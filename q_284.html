@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/animate.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/owl.carousel.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/slick.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-main.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-transitions.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/magnific-popup.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/fonts2/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/color/default.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/responsive.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .discussion-header-container { line-height: 1.5; }
+    .question-body { font-size: 1.05rem; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    </style>
+<title>PDE 284</title>
+
+<style>
+/* Zapewnij że główny kontener ma rozsądną szerokość */
+.q-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Wszystkie karty (pytanie i odpowiedź) mają tę samą szerokość */
+.q-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.q-answer {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.q-answer pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.ai-analysis-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+</style>
+
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_283.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_285.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+<h2>Question 284 / 319</h2>
+
+<div class="question-body mt-3 pt-3 border-top" data-id="907652">
+<p class="card-text">
+         You have a network of 1000 sensors. The sensors generate time series data: one metric per sensor per second, along with a timestamp. You already have 1 TB of data, and expect the data to grow by 1 GB every day. You need to access this data in two ways. The first access pattern requires retrieving the metric from one specific sensor stored at a specific timestamp, with a median single-digit millisecond latency. The second access pattern requires running complex analytic queries on the data, including joins, once a day. How should you store this data?
+        </p>
+<div class="voted-answers-tally d-none">
+<script id="907652" type="application/json">
+          [{"voted_answers": "B", "vote_count": 25, "is_most_voted": true}]
+         </script>
+</div>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="A">
+            A.
+           </span>
+           Store your data in BigQuery. Concatenate the sensor ID and timestamp, and use it as the primary key.
+          </li>
+<li class="multi-choice-item correct-hidden">
+<span class="multi-choice-letter" data-choice-letter="B">
+            B.
+           </span>
+           Store your data in Bigtable. Concatenate the sensor ID and timestamp and use it as the row key. Perform an export to BigQuery every day.
+           <span class="badge badge-success most-voted-answer-badge" data-original-title="This answer is currently the most voted for in the discussion" style="display: none;" title="">
+            Most Voted
+           </span>
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="C">
+            C.
+           </span>
+           Store your data in Bigtable. Concatenate the sensor ID and metric, and use it as the row key. Perform an export to BigQuery every day.
+          </li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="D">
+            D.
+           </span>
+           Store your data in BigQuery. Use the metric as a primary key.
+          </li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">
+         Show Suggested Answer
+        </a>
+<a class="btn btn-primary hide-solution d-none" href="#">
+         Hide Answer
+        </a>
+<div class="card-text question-answer bg-light white-text">
+<span class="correct-answer-box">
+<strong>
+           Suggested Answer:
+          </strong>
+<span class="correct-answer">
+           B
+          </span>
+<a class="vote-answer-button ml-1 d-print-none" data-original-title="Vote an answer" data-toggle="tooltip" href="#" title="">
+           🗳️
+          </a>
+<br/>
+</span>
+<span class="answer-description">
+</span>
+<div class="voting-summary col-12 col-sm-6 col-lg-4 pt-2 pb-2" style="font-size: 0.9em">
+<i>
+           Community vote distribution
+          </i>
+<!-- Additional optional vote button: <a href="javascript:void(0)" data-toggle="tooltip" class="vote-answer-button" title="Vote an answer">🗳️</a>-->
+<div class="progress vote-distribution-bar">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="15" class="vote-bar progress-bar bg-primary" data-original-title="25 votes." data-toggle="tooltip" role="progressbar" style="width: 100%; display: flex;" title="">
+            B (100%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-info" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            C (25%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-success" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            B (20%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" class="vote-bar progress-bar bg-warning" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 15%; display: none;" title="">
+            Other
+           </div>
+</div>
+</div>
+</div>
+</div>
+<!-- / Question  -->
+<div class="discussion-meta-data mt-3 pt-1 border-top">
+        <i>
+         Jan. 4, 2024, 7:37 a.m.
+        </i>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2></h2>
+<pre>Odpowiedź: B.
+
+Bigtable jest idealnym rozwiązaniem dla tego przypadku użycia ze względu na jego zdolność do obsługi ogromnych ilości danych szeregów czasowych z niską latencją odczytu i zapisu. Klucz wiersza (row key) zbudowany z połączenia ID czujnika i sygnatury czasowej pozwala na szybkie wyszukiwanie danych dla konkretnego czujnika w określonym momencie, spełniając wymaganie medianowej latencji w pojedynczych cyfrach milisekund. Dodatkowo, Bigtable dobrze radzi sobie z wysokim przepustowością zapisu, co jest istotne przy generowaniu danych przez 1000 czujników raz na sekundę. Eksport do BigQuery raz dziennie umożliwia wykonywanie złożonych zapytań analitycznych, wykorzystując moc BigQuery do analizy danych.
+
+A. BigQuery nie zapewnia tak niskiej latencji odczytu dla pojedynczych rekordów jak Bigtable, a użycie połączonego ID czujnika i sygnatury czasowej jako klucza podstawowego nie optymalizuje zapytań o pojedyncze wartości.
+C. Użycie ID czujnika i metryki jako klucza wiersza w Bigtable nie pozwala na efektywne wyszukiwanie danych po sygnaturze czasowej, co jest kluczowe dla pierwszego wzorca dostępu.
+D. BigQuery z metryką jako kluczem podstawowym nie zapewnia niskiej latencji odczytu dla konkretnych czujników i sygnatur czasowych, a także nie jest zoptymalizowany pod kątem danych szeregów czasowych.
+
+Dodatkowe źródła:
+
+*   **Bigtable Overview:** <a href="https://cloud.google.com/bigtable/docs/overview" target="_blank">https://cloud.google.com/bigtable/docs/overview</a>
+*   **BigQuery Overview:** <a href="https://cloud.google.com/bigquery/docs/overview" target="_blank">https://cloud.google.com/bigquery/docs/overview</a>
+*   **Designing Bigtable schemas:** <a href="https://cloud.google.com/bigtable/docs/schema-design" target="_blank">https://cloud.google.com/bigtable/docs/schema-design</a></pre>
+</div>
+<div class="ai-analysis-container" style="display:none;" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;"><h2>Analiza i Podsumowanie Dyskusji (AI)</h2><div class="analysis-section">
+<h3>Analiza i Wyjaśnienie</h3>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p>Odpowiedź B jest zdecydowanie najbardziej odpowiednia dla przedstawionego przypadku użycia. Kluczowe wymagania to: niska latencja dostępu do pojedynczych rekordów (milisekundy) oraz możliwość wykonywania złożonych zapytań analitycznych. Bigtable doskonale sprawdza się w scenariuszach wymagających szybkiego dostępu do danych na podstawie klucza wiersza. Konstrukcja klucza wiersza z połączenia ID czujnika i sygnatury czasowej umożliwia precyzyjne i szybkie wyszukiwanie danych dla konkretnego czujnika w określonym momencie.</p>
+<p>Dodatkowo, Bigtable jest skalowalny i dobrze radzi sobie z dużymi ilościami danych szeregów czasowych, co jest istotne biorąc pod uwagę 1 TB danych i oczekiwany wzrost o 1 GB dziennie.  Eksport danych do BigQuery raz dziennie pozwala na wykorzystanie możliwości BigQuery do wykonywania złożonych zapytań analitycznych, które nie są efektywne w Bigtable.</p>
+<p>Dyskusja użytkowników w pełni potwierdza tę odpowiedź. Większość użytkowników (w tym autor pytania - scaenruy) wybrała odpowiedź B i uzasadniła ją, podkreślając zalety Bigtable w kontekście danych szeregów czasowych i niskiej latencji. Komentarze takie jak te od raaad i Smakyel79 szczegółowo wyjaśniają, dlaczego Bigtable jest najlepszym wyborem.</p>
+<p><b>Dlaczego inne odpowiedzi są nieprawidłowe:</b></p>
+<ul>
+<li><b>A i D:</b> BigQuery nie jest zoptymalizowany pod kątem niskiej latencji dostępu do pojedynczych rekordów. Użycie ID czujnika i sygnatury czasowej jako klucza podstawowego w BigQuery nie zapewni wymaganej wydajności.</li>
+<li><b>C:</b> Użycie ID czujnika i metryki jako klucza wiersza w Bigtable uniemożliwia efektywne wyszukiwanie danych po sygnaturze czasowej, co jest kluczowe dla pierwszego wzorca dostępu.</li>
+</ul>
+</div>
+</div></div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+
+    revealButtons.forEach(button => {
+        let isVisible = false;
+
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+
+<script>localStorage.setItem('gcp_exam_last_visited', window.location.href);</script></body>
+</html>

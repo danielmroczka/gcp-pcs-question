@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/animate.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/owl.carousel.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/slick.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-main.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-transitions.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/magnific-popup.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/fonts2/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/color/default.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/responsive.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .discussion-header-container { line-height: 1.5; }
+    .question-body { font-size: 1.05rem; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    </style>
+<title>PDE 299</title>
+
+<style>
+/* Zapewnij że główny kontener ma rozsądną szerokość */
+.q-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Wszystkie karty (pytanie i odpowiedź) mają tę samą szerokość */
+.q-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.q-answer {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.q-answer pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.ai-analysis-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+</style>
+
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_298.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_300.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+<h2>Question 299 / 319</h2>
+
+<div class="question-body mt-3 pt-3 border-top" data-id="907667">
+<p class="card-text">
+         You have an upstream process that writes data to Cloud Storage. This data is then read by an Apache Spark job that runs on Dataproc. These jobs are run in the us-central1 region, but the data could be stored anywhere in the United States. You need to have a recovery process in place in case of a catastrophic single region failure. You need an approach with a maximum of 15 minutes of data loss (RPO=15 mins). You want to ensure that there is minimal latency when reading the data. What should you do?
+        </p>
+<div class="voted-answers-tally d-none">
+<script id="907667" type="application/json">
+          [{"voted_answers": "D", "vote_count": 12, "is_most_voted": true}]
+         </script>
+</div>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="A">
+            A.
+           </span>
+           1. Create two regional Cloud Storage buckets, one in the us-central1 region and one in the us-south1 region.
+           <br/>
+           2. Have the upstream process write data to the us-central1 bucket. Use the Storage Transfer Service to copy data hourly from the us-central1 bucket to the us-south1 bucket.
+           <br/>
+           3. Run the Dataproc cluster in a zone in the us-central1 region, reading from the bucket in that region.
+           <br/>
+           4. In case of regional failure, redeploy your Dataproc clusters to the us-south1 region and read from the bucket in that region instead.
+          </li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="B">
+            B.
+           </span>
+           1. Create a Cloud Storage bucket in the US multi-region.
+           <br/>
+           2. Run the Dataproc cluster in a zone in the us-central1 region, reading data from the US multi-region bucket.
+           <br/>
+           3. In case of a regional failure, redeploy the Dataproc cluster to the us-central2 region and continue reading from the same bucket.
+          </li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="C">
+            C.
+           </span>
+           1. Create a dual-region Cloud Storage bucket in the us-central1 and us-south1 regions.
+           <br/>
+           2. Enable turbo replication.
+           <br/>
+           3. Run the Dataproc cluster in a zone in the us-central1 region, reading from the bucket in the us-south1 region.
+           <br/>
+           4. In case of a regional failure, redeploy your Dataproc cluster to the us-south1 region and continue reading from the same bucket.
+          </li>
+<li class="multi-choice-item correct-hidden">
+<span class="multi-choice-letter" data-choice-letter="D">
+            D.
+           </span>
+           1. Create a dual-region Cloud Storage bucket in the us-central1 and us-south1 regions.
+           <br/>
+           2. Enable turbo replication.
+           <br/>
+           3. Run the Dataproc cluster in a zone in the us-central1 region, reading from the bucket in the same region.
+           <br/>
+           4. In case of a regional failure, redeploy the Dataproc clusters to the us-south1 region and read from the same bucket.
+           <span class="badge badge-success most-voted-answer-badge" data-original-title="This answer is currently the most voted for in the discussion" style="display: none;" title="">
+            Most Voted
+           </span>
+</li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">
+         Show Suggested Answer
+        </a>
+<a class="btn btn-primary hide-solution d-none" href="#">
+         Hide Answer
+        </a>
+<div class="card-text question-answer bg-light white-text">
+<span class="correct-answer-box">
+<strong>
+           Suggested Answer:
+          </strong>
+<span class="correct-answer">
+           D
+          </span>
+<a class="vote-answer-button ml-1 d-print-none" data-original-title="Vote an answer" data-toggle="tooltip" href="#" title="">
+           🗳️
+          </a>
+<br/>
+</span>
+<span class="answer-description">
+</span>
+<div class="voting-summary col-12 col-sm-6 col-lg-4 pt-2 pb-2" style="font-size: 0.9em">
+<i>
+           Community vote distribution
+          </i>
+<!-- Additional optional vote button: <a href="javascript:void(0)" data-toggle="tooltip" class="vote-answer-button" title="Vote an answer">🗳️</a>-->
+<div class="progress vote-distribution-bar">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="15" class="vote-bar progress-bar bg-primary" data-original-title="12 votes." data-toggle="tooltip" role="progressbar" style="width: 100%; display: flex;" title="">
+            D (100%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-info" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            C (25%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-success" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            B (20%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" class="vote-bar progress-bar bg-warning" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 15%; display: none;" title="">
+            Other
+           </div>
+</div>
+</div>
+</div>
+</div>
+<!-- / Question  -->
+<div class="discussion-meta-data mt-3 pt-1 border-top">
+        <i>
+         Jan. 4, 2024, 2:34 p.m.
+        </i>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2></h2>
+<pre>Odpowiedź: D.
+
+Opcja D jest poprawna, ponieważ wykorzystuje dual-region Cloud Storage z turbo replication, co zapewnia wysoką dostępność i odporność na awarie. Dual-region replikuje dane do dwóch regionów, a turbo replication minimalizuje opóźnienia w dostępie do danych w regionie awaryjnym. Uruchomienie Dataproc w us-central1 i odzyskiwanie w us-south1, czytając z tego samego bucketu, spełnia wymaganie RPO 15 minut (turbo replication zapewnia szybką synchronizację) i minimalizuje opóźnienia, ponieważ Dataproc będzie czytać z najbliższego regionu. W przypadku awarii, redeploy Dataproc do us-south1 i kontynuacja odczytu z tego samego bucketu zapewnia ciągłość działania.
+
+A. Użycie Storage Transfer Service z godzinowym opóźnieniem nie spełnia RPO 15 minut.
+B. Multi-region bucket nie gwarantuje tak niskich opóźnień jak dual-region z turbo replication.
+C. Czytanie z us-south1 podczas normalnej pracy zwiększa opóźnienia, a turbo replication nie jest w pełni wykorzystane.</pre>
+</div>
+<div class="ai-analysis-container" style="display:none;" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;"><h2>Analiza i Podsumowanie Dyskusji (AI)</h2><div class="analysis-section">
+<h3>Analiza i Wyjaśnienie</h3>
+<p><b>Sugerowana odpowiedź: D</b></p>
+<p>Odpowiedź D jest prawidłowa, ponieważ spełnia wszystkie wymagania zadania dotyczące odzyskiwania po awarii (RPO 15 minut) i minimalizacji opóźnień. Kluczowe elementy to:</p>
+<ul>
+<li><b>Dual-region Cloud Storage:</b> Replikacja danych do dwóch regionów (us-central1 i us-south1) zapewnia odporność na awarie pojedynczego regionu.</li>
+<li><b>Turbo Replication:</b>  Turbo replication zapewnia niemal natychmiastową synchronizację danych między regionami, co pozwala na spełnienie wymagania RPO wynoszącego 15 minut.</li>
+<li><b>Lokalny dostęp do danych:</b> Uruchomienie klastra Dataproc w us-central1 i odczytywanie danych z tego samego regionu minimalizuje opóźnienia podczas normalnej pracy.</li>
+<li><b>Płynne przełączenie po awarii:</b> W przypadku awarii regionu us-central1, klastry Dataproc mogą zostać ponownie wdrożone w us-south1 i kontynuować odczytywanie danych z tego samego bucketu, bez przestojów.</li>
+</ul>
+<p>Dyskusja użytkowników w pełni potwierdza poprawność odpowiedzi D. Użytkownicy raaad, JyoGCP, Matt_108 i scaenruy jednogłośnie wskazują na tę opcję, podkreślając korzyści z turbo replication, minimalnych opóźnień i płynnego przełączania po awarii.</p>
+<p><b>Dlaczego inne odpowiedzi są nieprawidłowe:</b></p>
+<ul>
+<li><b>A:</b> Użycie Storage Transfer Service z godzinowym opóźnieniem nie spełnia wymogu RPO wynoszącego 15 minut.</li>
+<li><b>B:</b> Multi-region bucket, choć zapewnia wysoką dostępność, nie gwarantuje tak niskich opóźnień jak dual-region z turbo replication.</li>
+<li><b>C:</b> Czytanie z us-south1 podczas normalnej pracy zwiększa opóźnienia, a turbo replication nie jest w pełni wykorzystane, ponieważ dane są odczytywane z regionu, do którego nie są natywnie kierowane.</li>
+</ul>
+</div>
+</div></div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+
+    revealButtons.forEach(button => {
+        let isVisible = false;
+
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+
+<script>localStorage.setItem('gcp_exam_last_visited', window.location.href);</script></body>
+</html>

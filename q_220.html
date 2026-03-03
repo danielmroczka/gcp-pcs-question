@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/animate.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/owl.carousel.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/slick.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-main.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-transitions.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/magnific-popup.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/fonts2/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/color/default.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/responsive.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .discussion-header-container { line-height: 1.5; }
+    .question-body { font-size: 1.05rem; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    </style>
+<title>PDE 220</title>
+
+<style>
+/* Zapewnij że główny kontener ma rozsądną szerokość */
+.q-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Wszystkie karty (pytanie i odpowiedź) mają tę samą szerokość */
+.q-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.q-answer {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.q-answer pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.ai-analysis-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+</style>
+
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_219.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_221.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+<h2>Question 220 / 319</h2>
+
+<div class="question-body mt-3 pt-3 border-top" data-id="907588">
+<p class="card-text">
+         You are migrating your on-premises data warehouse to BigQuery. One of the upstream data sources resides on a MySQL. database that runs in your on-premises data center with no public IP addresses. You want to ensure that the data ingestion into BigQuery is done securely and does not go through the public internet. What should you do?
+        </p>
+<div class="voted-answers-tally d-none">
+<script id="907588" type="application/json">
+          [{"voted_answers": "B", "vote_count": 13, "is_most_voted": true}]
+         </script>
+</div>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="A">
+            A.
+           </span>
+           Update your existing on-premises ETL tool to write to BigQuery by using the BigQuery Open Database Connectivity (ODBC) driver. Set up the proxy parameter in the simba.googlebigqueryodbc.ini file to point to your data center’s NAT gateway.
+          </li>
+<li class="multi-choice-item correct-hidden">
+<span class="multi-choice-letter" data-choice-letter="B">
+            B.
+           </span>
+           Use Datastream to replicate data from your on-premises MySQL database to BigQuery. Set up Cloud Interconnect between your on-premises data center and Google Cloud. Use Private connectivity as the connectivity method and allocate an IP address range within your VPC network to the Datastream connectivity configuration. Use Server-only as the encryption type when setting up the connection profile in Datastream.
+           <span class="badge badge-success most-voted-answer-badge" data-original-title="This answer is currently the most voted for in the discussion" style="display: none;" title="">
+            Most Voted
+           </span>
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="C">
+            C.
+           </span>
+           Use Datastream to replicate data from your on-premises MySQL database to BigQuery. Use Forward-SSH tunnel as the connectivity method to establish a secure tunnel between Datastream and your on-premises MySQL database through a tunnel server in your on-premises data center. Use None as the encryption type when setting up the connection profile in Datastream.
+          </li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="D">
+            D.
+           </span>
+           Use Datastream to replicate data from your on-premises MySQL database to BigQuery. Gather Datastream public IP addresses of the Google Cloud region that will be used to set up the stream. Add those IP addresses to the firewall allowlist of your on-premises data center. Use IP Allowlisting as the connectivity method and Server-only as the encryption type when setting up the connection profile in Datastream.
+          </li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">
+         Show Suggested Answer
+        </a>
+<a class="btn btn-primary hide-solution d-none" href="#">
+         Hide Answer
+        </a>
+<div class="card-text question-answer bg-light white-text">
+<span class="correct-answer-box">
+<strong>
+           Suggested Answer:
+          </strong>
+<span class="correct-answer">
+           B
+          </span>
+<a class="vote-answer-button ml-1 d-print-none" data-original-title="Vote an answer" data-toggle="tooltip" href="#" title="">
+           🗳️
+          </a>
+<br/>
+</span>
+<span class="answer-description">
+</span>
+<div class="voting-summary col-12 col-sm-6 col-lg-4 pt-2 pb-2" style="font-size: 0.9em">
+<i>
+           Community vote distribution
+          </i>
+<!-- Additional optional vote button: <a href="javascript:void(0)" data-toggle="tooltip" class="vote-answer-button" title="Vote an answer">🗳️</a>-->
+<div class="progress vote-distribution-bar">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="15" class="vote-bar progress-bar bg-primary" data-original-title="13 votes." data-toggle="tooltip" role="progressbar" style="width: 100%; display: flex;" title="">
+            B (100%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-info" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            C (25%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-success" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            B (20%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" class="vote-bar progress-bar bg-warning" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 15%; display: none;" title="">
+            Other
+           </div>
+</div>
+</div>
+</div>
+</div>
+<!-- / Question  -->
+<div class="discussion-meta-data mt-3 pt-1 border-top">
+        <i>
+         Dec. 30, 2023, 9:46 a.m.
+        </i>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2></h2>
+<pre>Odpowiedź: B.
+
+Opcja B jest poprawna, ponieważ wykorzystuje Cloud Interconnect do stworzenia prywatnego połączenia między Twoim centrum danych a Google Cloud, eliminując potrzebę przesyłania danych przez publiczny Internet. Datastream, w połączeniu z Private connectivity, zapewnia bezpieczną replikację danych z MySQL do BigQuery. Użycie Server-only encryption dodatkowo zabezpiecza dane podczas transferu. Cloud Interconnect gwarantuje stabilne i bezpieczne połączenie, idealne do regularnej replikacji danych. Konfiguracja IP address range w VPC zapewnia izolację i kontrolę nad ruchem sieciowym.
+
+A. Użycie NAT gateway nadal wymaga przechodzenia przez publiczny Internet, co nie spełnia wymogu bezpieczeństwa.
+C. Forward-SSH tunnel jest bardziej skomplikowany w utrzymaniu i skalowaniu niż dedykowane połączenie Cloud Interconnect.
+D. IP Allowlisting nadal naraża dane na potencjalne zagrożenia związane z publicznym Internetem, mimo ograniczenia dostępu do określonych adresów IP.
+
+Dodatkowe źródła:
+
+*   **Datastream documentation:** <a href="https://cloud.google.com/datastream/docs" target="_blank">https://cloud.google.com/datastream/docs</a>
+*   **Cloud Interconnect documentation:** <a href="https://cloud.google.com/interconnect/docs" target="_blank">https://cloud.google.com/interconnect/docs</a>
+*   **BigQuery ODBC Driver:** <a href="https://cloud.google.com/bigquery/docs/odbc-driver" target="_blank">https://cloud.google.com/bigquery/docs/odbc-driver</a></pre>
+</div>
+<div class="ai-analysis-container" style="display:none;" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;"><h2>Analiza i Podsumowanie Dyskusji (AI)</h2><div class="analysis-section">
+<h3>Analiza i Wyjaśnienie</h3>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p>Odpowiedź B jest prawidłowa, ponieważ spełnia wszystkie wymagania zadania. Kluczowe jest zapewnienie bezpiecznego transferu danych z on-premise MySQL do BigQuery bez przechodzenia przez publiczny Internet. Cloud Interconnect tworzy dedykowane, prywatne połączenie sieciowe między Twoim centrum danych a Google Cloud, eliminując potrzebę korzystania z publicznej infrastruktury. Datastream, w połączeniu z opcją Private connectivity, umożliwia bezpieczną replikację danych. Wybór Server-only encryption dodatkowo zabezpiecza dane podczas przesyłania.</p>
+<p>Użytkownicy w dyskusji jednogłośnie potwierdzają poprawność odpowiedzi B, wskazując na korzyści płynące z wykorzystania Datastream i Cloud Interconnect.  Użytkownik raaad podkreśla, że Cloud Interconnect zapewnia prywatne i bezpieczne połączenie, a Datastream umożliwia bezpieczny transfer danych. Użytkownik datapassionate dodaje, że Datastream jest bezproblemowym rozwiązaniem do replikacji danych bezpośrednio do BigQuery.</p>
+<p><b>Dlaczego inne odpowiedzi są nieprawidłowe:</b></p>
+<ul>
+<li><b>A:</b> Użycie NAT gateway nadal wymaga przechodzenia przez publiczny Internet, co narusza wymóg bezpieczeństwa.</li>
+<li><b>C:</b> Forward-SSH tunnel jest rozwiązaniem bardziej skomplikowanym w utrzymaniu i skalowaniu, a także mniej wydajnym niż dedykowane połączenie Cloud Interconnect.</li>
+<li><b>D:</b> IP Allowlisting, mimo ograniczenia dostępu, nadal naraża dane na potencjalne zagrożenia związane z publicznym Internetem.</li>
+</ul>
+<p>Podsumowując, odpowiedź B jest najbardziej kompleksowym i bezpiecznym rozwiązaniem, które spełnia wszystkie wymagania zadania, co potwierdzają zarówno sugerowana odpowiedź, jak i dyskusja użytkowników.</p>
+</div>
+</div></div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+
+    revealButtons.forEach(button => {
+        let isVisible = false;
+
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+
+<script>localStorage.setItem('gcp_exam_last_visited', window.location.href);</script></body>
+</html>

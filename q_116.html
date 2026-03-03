@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/animate.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/owl.carousel.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/slick.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-main.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-transitions.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/magnific-popup.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/fonts2/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/color/default.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/responsive.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .discussion-header-container { line-height: 1.5; }
+    .question-body { font-size: 1.05rem; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    </style>
+<title>PDE 116</title>
+
+<style>
+/* Zapewnij że główny kontener ma rozsądną szerokość */
+.q-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Wszystkie karty (pytanie i odpowiedź) mają tę samą szerokość */
+.q-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.q-answer {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.q-answer pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.ai-analysis-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+</style>
+
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_115.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_117.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+<h2>Question 116 / 319</h2>
+
+<div class="question-body mt-3 pt-3 border-top" data-id="835423">
+<p class="card-text">
+         Your company is in the process of migrating its on-premises data warehousing solutions to BigQuery. The existing data warehouse uses trigger-based change data capture (CDC) to apply updates from multiple transactional database sources on a daily basis. With BigQuery, your company hopes to improve its handling of
+         <br/>
+         CDC so that changes to the source systems are available to query in BigQuery in near-real time using log-based CDC streams, while also optimizing for the performance of applying changes to the data warehouse. Which two steps should they take to ensure that changes are available in the BigQuery reporting table with minimal latency while reducing compute overhead? (Choose two.)
+         <br/>
+</p>
+<div class="voted-answers-tally d-none">
+<script id="835423" type="application/json">
+          [{"voted_answers": "BD", "vote_count": 27, "is_most_voted": true}, {"voted_answers": "CE", "vote_count": 4, "is_most_voted": false}, {"voted_answers": "BC", "vote_count": 2, "is_most_voted": false}, {"voted_answers": "BE", "vote_count": 1, "is_most_voted": false}]
+         </script>
+</div>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="A">
+            A.
+           </span>
+           Perform a DML INSERT, UPDATE, or DELETE to replicate each individual CDC record in real time directly on the reporting table.
+          </li>
+<li class="multi-choice-item correct-hidden">
+<span class="multi-choice-letter" data-choice-letter="B">
+            B.
+           </span>
+           Insert each new CDC record and corresponding operation type to a staging table in real time.
+           <span class="badge badge-success most-voted-answer-badge" data-original-title="This answer is currently the most voted for in the discussion" style="display: none;" title="">
+            Most Voted
+           </span>
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="C">
+            C.
+           </span>
+           Periodically DELETE outdated records from the reporting table.
+          </li>
+<li class="multi-choice-item correct-hidden">
+<span class="multi-choice-letter" data-choice-letter="D">
+            D.
+           </span>
+           Periodically use a DML MERGE to perform several DML INSERT, UPDATE, and DELETE operations at the same time on the reporting table.
+           <span class="badge badge-success most-voted-answer-badge" data-original-title="This answer is currently the most voted for in the discussion" style="display: none;" title="">
+            Most Voted
+           </span>
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="E">
+            E.
+           </span>
+           Insert each new CDC record and corresponding operation type in real time to the reporting table, and use a materialized view to expose only the newest version of each unique record.
+          </li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">
+         Show Suggested Answer
+        </a>
+<a class="btn btn-primary hide-solution d-none" href="#">
+         Hide Answer
+        </a>
+<div class="card-text question-answer bg-light white-text">
+<span class="correct-answer-box">
+<strong>
+           Suggested Answer:
+          </strong>
+<span class="correct-answer">
+           BD
+          </span>
+<a class="vote-answer-button ml-1 d-print-none" data-original-title="Vote an answer" data-toggle="tooltip" href="#" title="">
+           🗳️
+          </a>
+<br/>
+</span>
+<span class="answer-description">
+</span>
+<div class="voting-summary col-12 col-sm-6 col-lg-4 pt-2 pb-2" style="font-size: 0.9em">
+<i>
+           Community vote distribution
+          </i>
+<!-- Additional optional vote button: <a href="javascript:void(0)" data-toggle="tooltip" class="vote-answer-button" title="Vote an answer">🗳️</a>-->
+<div class="progress vote-distribution-bar">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="15" class="vote-bar progress-bar bg-primary" data-original-title="27 votes." data-toggle="tooltip" role="progressbar" style="width: 79%; display: flex;" title="">
+            BD (79%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-info" data-original-title="4 votes." data-toggle="tooltip" role="progressbar" style="width: 12%; display: flex;" title="">
+            12%
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-success" data-original-title="6%" data-toggle="tooltip" role="progressbar" style="width: 9%; display: flex;" title="">
+            6%
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" class="vote-bar progress-bar bg-warning" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 15%; display: none;" title="">
+            Other
+           </div>
+</div>
+</div>
+</div>
+</div>
+<!-- / Question  -->
+<div class="discussion-meta-data mt-3 pt-1 border-top">
+        <i>
+         Sept. 3, 2022, 6:25 a.m.
+        </i>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2></h2>
+<pre>Odpowiedź: B
+
+Wyjaśnienie: Przeniesienie zmian z trigger-based CDC na BigQuery wymaga strategicznego podejścia do zarządzania danymi. Najważniejsze jest zapewnienie, że zmiany są dostępne w czasie rzeczywistym w BigQuery, co oznacza, że muszą być dostępne w czasie rzeczywistym.  Wybór B, czyli wstawienie nowych rekordów i operacji do staging table, jest najlepszym rozwiązaniem.  To pozwala na szybkie i efektywne wstawianie nowych danych do BigQuery, minimalizując jednocześnie obciążenie obliczeniowe, ponieważ operacje są wykonywane w czasie rzeczywistym.  Alternatywy A, C, D i E, choć mogą być skuteczne, są mniej optymalne, ponieważ mogą prowadzić do znacznego obciążenia obliczeniowego, nie zapewniają real-time dostępu do zmian, a także mogą prowadzić do problemów z wydajnością.</pre>
+</div>
+<div class="ai-analysis-container" style="display:none;" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;"><h2>Analiza i Podsumowanie Dyskusji (AI)</h2><div class="analysis-section">
+<h3>Analiza i Wyjaśnienie</h3>
+<p><b>Sugerowana odpowiedź: B, D</b></p>
+<p>Prawidłowe odpowiedzi to <b>B, D</b>.</p>
+<p><b>Dlaczego?</b></p>
+<p>Wymagania: Migracja CDC (Change Data Capture) do BigQuery, "near-real time", wysoka wydajność, niski narzut obliczeniowy.
+Standardowy wzorzec obsługi CDC w BigQuery ("DML Merge pattern"):
+1. <b>B. Insert into a staging table in real time:</b> Zamiast bezpośrednio aktualizować ogromną tabelę raportową dla każdego małego zdarzenia (co jest bardzo drogie i powolne), najpierw "zrzucamy" (streaming insert) surowe logi zmian do małej tabeli pośredniej (staging table). To zapewnia "minimal latency" w przyjmowaniu danych.
+2. <b>D. Periodically use a DML MERGE:</b> Raz na jakiś czas (np. co 5-15 minut) uruchamiamy instrukcję <code>MERGE</code>, która przenosi dane z tabeli staging do tabeli raportowej, wykonując wszystkie INSERTy, UPDATEy i DELETEy w jednym efektywnym kroku. To optymalizuje wydajność i redukuje "compute overhead".</p>
+
+<p><b>Dlaczego inne odpowiedzi są nieprawidłowe?</b></p>
+<ul>
+<li><b>A. Replicate individual records directly:</b> Wykonywanie pojedynczych operacji DML (UPDATE/DELETE) dla każdego rekordu w czasie rzeczywistym jest w BigQuery antywzorcem. Powoduje przekroczenie limitów (quotas) i jest ekstremalnie nieefektywne kosztowo.</li>
+<li><b>C. Periodically DELETE outdated:</b> Samo usuwanie nie rozwiązuje problemu wstawiania i aktualizowania nowych danych w czasie rzeczywistym.</li>
+<li><b>E. Materialized View:</b> Choć Materialized Views mogą pomóc w odczycie, nie rozwiązują problemu efektywnej ingestii i synchronizacji milionów rekordów CDC przy minimalnym narzucie. Standardowy model staging + MERGE (B+D) jest uznawany za "Google-recommended practice" dla CDC.</li>
+</ul>
+
+<h3>Dodatkowe Zasoby (Linki)</h3>
+<ul>
+<li><a href="https://cloud.google.com/architecture/database-replication-to-bigquery-using-change-data-capture" target="_blank">Architecture: CDC replication to BigQuery</a></li>
+<li><a href="https://cloud.google.com/bigquery/docs/reference/standard-sql/dml-syntax#merge_statement" target="_blank">BigQuery: MERGE statement</a></li>
+</ul>
+</div>
+</div></div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+
+    revealButtons.forEach(button => {
+        let isVisible = false;
+
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+
+<script>localStorage.setItem('gcp_exam_last_visited', window.location.href);</script></body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/animate.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/owl.carousel.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/slick.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-main.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-transitions.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/magnific-popup.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/fonts2/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/color/default.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/responsive.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .discussion-header-container { line-height: 1.5; }
+    .question-body { font-size: 1.05rem; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    </style>
+<title>PDE 270</title>
+
+<style>
+/* Zapewnij że główny kontener ma rozsądną szerokość */
+.q-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Wszystkie karty (pytanie i odpowiedź) mają tę samą szerokość */
+.q-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.q-answer {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.q-answer pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.ai-analysis-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+</style>
+
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_269.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_271.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+<h2>Question 270 / 319</h2>
+
+<div class="question-body mt-3 pt-3 border-top" data-id="907638">
+<p class="card-text">
+         You need to create a SQL pipeline. The pipeline runs an aggregate SQL transformation on a BigQuery table every two hours and appends the result to another existing BigQuery table. You need to configure the pipeline to retry if errors occur. You want the pipeline to send an email notification after three consecutive failures. What should you do?
+        </p>
+<div class="voted-answers-tally d-none">
+<script id="907638" type="application/json">
+          [{"voted_answers": "B", "vote_count": 14, "is_most_voted": true}, {"voted_answers": "D", "vote_count": 13, "is_most_voted": false}]
+         </script>
+</div>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="A">
+            A.
+           </span>
+           Use the BigQueryUpsertTableOperator in Cloud Composer, set the retry parameter to three, and set the email_on_failure parameter to true.
+          </li>
+<li class="multi-choice-item correct-hidden">
+<span class="multi-choice-letter" data-choice-letter="B">
+            B.
+           </span>
+           Use the BigQueryInsertJobOperator in Cloud Composer, set the retry parameter to three, and set the email_on_failure parameter to true.
+           <span class="badge badge-success most-voted-answer-badge" data-original-title="This answer is currently the most voted for in the discussion" style="display: none;" title="">
+            Most Voted
+           </span>
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="C">
+            C.
+           </span>
+           Create a BigQuery scheduled query to run the SQL transformation with schedule options that repeats every two hours, and enable email notifications.
+          </li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="D">
+            D.
+           </span>
+           Create a BigQuery scheduled query to run the SQL transformation with schedule options that repeats every two hours, and enable notification to Pub/Sub topic. Use Pub/Sub and Cloud Functions to send an email after three failed executions.
+          </li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">
+         Show Suggested Answer
+        </a>
+<a class="btn btn-primary hide-solution d-none" href="#">
+         Hide Answer
+        </a>
+<div class="card-text question-answer bg-light white-text">
+<span class="correct-answer-box">
+<strong>
+           Suggested Answer:
+          </strong>
+<span class="correct-answer">
+           B
+          </span>
+<a class="vote-answer-button ml-1 d-print-none" data-original-title="Vote an answer" data-toggle="tooltip" href="#" title="">
+           🗳️
+          </a>
+<br/>
+</span>
+<span class="answer-description">
+</span>
+<div class="voting-summary col-12 col-sm-6 col-lg-4 pt-2 pb-2" style="font-size: 0.9em">
+<i>
+           Community vote distribution
+          </i>
+<!-- Additional optional vote button: <a href="javascript:void(0)" data-toggle="tooltip" class="vote-answer-button" title="Vote an answer">🗳️</a>-->
+<div class="progress vote-distribution-bar">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="15" class="vote-bar progress-bar bg-primary" data-original-title="14 votes." data-toggle="tooltip" role="progressbar" style="width: 52%; display: flex;" title="">
+            B (52%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-info" data-original-title="13 votes." data-toggle="tooltip" role="progressbar" style="width: 48%; display: flex;" title="">
+            D (48%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-success" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            B (20%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" class="vote-bar progress-bar bg-warning" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 15%; display: none;" title="">
+            Other
+           </div>
+</div>
+</div>
+</div>
+</div>
+<!-- / Question  -->
+<div class="discussion-meta-data mt-3 pt-1 border-top">
+        <i>
+         Jan. 3, 2024, 6:43 p.m.
+        </i>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2></h2>
+<pre>Odpowiedź: B.
+
+Użycie `BigQueryInsertJobOperator` w Cloud Composer jest najlepszym rozwiązaniem, ponieważ pozwala na uruchamianie zadań BigQuery, w tym transformacji SQL, w sposób zaplanowany. Ustawienie parametru `retry` na trzy zapewnia ponawianie prób w przypadku błędów, a `email_on_failure` na `true` powoduje wysłanie powiadomienia e-mail po niepowodzeniu zadania.  W tym przypadku, ponieważ wymagane są ponowne próby i powiadomienia e-mail, `BigQueryInsertJobOperator` oferuje bezpośrednią konfigurację tych funkcji.  Operator ten jest przeznaczony do uruchamiania pojedynczych zadań BigQuery, co idealnie pasuje do opisu transformacji i dołączania wyników.  Dzięki temu pipeline będzie niezawodny i łatwy w monitorowaniu.
+
+A. `BigQueryUpsertTableOperator` służy do aktualizacji lub wstawiania danych do tabeli, a nie do uruchamiania transformacji i dołączania wyników.
+C. Scheduled queries nie oferują wbudowanego mechanizmu ponawiania prób, co jest kluczowe w wymaganiach.
+D. Użycie Pub/Sub i Cloud Functions jest bardziej skomplikowane niż bezpośrednie wykorzystanie `email_on_failure` w `BigQueryInsertJobOperator` i wymaga dodatkowej konfiguracji.
+
+Dodatkowe źródła:
+
+*   **BigQueryInsertJobOperator:** <a href="https://cloud.google.com/composer/docs/concepts/operators/bigquery-insert-job" target="_blank">https://cloud.google.com/composer/docs/concepts/operators/bigquery-insert-job</a>
+*   **Cloud Composer Operators:** <a href="https://cloud.google.com/composer/docs/concepts/operators" target="_blank">https://cloud.google.com/composer/docs/concepts/operators</a>
+*   **BigQuery Scheduled Queries:** <a href="https://cloud.google.com/bigquery/docs/scheduled-queries" target="_blank">https://cloud.google.com/bigquery/docs/scheduled-queries</a></pre>
+</div>
+<div class="ai-analysis-container" style="display:none;" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;"><h2>Analiza i Podsumowanie Dyskusji (AI)</h2><div class="analysis-section">
+<h3>Analiza i Wyjaśnienie</h3>
+<p><b>Sugerowana odpowiedź: D</b></p>
+<p>Analizując dyskusję użytkowników oraz treść pytania, najbardziej precyzyjną odpowiedzią wydaje się być <b>D</b>. Kluczowym elementem pytania jest wysłanie powiadomienia e-mail po <b>trzech kolejnych niepowodzeniach</b> całego pipeline'u, a nie pojedynczego zadania. Operatorzy `BigQueryInsertJobOperator` (odpowiedź B) i `BigQueryUpsertTableOperator` (odpowiedź A) oferują mechanizm ponawiania prób i powiadomień o błędach, ale dotyczą one pojedynczych zadań w DAG-u Cloud Composer.  Powiadomienie `email_on_failure` w tych operatorach jest wysyłane po wyczerpaniu limitu ponownych prób <b>dla danego zadania</b>, a nie po trzech kolejnych nieudanych uruchomieniach całego pipeline'u.</p>
+<p>Odpowiedź <b>D</b> wykorzystuje BigQuery Scheduled Queries do zaplanowania uruchomienia transformacji co dwie godziny.  Następnie, w przypadku niepowodzenia, wykorzystuje Pub/Sub i Cloud Functions do monitorowania i wysyłania powiadomień e-mail po trzech kolejnych nieudanych próbach.  To podejście pozwala na monitorowanie całego pipeline'u, a nie tylko pojedynczych zadań, co jest zgodne z wymaganiami pytania.</p>
+<p>Wiele komentarzy użytkowników (np. 56d02cd, gabbferreira, plum21, b3e59c2, datapassionate) wskazuje na to, że odpowiedź B nie spełnia warunku dotyczącego powiadomienia po trzech <b>kolejnych</b> niepowodzeniach.  Retries w Cloud Composer dotyczą pojedynczych zadań, a nie całego DAG-u.</p>
+<p>Odpowiedź <b>C</b> jest niepoprawna, ponieważ BigQuery Scheduled Queries nie oferują wbudowanego mechanizmu ponawiania prób.</p>
+<p>Chociaż odpowiedź <b>B</b> jest często wybierana przez użytkowników, dokładna analiza wymagań pytania wskazuje, że odpowiedź <b>D</b> jest bardziej precyzyjna i kompleksowa.</p>
+</div>
+</div></div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+
+    revealButtons.forEach(button => {
+        let isVisible = false;
+
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+
+<script>localStorage.setItem('gcp_exam_last_visited', window.location.href);</script></body>
+</html>

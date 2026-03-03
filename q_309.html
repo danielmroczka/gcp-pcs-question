@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/animate.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/owl.carousel.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/slick.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-main.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-transitions.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/magnific-popup.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/fonts2/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/color/default.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/responsive.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .discussion-header-container { line-height: 1.5; }
+    .question-body { font-size: 1.05rem; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    </style>
+<title>PDE 309</title>
+
+<style>
+/* Zapewnij że główny kontener ma rozsądną szerokość */
+.q-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Wszystkie karty (pytanie i odpowiedź) mają tę samą szerokość */
+.q-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.q-answer {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.q-answer pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.ai-analysis-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+</style>
+
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_308.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_310.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+<h2>Question 309 / 319</h2>
+
+<div class="question-body mt-3 pt-3 border-top" data-id="909850">
+<p class="card-text">
+         You work for an airline and you need to store weather data in a BigQuery table. Weather data will be used as input to a machine learning model. The model only uses the last 30 days of weather data. You want to avoid storing unnecessary data and minimize costs. What should you do?
+        </p>
+<div class="voted-answers-tally d-none">
+<script id="909850" type="application/json">
+          [{"voted_answers": "B", "vote_count": 19, "is_most_voted": true}, {"voted_answers": "C", "vote_count": 1, "is_most_voted": false}, {"voted_answers": "D", "vote_count": 1, "is_most_voted": false}]
+         </script>
+</div>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="A">
+            A.
+           </span>
+           Create a BigQuery table where each record has an ingestion timestamp. Run a scheduled query to delete all the rows with an ingestion timestamp older than 30 days.
+          </li>
+<li class="multi-choice-item correct-hidden">
+<span class="multi-choice-letter" data-choice-letter="B">
+            B.
+           </span>
+           Create a BigQuery table partitioned by datetime value of the weather date. Set up partition expiration to 30 days.
+           <span class="badge badge-success most-voted-answer-badge" data-original-title="This answer is currently the most voted for in the discussion" style="display: none;" title="">
+            Most Voted
+           </span>
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="C">
+            C.
+           </span>
+           Create a BigQuery table partitioned by ingestion time. Set up partition expiration to 30 days.
+          </li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="D">
+            D.
+           </span>
+           Create a BigQuery table with a datetime column for the day the weather data refers to. Run a scheduled query to delete rows with a datetime value older than 30 days.
+          </li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">
+         Show Suggested Answer
+        </a>
+<a class="btn btn-primary hide-solution d-none" href="#">
+         Hide Answer
+        </a>
+<div class="card-text question-answer bg-light white-text">
+<span class="correct-answer-box">
+<strong>
+           Suggested Answer:
+          </strong>
+<span class="correct-answer">
+           B
+          </span>
+<a class="vote-answer-button ml-1 d-print-none" data-original-title="Vote an answer" data-toggle="tooltip" href="#" title="">
+           🗳️
+          </a>
+<br/>
+</span>
+<span class="answer-description">
+</span>
+<div class="voting-summary col-12 col-sm-6 col-lg-4 pt-2 pb-2" style="font-size: 0.9em">
+<i>
+           Community vote distribution
+          </i>
+<!-- Additional optional vote button: <a href="javascript:void(0)" data-toggle="tooltip" class="vote-answer-button" title="Vote an answer">🗳️</a>-->
+<div class="progress vote-distribution-bar">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="15" class="vote-bar progress-bar bg-primary" data-original-title="19 votes." data-toggle="tooltip" role="progressbar" style="width: 90%; display: flex;" title="">
+            B (90%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-info" data-original-title="5%" data-toggle="tooltip" role="progressbar" style="width: 10%; display: flex;" title="">
+            5%
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-success" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            B (20%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" class="vote-bar progress-bar bg-warning" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 15%; display: none;" title="">
+            Other
+           </div>
+</div>
+</div>
+</div>
+</div>
+<!-- / Question  -->
+<div class="discussion-meta-data mt-3 pt-1 border-top">
+        <i>
+         Jan. 26, 2024, 12:30 a.m.
+        </i>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2></h2>
+<pre>Odpowiedź: B.
+
+Partycjonowanie tabel w BigQuery według daty (w tym przypadku daty pogodowej) jest najbardziej efektywnym sposobem zarządzania danymi, które mają ograniczony okres ważności. Ustawienie wygasania partycji na 30 dni automatycznie usuwa starsze dane, eliminując potrzebę ręcznego usuwania rekordów za pomocą zapytań. To rozwiązanie minimalizuje koszty przechowywania, ponieważ BigQuery przechowuje metadane tylko dla istniejących partycji, a usunięcie partycji jest operacją metadanych, a nie kopiowania danych. Dzięki temu proces jest szybki i tani. Partycjonowanie pozwala również na szybsze wykonywanie zapytań, ponieważ BigQuery skanuje tylko te partycje, które zawierają potrzebne dane.
+
+A. Używanie sygnatury czasowej wstawiania do filtrowania danych jest mniej efektywne, ponieważ BigQuery musi skanować całą tabelę, aby znaleźć rekordy do usunięcia.
+C. Partycjonowanie według czasu wstawiania nie jest idealne, ponieważ dane pogodowe odnoszą się do konkretnej daty, a nie do momentu ich wstawienia do BigQuery.
+D. Podobnie jak w opcji A, usuwanie wierszy na podstawie daty pogodowej za pomocą zaplanowanego zapytania wymaga skanowania całej tabeli, co jest kosztowne i wolne.
+
+Dodatkowe źródła:
+
+*   <a href="https://cloud.google.com/bigquery/docs/partitioned-tables" target="_blank">BigQuery Partitioned Tables</a>
+*   <a href="https://cloud.google.com/bigquery/docs/partition-expiration" target="_blank">BigQuery Partition Expiration</a></pre>
+</div>
+<div class="ai-analysis-container" style="display:none;" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;"><h2>Analiza i Podsumowanie Dyskusji (AI)</h2><div class="analysis-section">
+<h3>Analiza i Wyjaśnienie</h3>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p>Najlepszym rozwiązaniem jest <b>partycjonowanie tabeli BigQuery według daty pogodowej</b> i ustawienie <b>wygaśnięcia partycji na 30 dni</b>.  To podejście jest najbardziej efektywne kosztowo i wydajnościowo, ponieważ BigQuery zarządza partycjami jako jednostkami metadanych. Usunięcie partycji jest operacją metadanych, a nie kopiowania danych, co jest szybkie i tanie.</p>
+<p>Komentarze użytkowników, szczególnie te nowsze (np. sierpień 2024, iooj) potwierdzają, że pytanie pojawiło się na egzaminie i poprawna odpowiedź to B. Użytkownik joao_01 słusznie zauważa, że granularność partycji to dni, a nie sekundy, co obala argument chambg o przekroczeniu limitu 4000 partycji.</p>
+<p><b>Dlaczego inne odpowiedzi są nieprawidłowe:</b></p>
+<ul>
+<li><b>A i D:</b>  Usuwanie wierszy za pomocą zaplanowanych zapytań wymaga skanowania całej tabeli, co jest kosztowne i czasochłonne.</li>
+<li><b>C:</b> Partycjonowanie według czasu wstawiania (ingestion time) nie jest optymalne, ponieważ interesuje nas data pogodowa, a nie moment wstawienia danych do BigQuery.  Dane mogą być wstawiane z opóźnieniem, a my potrzebujemy danych za ostatnie 30 dni kalendarzowych.</li>
+</ul>
+<p>Dodatkowe źródło (link podany przez d11379b) potwierdza możliwość partycjonowania po datach z granularnością dzienną.</p>
+</div>
+</div></div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+
+    revealButtons.forEach(button => {
+        let isVisible = false;
+
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+
+<script>localStorage.setItem('gcp_exam_last_visited', window.location.href);</script></body>
+</html>

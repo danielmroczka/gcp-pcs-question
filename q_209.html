@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/animate.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/owl.carousel.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/slick.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-main.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-transitions.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/magnific-popup.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/fonts2/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/color/default.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/responsive.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .discussion-header-container { line-height: 1.5; }
+    .question-body { font-size: 1.05rem; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    </style>
+<title>PDE 209</title>
+
+<style>
+/* Zapewnij że główny kontener ma rozsądną szerokość */
+.q-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Wszystkie karty (pytanie i odpowiedź) mają tę samą szerokość */
+.q-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.q-answer {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.q-answer pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.ai-analysis-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+</style>
+
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_208.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_210.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+<h2>Question 209 / 319</h2>
+
+<div class="question-body mt-3 pt-3 border-top" data-id="907577">
+<p class="card-text">
+         A shipping company has live package-tracking data that is sent to an Apache Kafka stream in real time. This is then loaded into BigQuery. Analysts in your company want to query the tracking data in BigQuery to analyze geospatial trends in the lifecycle of a package. The table was originally created with ingest-date partitioning. Over time, the query processing time has increased. You need to copy all the data to a new clustered table. What should you do?
+        </p>
+<div class="voted-answers-tally d-none">
+<script id="907577" type="application/json">
+          [{"voted_answers": "B", "vote_count": 15, "is_most_voted": true}]
+         </script>
+</div>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="A">
+            A.
+           </span>
+           Re-create the table using data partitioning on the package delivery date.
+          </li>
+<li class="multi-choice-item correct-hidden">
+<span class="multi-choice-letter" data-choice-letter="B">
+            B.
+           </span>
+           Implement clustering in BigQuery on the package-tracking ID column.
+           <span class="badge badge-success most-voted-answer-badge" data-original-title="This answer is currently the most voted for in the discussion" style="display: none;" title="">
+            Most Voted
+           </span>
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="C">
+            C.
+           </span>
+           Implement clustering in BigQuery on the ingest date column.
+          </li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="D">
+            D.
+           </span>
+           Tier older data onto Cloud Storage files and create a BigQuery table using Cloud Storage as an external data source.
+          </li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">
+         Show Suggested Answer
+        </a>
+<a class="btn btn-primary hide-solution d-none" href="#">
+         Hide Answer
+        </a>
+<div class="card-text question-answer bg-light white-text">
+<span class="correct-answer-box">
+<strong>
+           Suggested Answer:
+          </strong>
+<span class="correct-answer">
+           B
+          </span>
+<a class="vote-answer-button ml-1 d-print-none" data-original-title="Vote an answer" data-toggle="tooltip" href="#" title="">
+           🗳️
+          </a>
+<br/>
+</span>
+<span class="answer-description">
+</span>
+<div class="voting-summary col-12 col-sm-6 col-lg-4 pt-2 pb-2" style="font-size: 0.9em">
+<i>
+           Community vote distribution
+          </i>
+<!-- Additional optional vote button: <a href="javascript:void(0)" data-toggle="tooltip" class="vote-answer-button" title="Vote an answer">🗳️</a>-->
+<div class="progress vote-distribution-bar">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="15" class="vote-bar progress-bar bg-primary" data-original-title="15 votes." data-toggle="tooltip" role="progressbar" style="width: 100%; display: flex;" title="">
+            B (100%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-info" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            C (25%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-success" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            B (20%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" class="vote-bar progress-bar bg-warning" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 15%; display: none;" title="">
+            Other
+           </div>
+</div>
+</div>
+</div>
+</div>
+<!-- / Question  -->
+<div class="discussion-meta-data mt-3 pt-1 border-top">
+        <i>
+         Dec. 30, 2023, 9:31 a.m.
+        </i>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2></h2>
+<pre>Odpowiedź: B.
+
+Implementacja clusteringu w BigQuery na kolumnie identyfikatora śledzenia paczki (package-tracking ID) jest najlepszym rozwiązaniem, ponieważ clustering optymalizuje wydajność zapytań poprzez fizyczne grupowanie danych o podobnych wartościach w tej kolumnie. W przypadku analizy trendów geoprzestrzennych w cyklu życia paczki, identyfikator śledzenia paczki jest kluczowy, ponieważ pozwala na szybkie filtrowanie i agregację danych dla konkretnych paczek.  Ponieważ oryginalna tabela była partycjonowana po dacie załadowania (ingest-date), a wydajność zapytań spadła, clustering na kolumnie istotnej dla analizy (tracking ID) przyniesie większe korzyści niż zmiana partycjonowania. Clustering pozwala na efektywne skanowanie tylko tych bloków danych, które są istotne dla zapytania, co znacznie przyspiesza przetwarzanie.
+
+A. Zmiana partycjonowania na datę dostawy paczki może nie przynieść oczekiwanej poprawy wydajności, jeśli zapytania często dotyczą pojedynczych paczek.
+C. Clustering na dacie załadowania (ingest-date) nie jest odpowiedni, ponieważ nie odzwierciedla danych istotnych dla analizy trendów geoprzestrzennych.
+D. Przeniesienie starszych danych do Cloud Storage i użycie ich jako zewnętrznego źródła danych pogorszy wydajność zapytań, ponieważ BigQuery będzie musiał odczytywać dane z wolniejszego medium.
+
+Dodatkowe źródła:
+
+*   **BigQuery Documentation - Clustering:** <a href="https://cloud.google.com/bigquery/docs/clustering-tables" target="_blank">https://cloud.google.com/bigquery/docs/clustering-tables</a>
+*   **BigQuery Documentation - Partitioning:** <a href="https://cloud.google.com/bigquery/docs/partitioned-tables" target="_blank">https://cloud.google.com/bigquery/docs/partitioned-tables</a></pre>
+</div>
+<div class="ai-analysis-container" style="display:none;" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;"><h2>Analiza i Podsumowanie Dyskusji (AI)</h2><div class="analysis-section">
+<h3>Analiza i Wyjaśnienie</h3>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p>Implementacja clusteringu w BigQuery na kolumnie identyfikatora śledzenia paczki (package-tracking ID) jest najefektywniejszym rozwiązaniem.  Analiza dotyczy trendów geoprzestrzennych w cyklu życia <i>pojedynczych</i> paczek. Clustering na identyfikatorze śledzenia paczki fizycznie grupuje wszystkie dane związane z daną paczką, co znacząco przyspiesza zapytania, które filtrują lub agregują dane po tym identyfikatorze.  To pozwala na efektywne skanowanie tylko tych bloków danych, które są istotne dla zapytania, zamiast skanowania całej tabeli.</p>
+<p>Komentarze użytkowników w dużej mierze potwierdzają tę odpowiedź. Większość użytkowników (w tym ci z nowszymi datami i większą liczbą głosów) wybrała odpowiedź B i uzasadniła ją w podobny sposób. Użytkownik <b>e70ea9e</b> szczególnie dobrze wyjaśnił, dlaczego clustering jest lepszy niż partycjonowanie w tym przypadku, podkreślając, że clustering optymalizuje organizację danych pod kątem konkretnych wzorców zapytań.</p>
+<p><b>Dlaczego inne odpowiedzi są nieprawidłowe:</b></p>
+<ul>
+<li><b>A:</b> Zmiana partycjonowania na datę dostawy paczki może nie przynieść oczekiwanej poprawy, jeśli zapytania często dotyczą pojedynczych paczek lub analizy w określonym przedziale czasu dla wielu paczek.</li>
+<li><b>C:</b> Clustering na dacie załadowania (ingest-date) nie jest odpowiedni, ponieważ data załadowania nie jest bezpośrednio związana z danymi istotnymi dla analizy trendów geoprzestrzennych.</li>
+<li><b>D:</b> Przeniesienie starszych danych do Cloud Storage i użycie ich jako zewnętrznego źródła danych znacznie pogorszy wydajność zapytań, ponieważ BigQuery będzie musiał odczytywać dane z wolniejszego medium.</li>
+</ul>
+<p>Dodatkowo, komentarz użytkownika <b>apoio.certificacoes.closer</b> zwraca uwagę na ważną kwestię: clustering nie wymaga migracji danych, jak to ma miejsce w przypadku partycjonowania.  Można go zaimplementować na istniejącej tabeli, choć dane muszą być ponownie zapisane, aby skorzystać z clusteringu.</p>
+</div>
+</div></div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+
+    revealButtons.forEach(button => {
+        let isVisible = false;
+
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+
+<script>localStorage.setItem('gcp_exam_last_visited', window.location.href);</script></body>
+</html>

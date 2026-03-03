@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/animate.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/owl.carousel.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/slick.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-main.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-transitions.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/magnific-popup.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/fonts2/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/color/default.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/responsive.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .discussion-header-container { line-height: 1.5; }
+    .question-body { font-size: 1.05rem; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    </style>
+<title>PDE 241</title>
+
+<style>
+/* Zapewnij że główny kontener ma rozsądną szerokość */
+.q-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Wszystkie karty (pytanie i odpowiedź) mają tę samą szerokość */
+.q-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.q-answer {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.q-answer pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.ai-analysis-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+</style>
+
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_240.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_242.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+<h2>Question 241 / 319</h2>
+
+<div class="question-body mt-3 pt-3 border-top" data-id="907609">
+<p class="card-text">
+         You are designing the architecture of your application to store data in Cloud Storage. Your application consists of pipelines that read data from a Cloud Storage bucket that contains raw data, and write the data to a second bucket after processing. You want to design an architecture with Cloud Storage resources that are capable of being resilient if a Google Cloud regional failure occurs. You want to minimize the recovery point objective (RPO) if a failure occurs, with no impact on applications that use the stored data. What should you do?
+        </p>
+<div class="voted-answers-tally d-none">
+<script id="907609" type="application/json">
+          [{"voted_answers": "C", "vote_count": 29, "is_most_voted": true}, {"voted_answers": "A", "vote_count": 7, "is_most_voted": false}]
+         </script>
+</div>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="A">
+            A.
+           </span>
+           Adopt multi-regional Cloud Storage buckets in your architecture.
+          </li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="B">
+            B.
+           </span>
+           Adopt two regional Cloud Storage buckets, and update your application to write the output on both buckets.
+          </li>
+<li class="multi-choice-item correct-hidden">
+<span class="multi-choice-letter" data-choice-letter="C">
+            C.
+           </span>
+           Adopt a dual-region Cloud Storage bucket, and enable turbo replication in your architecture.
+           <span class="badge badge-success most-voted-answer-badge" data-original-title="This answer is currently the most voted for in the discussion" style="display: none;" title="">
+            Most Voted
+           </span>
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="D">
+            D.
+           </span>
+           Adopt two regional Cloud Storage buckets, and create a daily task to copy from one bucket to the other.
+          </li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">
+         Show Suggested Answer
+        </a>
+<a class="btn btn-primary hide-solution d-none" href="#">
+         Hide Answer
+        </a>
+<div class="card-text question-answer bg-light white-text">
+<span class="correct-answer-box">
+<strong>
+           Suggested Answer:
+          </strong>
+<span class="correct-answer">
+           C
+          </span>
+<a class="vote-answer-button ml-1 d-print-none" data-original-title="Vote an answer" data-toggle="tooltip" href="#" title="">
+           🗳️
+          </a>
+<br/>
+</span>
+<span class="answer-description">
+</span>
+<div class="voting-summary col-12 col-sm-6 col-lg-4 pt-2 pb-2" style="font-size: 0.9em">
+<i>
+           Community vote distribution
+          </i>
+<!-- Additional optional vote button: <a href="javascript:void(0)" data-toggle="tooltip" class="vote-answer-button" title="Vote an answer">🗳️</a>-->
+<div class="progress vote-distribution-bar">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="15" class="vote-bar progress-bar bg-primary" data-original-title="29 votes." data-toggle="tooltip" role="progressbar" style="width: 81%; display: flex;" title="">
+            C (81%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-info" data-original-title="7 votes." data-toggle="tooltip" role="progressbar" style="width: 19%; display: flex;" title="">
+            A (19%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-success" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            B (20%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" class="vote-bar progress-bar bg-warning" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 15%; display: none;" title="">
+            Other
+           </div>
+</div>
+</div>
+</div>
+</div>
+<!-- / Question  -->
+<div class="discussion-meta-data mt-3 pt-1 border-top">
+        <i>
+         Jan. 3, 2024, 2:06 p.m.
+        </i>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2></h2>
+<pre>Odpowiedź: C.
+
+Dual-region Cloud Storage bucket z włączoną turbo replikacją zapewnia najwyższy poziom dostępności i odporności na awarie regionalne. Turbo replikacja synchronizuje dane między dwoma regionami w sposób asynchroniczny, ale z minimalnym opóźnieniem, co pozwala na szybkie przełączenie w przypadku awarii. Dzięki temu RPO (Recovery Point Objective) jest minimalne, a aplikacje korzystające z danych nie odczują przestojów. Dual-region zapewnia redundancję geograficzną, chroniąc przed utratą danych w przypadku awarii całego regionu. Dodatkowo, turbo replikacja optymalizuje koszty w porównaniu do pełnej synchronizacji.
+
+A. Multi-regional buckets oferują wysoką dostępność, ale replikacja jest geograficznie rozproszona i może skutkować wyższym RPO niż w przypadku dual-region z turbo replikacją.
+B. Pisanie do dwóch regionalnych bucketów zwiększa złożoność aplikacji i nie gwarantuje automatycznego przełączania w przypadku awarii.
+D. Codzienne kopiowanie danych między bucketami skutkuje wysokim RPO, ponieważ dane z ostatniego dnia mogą zostać utracone w przypadku awarii.
+
+Dodatkowe źródła:
+
+*   **Cloud Storage Locations:** <a href="https://cloud.google.com/storage/docs/locations" target="_blank">https://cloud.google.com/storage/docs/locations</a>
+*   **Dual-region buckets:** <a href="https://cloud.google.com/storage/docs/dual-region" target="_blank">https://cloud.google.com/storage/docs/dual-region</a>
+*   **Turbo replication:** <a href="https://cloud.google.com/storage/docs/turbo-replication" target="_blank">https://cloud.google.com/storage/docs/turbo-replication</a></pre>
+</div>
+<div class="ai-analysis-container" style="display:none;" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;"><h2>Analiza i Podsumowanie Dyskusji (AI)</h2><div class="analysis-section">
+<h3>Analiza i Wyjaśnienie</h3>
+<p><b>Sugerowana odpowiedź: C</b></p>
+<p>Poprawną odpowiedzią jest C, czyli zastosowanie dual-region Cloud Storage bucket z włączoną turbo replikacją. Kluczowym wymaganiem w pytaniu jest <b>minimalizacja RPO (Recovery Point Objective)</b> przy jednoczesnym <b>braku wpływu na aplikacje korzystające z danych</b>. Turbo replikacja zapewnia szybką synchronizację danych między dwoma regionami (z RPO do 15 minut), co minimalizuje potencjalną utratę danych w przypadku awarii regionalnej.  Dual-region zapewnia redundancję geograficzną.</p>
+<p>Dyskusja użytkowników w większości poprawnie wskazuje odpowiedź C, powołując się na dokumentację Google Cloud dotyczącą turbo replikacji i dual-region buckets. Użytkownicy zwracają uwagę na fakt, że turbo replikacja znacząco skraca czas replikacji w porównaniu do standardowej replikacji, co jest kluczowe dla minimalizacji RPO.</p>
+<p><b>Dlaczego inne odpowiedzi są nieprawidłowe:</b></p>
+<ul>
+<li><b>A: Adopt multi-regional Cloud Storage buckets in your architecture.</b> – Chociaż multi-regional buckets zapewniają wysoką dostępność, replikacja jest rozproszona na większą liczbę regionów, co skutkuje potencjalnie wyższym RPO niż w przypadku dual-region z turbo replikacją. Dodatkowo, jak zauważają użytkownicy, mogą wystąpić problemy z latencją i kosztami transferu danych.</li>
+<li><b>B: Adopt two regional Cloud Storage buckets, and update your application to write the output on both buckets.</b> –  Wymaga to modyfikacji aplikacji, co jest sprzeczne z wymaganiem braku wpływu na aplikacje. Ponadto, nie gwarantuje automatycznego przełączania w przypadku awarii.</li>
+<li><b>D: Adopt two regional Cloud Storage buckets, and create a daily task to copy from one bucket to the other.</b> –  Codzienne kopiowanie danych skutkuje bardzo wysokim RPO (do 24 godzin), co jest niedopuszczalne w kontekście minimalizacji utraty danych.</li>
+</ul>
+<p>Podsumowując, odpowiedź C najlepiej spełnia wszystkie wymagania zadania, oferując minimalne RPO, brak wpływu na aplikacje i odporność na awarie regionalne dzięki redundancji geograficznej i szybkiej replikacji.</p>
+</div>
+</div></div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+
+    revealButtons.forEach(button => {
+        let isVisible = false;
+
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+
+<script>localStorage.setItem('gcp_exam_last_visited', window.location.href);</script></body>
+</html>

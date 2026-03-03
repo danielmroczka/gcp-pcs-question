@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/animate.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/owl.carousel.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/slick.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-main.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-transitions.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/magnific-popup.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/fonts2/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/color/default.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/responsive.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .discussion-header-container { line-height: 1.5; }
+    .question-body { font-size: 1.05rem; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    </style>
+<title>PDE 229</title>
+
+<style>
+/* Zapewnij że główny kontener ma rozsądną szerokość */
+.q-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Wszystkie karty (pytanie i odpowiedź) mają tę samą szerokość */
+.q-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.q-answer {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.q-answer pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.ai-analysis-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+</style>
+
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_228.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_230.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+<h2>Question 229 / 319</h2>
+
+<div class="question-body mt-3 pt-3 border-top" data-id="907597">
+<p class="card-text">
+         You currently use a SQL-based tool to visualize your data stored in BigQuery. The data visualizations require the use of outer joins and analytic functions. Visualizations must be based on data that is no less than 4 hours old. Business users are complaining that the visualizations are too slow to generate. You want to improve the performance of the visualization queries while minimizing the maintenance overhead of the data preparation pipeline. What should you do?
+        </p>
+<div class="voted-answers-tally d-none">
+<script id="907597" type="application/json">
+          [{"voted_answers": "A", "vote_count": 12, "is_most_voted": true}, {"voted_answers": "B", "vote_count": 2, "is_most_voted": false}]
+         </script>
+</div>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item correct-hidden">
+<span class="multi-choice-letter" data-choice-letter="A">
+            A.
+           </span>
+           Create materialized views with the allow_non_incremental_definition option set to true for the visualization queries. Specify the max_staleness parameter to 4 hours and the enable_refresh parameter to true. Reference the materialized views in the data visualization tool.
+           <span class="badge badge-success most-voted-answer-badge" data-original-title="This answer is currently the most voted for in the discussion" style="display: none;" title="">
+            Most Voted
+           </span>
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="B">
+            B.
+           </span>
+           Create views for the visualization queries. Reference the views in the data visualization tool.
+          </li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="C">
+            C.
+           </span>
+           Create a Cloud Function instance to export the visualization query results as parquet files to a Cloud Storage bucket. Use Cloud Scheduler to trigger the Cloud Function every 4 hours. Reference the parquet files in the data visualization tool.
+          </li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="D">
+            D.
+           </span>
+           Create materialized views for the visualization queries. Use the incremental updates capability of BigQuery materialized views to handle changed data automatically. Reference the materialized views in the data visualization tool.
+          </li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">
+         Show Suggested Answer
+        </a>
+<a class="btn btn-primary hide-solution d-none" href="#">
+         Hide Answer
+        </a>
+<div class="card-text question-answer bg-light white-text">
+<span class="correct-answer-box">
+<strong>
+           Suggested Answer:
+          </strong>
+<span class="correct-answer">
+           A
+          </span>
+<a class="vote-answer-button ml-1 d-print-none" data-original-title="Vote an answer" data-toggle="tooltip" href="#" title="">
+           🗳️
+          </a>
+<br/>
+</span>
+<span class="answer-description">
+</span>
+<div class="voting-summary col-12 col-sm-6 col-lg-4 pt-2 pb-2" style="font-size: 0.9em">
+<i>
+           Community vote distribution
+          </i>
+<!-- Additional optional vote button: <a href="javascript:void(0)" data-toggle="tooltip" class="vote-answer-button" title="Vote an answer">🗳️</a>-->
+<div class="progress vote-distribution-bar">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="15" class="vote-bar progress-bar bg-primary" data-original-title="12 votes." data-toggle="tooltip" role="progressbar" style="width: 86%; display: flex;" title="">
+            A (86%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-info" data-original-title="2 votes." data-toggle="tooltip" role="progressbar" style="width: 14%; display: flex;" title="">
+            14%
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-success" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            B (20%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" class="vote-bar progress-bar bg-warning" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 15%; display: none;" title="">
+            Other
+           </div>
+</div>
+</div>
+</div>
+</div>
+<!-- / Question  -->
+<div class="discussion-meta-data mt-3 pt-1 border-top">
+        <i>
+         Dec. 30, 2023, 9:55 a.m.
+        </i>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2></h2>
+<pre>Odpowiedź: A.
+
+Materializowane widoki (materialized views) są idealnym rozwiązaniem w tej sytuacji, ponieważ pre-kompilują wyniki złożonych zapytań, takich jak te wykorzystujące outer joins i funkcje analityczne, co znacznie przyspiesza czas generowania wizualizacji. Ustawienie `max_staleness` na 4 godziny spełnia wymaganie dotyczące wieku danych, a `enable_refresh` automatycznie odświeża widok, minimalizując nakład pracy związany z utrzymaniem. Opcja `allow_non_incremental_definition = true` pozwala na tworzenie widoków, które nie muszą być aktualizowane inkrementalnie, co może być korzystne w przypadku złożonych zapytań, gdzie inkrementalne aktualizacje byłyby zbyt kosztowne. Dzięki temu użytkownicy biznesowi otrzymają szybsze wizualizacje, a zespół inżynierski zminimalizuje obciążenie związane z optymalizacją zapytań i odświeżaniem danych.
+
+A. Jest to najlepsza opcja, ponieważ wykorzystuje wbudowane mechanizmy BigQuery do optymalizacji zapytań i automatycznego odświeżania danych.
+B. Widoki (views) nie przechowują pre-kompilowanych danych, więc nie poprawią wydajności zapytań, a jedynie zmienią sposób ich zapisu.
+C. Eksportowanie do plików Parquet i używanie Cloud Functions/Scheduler wprowadza dodatkową złożoność i opóźnienia, a także zwiększa koszty związane z przechowywaniem i przetwarzaniem danych.
+D. Chociaż inkrementalne aktualizacje są korzystne, nie zawsze są możliwe lub efektywne dla wszystkich typów zapytań, a w tym przypadku `allow_non_incremental_definition = true` sugeruje, że inkrementalne aktualizacje mogą nie być optymalne.
+
+Dodatkowe źródła:
+
+*   **BigQuery Materialized Views:** <a href="https://cloud.google.com/bigquery/docs/materialized-views-intro" target="_blank">https://cloud.google.com/bigquery/docs/materialized-views-intro</a>
+*   **BigQuery max_staleness:** <a href="https://cloud.google.com/bigquery/docs/materialized-views-max-staleness" target="_blank">https://cloud.google.com/bigquery/docs/materialized-views-max-staleness</a>
+*   **BigQuery allow_non_incremental_definition:** <a href="https://cloud.google.com/bigquery/docs/materialized-views-allow-non-incremental-definition" target="_blank">https://cloud.google.com/bigquery/docs/materialized-views-allow-non-incremental-definition</a></pre>
+</div>
+<div class="ai-analysis-container" style="display:none;" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;"><h2>Analiza i Podsumowanie Dyskusji (AI)</h2><div class="analysis-section">
+<h3>Analiza i Wyjaśnienie</h3>
+<p><b>Sugerowana odpowiedź: A</b></p>
+<p>Odpowiedź A jest najbardziej odpowiednia, ponieważ wykorzystuje materializowane widoki BigQuery z opcją <code>allow_non_incremental_definition = true</code>, <code>max_staleness = 4 hours</code> oraz <code>enable_refresh = true</code>.  To rozwiązanie pre-kompiluje wyniki złożonych zapytań (outer joins i funkcje analityczne), co znacząco przyspiesza generowanie wizualizacji. Ustawienie <code>max_staleness</code> zapewnia, że dane w wizualizacjach nie będą starsze niż 4 godziny, spełniając wymagania biznesowe.  Automatyczne odświeżanie (<code>enable_refresh</code>) minimalizuje nakład pracy związany z utrzymaniem.</p>
+<p>Kluczowe jest użycie <code>allow_non_incremental_definition = true</code>.  Zgodnie z dokumentacją BigQuery i komentarzem użytkownika ricardovazz, ta opcja pozwala na tworzenie materializowanych widoków dla zapytań, które nie mogą być efektywnie aktualizowane inkrementalnie (np. z powodu użycia outer joins lub funkcji analitycznych).  W takim przypadku, pełne odświeżanie w określonych odstępach czasu (kontrolowane przez <code>max_staleness</code>) jest akceptowalnym kompromisem między wydajnością a kosztem.</p>
+<p>Dyskusja użytkowników potwierdza poprawność odpowiedzi A. Użytkownik AWSandeep wskazuje, że materializowane widoki obsługują outer joins i funkcje analityczne, jeśli są zdefiniowane jako nieinkrementalne. Użytkownik raaad i e70ea9e również argumentują za odpowiedzią A, podkreślając korzyści z prekompilowanych wyników i automatycznego odświeżania.</p>
+<ul>
+<li><b>Odpowiedź B:</b> Widoki (views) nie przechowują pre-kompilowanych danych, więc nie poprawią wydajności zapytań.</li>
+<li><b>Odpowiedź C:</b> Eksportowanie do plików Parquet i używanie Cloud Functions/Scheduler wprowadza niepotrzebną złożoność, opóźnienia i koszty.</li>
+<li><b>Odpowiedź D:</b> Inkrementalne aktualizacje nie zawsze są możliwe lub efektywne dla wszystkich typów zapytań, a w tym przypadku <code>allow_non_incremental_definition = true</code> sugeruje, że inkrementalne aktualizacje nie są optymalne. Użytkownik datapassionate wyjaśnia, że inkrementalne aktualizacje mogą zawodzić, jeśli dane w tabeli źródłowej zostały zmienione (usunięte lub zaktualizowane).</li>
+</ul>
+<p>Uwaga dotycząca komentarza JamesKarianis:  Informacja o braku wsparcia dla outer joins i funkcji analitycznych w materializowanych widokach jest nieaktualna, ponieważ materializowane widoki z opcją <code>allow_non_incremental_definition = true</code> obsługują te funkcjonalności.</p>
+</div>
+</div></div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+
+    revealButtons.forEach(button => {
+        let isVisible = false;
+
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+
+<script>localStorage.setItem('gcp_exam_last_visited', window.location.href);</script></body>
+</html>

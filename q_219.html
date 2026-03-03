@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/animate.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/owl.carousel.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/slick.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-main.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-transitions.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/magnific-popup.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/fonts2/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/color/default.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/responsive.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .discussion-header-container { line-height: 1.5; }
+    .question-body { font-size: 1.05rem; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    </style>
+<title>PDE 219</title>
+
+<style>
+/* Zapewnij że główny kontener ma rozsądną szerokość */
+.q-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Wszystkie karty (pytanie i odpowiedź) mają tę samą szerokość */
+.q-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.q-answer {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.q-answer pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.ai-analysis-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+</style>
+
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_218.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_220.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+<h2>Question 219 / 319</h2>
+
+<div class="question-body mt-3 pt-3 border-top" data-id="907587">
+<p class="card-text">
+         You orchestrate ETL pipelines by using Cloud Composer. One of the tasks in the Apache Airflow directed acyclic graph (DAG) relies on a third-party service. You want to be notified when the task does not succeed. What should you do?
+        </p>
+<div class="voted-answers-tally d-none">
+<script id="907587" type="application/json">
+          [{"voted_answers": "C", "vote_count": 16, "is_most_voted": true}]
+         </script>
+</div>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="A">
+            A.
+           </span>
+           Assign a function with notification logic to the on_retry_callback parameter for the operator responsible for the task at risk.
+          </li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="B">
+            B.
+           </span>
+           Configure a Cloud Monitoring alert on the sla_missed metric associated with the task at risk to trigger a notification.
+          </li>
+<li class="multi-choice-item correct-hidden">
+<span class="multi-choice-letter" data-choice-letter="C">
+            C.
+           </span>
+           Assign a function with notification logic to the on_failure_callback parameter tor the operator responsible for the task at risk.
+           <span class="badge badge-success most-voted-answer-badge" data-original-title="This answer is currently the most voted for in the discussion" style="display: none;" title="">
+            Most Voted
+           </span>
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="D">
+            D.
+           </span>
+           Assign a function with notification logic to the sla_miss_callback parameter for the operator responsible for the task at risk.
+          </li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">
+         Show Suggested Answer
+        </a>
+<a class="btn btn-primary hide-solution d-none" href="#">
+         Hide Answer
+        </a>
+<div class="card-text question-answer bg-light white-text">
+<span class="correct-answer-box">
+<strong>
+           Suggested Answer:
+          </strong>
+<span class="correct-answer">
+           C
+          </span>
+<a class="vote-answer-button ml-1 d-print-none" data-original-title="Vote an answer" data-toggle="tooltip" href="#" title="">
+           🗳️
+          </a>
+<br/>
+</span>
+<span class="answer-description">
+</span>
+<div class="voting-summary col-12 col-sm-6 col-lg-4 pt-2 pb-2" style="font-size: 0.9em">
+<i>
+           Community vote distribution
+          </i>
+<!-- Additional optional vote button: <a href="javascript:void(0)" data-toggle="tooltip" class="vote-answer-button" title="Vote an answer">🗳️</a>-->
+<div class="progress vote-distribution-bar">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="15" class="vote-bar progress-bar bg-primary" data-original-title="16 votes." data-toggle="tooltip" role="progressbar" style="width: 100%; display: flex;" title="">
+            C (100%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-info" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            C (25%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-success" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            B (20%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" class="vote-bar progress-bar bg-warning" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 15%; display: none;" title="">
+            Other
+           </div>
+</div>
+</div>
+</div>
+</div>
+<!-- / Question  -->
+<div class="discussion-meta-data mt-3 pt-1 border-top">
+        <i>
+         Dec. 30, 2023, 9:44 a.m.
+        </i>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2></h2>
+<pre>Odpowiedź: C.
+
+Wyjaśnienie: Aby otrzymywać powiadomienia w przypadku niepowodzenia zadania w DAGu Airflow, należy użyć parametru `on_failure_callback` dla operatora odpowiedzialnego za to zadanie. Ten parametr pozwala przypisać funkcję, która zostanie wykonana, gdy zadanie zakończy się niepowodzeniem. Funkcja ta może zawierać logikę wysyłania powiadomień, np. e-maili, wiadomości SMS lub alertów do innych systemów.  `on_failure_callback` jest dedykowany do obsługi sytuacji, gdy zadanie nie zakończyło się pomyślnie, co idealnie odpowiada wymaganiom pytania.  Użycie tego parametru zapewnia bezpośrednią reakcję na błędy w konkretnym zadaniu.
+
+A. `on_retry_callback` uruchamia się tylko podczas ponawiania próby zadania, a nie po ostatecznym niepowodzeniu.
+B. `sla_missed` informuje o przekroczeniu ustalonego SLA, a nie o samym niepowodzeniu zadania.
+D. `sla_miss_callback` jest uruchamiany, gdy SLA zostanie przekroczone, a nie gdy zadanie zakończy się niepowodzeniem.
+
+Dodatkowe źródła:
+
+*   <a href="https://airflow.apache.org/docs/apache-airflow/stable/concepts/callbacks.html" target="_blank">Airflow Documentation - Callbacks</a>
+*   <a href="https://airflow.apache.org/docs/apache-airflow/stable/operators/index.html" target="_blank">Airflow Documentation - Operators</a></pre>
+</div>
+<div class="ai-analysis-container" style="display:none;" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;"><h2>Analiza i Podsumowanie Dyskusji (AI)</h2><div class="analysis-section">
+<h3>Analiza i Wyjaśnienie</h3>
+<p><b>Sugerowana odpowiedź: C</b></p>
+<p>Poprawną odpowiedzią jest C, czyli przypisanie funkcji z logiką powiadomień do parametru <code>on_failure_callback</code> operatora odpowiedzialnego za zadanie.  Ten parametr w Airflow jest specjalnie przeznaczony do uruchamiania funkcji w momencie, gdy zadanie zakończy się niepowodzeniem. Pozwala to na bezpośrednie i automatyczne powiadomienie o błędzie, co idealnie odpowiada wymaganiom postawionym w pytaniu.</p>
+<p>Dyskusja użytkowników w pełni potwierdza tę odpowiedź. Większość użytkowników (w tym autor pytania - e70ea9e) wskazuje odpowiedź C, powołując się na dokumentację Airflow i podkreślając, że <code>on_failure_callback</code> jest "bezpośrednim wyzwalaczem" powiadomień w przypadku niepowodzenia zadania. Użytkownik raaad trafnie zauważa, że pozwala to na dostosowanie logiki powiadomień do konkretnych potrzeb.</p>
+<p>Pozostałe odpowiedzi są nieprawidłowe z następujących powodów:</p>
+<ul>
+<li><b>A (<code>on_retry_callback</code>):</b> Ta funkcja jest wywoływana podczas ponawiania próby zadania, a nie po ostatecznym niepowodzeniu.</li>
+<li><b>B (<code>sla_missed</code>):</b>  Ten metryka informuje o przekroczeniu ustalonego SLA (Service Level Agreement), a nie o samym niepowodzeniu zadania.  Przekroczenie SLA może wynikać z różnych przyczyn, niekoniecznie z błędu w zadaniu.</li>
+<li><b>D (<code>sla_miss_callback</code>):</b> Ta funkcja jest uruchamiana, gdy SLA zostanie przekroczone, a nie gdy zadanie zakończy się niepowodzeniem.</li>
+</ul>
+<p>Podsumowując, <code>on_failure_callback</code> jest najprostszym i najbardziej bezpośrednim sposobem na otrzymywanie powiadomień o niepowodzeniach zadań w DAGach Airflow, co czyni odpowiedź C jedyną poprawną.</p>
+</div>
+</div></div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+
+    revealButtons.forEach(button => {
+        let isVisible = false;
+
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+
+<script>localStorage.setItem('gcp_exam_last_visited', window.location.href);</script></body>
+</html>

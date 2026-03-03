@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .question-body { font-size: 1.05rem; }
+    .ai-analysis-container { margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3; }
+</style>
+<title>PDE 320</title>
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_319.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_321.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+</h2>
+<div class="question-body mt-3 pt-3 border-top">
+<p class="card-text">
+Your company uses Looker Studio connected to BigQuery for reporting. Users are experiencing slow dashboard load times due to complex queries on a large table. The queries involve aggregations and filtering on several columns. You need to optimize query performance to decrease the dashboard load times. What should you do?
+</p>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure Looker Studio to use a shorter data refresh interval to ensure fresh data is always displayed.
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a materialized view in BigQuery that pre-calculates the aggregations and filters used in the Looker Studio dashboards.
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="C">C.</span> Implement row-level security in BigQuery to restrict data access and reduce the amount of data processed by the queries.
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="D">D.</span> Use BigQuery BI Engine to accelerate query performance by caching frequently accessed data.
+</li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
+<div class="card-text question-answer bg-light white-text" style="display:none;">
+<span class="correct-answer-box">
+<strong>Suggested Answer:</strong> <span class="correct-answer">B</span>
+</span>
+</div>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2>Wyjaśnienie</h2>
+<pre>
+Correct Answer: B
+
+Materialized views in BigQuery are precomputed views that periodically cache the results of a query for increased performance and efficiency. They are particularly effective for complex queries involving aggregations and filters on large datasets, as the heavy lifting is done ahead of time. When Looker Studio queries the materialized view, BigQuery can serve the precomputed results, significantly reducing dashboard load times.
+
+Why other options are incorrect:
+A. Shorter data refresh interval would actually increase the load on BigQuery and could potentially worsen performance or increase costs, as it forces more frequent query execution.
+C. Row-level security is for access control, not performance optimization. While it reduces the data a specific user sees, it doesn't optimize the underlying complex aggregation logic.
+D. BigQuery BI Engine is a great tool for accelerating BI dashboards by providing sub-second query execution through in-memory caching. However, for complex aggregations on very large tables, materialized views are often the first step in pre-calculating results, and ExamTopics community consensus frequently favors B for this specific scenario.
+</pre>
+</div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelector('.reveal-solution');
+    revealButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        const answerSection = document.querySelector('.question-answer');
+        const explanationSection = document.querySelector('.q-answer');
+        if (answerSection.style.display === 'none') {
+            answerSection.style.display = 'block';
+            explanationSection.style.display = 'block';
+            this.textContent = 'Hide Answer';
+        } else {
+            answerSection.style.display = 'none';
+            explanationSection.style.display = 'none';
+            this.textContent = 'Show Suggested Answer';
+        }
+    });
+});
+</script>
+</body>
+</html>

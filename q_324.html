@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .question-body { font-size: 1.05rem; }
+</style>
+<title>PDE 324</title>
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_323.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_325.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+</h2>
+<div class="question-body mt-3 pt-3 border-top">
+<p class="card-text">
+Your financial services company has a critical daily reconciliation process that involves several distinct steps: fetching data from an external SFTP server, decrypting the files, loading them into Cloud Storage, and finally running a series of BigQuery SQL transformations. Each step has strict dependencies, and the entire process should notify you if not completed by 7:00 AM. You need a highly observable and robust solution that supports easy re-runs of individual steps if errors occur. What should you do?
+</p>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="A">A.</span> Develop a Cloud Composer DAG that includes a single PythonOperator to execute a Python script that runs each step sequentially, incorporating error handling and retries.
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="B">B.</span> Implement a Cloud Composer DAG, with each step defined as a separate task using appropriate Airflow operators, and schedule the DAG for daily execution.
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="C">C.</span> Define a Cloud Composer DAG to orchestrate the SFTP fetch and decryption steps, and then use Cloud Scheduler to trigger a separate Dataflow job that handles the Cloud Storage load and BigQuery transformations.
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a Cloud Composer DAG that includes a single BashOperator to execute a top-level shell script, which in turn calls individual scripts for each pipeline step.
+</li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
+<div class="card-text question-answer bg-light white-text" style="display:none;">
+<span class="correct-answer-box">
+<strong>Suggested Answer:</strong> <span class="correct-answer">B</span>
+</span>
+</div>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2>Wyjaśnienie</h2>
+<pre>
+Correct Answer: B
+
+Cloud Composer (based on Apache Airflow) is the standard GCP tool for orchestrating complex workflows with dependencies. By defining each step as a separate task within a DAG, you gain high observability (you can see which specific task failed in the Airflow UI), robust error handling, and the ability to easily clear and re-run individual tasks without re-running the entire pipeline.
+
+Why other options are incorrect:
+A and D. Using a single operator (Python or Bash) to run all steps as one task loses the benefits of Airflow's observability and task-level retries/re-runs. If one step fails, the entire task fails, and you'd have to re-run everything from the start or implement complex internal logic.
+C. Dividing the workflow between Composer and Cloud Scheduler/Dataflow creates unnecessary complexity and fragmentation, making it harder to monitor the end-to-end dependency and meet the 7:00 AM notification requirement.
+</pre>
+</div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelector('.reveal-solution');
+    revealButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        const answerSection = document.querySelector('.question-answer');
+        const explanationSection = document.querySelector('.q-answer');
+        if (answerSection.style.display === 'none') {
+            answerSection.style.display = 'block';
+            explanationSection.style.display = 'block';
+            this.textContent = 'Hide Answer';
+        } else {
+            answerSection.style.display = 'none';
+            explanationSection.style.display = 'none';
+            this.textContent = 'Show Suggested Answer';
+        }
+    });
+});
+</script>
+</body>
+</html>

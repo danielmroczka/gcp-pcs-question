@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .question-body { font-size: 1.05rem; }
+</style>
+<title>PDE 329</title>
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_328.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_330.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+</h2>
+<div class="question-body mt-3 pt-3 border-top">
+<p class="card-text">
+Your Cloud Storage data lake has raw, processed, and historical data in different buckets. Data older than two years is rarely accessed, and all data must be retained for no longer than seven years. You are concerned about rising storage costs. How should you control costs for the historical data bucket?
+</p>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="A">A.</span> Write a script on a Compute Engine instance, triggered daily by Cloud Scheduler, to scan all objects and delete any older than seven years.
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure an Object Lifecycle Management (OLM) rule to transition objects older than two years to the Archive storage class and delete them after seven years.
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="C">C.</span> Enable the Autoclass feature on your Cloud Storage buckets and select Opt-in to object transitions to Coldline and Archive storage classes.
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="D">D.</span> Replicate the buckets to a different region with lower storage costs and configure an Object Lifecycle Management rule to delete objects after seven years.
+</li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
+<div class="card-text question-answer bg-light white-text" style="display:none;">
+<span class="correct-answer-box">
+<strong>Suggested Answer:</strong> <span class="correct-answer">B</span>
+</span>
+</div>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2>Wyjaśnienie</h2>
+<pre>
+Correct Answer: B
+
+Object Lifecycle Management (OLM) is the native Cloud Storage feature for managing object lifetimes. You can define rules to automatically transition objects to cheaper storage classes (like Archive for data older than 2 years) and to delete objects permanently (after 7 years). This is a managed, no-code solution that is highly cost-effective.
+
+Why other options are incorrect:
+A. Running a custom script on Compute Engine is complex, requires maintenance, and incurs Compute Engine costs. OLM is the preferred managed alternative.
+C. Autoclass automatically transitions objects based on access patterns, which is great, but it doesn't handle the "delete after 7 years" requirement. A specific OLM rule is needed for deletion.
+D. Replicating data just for cost savings usually increases egress and storage costs due to duplication, unless the data is moved entirely. OLM within the existing bucket is simpler.
+</pre>
+</div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelector('.reveal-solution');
+    revealButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        const answerSection = document.querySelector('.question-answer');
+        const explanationSection = document.querySelector('.q-answer');
+        if (answerSection.style.display === 'none') {
+            answerSection.style.display = 'block';
+            explanationSection.style.display = 'block';
+            this.textContent = 'Hide Answer';
+        } else {
+            answerSection.style.display = 'none';
+            explanationSection.style.display = 'none';
+            this.textContent = 'Show Suggested Answer';
+        }
+    });
+});
+</script>
+</body>
+</html>

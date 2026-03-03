@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/animate.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/owl.carousel.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/slick.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-main.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-transitions.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/magnific-popup.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/fonts2/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/color/default.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/responsive.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .discussion-header-container { line-height: 1.5; }
+    .question-body { font-size: 1.05rem; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    </style>
+<title>PDE 242</title>
+
+<style>
+/* Zapewnij że główny kontener ma rozsądną szerokość */
+.q-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Wszystkie karty (pytanie i odpowiedź) mają tę samą szerokość */
+.q-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.q-answer {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.q-answer pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.ai-analysis-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+</style>
+
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_241.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_243.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+<h2>Question 242 / 319</h2>
+
+<div class="question-body mt-3 pt-3 border-top" data-id="907610">
+<p class="card-text">
+         You have designed an Apache Beam processing pipeline that reads from a Pub/Sub topic. The topic has a message retention duration of one day, and writes to a Cloud Storage bucket. You need to select a bucket location and processing strategy to prevent data loss in case of a regional outage with an RPO of 15 minutes. What should you do?
+        </p>
+<div class="voted-answers-tally d-none">
+<script id="907610" type="application/json">
+          [{"voted_answers": "D", "vote_count": 21, "is_most_voted": true}, {"voted_answers": "A", "vote_count": 4, "is_most_voted": false}]
+         </script>
+</div>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="A">
+            A.
+           </span>
+           1. Use a dual-region Cloud Storage bucket.
+           <br/>
+           2. Monitor Dataflow metrics with Cloud Monitoring to determine when an outage occurs.
+           <br/>
+           3. Seek the subscription back in time by 15 minutes to recover the acknowledged messages.
+           <br/>
+           4. Start the Dataflow job in a secondary region.
+          </li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="B">
+            B.
+           </span>
+           1. Use a multi-regional Cloud Storage bucket.
+           <br/>
+           2. Monitor Dataflow metrics with Cloud Monitoring to determine when an outage occurs.
+           <br/>
+           3. Seek the subscription back in time by 60 minutes to recover the acknowledged messages.
+           <br/>
+           4. Start the Dataflow job in a secondary region.
+          </li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="C">
+            C.
+           </span>
+           1. Use a regional Cloud Storage bucket.
+           <br/>
+           2. Monitor Dataflow metrics with Cloud Monitoring to determine when an outage occurs.
+           <br/>
+           3. Seek the subscription back in time by one day to recover the acknowledged messages.
+           <br/>
+           4. Start the Dataflow job in a secondary region and write in a bucket in the same region.
+          </li>
+<li class="multi-choice-item correct-hidden">
+<span class="multi-choice-letter" data-choice-letter="D">
+            D.
+           </span>
+           1. Use a dual-region Cloud Storage bucket with turbo replication enabled.
+           <br/>
+           2. Monitor Dataflow metrics with Cloud Monitoring to determine when an outage occurs.
+           <br/>
+           3. Seek the subscription back in time by 60 minutes to recover the acknowledged messages.
+           <br/>
+           4. Start the Dataflow job in a secondary region.
+           <span class="badge badge-success most-voted-answer-badge" data-original-title="This answer is currently the most voted for in the discussion" style="display: none;" title="">
+            Most Voted
+           </span>
+</li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">
+         Show Suggested Answer
+        </a>
+<a class="btn btn-primary hide-solution d-none" href="#">
+         Hide Answer
+        </a>
+<div class="card-text question-answer bg-light white-text">
+<span class="correct-answer-box">
+<strong>
+           Suggested Answer:
+          </strong>
+<span class="correct-answer">
+           D
+          </span>
+<a class="vote-answer-button ml-1 d-print-none" data-original-title="Vote an answer" data-toggle="tooltip" href="#" title="">
+           🗳️
+          </a>
+<br/>
+</span>
+<span class="answer-description">
+</span>
+<div class="voting-summary col-12 col-sm-6 col-lg-4 pt-2 pb-2" style="font-size: 0.9em">
+<i>
+           Community vote distribution
+          </i>
+<!-- Additional optional vote button: <a href="javascript:void(0)" data-toggle="tooltip" class="vote-answer-button" title="Vote an answer">🗳️</a>-->
+<div class="progress vote-distribution-bar">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="15" class="vote-bar progress-bar bg-primary" data-original-title="21 votes." data-toggle="tooltip" role="progressbar" style="width: 84%; display: flex;" title="">
+            D (84%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-info" data-original-title="4 votes." data-toggle="tooltip" role="progressbar" style="width: 16%; display: flex;" title="">
+            A (16%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-success" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            B (20%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" class="vote-bar progress-bar bg-warning" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 15%; display: none;" title="">
+            Other
+           </div>
+</div>
+</div>
+</div>
+</div>
+<!-- / Question  -->
+<div class="discussion-meta-data mt-3 pt-1 border-top">
+        <i>
+         Jan. 3, 2024, 2:15 p.m.
+        </i>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2></h2>
+<pre>Odpowiedź: D.
+
+Opcja D jest poprawna, ponieważ łączy kilka kluczowych elementów zapewniających odporność na awarie i minimalizację utraty danych (RPO 15 minut). Użycie dual-region Cloud Storage bucket z turbo replication zapewnia wysoką dostępność i replikację danych w dwóch regionach, chroniąc przed utratą danych w przypadku awarii jednego z nich. Monitorowanie metryk Dataflow pozwala na szybkie wykrycie problemów. Seek w Pub/Sub na 60 minut pozwala odzyskać wiadomości, które mogły zostać przetworzone, ale nie zapisane w Cloud Storage przed awarią (uwzględniając potencjalne opóźnienia). Uruchomienie Dataflow w regionie wtórnym zapewnia kontynuację przetwarzania po awarii w regionie podstawowym.
+
+A. Regional Cloud Storage nie zapewnia odporności na awarie regionalne.
+B. Multi-regional Cloud Storage oferuje wysoką dostępność, ale seek na 60 minut może być niewystarczający dla RPO 15 minut.
+C. Regional Cloud Storage jest niewystarczający, a seek na jeden dzień jest zbyt długi w stosunku do RPO.</pre>
+</div>
+<div class="ai-analysis-container" style="display:none;" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;"><h2>Analiza i Podsumowanie Dyskusji (AI)</h2><div class="analysis-section">
+<h3>Analiza i Wyjaśnienie</h3>
+<p><b>Sugerowana odpowiedź: D</b></p>
+<p>Odpowiedź D jest najbardziej kompleksowa i poprawna, ponieważ uwzględnia wszystkie aspekty wymagane przez pytanie, w szczególności RPO (Recovery Point Objective) na poziomie 15 minut. Kluczowym elementem jest użycie <b>dual-region Cloud Storage bucket z włączoną turbo replikacją</b>. Turbo replikacja, jak wskazują liczne komentarze użytkowników (lipa31, datapassionate, SVGoogle89), gwarantuje replikację danych w obu regionach w ciągu 15 minut, spełniając wymagany RPO. </p>
+<p>Dodatkowe elementy odpowiedzi D, takie jak monitorowanie metryk Dataflow, cofanie subskrypcji Pub/Sub o 60 minut oraz uruchomienie Dataflow w regionie wtórnym, stanowią dodatkowe warstwy zabezpieczeń. Cofanie subskrypcji o 60 minut zapewnia pewność odzyskania danych w przypadku opóźnień w replikacji lub problemów z zapisem do Cloud Storage. Uruchomienie Dataflow w regionie wtórnym zapewnia ciągłość przetwarzania w przypadku awarii regionu podstawowego.</p>
+<p><b>Dlaczego inne odpowiedzi są nieprawidłowe:</b></p>
+<ul>
+<li><b>A:</b> Chociaż dual-region bucket jest dobrym rozwiązaniem, brak turbo replikacji oznacza, że replikacja może trwać dłużej niż 15 minut, naruszając RPO. Dodatkowo, cofanie subskrypcji o 15 minut może być niewystarczające w przypadku opóźnień.</li>
+<li><b>B:</b> Multi-regional bucket oferuje wysoką dostępność, ale nie gwarantuje tak niskiego RPO jak dual-region z turbo replikacją. Cofanie subskrypcji o 60 minut jest zbędne, jeśli turbo replikacja działa poprawnie.</li>
+<li><b>C:</b> Regional bucket nie zapewnia odporności na awarie regionalne, co jest kluczowym wymaganiem pytania. Cofanie subskrypcji o jeden dzień jest zupełnie niepraktyczne i nie spełnia RPO.</li>
+</ul>
+<p>Dyskusja użytkowników potwierdza, że turbo replikacja jest kluczowa (0dd4e0c, shangning007, qq589539483084gfrgrgfr).  Chociaż niektórzy użytkownicy (m_a_p_s, raaad) początkowo wskazywali odpowiedź A, późniejsze komentarze i linki do dokumentacji Google Cloud (datapassionate, SVGoogle89) wskazują na przewagę odpowiedzi D.</p>
+</div>
+</div></div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+
+    revealButtons.forEach(button => {
+        let isVisible = false;
+
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+
+<script>localStorage.setItem('gcp_exam_last_visited', window.location.href);</script></body>
+</html>

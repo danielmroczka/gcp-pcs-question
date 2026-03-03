@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/animate.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/owl.carousel.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/slick.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-main.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-transitions.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/magnific-popup.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/fonts2/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/color/default.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/responsive.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .discussion-header-container { line-height: 1.5; }
+    .question-body { font-size: 1.05rem; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    </style>
+<title>PDE 315</title>
+
+<style>
+/* Zapewnij że główny kontener ma rozsądną szerokość */
+.q-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Wszystkie karty (pytanie i odpowiedź) mają tę samą szerokość */
+.q-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.q-answer {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.q-answer pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.ai-analysis-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+</style>
+
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_314.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_316.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+<h2>Question 315 / 319</h2>
+
+<div class="question-body mt-3 pt-3 border-top" data-id="935543">
+<p class="card-text">
+         You are using Workflows to call an API that returns a 1KB JSON response, apply some complex business logic on this response, wait for the logic to complete, and then perform a load from a Cloud Storage file to BigQuery. The Workflows standard library does not have sufficient capabilities to perform your complex logic, and you want to use Python's standard library instead. You want to optimize your workflow for simplicity and speed of execution. What should you do?
+        </p>
+<div class="voted-answers-tally d-none">
+<script id="935543" type="application/json">
+          [{"voted_answers": "C", "vote_count": 7, "is_most_voted": true}]
+         </script>
+</div>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="A">
+            A.
+           </span>
+           Create a Cloud Composer environment and run the logic in Cloud Composer.
+          </li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="B">
+            B.
+           </span>
+           Create a Dataproc cluster, and use PySpark to apply the logic on your JSON file.
+          </li>
+<li class="multi-choice-item correct-hidden">
+<span class="multi-choice-letter" data-choice-letter="C">
+            C.
+           </span>
+           Invoke a Cloud Function instance that uses Python to apply the logic on your JSON file.
+           <span class="badge badge-success most-voted-answer-badge" data-original-title="This answer is currently the most voted for in the discussion" style="display: none;" title="">
+            Most Voted
+           </span>
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="D">
+            D.
+           </span>
+           Invoke a subworkflow in Workflows to apply the logic on your JSON file.
+          </li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">
+         Show Suggested Answer
+        </a>
+<a class="btn btn-primary hide-solution d-none" href="#">
+         Hide Answer
+        </a>
+<div class="card-text question-answer bg-light white-text">
+<span class="correct-answer-box">
+<strong>
+           Suggested Answer:
+          </strong>
+<span class="correct-answer">
+           C
+          </span>
+<a class="vote-answer-button ml-1 d-print-none" data-original-title="Vote an answer" data-toggle="tooltip" href="#" title="">
+           🗳️
+          </a>
+<br/>
+</span>
+<span class="answer-description">
+</span>
+<div class="voting-summary col-12 col-sm-6 col-lg-4 pt-2 pb-2" style="font-size: 0.9em">
+<i>
+           Community vote distribution
+          </i>
+<!-- Additional optional vote button: <a href="javascript:void(0)" data-toggle="tooltip" class="vote-answer-button" title="Vote an answer">🗳️</a>-->
+<div class="progress vote-distribution-bar">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="15" class="vote-bar progress-bar bg-primary" data-original-title="7 votes." data-toggle="tooltip" role="progressbar" style="width: 100%; display: flex;" title="">
+            C (100%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-info" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            C (25%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-success" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            B (20%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" class="vote-bar progress-bar bg-warning" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 15%; display: none;" title="">
+            Other
+           </div>
+</div>
+</div>
+</div>
+</div>
+<!-- / Question  -->
+<div class="discussion-meta-data mt-3 pt-1 border-top">
+        <i>
+         Dec. 16, 2024, 3:39 a.m.
+        </i>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2></h2>
+<pre>Odpowiedź: C.
+
+Najlepszym rozwiązaniem w tej sytuacji jest wywołanie instancji Cloud Functions, która wykorzystuje Python do zastosowania złożonej logiki biznesowej na danych JSON. Cloud Functions pozwalają na uruchomienie kodu Python bez konieczności zarządzania infrastrukturą, co upraszcza workflow. Ponadto, Cloud Functions są bezserwerowe, co oznacza, że płacisz tylko za czas rzeczywistego działania kodu, co może być bardziej opłacalne niż utrzymywanie działającego klastra. Wywołanie Cloud Function jest szybkie i efektywne, idealnie pasując do wymagań optymalizacji workflow pod kątem szybkości. Użycie Python'a w Cloud Functions pozwala na wykorzystanie pełnej mocy standardowej biblioteki Python, co jest kluczowe, gdy standardowa biblioteka Workflows jest niewystarczająca.
+
+A. Cloud Composer jest bardziej odpowiedni do złożonych, cyklicznych zadań ETL, a nie do jednorazowego przetworzenia danych JSON.
+B. Dataproc z PySpark jest nadmiernie skomplikowany i kosztowny dla przetworzenia 1KB danych JSON i zastosowania logiki biznesowej.
+D. Subworkflow w Workflows nie rozwiązuje problemu braku możliwości w standardowej bibliotece Workflows, a jedynie przenosi złożoność w inne miejsce.
+
+Dodatkowe źródła:
+
+*   **Cloud Functions:** <a href="https://cloud.google.com/functions/docs" target="_blank">https://cloud.google.com/functions/docs</a>
+*   **Workflows:** <a href="https://cloud.google.com/workflows/docs" target="_blank">https://cloud.google.com/workflows/docs</a>
+*   **Cloud Composer:** <a href="https://cloud.google.com/composer/docs" target="_blank">https://cloud.google.com/composer/docs</a>
+*   **Dataproc:** <a href="https://cloud.google.com/dataproc/docs" target="_blank">https://cloud.google.com/dataproc/docs</a></pre>
+</div>
+<div class="ai-analysis-container" style="display:none;" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;"><h2>Analiza i Podsumowanie Dyskusji (AI)</h2><div class="analysis-section">
+<h3>Analiza i Wyjaśnienie</h3>
+<p><b>Sugerowana odpowiedź: C</b></p>
+<p>Odpowiedź C, czyli wywołanie instancji Cloud Function, jest najbardziej optymalnym rozwiązaniem w przedstawionym scenariuszu. Pytanie wyraźnie wskazuje na potrzebę wykorzystania standardowej biblioteki Pythona ze względu na niedostateczne możliwości biblioteki Workflows. Cloud Functions umożliwiają uruchomienie kodu Python bez konieczności zarządzania infrastrukturą serwerową, co przekłada się na prostotę i szybkość wykonania.  Ponadto, model płatności Cloud Functions (płacisz tylko za czas działania kodu) jest efektywny kosztowo, szczególnie w przypadku jednorazowych lub rzadko wykonywanych zadań.</p>
+<p>Komentarze użytkowników, w szczególności te nowsze (Arvi1984, 22c1725, Pime13, FireAtMe), konsekwentnie wskazują na odpowiedź C jako prawidłową. Użytkownicy trafnie zauważają, że Cloud Functions są idealne do tego typu zadań, oferując serverless computing i możliwość wykorzystania pełnej mocy Pythona.</p>
+<p><b>Dlaczego inne odpowiedzi są nieprawidłowe:</b></p>
+<ul>
+<li><b>A (Cloud Composer):</b> Cloud Composer jest przeznaczony do bardziej złożonych, cyklicznych procesów ETL, a nie do prostego przetworzenia 1KB danych JSON. Użycie Cloud Composer byłoby nadmierne i nieefektywne.</li>
+<li><b>B (Dataproc z PySpark):</b> Dataproc z PySpark jest rozwiązaniem zbyt kosztownym i skomplikowanym dla tak małego wolumenu danych i prostego zadania.  Uruchomienie całego klastra Dataproc w celu przetworzenia 1KB JSON jest nieuzasadnione.</li>
+<li><b>D (Subworkflow w Workflows):</b> Subworkflow nie rozwiązuje problemu braku możliwości w standardowej bibliotece Workflows. Przenosi jedynie złożoność w inne miejsce, nie oferując żadnej korzyści.</li>
+</ul>
+</div>
+</div></div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+
+    revealButtons.forEach(button => {
+        let isVisible = false;
+
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+
+<script>localStorage.setItem('gcp_exam_last_visited', window.location.href);</script></body>
+</html>

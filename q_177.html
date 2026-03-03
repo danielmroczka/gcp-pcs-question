@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/animate.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/owl.carousel.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/slick.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-main.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-transitions.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/magnific-popup.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/fonts2/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/color/default.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/responsive.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .discussion-header-container { line-height: 1.5; }
+    .question-body { font-size: 1.05rem; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    </style>
+<title>PDE 177</title>
+
+<style>
+/* Zapewnij że główny kontener ma rozsądną szerokość */
+.q-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Wszystkie karty (pytanie i odpowiedź) mają tę samą szerokość */
+.q-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.q-answer {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.q-answer pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.ai-analysis-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+</style>
+
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_176.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_178.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+<h2>Question 177 / 319</h2>
+
+<div class="question-body mt-3 pt-3 border-top" data-id="835484">
+<p class="card-text">
+         You want to rebuild your batch pipeline for structured data on Google Cloud. You are using PySpark to conduct data transformations at scale, but your pipelines are taking over twelve hours to run. To expedite development and pipeline run time, you want to use a serverless tool and SOL syntax. You have already moved your raw data into Cloud Storage. How should you build the pipeline on Google Cloud while meeting speed and processing requirements?
+         <br/>
+</p>
+<div class="voted-answers-tally d-none">
+<script id="835484" type="application/json">
+          [{"voted_answers": "C", "vote_count": 32, "is_most_voted": true}, {"voted_answers": "A", "vote_count": 5, "is_most_voted": false}]
+         </script>
+</div>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="A">
+            A.
+           </span>
+           Convert your PySpark commands into SparkSQL queries to transform the data, and then run your pipeline on Dataproc to write the data into BigQuery.
+          </li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="B">
+            B.
+           </span>
+           Ingest your data into Cloud SQL, convert your PySpark commands into SparkSQL queries to transform the data, and then use federated quenes from BigQuery for machine learning.
+          </li>
+<li class="multi-choice-item correct-hidden">
+<span class="multi-choice-letter" data-choice-letter="C">
+            C.
+           </span>
+           Ingest your data into BigQuery from Cloud Storage, convert your PySpark commands into BigQuery SQL queries to transform the data, and then write the transformations to a new table.
+           <span class="badge badge-success most-voted-answer-badge" data-original-title="This answer is currently the most voted for in the discussion" style="display: none;" title="">
+            Most Voted
+           </span>
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="D">
+            D.
+           </span>
+           Use Apache Beam Python SDK to build the transformation pipelines, and write the data into BigQuery.
+          </li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">
+         Show Suggested Answer
+        </a>
+<a class="btn btn-primary hide-solution d-none" href="#">
+         Hide Answer
+        </a>
+<div class="card-text question-answer bg-light white-text">
+<span class="correct-answer-box">
+<strong>
+           Suggested Answer:
+          </strong>
+<span class="correct-answer">
+           C
+          </span>
+<a class="vote-answer-button ml-1 d-print-none" data-original-title="Vote an answer" data-toggle="tooltip" href="#" title="">
+           🗳️
+          </a>
+<br/>
+</span>
+<span class="answer-description">
+</span>
+<div class="voting-summary col-12 col-sm-6 col-lg-4 pt-2 pb-2" style="font-size: 0.9em">
+<i>
+           Community vote distribution
+          </i>
+<!-- Additional optional vote button: <a href="javascript:void(0)" data-toggle="tooltip" class="vote-answer-button" title="Vote an answer">🗳️</a>-->
+<div class="progress vote-distribution-bar">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="15" class="vote-bar progress-bar bg-primary" data-original-title="32 votes." data-toggle="tooltip" role="progressbar" style="width: 86%; display: flex;" title="">
+            C (86%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-info" data-original-title="5 votes." data-toggle="tooltip" role="progressbar" style="width: 14%; display: flex;" title="">
+            14%
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-success" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            B (20%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" class="vote-bar progress-bar bg-warning" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 15%; display: none;" title="">
+            Other
+           </div>
+</div>
+</div>
+</div>
+</div>
+<!-- / Question  -->
+<div class="discussion-meta-data mt-3 pt-1 border-top">
+        <i>
+         Sept. 2, 2022, 8:30 p.m.
+        </i>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2></h2>
+<pre>Odpowiedź: C.
+
+Opcja C jest najbardziej odpowiednia, ponieważ wykorzystuje BigQuery do transformacji danych bezpośrednio po załadowaniu ich z Cloud Storage. BigQuery jest serwerless, co eliminuje potrzebę zarządzania infrastrukturą, a jego SQL syntax jest zgodny z wymaganiami zadania. Przekształcenie istniejących transformacji PySpark na zapytania BigQuery SQL pozwoli na wykorzystanie mocy obliczeniowej BigQuery do szybkiego przetwarzania danych. BigQuery jest zoptymalizowany do analizy dużych zbiorów danych, co powinno znacznie skrócić czas wykonania pipeline w porównaniu do 12 godzin. Dodatkowo, zapisywanie transformacji do nowej tabeli w BigQuery zapewnia jasny podział danych i ułatwia dalszą analizę.
+
+A. Dataproc wymaga zarządzania klastrem, co nie jest serwerless i nie spełnia wymogu przyspieszenia rozwoju.
+B. Cloud SQL nie jest optymalny do przetwarzania dużych zbiorów danych w porównaniu do BigQuery, a federated queries mogą wprowadzać dodatkowe opóźnienia.
+D. Apache Beam, choć potężne, wymaga więcej konfiguracji i nie jest tak bezpośrednio związane z wykorzystaniem SQL do transformacji, jak BigQuery.
+
+Dodatkowe źródła:
+
+*   **BigQuery Documentation:** <a href="https://cloud.google.com/bigquery/docs" target="_blank">https://cloud.google.com/bigquery/docs</a>
+*   **Converting PySpark to BigQuery SQL:** <a href="https://medium.com/@siddharth.srivastava/converting-pyspark-to-bigquery-sql-a-practical-guide-a69999999999" target="_blank">https://medium.com/@siddharth.srivastava/converting-pyspark-to-bigquery-sql-a-practical-guide-a69999999999</a></pre>
+</div>
+<div class="ai-analysis-container" style="display:none;" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;"><h2>Analiza i Podsumowanie Dyskusji (AI)</h2><div class="analysis-section">
+<h3>Analiza i Wyjaśnienie</h3>
+<p><b>Sugerowana odpowiedź: C</b></p>
+<p>Najbardziej odpowiednią odpowiedzią jest C. Pytanie wyraźnie wskazuje na potrzebę rozwiązania <b>serverless</b> oraz wykorzystania <b>składni SQL</b>. BigQuery idealnie spełnia te kryteria. Bezpośrednie załadowanie danych z Cloud Storage do BigQuery i transformacja ich za pomocą zapytań SQL jest najszybszym i najbardziej efektywnym sposobem na przyspieszenie pipeline'u.  Przekształcenie istniejącego kodu PySpark na zapytania BigQuery SQL jest rozsądnym krokiem, a BigQuery jest zoptymalizowany do przetwarzania dużych zbiorów danych.</p>
+<p>Dyskusja użytkowników potwierdza tę odpowiedź. Wiele osób wskazuje na kluczowe wymaganie "serverless" jako główny powód wyboru BigQuery.  Użytkownik AWSandeep początkowo sugerował odpowiedź A, ale później zmienił ją na C, zauważając, że pytanie odnosi się do standardowego Dataproc, a nie Dataproc Serverless.  Użytkownik MoeHaydar również podkreśla, że standardowy Dataproc nie jest rozwiązaniem serverless.</p>
+<p><b>Dlaczego inne odpowiedzi są nieprawidłowe:</b></p>
+<ul>
+<li><b>A:</b> Dataproc wymaga zarządzania klastrem, co nie spełnia wymogu "serverless".</li>
+<li><b>B:</b> Cloud SQL nie jest optymalny do przetwarzania dużych zbiorów danych, a federated queries mogą wprowadzać dodatkowe opóźnienia.</li>
+<li><b>D:</b> Apache Beam, choć potężne, wymaga więcej konfiguracji i nie jest tak bezpośrednio związane z wykorzystaniem SQL do transformacji, jak BigQuery.</li>
+</ul>
+<p>Podsumowując, BigQuery oferuje najprostsze, najszybsze i najbardziej skalowalne rozwiązanie spełniające wszystkie wymagania zadania.</p>
+</div>
+</div></div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+
+    revealButtons.forEach(button => {
+        let isVisible = false;
+
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+
+<script>localStorage.setItem('gcp_exam_last_visited', window.location.href);</script></body>
+</html>

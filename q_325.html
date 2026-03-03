@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .question-body { font-size: 1.05rem; }
+</style>
+<title>PDE 325</title>
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_324.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_326.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+</h2>
+<div class="question-body mt-3 pt-3 border-top">
+<p class="card-text">
+Your large e-commerce company uses BigQuery for its data warehousing needs. They have two primary types of workloads:
+- Analyst dashboards: Interactive queries throughout the day requiring low latency.
+- ETL jobs: Large, complex batch queries that load and transform data overnight.
+Analysts are reporting inconsistent performance during peak business hours. You need to ensure reliable performance for both workload types while optimizing costs. What should you do?
+</p>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="A">A.</span> Use BigQuery editions to create an autoscaling reservation with dedicated slots for analyst dashboards, while running ETL jobs with a separate reservation or using the on-demand billing model.
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="B">B.</span> Implement a custom autoscaling solution using Cloud Run functions to dynamically adjust available BigQuery slots based on time of day.
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="C">C.</span> Migrate all ETL jobs to Cloud SQL to reduce BigQuery's workload.
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="D">D.</span> Run all analyst dashboard queries as interactive queries and configure ETL jobs to run as batch queries.
+</li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
+<div class="card-text question-answer bg-light white-text" style="display:none;">
+<span class="correct-answer-box">
+<strong>Suggested Answer:</strong> <span class="correct-answer">A</span>
+</span>
+</div>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2>Wyjaśnienie</h2>
+<pre>
+Correct Answer: A
+
+BigQuery Reservations (now part of BigQuery Editions) allow you to allocate dedicated capacity (slots) to specific workloads. By creating separate reservations for Analyst Dashboards and ETL jobs, you ensure that high-priority interactive queries aren't starved of resources by background ETL tasks. Autoscaling within a reservation allows BigQuery to dynamically adjust the number of slots based on demand, optimizing costs.
+
+Why other options are incorrect:
+B. Custom autoscaling with Cloud Run is complex and unnecessary, as BigQuery now provides native autoscaling reservations.
+C. Cloud SQL is not suitable for large-scale data warehousing and complex ETL jobs that are currently running in BigQuery.
+D. While batch queries are scheduled to run when resources are available, they don't guarantee performance for interactive queries if the system is overall congested. Reservations provide more robust isolation.
+</pre>
+</div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelector('.reveal-solution');
+    revealButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        const answerSection = document.querySelector('.question-answer');
+        const explanationSection = document.querySelector('.q-answer');
+        if (answerSection.style.display === 'none') {
+            answerSection.style.display = 'block';
+            explanationSection.style.display = 'block';
+            this.textContent = 'Hide Answer';
+        } else {
+            answerSection.style.display = 'none';
+            explanationSection.style.display = 'none';
+            this.textContent = 'Show Suggested Answer';
+        }
+    });
+});
+</script>
+</body>
+</html>

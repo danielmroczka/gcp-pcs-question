@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/animate.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/owl.carousel.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/slick.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-main.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-transitions.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/magnific-popup.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/fonts2/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/color/default.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/responsive.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .discussion-header-container { line-height: 1.5; }
+    .question-body { font-size: 1.05rem; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    </style>
+<title>PDE 153</title>
+
+<style>
+/* Zapewnij że główny kontener ma rozsądną szerokość */
+.q-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Wszystkie karty (pytanie i odpowiedź) mają tę samą szerokość */
+.q-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.q-answer {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.q-answer pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.ai-analysis-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+</style>
+
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_152.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_154.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+<h2>Question 153 / 319</h2>
+
+<div class="question-body mt-3 pt-3 border-top" data-id="835460">
+<p class="card-text">
+         You operate an IoT pipeline built around Apache Kafka that normally receives around 5000 messages per second. You want to use Google Cloud Platform to create an alert as soon as the moving average over 1 hour drops below 4000 messages per second. What should you do?
+         <br/>
+</p>
+<div class="voted-answers-tally d-none">
+<script id="835460" type="application/json">
+          [{"voted_answers": "A", "vote_count": 16, "is_most_voted": true}]
+         </script>
+</div>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item correct-hidden">
+<span class="multi-choice-letter" data-choice-letter="A">
+            A.
+           </span>
+           Consume the stream of data in Dataflow using Kafka IO. Set a sliding time window of 1 hour every 5 minutes. Compute the average when the window closes, and send an alert if the average is less than 4000 messages.
+           <span class="badge badge-success most-voted-answer-badge" data-original-title="This answer is currently the most voted for in the discussion" style="display: none;" title="">
+            Most Voted
+           </span>
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="B">
+            B.
+           </span>
+           Consume the stream of data in Dataflow using Kafka IO. Set a fixed time window of 1 hour. Compute the average when the window closes, and send an alert if the average is less than 4000 messages.
+          </li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="C">
+            C.
+           </span>
+           Use Kafka Connect to link your Kafka message queue to Pub/Sub. Use a Dataflow template to write your messages from Pub/Sub to Bigtable. Use Cloud Scheduler to run a script every hour that counts the number of rows created in Bigtable in the last hour. If that number falls below 4000, send an alert.
+          </li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="D">
+            D.
+           </span>
+           Use Kafka Connect to link your Kafka message queue to Pub/Sub. Use a Dataflow template to write your messages from Pub/Sub to BigQuery. Use Cloud Scheduler to run a script every five minutes that counts the number of rows created in BigQuery in the last hour. If that number falls below 4000, send an alert.
+          </li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">
+         Show Suggested Answer
+        </a>
+<a class="btn btn-primary hide-solution d-none" href="#">
+         Hide Answer
+        </a>
+<div class="card-text question-answer bg-light white-text">
+<span class="correct-answer-box">
+<strong>
+           Suggested Answer:
+          </strong>
+<span class="correct-answer">
+           A
+          </span>
+<a class="vote-answer-button ml-1 d-print-none" data-original-title="Vote an answer" data-toggle="tooltip" href="#" title="">
+           🗳️
+          </a>
+<br/>
+</span>
+<span class="answer-description">
+</span>
+<div class="voting-summary col-12 col-sm-6 col-lg-4 pt-2 pb-2" style="font-size: 0.9em">
+<i>
+           Community vote distribution
+          </i>
+<!-- Additional optional vote button: <a href="javascript:void(0)" data-toggle="tooltip" class="vote-answer-button" title="Vote an answer">🗳️</a>-->
+<div class="progress vote-distribution-bar">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="15" class="vote-bar progress-bar bg-primary" data-original-title="16 votes." data-toggle="tooltip" role="progressbar" style="width: 100%; display: flex;" title="">
+            A (100%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-info" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            C (25%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-success" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            B (20%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" class="vote-bar progress-bar bg-warning" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 15%; display: none;" title="">
+            Other
+           </div>
+</div>
+</div>
+</div>
+</div>
+<!-- / Question  -->
+<div class="discussion-meta-data mt-3 pt-1 border-top">
+        by
+							
+								[deleted]
+							
+							at
+        <i>
+         March 22, 2020, 8:12 a.m.
+        </i>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2></h2>
+<pre>Odpowiedź: A.
+
+Opcja A jest poprawna, ponieważ Dataflow z Kafka IO pozwala na bezpośrednie przetwarzanie strumienia danych z Kafki. Użycie sliding time window o długości 1 godziny i częstotliwości 5 minut umożliwia obliczanie średniej ruchomej w sposób ciągły i efektywny. Po zamknięciu okna, obliczana jest średnia, a jeśli jest ona poniżej 4000 wiadomości na sekundę, wysyłany jest alert. To podejście zapewnia szybką reakcję na spadek przepustowości, co jest kluczowe w monitoringu IoT.  Sliding windows są idealne do obliczania ruchomych średnich, ponieważ nie wymagają ponownego przetwarzania danych dla każdego okna.
+
+A. Jest to najbardziej efektywne i bezpośrednie rozwiązanie do monitorowania średniej ruchomej w czasie rzeczywistym.
+B. Użycie fixed time window nie pozwala na ciągłe monitorowanie średniej ruchomej, a jedynie na obliczanie średniej za pełną godzinę, co opóźnia reakcję na spadek przepustowości.
+C. Użycie Kafka Connect, Pub/Sub, Bigtable i Cloud Scheduler jest zbyt skomplikowane i wprowadza niepotrzebne opóźnienia w procesie alertowania.
+D. Podobnie jak w C, użycie Kafka Connect, Pub/Sub, BigQuery i Cloud Scheduler jest bardziej złożone i mniej efektywne niż bezpośrednie przetwarzanie strumienia w Dataflow.
+
+Dodatkowe źródła:
+
+*   **Apache Kafka IO for Apache Beam:** <a href="https://beam.apache.org/documentation/sdks/python/io/kafka/" target="_blank">https://beam.apache.org/documentation/sdks/python/io/kafka/</a>
+*   **Dataflow Windows:** <a href="https://cloud.google.com/dataflow/docs/concepts/windowing" target="_blank">https://cloud.google.com/dataflow/docs/concepts/windowing</a>
+*   **Sliding vs. Fixed Windows:** <a href="https://beam.apache.org/documentation/programming-guide/windowing/" target="_blank">https://beam.apache.org/documentation/programming-guide/windowing/</a></pre>
+</div>
+<div class="ai-analysis-container" style="display:none;" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;"><h2>Analiza i Podsumowanie Dyskusji (AI)</h2><div class="analysis-section">
+<h3>Analiza i Wyjaśnienie</h3>
+<p><b>Sugerowana odpowiedź: A</b></p>
+<p>Odpowiedź A jest prawidłowa, ponieważ oferuje najbardziej efektywne i bezpośrednie rozwiązanie do monitorowania średniej ruchomej w czasie rzeczywistym. Dataflow z Kafka IO umożliwia bezpośrednie przetwarzanie strumienia danych z Kafki. Kluczowe jest użycie <b>sliding time window</b> (okna czasowego z przesuwem) o długości 1 godziny i częstotliwości 5 minut. Pozwala to na ciągłe obliczanie średniej ruchomej bez konieczności ponownego przetwarzania danych dla każdego okna.  W momencie zamknięcia okna, obliczana jest średnia, a jeśli jest ona poniżej 4000 wiadomości na sekundę, wysyłany jest alert.</p>
+<p>Dyskusja użytkowników w dużej mierze potwierdza tę odpowiedź. Większość użytkowników wskazuje A jako prawidłową, argumentując, że Kafka IO i Dataflow stanowią optymalne połączenie, a sliding window jest niezbędny do obliczania ruchomej średniej.  Użytkownik <i>zellck</i> trafnie odnosi się do dokumentacji Dataflow, podkreślając rolę hopping windows (sliding windows w Apache Beam) w obliczaniu ruchomych średnich.</p>
+<p><b>Dlaczego inne odpowiedzi są nieprawidłowe:</b></p>
+<ul>
+<li><b>B:</b> Użycie fixed time window (okna czasowego o stałej długości) nie pozwala na ciągłe monitorowanie średniej ruchomej. Obliczenia są wykonywane tylko po upływie pełnej godziny, co opóźnia reakcję na spadek przepustowości.</li>
+<li><b>C i D:</b> Użycie Kafka Connect, Pub/Sub, Bigtable/BigQuery i Cloud Scheduler jest nadmiernie skomplikowane i wprowadza niepotrzebne opóźnienia.  Przetwarzanie danych przez kilka usług zwiększa złożoność i potencjalne punkty awarii, a także wydłuża czas reakcji na zmiany w przepustowości.</li>
+</ul>
+<p>Podsumowując, odpowiedź A jest najbardziej efektywna, skalowalna i bezpośrednia, co czyni ją najlepszym rozwiązaniem dla tego scenariusza.</p>
+</div>
+</div></div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+
+    revealButtons.forEach(button => {
+        let isVisible = false;
+
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+
+<script>localStorage.setItem('gcp_exam_last_visited', window.location.href);</script></body>
+</html>

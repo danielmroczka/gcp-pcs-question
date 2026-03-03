@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/animate.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/owl.carousel.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/slick.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-main.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-transitions.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/magnific-popup.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/fonts2/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/color/default.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/responsive.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .discussion-header-container { line-height: 1.5; }
+    .question-body { font-size: 1.05rem; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    </style>
+<title>PDE 52</title>
+
+<style>
+/* Zapewnij że główny kontener ma rozsądną szerokość */
+.q-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Wszystkie karty (pytanie i odpowiedź) mają tę samą szerokość */
+.q-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.q-answer {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.q-answer pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.ai-analysis-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+</style>
+
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_051.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_053.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+<h2>Question 52 / 319</h2>
+
+<div class="question-body mt-3 pt-3 border-top" data-id="835359">
+<p class="card-text">
+         You are implementing security best practices on your data pipeline. Currently, you are manually executing jobs as the Project Owner. You want to automate these jobs by taking nightly batch files containing non-public information from Google Cloud Storage, processing them with a Spark Scala job on a Google Cloud
+         <br/>
+         Dataproc cluster, and depositing the results into Google BigQuery.
+         <br/>
+         How should you securely run this workload?
+         <br/>
+</p>
+<div class="voted-answers-tally d-none">
+<script id="835359" type="application/json">
+          [{"voted_answers": "C", "vote_count": 16, "is_most_voted": true}, {"voted_answers": "B", "vote_count": 4, "is_most_voted": false}]
+         </script>
+</div>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="A">
+            A.
+           </span>
+           Restrict the Google Cloud Storage bucket so only you can see the files
+          </li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="B">
+            B.
+           </span>
+           Grant the Project Owner role to a service account, and run the job with it
+          </li>
+<li class="multi-choice-item correct-hidden">
+<span class="multi-choice-letter" data-choice-letter="C">
+            C.
+           </span>
+           Use a service account with the ability to read the batch files and to write to BigQuery
+           <span class="badge badge-success most-voted-answer-badge" data-original-title="This answer is currently the most voted for in the discussion" style="display: none;" title="">
+            Most Voted
+           </span>
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="D">
+            D.
+           </span>
+           Use a user account with the Project Viewer role on the Cloud Dataproc cluster to read the batch files and write to BigQuery
+          </li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">
+         Show Suggested Answer
+        </a>
+<a class="btn btn-primary hide-solution d-none" href="#">
+         Hide Answer
+        </a>
+<div class="card-text question-answer bg-light white-text">
+<span class="correct-answer-box">
+<strong>
+           Suggested Answer:
+          </strong>
+<span class="correct-answer">
+           C
+          </span>
+<a class="vote-answer-button ml-1 d-print-none" data-original-title="Vote an answer" data-toggle="tooltip" href="#" title="">
+           🗳️
+          </a>
+<br/>
+</span>
+<span class="answer-description">
+</span>
+<div class="voting-summary col-12 col-sm-6 col-lg-4 pt-2 pb-2" style="font-size: 0.9em">
+<i>
+           Community vote distribution
+          </i>
+<!-- Additional optional vote button: <a href="javascript:void(0)" data-toggle="tooltip" class="vote-answer-button" title="Vote an answer">🗳️</a>-->
+<div class="progress vote-distribution-bar">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="15" class="vote-bar progress-bar bg-primary" data-original-title="16 votes." data-toggle="tooltip" role="progressbar" style="width: 80%; display: flex;" title="">
+            C (80%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-info" data-original-title="4 votes." data-toggle="tooltip" role="progressbar" style="width: 20%; display: flex;" title="">
+            B (20%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-success" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            B (20%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" class="vote-bar progress-bar bg-warning" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 15%; display: none;" title="">
+            Other
+           </div>
+</div>
+</div>
+</div>
+</div>
+<!-- / Question  -->
+<div class="discussion-meta-data mt-3 pt-1 border-top">
+        <i>
+         March 17, 2020, 5:01 a.m.
+        </i>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2></h2>
+<pre>Odpowiedź: C.
+
+Wyjaśnienie:
+Opcja C jest najbezpieczniejszym i najbardziej zalecanym podejściem zgodnie z najlepszymi praktykami bezpieczeństwa w Google Cloud Platform. Do zautomatyzowanych zadań, takich jak nocne procesy wsadowe, zawsze należy używać kont usługi (service accounts), a nie kont użytkowników. Konto usługi pozwala na wykonywanie operacji w imieniu aplikacji lub maszyny. Kluczową zasadą bezpieczeństwa jest zasada najmniejszych uprawnień (Principle of Least Privilege), która mówi, że dany podmiot powinien mieć tylko te uprawnienia, które są absolutnie niezbędne do wykonania swojego zadania. W tym przypadku zadanie wymaga jedynie odczytu plików z Google Cloud Storage i zapisu wyników do Google BigQuery. Utworzenie konta usługi z precyzyjnie określonymi uprawnieniami do tych dwóch zasobów zapewnia, że klaster Dataproc, wykonujący zadanie Spark Scala, będzie miał niezbędny dostęp, jednocześnie minimalizując potencjalne ryzyka bezpieczeństwa związane z nadmiernymi uprawnieniami.
+
+Pozostałe opcje są gorsze lub błędne:
+A. Ograniczenie widoczności plików w zasobniku Google Cloud Storage tylko dla właściciela projektu nie rozwiązuje problemu, jak zautomatyzowane zadanie ma uzyskać do nich dostęp ani jak ma zapisać dane do BigQuery, nadal wymagając bezpiecznego sposobu uwierzytelnienia i autoryzacji dla samego zadania.
+B. Nadanie roli Właściciela Projektu (Project Owner) kontu usługi stanowi poważne naruszenie zasady najmniejszych uprawnień, ponieważ rola ta daje pełen dostęp administracyjny do wszystkich zasobów w projekcie, co jest znacznie więcej niż potrzeba do wykonania tego konkretnego zadania.
+D. Używanie konta użytkownika do zautomatyzowanych zadań jest niewłaściwą praktyką, a rola Przeglądającego Projektu (Project Viewer) nie zapewnia uprawnień do zapisu danych do BigQuery, co jest wymagane przez zadanie.
+
+Dodatkowe źródła:
+*   <a href="https://cloud.google.com/security/least-privilege" target="_blank">Zasada najmniejszych uprawnień</a>
+*   <a href="https://cloud.google.com/iam/docs/service-accounts" target="_blank">Konta usługi (Service Accounts) w Google Cloud</a></pre>
+</div>
+<div class="ai-analysis-container" style="display:none;" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;"><h2>Analiza i Podsumowanie Dyskusji (AI)</h2><div class="analysis-section">
+<h3>Analiza i Wyjaśnienie</h3>
+<p><b>Sugerowana odpowiedź: C</b></p>
+<p>Odpowiedź C jest najbezpieczniejszym i najbardziej zgodnym z najlepszymi praktykami rozwiązaniem. Kluczowe jest użycie konta usługi (service account) z minimalnymi wymaganymi uprawnieniami (zasada najmniejszych uprawnień). Konto usługi powinno mieć dostęp do odczytu plików z Google Cloud Storage oraz do zapisu danych do Google BigQuery.  Wykorzystanie konta usługi pozwala na automatyzację zadań bez konieczności używania kont użytkowników, co zwiększa bezpieczeństwo.</p>
+<p>Dyskusja użytkowników potwierdza tę odpowiedź. Wiele osób, w tym nowsze komentarze (np. od ThomasChoy, Bhawantha, medeis_jar), poprawnie wskazuje, że konto usługi z odpowiednimi uprawnieniami jest najlepszym rozwiązaniem.  Komentarze podkreślają, że rola Project Owner (odpowiedź B) jest zbyt szeroka i narusza zasadę najmniejszych uprawnień.  Dodatkowo, komentarze wskazują, że konto usługi może być używane do uruchamiania zadań Dataproc, a inne konta usługi mogą być używane do uruchamiania zadań (Cron, Composer) z różnymi uprawnieniami.</p>
+<p>Odpowiedź A jest niewłaściwa, ponieważ ograniczenie dostępu tylko do właściciela projektu nie umożliwia automatyzacji zadań. Odpowiedź D jest niewłaściwa, ponieważ rola Project Viewer nie zapewnia uprawnień do zapisu do BigQuery, a używanie kont użytkowników do automatyzacji jest złą praktyką.</p>
+</div>
+</div></div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+
+    revealButtons.forEach(button => {
+        let isVisible = false;
+
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+
+<script>localStorage.setItem('gcp_exam_last_visited', window.location.href);</script></body>
+</html>

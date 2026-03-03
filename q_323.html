@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .question-body { font-size: 1.05rem; }
+</style>
+<title>PDE 323</title>
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_322.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_324.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+</h2>
+<div class="question-body mt-3 pt-3 border-top">
+<p class="card-text">
+Your company uses separate Google Cloud projects for development, staging, and production. Developers need edit access in the development project, read-only access in the staging project, and no access in the production project. You need an effective and manageable solution to assign and enforce these permissions according to Google-recommended practices. What should you do?
+</p>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="A">A.</span> Create separate VPC Service Controls perimeters for each project and use access levels.
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="B">B.</span> Grant individual developers specific IAM roles directly on each project.
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure firewall rules within each project's VPC to block traffic from unauthorized developer machines.
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="D">D.</span> Create Google Groups for access levels, assign developers to groups, and grant the groups the appropriate IAM roles on each project.
+</li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
+<div class="card-text question-answer bg-light white-text" style="display:none;">
+<span class="correct-answer-box">
+<strong>Suggested Answer:</strong> <span class="correct-answer">D</span>
+</span>
+</div>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2>Wyjaśnienie</h2>
+<pre>
+Correct Answer: D
+
+Google Cloud best practices recommend using Google Groups to manage IAM permissions rather than granting roles to individual users. This simplifies administration, as you can add or remove users from the group to change their access across multiple projects simultaneously.
+
+Why other options are incorrect:
+A. VPC Service Controls are for mitigating data exfiltration risks by defining a security perimeter, not for basic IAM access management for developers.
+B. Granting individual roles is hard to manage and scale, especially as the team grows or roles change.
+C. Firewall rules control network traffic between resources, not IAM permissions for users to access the Google Cloud Console or APIs.
+</pre>
+</div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelector('.reveal-solution');
+    revealButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        const answerSection = document.querySelector('.question-answer');
+        const explanationSection = document.querySelector('.q-answer');
+        if (answerSection.style.display === 'none') {
+            answerSection.style.display = 'block';
+            explanationSection.style.display = 'block';
+            this.textContent = 'Hide Answer';
+        } else {
+            answerSection.style.display = 'none';
+            explanationSection.style.display = 'none';
+            this.textContent = 'Show Suggested Answer';
+        }
+    });
+});
+</script>
+</body>
+</html>

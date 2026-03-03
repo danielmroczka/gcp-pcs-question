@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/animate.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/owl.carousel.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/slick.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-main.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-transitions.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/magnific-popup.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/fonts2/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/color/default.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/responsive.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .discussion-header-container { line-height: 1.5; }
+    .question-body { font-size: 1.05rem; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    </style>
+<title>PDE 121</title>
+
+<style>
+/* Zapewnij że główny kontener ma rozsądną szerokość */
+.q-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Wszystkie karty (pytanie i odpowiedź) mają tę samą szerokość */
+.q-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.q-answer {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.q-answer pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.ai-analysis-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+</style>
+
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_120.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_122.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+<h2>Question 121 / 319</h2>
+
+<div class="question-body mt-3 pt-3 border-top" data-id="835428">
+<p class="card-text">
+         You currently have a single on-premises Kafka cluster in a data center in the us-east region that is responsible for ingesting messages from IoT devices globally.
+         <br/>
+         Because large parts of globe have poor internet connectivity, messages sometimes batch at the edge, come in all at once, and cause a spike in load on your
+         <br/>
+         Kafka cluster. This is becoming difficult to manage and prohibitively expensive. What is the Google-recommended cloud native architecture for this scenario?
+         <br/>
+</p>
+<div class="voted-answers-tally d-none">
+<script id="835428" type="application/json">
+          [{"voted_answers": "C", "vote_count": 11, "is_most_voted": true}]
+         </script>
+</div>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="A">
+            A.
+           </span>
+           Edge TPUs as sensor devices for storing and transmitting the messages.
+          </li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="B">
+            B.
+           </span>
+           Cloud Dataflow connected to the Kafka cluster to scale the processing of incoming messages.
+          </li>
+<li class="multi-choice-item correct-hidden">
+<span class="multi-choice-letter" data-choice-letter="C">
+            C.
+           </span>
+           An IoT gateway connected to Cloud Pub/Sub, with Cloud Dataflow to read and process the messages from Cloud Pub/Sub.
+           <span class="badge badge-success most-voted-answer-badge" data-original-title="This answer is currently the most voted for in the discussion" style="display: none;" title="">
+            Most Voted
+           </span>
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="D">
+            D.
+           </span>
+           A Kafka cluster virtualized on Compute Engine in us-east with Cloud Load Balancing to connect to the devices around the world.
+          </li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">
+         Show Suggested Answer
+        </a>
+<a class="btn btn-primary hide-solution d-none" href="#">
+         Hide Answer
+        </a>
+<div class="card-text question-answer bg-light white-text">
+<span class="correct-answer-box">
+<strong>
+           Suggested Answer:
+          </strong>
+<span class="correct-answer">
+           C
+          </span>
+<a class="vote-answer-button ml-1 d-print-none" data-original-title="Vote an answer" data-toggle="tooltip" href="#" title="">
+           🗳️
+          </a>
+<br/>
+</span>
+<span class="answer-description">
+</span>
+<div class="voting-summary col-12 col-sm-6 col-lg-4 pt-2 pb-2" style="font-size: 0.9em">
+<i>
+           Community vote distribution
+          </i>
+<!-- Additional optional vote button: <a href="javascript:void(0)" data-toggle="tooltip" class="vote-answer-button" title="Vote an answer">🗳️</a>-->
+<div class="progress vote-distribution-bar">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="15" class="vote-bar progress-bar bg-primary" data-original-title="11 votes." data-toggle="tooltip" role="progressbar" style="width: 100%; display: flex;" title="">
+            C (100%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-info" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            C (25%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-success" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            B (20%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" class="vote-bar progress-bar bg-warning" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 15%; display: none;" title="">
+            Other
+           </div>
+</div>
+</div>
+</div>
+</div>
+<!-- / Question  -->
+<div class="discussion-meta-data mt-3 pt-1 border-top">
+        by
+							
+								[deleted]
+							
+							at
+        <i>
+         March 22, 2020, 11:22 a.m.
+        </i>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2></h2>
+<pre>Odpowiedź: C.
+
+Architektura z IoT gateway połączonym z Cloud Pub/Sub, a następnie z Cloud Dataflow, jest rekomendowanym rozwiązaniem Google dla scenariusza z niestabilnym połączeniem internetowym i nagłymi skokami obciążenia. IoT gateway zbiera wiadomości na brzegu sieci, nawet przy słabym połączeniu, a następnie asynchronicznie przesyła je do Cloud Pub/Sub. Pub/Sub działa jako bufor, absorbując nagłe skoki obciążenia i zapewniając niezawodny transport wiadomości. Cloud Dataflow następnie odczytuje i przetwarza wiadomości z Pub/Sub w sposób skalowalny i elastyczny, co pozwala na efektywne zarządzanie zmiennym obciążeniem. To rozwiązanie minimalizuje koszty i zapewnia lepszą skalowalność niż utrzymywanie pojedynczego, obciążonego klastra Kafka.
+
+A. Edge TPUs są przeznaczone do wnioskowania maszynowego na brzegu sieci, a nie do przechowywania i przesyłania wiadomości.
+B. Cloud Dataflow podłączony bezpośrednio do klastra Kafka nie rozwiązuje problemu nagłych skoków obciążenia spowodowanych niestabilnym połączeniem internetowym.
+D. Wirtualizacja klastra Kafka na Compute Engine z Cloud Load Balancing nie eliminuje problemu nagłych skoków obciążenia i może być równie kosztowna jak obecne rozwiązanie.
+
+Dodatkowe źródła:
+
+*   **Cloud Pub/Sub:** <a href="https://cloud.google.com/pubsub" target="_blank">https://cloud.google.com/pubsub</a>
+*   **Cloud Dataflow:** <a href="https://cloud.google.com/dataflow" target="_blank">https://cloud.google.com/dataflow</a>
+*   **IoT Gateway:** <a href="https://cloud.google.com/iot-edge" target="_blank">https://cloud.google.com/iot-edge</a></pre>
+</div>
+<div class="ai-analysis-container" style="display:none;" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;"><h2>Analiza i Podsumowanie Dyskusji (AI)</h2><div class="analysis-section">
+<h3>Analiza i Wyjaśnienie</h3>
+<p><b>Sugerowana odpowiedź: C</b></p>
+<p>Prawidłową odpowiedzią jest <b>C. An IoT gateway connected to Cloud Pub/Sub, with Cloud Dataflow to read and process...</b>.</p>
+<p><b>Dlaczego?</b></p>
+<p>Problem: Globalna ingestia z obszarów o słabej łączności powoduje nagłe "piki" (bursts) obciążenia na klastrze Kafka, co jest drogie i trudne do zarządzania.
+1. <b>Scalability & Cost:</b> Zarządzanie własnym klastrem Kafka pod kątem pików wymaga utrzymywania nadmiarowej infrastruktury (płacisz za nieużywane zasoby). <b>Cloud Pub/Sub</b> jest usługą serverless, która skaluje się automatycznie od zera do milionów wiadomości na sekundę i płacisz tylko za to, co wyślesz.
+2. <b>IoT Gateway:</b> Urządzenia IoT mogą łączyć się przez bramę (lub bezpośrednio przez Cloud IoT Core, który pod spodem używa Pub/Sub), co pozwala na buforowanie na brzegu i niezawodną ingestję do globalnego endpointu Pub/Sub.
+3. <b>Cloud Dataflow:</b> Jako procesor serverless, Dataflow automatycznie przeskaluje liczbę workerów, gdy nagle napłynie duża partia wiadomości ("messages batch at the edge"), a następnie wyłączy ich, gdy dane zostaną przetworzone.</p>
+
+<p><b>Dlaczego inne odpowiedzi są nieprawidłowe?</b></p>
+<ul>
+<li><b>A. Edge TPUs:</b> Służą do wnioskowania AI na brzegu (np. rozpoznawanie obrazu w kamerze), a nie do rozwiązywania problemów z przepustowością sieciową i ingestią wiadomości.</li>
+<li><b>B. Dataflow connected to on-prem Kafka:</b> Nie rozwiązuje problemu kosztów i zarządzania klastrem Kafka on-premise, który nadal byłby "prohibitively expensive" i narażony na piki.</li>
+<li><b>D. Kafka on GCE:</b> Przeniesienie Kafki 1:1 do chmury nie zmienia paradygmatu zarządzania – nadal musisz administrować brokerami i płacić za stałą infrastrukturę. Pub/Sub (C) to rozwiązanie natywne ("cloud native"), które usuwa ten ciężar.</li>
+</ul>
+
+<h3>Dodatkowe Zasoby (Linki)</h3>
+<ul>
+<li><a href="https://cloud.google.com/pubsub/docs/overview" target="_blank">Cloud Pub/Sub: Scalable messaging</a></li>
+<li><a href="https://cloud.google.com/architecture/iot-overview" target="_blank">Google Cloud IoT Architecture</a></li>
+</ul>
+</div>
+</div></div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+
+    revealButtons.forEach(button => {
+        let isVisible = false;
+
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+
+<script>localStorage.setItem('gcp_exam_last_visited', window.location.href);</script></body>
+</html>

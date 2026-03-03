@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/animate.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/owl.carousel.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/slick.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-main.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-transitions.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/magnific-popup.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/fonts2/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/color/default.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/responsive.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .discussion-header-container { line-height: 1.5; }
+    .question-body { font-size: 1.05rem; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    </style>
+<title>PDE 224</title>
+
+<style>
+/* Zapewnij że główny kontener ma rozsądną szerokość */
+.q-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Wszystkie karty (pytanie i odpowiedź) mają tę samą szerokość */
+.q-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.q-answer {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.q-answer pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.ai-analysis-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+</style>
+
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_223.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_225.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+<h2>Question 224 / 319</h2>
+
+<div class="question-body mt-3 pt-3 border-top" data-id="907592">
+<p class="card-text">
+         A web server sends click events to a Pub/Sub topic as messages. The web server includes an eventTimestamp attribute in the messages, which is the time when the click occurred. You have a Dataflow streaming job that reads from this Pub/Sub topic through a subscription, applies some transformations, and writes the result to another Pub/Sub topic for use by the advertising department. The advertising department needs to receive each message within 30 seconds of the corresponding click occurrence, but they report receiving the messages late. Your Dataflow job's system lag is about 5 seconds, and the data freshness is about 40 seconds. Inspecting a few messages show no more than 1 second lag between their eventTimestamp and publishTime. What is the problem and what should you do?
+        </p>
+<div class="voted-answers-tally d-none">
+<script id="907592" type="application/json">
+          [{"voted_answers": "G", "vote_count": 24, "is_most_voted": true}, {"voted_answers": "B", "vote_count": 2, "is_most_voted": false}]
+         </script>
+</div>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="A">
+            A.
+           </span>
+           The advertising department is causing delays when consuming the messages. Work with the advertising department to fix this.
+          </li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="B">
+            B.
+           </span>
+           Messages in your Dataflow job are taking more than 30 seconds to process. Optimize your job or increase the number of workers to fix this.
+          </li>
+<li class="multi-choice-item correct-hidden">
+<span class="multi-choice-letter" data-choice-letter="G">
+            G.
+           </span>
+           Messages in your Dataflow job are processed in less than 30 seconds, but your job cannot keep up with the backlog in the Pub/Sub subscription. Optimize your job or increase the number of workers to fix this.
+           <span class="badge badge-success most-voted-answer-badge" data-original-title="This answer is currently the most voted for in the discussion" style="display: none;" title="">
+            Most Voted
+           </span>
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="D">
+            D.
+           </span>
+           The web server is not pushing messages fast enough to Pub/Sub. Work with the web server team to fix this.
+          </li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">
+         Show Suggested Answer
+        </a>
+<a class="btn btn-primary hide-solution d-none" href="#">
+         Hide Answer
+        </a>
+<div class="card-text question-answer bg-light white-text">
+<span class="correct-answer-box">
+<strong>
+           Suggested Answer:
+          </strong>
+<span class="correct-answer">
+           G
+          </span>
+<a class="vote-answer-button ml-1 d-print-none" data-original-title="Vote an answer" data-toggle="tooltip" href="#" title="">
+           🗳️
+          </a>
+<br/>
+</span>
+<span class="answer-description">
+</span>
+<div class="voting-summary col-12 col-sm-6 col-lg-4 pt-2 pb-2" style="font-size: 0.9em">
+<i>
+           Community vote distribution
+          </i>
+<!-- Additional optional vote button: <a href="javascript:void(0)" data-toggle="tooltip" class="vote-answer-button" title="Vote an answer">🗳️</a>-->
+<div class="progress vote-distribution-bar">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="15" class="vote-bar progress-bar bg-primary" data-original-title="24 votes." data-toggle="tooltip" role="progressbar" style="width: 92%; display: flex;" title="">
+            G (92%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-info" data-original-title="2 votes." data-toggle="tooltip" role="progressbar" style="width: 8%; display: flex;" title="">
+            8%
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-success" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            B (20%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" class="vote-bar progress-bar bg-warning" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 15%; display: none;" title="">
+            Other
+           </div>
+</div>
+</div>
+</div>
+</div>
+<!-- / Question  -->
+<div class="discussion-meta-data mt-3 pt-1 border-top">
+        <i>
+         Dec. 30, 2023, 9:50 a.m.
+        </i>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2></h2>
+<pre>Odpowiedź: G.
+
+Problem leży w tym, że Dataflow job nie nadąża z przetwarzaniem zaległości w subskrypcji Pub/Sub, mimo że pojedyncze wiadomości są przetwarzane w czasie krótszym niż 30 sekund. System lag (5 sekund) wskazuje na opóźnienie w przetwarzaniu danych przez Dataflow, ale data freshness (40 sekund) jest znacznie wyższa niż wymagane 30 sekund, co sugeruje, że problem nie leży w opóźnieniu pojedynczych wiadomości, a w kumulacji zaległości.  Oznacza to, że job nie jest w stanie przetworzyć wszystkich wiadomości tak szybko, jak są one publikowane, co prowadzi do narastającego opóźnienia. Optymalizacja jobu lub zwiększenie liczby workerów powinno pomóc w zmniejszeniu zaległości i zapewnieniu, że wiadomości docierają do działu reklamy w wymaganym czasie.
+
+A. Opóźnienie konsumenta (działu reklamy) nie tłumaczy wysokiej wartości data freshness, która mierzy opóźnienie od momentu wystąpienia zdarzenia do momentu dostarczenia przetworzonej wiadomości.
+B.  Przetwarzanie pojedynczej wiadomości w mniej niż 30 sekund nie rozwiązuje problemu narastającej zaległości i wysokiej data freshness.
+C.  Data freshness na poziomie 40 sekund wskazuje, że problem nie leży w szybkości przetwarzania pojedynczych wiadomości, a w zdolności jobu do nadążania z całą subskrypcją.
+D.  Lag między eventTimestamp a publishTime jest niski (maksymalnie 1 sekunda), co wyklucza problem z web serverem.
+
+Dodatkowe źródła:
+
+*   <a href="https://cloud.google.com/dataflow/docs/monitoring" target="_blank">Dataflow Monitoring</a>
+*   <a href="https://cloud.google.com/pubsub/docs/monitoring" target="_blank">Pub/Sub Monitoring</a>
+*   <a href="https://medium.com/@siddharth.srivastava/understanding-dataflow-lag-metrics-and-how-to-troubleshoot-them-a6699966666f" target="_blank">Understanding Dataflow Lag</a></pre>
+</div>
+<div class="ai-analysis-container" style="display:none;" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;"><h2>Analiza i Podsumowanie Dyskusji (AI)</h2><div class="analysis-section">
+<h3>Analiza i Wyjaśnienie</h3>
+<p><b>Sugerowana odpowiedź: G</b></p>
+<p>Poprawna odpowiedź to G. Problem polega na tym, że zadanie Dataflow nie nadąża z przetwarzaniem zaległości w subskrypcji Pub/Sub. Mimo że pojedyncze wiadomości są przetwarzane szybko (system lag wynosi 5 sekund), ogólna data freshness wynosi 40 sekund, co wskazuje na narastającą zaległość. Oznacza to, że zadanie nie jest w stanie przetworzyć wszystkich wiadomości tak szybko, jak są one publikowane.</p>
+<p>Kluczowe informacje z treści pytania i dyskusji użytkowników potwierdzają tę diagnozę:</p>
+<ul>
+<li><b>System lag:</b> Niski (5 sekund) – pojedyncze wiadomości są przetwarzane szybko.</li>
+<li><b>Data freshness:</b> Wysoka (40 sekund) – wiadomości docierają do działu reklamy z dużym opóźnieniem.</li>
+<li><b>Opóźnienie między eventTimestamp a publishTime:</b> Niskie (maksymalnie 1 sekunda) – problem nie leży po stronie serwera webowego.</li>
+</ul>
+<p>Użytkownicy <b>e70ea9e</b>, <b>raaad</b>, <b>Matt_108</b> i inni słusznie wskazują na problem z zaległością i niemożnością nadążenia z przepływem danych.</p>
+<p><b>Dlaczego inne odpowiedzi są nieprawidłowe:</b></p>
+<ul>
+<li><b>A:</b> Opóźnienie po stronie działu reklamy nie tłumaczy wysokiej wartości data freshness.</li>
+<li><b>B:</b> Przetwarzanie pojedynczej wiadomości w mniej niż 30 sekund nie rozwiązuje problemu narastającej zaległości. Użytkownik <b>4a8ffd7</b> błędnie interpretuje dane, sugerując, że czas przetwarzania wynosi 35 sekund.  Należy pamiętać, że system lag to opóźnienie w przetwarzaniu pojedynczej wiadomości, a data freshness to całkowity czas od wystąpienia zdarzenia do dostarczenia przetworzonej wiadomości.</li>
+<li><b>C:</b> Chociaż użytkownicy <b>Alex3551</b> i <b>JyoGCP</b> sugerują odpowiedź C, to jest ona mniej precyzyjna niż G. Odpowiedź G bezpośrednio wskazuje na problem z backlogiem i koniecznością optymalizacji lub zwiększenia zasobów.</li>
+<li><b>D:</b> Niskie opóźnienie między eventTimestamp a publishTime wyklucza problem z serwerem webowym.</li>
+</ul>
+</div>
+</div></div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+
+    revealButtons.forEach(button => {
+        let isVisible = false;
+
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+
+<script>localStorage.setItem('gcp_exam_last_visited', window.location.href);</script></body>
+</html>

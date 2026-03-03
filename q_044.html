@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/animate.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/owl.carousel.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/slick.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-main.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-transitions.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/magnific-popup.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/fonts2/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/color/default.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/responsive.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .discussion-header-container { line-height: 1.5; }
+    .question-body { font-size: 1.05rem; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    </style>
+<title>PDE 44</title>
+
+<style>
+/* Zapewnij że główny kontener ma rozsądną szerokość */
+.q-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Wszystkie karty (pytanie i odpowiedź) mają tę samą szerokość */
+.q-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.q-answer {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.q-answer pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.ai-analysis-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+</style>
+
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_043.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_045.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+<h2>Question 44 / 319</h2>
+
+<div class="question-body mt-3 pt-3 border-top" data-id="835351">
+<p class="card-text">
+         You are deploying a new storage system for your mobile application, which is a media streaming service. You decide the best fit is Google Cloud Datastore. You have entities with multiple properties, some of which can take on multiple values. For example, in the entity 'Movie' the property 'actors' and the property
+         <br/>
+         'tags' have multiple values but the property 'date released' does not. A typical query would ask for all movies with actor=&lt;actorname&gt; ordered by date_released or all movies with tag=Comedy ordered by date_released. How should you avoid a combinatorial explosion in the number of indexes?
+         <br/>
+</p>
+<div class="voted-answers-tally d-none">
+<script id="835351" type="application/json">
+          [{"voted_answers": "A", "vote_count": 12, "is_most_voted": true}, {"voted_answers": "D", "vote_count": 6, "is_most_voted": false}]
+         </script>
+</div>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item correct-hidden">
+<span class="multi-choice-letter" data-choice-letter="A">
+            A.
+           </span>
+           Manually configure the index in your index config as follows:
+           <img class="in-exam-image" src="https://www.examtopics.com/assets/media/exam-media/04341/0003700001.png"/>
+<span class="badge badge-success most-voted-answer-badge" data-original-title="This answer is currently the most voted for in the discussion" style="display: none;" title="">
+            Most Voted
+           </span>
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="B">
+            B.
+           </span>
+           Manually configure the index in your index config as follows:
+           <img class="in-exam-image" src="https://www.examtopics.com/assets/media/exam-media/04341/0003700002.png"/>
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="C">
+            C.
+           </span>
+           Set the following in your entity options: exclude_from_indexes = 'actors, tags'
+          </li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="D">
+            D.
+           </span>
+           Set the following in your entity options: exclude_from_indexes = 'date_published'
+          </li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">
+         Show Suggested Answer
+        </a>
+<a class="btn btn-primary hide-solution d-none" href="#">
+         Hide Answer
+        </a>
+<div class="card-text question-answer bg-light white-text">
+<span class="correct-answer-box">
+<strong>
+           Suggested Answer:
+          </strong>
+<span class="correct-answer">
+           A
+          </span>
+<a class="vote-answer-button ml-1 d-print-none" data-original-title="Vote an answer" data-toggle="tooltip" href="#" title="">
+           🗳️
+          </a>
+<br/>
+</span>
+<span class="answer-description">
+</span>
+<div class="voting-summary col-12 col-sm-6 col-lg-4 pt-2 pb-2" style="font-size: 0.9em">
+<i>
+           Community vote distribution
+          </i>
+<!-- Additional optional vote button: <a href="javascript:void(0)" data-toggle="tooltip" class="vote-answer-button" title="Vote an answer">🗳️</a>-->
+<div class="progress vote-distribution-bar">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="15" class="vote-bar progress-bar bg-primary" data-original-title="12 votes." data-toggle="tooltip" role="progressbar" style="width: 67%; display: flex;" title="">
+            A (67%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-info" data-original-title="6 votes." data-toggle="tooltip" role="progressbar" style="width: 33%; display: flex;" title="">
+            D (33%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-success" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            B (20%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" class="vote-bar progress-bar bg-warning" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 15%; display: none;" title="">
+            Other
+           </div>
+</div>
+</div>
+</div>
+</div>
+<!-- / Question  -->
+<div class="discussion-meta-data mt-3 pt-1 border-top">
+        <i>
+         Sept. 3, 2022, 1:26 p.m.
+        </i>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2></h2>
+<pre>Odpowiedź: A.
+
+W Google Cloud Datastore (i Firestore) "kombinatoryczna eksplozja" indeksów najczęściej odnosi się do sytuacji, gdy indeks kompozytowy obejmuje wiele właściwości będących listami (mających wiele wartości). W takim przypadku Datastore tworzy wpis indeksu dla każdej możliwej kombinacji wszystkich elementów tych list, co może drastycznie zwiększyć rozmiar indeksu i koszty. Wymagane zapytania (`actor=&lt;actorname&gt; ordered by date_released` oraz `tag=Comedy ordered by date_released`) filtrują po jednej właściwości wielowartościowej i sortują po jednej właściwości jednowartościowej. Aby je efektywnie obsłużyć, niezbędne są indeksy kompozytowe. Ręczna konfiguracja indeksów w pliku `index.yaml` pozwala precyzyjnie zdefiniować tylko te indeksy, które są potrzebne (np. `(actor ASC, date_released ASC)` i `(tag ASC, date_released ASC)`). Dzięki temu unikamy automatycznego generowania niepotrzebnych, potencjalnie ogromnych indeksów, które mogłyby łączyć wiele właściwości wielowartościowych w jeden indeks.
+
+*   **A. Manually configure the index in your index config as follows:** Ta opcja (choć brakuje konkretnej konfiguracji po dwukropku) jest poprawna, ponieważ ręczne definiowanie indeksów kompozytowych w pliku `index.yaml` jest standardowym sposobem zarządzania indeksami i unikania ich eksplozji, jednocześnie wspierając złożone zapytania.
+*   **C. Set the following in your entity options: exclude_from_indexes = 'actors, tags'**: Wykluczenie właściwości `actors` i `tags` z indeksów uniemożliwiłoby wykonywanie zapytań filtrujących po tych właściwościach, co jest sprzeczne z wymaganiami.
+*   **D. Set the following in your entity options: exclude_from_indexes = 'date_published'**: Wykluczenie właściwości `date_released` (zakładając, że `date_published` to literówka) z indeksów uniemożliwiłoby sortowanie po tej właściwości, co jest wymagane w pytaniu.
+
+**Dodatkowe źródła:**
+*   Dokumentacja indeksów w Google Cloud Datastore: <a href="https://cloud.google.com/datastore/docs/indexes" target="_blank">https://cloud.google.com/datastore/docs/indexes</a>
+*   Dokumentacja indeksów w Google Cloud Firestore (często analogiczne zasady dla Datastore): <a href="https://cloud.google.com/firestore/docs/query-data/indexes" target="_blank">https://cloud.google.com/firestore/docs/query-data/indexes</a> (sekcja "Combinatorial explosions")</pre>
+</div>
+<div class="ai-analysis-container" style="display:none;" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;"><h2>Analiza i Podsumowanie Dyskusji (AI)</h2><div class="analysis-section">
+<h3>Analiza i Wyjaśnienie</h3>
+<p><b>Sugerowana odpowiedź: A</b></p>
+<p>Poprawną odpowiedzią jest A. Pytanie dotyczy unikania "kombinatorycznej eksplozji" indeksów w Google Cloud Datastore, która występuje, gdy mamy do czynienia z właściwościami o wielu wartościach.  Kluczem do rozwiązania jest ręczne skonfigurowanie indeksów w pliku <code>index.yaml</code>. Pozwala to na precyzyjne zdefiniowanie tylko tych indeksów, które są faktycznie potrzebne do obsługi zapytań, takich jak te podane w przykładzie (filtrowanie po aktorze lub tagu i sortowanie po dacie wydania).</p>
+<p>Użytkownik Wasss123 i jkhong w swoich komentarzach poprawnie wskazują na dokumentację Google Cloud Datastore, która potwierdza tę metodę.  Przykładowa konfiguracja indeksu, którą podają, pokazuje, jak zdefiniować indeksy dla konkretnych zapytań, minimalizując liczbę wpisów indeksu.</p>
+<p>Opcja C jest niepoprawna, ponieważ wykluczenie właściwości <code>actors</code> i <code>tags</code> z indeksów uniemożliwiłoby wykonywanie zapytań filtrujących po tych właściwościach. Opcja D jest również niepoprawna, ponieważ wykluczenie <code>date_released</code> uniemożliwiłoby sortowanie po tej właściwości, co jest wymagane w pytaniu.</p>
+<p>Komentarze użytkowników Ender_H i Hm92730 dostarczają dodatkowych informacji na temat działania indeksów w Datastore i potwierdzają, że ręczna konfiguracja jest najlepszym sposobem na uniknięcie problemów z kombinatoryczną eksplozją.  Użytkownik soichirokawa sugeruje opcję B, ale jest ona mniej precyzyjna niż A, ponieważ nie adresuje bezpośrednio problemu właściwości o wielu wartościach.</p>
+</div>
+</div></div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+
+    revealButtons.forEach(button => {
+        let isVisible = false;
+
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+
+<script>localStorage.setItem('gcp_exam_last_visited', window.location.href);</script></body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/animate.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/owl.carousel.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/slick.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-main.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-transitions.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/magnific-popup.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/fonts2/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/color/default.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/responsive.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .discussion-header-container { line-height: 1.5; }
+    .question-body { font-size: 1.05rem; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    </style>
+<title>PDE 277</title>
+
+<style>
+/* Zapewnij że główny kontener ma rozsądną szerokość */
+.q-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Wszystkie karty (pytanie i odpowiedź) mają tę samą szerokość */
+.q-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.q-answer {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.q-answer pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.ai-analysis-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+</style>
+
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_276.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_278.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+<h2>Question 277 / 319</h2>
+
+<div class="question-body mt-3 pt-3 border-top" data-id="907645">
+<p class="card-text">
+         You are designing a real-time system for a ride hailing app that identifies areas with high demand for rides to effectively reroute available drivers to meet the demand. The system ingests data from multiple sources to Pub/Sub, processes the data, and stores the results for visualization and analysis in real-time dashboards. The data sources include driver location updates every 5 seconds and app-based booking events from riders. The data processing involves real-time aggregation of supply and demand data for the last 30 seconds, every 2 seconds, and storing the results in a low-latency system for visualization. What should you do?
+        </p>
+<div class="voted-answers-tally d-none">
+<script id="907645" type="application/json">
+          [{"voted_answers": "B", "vote_count": 16, "is_most_voted": true}]
+         </script>
+</div>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="A">
+            A.
+           </span>
+           Group the data by using a tumbling window in a Dataflow pipeline, and write the aggregated data to Memorystore.
+          </li>
+<li class="multi-choice-item correct-hidden">
+<span class="multi-choice-letter" data-choice-letter="B">
+            B.
+           </span>
+           Group the data by using a hopping window in a Dataflow pipeline, and write the aggregated data to Memorystore.
+           <span class="badge badge-success most-voted-answer-badge" data-original-title="This answer is currently the most voted for in the discussion" style="display: none;" title="">
+            Most Voted
+           </span>
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="C">
+            C.
+           </span>
+           Group the data by using a session window in a Dataflow pipeline, and write the aggregated data to BigQuery.
+          </li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="D">
+            D.
+           </span>
+           Group the data by using a hopping window in a Dataflow pipeline, and write the aggregated data to BigQuery.
+          </li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">
+         Show Suggested Answer
+        </a>
+<a class="btn btn-primary hide-solution d-none" href="#">
+         Hide Answer
+        </a>
+<div class="card-text question-answer bg-light white-text">
+<span class="correct-answer-box">
+<strong>
+           Suggested Answer:
+          </strong>
+<span class="correct-answer">
+           B
+          </span>
+<a class="vote-answer-button ml-1 d-print-none" data-original-title="Vote an answer" data-toggle="tooltip" href="#" title="">
+           🗳️
+          </a>
+<br/>
+</span>
+<span class="answer-description">
+</span>
+<div class="voting-summary col-12 col-sm-6 col-lg-4 pt-2 pb-2" style="font-size: 0.9em">
+<i>
+           Community vote distribution
+          </i>
+<!-- Additional optional vote button: <a href="javascript:void(0)" data-toggle="tooltip" class="vote-answer-button" title="Vote an answer">🗳️</a>-->
+<div class="progress vote-distribution-bar">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="15" class="vote-bar progress-bar bg-primary" data-original-title="16 votes." data-toggle="tooltip" role="progressbar" style="width: 100%; display: flex;" title="">
+            B (100%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-info" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            C (25%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-success" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            B (20%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" class="vote-bar progress-bar bg-warning" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 15%; display: none;" title="">
+            Other
+           </div>
+</div>
+</div>
+</div>
+</div>
+<!-- / Question  -->
+<div class="discussion-meta-data mt-3 pt-1 border-top">
+        <i>
+         Jan. 4, 2024, 5:14 a.m.
+        </i>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2></h2>
+<pre>Odpowiedź: B.
+
+Wykorzystanie hopping window w Dataflow pipeline jest najlepszym rozwiązaniem, ponieważ pozwala na agregację danych w regularnych, nakładających się na siebie interwałach czasowych. W tym przypadku, potrzebujemy agregować dane z ostatnich 30 sekund co 2 sekundy, co idealnie pasuje do charakterystyki hopping window.  Hopping window zapewnia, że dane są przetwarzane w sposób ciągły i aktualne wyniki są dostępne z niskim opóźnieniem. Memorystore, jako w pełni zarządzana usługa pamięci podręcznej w pamięci, zapewnia niskie opóźnienia odczytu i zapisu, co jest kluczowe dla wyświetlania danych w czasie rzeczywistym na dashboardach.  Połączenie hopping window i Memorystore pozwala na efektywne przetwarzanie i przechowywanie danych w celu spełnienia wymagań aplikacji ride-hailing.
+
+A. Tumbling window tworzy nie nakładające się okna, co nie pozwala na uwzględnienie danych z ostatnich 30 sekund w każdym 2-sekundowym interwale.
+C. Session window jest przeznaczone do przetwarzania danych opartych na aktywności użytkownika, a nie do regularnej agregacji danych w czasie.
+D. BigQuery jest dobrym rozwiązaniem do analizy danych historycznych, ale nie zapewnia wystarczająco niskich opóźnień dla wizualizacji w czasie rzeczywistym.
+
+Dodatkowe źródła:
+
+*   **Apache Beam Documentation - Windows:** <a href="https://beam.apache.org/documentation/programming-guide/windows/" target="_blank">https://beam.apache.org/documentation/programming-guide/windows/</a>
+*   **Google Cloud Memorystore:** <a href="https://cloud.google.com/memorystore" target="_blank">https://cloud.google.com/memorystore</a>
+*   **Google Cloud Dataflow:** <a href="https://cloud.google.com/dataflow" target="_blank">https://cloud.google.com/dataflow</a></pre>
+</div>
+<div class="ai-analysis-container" style="display:none;" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;"><h2>Analiza i Podsumowanie Dyskusji (AI)</h2><div class="analysis-section">
+<h3>Analiza i Wyjaśnienie</h3>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p>Odpowiedź B, czyli użycie <b>hopping window</b> w Dataflow pipeline i zapisanie zagregowanych danych do <b>Memorystore</b>, jest najbardziej odpowiednia dla tego scenariusza. Kluczowe wymagania to przetwarzanie danych w czasie rzeczywistym, agregacja danych z ostatnich 30 sekund co 2 sekundy oraz zapewnienie niskich opóźnień dla wizualizacji. Hopping window idealnie spełnia warunek agregacji w nakładających się interwałach czasowych, umożliwiając uwzględnienie danych z ostatnich 30 sekund w każdym 2-sekundowym oknie.  Memorystore, będący w pełni zarządzaną usługą pamięci podręcznej w pamięci, zapewnia bardzo niskie opóźnienia odczytu i zapisu, co jest niezbędne do wyświetlania danych w czasie rzeczywistym na dashboardach.</p>
+<p>Dyskusja użytkowników potwierdza tę ocenę. Większość głosów popiera odpowiedź B, a komentarze takie jak ten od raaad i anushree09 podkreślają zalety hopping window w kontekście agregacji danych w czasie rzeczywistym.  Użytkownik ashdam słusznie zwraca uwagę na wybór między Memorystore a BigQuery, a ML6 i ea2023 wyjaśniają, dlaczego Memorystore jest lepszy ze względu na niskie opóźnienia.</p>
+<p><b>Dlaczego inne odpowiedzi są nieprawidłowe:</b></p>
+<ul>
+<li><b>A i C:</b> Tumbling window tworzy nie nakładające się okna, co nie pozwala na uwzględnienie danych z ostatnich 30 sekund w każdym 2-sekundowym interwale. Session window jest przeznaczone do analizy aktywności użytkownika, a nie do regularnej agregacji danych w czasie.</li>
+<li><b>D:</b> BigQuery jest doskonałym rozwiązaniem do analizy danych historycznych, ale nie zapewnia wystarczająco niskich opóźnień dla wizualizacji w czasie rzeczywistym.</li>
+</ul>
+<p>Należy zauważyć, że Jeyaraj początkowo sugerował tumbling window, ale później zmienił zdanie, co wskazuje na zrozumienie zalet hopping window w tym konkretnym przypadku.</p>
+</div>
+</div></div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+
+    revealButtons.forEach(button => {
+        let isVisible = false;
+
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+
+<script>localStorage.setItem('gcp_exam_last_visited', window.location.href);</script></body>
+</html>

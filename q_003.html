@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/animate.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/owl.carousel.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/slick.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-main.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/rsmenu-transitions.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/magnific-popup.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/fonts/fonts2/flaticon.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/color/default.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/responsive.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
+<style>
+    body { background: #f6f8fa; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
+    .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
+    .q-answer pre {
+      white-space: pre-wrap;
+      background: #0b1020;
+      color: #e6edf3;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+    .discussion-header-container { line-height: 1.5; }
+    .question-body { font-size: 1.05rem; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    </style>
+<title>PDE 3</title>
+
+<style>
+/* Zapewnij że główny kontener ma rozsądną szerokość */
+.q-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Wszystkie karty (pytanie i odpowiedź) mają tę samą szerokość */
+.q-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.q-answer {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.q-answer pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.ai-analysis-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+</style>
+
+    <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+</head>
+<body class="home2">
+<div class="q-page">
+<nav class="q-nav d-flex justify-content-between align-items-center my-3">
+<a class="btn btn-outline-primary" href="q_002.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="q_004.html">Następne →</a>
+</nav>
+<div class="q-card mb-4">
+<h2>Question 3 / 319</h2>
+
+<div class="question-body mt-3 pt-3 border-top" data-id="835310">
+<p class="card-text">
+         You designed a database for patient records as a pilot project to cover a few hundred patients in three clinics. Your design used a single database table to represent all patients and their visits, and you used self-joins to generate reports. The server resource utilization was at 50%. Since then, the scope of the project has expanded. The database must now store 100 times more patient records. You can no longer run the reports, because they either take too long or they encounter errors with insufficient compute resources. How should you adjust the database design?
+         <br/>
+</p>
+<div class="voted-answers-tally d-none">
+<script id="835310" type="application/json">
+          [{"voted_answers": "C", "vote_count": 18, "is_most_voted": true}]
+         </script>
+</div>
+<div class="question-choices-container">
+<ul>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="A">
+            A.
+           </span>
+           Add capacity (memory and disk space) to the database server by the order of 200.
+          </li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="B">
+            B.
+           </span>
+           Shard the tables into smaller ones based on date ranges, and only generate reports with prespecified date ranges.
+          </li>
+<li class="multi-choice-item correct-hidden">
+<span class="multi-choice-letter" data-choice-letter="C">
+            C.
+           </span>
+           Normalize the master patient-record table into the patient table and the visits table, and create other necessary tables to avoid self-join.
+           <span class="badge badge-success most-voted-answer-badge" data-original-title="This answer is currently the most voted for in the discussion" style="display: none;" title="">
+            Most Voted
+           </span>
+</li>
+<li class="multi-choice-item">
+<span class="multi-choice-letter" data-choice-letter="D">
+            D.
+           </span>
+           Partition the table into smaller tables, with one for each clinic. Run queries against the smaller table pairs, and use unions for consolidated reports.
+          </li>
+</ul>
+</div>
+<a class="btn btn-primary reveal-solution" href="#">
+         Show Suggested Answer
+        </a>
+<a class="btn btn-primary hide-solution d-none" href="#">
+         Hide Answer
+        </a>
+<div class="card-text question-answer bg-light white-text">
+<span class="correct-answer-box">
+<strong>
+           Suggested Answer:
+          </strong>
+<span class="correct-answer">
+           C
+          </span>
+<a class="vote-answer-button ml-1 d-print-none" data-original-title="Vote an answer" data-toggle="tooltip" href="#" title="">
+           🗳️
+          </a>
+<br/>
+</span>
+<span class="answer-description">
+</span>
+<div class="voting-summary col-12 col-sm-6 col-lg-4 pt-2 pb-2" style="font-size: 0.9em">
+<i>
+           Community vote distribution
+          </i>
+<!-- Additional optional vote button: <a href="javascript:void(0)" data-toggle="tooltip" class="vote-answer-button" title="Vote an answer">🗳️</a>-->
+<div class="progress vote-distribution-bar">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="15" class="vote-bar progress-bar bg-primary" data-original-title="18 votes." data-toggle="tooltip" role="progressbar" style="width: 100%; display: flex;" title="">
+            C (100%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-info" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            C (25%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="vote-bar progress-bar bg-success" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 25%; display: none;" title="">
+            B (20%)
+           </div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" class="vote-bar progress-bar bg-warning" data-original-title="" data-toggle="tooltip" role="progressbar" style="width: 15%; display: none;" title="">
+            Other
+           </div>
+</div>
+</div>
+</div>
+</div>
+<!-- / Question  -->
+<div class="discussion-meta-data mt-3 pt-1 border-top">
+        by
+							
+								[deleted]
+							
+							at
+        <i>
+         March 15, 2020, 8:14 a.m.
+        </i>
+</div>
+</div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2></h2>
+<pre>Odpowiedź: C.
+
+Wyjaśnienie: Obecny projekt wykorzystuje jedną tabelę do przechowywania wszystkich danych pacjentów i ich wizyt, co prowadzi do problemów z wydajnością wraz ze wzrostem liczby rekordów. Normalizacja, polegająca na rozdzieleniu danych na bardziej szczegółowe tabele (np. tabela pacjentów i tabela wizyt), eliminuje potrzebę złożonych złączeń samego siebie (self-joins). Umożliwia to bardziej efektywne zapytania i zarządzanie danymi. Takie podejście jest zgodne z dobrymi praktykami projektowania baz danych, szczególnie w przypadku rosnącej ilości danych.
+
+Dlaczego pozostałe opcje są gorsze/błędne:
+A. Zwiększenie zasobów serwera bez zmiany struktury bazy danych jest rozwiązaniem tymczasowym i nie adresuje fundamentalnego problemu wydajnościowego wynikającego ze źle zaprojektowanej struktury danych.
+B. Partycjonowanie według zakresów dat, chociaż może pomóc w niektórych scenariuszach, nadal może wymagać złożonych złączeń i nie rozwiązuje problemu nadmiernego polegania na self-joins w pierwotnym projekcie.
+D. Partycjonowanie tabeli według klinik może częściowo poprawić wydajność dla zapytań specyficznych dla danej kliniki, ale tworzenie skonsolidowanych raportów za pomocą `UNION` może nadal być kosztowne i nie eliminuje podstawowego problemu z designem.</pre>
+</div>
+<div class="ai-analysis-container" style="display:none;" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;"><h2>Analiza i Podsumowanie Dyskusji (AI)</h2><div class="analysis-section">
+<h3>Analiza i Wyjaśnienie</h3>
+<p><b>Sugerowana odpowiedź: C</b></p>
+<p>Prawidłową odpowiedzią jest <b>C. Normalize the master patient-record table...</b>.</p>
+<p><b>Dlaczego?</b></p>
+<p>Problem wydajności wynika z fundamentalnego błędu w projekcie schematu bazy danych. Przechowywanie pacjentów i wizyt w jednej tabeli ("flat table") zmusza system do wykonywania operacji <b>Self-Join</b> (łączenia tabeli samej ze sobą), aby powiązać dane pacjenta z jego wieloma wizytami. Przy małej skali to działa, ale przy wzroście wolumenu danych o 100x (złożoność obliczeniowa self-join rośnie nieliniowo), zapytania stają się ekstremalnie kosztowne i wolne.</p>
+<p><b>Rozwiązanie (Normalizacja):</b></p>
+<ul>
+<li>Rozdzielenie danych na dwie tabele: <code>Patients</code> (Pacjenci) i <code>Visits</code> (Wizyty).</li>
+<li>Tabela <code>Visits</code> będzie zawierać klucz obcy (Foreign Key) do tabeli <code>Patients</code>.</li>
+<li>Zastępuje to kosztowny Self-Join znacznie wydajniejszym złączeniem typu <code>JOIN</code> (np. LEFT JOIN) po indeksowanym kluczu. Jest to standardowa praktyka w relacyjnych bazach danych (OLTP/OLAP).</li>
+</ul>
+
+<p><b>Dlaczego inne odpowiedzi są nieprawidłowe?</b></p>
+<ul>
+<li><b>A. Add capacity (Skalowanie wertykalne):</b> To leczenie objawowe. Przy tak złym projekcie zapytania, nawet 200-krotne zwiększenie zasobów może nie wystarczyć, a koszty wzrosną drastycznie. Nie rozwiązuje to problemu nieefektywnego algorytmu zapytania.</li>
+<li><b>B. Sharding (Szardowanie):</b> Może pomóc, ale wprowadza ogromną złożoność operacyjną i ogranicza możliwości raportowania (tylko w ramach szarda/zakresu dat). Nadal nie naprawia problemu self-join wewnątrz szarda.</li>
+<li><b>D. Partitioning per clinic:</b> Podobnie jak B, poprawia wydajność tylko lokalnie. Raporty skonsolidowane ("consolidated reports") wymagałyby kosztownych operacji <code>UNION</code> na wszystkich tabelach, co przy 100x większej skali nadal byłoby nieefektywne.</li>
+</ul>
+
+<h3>Dodatkowe Zasoby (Linki)</h3>
+<ul>
+<li><a href="https://cloud.google.com/bigquery/docs/best-practices-performance-compute" target="_blank">Google Cloud: BigQuery Performance Best Practices (Joins)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Database_normalization" target="_blank">Wikipedia: Database Normalization</a></li>
+</ul>
+</div>
+</div></div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+
+    revealButtons.forEach(button => {
+        let isVisible = false;
+
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+
+<script>localStorage.setItem('gcp_exam_last_visited', window.location.href);</script></body>
+</html>
