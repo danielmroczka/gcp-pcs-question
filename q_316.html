@@ -19,25 +19,36 @@
 <link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
 <style>
     body { background: #f6f8fa; }
-    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
-    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
     .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
-    .q-answer { width: 100% !important; max-width: 100% !important; }
     .q-answer pre {
       white-space: pre-wrap;
-      word-wrap: break-word;
       background: #0b1020;
       color: #e6edf3;
       padding: 14px;
       border-radius: 10px;
       line-height: 1.45;
       font-size: 0.98rem;
-      max-width: 100%;
-      overflow-x: auto;
     }
-    .ai-analysis-container { width: 100% !important; max-width: 100% !important; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3; }
+    .discussion-header-container { line-height: 1.5; }
     .question-body { font-size: 1.05rem; }
-    .multi-choice-letter { font-weight: bold; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    
+    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+    .q-card { width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-answer { width: 100% !important; max-width: 100% !important; }
+    .q-answer pre { white-space: pre-wrap; word-wrap: break-word; max-width: 100%; overflow-x: auto; }
+    .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 316</title>
 <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
@@ -46,14 +57,15 @@
 <div class="q-page">
 <nav class="q-nav d-flex justify-content-between align-items-center my-3">
 <a class="btn btn-outline-primary" href="q_315.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="index.html">Spis Pytań</a>
 <a class="btn btn-outline-primary" href="q_317.html">Następne →</a>
 </nav>
 <div class="q-card mb-4">
 <h2>Question 316 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
-<div class="card-text">
+<p class="card-text">
 database servers must not have any direct communication with public internet. Secure, internal network. What to do?
-</div>
+</p>
 <div class="question-choices-container">
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Private IP + NAT gateway.</li>
@@ -78,18 +90,24 @@ database servers must not have any direct communication with public internet. Se
 <h2>Wyjaśnienie</h2>
 <pre>Odpowiedź: C.
 
-Wyjaśnienie: Najbardziej odizolowanym rozwiązaniem jest podsieć prywatna bez bramy internetowej (lub Cloud NAT tylko jeśli wymagane są updejty). Brak publicznego IP na poziomie NIC (C) całkowicie uniemożliwia bezpośredni dostęp z sieci zewnętrznej.</pre>
+Wyjaśnienie (Dlaczego poprawna):
+C. Private Subnet + Private IP: Najbardziej bezpiecznym sposobem izolacji bazy danych jest przypisanie jej wyłącznie prywatnego adresu IP w podsieci, która nie posiada trasy (Default route) do internetu (brak Internet Gateway). Całkowity brak publicznego adresu IP na poziomie karty sieciowej VM eliminuje możliwość bezpośredniego ataku z zewnątrz.
+
+Dlaczego inne są błędne:
+A. NAT Gateway: Pozwala na WYJŚCIE do internetu. Choć chroni przed wejściem, wymóg 'no DIRECT communication' przy bazach danych zazwyczaj implikuje całkowitą izolację, którą lepiej realizuje czyste C. (Uwaga: Wiele osób wybiera A, ale C jest bardziej fundamentalną odpowiedzią na brak jakiejkolwiek komunikacji).
+B, D: Posiadanie Public IP (nawet zablokowanego firewallem) zwiększa powierzchnię ataku i ryzyko błędu w regułach firewall.
+
+Konsensus społeczności ExamTopics: Zdecydowana większość na C. Dla krytycznych DB izolacja L3 (brak routingu) jest kluczowa.</pre>
 </div>
-<div class="ai-analysis-container" style="display:none;">
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p>Cloud NAT (A) pozwala na wyjście, ale nie wejście, jednak C jest najbardziej 'zamkniętą' opcją zgodnie z treścią.</p>
+<p><b>Głęboka analiza:</b> Aby administrować taką bazą, powinieneś używać Bastion Host lub IAP TCP Forwarding, co pozwala na bezpieczne połączenie bez wystawiania bazy na świat.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">https://cloud.google.com/vpc/docs/private-google-access</a></li>
-
 </ul>
 </div>
 </div>

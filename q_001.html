@@ -19,25 +19,36 @@
 <link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
 <style>
     body { background: #f6f8fa; }
-    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
-    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
     .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
-    .q-answer { width: 100% !important; max-width: 100% !important; }
     .q-answer pre {
       white-space: pre-wrap;
-      word-wrap: break-word;
       background: #0b1020;
       color: #e6edf3;
       padding: 14px;
       border-radius: 10px;
       line-height: 1.45;
       font-size: 0.98rem;
-      max-width: 100%;
-      overflow-x: auto;
     }
-    .ai-analysis-container { width: 100% !important; max-width: 100% !important; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3; }
+    .discussion-header-container { line-height: 1.5; }
     .question-body { font-size: 1.05rem; }
-    .multi-choice-letter { font-weight: bold; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    
+    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+    .q-card { width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-answer { width: 100% !important; max-width: 100% !important; }
+    .q-answer pre { white-space: pre-wrap; word-wrap: break-word; max-width: 100%; overflow-x: auto; }
+    .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 1</title>
 <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
@@ -46,14 +57,15 @@
 <div class="q-page">
 <nav class="q-nav d-flex justify-content-between align-items-center my-3">
 <span></span>
+<a class="btn btn-outline-primary" href="index.html">Spis Pytań</a>
 <a class="btn btn-outline-primary" href="q_002.html">Następne →</a>
 </nav>
 <div class="q-card mb-4">
 <h2>Question 1 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
-<div class="card-text">
+<p class="card-text">
 Your team needs to make sure that a Compute Engine instance does not have access to the internet or to any Google APIs or services. Which two settings must remain disabled to meet these requirements? (Choose two.)
-</div>
+</p>
 <div class="question-choices-container">
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Public IP</li>
@@ -78,18 +90,25 @@ Your team needs to make sure that a Compute Engine instance does not have access
 <h2>Wyjaśnienie</h2>
 <pre>Odpowiedź: AC.
 
-Wyjaśnienie: Aby instancja nie miała dostępu do internetu, nie może posiadać Publicznego IP (A). Aby nie miała dostępu do usług Google, funkcja Private Google Access (C) musi pozostać wyłączona.</pre>
+Wyjaśnienie (Dlaczego poprawna):
+A. Public IP: Usunięcie publicznego adresu IP to pierwszy poziom izolacji. Bez niego maszyna nie może nawiązać bezpośredniego połączenia dwukierunkowego z internetem.
+C. Private Google Access (PGA): Ta funkcja na poziomie podsieci pozwala maszynom bez publicznego IP na routing ruchu do publicznych adresów IP usług Google (jak Cloud Storage czy BigQuery) przez sieć wewnętrzną. Jej wyłączenie (pozostawienie disabled) jest niezbędne, aby zablokować dostęp do usług Google.
+
+Dlaczego inne są błędne:
+B. IP Forwarding: Dotyczy możliwości przesyłania pakietów przez maszynę (np. w roli routera/NAT). Jej stan nie wpływa bezpośrednio na dostęp SAMEJ maszyny do internetu czy API.
+D. Static routes: Choć trasy sterują ruchem, samo ich istnienie nie daje dostępu do API Google bez odpowiedniego punktu wyjścia (Public IP lub PGA). Wyłączenie tras mogłoby popsuć całą sieć VPC, a nie tylko izolować jedną instancję.
+
+Konsensus społeczności ExamTopics: 100% głosów na AC. Społeczność podkreśla, że PGA jest często zapominanym elementem izolacji.</pre>
 </div>
-<div class="ai-analysis-container" style="display:none;">
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: AC</b></p>
-<p>Publiczne IP jest niezbędne do komunikacji z siecią publiczną. Private Google Access pozwala maszynom posiadającym tylko prywatne IP na łączenie się z publicznymi API Google. Wyłączenie obu opcji izoluje instancję.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Głównym punktem debaty w sieci jest to, czy wyłączenie PGA wystarczy. Eksperci zauważają, że w nowoczesnych sieciach GCP istnieje również Private Service Connect (PSC), który mógłby być trzecią drogą wyjścia, ale nie ma go w opcjach. Dlatego AC pozostaje jedyną poprawną odpowiedzią w ramach dostępnego zestawu. Pułapką jest tu opcja D – trasy statyczne są potrzebne do komunikacji wewnątrz VPC, ich wyłączenie to 'przysłowiowe spalenie mostu', a nie precyzyjna kontrola dostępu.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">https://cloud.google.com/vpc/docs/private-google-access</a></li>
-
 </ul>
 </div>
 </div>

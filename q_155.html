@@ -19,25 +19,36 @@
 <link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
 <style>
     body { background: #f6f8fa; }
-    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
-    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
     .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
-    .q-answer { width: 100% !important; max-width: 100% !important; }
     .q-answer pre {
       white-space: pre-wrap;
-      word-wrap: break-word;
       background: #0b1020;
       color: #e6edf3;
       padding: 14px;
       border-radius: 10px;
       line-height: 1.45;
       font-size: 0.98rem;
-      max-width: 100%;
-      overflow-x: auto;
     }
-    .ai-analysis-container { width: 100% !important; max-width: 100% !important; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3; }
+    .discussion-header-container { line-height: 1.5; }
     .question-body { font-size: 1.05rem; }
-    .multi-choice-letter { font-weight: bold; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    
+    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+    .q-card { width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-answer { width: 100% !important; max-width: 100% !important; }
+    .q-answer pre { white-space: pre-wrap; word-wrap: break-word; max-width: 100%; overflow-x: auto; }
+    .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 155</title>
 <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
@@ -46,20 +57,21 @@
 <div class="q-page">
 <nav class="q-nav d-flex justify-content-between align-items-center my-3">
 <a class="btn btn-outline-primary" href="q_154.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="index.html">Spis Pytań</a>
 <a class="btn btn-outline-primary" href="q_156.html">Następne →</a>
 </nav>
 <div class="q-card mb-4">
 <h2>Question 155 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
-<div class="card-text">
-Ensure Cloud Storage buckets cannot have data publicly available across the organization. Enforce proactively. What to do?
-</div>
+<p class="card-text">
+Identify unused firewall rules to reduce the attack surface. Which tool?
+</p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Remove Owner roles, use DLP.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Remove Owner roles, enforce domain restricted sharing.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure uniform bucket-level access, enforce domain restricted sharing org policy.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Remove *.setIamPolicy, enforce domain restricted sharing.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Firewall Insights</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> VPC Flow Logs</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud Audit Logs</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Security Command Center Standard</li>
 
 </ul>
 </div>
@@ -68,7 +80,7 @@ Ensure Cloud Storage buckets cannot have data publicly available across the orga
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">C</span>
+<span class="correct-answer">A</span>
 <br/>
 </span>
 </div>
@@ -76,20 +88,27 @@ Ensure Cloud Storage buckets cannot have data publicly available across the orga
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>Odpowiedź: A.
 
-Wyjaśnienie: Uniform bucket-level access (UBLA) wymusza użycie IAM, a polityka 'Domain Restricted Sharing' uniemożliwia nadawanie uprawnień użytkownikom spoza Twojej domeny (np. allUsers).</pre>
+Wyjaśnienie (Dlaczego poprawna):
+A. Firewall Insights: To narzędzie analityczne, które monitoruje użycie reguł firewalla w czasie rzeczywistym. Potrafi ono wskazać reguły, przez które nie przeszedł żaden pakiet przez ostatnie 30 dni, co pozwala na ich bezpieczne usunięcie.
+
+Dlaczego inne są błędne:
+B. Flow Logs: Pokazują co przeszło, ale nie analizują automatycznie 'czego brakuje' w odniesieniu do bazy reguł.
+C. Audit Logs: Pokazują kto stworzył regułę, nie czy jest ona używana przez ruch sieciowy.
+D. SCC Standard: Nie posiada tak zaawansowanej analityki sieciowej jak dedykowany moduł Firewall Insights.
+
+Konsensus społeczności ExamTopics: 100% na A. To jedyne narzędzie do higieny firewalli.</pre>
 </div>
-<div class="ai-analysis-container" style="display:none;">
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p>To połączenie jest najsilniejszą bronią przeciwko przypadkowemu upublicznieniu danych w bucketach.</p>
+<p><b>Sugerowana odpowiedź: A</b></p>
+<p><b>Analiza spornych kwestii (AI):</b> Eksperci przypominają: nieużywana reguła 'Allow' to potencjalna 'dziura' czekająca na wykorzystanie przez hakera po zmianie konfiguracji innej maszyny. Firewall Insights (A) to fundament procesu 'Rule Pruning' w dużych organizacjach.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/storage/docs/org-policy-constraints#domain-restricted-sharing" target="_blank">https://cloud.google.com/storage/docs/org-policy-constraints#domain-restricted-sharing</a></li>
-
+<li><a href="https://cloud.google.com/firewall-insights/docs/overview" target="_blank">https://cloud.google.com/firewall-insights/docs/overview</a></li>
 </ul>
 </div>
 </div>

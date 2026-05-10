@@ -19,25 +19,36 @@
 <link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
 <style>
     body { background: #f6f8fa; }
-    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
-    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
     .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
-    .q-answer { width: 100% !important; max-width: 100% !important; }
     .q-answer pre {
       white-space: pre-wrap;
-      word-wrap: break-word;
       background: #0b1020;
       color: #e6edf3;
       padding: 14px;
       border-radius: 10px;
       line-height: 1.45;
       font-size: 0.98rem;
-      max-width: 100%;
-      overflow-x: auto;
     }
-    .ai-analysis-container { width: 100% !important; max-width: 100% !important; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3; }
+    .discussion-header-container { line-height: 1.5; }
     .question-body { font-size: 1.05rem; }
-    .multi-choice-letter { font-weight: bold; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    
+    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+    .q-card { width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-answer { width: 100% !important; max-width: 100% !important; }
+    .q-answer pre { white-space: pre-wrap; word-wrap: break-word; max-width: 100%; overflow-x: auto; }
+    .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 197</title>
 <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
@@ -46,21 +57,21 @@
 <div class="q-page">
 <nav class="q-nav d-flex justify-content-between align-items-center my-3">
 <a class="btn btn-outline-primary" href="q_196.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="index.html">Spis Pytań</a>
 <a class="btn btn-outline-primary" href="q_198.html">Następne →</a>
 </nav>
 <div class="q-card mb-4">
 <h2>Question 197 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
-<div class="card-text">
-Cloud Run: ensure only trusted container images are deployed. Which two?
-</div>
+<p class="card-text">
+Grant a user access to manage and view all security settings, but only within a specific folder, not the organization. Which role?
+</p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enable Binary Authorization on service.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Org policy constraints/run.allowedBinaryAuthorizationPolicies.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Binary Authorization on K8s cluster.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Run breakglass.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Org policy compute.trustedImageProjects.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> roles/resourcemanager.folderAdmin</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> roles/iam.securityAdmin</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> roles/securitycenter.admin</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> roles/owner</li>
 
 </ul>
 </div>
@@ -69,7 +80,7 @@ Cloud Run: ensure only trusted container images are deployed. Which two?
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">AB</span>
+<span class="correct-answer">B</span>
 <br/>
 </span>
 </div>
@@ -77,20 +88,27 @@ Cloud Run: ensure only trusted container images are deployed. Which two?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: AB.
+<pre>Odpowiedź: B.
 
-Wyjaśnienie: Binary Authorization wspiera Cloud Run (A). Polityka organizacji (B) wymusza użycie konkretnych reguł BinAuth w całej strukturze projektów.</pre>
+Wyjaśnienie (Dlaczego poprawna):
+B. iam.securityAdmin: Ta rola pozwala na zarządzanie wszystkimi politykami IAM i uprawnieniami. Nadanie jej na poziomie Foldera (B) ogranicza zasięg władzy administratora bezpieczeństwa tylko do projektów znajdujących się w tym folderze.
+
+Dlaczego inne są błędne:
+A. Folder Admin: Zarządza Strukturą folderów (tworzenie/przenoszenie), ale nie jest dedykowaną rolą do zarządzania 'ustawieniami bezpieczeństwa' (IAM) w sposób tak bezpośredni jak Security Admin.
+C. securitycenter.admin: Zarządza usługą SCC, a nie uprawnieniami IAM użytkowników.
+D. Owner: Zbyt szeroka rola, naruszenie Least Privilege.
+
+Konsensus społeczności ExamTopics: 100% poparcia dla B. To standardowa rola dla regionalnych adminów security.</pre>
 </div>
-<div class="ai-analysis-container" style="display:none;">
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: AB</b></p>
-<p>Binary Authorization to jedyny mechanizm gwarantujący, że kod przeszedł przez proces atestacji przed uruchomieniem.</p>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p><b>Analiza spornych kwestii (AI):</b> To pytanie sprawdza znajomość hierarchii zasobów. Zapamiętaj: każdą rolę w GCP można nadać na poziomie Organizacji, Foldera lub Projektu. Aby ograniczyć dostęp terytorialnie/działowo, zawsze wybieraj Folder (B).</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/binary-authorization/docs/run/overview" target="_blank">https://cloud.google.com/binary-authorization/docs/run/overview</a></li>
-
+<li><a href="https://cloud.google.com/iam/docs/understanding-roles#security-admin-role" target="_blank">https://cloud.google.com/iam/docs/understanding-roles#security-admin-role</a></li>
 </ul>
 </div>
 </div>

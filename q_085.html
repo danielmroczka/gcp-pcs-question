@@ -19,25 +19,36 @@
 <link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
 <style>
     body { background: #f6f8fa; }
-    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
-    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
     .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
-    .q-answer { width: 100% !important; max-width: 100% !important; }
     .q-answer pre {
       white-space: pre-wrap;
-      word-wrap: break-word;
       background: #0b1020;
       color: #e6edf3;
       padding: 14px;
       border-radius: 10px;
       line-height: 1.45;
       font-size: 0.98rem;
-      max-width: 100%;
-      overflow-x: auto;
     }
-    .ai-analysis-container { width: 100% !important; max-width: 100% !important; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3; }
+    .discussion-header-container { line-height: 1.5; }
     .question-body { font-size: 1.05rem; }
-    .multi-choice-letter { font-weight: bold; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    
+    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+    .q-card { width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-answer { width: 100% !important; max-width: 100% !important; }
+    .q-answer pre { white-space: pre-wrap; word-wrap: break-word; max-width: 100%; overflow-x: auto; }
+    .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 85</title>
 <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
@@ -46,14 +57,15 @@
 <div class="q-page">
 <nav class="q-nav d-flex justify-content-between align-items-center my-3">
 <a class="btn btn-outline-primary" href="q_084.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="index.html">Spis Pytań</a>
 <a class="btn btn-outline-primary" href="q_086.html">Następne →</a>
 </nav>
 <div class="q-card mb-4">
 <h2>Question 85 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
-<div class="card-text">
+<p class="card-text">
 You want to synchronize security groups with email addresses from LDAP to Cloud IAM. What should you do?
-</div>
+</p>
 <div class="question-choices-container">
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure GCDS to sync security groups using LDAP search rules with 'user email address' attribute.</li>
@@ -78,18 +90,25 @@ You want to synchronize security groups with email addresses from LDAP to Cloud 
 <h2>Wyjaśnienie</h2>
 <pre>Odpowiedź: A.
 
-Wyjaśnienie: GCDS pozwala na definiowanie reguł wyszukiwania LDAP, aby synchronizować tylko te grupy, które posiadają atrybut adresu e-mail.</pre>
+Wyjaśnienie (Dlaczego poprawna):
+A. GCDS search rules: Google Cloud Directory Sync pozwala na precyzyjne określenie, które grupy z LDAP mają zostać przeniesione do chmury. Filtrowanie po atrybucie adresu e-mail zapewnia, że zsynchronizowane zostaną tylko grupy, które mogą funkcjonować w ekosystemie Google (gdzie tożsamość oparta jest na e-mailu).
+
+Dlaczego inne są błędne:
+B. Bidirectional sync: GCDS wspiera tylko synchronizację JEDNOSTRONNĄ (LDAP -> Google). Google nie pozwala na wypychanie zmian z chmury z powrotem do Twojego AD/LDAP tym narzędziem.
+C. Subset sync tool: Brzmi jak ogólnik, podczas gdy A precyzuje jak to zrobić w oficjalnym narzędziu GCDS.
+D. Object class attribute: Sama klasa obiektu (np. groupOfNames) nie gwarantuje, że grupa ma przypisany adres e-mail, co jest wymagane do jej poprawnego działania w IAM.
+
+Konsensus społeczności ExamTopics: Zdecydowane A. Skuteczna synchronizacja wymaga dobrze zdefiniowanych reguł wyszukiwania (Search Rules).</pre>
 </div>
-<div class="ai-analysis-container" style="display:none;">
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p>Synchronizacja jest zawsze jednostronna (z LDAP do Google), co zapewnia spójność danych.</p>
+<p><b>Głęboka analiza:</b> GCDS to narzędzie działające w modelu 'state comparison'. Przed każdą synchronizacją generuje raport zmian, który administrator musi zatwierdzić.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://support.google.com/a/answer/612003" target="_blank">https://support.google.com/a/answer/612003</a></li>
-
 </ul>
 </div>
 </div>

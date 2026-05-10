@@ -19,25 +19,36 @@
 <link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
 <style>
     body { background: #f6f8fa; }
-    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
-    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
     .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
-    .q-answer { width: 100% !important; max-width: 100% !important; }
     .q-answer pre {
       white-space: pre-wrap;
-      word-wrap: break-word;
       background: #0b1020;
       color: #e6edf3;
       padding: 14px;
       border-radius: 10px;
       line-height: 1.45;
       font-size: 0.98rem;
-      max-width: 100%;
-      overflow-x: auto;
     }
-    .ai-analysis-container { width: 100% !important; max-width: 100% !important; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3; }
+    .discussion-header-container { line-height: 1.5; }
     .question-body { font-size: 1.05rem; }
-    .multi-choice-letter { font-weight: bold; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    
+    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+    .q-card { width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-answer { width: 100% !important; max-width: 100% !important; }
+    .q-answer pre { white-space: pre-wrap; word-wrap: break-word; max-width: 100%; overflow-x: auto; }
+    .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 141</title>
 <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
@@ -46,14 +57,15 @@
 <div class="q-page">
 <nav class="q-nav d-flex justify-content-between align-items-center my-3">
 <a class="btn btn-outline-primary" href="q_140.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="index.html">Spis Pytań</a>
 <a class="btn btn-outline-primary" href="q_142.html">Następne →</a>
 </nav>
 <div class="q-card mb-4">
 <h2>Question 141 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
-<div class="card-text">
+<p class="card-text">
 SCC configuration. Alerts for crypto mining and misconfigurations. Which two features?
-</div>
+</p>
 <div class="question-choices-container">
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Event Threat Detection</li>
@@ -79,18 +91,26 @@ SCC configuration. Alerts for crypto mining and misconfigurations. Which two fea
 <h2>Wyjaśnienie</h2>
 <pre>Odpowiedź: AC.
 
-Wyjaśnienie: Security Health Analytics (C) wykrywa błędne konfiguracje (np. publiczne buckety). Event Threat Detection (A) analizuje logi pod kątem zagrożeń takich jak crypto mining.</pre>
+Wyjaśnienie (Dlaczego poprawna):
+A. Event Threat Detection: Analizuje logi (np. Cloud Audit Logs, VPC Flow Logs) w czasie rzeczywistym i wykrywa wzorce charakterystyczne dla zagrożeń takich jak właśnie crypto mining, brute force czy wycieki danych.
+C. Security Health Analytics: Skupia się na wykrywaniu błędnych konfiguracji infrastruktury (misconfigurations), np. otwartych portów SSH na cały świat czy braku wersjonowania bucketów.
+
+Dlaczego inne są błędne:
+B. Container Threat Detection: Monitoruje wnętrze działającego kontenera (np. próba odczytu pamięci przez obcy proces). Jest to Premium, ale A i C pokrywają szerszy zakres 'misconfigurations' i 'threats' wymienionych w pytaniu.
+D. Cloud DLP: Szuka danych wrażliwych, nie wykrywa ataków typu mining.
+E. Cloud Armor: Chroni aplikacje webowe przed atakami z zewnątrz.
+
+Konsensus społeczności ExamTopics: Silne poparcie dla AC. To dwa fundamentalne filary SCC Premium.</pre>
 </div>
-<div class="ai-analysis-container" style="display:none;">
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: AC</b></p>
-<p>Container Threat Detection (B) jest bardziej specyficzny dla runtime kontenerów, a pytanie dotyczy 'compute environment' ogólnie i logów (Event).</p>
+<p><b>Głęboka analiza:</b> SHA to Twoje 'Compliance', a ETD to Twoje 'SOC'. Razem dają pełny obraz stanu bezpieczeństwa i aktywnych prób włamań.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/security-command-center/docs/concepts-security-command-center-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-security-command-center-overview</a></li>
-
 </ul>
 </div>
 </div>

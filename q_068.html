@@ -19,25 +19,36 @@
 <link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
 <style>
     body { background: #f6f8fa; }
-    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
-    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
     .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
-    .q-answer { width: 100% !important; max-width: 100% !important; }
     .q-answer pre {
       white-space: pre-wrap;
-      word-wrap: break-word;
       background: #0b1020;
       color: #e6edf3;
       padding: 14px;
       border-radius: 10px;
       line-height: 1.45;
       font-size: 0.98rem;
-      max-width: 100%;
-      overflow-x: auto;
     }
-    .ai-analysis-container { width: 100% !important; max-width: 100% !important; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3; }
+    .discussion-header-container { line-height: 1.5; }
     .question-body { font-size: 1.05rem; }
-    .multi-choice-letter { font-weight: bold; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    
+    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+    .q-card { width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-answer { width: 100% !important; max-width: 100% !important; }
+    .q-answer pre { white-space: pre-wrap; word-wrap: break-word; max-width: 100%; overflow-x: auto; }
+    .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 68</title>
 <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
@@ -46,14 +57,15 @@
 <div class="q-page">
 <nav class="q-nav d-flex justify-content-between align-items-center my-3">
 <a class="btn btn-outline-primary" href="q_067.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="index.html">Spis Pytań</a>
 <a class="btn btn-outline-primary" href="q_069.html">Następne →</a>
 </nav>
 <div class="q-card mb-4">
 <h2>Question 68 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
-<div class="card-text">
+<p class="card-text">
 A customer terminates an engineer and needs to make sure the engineer's Google account is automatically deprovisioned. What should the customer do?
-</div>
+</p>
 <div class="question-choices-container">
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Remove IAM permissions in Cloud Identity.</li>
@@ -78,18 +90,25 @@ A customer terminates an engineer and needs to make sure the engineer's Google a
 <h2>Wyjaśnienie</h2>
 <pre>Odpowiedź: C.
 
-Wyjaśnienie: GCDS automatyzuje proces provisioningu i deprovisioningu użytkowników na podstawie zmian w lokalnym katalogu (np. AD).</pre>
+Wyjaśnienie (Dlaczego poprawna):
+C. GCDS: Narzędzie to synchronizuje stan Twojego lokalnego katalogu (np. Active Directory) z Cloud Identity. Gdy HR usunie inżyniera z AD, przy kolejnej synchronizacji GCDS automatycznie zawiesi lub usunie jego konto w Google, zapewniając automatyzm i brak 'osieroconych' kont.
+
+Dlaczego inne są błędne:
+A. Remove IAM: To tylko odbiera uprawnienia w chmurze, ale użytkownik nadal może się logować do innych usług Google (np. Drive, Gmail). To nie jest deprovisioning konta.
+B. Cloud SDK: Można napisać skrypt, ale nie jest to 'automatyczny' mechanizm systemowy tak jak GCDS.
+D. Manually delete: Rozwiązanie manualne, podatne na błędy i zapomnienia, sprzeczne z wymogiem automatyzacji.
+
+Konsensus społeczności ExamTopics: 100% na C. GCDS to jedyne poprawne rozwiązanie dla automatycznego cyklu życia użytkownika hybrydowego.</pre>
 </div>
-<div class="ai-analysis-container" style="display:none;">
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p>GCDS zapewnia, że gdy użytkownik zostanie usunięty w AD, jego dostęp do GCP również zostanie wyłączony.</p>
+<p><b>Głęboka analiza:</b> Automatyczny deprovisioning to krytyczny wymóg większości audytów bezpieczeństwa (np. SOC2, ISO 27001). Zapobiega on dostępowi byłych pracowników do zasobów firmy.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://support.google.com/a/answer/106368" target="_blank">https://support.google.com/a/answer/106368</a></li>
-
 </ul>
 </div>
 </div>

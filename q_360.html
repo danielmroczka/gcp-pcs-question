@@ -19,25 +19,36 @@
 <link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
 <style>
     body { background: #f6f8fa; }
-    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
-    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
     .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
-    .q-answer { width: 100% !important; max-width: 100% !important; }
     .q-answer pre {
       white-space: pre-wrap;
-      word-wrap: break-word;
       background: #0b1020;
       color: #e6edf3;
       padding: 14px;
       border-radius: 10px;
       line-height: 1.45;
       font-size: 0.98rem;
-      max-width: 100%;
-      overflow-x: auto;
     }
-    .ai-analysis-container { width: 100% !important; max-width: 100% !important; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3; }
+    .discussion-header-container { line-height: 1.5; }
     .question-body { font-size: 1.05rem; }
-    .multi-choice-letter { font-weight: bold; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    
+    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+    .q-card { width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-answer { width: 100% !important; max-width: 100% !important; }
+    .q-answer pre { white-space: pre-wrap; word-wrap: break-word; max-width: 100%; overflow-x: auto; }
+    .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 360</title>
 <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
@@ -46,14 +57,15 @@
 <div class="q-page">
 <nav class="q-nav d-flex justify-content-between align-items-center my-3">
 <a class="btn btn-outline-primary" href="q_359.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="index.html">Spis Pytań</a>
 <a class="btn btn-outline-primary" href="q_361.html">Następne →</a>
 </nav>
 <div class="q-card mb-4">
 <h2>Question 360 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
-<div class="card-text">
+<p class="card-text">
 improve password security for Google Workspace users (initially user-created). What to do?
-</div>
+</p>
 <div class="question-choices-container">
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Security awareness training.</li>
@@ -78,18 +90,25 @@ improve password security for Google Workspace users (initially user-created). W
 <h2>Wyjaśnienie</h2>
 <pre>Odpowiedź: B.
 
-Wyjaśnienie: Wymuszenie silnego hasła (B) poprawia jakość nowych haseł, a wymuszenie zmiany przy kolejnym logowaniu gwarantuje, że stare, słabe hasła zostaną natychmiast zastąpione.</pre>
+Wyjaśnienie (Dlaczego poprawna):
+B. Strong password + Enforce at next sign-in: To najbardziej skuteczna kombinacja techniczna. 'Strong password' wymusza użycie złożonych znaków. 'Enforce at next sign-in' gwarantuje, że wszyscy użytkownicy (nawet ci ze starymi, słabymi hasłami) zostaną natychmiast zmuszeni do poprawy swojego bezpieczeństwa.
+
+Dlaczego inne są błędne:
+A. Training: Bardzo ważne, ale nie stanowi technicznego wymuszenia (enforcement).
+C. Frequent expiration: Obecnie odradzane przez standardy (NIST), ponieważ zmusza użytkowników do tworzenia przewidywalnych haseł (np. Haslo1, Haslo2). Lepiej mieć jedno bardzo silne hasło i 2FA.
+D. Audit: Powie Ci o problemie, ale go nie naprawi.
+
+Konsensus społeczności ExamTopics: 100% na B. Standardowa procedura podnoszenia poziomu bezpieczeństwa tożsamości.</pre>
 </div>
-<div class="ai-analysis-container" style="display:none;">
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p>Częste wygaszanie haseł (C) jest obecnie odradzane przez standardy (np. NIST) na rzecz długich i silnych haseł.</p>
+<p><b>Głęboka analiza:</b> Wymuszenie zmiany hasła to najlepszy sposób na 'wyczyszczenie' starych grzechów z okresu, gdy domena nie była jeszcze profesjonalnie zarządzana.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://support.google.com/a/answer/139399" target="_blank">https://support.google.com/a/answer/139399</a></li>
-
 </ul>
 </div>
 </div>

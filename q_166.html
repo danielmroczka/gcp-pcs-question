@@ -19,25 +19,36 @@
 <link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
 <style>
     body { background: #f6f8fa; }
-    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
-    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
     .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
-    .q-answer { width: 100% !important; max-width: 100% !important; }
     .q-answer pre {
       white-space: pre-wrap;
-      word-wrap: break-word;
       background: #0b1020;
       color: #e6edf3;
       padding: 14px;
       border-radius: 10px;
       line-height: 1.45;
       font-size: 0.98rem;
-      max-width: 100%;
-      overflow-x: auto;
     }
-    .ai-analysis-container { width: 100% !important; max-width: 100% !important; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3; }
+    .discussion-header-container { line-height: 1.5; }
     .question-body { font-size: 1.05rem; }
-    .multi-choice-letter { font-weight: bold; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    
+    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+    .q-card { width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-answer { width: 100% !important; max-width: 100% !important; }
+    .q-answer pre { white-space: pre-wrap; word-wrap: break-word; max-width: 100%; overflow-x: auto; }
+    .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 166</title>
 <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
@@ -46,20 +57,21 @@
 <div class="q-page">
 <nav class="q-nav d-flex justify-content-between align-items-center my-3">
 <a class="btn btn-outline-primary" href="q_165.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="index.html">Spis Pytań</a>
 <a class="btn btn-outline-primary" href="q_167.html">Następne →</a>
 </nav>
 <div class="q-card mb-4">
 <h2>Question 166 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
-<div class="card-text">
-Inspect IP packet data for invalid or malicious content. What to do?
-</div>
+<p class="card-text">
+Encrypt sensitive data in BigQuery using your own keys, but let Google manage the hardware. Which method?
+</p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Packet Mirroring and security software.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> VPC Flow Logs.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Fluentd agent on VM.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Armor access logs.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Google-managed encryption keys</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Customer-managed encryption keys (CMEK) using Cloud KMS</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Customer-supplied encryption keys (CSEK)</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Client-side encryption</li>
 
 </ul>
 </div>
@@ -68,7 +80,7 @@ Inspect IP packet data for invalid or malicious content. What to do?
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">B</span>
 <br/>
 </span>
 </div>
@@ -76,20 +88,27 @@ Inspect IP packet data for invalid or malicious content. What to do?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>Odpowiedź: B.
 
-Wyjaśnienie: Pełna inspekcja zawartości pakietów (L3-L7) wymaga narzędzia IDS/IPS, któremu dostarcza się dane za pomocą usługi Packet Mirroring.</pre>
+Wyjaśnienie (Dlaczego poprawna):
+B. CMEK via Cloud KMS: Pozwala na zarządzanie własnym kluczem (rotacja, włączanie/wyłączanie), ale klucz rezyduje fizycznie w systemie Google (Cloud KMS). Google dba o sprzęt i dostępność, Ty dbasz o logikę bezpieczeństwa klucza.
+
+Dlaczego inne są błędne:
+A. Google-managed: Nie masz żadnej kontroli nad kluczem.
+C. CSEK: BigQuery NIE wspiera metody CSEK (klucze podawane w żądaniu). CSEK jest dostępne głównie dla GCS i Compute Engine.
+D. Client-side: Uniemożliwiłoby to analitykę BigQuery (Google nie mogłoby przeszukiwać zaszyfrowanych danych bez ich wcześniejszego deszyfrowania przez klienta).
+
+Konsensus społeczności ExamTopics: 100% na B. CMEK to złoty standard kontroli klucza w usługach managed takich jak BQ.</pre>
 </div>
-<div class="ai-analysis-container" style="display:none;">
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p>Inne logi (Flow Logs, Cloud Armor) dają tylko metadane lub logi HTTP, a nie pełną treść pakietu IP.</p>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p><b>Analiza spornych kwestii (AI):</b> Dyskusja dotyczy 'Searchability'. Dane zaszyfrowane CMEK (B) są dla BigQuery przezroczyste (Google ma uprawnienie do klucza), więc zapytania SQL działają normalnie. Dane zaszyfrowane przez klienta (D) to dla Google tylko 'szum', co zabija sens używania hurtowni danych.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc/docs/packet-mirroring" target="_blank">https://cloud.google.com/vpc/docs/packet-mirroring</a></li>
-
+<li><a href="https://cloud.google.com/bigquery/docs/customer-managed-encryption" target="_blank">https://cloud.google.com/bigquery/docs/customer-managed-encryption</a></li>
 </ul>
 </div>
 </div>

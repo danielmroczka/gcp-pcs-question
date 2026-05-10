@@ -19,25 +19,36 @@
 <link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
 <style>
     body { background: #f6f8fa; }
-    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
-    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
     .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
-    .q-answer { width: 100% !important; max-width: 100% !important; }
     .q-answer pre {
       white-space: pre-wrap;
-      word-wrap: break-word;
       background: #0b1020;
       color: #e6edf3;
       padding: 14px;
       border-radius: 10px;
       line-height: 1.45;
       font-size: 0.98rem;
-      max-width: 100%;
-      overflow-x: auto;
     }
-    .ai-analysis-container { width: 100% !important; max-width: 100% !important; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3; }
+    .discussion-header-container { line-height: 1.5; }
     .question-body { font-size: 1.05rem; }
-    .multi-choice-letter { font-weight: bold; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    
+    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+    .q-card { width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-answer { width: 100% !important; max-width: 100% !important; }
+    .q-answer pre { white-space: pre-wrap; word-wrap: break-word; max-width: 100%; overflow-x: auto; }
+    .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 91</title>
 <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
@@ -46,14 +57,15 @@
 <div class="q-page">
 <nav class="q-nav d-flex justify-content-between align-items-center my-3">
 <a class="btn btn-outline-primary" href="q_090.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="index.html">Spis Pytań</a>
 <a class="btn btn-outline-primary" href="q_092.html">Następne →</a>
 </nav>
 <div class="q-card mb-4">
 <h2>Question 91 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
-<div class="card-text">
+<p class="card-text">
 Convert existing unmanaged users (using corporate domain for personal accounts) to managed accounts. Use single sign-on. Which two actions? (Choose two.)
-</div>
+</p>
 <div class="question-choices-container">
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> GCDS to sync local identity to Cloud Identity.</li>
@@ -79,18 +91,26 @@ Convert existing unmanaged users (using corporate domain for personal accounts) 
 <h2>Wyjaśnienie</h2>
 <pre>Odpowiedź: AD.
 
-Wyjaśnienie: Najpierw synchronizujesz konta (A), a następnie używasz narzędzia TTUU (D) do wykrycia konfliktów i zaproszenia użytkowników do migracji kont osobistych na firmowe.</pre>
+Wyjaśnienie (Dlaczego poprawna):
+A. GCDS: Najpierw synchronizujesz tożsamości z lokalnego AD do Google, aby system wiedział, jakie konta POWINNY istnieć.
+D. Transfer Tool (TTUU): To narzędzie identyfikuje konta 'osobiste' założone na adresy w Twojej domenie i pozwala wysłać do ich właścicieli prośbę o przekazanie konta pod zarząd firmy (migracja do konta zarządzanego).
+
+Dlaczego inne są błędne:
+B. Recovery emails: Nie pomagają w przejęciu kontroli nad kontem.
+C. Force change: Można to zrobić, ale jest to bardzo inwazyjne i nie rozwiązuje problemu istniejących danych na kontach. TTUU jest zalecaną, łagodniejszą ścieżką.
+E. Ask to delete: Mało skuteczne i powoduje utratę danych służbowych, które pracownik mógł tam zgromadzić.
+
+Konsensus społeczności ExamTopics: 100% poparcia dla AD. To standardowa procedura 'domykania' domeny w Google Cloud.</pre>
 </div>
-<div class="ai-analysis-container" style="display:none;">
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: AD</b></p>
-<p>TTUU to jedyne oficjalne narzędzie Google do przejmowania kontroli nad kontami utworzonymi poza domeną zarządzaną.</p>
+<p><b>Głęboka analiza:</b> Konflikt kont (Conflicting Accounts) powstaje, gdy GCDS próbuje stworzyć konto, które już istnieje jako osobiste. TTUU to jedyny sposób na czyste rozwiązanie tego problemu.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://support.google.com/cloudidentity/answer/7062710" target="_blank">https://support.google.com/cloudidentity/answer/7062710</a></li>
-
 </ul>
 </div>
 </div>

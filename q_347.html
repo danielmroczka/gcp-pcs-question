@@ -19,25 +19,36 @@
 <link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
 <style>
     body { background: #f6f8fa; }
-    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
-    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
     .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
-    .q-answer { width: 100% !important; max-width: 100% !important; }
     .q-answer pre {
       white-space: pre-wrap;
-      word-wrap: break-word;
       background: #0b1020;
       color: #e6edf3;
       padding: 14px;
       border-radius: 10px;
       line-height: 1.45;
       font-size: 0.98rem;
-      max-width: 100%;
-      overflow-x: auto;
     }
-    .ai-analysis-container { width: 100% !important; max-width: 100% !important; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3; }
+    .discussion-header-container { line-height: 1.5; }
     .question-body { font-size: 1.05rem; }
-    .multi-choice-letter { font-weight: bold; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    
+    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+    .q-card { width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-answer { width: 100% !important; max-width: 100% !important; }
+    .q-answer pre { white-space: pre-wrap; word-wrap: break-word; max-width: 100%; overflow-x: auto; }
+    .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 347</title>
 <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
@@ -46,14 +57,15 @@
 <div class="q-page">
 <nav class="q-nav d-flex justify-content-between align-items-center my-3">
 <a class="btn btn-outline-primary" href="q_346.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="index.html">Spis Pytań</a>
 <a class="btn btn-outline-primary" href="q_348.html">Następne →</a>
 </nav>
 <div class="q-card mb-4">
 <h2>Question 347 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
-<div class="card-text">
+<p class="card-text">
 runtime threat detection for containers in production folder (libs loaded, scripts executed). Findings visible in SCC. What to do?
-</div>
+</p>
 <div class="question-choices-container">
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Log-based metrics.</li>
@@ -78,18 +90,25 @@ runtime threat detection for containers in production folder (libs loaded, scrip
 <h2>Wyjaśnienie</h2>
 <pre>Odpowiedź: D.
 
-Wyjaśnienie: Container Threat Detection (D) to usługa SCC Premium, która monitoruje zachowanie kontenerów w czasie rzeczywistym i wykrywa anomalie takie jak egzekucja nieznanych skryptów lub ładowanie obcych bibliotek.</pre>
+Wyjaśnienie (Dlaczego poprawna):
+D. Container Threat Detection: Jest to specyficzna funkcja SCC Premium zaprojektowana dokładnie do monitorowania wnętrza działających kontenerów. Wykrywa ona podejrzane zdarzenia, takie jak uruchomienie nieznanego skryptu, ładowanie złośliwej biblioteki czy otwarcie reverse-shell.
+
+Dlaczego inne są błędne:
+A. Log-based metrics: Zliczają wystąpienia fraz w logach, ale nie mają wglądu w niskopoziomowe operacje systemowe kontenera (np. ładowanie modułów jądra).
+B. SHA: Skupia się na błędach w konfiguracji chmury (np. 'pod jest uprzywilejowany'), a nie na tym co pod ROBI w trakcie działania (runtime).
+C. COS: To bezpieczny system operacyjny, ale sam w sobie nie raportuje zagrożeń runtime do SCC bez włączonej usługi detekcji (D).
+
+Konsensus społeczności ExamTopics: 100% na D. Runtime threat detection = CTD w Google Cloud.</pre>
 </div>
-<div class="ai-analysis-container" style="display:none;">
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p>SHA (B) sprawdza konfigurację (np. czy obraz jest bezpieczny), a CTD sprawdza co kontener ROBI po uruchomieniu.</p>
+<p><b>Głęboka analiza:</b> CTD działa poprzez zbieranie sygnałów z jądra systemu Linux i przesyłanie ich do silnika analitycznego SCC, co pozwala na wykrycie włamań 'zero-day'.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/security-command-center/docs/concepts-container-threat-detection-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-container-threat-detection-overview</a></li>
-
 </ul>
 </div>
 </div>

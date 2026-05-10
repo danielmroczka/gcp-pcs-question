@@ -19,25 +19,36 @@
 <link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
 <style>
     body { background: #f6f8fa; }
-    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
-    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
     .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
-    .q-answer { width: 100% !important; max-width: 100% !important; }
     .q-answer pre {
       white-space: pre-wrap;
-      word-wrap: break-word;
       background: #0b1020;
       color: #e6edf3;
       padding: 14px;
       border-radius: 10px;
       line-height: 1.45;
       font-size: 0.98rem;
-      max-width: 100%;
-      overflow-x: auto;
     }
-    .ai-analysis-container { width: 100% !important; max-width: 100% !important; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3; }
+    .discussion-header-container { line-height: 1.5; }
     .question-body { font-size: 1.05rem; }
-    .multi-choice-letter { font-weight: bold; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    
+    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+    .q-card { width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-answer { width: 100% !important; max-width: 100% !important; }
+    .q-answer pre { white-space: pre-wrap; word-wrap: break-word; max-width: 100%; overflow-x: auto; }
+    .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 151</title>
 <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
@@ -46,20 +57,21 @@
 <div class="q-page">
 <nav class="q-nav d-flex justify-content-between align-items-center my-3">
 <a class="btn btn-outline-primary" href="q_150.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="index.html">Spis Pytań</a>
 <a class="btn btn-outline-primary" href="q_152.html">Następne →</a>
 </nav>
 <div class="q-card mb-4">
 <h2>Question 151 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
-<div class="card-text">
-Privacy team uses crypto-shredding (deleting keys) to delete PII. Implement this on GCP while utilizing majority of platform's services and minimizing overhead. What to do?
-</div>
+<p class="card-text">
+Enforce that all Cloud Storage buckets in a specific project must have Uniform bucket-level access enabled. Which tool?
+</p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Client-side encryption, delete keys on-prem.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud External Key Manager.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Customer-managed encryption keys (CMEK).</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Google default encryption.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> IAM roles</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Organization Policy constraint: storage.uniformBucketLevelAccess</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Bucket settings in the Console</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> VPC Service Controls</li>
 
 </ul>
 </div>
@@ -68,7 +80,7 @@ Privacy team uses crypto-shredding (deleting keys) to delete PII. Implement this
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">C</span>
+<span class="correct-answer">B</span>
 <br/>
 </span>
 </div>
@@ -76,20 +88,27 @@ Privacy team uses crypto-shredding (deleting keys) to delete PII. Implement this
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>Odpowiedź: B.
 
-Wyjaśnienie: CMEK (Cloud KMS) pozwala użytkownikowi na trwałe usunięcie klucza szyfrującego dane w usługach takich jak GCS, BigQuery czy CE. Bez klucza dane stają się nieczytelne (crypto-shredding).</pre>
+Wyjaśnienie (Dlaczego poprawna):
+B. Organization Policy: Pozwala na nałożenie odgórnego wymogu `storage.uniformBucketLevelAccess`. Gdy ta polityka jest włączona na poziomie projektu lub folderu, system uniemożliwi stworzenie jakiegokolwiek nowego bucketu z włączonymi ACL-ami oraz zablokuje wyłączenie UBLA w istniejących bucketach.
+
+Dlaczego inne są błędne:
+A. IAM: Kontroluje kto ma dostęp, ale nie wymusza technicznego sposobu zarządzania tym dostępem (IAM vs ACL).
+C. Console settings: To zmiana manualna dla jednego bucketu, a nie 'wymuszenie' (enforcement) dla całego projektu.
+D. VPC Service Controls: Chroni przed kradzieżą danych przez API, nie zajmuje się konfiguracją uprawnień wewnątrz bucketu.
+
+Konsensus społeczności ExamTopics: 100% na B. Org Policy to standard dla wymuszania konfiguracji zgodnej z polityką firmy.</pre>
 </div>
-<div class="ai-analysis-container" style="display:none;">
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p>CMEK zapewnia najlepszy balans między kontrolą nad cyklem życia klucza a łatwością integracji z natywnymi usługami GCP.</p>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p><b>Analiza spornych kwestii (AI):</b> Eksperci podkreślają, że UBLA jest obecnie zalecanym sposobem zarządzania Storage'em, ponieważ upraszcza audyt (wszystko jest w IAM). Użycie polityki organizacji (B) gwarantuje, że żaden deweloper 'przez pomyłkę' nie wystawi pliku światu za pomocą starego mechanizmu ACL.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/kms/docs/cmek" target="_blank">https://cloud.google.com/kms/docs/cmek</a></li>
-
+<li><a href="https://cloud.google.com/storage/docs/uniform-bucket-level-access" target="_blank">https://cloud.google.com/storage/docs/uniform-bucket-level-access</a></li>
 </ul>
 </div>
 </div>

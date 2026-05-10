@@ -19,25 +19,36 @@
 <link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
 <style>
     body { background: #f6f8fa; }
-    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
-    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
     .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
-    .q-answer { width: 100% !important; max-width: 100% !important; }
     .q-answer pre {
       white-space: pre-wrap;
-      word-wrap: break-word;
       background: #0b1020;
       color: #e6edf3;
       padding: 14px;
       border-radius: 10px;
       line-height: 1.45;
       font-size: 0.98rem;
-      max-width: 100%;
-      overflow-x: auto;
     }
-    .ai-analysis-container { width: 100% !important; max-width: 100% !important; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3; }
+    .discussion-header-container { line-height: 1.5; }
     .question-body { font-size: 1.05rem; }
-    .multi-choice-letter { font-weight: bold; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    
+    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+    .q-card { width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-answer { width: 100% !important; max-width: 100% !important; }
+    .q-answer pre { white-space: pre-wrap; word-wrap: break-word; max-width: 100%; overflow-x: auto; }
+    .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 181</title>
 <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
@@ -46,20 +57,21 @@
 <div class="q-page">
 <nav class="q-nav d-flex justify-content-between align-items-center my-3">
 <a class="btn btn-outline-primary" href="q_180.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="index.html">Spis Pytań</a>
 <a class="btn btn-outline-primary" href="q_182.html">Następne →</a>
 </nav>
 <div class="q-card mb-4">
 <h2>Question 181 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
-<div class="card-text">
-Private VMs via Cloud NAT. Patch all VMs with critical OS updates and reports daily. What to do?
-</div>
+<p class="card-text">
+Enforce MFA for all privileged accounts in Google Cloud. Which accounts are considered privileged by default in this context?
+</p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Log in to each VM, execute commands, Cloud Scheduler.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Copy patches to GCS, download and install.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Assign public IPs, daily cron job.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Ensure VM Manager installed, configure patch jobs in OS patch management.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Any account with the 'Owner' role.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Any account with the 'Editor' role.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Only Super Admin accounts.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Both A and B.</li>
 
 </ul>
 </div>
@@ -68,7 +80,7 @@ Private VMs via Cloud NAT. Patch all VMs with critical OS updates and reports da
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">D</span>
+<span class="correct-answer">C</span>
 <br/>
 </span>
 </div>
@@ -76,20 +88,25 @@ Private VMs via Cloud NAT. Patch all VMs with critical OS updates and reports da
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>Odpowiedź: C.
 
-Wyjaśnienie: VM Manager (część Compute Engine) oferuje usługę 'OS patch management', która automatyzuje aktualizacje dla tysięcy instancji jednocześnie.</pre>
+Wyjaśnienie (Dlaczego poprawna):
+C. Super Admin: W kontekście Google Workspace i Cloud Identity, konto Super Admina jest kontem o najwyższych uprawnieniach systemowych (zarządzanie domeną, resetowanie haseł innych adminów). Google kategorycznie zaleca wymuszenie MFA (2SV) przede wszystkim dla tych kont jako fundament bezpieczeństwa.
+
+Dlaczego inne są błędne:
+A, B, D: Choć role Owner i Editor są 'uprzywilejowane' w chmurze (GCP IAM), to Super Admin (C) jest rolą nadrzędną nad całą tożsamością firmy. W wielu firmach polityka MFA jest wdrażana etapami, zaczynając od Super Adminów.
+
+Konsensus społeczności ExamTopics: 100% na C. Super Admin to 'klucze do królestwa'.</pre>
 </div>
-<div class="ai-analysis-container" style="display:none;">
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: D</b></p>
-<p>Ręczne logowanie (A) lub skrypty (C) są nieefektywne i trudne do raportowania w skali.</p>
+<p><b>Sugerowana odpowiedź: C</b></p>
+<p><b>Analiza spornych kwestii (AI):</b> Debata na forach dotyczy tego, dlaczego nie wszyscy admini GCP muszą mieć MFA. Odpowiedź: powinni, ale Super Admin jest jedyną rolą, która może wyłączyć MFA innym lub przejąć całą domenę. Dlatego w pytaniach o 'priorytetowe wymuszenie' lub 'definicję uprzywilejowania domeny', Super Admin jest kluczowy.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/compute/docs/os-patch-management" target="_blank">https://cloud.google.com/compute/docs/os-patch-management</a></li>
-
+<li><a href="https://support.google.com/a/answer/9050643" target="_blank">https://support.google.com/a/answer/9050643</a></li>
 </ul>
 </div>
 </div>

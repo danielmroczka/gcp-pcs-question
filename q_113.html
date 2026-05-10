@@ -19,25 +19,36 @@
 <link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
 <style>
     body { background: #f6f8fa; }
-    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
-    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
     .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
-    .q-answer { width: 100% !important; max-width: 100% !important; }
     .q-answer pre {
       white-space: pre-wrap;
-      word-wrap: break-word;
       background: #0b1020;
       color: #e6edf3;
       padding: 14px;
       border-radius: 10px;
       line-height: 1.45;
       font-size: 0.98rem;
-      max-width: 100%;
-      overflow-x: auto;
     }
-    .ai-analysis-container { width: 100% !important; max-width: 100% !important; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3; }
+    .discussion-header-container { line-height: 1.5; }
     .question-body { font-size: 1.05rem; }
-    .multi-choice-letter { font-weight: bold; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    
+    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+    .q-card { width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-answer { width: 100% !important; max-width: 100% !important; }
+    .q-answer pre { white-space: pre-wrap; word-wrap: break-word; max-width: 100%; overflow-x: auto; }
+    .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 113</title>
 <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
@@ -46,14 +57,15 @@
 <div class="q-page">
 <nav class="q-nav d-flex justify-content-between align-items-center my-3">
 <a class="btn btn-outline-primary" href="q_112.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="index.html">Spis Pytań</a>
 <a class="btn btn-outline-primary" href="q_114.html">Następne →</a>
 </nav>
 <div class="q-card mb-4">
 <h2>Question 113 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
-<div class="card-text">
+<p class="card-text">
 Access denied between CE instances in Shared VPC and BigQuery in a perimeter. What to do?
-</div>
+</p>
 <div class="question-choices-container">
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Add host project to the perimeter.</li>
@@ -78,18 +90,24 @@ Access denied between CE instances in Shared VPC and BigQuery in a perimeter. Wh
 <h2>Wyjaśnienie</h2>
 <pre>Odpowiedź: A.
 
-Wyjaśnienie: W Shared VPC ruch sieciowy jest 'własnością' projektu hosta. Aby ruch z VM trafił do chronionego BigQuery, projekt hosta musi być częścią perymetru.</pre>
+Wyjaśnienie (Dlaczego poprawna):
+A. Add host project: W architekturze Shared VPC, sieć fizycznie 'należy' do projektu hosta. Gdy VM z projektu usługowego (service project) próbuje połączyć się z usługą chronioną perymetrem (BigQuery), VPC Service Controls sprawdza, czy sieć, z której pochodzi ruch, jest zaufana. Dlatego to projekt HOSTA sieci musi być częścią perymetru.
+
+Dlaczego inne są błędne:
+B. Service project: Sam projekt usługowy zazwyczaj już jest w perymetrze, ale to nie wystarcza, bo ruch 'sieciowy' jest przypisany do hosta sieci.
+C, D. Perimeter bridge: Służą do łączenia OBU projektów, jeśli są w RÓŻNYCH perymetrach. Tutaj kluczowym problemem jest brak hosta sieci w obwodzie bezpieczeństwa.
+
+Konsensus społeczności ExamTopics: Zdecydowana większość na A. To jeden z najczęstszych błędów przy wdrażaniu VPC SC w Shared VPC.</pre>
 </div>
-<div class="ai-analysis-container" style="display:none;">
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p>VPC Service Controls wymagają, aby wszystkie projekty biorące udział w komunikacji sieciowej (host sieci) i usługowej (BigQuery) były w tym samym perymetrze lub połączone mostem.</p>
+<p><b>Głęboka analiza:</b> VPC Service Controls chroni nie tylko projekty, ale całe sieci VPC. W Shared VPC 'tożsamością sieciową' jest projekt hosta.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc-service-controls/docs/shared-vpc" target="_blank">https://cloud.google.com/vpc-service-controls/docs/shared-vpc</a></li>
-
 </ul>
 </div>
 </div>

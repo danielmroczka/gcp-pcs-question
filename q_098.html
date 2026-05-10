@@ -19,25 +19,36 @@
 <link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
 <style>
     body { background: #f6f8fa; }
-    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
-    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
     .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
-    .q-answer { width: 100% !important; max-width: 100% !important; }
     .q-answer pre {
       white-space: pre-wrap;
-      word-wrap: break-word;
       background: #0b1020;
       color: #e6edf3;
       padding: 14px;
       border-radius: 10px;
       line-height: 1.45;
       font-size: 0.98rem;
-      max-width: 100%;
-      overflow-x: auto;
     }
-    .ai-analysis-container { width: 100% !important; max-width: 100% !important; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3; }
+    .discussion-header-container { line-height: 1.5; }
     .question-body { font-size: 1.05rem; }
-    .multi-choice-letter { font-weight: bold; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    
+    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+    .q-card { width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-answer { width: 100% !important; max-width: 100% !important; }
+    .q-answer pre { white-space: pre-wrap; word-wrap: break-word; max-width: 100%; overflow-x: auto; }
+    .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 98</title>
 <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
@@ -46,14 +57,15 @@
 <div class="q-page">
 <nav class="q-nav d-flex justify-content-between align-items-center my-3">
 <a class="btn btn-outline-primary" href="q_097.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="index.html">Spis Pytań</a>
 <a class="btn btn-outline-primary" href="q_099.html">Następne →</a>
 </nav>
 <div class="q-card mb-4">
 <h2>Question 98 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
-<div class="card-text">
+<p class="card-text">
 Implementing protection against common web attacks. Validate policy changes before enforcement. What service?
-</div>
+</p>
 <div class="question-choices-container">
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud Armor preconfigured rules in preview mode.</li>
@@ -78,18 +90,25 @@ Implementing protection against common web attacks. Validate policy changes befo
 <h2>Wyjaśnienie</h2>
 <pre>Odpowiedź: A.
 
-Wyjaśnienie: Tryb 'Preview' w Cloud Armor pozwala na logowanie zdarzeń, które ZABLOKOWAŁABY reguła, bez faktycznego przerywania ruchu.</pre>
+Wyjaśnienie (Dlaczego poprawna):
+A. Cloud Armor Preview Mode: To kluczowa funkcja dla bezpieczeństwa bez przestojów. Pozwala na uruchomienie reguł WAF (np. przeciwko SQLi), które tylko LOGUJĄ co by się stało, zamiast faktycznie blokować ruch. Dzięki temu możesz sprawdzić, czy reguła nie blokuje legalnych użytkowników (false positives) przed jej ostatecznym włączeniem.
+
+Dlaczego inne są błędne:
+B. VPC firewall monitor: Firewall VPC nie posiada dedykowanego trybu 'monitor mode' w takim sensie jak WAF (rejestruje tylko dopuszczenia/odrzucenia, ale nie wspiera zaawansowanej symulacji zmian).
+C. GFE protections: Są domyślne i niezmienne, nie masz nad nimi kontroli 'pre-enforcement'.
+D. VPC SC dry run: Chroni przed kradzieżą danych (exfiltration), ale nie jest to narzędzie do walki z 'common web attacks' (SQLi/XSS).
+
+Konsensus społeczności ExamTopics: 100% na A. Standardowy krok wdrożenia WAF w Enterprise.</pre>
 </div>
-<div class="ai-analysis-container" style="display:none;">
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p>Jest to kluczowe dla uniknięcia błędnych blokad (false positives) w środowisku produkcyjnym.</p>
+<p><b>Głęboka analiza:</b> Po kilku dniach w trybie Preview administrator analizuje logi. Jeśli nie ma błędnych blokad, jednym kliknięciem zmienia tryb na 'enforced'.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/armor/docs/configure-security-policies#preview-mode" target="_blank">https://cloud.google.com/armor/docs/configure-security-policies#preview-mode</a></li>
-
 </ul>
 </div>
 </div>

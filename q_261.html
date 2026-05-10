@@ -19,25 +19,36 @@
 <link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
 <style>
     body { background: #f6f8fa; }
-    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
-    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .q-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 18px; }
     .q-card h2 { font-size: 1.25rem; margin-bottom: 12px; }
-    .q-answer { width: 100% !important; max-width: 100% !important; }
     .q-answer pre {
       white-space: pre-wrap;
-      word-wrap: break-word;
       background: #0b1020;
       color: #e6edf3;
       padding: 14px;
       border-radius: 10px;
       line-height: 1.45;
       font-size: 0.98rem;
-      max-width: 100%;
-      overflow-x: auto;
     }
-    .ai-analysis-container { width: 100% !important; max-width: 100% !important; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3; }
+    .discussion-header-container { line-height: 1.5; }
     .question-body { font-size: 1.05rem; }
-    .multi-choice-letter { font-weight: bold; }
+
+    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
+    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
+    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+    .c-user { font-weight: 700; }
+    .c-date { color: #666; font-size: 0.9rem; }
+    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
+    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
+    .c-text { margin: 0 0 10px; line-height: 1.55; }
+    .c-text:last-child { margin-bottom: 0; }
+    
+    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+    .q-card { width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
+    .q-answer { width: 100% !important; max-width: 100% !important; }
+    .q-answer pre { white-space: pre-wrap; word-wrap: break-word; max-width: 100%; overflow-x: auto; }
+    .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 261</title>
 <link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
@@ -46,14 +57,15 @@
 <div class="q-page">
 <nav class="q-nav d-flex justify-content-between align-items-center my-3">
 <a class="btn btn-outline-primary" href="q_260.html">← Poprzednie</a>
+<a class="btn btn-outline-primary" href="index.html">Spis Pytań</a>
 <a class="btn btn-outline-primary" href="q_262.html">Następne →</a>
 </nav>
 <div class="q-card mb-4">
 <h2>Question 261 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
-<div class="card-text">
+<p class="card-text">
 Cloud Run services under non-prod folder. Grant external access to approved FQDNs only for designated VPCs. Block others. Overriding. How?
-</div>
+</p>
 <div class="question-choices-container">
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Global allowlist hierarchical policy.</li>
@@ -78,18 +90,25 @@ Cloud Run services under non-prod folder. Grant external access to approved FQDN
 <h2>Wyjaśnienie</h2>
 <pre>Odpowiedź: B.
 
-Wyjaśnienie: Hierarchiczne polityki pozwalają na zdefiniowanie domyślnej blokady na poziomie folderu, którą można uszczegółowić regułami przypiętymi do konkretnych sieci VPC (polityki per-VPC).</pre>
+Wyjaśnienie (Dlaczego poprawna):
+B. Hierarchical Firewall Policies: Ustawienie blokady wyjścia (deny outbound) na poziomie foldera zapewnia bezpieczeństwo domyślne. Następnie tworzysz polityki przypisane do konkretnych sieci VPC (polityki per-VPC), które dopuszczają ruch tylko do wybranych nazw domenowych (FQDN). To najbardziej granularny model kontroli egress.
+
+Dlaczego inne są błędne:
+A. Global allowlist: Nie pozwala na rozróżnienie między różnymi sieciami VPC.
+C. Project-level: Niezarządzalne przy dużej skali projektów serverless.
+D. Cloud NAT: Ma ograniczone funkcje filtrowania FQDN w porównaniu do dedykowanych polityk firewall klasy Enterprise.
+
+Konsensus społeczności ExamTopics: 100% na B. Polityki per-VPC to zaawansowana technika zarządzania bezpieczeństwem sieciowym.</pre>
 </div>
-<div class="ai-analysis-container" style="display:none;">
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p>Filtrowanie FQDN w GCP realizuje się zazwyczaj za pomocą Secure Web Proxy lub Cloud NAT (w specyficznych wersjach), ale kluczem jest struktura polityk hierarchicznych.</p>
+<p><b>Głęboka analiza:</b> To rozwiązanie wymaga usługi Cloud Firewall Enterprise, aby móc korzystać z filtrów opartych na nazwach domenowych (FQDN) zamiast samych IP.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc/docs/firewall-policies" target="_blank">https://cloud.google.com/vpc/docs/firewall-policies</a></li>
-
 </ul>
 </div>
 </div>
