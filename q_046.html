@@ -88,24 +88,32 @@ A customer wants to ensure that their data is only stored in a specific geograph
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Poprawna odpowiedź: C (Organization Policy: Resource Location Restriction)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Resource Location Restriction: Jest to polityka organizacji (constraint: `gcp.resourceLocations`), która pozwala zdefiniować listę dozwolonych regionów/stref dla wszystkich usług w hierarchii. Każda próba utworzenia zasobu (np. bucketu) poza EU zostanie zablokowana.
+Analiza poprawności:
+Polityka organizacji (Organization Policy) to potężne narzędzie Governance, które pozwala na nakładanie globalnych ograniczeń na poziomie całej firmy lub wybranego folderu. Ograniczenie `gcp.resourceLocations` (Constraint: `constraints/gcp.resourceLocations`) pozwala zdefiniować "listę dozwolonych regionów" dla wszystkich usług GCP. Jeśli deweloper spróbuje utworzyć zasób w regionie spoza tej listy (np. próbując utworzyć bucket w USA zamiast wymaganej UE), system GCP automatycznie odrzuci to zapytanie na poziomie API.
 
-Dlaczego inne są błędne:
-A. Cloud IAM: Zarządza uprawnieniami osób, a nie właściwościami fizycznymi zasobów.
-B. Resource Labels: To tylko metadane (tagi) do opisu zasobów, nie wymuszają one niczego technicznie.
-D. Shared VPC: To architektura sieciowa, nie kontroluje ona geolokalizacji zasobów storage czy compute.
+Dlaczego pozostałe są błędne:
+A (Cloud IAM): IAM zarządza tym, *kto* ma uprawnienia do wykonania operacji, ale nie kontroluje *geograficznej lokalizacji* zasobów, które użytkownik tworzy.
+B (Resource Labels): Etykiety służą do tagowania zasobów (np. "środowisko: prod"), co pomaga w wyszukiwaniu czy raportowaniu kosztów, ale nie nakłada żadnych restrykcji technicznych na lokalizację.
+D (Shared VPC): To architektura sieciowa służąca do współdzielenia sieci między projektami. Nie posiada funkcji wymuszania restrykcji geograficznych dla zasobów (np. Cloud Storage).
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na C. To standardowe rozwiązanie dla wymogów rezydencji danych (Data Residency).</pre>
+Wskazówki egzaminacyjne:
+- "Geographic region" / "Data Residency": Jeśli pytanie o tym mówi, szukaj "Organization Policy" i "Resource Location Restriction".
+- "Prevent": Jeśli słyszysz słowo "prevent" w kontekście konfiguracji infrastruktury – Org Policy jest zazwyczaj poprawną odpowiedzią.
+- Eliminacja: Jeśli opcja dotyczy sieci (VPC) lub uprawnień (IAM) – odrzuć je w kontekście rezydencji danych.
+
+Dokumentacja:
+<a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Polityka ta jest dziedziczona. Jeśli ustawisz ją na poziomie organizacji, żaden deweloper w żadnym projekcie nie stworzy zasobu w niedozwolonej lokalizacji.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Polityka ta jest dziedziczona. Jeśli ustawisz ją na poziomie organizacji, żaden deweloper w żadnym projekcie nie utworzy zasobu w niedozwolonej lokalizacji. Jest to absolutnie najlepsza metoda dla Data Residency.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: Zdecydowana większość na C. To standardo
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

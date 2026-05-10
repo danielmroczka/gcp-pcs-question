@@ -88,24 +88,32 @@ A customer needs to prevent attackers from hijacking their domain/IP and redirec
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Poprawna odpowiedź: C (DNS Security Extensions)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. DNS Security Extensions (DNSSEC): Chroni przed atakami typu man-in-the-middle, takimi jak DNS cache poisoning, poprzez cyfrowe podpisywanie rekordów DNS. Gwarantuje to, że odpowiedzi DNS pochodzą z autentycznego źródła i nie zostały zmodyfikowane w trakcie przesyłania.
+Analiza poprawności:
+DNS Security Extensions (DNSSEC) to zestaw rozszerzeń protokołu DNS, które zapewniają autentyczność i integralność danych DNS. Działają poprzez cyfrowe podpisywanie rekordów DNS przy użyciu kryptografii klucza publicznego. Dzięki temu klient (np. przeglądarka) może zweryfikować, czy otrzymana odpowiedź DNS pochodzi z zaufanego, autentycznego źródła i nie została zmodyfikowana przez atakującego (np. w ataku typu DNS cache poisoning lub man-in-the-middle).
 
-Dlaczego inne są błędne:
-A. VPC Flow Logs: Rejestrują pakiety IP, co jest przydatne do audytu ruchu, ale nie zapobiegają atakom na protokół DNS.
-B. Cloud Armor: Chroni przed atakami DDoS i atakami na poziomie aplikacji (WAF), ale nie rozwiązuje problemów z integralnością odpowiedzi DNS.
-D. Cloud Identity-Aware Proxy (IAP): Zarządza dostępem do aplikacji na podstawie tożsamości, ale nie chroni infrastruktury DNS przed hijackingiem.
+Dlaczego pozostałe są błędne:
+A (VPC Flow Logs): Rejestrują metadane ruchu sieciowego wewnątrz sieci VPC (źródło, cel, bajty). Służą do audytu i monitorowania przepływu, a nie do ochrony integralności domen.
+B (Cloud Armor): Jest to WAF (Web Application Firewall) oraz ochrona DDoS, która chroni aplikację webową (L7) przed atakami na poziomie HTTP/S. Nie dotyczy infrastruktury DNS.
+D (Cloud Identity-Aware Proxy): Służy do kontrolowania dostępu do aplikacji (na podstawie tożsamości użytkownika), a nie do ochrony samego protokołu DNS czy domen.
 
-Konsensus społeczności ExamTopics: 100% wskazuje na C. DNSSEC to standardowe rozwiązanie dla ochrony integralności domen.</pre>
+Wskazówki egzaminacyjne:
+- "Man-in-the-middle" + "Domain": To niemal zawsze oznacza atak na DNS lub certyfikaty SSL. Jeśli w opcjach widzisz DNSSEC – zazwyczaj to jest poprawna odpowiedź.
+- "DNS Integrity": DNSSEC to jedyny standard branżowy służący do ochrony integralności odpowiedzi DNS.
+- Eliminacja: Cloud Armor (WAF) i IAP (Auth) to narzędzia warstwy 7 (aplikacyjnej), DNSSEC to warstwa sieciowo-infrastrukturalna (DNS).
+
+Dokumentacja:
+<a href="https://cloud.google.com/dns/docs/dnssec-configs" target="_blank">https://cloud.google.com/dns/docs/dnssec-configs</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> DNSSEC wprowadza zaufanie do hierarchii DNS poprzez łańcuch podpisów cyfrowych. W Google Cloud DNS włączenie DNSSEC sprowadza się do zmiany jednego ustawienia w strefie DNS.</p>
+<p><b>Analiza spornych kwestii (AI):</b> DNSSEC wprowadza zaufanie do hierarchii DNS poprzez łańcuch podpisów cyfrowych. W Google Cloud DNS włączenie DNSSEC sprowadza się do zmiany jednego ustawienia w strefie DNS – jest to jedna z najprostszych, a jednocześnie najważniejszych operacji zabezpieczających domenę.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/dns/docs/dnssec-configs" target="_blank">https://cloud.google.com/dns/docs/dnssec-configs</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: 100% wskazuje na C. DNSSEC to standardowe r
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

@@ -88,37 +88,46 @@ An engineering team is launching a web application that will be public on the in
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Poprawna odpowiedź: A (Cloud Armor)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Cloud Armor: Współpracuje z zewnętrznym Load Balancerem HTTP(S). Pozwala na filtrowanie ruchu na poziomie warstwy 7 (URL-based routing) i jednoczesne blokowanie adresów IP (blacklisting). Chroni przed bezpośrednim wystawieniem backendów na internet.
+Analiza poprawności:
+Cloud Armor to w pełni zarządzana usługa Google Cloud, która pełni rolę Web Application Firewall (WAF) oraz mechanizmu ochrony przed atakami DDoS (Distributed Denial of Service). Zapewnia ona wbudowane, gotowe reguły chroniące aplikacje przed najczęstszymi atakami, a w szczególności pozwala na tworzenie list IP (whitelist/blacklist), co jest kluczowe dla blokowania "złośliwych adresów IP". Współpracuje bezpośrednio z globalnym Load Balancerem HTTP(S), co pozwala filtrować ruch na brzegu sieci Google (Edge), zanim dotrze on do Twoich serwerów.
 
-Dlaczego inne są błędne:
-B. Network Load Balancing: Jest regionalny i działa na warstwie 4 (TCP/UDP). Nie potrafi kierować ruchem na podstawie URL i nie integruje się z Cloud Armor w celu zaawansowanego blokowania IP L7.
-C. SSL Proxy LB: Obsługuje ruch TCP z szyfrowaniem SSL, ale nie wspiera routingu opartego na ścieżkach URL (host/path rules), co jest wymogiem pytania.
-D. NAT Gateway: Służy do ruchu WYCHODZĄCEGO z maszyn prywatnych, a nie do obsługi ruchu przychodzącego od użytkowników publicznych.
+Dlaczego pozostałe są błędne:
+B (Network Load Balancing): To regionalny LB działający w warstwie 4 (TCP/UDP). Nie wspiera filtrowania ruchu na podstawie URL i nie integruje się z Cloud Armor dla zaawansowanej ochrony warstwy 7.
+C (SSL Proxy Load Balancing): Służy do obsługi ruchu TCP z szyfrowaniem SSL, ale nie wspiera routingu opartego na ścieżkach URL (path rules), który jest wymagany w pytaniu.
+D (NAT Gateway): Służy do zapewnienia dostępu do internetu instancjom wewnątrz sieci prywatnej (ruch WYCHODZĄCY), a nie do obsługi ruchu przychodzącego od użytkowników publicznych.
 
-Konsensus społeczności ExamTopics: Zdecydowane poparcie dla A. Połączenie GCLB HTTP(S) + Cloud Armor to standard dla aplikacji webowych.</pre>
+Wskazówki egzaminacyjne:
+- "Public application" + "Malicious IP addresses": Zawsze szukaj "Cloud Armor".
+- "WAF" / "DDoS": To klasyczne zastosowania Cloud Armor.
+- Eliminacja: Jeśli pytanie dotyczy filtrowania ruchu przychodzącego do aplikacji webowej – odrzuć NAT Gateway i Network LB.
+
+Dokumentacja:
+<a href="https://cloud.google.com/armor/docs/cloud-armor-overview" target="_blank">https://cloud.google.com/armor/docs/cloud-armor-overview</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Wykorzystanie mechanizmu Anycast IP w Load Balancerze sprawia, że atak DDoS jest rozpraszany po całej infrastrukturze Google, a Cloud Armor blokuje go zanim dotrze do Twoich serwerów.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Cloud Armor jest niezwykle skuteczny, ponieważ korzysta z tej samej technologii, którą Google używa do ochrony własnych usług (Search, YouTube, Gmail). Dzięki temu może filtrować ataki na wielką skalę, które mogłyby położyć każdą własną infrastrukturę.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/armor" target="_blank">https://cloud.google.com/armor</a></li>
+<li><a href="https://cloud.google.com/armor/docs/cloud-armor-overview" target="_blank">https://cloud.google.com/armor/docs/cloud-armor-overview</a></li>
 </ul>
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

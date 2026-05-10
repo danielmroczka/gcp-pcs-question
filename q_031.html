@@ -88,24 +88,32 @@ An organization wants to migrate its current data backup and disaster recovery s
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Poprawna odpowiedź: B (Cloud Storage using a scheduled task and gsutil.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Cloud Storage: Jest to najbardziej skalowalna, trwała (11 dziewiątek trwałości) i kosztowo efektywna usługa do przechowywania backupów. Użycie gsutil w zaplanowanych zadaniach to standardowy sposób automatyzacji transferu danych z on-premises.
+Analiza poprawności:
+Cloud Storage to najbardziej skalowalna, trwała (11 dziewiątek trwałości danych) i efektywna kosztowo usługa do przechowywania backupów w chmurze. Dzięki obsłudze różnych klas przechowywania (Standard, Nearline, Coldline, Archive), można drastycznie zredukować koszty, przechowując dane rzadko odczytywane w tańszych klasach (np. Archive). Narzędzie `gsutil` (lub nowsze `gcloud storage`) pozwala na łatwą automatyzację transferu danych z lokalnych serwerów (on-premises) do chmury przy użyciu prostych skryptów wykonywanych w zaplanowanych zadaniach (np. crontab).
 
-Dlaczego inne są błędne:
-A. BigQuery: To magazyn danych analitycznych, nie nadaje się do przechowywania surowych kopii zapasowych systemów plików czy baz danych. Jest bardzo drogi jako 'zwykły storage'.
-C. Persistent Disks: Są przypięte do VM. Używanie ich jako globalnego rozwiązania DR jest drogie i nieefektywne (brak łatwego dostępu spoza VM).
-D. Cloud Datastore: To baza dokumentowa NoSQL, nie służy do backupów infrastrukturalnych.
+Dlaczego pozostałe są błędne:
+A (BigQuery): BigQuery to magazyn danych analitycznych (SQL), nie jest przeznaczony do przechowywania surowych kopii zapasowych (np. zrzutów systemów plików). Jest to rozwiązanie bardzo drogie w kontekście "zwykłego" przechowywania danych.
+C (Persistent Disks): Są to dyski blokowe przypisane do instancji VM. Nie nadają się jako globalne rozwiązanie DR – ich przywrócenie w innym regionie jest trudne, a koszty przechowywania dysków są znacznie wyższe niż Cloud Storage.
+D (Cloud Datastore): To baza dokumentowa NoSQL, służy do przechowywania danych aplikacji, a nie do tworzenia kopii zapasowych całej infrastruktury.
 
-Konsensus społeczności ExamTopics: 100% głosów na B. Cloud Storage to fundament każdego planu Backup & DR w Google Cloud.</pre>
+Wskazówki egzaminacyjne:
+- "Backup & DR": Jeśli widzisz to sformułowanie – Cloud Storage (GCS) jest prawie zawsze poprawną odpowiedzią.
+- "Cost-effective": Pamiętaj o klasach przechowywania (Archive/Coldline) w GCS.
+- Eliminacja: Jeśli opcja sugeruje bazę danych (BigQuery, Datastore) lub dysk VM (Persistent Disk) jako miejsce na backup – odrzuć ją.
+
+Dokumentacja:
+<a href="https://cloud.google.com/storage/docs/storage-classes" target="_blank">https://cloud.google.com/storage/docs/storage-classes</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Cloud Storage oferuje klasy archiwalne (Coldline i Archive), które są drastycznie tańsze dla danych rzadko odczytywanych, co jest idealne dla kopii zapasowych.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Choć obecnie Google promuje usługę **Backup and DR Service** (jako dedykowany, zarządzany produkt), w starszych pytaniach egzaminacyjnych Cloud Storage to jedyne, poprawne rozwiązanie. Warto wiedzieć o różnicy między prostym backupem do GCS a pełną usługą zarządzaną (DRaaS).</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/storage/docs/storage-classes" target="_blank">https://cloud.google.com/storage/docs/storage-classes</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: 100% głosów na B. Cloud Storage to fundam
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

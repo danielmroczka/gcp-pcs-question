@@ -88,24 +88,32 @@ You want to enable SSO for your GCP users using your on-premises SAML 2.0 Identi
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Poprawna odpowiedź: C (SAML SSO in Google Admin Console)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. SAML SSO in Google Admin Console: To tam (w konsoli administracyjnej Google Workspace/Cloud Identity) konfiguruje się profile SSO. Wskazujesz tam URL logowania Twojego dostawcy (IdP), URL zmiany hasła i wgrywasz certyfikat X.509 do weryfikacji podpisów asercji SAML.
+Analiza poprawności:
+Aby skonfigurować logowanie jednokrotne (SSO) za pomocą zewnętrznego dostawcy tożsamości (IdP), który wspiera standard SAML 2.0 (np. ADFS, Okta, PingFederate), należy przejść do Google Admin Console (zarządzającej całą organizacją w Cloud Identity lub Google Workspace). Tam w ustawieniach "SSO z zewnętrznym dostawcą tożsamości" konfigurujesz profil SSO: wpisujesz adresy URL strony logowania swojego IdP, URL zmiany hasła oraz wgrywasz certyfikat X.509, który służy do weryfikacji podpisów asercji SAML przesyłanych przez Twój IdP.
 
-Dlaczego inne są błędne:
-A. Cloud Identity: To nazwa całej usługi/domeny, a nie konkretna konfiguracja łącza SSO.
-B. Google Cloud Directory Sync (GCDS): Służy do synchronizacji kont i grup (provisioning), ale nie obsługuje samego procesu logowania (authentication).
-D. Cloud IAM: Służy do nadawania uprawnień WEWNĄTRZ chmury, nie konfiguruje się w nim zewnętrznych metod logowania do całego ekosystemu Google.
+Dlaczego pozostałe są błędne:
+A (Cloud Identity): To ogólna nazwa usługi zarządzania tożsamością w Google Cloud. Nie jest to konkretny "punkt" w menu konsoli, gdzie konfiguruje się SAML.
+B (Google Cloud Directory Sync - GCDS): GCDS służy wyłącznie do *synchronizacji* kont użytkowników i grup z Twojego lokalnego katalogu (np. Active Directory) do Google. Nie obsługuje samego procesu uwierzytelniania (logowania).
+D (Cloud IAM): IAM służy do nadawania *uprawnień* do zasobów GCP (kto może zarządzać VM, kto ma dostęp do baz danych). Nie konfiguruje się w nim metod logowania do całego ekosystemu Google.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla C. To standardowy krok konfiguracji federacji.</pre>
+Wskazówki egzaminacyjne:
+- "SAML 2.0" + "SSO": Zawsze szukaj konfiguracji w "Google Admin Console".
+- Synchronizacja vs Uwierzytelnianie: Synchronizacja (GCDS) != Uwierzytelnianie (SAML/SSO). To rozróżnienie często pojawia się w pytaniach.
+- Eliminacja: Jeśli pytanie pyta o logowanie do *całej platformy* (SAML), nigdy nie wybieraj IAM (uprawnienia) ani GCDS (synchronizacja).
+
+Dokumentacja:
+<a href="https://support.google.com/cloudidentity/answer/60224" target="_blank">https://support.google.com/cloudidentity/answer/60224</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Przy tej konfiguracji Google staje się 'Service Providerem' (SP). Gdy użytkownik wpisze e-mail w Gmailu/Konsoli, zostanie przekierowany do Twojego on-premises IdP (np. ADFS lub Okta) w celu uwierzytelnienia.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Przy tej konfiguracji Google staje się "Service Providerem" (SP). Gdy użytkownik wpisze e-mail w Gmailu lub konsoli GCP, zostanie przekierowany do Twojego on-premises IdP (np. ADFS lub Okta) w celu uwierzytelnienia. W ten sposób zachowujesz pełną kontrolę nad hasłami swoich pracowników.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://support.google.com/cloudidentity/answer/60224" target="_blank">https://support.google.com/cloudidentity/answer/60224</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: 100% poparcia dla C. To standardowy krok ko
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

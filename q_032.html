@@ -88,23 +88,31 @@ You are creating an internal application that needs to access a user's Google Dr
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Poprawna odpowiedź: D (Create a service account with G Suite domain-wide delegation.)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Domain-wide delegation: Pozwala kontu serwisowemu na podszywanie się (impersonację) pod dowolnego użytkownika w domenie Google Workspace (G Suite). Dzięki temu aplikacja może uzyskać dostęp do plików na Drive danego użytkownika bez jego interakcji, używając uprawnień nadanych centralnie przez administratora.
+Analiza poprawności:
+Domain-wide delegation (delegacja na całą domenę) to mechanizm umożliwiający kontu serwisowemu (Service Account) podszywanie się pod dowolnego użytkownika domeny Google Workspace (G Suite). Dzięki temu aplikacja może uzyskać dostęp do plików użytkownika na Dysku Google (Drive API) z uprawnieniami danego użytkownika, bez konieczności interaktywnego logowania się przez niego. Jest to standardowy sposób na automatyzację zadań administracyjnych lub przetwarzanie danych wewnątrz domeny.
 
-Dlaczego inne są błędne:
-A, B. Service Account User: Ta rola wewnątrz GCP pozwala użytkownikowi na używanie konta serwisowego do uruchamiania VM, ale nie ma nic wspólnego z dostępem do danych w G Suite/Drive.
-C. Admin credentials: Używanie haseł administratora w kodzie aplikacji jest skrajnie niebezpieczne i niezgodne z żadnymi standardami bezpieczeństwa.
+Dlaczego pozostałe są błędne:
+A, B (Service Account User): Ta rola IAM pozwala użytkownikowi (np. deweloperowi) używać konta serwisowego do uruchamiania instancji VM (podpinania SA do VM). Nie daje ona aplikacji uprawnień do "impersonacji" użytkownika w Workspace.
+C (Admin credentials): Przechowywanie haseł administratora (lub jakichkolwiek innych) w kodzie aplikacji jest skrajnie niebezpiecznym błędem (hardcoding credentials) i drastycznym naruszeniem zasad bezpieczeństwa.
 
-Konsensus społeczności ExamTopics: Zdecydowane poparcie dla D. Jest to jedyny poprawny sposób na automatyzację zadań w Workspace przez aplikacje serwerowe.</pre>
+Wskazówki egzaminacyjne:
+- "Access Drive on user's behalf" / "G Suite" / "Service Account": To słowa klucze dla "Domain-wide delegation".
+- Mechanizm: Aplikacja serwerowa -> Konto serwisowe -> Delegacja -> Dostęp do danych użytkownika.
+- Eliminacja: Hasła (Admin credentials) = zawsze źle. SA User (rola w IAM) = błędny kontekst.
+
+Dokumentacja:
+<a href="https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority" target="_blank">https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Delegacja na całą domenę wymaga precyzyjnego ograniczenia zakresów (OAuth Scopes) w konsoli Admin G Suite, aby konto serwisowe miało dostęp tylko do niezbędnych API (np. tylko Drive, bez poczty).</p>
+<p><b>Analiza spornych kwestii (AI):</b> Delegacja na całą domenę wymaga precyzyjnego ograniczenia zakresów (OAuth Scopes) w konsoli Admin Workspace, aby konto serwisowe miało dostęp tylko do niezbędnych API (np. tylko Drive, bez poczty Gmail), zgodnie z zasadą "Least Privilege".</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority" target="_blank">https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority</a></li>
@@ -112,12 +120,13 @@ Konsensus społeczności ExamTopics: Zdecydowane poparcie dla D. Jest to jedyny 
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -132,8 +141,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

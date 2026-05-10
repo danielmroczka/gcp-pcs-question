@@ -88,24 +88,32 @@ How should a customer reliably deliver Stackdriver logs from GCP to their on-pre
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Poprawna odpowiedź: C (Configure Organizational Log Sinks to export logs to a Cloud Pub/Sub Topic, which will be sent to the SIEM via Dataflow.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Pub/Sub + Dataflow: To najbardziej skalowalna i odporna na awarie metoda. Pub/Sub działa jako bufor (do 7 dni), co gwarantuje, że logi nie zginą przy awarii SIEM lub łącza. Dataflow pozwala na transformację i bezpieczne wypchnięcie danych do on-prem.
+Analiza poprawności:
+W środowiskach korporacyjnych (Enterprise) "Reliability" (niezawodność) dostarczania logów jest kluczowa. Cloud Pub/Sub pełni rolę wysoce skalowalnego i trwałego bufora (przechowuje komunikaty do 7 dni). Jeśli SIEM lub łącze do on-premises ulegnie awarii, logi zostaną bezpiecznie zakolejkowane w Pub/Sub. Dataflow z kolei służy do zaawansowanej obróbki (transformacji/filtrowania) strumieni danych z Pub/Sub przed ich ostatecznym zapisem w SIEM, co jest zgodne z najlepszymi praktykami GCP.
 
-Dlaczego inne są błędne:
-A. Syslog: Bezpośrednie wysyłanie syslogiem przez internet jest niebezpieczne i nie gwarantuje dostarczenia przy dużym natężeniu ruchu.
-B. BigQuery: Jest to baza analityczna. Odpytywanie jej przez SIEM w czasie rzeczywistym jest nieefektywne i kosztowne.
-D. REST APIs: Odpytywanie (polling) API jest wolne, ma limity (quota) i nie nadaje się do przesyłania milionów logów w czasie rzeczywistym.
+Dlaczego pozostałe są błędne:
+A (Syslog): Bezpośrednie przesyłanie logów przez internet (Syslog) jest narażone na utratę danych (brak buforowania przy awarii odbiorcy) i ataki (brak szyfrowania end-to-end w standardowym Syslogu).
+B (BigQuery): BigQuery jest świetne do analityki (SQL), ale nie jest systemem typu "push" do SIEM. Odpytywanie (polling) BQ przez SIEM jest wolne, drogie i nie nadaje się do wykrywania incydentów w czasie rzeczywistym.
+D (REST APIs): Odpytywanie API ma bardzo restrykcyjne limity (quotas) i nie gwarantuje niezawodności przy dużych wolumenach danych. Jest to rozwiązanie bardzo nieefektywne.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na C. Jest to oficjalnie zalecana przez Google architektura dla integracji z SIEM takimi jak Splunk czy QRadar.</pre>
+Wskazówki egzaminacyjne:
+- "Reliably" (niezawodnie): Szukaj rozwiązań z buforowaniem (Pub/Sub) lub trwałym przechowywaniem przed wysyłką.
+- "SIEM Integration": Zawsze wybieraj architekturę: Sink -> Pub/Sub -> Dataflow -> SIEM.
+- Eliminacja: Odpytywanie (API/BigQuery) w kontekście SIEM zawsze odrzucaj jako niewydajne.
+
+Dokumentacja:
+<a href="https://cloud.google.com/architecture/exporting-stackdriver-logs-to-splunk" target="_blank">https://cloud.google.com/architecture/exporting-stackdriver-logs-to-splunk</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Kluczowym słowem jest 'reliably'. Pub/Sub zapewnia mechanizm potwierdzeń (acknowledgments), co daje pewność, że każde zdarzenie trafiło do celu.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Kluczowym słowem jest "reliably". Pub/Sub zapewnia mechanizm potwierdzeń (acknowledgments), co daje pewność, że każde zdarzenie trafiło do celu. To standardowa architektura stosowana przy integracjach z systemami typu Splunk, QRadar czy Sentinel.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/architecture/exporting-stackdriver-logs-to-splunk" target="_blank">https://cloud.google.com/architecture/exporting-stackdriver-logs-to-splunk</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: Zdecydowana większość na C. Jest to ofic
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

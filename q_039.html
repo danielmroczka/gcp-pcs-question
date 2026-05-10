@@ -89,25 +89,34 @@ A company wants to manage IAM permissions between users in development and produ
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: BC.
+<pre>
+Poprawna odpowiedź: BC (Create a folder for each environment. Create a Google Group and assign permissions at the folder level.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Folders: Pozwalają na logiczną izolację środowisk. Możesz mieć folder 'Prod' i folder 'Dev', co ułatwia stosowanie różnych polityk.
-C. Google Groups: Zarządzanie uprawnieniami poprzez grupy (a nie pojedynczych użytkowników) to najlepsza praktyka IAM. Nadanie uprawnień grupie na poziomie foldera automatyzuje dostęp do wszystkich projektów w danym środowisku.
+Analiza poprawności:
+Stosowanie folderów (Folders) to najlepsza praktyka ("best practice") w GCP do zarządzania zasobami w skali przedsiębiorstwa. Foldery pozwalają na logiczną separację środowisk (np. folder "Prod" i folder "Dev") oraz odzwierciedlają strukturę firmy.
+- Tworzenie folderów (B) pozwala na łatwe nakładanie polityk IAM i Organization Policies na wszystkie projekty wewnątrz danego środowiska.
+- Używanie Grup Google (C) zamiast przypisywania uprawnień każdemu użytkownikowi z osobna jest kluczowe dla "skalowalności" i bezpieczeństwa (zarządzanie członkostwem w grupie przez AD/Workspace zamiast w IAM GCP). Przypisanie uprawnień grupie na poziomie folderu powoduje ich dziedziczenie we wszystkich projektach podrzędnych.
 
-Dlaczego inne są błędne:
-A. VPC: To warstwa sieciowa, a nie system zarządzania uprawnieniami użytkowników (IAM).
-D. Org Policy: Służy do nakładania restrykcji na zasoby (np. zakaz publicznych IP), a nie do nadawania uprawnień osobom.
-E. Individual users: To koszmar administracyjny i częste źródło błędów oraz nadmiarowych uprawnień (brak 'skalowalności' przy rotacji pracowników).
+Dlaczego pozostałe są błędne:
+A (Multiple VPCs): VPC to technologia sieciowa, a nie narzędzie do zarządzania uprawnieniami IAM czy strukturą organizacyjną.
+D (Org Policy): Org Policy służy do nakładania ograniczeń technicznych (np. "zabroń publicznych IP"), a nie do nadawania uprawnień typu "Viewer" czy "Editor".
+E (Individual users): Zarządzanie użytkownikami jeden po jednym ("per user") to "antywzorzec" bezpieczeństwa. Jest to nieefektywne, podatne na błędy i uniemożliwia audyt w dużych organizacjach.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla BC. To fundamenty Google Cloud Landing Zone.</pre>
+Wskazówki egzaminacyjne:
+- "Manage IAM" + "Multiple projects": Szukaj rozwiązania z "Folderami" i "Grupami".
+- "Best practice": Grupy zamiast użytkowników to zawsze lepsze rozwiązanie w GCP.
+- Eliminacja: Jeśli widzisz "Individual users" w pytaniu o zarządzanie uprawnieniami w dużej organizacji – odrzuć to natychmiast.
+
+Dokumentacja:
+<a href="https://cloud.google.com/iam/docs/groups-in-iam" target="_blank">https://cloud.google.com/iam/docs/groups-in-iam</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: BC</b></p>
-<p><b>Głęboka analiza:</b> Stosowanie grup pozwala na 'Self-service'. Zamiast zmieniać uprawnienia w chmurze, administrator AD dodaje osobę do lokalnej grupy, a GCDS synchronizuje to z folderem GCP.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Stosowanie grup pozwala na "self-service" dla zespołu IT/Identity. Zamiast administratora GCP zmieniającego uprawnienia w konsoli cloud, administrator Active Directory/Workspace po prostu dodaje osobę do lokalnej grupy, a GCDS (Google Cloud Directory Sync) dba o resztę.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/iam/docs/groups-in-iam" target="_blank">https://cloud.google.com/iam/docs/groups-in-iam</a></li>
@@ -115,12 +124,13 @@ Konsensus społeczności ExamTopics: 100% poparcia dla BC. To fundamenty Google 
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -135,8 +145,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

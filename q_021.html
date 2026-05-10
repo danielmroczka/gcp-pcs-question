@@ -89,24 +89,32 @@ In order to meet PCI DSS requirements, a customer wants to ensure that all outbo
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: CD.
+<pre>
+Poprawna odpowiedź: CD (Compute Engine oraz Google Kubernetes Engine)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Compute Engine (CE): Jako usługa IaaS daje pełną kontrolę nad stosem sieciowym. Możesz tworzyć reguły Firewall typu 'egress' (wychodzące), które blokują cały ruch i zezwalają tylko na autoryzowane połączenia.
-D. Google Kubernetes Engine (GKE): Pozwala na stosowanie polityk sieciowych (Network Policies) oraz reguł firewalla VPC dla węzłów klastra, co umożliwia pełną kontrolę ruchu wychodzącego z podów i węzłów.
+Analiza poprawności:
+PCI DSS (wymóg 1.2.1) nakłada obowiązek ograniczania ruchu wychodzącego (egress) tylko do niezbędnych, autoryzowanych połączeń.
+- Compute Engine (C): Jako rozwiązanie IaaS (Infrastructure as a Service), daje pełną kontrolę nad siecią VPC. Administratorzy mogą definiować restrykcyjne reguły Firewall (Egress Firewall Rules), które blokują cały ruch wychodzący domyślnie, a zezwalają tylko na specyficzne, wymagane połączenia.
+- Google Kubernetes Engine (D): GKE działa wewnątrz sieci VPC. Umożliwia wykorzystanie polityk sieciowych (Kubernetes Network Policies) oraz reguł firewall VPC na poziomie węzłów (nodes), co pozwala na precyzyjne ograniczenie ruchu wychodzącego z kontenerów i węzłów.
 
-Dlaczego inne są błędne:
-A, B. App Engine i Cloud Functions: To usługi typu serverless (PaaS). Domyślnie ich ruch wychodzący przechodzi przez współdzielone adresy IP Google i nie podlega pod Twoje reguły VPC Firewall (chyba że użyjesz VPC Access Connector, ale to już jest 'additional control').
-E. Cloud Storage: Jest to usługa obiektowa, a nie środowisko obliczeniowe generujące ruch sieciowy, który można filtrować regułami firewall.
+Dlaczego pozostałe są błędne:
+A, B (App Engine, Cloud Functions): Są to usługi typu serverless (PaaS). Ruch wychodzący z tych usług zazwyczaj przechodzi przez współdzieloną infrastrukturę Google (shared egress IPs), nad którą klient nie ma pełnej kontroli na poziomie sieciowym bez dodatkowych, złożonych konfiguracji (np. VPC Access Connector). Nie są to usługi "natywnie" podlegające pod VPC Firewall Egress w taki sam sposób jak instancje VM.
+E (Cloud Storage): Jest to usługa obiektowa (Storage-as-a-Service), a nie środowisko obliczeniowe generujące ruch sieciowy, który klient mógłby filtrować regułami firewall.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na CD. Kontrola 'egress' jest natywna dla modelu IaaS/CaaS w VPC.</pre>
+Wskazówki egzaminacyjne:
+- "PCI DSS" + "Restrict Egress": Szukaj usług IaaS/CaaS (VM, GKE), gdzie masz kontrolę nad VPC.
+- "Without additional compensating controls": Jeśli usługa serverless wymaga VPC Access Connector (by być w VPC), to jest to właśnie "dodatkowa kontrola" (compensating control).
+
+Dokumentacja:
+<a href="https://cloud.google.com/vpc/docs/firewalls" target="_blank">https://cloud.google.com/vpc/docs/firewalls</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: CD</b></p>
-<p><b>Głęboka analiza:</b> PCI DSS (wymóg 1.2.1) wymaga ograniczania ruchu wychodzącego do tego, co jest niezbędne. W GCP najłatwiej to osiągnąć w usługach, które są bezpośrednio przypięte do sieci VPC.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Kluczowy jest termin "bez dodatkowych kontroli". Usługi serverless w GCP są domyślnie odizolowane od VPC i wymagają Connectorów, aby stały się częścią sieci podlegającej pod Firewall Rules. Zatem tylko VM i GKE oferują tę kontrolę "out-of-the-box".</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc/docs/firewalls" target="_blank">https://cloud.google.com/vpc/docs/firewalls</a></li>
@@ -114,12 +122,13 @@ Konsensus społeczności ExamTopics: Zdecydowana większość na CD. Kontrola 'e
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,8 +143,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

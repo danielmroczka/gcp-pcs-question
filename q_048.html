@@ -88,22 +88,30 @@ Which role allows a user to manage encryption keys in Cloud KMS but not use them
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Poprawna odpowiedź: A (Cloud KMS Admin)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Cloud KMS Admin: Rola `roles/cloudkms.admin` pozwala na zarządzanie zasobami KMS (tworzenie kluczy, ustawianie polityk IAM, rotacja), ale celowo NIE posiada uprawnienia `cloudkms.cryptoKeyVersions.useToEncrypt/Decrypt`. To realizuje separację obowiązków.
+Analiza poprawności:
+W Google Cloud obowiązuje zasada separacji obowiązków (Separation of Duties). Rola `roles/cloudkms.admin` (`Cloud KMS Admin`) jest przeznaczona dla administratorów bezpieczeństwa, którzy zarządzają *samą infrastrukturą kluczy*: tworzą klucze, nadają do nich uprawnienia IAM, rotują je lub wyłączają. Zgodnie z zasadą najniższych uprawnień (Least Privilege), administrator kluczy nie powinien mieć możliwości używania tych kluczy do rzeczywistych operacji kryptograficznych (szyfrowania/deszyfrowania danych), ponieważ jego rola ogranicza się do zarządzania, a nie do "dotykania" danych.
 
-Dlaczego inne są błędne:
-B, C, D: Te role (Decrypter, Encrypter, User) służą właśnie do WYKONYWANIA operacji kryptograficznych, a nie do zarządzania samymi kluczami (np. nie pozwalają ich usuwać czy zmieniać uprawnień).
+Dlaczego pozostałe są błędne:
+B (Decrypter), C (Encrypter), D (User): Te role (`roles/cloudkms.cryptoKeyDecrypter`, `roles/cloudkms.cryptoKeyEncrypter`, `roles/cloudkms.cryptoKeyUser`) dają uprawnienia do WYKONYWANIA operacji kryptograficznych, a nie do administracji samym kluczem.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla A. Separacja admina od użytkownika klucza to standard bezpieczeństwa.</pre>
+Wskazówki egzaminacyjne:
+- "Manage encryption keys" + "not use them to encrypt/decrypt": To klasyczna definicja roli Admina.
+- "Separation of Duties": Admin (zarządza) vs User (używa). Nigdy nie mieszaj tych dwóch ról u jednego użytkownika/aplikacji.
+- Eliminacja: Zawsze odrzucaj role "User" lub "Encrypter/Decrypter", gdy w pytaniu pojawia się wymóg "administrowania" samym kluczem.
+
+Dokumentacja:
+<a href="https://cloud.google.com/kms/docs/reference/iam-roles" target="_blank">https://cloud.google.com/kms/docs/reference/iam-roles</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Dzięki temu administrator kluczy może dbać o ich bezpieczeństwo i rotację, ale nie może odczytać zaszyfrowanych danych (np. z bazy), do których te klucze służą.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Dzięki temu administrator kluczy może dbać o ich bezpieczeństwo i rotację, ale nie może odczytać zaszyfrowanych danych (np. z bazy), do których te klucze służą. To wymusza współpracę między zespołem operacyjnym (Security Admin) a aplikacyjnym (deweloperzy).</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/kms/docs/reference/iam-roles" target="_blank">https://cloud.google.com/kms/docs/reference/iam-roles</a></li>
@@ -111,12 +119,13 @@ Konsensus społeczności ExamTopics: 100% poparcia dla A. Separacja admina od u�
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -131,8 +140,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

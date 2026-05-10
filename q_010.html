@@ -88,24 +88,32 @@ Your team needs to obtain a unified log view of all development cloud projects i
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Poprawna odpowiedź: A (1. Export logs to a Cloud Pub/Sub topic... 2. Subscribe SIEM to the topic.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Aggregated Sink na folderze: To najbardziej profesjonalna metoda. Ustawiając sink na poziomie FOLDERU z flagą `includeChildren=True`, automatycznie zbierasz logi ze wszystkich obecnych i przyszłych projektów w tym folderze. Pub/Sub to standard dla SIEM (real-time).
+Analiza poprawności:
+Stosowanie "Aggregated Sinks" (zagregowanych ujść logów) na poziomie folderu lub organizacji jest najlepszą praktyką w środowiskach enterprise. Ustawiając sink na poziomie folderu NONPROD z flagą `includeChildren=True`, automatycznie przechwytujesz logi ze wszystkich obecnych i przyszłych projektów w tym folderze. Cloud Pub/Sub jest standardem dla integracji z systemami SIEM, ponieważ oferuje niskie opóźnienia i wysoką skalowalność (przesyłanie w czasie rzeczywistym).
 
-Dlaczego inne są błędne:
-B. Billing parent: Logi konta rozliczeniowego dotyczą pieniędzy, a nie aktywności systemowej wewnątrz projektów.
-C. Each project: Nieskalowalne. Przy 100 projektach musiałbyś ręcznie klikać 100 razy.
-D. Publicly shared bucket: Skrajne naruszenie bezpieczeństwa. Logi systemowe nigdy nie powinny być publiczne.
+Dlaczego pozostałe są błędne:
+B (Billing account parent): Logi konta rozliczeniowego zawierają dane o kosztach, a nie aktywności systemowej (audit logs) czy logi aplikacji z projektów.
+C (Each project): Jest to rozwiązanie nieefektywne i nieskalowalne. Przy setkach projektów zarządzanie sinkami w każdym z nich z osobna jest niemożliwe.
+D (Publicly shared bucket): Skrajne naruszenie zasad bezpieczeństwa. Logi systemowe, które mogą zawierać wrażliwe informacje, nigdy nie powinny być przechowywane w publicznie dostępnym bucketcie.
 
-Konsensus społeczności ExamTopics: 100% na A. Agregacja to klucz do Enterprise Logging.</pre>
+Wskazówki egzaminacyjne:
+- "Aggregated": Jeśli w pytaniu o logi pojawia się wiele projektów w jednej hierarchii (folder/org), zawsze wybieraj odpowiedź z "aggregated sink".
+- "SIEM": Zawsze szukaj Cloud Pub/Sub jako odbiorcy (standard integracji).
+- Eliminacja: Odpowiedzi sugerujące publiczne buckety zawsze odrzucaj natychmiast (Security violation).
+
+Dokumentacja:
+<a href="https://cloud.google.com/logging/docs/export/aggregated_sinks" target="_blank">https://cloud.google.com/logging/docs/export/aggregated_sinks</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Eksperci na GitHubie zauważają, że aggregated sinks pozwalają na oszczędności – filtrujesz logi raz na górze hierarchii, zamiast zarządzać filtrami w każdym projekcie. To rozwiązanie jest odporne na tzw. 'Shadow IT' – jeśli deweloper stworzy nowy projekt w tym folderze, logi zaczną płynąć do SIEM od pierwszej sekundy.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Eksperci zwracają uwagę na zalety ekonomiczne: filtrujesz logi raz na górze hierarchii, zamiast zarządzać filtrami w każdym projekcie. To rozwiązanie jest również odporne na tzw. "Shadow IT" – jeśli deweloper stworzy nowy projekt w tym folderze, logi zaczną płynąć do SIEM od pierwszej sekundy.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/logging/docs/export/aggregated_sinks" target="_blank">https://cloud.google.com/logging/docs/export/aggregated_sinks</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: 100% na A. Agregacja to klucz do Enterprise
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

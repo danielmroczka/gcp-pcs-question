@@ -88,37 +88,46 @@ You want to have a historical record of what was running in GCP at any point in 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Poprawna odpowiedź: B (Use Forseti Security to automate inventory snapshots.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Forseti Inventory: Jest to narzędzie (często używane w GCP, obecnie wiele jego funkcji ma Cloud Asset Inventory), które tworzy regularne migawki (snapshots) wszystkich zasobów w organizacji. Pozwala to na sprawdzenie stanu infrastruktury z przeszłości (audyt historyczny).
+Analiza poprawności:
+Forseti Security to zaawansowane narzędzie open-source, które było szeroko stosowane do audytu i inwentaryzacji zasobów GCP. Jedną z jego kluczowych funkcji jest "Inventory", która pozwala na tworzenie regularnych migawek (snapshots) całego stanu zasobów w organizacji. Dzięki temu możesz w dowolnym momencie sprawdzić, jakie zasoby istniały w danym czasie i jak były skonfigurowane, co jest fundamentem historycznej analizy audytowej.
 
-Dlaczego inne są błędne:
-A. Resource Manager: Pozwala na tworzenie projektów i folderów, ale sam w sobie nie przechowuje historycznych stanów 'każdego zasobu' w czasie.
-C. Stackdriver dashboards: Pokazują aktualne metryki i stan (np. CPU), ale nie służą do inwentaryzacji konfiguracji zasobów z przeszłości.
-D. Security Command Center: Pokazuje błędy konfiguracji (findings) i aktualny inwentarz, ale funkcja 'historycznego rekordu' dla dowolnego punktu w czasie jest domeną systemów inwentaryzacji jak Forseti.
+Dlaczego pozostałe są błędne:
+A (Resource Manager): Służy do hierarchicznej organizacji zasobów (projekty, foldery), a nie do śledzenia historycznych zmian konfiguracji poszczególnych zasobów.
+C (Stackdriver/Cloud Monitoring dashboards): Służą do monitorowania wydajności (CPU, RAM, latency) w czasie rzeczywistym. Nie służą do inwentaryzacji konfiguracji zasobów z przeszłości.
+D (Security Command Center - SCC): SCC koncentruje się na wykrywaniu podatności, zagrożeń i błędów konfiguracji ("findings"). Choć ma pewne funkcje inwentaryzacyjne, to Forseti (i jego następca Cloud Asset Inventory) jest dedykowany do pełnej inwentaryzacji historycznej.
 
-Konsensus społeczności ExamTopics: Przewaga głosów na B. Forseti to standardowe narzędzie open-source polecane przez Google do tego celu.</pre>
+Wskazówki egzaminacyjne:
+- "Historical record": Jeśli widzisz to hasło, szukaj "Inventory" lub "Asset Inventory".
+- "Forseti": Często pojawia się w starszych pytaniach jako poprawne rozwiązanie do audytu i inwentaryzacji.
+- Uwaga: W nowoczesnych środowiskach GCP używa się usługi <b>Cloud Asset Inventory</b> z funkcją "Time Travel".
+
+Dokumentacja:
+<a href="https://forsetisecurity.org/docs/latest/concepts/inventory.html" target="_blank">https://forsetisecurity.org/docs/latest/concepts/inventory.html</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Obecnie natywną usługą Google do tego celu jest <b>Cloud Asset Inventory</b>, który wspiera 'Time Travel'. Jednak w kontekście pytań egzaminacyjnych Forseti nadal często pojawia się jako poprawna odpowiedź dla inwentaryzacji historycznej.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Obecnie natywną usługą Google do tego celu jest **Cloud Asset Inventory**, który natywnie wspiera tzw. 'Time Travel' (odpytywanie o stan zasobów w konkretnym czasie z przeszłości). Warto wiedzieć, że Forseti (jako projekt open-source) stopniowo ustępuje miejsca temu narzędziu.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://forsetisecurity.org/docs/latest/concepts/inventory.html" target="_blank">https://forsetisecurity.org/docs/latest/concepts/inventory.html</a></li>
+<li><a href="https://cloud.google.com/asset-inventory/docs/time-travel" target="_blank">https://cloud.google.com/asset-inventory/docs/time-travel</a></li>
 </ul>
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

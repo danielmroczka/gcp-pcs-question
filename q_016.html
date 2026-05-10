@@ -88,24 +88,32 @@ An organization's typical network and security review consists of analyzing appl
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Poprawna odpowiedź: B (Mandate use of infrastructure as code and provide static analysis in the CI/CD pipelines to enforce policies.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. IaC + static analysis: Przeniesienie kontroli na etap budowania (Shift Left) za pomocą Infrastructure as Code (np. Terraform) i automatycznych narzędzi do analizy statycznej (np. Terraform Validator) pozwala na automatyczne odrzucanie niezgodnych konfiguracji bez angażowania zespołu security w każde wdrożenie.
+Analiza poprawności:
+Przeniesienie kontroli na etap projektowania i wdrażania (tzw. "Shift Left") jest fundamentem nowoczesnych praktyk DevSecOps. Korzystanie z Infrastructure as Code (IaC), takiego jak Terraform, w połączeniu z narzędziami do statycznej analizy kodu (np. Terraform Validator, `gcloud terraform vet`), pozwala na automatyczne sprawdzanie zgodności konfiguracji z politykami bezpieczeństwa przed ich wdrożeniem w chmurze. Dzięki temu programiści mogą bezpiecznie wdrażać swoje aplikacje bez potrzeby manualnej, długotrwałej weryfikacji przez zespół bezpieczeństwa dla każdej zmiany.
 
-Dlaczego inne są błędne:
-A. Forseti: Wykrywa błędy JUŻ PO ich wdrożeniu na produkcję (Detective control). Firma chce umożliwić wdrożenia przy jednoczesnym zachowaniu standardów, co lepiej adresuje prewencyjne podejście B.
-C. Customer-managed routers: Wprowadza ogromny narzut wydajnościowy i operacyjny, co jest sprzeczne z celem 'enabling teams'.
-D. Run on-premises: To ucieczka od problemu, a nie rozwiązanie go w chmurze.
+Dlaczego pozostałe są błędne:
+A (Forseti): Forseti to narzędzie typu "Detective". Wykrywa naruszenia po fakcie (gdy zasób już powstał w chmurze). Pozwala to na naprawę, ale nie zapobiega wdrożeniu ("overhead" wciąż występuje, gdy zespół security musi reagować na alerty).
+C (Customer-managed routers): To podejście jest skrajnie nieefektywne, kosztowne i wprowadza ogromne opóźnienia w ruchu sieciowym. Nie rozwiązuje problemu weryfikacji konfiguracji, a jedynie dokłada warstwę kontroli w czasie wykonywania (runtime).
+D (Run on-premises): Jest to unikanie problemu, a nie rozwiązanie (zamykanie się w starym modelu), co stoi w sprzeczności z celami adopcji chmury.
 
-Konsensus społeczności ExamTopics: Silne poparcie dla B. Automatyzacja polityk w pipeline'ie to klucz do nowoczesnego DevSecOps.</pre>
+Wskazówki egzaminacyjne:
+- "Enable developer teams": Jeśli widzisz to hasło, szukaj rozwiązań "Shift Left" (IaC + automatyzacja w CI/CD).
+- "Shift Left": W GCP oznacza to sprawdzanie kodu przed jego uruchomieniem (statyczna analiza).
+- Eliminacja: Forseti to świetne narzędzie, ale wykrywa błędy po fakcie. Jeśli pytanie pyta o "zapobieganie overheadowi", wybierz IaC w CI/CD.
+
+Dokumentacja:
+<a href="https://cloud.google.com/docs/security/infrastructure-as-code" target="_blank">https://cloud.google.com/docs/security/infrastructure-as-code</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Statyczna analiza IaC pozwala na sprawdzanie reguł takich jak: 'czy ten firewall otwiera port 22 na cały świat?' jeszcze zanim jakikolwiek zasób powstanie w chmurze.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Automatyzacja polityk w CI/CD pipeline to klucz do nowoczesnego modelu DevSecOps. Statyczna analiza pozwala na sprawdzanie reguł takich jak: "czy ten firewall otwiera port 22 na cały świat?" jeszcze zanim jakikolwiek zasób powstanie w chmurze.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/docs/security/infrastructure-as-code" target="_blank">https://cloud.google.com/docs/security/infrastructure-as-code</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: Silne poparcie dla B. Automatyzacja polityk
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

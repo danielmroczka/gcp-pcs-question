@@ -88,24 +88,32 @@ A customer decides to use customer-supplied encryption keys (CSEK) for Cloud Sto
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Poprawna odpowiedź: B (Use gsutil and specify the location of the encryption key.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. gsutil with key: CSEK wymagają, aby to klient dostarczał klucz przy każdej operacji zapisu/odczytu. Narzędzie gsutil posiada specjalne flagi (lub plik konfiguracyjny .boto), w których wskazuje się klucz szyfrujący. Google używa go w pamięci RAM i natychmiast usuwa.
+Analiza poprawności:
+W usłudze CSEK (Customer-Supplied Encryption Keys) klucz szyfrujący nie jest przechowywany przez Google w żaden sposób (nie ma go w KMS ani w bazie danych). Google używa Twojego klucza w pamięci RAM wyłącznie do przeprowadzenia operacji szyfrowania/deszyfrowania danych w momencie ich zapisu lub odczytu z bucketa Cloud Storage, a następnie natychmiast go usuwa. Dlatego przy każdej operacji (np. za pomocą narzędzia `gsutil`) musisz jawnie wskazać lokalizację klucza (np. w pliku `.boto` lub przez flagę w linii komend), aby aplikacja mogła go "przekazać" do Google.
 
-Dlaczego inne są błędne:
-A. Upload key: Przechowywanie klucza w tym samym buckecie co dane niweluje sens szyfrowania.
-C. Console: Konsola Google Cloud nie wspiera CSEK, ponieważ Google nie może (z założenia tej usługi) dotknąć Twojego klucza w sposób trwały.
-D. Encrypt locally: To szyfrowanie 'client-side', a nie CSEK. CSEK to szyfrowanie 'server-side' kluczem dostarczonym przez klienta.
+Dlaczego pozostałe są błędne:
+A (Upload the key): To najgorsza z możliwych opcji bezpieczeństwa. Przesłanie klucza do bucketu oznacza, że klucz stałby się częścią danych, które ma szyfrować, a każdy, kto ma dostęp do bucketu, mógłby go odczytać i użyć do odszyfrowania danych.
+C (Generate key in Console): Konsola GCP nie obsługuje generowania i trzymania kluczy CSEK, ponieważ Google nie chce mieć technicznej możliwości posiadania Twojego klucza (to kluczowe dla założeń tej usługi).
+D (Encrypt locally): Szyfrowanie po stronie klienta (client-side) to inna technika. CSEK to szyfrowanie po stronie serwera (server-side), w którym po prostu dostarczasz klucz w trakcie zapytania.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na B. CSEK to najbardziej restrykcyjna forma szyfrowania w GCP obsługiwana głównie przez CLI.</pre>
+Wskazówki egzaminacyjne:
+- "CSEK" + "How to complete": Zawsze szukaj "gsutil" i "specify location/key".
+- Google-managed vs Customer-managed: Jeśli to GMEK – Google zarządza wszystkim. Jeśli CMEK – klucze są w KMS. Jeśli CSEK – dostarczasz klucz lokalnie przy każdej operacji (brak trwałości w Google).
+- Ostrzeżenie: Jeśli zgubisz klucz CSEK, Google NIE MOŻE Ci pomóc w odzyskaniu danych.
+
+Dokumentacja:
+<a href="https://cloud.google.com/storage/docs/encryption/customer-supplied-keys" target="_blank">https://cloud.google.com/storage/docs/encryption/customer-supplied-keys</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Jeśli zgubisz klucz CSEK, Google NIE może Ci pomóc w odzyskaniu danych. Dane są bezpowrotnie stracone, ponieważ materiał klucza nigdy nie został zapisany w systemach Google.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Użytkownicy często mylą CSEK z szyfrowaniem po stronie klienta (client-side). Główna różnica polega na tym, że w CSEK Google "widzi" proces szyfrowania (dostaje klucz na chwilę), podczas gdy w szyfrowaniu po stronie klienta Google widzi tylko zaszyfrowany bełkot i nie ma żadnej możliwości odczytu danych.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/storage/docs/encryption/customer-supplied-keys" target="_blank">https://cloud.google.com/storage/docs/encryption/customer-supplied-keys</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: Zdecydowana większość na B. CSEK to najb
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

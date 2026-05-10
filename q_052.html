@@ -88,24 +88,32 @@ Which tool can help identify and classify sensitive information (like credit car
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Poprawna odpowiedź: B (Cloud DLP API)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Cloud DLP API: Usługa ta posiada wbudowane silniki analizy tekstu (NLP), które potrafią w strumieniu tekstu (nieustrukturyzowanym) rozpoznać wzorce pasujące do ponad 100 typów danych wrażliwych, w tym numerów kart (CREDIT_CARD_NUMBER).
+Analiza poprawności:
+Usługa Cloud DLP (obecnie Sensitive Data Protection) posiada zaawansowane silniki analizy tekstu oparte na przetwarzaniu języka naturalnego (NLP). Dzięki nim potrafi w strumieniu nieustrukturyzowanego tekstu (np. czat, komentarz, logi) automatycznie wykryć wzorce typowe dla danych wrażliwych (PII - Personally Identifiable Information), takich jak numery kart płatniczych (np. wzorzec `CREDIT_CARD_NUMBER`), numery PESEL, adresy email czy numery telefonów. Jest to dedykowane narzędzie do "identyfikacji i klasyfikacji" takich informacji.
 
-Dlaczego inne są błędne:
-A. Cloud KMS: Służy do szyfrowania, nie do analizy treści.
-C. BigQuery: Może przechowywać dane, ale sam w sobie nie posiada funkcji 'automatycznego wykrywania wrażliwości' wewnątrz tekstu (choć można z niego wywołać DLP).
-D. Data Catalog: Służy do inwentaryzacji i opisywania (metadanych) zbiorów danych, a nie do głębokiej inspekcji zawartości plików tekstowych.
+Dlaczego pozostałe są błędne:
+A (Cloud KMS): Służy wyłącznie do bezpiecznego przechowywania i zarządzania kluczami szyfrującymi. Nie posiada żadnej funkcjonalności skanowania czy analizy treści danych.
+C (BigQuery): To baza danych klasy Data Warehouse. Choć można w niej przechowywać dane, sama w sobie nie potrafi przeszukiwać tekstu w poszukiwaniu "wrażliwości" (PII) – do tego celu zazwyczaj używa się DLP API, które z BigQuery współpracuje.
+D (Data Catalog): To usługa do inwentaryzacji metadanych (opisywania, tagowania, zarządzania słownikiem danych). Pozwala na tagowanie danych jako "wrażliwe", ale nie służy do aktywnego *wykrywania* tych danych w treści plików tekstowych.
 
-Konsensus społeczności ExamTopics: 100% na B. DLP to jedyna odpowiedź na pytanie o 'identyfikację i klasyfikację' danych osobowych.</pre>
+Wskazówki egzaminacyjne:
+- "Identify and classify" + "Sensitive information" / "PII": Szukaj "Cloud DLP API".
+- "Unstructured text": To zawsze domena narzędzi NLP/DLP.
+- Eliminacja: KMS (szyfrowanie), Data Catalog (metadane) – nigdy nie wybieraj ich jako narzędzi do "wykrywania" treści.
+
+Dokumentacja:
+<a href="https://cloud.google.com/dlp/docs/inspecting-text" target="_blank">https://cloud.google.com/dlp/docs/inspecting-text</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> DLP używa kombinacji wyrażeń regularnych, sum kontrolnych i modeli ML, aby minimalizować liczbę pomyłek (false positives) przy wykrywaniu np. numerów kart płatniczych.</p>
+<p><b>Analiza spornych kwestii (AI):</b> DLP używa kombinacji wyrażeń regularnych, sum kontrolnych (np. algorytm Luhna dla kart kredytowych) i modeli ML, aby minimalizować liczbę pomyłek (false positives) przy wykrywaniu wrażliwych danych w dużych zbiorach.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/dlp" target="_blank">https://cloud.google.com/dlp</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: 100% na B. DLP to jedyna odpowiedź na pyta
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

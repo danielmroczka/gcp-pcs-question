@@ -88,24 +88,32 @@ What is the purpose of the Cloud Identity-Aware Proxy (IAP)?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Poprawna odpowiedź: C (To control access to cloud applications based on user identity and context.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Identity and Context Control: IAP działa jako centralny punkt autoryzacji dla aplikacji HTTP(S) i SSH/RDP. Zamiast używać VPN, IAP sprawdza tożsamość użytkownika (czy jest zalogowany w Google) oraz kontekst (np. czy ma firmowy laptop, czy jest w dobrym kraju) i dopiero wtedy wpuszcza go do zasobu.
+Analiza poprawności:
+Identity-Aware Proxy (IAP) to kluczowe narzędzie Google w architekturze "Zero Trust" (BeyondCorp). Pozwala ono na zabezpieczenie aplikacji webowych (np. na App Engine, GKE, Compute Engine) bez konieczności wystawiania ich bezpośrednio do publicznego internetu (brak publicznego IP) lub wymuszania użycia VPN. IAP weryfikuje tożsamość użytkownika (przez Cloud Identity) oraz kontekst (np. czy urządzenie jest zarządzane, lokalizacja) przed przyznaniem dostępu. Dla pracowników jest to najbardziej wygodne rozwiązanie – dostęp odbywa się przez zwykłą przeglądarkę, z dowolnego miejsca.
 
-Dlaczego inne są błędne:
-A. VPN: IAP to alternatywa dla VPN (model BeyondCorp), nie jest on tunelem VPN.
-B. SQL Injection: To zadanie dla WAF (Cloud Armor). IAP nie sprawdza treści zapytań pod kątem ataków hakerskich.
-D. DNS: Tym zajmuje się Cloud DNS.
+Dlaczego pozostałe są błędne:
+A (VPN): IAP to nowoczesna alternatywa dla VPN (model BeyondCorp), nie jest to tunel VPN.
+B (SQL injection): To zadanie dla WAF (Cloud Armor). IAP nie sprawdza treści zapytań HTTP pod kątem ataków hakerskich typu SQLi.
+D (DNS): Zarządzaniem rekordami DNS zajmuje się usługa Cloud DNS.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla C. To definicja IAP jako bramy Zero Trust.</pre>
+Wskazówki egzaminacyjne:
+- "Zero Trust" / "Any location": Szukaj IAP. To jedyna technologia GCP zaprojektowana do bezpiecznego dostępu bez VPN.
+- "In-progress sites": Często mylnie chce się użyć VPN, ale pamiętaj: VPN = trudna obsługa użytkowników; IAP = przeglądarka + zalogowanie się kontem Google.
+- Eliminacja: Jeśli widzisz VPN w kontekście dostępu dla pracowników do aplikacji webowych, zazwyczaj jest to dystraktor.
+
+Dokumentacja:
+<a href="https://cloud.google.com/iap" target="_blank">https://cloud.google.com/iap</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> IAP pozwala na udostępnienie wewnętrznych aplikacji (np. Jira, Git) bezpośrednio w internecie w sposób bezpieczniejszy niż tradycyjny VPN, ponieważ każda próba dostępu jest weryfikowana tożsamościowo.</p>
+<p><b>Analiza spornych kwestii (AI):</b> IAP działa na poziomie warstwy 7 modelu OSI. Po włączeniu IAP dla aplikacji, serwer odrzuca absolutnie wszystkie przychodzące żądania, które nie posiadają ważnego dowodu tożsamości wystawionego przez proxy Google.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/iap" target="_blank">https://cloud.google.com/iap</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: 100% poparcia dla C. To definicja IAP jako 
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

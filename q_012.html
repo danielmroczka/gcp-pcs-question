@@ -88,24 +88,32 @@ A customer deploys an application to App Engine and needs to check for Open Web 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Poprawna odpowiedź: C (Web Security Scanner)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Web Security Scanner: Jest to usługa zaprojektowana specjalnie do automatycznego skanowania aplikacji webowych (App Engine, GKE, CE) pod kątem typowych podatności, takich jak XSS, Flash injection, Mixed Content i inne błędy z listy OWASP.
+Analiza poprawności:
+Web Security Scanner jest dedykowanym narzędziem DAST (Dynamic Application Security Testing) w Google Cloud. Automatycznie skanuje aplikacje webowe (uruchomione na App Engine, GKE, Compute Engine) w poszukiwaniu typowych podatności, takich jak Cross-Site Scripting (XSS), Flash injection, Mixed Content i innych błędów sklasyfikowanych w ramach projektu OWASP. Pomaga to inżynierom wcześnie identyfikować luki w bezpieczeństwie przed ich wykorzystaniem przez atakujących.
 
-Dlaczego inne są błędne:
-A. Cloud Armor: Jest to firewall L7 (WAF), który BLOKUJE ataki, ale sam w sobie nie jest skanerem podatności szukającym luk w kodzie aplikacji.
-B. Audit Logs: Rejestrują aktywność administracyjną i dostęp do danych, nie służą do testowania bezpieczeństwa kodu.
-D. Anomaly Detection: Część monitoringu wykrywająca nietypowe zachowania, ale nie jest narzędziem do systematycznego skanowania pod kątem OWASP.
+Dlaczego pozostałe są błędne:
+A (Cloud Armor): To firewall aplikacyjny (WAF). Służy do blokowania znanych ataków (np. SQL Injection, XSS) w czasie rzeczywistym, gdy ruch dociera do aplikacji. Nie służy do aktywnego skanowania kodu w poszukiwaniu luk.
+B (Audit Logs): Są to dzienniki zdarzeń administracyjnych i dostępowych. Służą do audytu "kto, co, kiedy", a nie do testowania bezpieczeństwa samej aplikacji.
+D (Anomaly Detection): W GCP odnosi się to zazwyczaj do systemów monitorowania anomalii (np. w Cloud Monitoring), które wykrywają nietypowe wzorce w ruchu lub metrykach, ale nie są narzędziem do systematycznego audytu bezpieczeństwa OWASP.
 
-Konsensus społeczności ExamTopics: Prawie 100% głosów na C. Jest to jedyne natywne narzędzie DAST (Dynamic Application Security Testing) w GCP.</pre>
+Wskazówki egzaminacyjne:
+- "OWASP vulnerabilities" + "App Engine": Szukaj "Web Security Scanner". To jedyna logiczna odpowiedź w tym kontekście.
+- DAST vs WAF: Zapamiętaj: DAST (Scanner) = testuje luki; WAF (Armor) = chroni przed atakiem.
+- Eliminacja: Jeśli pytanie mówi o szukaniu luk w kodzie aplikacji – odrzuć Cloud Armor (on tylko filtruje ruch).
+
+Dokumentacja:
+<a href="https://cloud.google.com/security-command-center/docs/concepts-web-security-scanner-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-web-security-scanner-overview</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Web Security Scanner jest darmowy dla podstawowych skanów w App Engine. Wersja Premium (w SCC) oferuje szerszy zakres wykrywania podatności i wsparcie dla aplikacji za Load Balancerem.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Web Security Scanner jest darmowy dla podstawowych skanów w App Engine (w ograniczonym zakresie). Wersja Premium (w ramach SCC) oferuje szerszy zakres wykrywania podatności i wsparcie dla aplikacji za zewnętrznymi Load Balancerami.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/security-command-center/docs/concepts-web-security-scanner-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-web-security-scanner-overview</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: Prawie 100% głosów na C. Jest to jedyne n
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

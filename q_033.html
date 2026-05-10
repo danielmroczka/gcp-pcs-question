@@ -88,24 +88,32 @@ Which boot disk encryption solution should you use on a MIG cluster to control t
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Poprawna odpowiedź: B (CMEK using Cloud KMS)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. CMEK (Customer-Managed Encryption Keys): Pozwala użytkownikowi na pełną kontrolę nad kluczem (rotacja, wyłączanie, niszczenie) przechowywanym w Cloud KMS. Co najważniejsze, CMEK jest w pełni wspierany przez Managed Instance Groups (MIG) i Instance Templates.
+Analiza poprawności:
+CMEK (Customer-Managed Encryption Keys) to usługa w Google Cloud, która daje administratorowi pełną kontrolę nad cyklem życia klucza szyfrującego (rotacja, wyłączanie, niszczenie) poprzez Cloud KMS. Jest to rozwiązanie w pełni wspierane przez Managed Instance Groups (MIG). Podczas definiowania szablonu instancji (Instance Template), możesz wskazać klucz KMS, który zostanie użyty do zaszyfrowania dysków systemowych (boot disks) każdej nowo uruchomionej instancji w ramach grupy, co jest standardem bezpieczeństwa w architekturach Enterprise.
 
-Dlaczego inne są błędne:
-A. CSEK (Customer-Supplied): Wymaga podania klucza przy każdym uruchomieniu VM. Nie jest to wspierane przez MIG, ponieważ Google nie mogłoby automatycznie skalować (startować nowych VM) bez Twojej interwencji i podania klucza.
-C. Default encryption: Kluczami zarządza Google, więc użytkownik nie ma kontroli nad ich cyklem życia (rotation schedule itp.).
-D. Pre-encrypting: Nie chroni całego dysku systemowego (boot disk), a jedynie wybrane pliki.
+Dlaczego pozostałe są błędne:
+A (CSEK - Customer-Supplied Encryption Keys): Wymaga podania klucza szyfrującego jako parametru przy każdym uruchomieniu/starcie VM. Ponieważ MIG-i muszą automatycznie skalować (samodzielnie startować nowe instancje w odpowiedzi na obciążenie), Google nie mogłoby zarządzać startem VM bez Twojej manualnej interwencji przy dostarczaniu klucza przy każdym nowym dysku.
+C (Encryption by default): Google szyfruje dane "by default" (domyślnie), ale używa do tego kluczy zarządzanych przez Google (GMEK). Użytkownik nie ma kontroli nad ich cyklem życia (nie może ich ręcznie rotować ani usunąć).
+D (Pre-encrypting files): Szyfrowanie plików na poziomie systemu operacyjnego nie chroni całego dysku systemowego (boot disk) i jest bardzo trudne w zarządzaniu na poziomie skalowalnych grup instancji.
 
-Konsensus społeczności ExamTopics: Prawie 100% głosów na B. Dla grup instancji CMEK to jedyna metoda dająca kontrolę i automatyzację.</pre>
+Wskazówki egzaminacyjne:
+- "MIG" + "Control key lifecycle": Zawsze wybieraj CMEK.
+- "Automated scaling": Odrzuć CSEK, ponieważ wymaga ręcznej podaży klucza.
+- "Control": GMEK (Encryption by default) = brak kontroli; CMEK = pełna kontrola.
+
+Dokumentacja:
+<a href="https://cloud.google.com/compute/docs/disks/customer-managed-encryption" target="_blank">https://cloud.google.com/compute/docs/disks/customer-managed-encryption</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Przy użyciu CMEK w MIG, nadajesz systemowemu kontu serwisowemu (Compute Service Agent) uprawnienia do używania Twojego klucza w KMS. To pozwala Google na automatyczne tworzenie dysków w Twoim imieniu.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Przy użyciu CMEK w MIG, nadajesz systemowemu kontu serwisowemu (Compute Service Agent) uprawnienia do używania Twojego klucza w KMS. To pozwala Google na automatyczne tworzenie dysków w Twoim imieniu, zapewniając bezpieczne zarządzanie cyklem życia klucza.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/compute/docs/disks/customer-managed-encryption" target="_blank">https://cloud.google.com/compute/docs/disks/customer-managed-encryption</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: Prawie 100% głosów na B. Dla grup instanc
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

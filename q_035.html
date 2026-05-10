@@ -88,24 +88,32 @@ You want to reduce the scope of systems subject to PCI audit standards. What sho
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Poprawna odpowiedź: C (Move cardholder data environment into a separate project.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Separate project (Segmentation): Podstawową metodą ograniczania kosztów i trudności audytu PCI jest izolacja systemów przetwarzających dane kart płatniczych (CDE - Cardholder Data Environment) od reszty systemów firmy. W GCP projekt jest najsilniejszą granicą izolacji.
+Analiza poprawności:
+Podstawową zasadą przy audycie PCI DSS jest "zakres audytu" (scope). Im większy zakres systemów i sieci przetwarza dane kart płatniczych (CDE - Cardholder Data Environment), tym droższy, trudniejszy i bardziej ryzykowny jest audyt. Separacja środowiska CDE do osobnego projektu GCP pozwala na izolację zasobów, ograniczenie przepływu ruchu sieciowego tylko do niezbędnych połączeń oraz wymuszenie bardzo rygorystycznych polityk IAM i sieciowych tylko dla tego jednego projektu. Dzięki temu reszta infrastruktury firmy wypada poza ścisły zakres audytu PCI, co drastycznie upraszcza proces certyfikacji.
 
-Dlaczego inne są błędne:
-A. MFA: Jest wymagane przez PCI, ale nie zmniejsza *zakresu* (scope) audytu; po prostu zwiększa bezpieczeństwo wewnątrz zakresu.
-B. PA-DSS: Pomaga w certyfikacji aplikacji, ale nie odcina innych systemów infrastrukturalnych od audytu.
-D. VPN: Służy do bezpiecznej transmisji, ale nie separuje logicznie systemów w chmurze w celu redukcji zakresu audytu.
+Dlaczego pozostałe są błędne:
+A (Use MFA): MFA jest wymagane przez PCI DSS, ale to podstawowy wymóg, który nie zmniejsza *zakresu* audytu. Audytor i tak będzie musiał zbadać całą infrastrukturę, do której mają dostęp administratorzy.
+B (PA-DSS): PA-DSS pomaga w certyfikacji *aplikacji* płatniczych, ale nie odcina infrastruktury systemowej od audytu.
+D (Use VPN): VPN służy do bezpiecznej transmisji, ale nie stanowi logicznej separacji systemów, której wymaga PCI DSS w celu redukcji scope'u.
 
-Konsensus społeczności ExamTopics: 100% głosów na C. Segmentacja to słowo-klucz przy PCI DSS.</pre>
+Wskazówki egzaminacyjne:
+- "Reduce the scope": Jeśli widzisz to hasło w pytaniach o PCI lub bezpieczeństwo – szukaj "Segmentation" (izolacja/osobny projekt).
+- "Cardholder data": Zawsze kojarz z "PCI DSS".
+- Eliminacja: Narzędzia bezpieczeństwa (MFA, VPN) poprawiają bezpieczeństwo, ale nie redukują *zakresu* (scope) audytu.
+
+Dokumentacja:
+<a href="https://cloud.google.com/solutions/pci-dss-compliance-in-gcp" target="_blank">https://cloud.google.com/solutions/pci-dss-compliance-in-gcp</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Dzięki umieszczeniu CDE w osobnym projekcie, audytor musi skupić się tylko na tym projekcie i regułach sieciowych do niego prowadzących, zamiast badać całą infrastrukturę firmy.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Segmentacja to jedyny skuteczny sposób, by audytor mógł przyjąć "ograniczony zakres". W GCP projekt jest najsilniejszą granicą administracyjną i sieciową, co czyni go naturalnym kontenerem dla CDE.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/solutions/pci-dss-compliance-in-gcp" target="_blank">https://cloud.google.com/solutions/pci-dss-compliance-in-gcp</a></li>
@@ -113,12 +121,14 @@ Konsensus społeczności ExamTopics: 100% głosów na C. Segmentacja to słowo-k
 </div>
 </div>
 </div>
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +143,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

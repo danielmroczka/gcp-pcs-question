@@ -88,16 +88,24 @@ Your team wants to centrally manage GCP IAM permissions from their on-premises A
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Poprawna odpowiedź: A (Set up Cloud Directory Sync to sync groups, and set IAM permissions on the groups.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. GCDS: Google Cloud Directory Sync to narzędzie do tzw. 'provisioningu'. Odczytuje ono grupy z Twojego AD i tworzy ich lustrzane odbicia w Google Cloud Identity. Dzięki temu możesz nadać rolę IAM grupie `GCP-Admins`, a GCDS zadba o to, by jej skład zawsze zgadzał się z tym, co jest w AD.
+Analiza poprawności:
+Google Cloud Directory Sync (GCDS) jest kluczowym narzędziem do zapewnienia spójności tożsamości między lokalnym Active Directory (AD) a Google Cloud Identity. GCDS odczytuje grupy z AD i automatycznie synchronizuje je z Cloud Identity. Dzięki temu uprawnienia IAM mogą być przypisane do grup w GCP, a członkostwo w tych grupach jest zarządzane bezpośrednio w AD, co spełnia wymóg centralnego zarządzania.
 
-Dlaczego inne są błędne:
-B. SAML SSO: SAML służy do autentykacji (logowania). Pozwala użytkownikowi wejść do konsoli, ale bez GCDS system IAM nie wiedziałby, do jakich grup ten użytkownik należy w chmurze (tożsamości grupowe muszą fizycznie istnieć w katalogu Google).
-C, D: To manualne próby budowania tego, co GCDS robi automatycznie i w sposób wspierany przez Google.
+Dlaczego pozostałe są błędne:
+B. SAML 2.0 Single Sign-On (SSO): SSO odpowiada jedynie za proces logowania (uwierzytelniania). Samo w sobie nie synchronizuje informacji o przynależności do grup, więc system IAM w GCP "nie wiedziałby", do jakich grup należy użytkownik z AD.
+C, D: Użycie API (Cloud IAM API lub Admin SDK) do tworzenia grup wymagałoby budowy własnego, niestandardowego oprogramowania typu "middleware". Jest to podejście niepotrzebnie skomplikowane i nieefektywne w porównaniu do natywnego i wspieranego narzędzia GCDS.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla A. GCDS to 'must-have' dla każdej firmy używającej AD.</pre>
+Wskazówki egzaminacyjne:
+- Provisioning vs Auth: Pamiętaj o rozróżnieniu: SAML/SSO to UWIERZYTELNIANIE (jak się loguję), GCDS to PROVISIONING (jak tworzę tożsamość użytkownika/grupy w chmurze).
+- Centralne zarządzanie: Jeśli w pytaniu pada Active Directory + IAM GCP, "GCDS" jest prawie zawsze poprawną odpowiedzią.
+- Eliminacja: Jeśli widzisz rozwiązania wymagające pisania kodu przez klienta (własne skrypty korzystające z API), niemal zawsze jest to dystraktor.
+
+Dokumentacja:
+<a href="https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction" target="_blank">https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

@@ -88,17 +88,25 @@ A customer needs to launch a 3-tier internal web application on Google Cloud Pla
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Poprawna odpowiedź: B (VPC Firewall Rules)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. VPC Firewall Rules: Pozwalają na filtrowanie ruchu przychodzącego na podstawie źródłowych zakresów IP (CIDR). Google zapewnia wbudowaną (native) ochronę przed atakami SYN flood na poziomie infrastruktury VPC dla wszystkich portów i adresów.
+Analiza poprawności:
+VPC Firewall Rules to natywny, wysokowydajny mechanizm GCP działający na poziomie warstwy sieciowej (L3/L4). Pozwalają one na precyzyjne filtrowanie ruchu przychodzącego i wychodzącego w oparciu o źródłowe/docelowe adresy IP (CIDR). Google, jako dostawca infrastruktury, zapewnia automatyczną ochronę przed atakami typu SYN flood dla całego ruchu w sieciach VPC, co czyni VPC Firewall naturalnym wyborem dla aplikacji wewnętrznych, wymagających filtrowania po CIDR.
 
-Dlaczego inne są błędne:
-A. Cloud Armor: Choć oferuje zaawansowaną ochronę DDoS i WAF, działa głównie z zewnętrznymi Load Balancerami HTTP(S). Dla aplikacji *wewnętrznej* (internal) i prostego filtrowania po CIDR, VPC Firewall jest rozwiązaniem natywnym i wystarczającym.
-C. IAM: Zarządza uprawnieniami do zarządzania chmurą, a nie filtrowaniem pakietów sieciowych.
-D. Cloud CDN: Przyspiesza treści, nie filtruje dostępu po IP.
+Dlaczego pozostałe są błędne:
+A. Cloud Armor: Jest to zaawansowana usługa ochrony WAF/DDoS, ale działa głównie z zewnętrznymi Load Balancerami (HTTP(S), TCP/UDP Proxy). W przypadku aplikacji "internal" (wewnętrznej), Cloud Armor nie jest dostępny, więc nie można go użyć do ochrony tego typu zasobów.
+C. Cloud Identity and Access Management (IAM): IAM służy do zarządzania uprawnieniami do zasobów GCP (kto może co robić), a nie do filtrowania ruchu sieciowego czy pakietów.
+D. Cloud CDN: Służy do dystrybucji treści (cache'owanie) bliżej użytkownika, aby zwiększyć wydajność, a nie do filtrowania ruchu sieciowego czy ochrony przed atakami DDoS.
 
-Konsensus społeczności ExamTopics: 100% na B. Kluczowe słowo 'internal' eliminuje Cloud Armor.</pre>
+Wskazówki egzaminacyjne:
+- "Internal application": Jeśli widzisz to sformułowanie, od razu odrzuć Cloud Armor (chyba że mowa o Internal HTTP(S) LB z zaawansowanymi funkcjami, ale w tym pytaniu podstawowym narzędziem jest Firewall).
+- "Native protection": Pamiętaj, że GCP zapewnia ochronę przed SYN flood jako funkcję wbudowaną w infrastrukturę VPC, nie potrzebujesz do tego specjalnego produktu typu WAF.
+- CIDR filtering: Do filtrowania po CIDR (źródło ruchu) w sieciach prywatnych zawsze najlepszym wyborem są Firewall Rules.
+
+Dokumentacja:
+<a href="https://cloud.google.com/vpc/docs/firewalls" target="_blank">https://cloud.google.com/vpc/docs/firewalls</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

@@ -88,24 +88,32 @@ An application running on a Compute Engine instance needs to read data from a Cl
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Poprawna odpowiedź: C (Use a service account with read-only access to the Cloud Storage bucket to retrieve the credentials from the instance metadata.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Service account + instance metadata: Tożsamość instancji (Service Account attached to VM) pozwala aplikacji na bezpieczne pobieranie tymczasowych tokenów z serwera metadanych (http://metadata.google.internal). Eliminuje to potrzebę przechowywania haseł czy kluczy na dysku.
+Analiza poprawności:
+To jest "złoty standard" bezpieczeństwa w GCP. Zamiast ręcznie zarządzać kluczami (które mogą wyciec) i przechowywać je w plikach konfiguracyjnych, używamy "tożsamości instancji". Przypisujemy do VM (Compute Engine) konto serwisowe (Service Account) z odpowiednimi uprawnieniami (read-only do bucketu). Aplikacja działająca na tej VM automatycznie (przez biblioteki klienta GCP) pobiera tymczasowe tokeny dostępu z lokalnego serwera metadanych (http://metadata.google.internal). Jest to bezpieczne, nie wymaga zarządzania hasłami i spełnia zasadę najmniejszych uprawnień.
 
-Dlaczego inne są błędne:
-A. ACL by IP: Cloud Storage nie wspiera filtrowania dostępu po adresie IP instancji w ramach standardowych ACL.
-B. Store credentials in config: Przechowywanie kluczy JSON na dysku jest poważnym błędem bezpieczeństwa (ryzyko wycieku przy kompromitacji VM).
-D. Cloud KMS: Szyfrowanie chroni dane, ale aplikacja i tak potrzebuje Tożsamości, aby pobrać klucz z KMS. To nie rozwiązuje problemu autoryzacji do bucketu.
+Dlaczego pozostałe są błędne:
+A (ACL by IP): Cloud Storage nie oferuje natywnej możliwości ograniczenia dostępu do bucketu na podstawie adresu IP źródłowej instancji Compute Engine. To podejście jest niemożliwe technicznie.
+B (Store credentials in config): Przechowywanie kluczy (np. pliki JSON) na dysku maszyny wirtualnej jest skrajnie niebezpieczne. Jeśli haker przejmie VM, natychmiast przejmie też klucze.
+D (Encrypt with Cloud KMS): Szyfrowanie danych w bucketcie (KMS) jest świetne dla bezpieczeństwa danych w spoczynku, ale w żaden sposób nie rozwiązuje problemu autoryzacji aplikacji do odczytu bucketu. Aplikacja nadal musi mieć uprawnienia IAM do bucketu, aby w ogóle pobrać obiekt.
 
-Konsensus społeczności ExamTopics: Prawie 100% wskazań na C jako standardową i najbezpieczniejszą metodę w GCP.</pre>
+Wskazówki egzaminacyjne:
+- "Credentials" + "Compute Engine": Jeśli masz opcję użycia "Service Account attached to VM" – to prawie zawsze jest poprawna odpowiedź.
+- "No local credentials": Nigdy nie wybieraj odpowiedzi, która sugeruje trzymanie haseł/kluczy w konfiguracji (config).
+- Metadata Server: Pamiętaj, że instancje GCP pobierają tożsamość z serwera metadanych (`http://metadata.google.internal`).
+
+Dokumentacja:
+<a href="https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances" target="_blank">https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Mechanizm ten nazywa się 'impersonacją' konta serwisowego przez VM. Jest to fundament bezpieczeństwa IaaS, zapobiegający tzw. 'credential theft' z obrazów maszyn.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Mechanizm ten nazywa się "impersonacją konta serwisowego" przez instancję VM. Jest to fundament bezpieczeństwa w chmurze (IaaS), który całkowicie eliminuje potrzebę "zarządzania hasłami" przez deweloperów.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances" target="_blank">https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: Prawie 100% wskazań na C jako standardową
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

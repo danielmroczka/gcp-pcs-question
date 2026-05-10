@@ -88,23 +88,35 @@ You need to follow Google-recommended practices to leverage envelope encryption 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Poprawna odpowiedź: A (Generate a data encryption key (DEK) locally to encrypt the data, and generate a new key encryption key (KEK) in Cloud KMS to encrypt the DEK. Store both the encrypted data and the encrypted DEK.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Envelope encryption: Polega na generowaniu klucza danych (DEK) lokalnie w aplikacji, użyciu go do szybkiego zaszyfrowania danych, a następnie zaszyfrowaniu samego DEK kluczem nadrzędnym (KEK) z Cloud KMS. Przechowujesz zaszyfrowane dane i 'opakowany' (zaszyfrowany) klucz DEK obok nich.
+Analiza poprawności:
+Szyfrowanie kopertowe (Envelope Encryption) to standardowa praktyka dla ochrony danych na poziomie aplikacji. Proces wygląda następująco:
+1. Aplikacja generuje lokalnie unikalny "Klucz Danych" (DEK - Data Encryption Key).
+2. Aplikacja używa DEK do zaszyfrowania danych (szyfrowanie symetryczne, bardzo szybkie).
+3. Aplikacja wysyła DEK do Cloud KMS, aby został on zaszyfrowany (opakowany) za pomocą "Klucza Szyfrującego Klucz" (KEK - Key Encryption Key), który bezpiecznie spoczywa w KMS i nigdy nie opuszcza sprzętowego modułu bezpieczeństwa (HSM).
+4. Przechowujesz zaszyfrowane dane oraz "zaszyfrowany DEK" razem (jako "kopertę"). Aby odszyfrować dane, aplikacja najpierw prosi KMS o odszyfrowanie DEK, a potem używa DEK do odczytu danych.
 
-Dlaczego inne są błędne:
-B. Store KEK: Nigdy nie przechowujesz jawnego klucza KEK obok danych. KEK powinien bezpiecznie spoczywać w KMS.
-C, D: DEK jest generowany lokalnie dla wydajności (nie chcesz wysyłać dużych plików do KMS). KMS służy tylko do operacji na małym kluczu DEK.
+Dlaczego pozostałe są błędne:
+B (Store KEK): Nigdy nie przechowujesz KEK obok danych. KEK musi być bezpieczny w KMS.
+C, D: DEK generowany w KMS (do szyfrowania dużych zbiorów danych lokalnie) byłby nieefektywny (opóźnienia sieciowe) i niezgodny z zasadami szyfrowania kopertowego.
 
-Konsensus społeczności ExamTopics: 100% na A. To podręcznikowa definicja szyfrowania kopertowego wspieranego przez Google Cloud KMS.</pre>
+Wskazówki egzaminacyjne:
+- "Envelope Encryption": Szukaj sekwencji: Generuj DEK lokalnie -> Szyfruj dane -> Szyfruj DEK w KMS (KEK).
+- Wydajność: Zawsze wybieraj opcje, w których KMS służy do operacji na *kluczach* (mały rozmiar), a nie do szyfrowania dużych *danych* (duży rozmiar).
+- Eliminacja: Jeśli odpowiedź mówi o przechowywaniu KEK poza KMS – to jest to błąd bezpieczeństwa.
+
+Dokumentacja:
+<a href="https://cloud.google.com/kms/docs/envelope-encryption" target="_blank">https://cloud.google.com/kms/docs/envelope-encryption</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Ta metoda łączy wydajność szyfrowania symetrycznego (lokalny DEK) z bezpieczeństwem centralnego zarządzania (KEK w KMS z pełnym audytem użycia).
+<p><b>Analiza spornych kwestii (AI):</b> Ta metoda łączy wydajność szyfrowania symetrycznego (lokalny DEK) z bezpieczeństwem centralnego zarządzania (KEK w KMS z pełnym audytem użycia). Jest to standard w usługach takich jak Cloud Storage (Customer-Managed Encryption Keys - CMEK).</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/kms/docs/envelope-encryption" target="_blank">https://cloud.google.com/kms/docs/envelope-encryption</a></li>
@@ -112,12 +124,13 @@ Konsensus społeczności ExamTopics: 100% na A. To podręcznikowa definicja szyf
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -132,8 +145,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

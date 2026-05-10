@@ -88,23 +88,30 @@ An organization adopts Google Cloud Platform (GCP) for application hosting servi
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Poprawna odpowiedź: A (Set the minimum length for passwords to be 8 characters.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. 8 characters: Google Cloud Identity pozwala administratorom wymusić minimalną długość hasła. Standardową rekomendacją Google i domyślnym minimum dla wielu polityk zgodności jest właśnie 8 znaków.
+Analiza poprawności:
+Google Cloud Identity (i zintegrowany z nim Google Workspace) oferuje administratorom możliwość konfiguracji polityk haseł dla kont użytkowników. Zgodnie z najlepszymi praktykami bezpieczeństwa, zalecaną minimalną długością hasła, która zapewnia rozsądny kompromis między bezpieczeństwem a użytecznością dla pracowników korporacyjnych, jest 8 znaków. Jest to wartość często spotykana jako domyślna w standardach zgodności (compliance).
 
-Dlaczego inne są błędne:
-B, C: Mogą być ustawione przez administratora, ale nie są 'minimalną wytyczną' (guideline) określoną przez platformę jako fundament.
-D. 6 characters: Jest uważane za zbyt słabe hasło według nowoczesnych standardów bezpieczeństwa.
+Dlaczego pozostałe są błędne:
+B (10 znaków) i C (12 znaków): Choć administrator może ustawić wyższą wartość, nie są to "podstawowe wytyczne" (guidelines) definiowane jako minimalny standard przez Google.
+D (6 znaków): Jest to wartość zdecydowanie zbyt niska w nowoczesnym środowisku zagrożeń (podatność na ataki typu brute-force/dictionary). Większość systemów bezpieczeństwa odrzuca hasła krótsze niż 8 znaków.
 
-Konsensus społeczności ExamTopics: Przewaga głosów na A. 8 znaków to 'magiczna liczba' w dokumentacji Google dotyczącej bazowego bezpieczeństwa haseł.</pre>
+Wskazówki egzaminacyjne:
+- "Minimum password length": Jeśli pytanie pyta o wytyczne Google, "magiczna liczba" to zazwyczaj 8.
+- Bezpieczeństwo vs. Użyteczność: Pamiętaj, że polityki GCP/Workspace pozwalają na wymuszenie silnych haseł, ale wytyczne bezpieczeństwa to zawsze balans między tymi dwoma.
+
+Dokumentacja:
+<a href="https://support.google.com/a/answer/139399" target="_blank">https://support.google.com/a/answer/139399</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Sama długość to nie wszystko. Google Cloud Identity pozwala również na wymuszenie silnych znaków i sprawdzenie hasła względem baz danych haseł, które wyciekły do sieci.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Sama długość hasła to tylko jeden z elementów. Nowoczesne podejście (np. NIST) sugeruje, że ważniejsza niż częsta rotacja hasła jest jego długość (złożoność) oraz sprawdzenie, czy hasło nie wyciekło w innym serwisie (Google Cloud Identity sprawdza hasła względem znanych baz wycieków).</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://support.google.com/a/answer/139399" target="_blank">https://support.google.com/a/answer/139399</a></li>
@@ -112,12 +119,13 @@ Konsensus społeczności ExamTopics: Przewaga głosów na A. 8 znaków to 'magic
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -132,8 +140,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

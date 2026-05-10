@@ -88,24 +88,32 @@ You need to ensure that specific sensitive data in a BigQuery table is only visi
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Poprawna odpowiedź: D (Column-level security using policy tags)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Column-level security: To najbardziej szczegółowa metoda ochrony danych wewnątrz tabeli BigQuery. Używając tagów polityk (policy tags) z Data Catalog, możesz zablokować dostęp do wybranych kolumn (np. numer telefonu) dla konkretnych grup użytkowników, podczas gdy nadal mogą oni pracować na pozostałych kolumnach tej samej tabeli.
+Analiza poprawności:
+Column-level security (CLS) to najbardziej precyzyjne narzędzie kontroli dostępu do danych wewnątrz tabeli BigQuery. Dzięki integracji z Data Catalog i mechanizmowi "policy tags" (tagi polityk), administrator może przypisać określone etykiety (np. "PII-Data") do konkretnych kolumn. Następnie, stosując polityki IAM na poziomie tych tagów, możesz precyzyjnie określić, które grupy użytkowników mają prawo "odczytu" danych z tak oznaczonej kolumny. Nawet jeśli użytkownik ma uprawnienia `Data Viewer` na całej tabeli, zablokowanie dostępu do tagu uniemożliwi mu wyświetlenie zawartości danej kolumny (zwrócony zostanie błąd lub wartość NULL).
 
-Dlaczego inne są błędne:
-A. Dataset-level: Daje dostęp do całego zbioru danych (wszystkich tabel w środku). Najmniej granularne.
-B. Table-level: Daje dostęp do całej tabeli. Nadal mniej granularne niż pojedyncza kolumna.
-C. Row-level security: Pozwala na filtrowanie rekordów (wierszy), ale nie ukrywa konkretnych atrybutów (kolumn). Jeśli użytkownik ma dostęp do wiersza, widzi wszystkie jego kolumny.
+Dlaczego pozostałe są błędne:
+A (Dataset-level): To uprawnienie do całego zbioru (wszystkich tabel w danym zbiorze). Jest zbyt szerokie i nie spełnia wymogu "most granular" (najbardziej precyzyjnego).
+B (Table-level): Ogranicza dostęp do całej tabeli, co również nie jest rozwiązaniem "na poziomie kolumny" (granularności).
+C (Row-level security): To filtrowanie wierszy (np. użytkownik widzi tylko wiersze dla swojego regionu). Choć to precyzyjna metoda, nie pozwala ukryć konkretnych *atrybutów* (kolumn) wewnątrz wiersza, które użytkownik może zobaczyć.
 
-Konsensus społeczności ExamTopics: 100% na D. Policy tags to standardowe rozwiązanie dla ochrony PII w kolumnach.</pre>
+Wskazówki egzaminacyjne:
+- "Granular" + "BigQuery" + "Sensitive data" / "Visible": Zawsze szukaj "Column-level security" lub "policy tags".
+- "PII": To słowo klucz, które powinno automatycznie kierować Cię w stronę zabezpieczeń na poziomie kolumn.
+- Eliminacja: Jeśli pytanie mówi o kolumnach/atrybutach – nigdy nie wybieraj Dataset lub Table level.
+
+Dokumentacja:
+<a href="https://cloud.google.com/bigquery/docs/column-level-security-intro" target="_blank">https://cloud.google.com/bigquery/docs/column-level-security-intro</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Column-level security jest niezależne od zapytania SQL. Nawet jeśli użytkownik ma rolę Data Viewer na tabeli, brak uprawnienia do tagu polityki uniemożliwi mu odczytanie zawartości chronionej kolumny.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Wiele osób myli Row-level security z Column-level security. Row-level służy do "segregacji użytkowników" (kto widzi jakie wiersze), natomiast Column-level służy do "ochrony danych wrażliwych" (kto widzi jakie kolumny/atrybuty).</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/bigquery/docs/column-level-security-intro" target="_blank">https://cloud.google.com/bigquery/docs/column-level-security-intro</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: 100% na D. Policy tags to standardowe rozwi
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

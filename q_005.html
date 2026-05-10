@@ -89,18 +89,27 @@ When creating a secure container image, which two items should you incorporate i
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: BC.
+<pre>
+Poprawna odpowiedź: BC (Package a single app as a container oraz Remove any unnecessary tools not needed by the app.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Single app per container: Fundament mikroserwisów i bezpieczeństwa. Ułatwia izolację, ograniczanie zasobów i monitorowanie.
-C. Remove unnecessary tools: Usunięcie shella, menedżerów pakietów czy edytorów (tzw. obrazy distroless) uniemożliwia hakerowi eskalację ataku po udanym przejęciu aplikacji.
+Analiza poprawności:
+Stosowanie dobrych praktyk przy budowaniu obrazów kontenerów jest fundamentem bezpieczeństwa w GCP:
+1. Package a single app as a container (B): Zgodnie z filozofią mikroserwisów, jeden kontener powinien obsługiwać tylko jeden proces (aplikację). Ułatwia to izolację, ograniczanie zasobów i monitorowanie.
+2. Remove any unnecessary tools (C): Minimalizacja powierzchni ataku (tzw. obrazy "distroless") poprzez usunięcie niepotrzebnych powłok (shell), menedżerów pakietów czy edytorów tekstu drastycznie ogranicza możliwość eskalacji uprawnień przez napastnika po ewentualnym przejęciu aplikacji.
 
-Dlaczego inne są błędne:
-A. PID 1: Aplikacja POWINNA być PID 1 (lub używać inita jak `tini`), aby poprawnie obsługiwać sygnały zamknięcia.
-D. Public images: Korzystanie z publicznych, niezweryfikowanych obrazów to ogromne ryzyko (malware, exploity).
-E. Many layers: Warstwy nie ukrywają danych. Każda warstwa jest dostępna dla każdego, kto ma obraz. Dane wrażliwe w warstwie zostają tam na zawsze, nawet jeśli je 'usuniesz' w kolejnej.
+Dlaczego pozostałe są błędne:
+A. PID 1: Aplikacja powinna być uruchomiona jako PID 1 (lub korzystać z mechanizmu init, jak `tini`), aby poprawnie obsługiwać sygnały zakończenia (np. SIGTERM).
+D. Public container images: Używanie publicznych, niezweryfikowanych obrazów jest wysoce ryzykowne (mogą zawierać malware, luki lub być nieaktualne). Należy używać obrazów z zaufanych źródeł (np. oficjalne obrazy DockerHub lub własne obrazy w Container Registry/Artifact Registry).
+E. Many container image layers: Warstwy nie służą do ukrywania danych. Dane wrażliwe umieszczone w warstwie obrazu są dostępne dla każdego, kto ma do niego dostęp, nawet jeśli zostaną usunięte w kolejnej warstwie (nadal pozostają w historii obrazu).
 
-Konsensus społeczności ExamTopics: 100% na BC. To fundamenty bezpieczeństwa kontenerów (Docker Best Practices).</pre>
+Wskazówki egzaminacyjne:
+- "Distroless": Jeśli w pytaniu o bezpieczeństwo kontenerów widzisz coś o minimalizacji narzędzi – to jest to.
+- "Separation of concerns": Kontener to aplikacja, nie cała maszyna wirtualna.
+- Pułapka warstw: Pamiętaj, że warstwy obrazu Docker NIE SĄ sposobem na ukrycie sekretów.
+
+Dokumentacja:
+<a href="https://cloud.google.com/architecture/best-practices-for-building-containers" target="_blank">https://cloud.google.com/architecture/best-practices-for-building-containers</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

@@ -88,24 +88,32 @@ A company has redundant mail servers in different regions and wants to route cus
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Poprawna odpowiedź: A (Configure TCP Proxy Load Balancing on port 995.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. TCP Proxy Load Balancing: Jest to globalny Load Balancer Google, który obsługuje ruch TCP na innych portach niż 80/443 (np. port 995 dla POP3S). Automatycznie kieruje ruch do najbliższego dostępnego regionu (Anycast IP).
+Analiza poprawności:
+TCP Proxy Load Balancing to globalny Load Balancer GCP, który umożliwia kierowanie ruchu TCP na dowolnych portach (nie tylko 80/443). Jest to rozwiązanie typu "Anycast" (jeden globalny adres IP), co oznacza, że ruch wchodzi do sieci Google w najbliższym dla klienta punkcie (Point of Presence) i jest przesyłany światłowodami Google do najbliższego dostępnego regionu z serwerami pocztowymi. Idealnie wpisuje się to w wymóg "routingu do najbliższego serwera".
 
-Dlaczego inne są błędne:
-B. Network Load Balancer: Jest to Load Balancer regionalny. Nie potrafi on automatycznie przekierować ruchu do innego regionu na podstawie geolokalizacji klienta.
-C. HTTP(S) Load Balancing: Służy wyłącznie do ruchu webowego (warstwa 7). Serwery pocztowe używają protokołów warstwy 4 (TCP).
-D. Cloud CDN: Służy do cachowania treści statycznych (obrazy, wideo), nie do obsługi protokołów pocztowych.
+Dlaczego pozostałe są błędne:
+B (Network Load Balancer): Jest to LB regionalny. Nie potrafi on automatycznie kierować ruchu między różnymi regionami na podstawie lokalizacji klienta.
+C (HTTP(S) Load Balancing): Działa wyłącznie w warstwie 7 (dla protokołów webowych HTTP/HTTPS). Serwery pocztowe używają protokołów TCP/IP, więc ten LB nie będzie w stanie obsłużyć ruchu na porcie 995.
+D (Cloud CDN): Cloud CDN służy do cache'owania (przechowywania) treści statycznych (obrazy, wideo, skrypty), aby przyspieszyć ich ładowanie. Nie posiada funkcji routingu ruchu pocztowego (TCP).
 
-Konsensus społeczności ExamTopics: 100% na A. Dla ruchu TCP (nie-HTTP) o zasięgu globalnym jedynym wyborem jest TCP Proxy LB.</pre>
+Wskazówki egzaminacyjne:
+- "Global" + "TCP": Jeśli musisz kierować ruch TCP (nie HTTP) globalnie -> tylko TCP Proxy LB.
+- "Location-based" / "Nearest": Szukaj rozwiązań "Anycast" (global IP).
+- Eliminacja: Jeśli pytanie dotyczy portów typu 995 (POP3S), 25 (SMTP) – odrzuć wszystko co ma "HTTP" w nazwie.
+
+Dokumentacja:
+<a href="https://cloud.google.com/load-balancing/docs/tcp" target="_blank">https://cloud.google.com/load-balancing/docs/tcp</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> TCP Proxy LB używa technologii Maglev i globalnego adresu IP. Ruch wchodzi do sieci Google w najbliższym punkcie (Edge) i jest przesyłany światłowodami Google do docelowej VM.</p>
+<p><b>Analiza spornych kwestii (AI):</b> TCP Proxy LB jest niezwykle potężny, ponieważ pozwala na "zakończenie" sesji TCP blisko klienta (Edge), co redukuje opóźnienia w nawiązywaniu połączeń (tzw. TCP handshake time) w porównaniu do łączenia się bezpośrednio z serwerem po drugiej stronie globu.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/load-balancing/docs/tcp" target="_blank">https://cloud.google.com/load-balancing/docs/tcp</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: 100% na A. Dla ruchu TCP (nie-HTTP) o zasi�
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

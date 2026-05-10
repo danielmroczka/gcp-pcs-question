@@ -89,18 +89,27 @@ A company is running workloads in a dedicated server room. They must only be acc
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: AC.
+<pre>
+Poprawna odpowiedź: AC (Configure the project with Cloud VPN oraz Configure the project with Cloud Interconnect.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Cloud VPN: Tworzy bezpieczny, zaszyfrowany tunel IPsec między on-prem a GCP przez internet.
-C. Cloud Interconnect: Tworzy bezpośrednie, fizyczne połączenie omijające internet. Oba te rozwiązania pozwalają na komunikację po prywatnych adresach IP, co spełnia wymóg 'private company network'.
+Analiza poprawności:
+Aby uzyskać bezpieczną, prywatną łączność między środowiskiem on-premises (lokalną serwerownią) a zasobami w GCP, należy wykorzystać rozwiązania hybrydowe:
+1. Cloud VPN: Tworzy bezpieczny tunel IPsec przez publiczny internet. Jest to rozwiązanie szybkie i stosunkowo tanie, zapewniające prywatną komunikację.
+2. Cloud Interconnect: Zapewnia bezpośrednie, fizyczne połączenie (dedykowane lub partnera) omijające internet. Jest to rozwiązanie klasy enterprise, oferujące niższą latencję i większą stabilność przepustowości.
 
-Dlaczego inne są błędne:
-B. Shared VPC: Służy do współdzielenia sieci Wewnątrz chmury, nie łączy jej z lokalną serwerownią.
-D. VPC Peering: Łączy dwie sieci VPC wewnątrz GCP.
-E. Private Access: Pozwala maszynom GCP sięgać DO usług Google (np. GCS) bez publicznego IP, ale nie daje łączności DO lokalnej serwerowni klienta.
+Dlaczego pozostałe są błędne:
+B. Shared VPC: Służy wyłącznie do udostępniania sieci między projektami wewnątrz GCP. Nie oferuje łączności z zasobami zewnętrznymi.
+D. VPC Peering: Umożliwia połączenie dwóch sieci VPC wewnątrz Google Cloud. Nie służy do łączenia sieci chmurowych z lokalną serwerownią.
+E. Private Access: Pozwala instancjom GCP na dostęp do usług Google (np. Cloud Storage) bez publicznego IP, ale nie daje łączności do infrastruktury w prywatnej serwerowni klienta.
 
-Konsensus społeczności ExamTopics: 100% na AC. Standardowy duet rozwiązań dla chmury hybrydowej.</pre>
+Wskazówki egzaminacyjne:
+- "Hybrid Cloud": Jeśli w pytaniu pada on-premise + GCP, szukaj tylko dwóch opcji: VPN lub Interconnect.
+- "Stability/Performance": Jeśli pytanie sugeruje duże potrzeby wydajnościowe, wybierz Interconnect; jeśli szybkość wdrożenia – VPN.
+- Eliminacja: Wszystkie opcje sieciowe typu "VPC..." (Shared, Peering) odrzuć natychmiast – dotyczą one połączeń tylko wewnątrz GCP.
+
+Dokumentacja:
+<a href="https://cloud.google.com/network-connectivity/docs/how-to/choose-product" target="_blank">https://cloud.google.com/network-connectivity/docs/how-to/choose-product</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

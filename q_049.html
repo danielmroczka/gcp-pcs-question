@@ -88,24 +88,33 @@ A company wants to securely connect their on-premises data center to GCP with hi
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Poprawna odpowiedź: C (Dedicated Interconnect)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Dedicated Interconnect: Oferuje fizyczne, dedykowane łącze o przepustowościach 10 Gbps lub 100 Gbps. Jest to najbardziej wydajne i niezawodne rozwiązanie dla dużych przedsiębiorstw potrzebujących stałego, szerokiego pasma do chmury.
+Analiza poprawności:
+Dedicated Interconnect oferuje bezpośrednie, fizyczne połączenie (podłączone w punkcie styku Google - PoP) między siecią on-premises a siecią VPC w GCP. Jest to rozwiązanie klasy Enterprise, które zapewnia gwarantowaną przepustowość (np. 10 Gbps lub 100 Gbps na link) oraz wysoką niezawodność, ponieważ omija publiczny internet. Dla firmy wymagającej stabilnego pasma 10 Gbps+ jest to jedyne optymalne i wydajne rozwiązanie.
 
-Dlaczego inne są błędne:
-A. Cloud VPN: Przepustowość jednego tunelu to ok. 3 Gbps. Osiągnięcie stabilnych 10 Gbps+ wymagałoby wielu tuneli, co jest droższe i trudniejsze w zarządzaniu niż Interconnect.
-B. Carrier Peering: To połączenie dla dostępu do publicznych API Google (np. YouTube, Workspace), nie zapewnia ono prywatnego połączenia z siecią VPC dla Twoich maszyn VM.
-D. Partner Interconnect: Podobny do Dedicated, ale realizowany przez pośrednika (operatora). Zazwyczaj stosowany dla mniejszych przepustowości (poniżej 10 Gbps) lub gdy klient nie ma punktu styku z Google.
+Dlaczego pozostałe są błędne:
+A (Cloud VPN): VPN opiera się na publicznym internecie. Jego przepustowość jest ograniczona (jeden tunel to max 3 Gbps) i zależy od jakości łączy internetowych między lokalizacją a punktem styku GCP. Stabilne 10 Gbps w VPN jest praktycznie niemożliwe do utrzymania w środowisku produkcyjnym.
+B (Carrier Peering): Służy wyłącznie do uzyskania dostępu do usług Google dostępnych publicznie (np. YouTube, Workspace, czy publicznych API GCP). Nie zapewnia prywatnego połączenia z Twoją siecią VPC (wewnątrz której pracują Twoje maszyny VM).
+D (Partner Interconnect): Jest podobny do Dedicated, ale realizowany przez pośrednika. Choć jest to poprawne technicznie rozwiązanie hybrydowe, dla przepustowości 10 Gbps+ zazwyczaj stosuje się już bezpośrednie, dedykowane łącze (Dedicated Interconnect), aby uniknąć zależności od dostawców trzecich (partnerów).
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na C ze względu na wymóg '10 Gbps+'. Dedicated to najwyższa półka wydajności.</pre>
+Wskazówki egzaminacyjne:
+- "10 Gbps+" / "High throughput": Jeśli widzisz te liczby – od razu szukaj "Dedicated Interconnect".
+- "Prywatne połączenie" (VPC): VPN lub Interconnect.
+- "Publiczne usługi" (YouTube/API): Carrier Peering.
+- Eliminacja: Jeśli potrzebujesz prywatnej sieci (VPC) i dużej przepustowości (10 Gbps+) – nigdy nie wybieraj VPN ani Carrier Peering.
+
+Dokumentacja:
+<a href="https://cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview" target="_blank">https://cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Dedicated Interconnect wymaga fizycznej kolokacji sprzętu klienta w tym samym punkcie (PoP) co routery Google.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Warto pamiętać o fizycznej kolokacji. Dedicated Interconnect wymaga, abyś miał własny sprzęt sieciowy w tym samym "Carrier Hotel" (PoP), gdzie znajdują się urządzenia brzegowe Google. To duży nakład inwestycyjny, ale niezbędny dla najwyższej wydajności.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview" target="_blank">https://cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview</a></li>
@@ -113,12 +122,13 @@ Konsensus społeczności ExamTopics: Zdecydowana większość na C ze względu n
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +143,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

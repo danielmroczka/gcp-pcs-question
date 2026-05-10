@@ -88,24 +88,32 @@ You need to analyze VPC network traffic for anomalies without installing agents 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Poprawna odpowiedź: B (VPC Flow Logs)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. VPC Flow Logs: Rejestrują one metadane o wszystkich przepływach IP (źródło, cel, porty, liczba bajtów) bezpośrednio na poziomie sieci VPC. Nie wymagają one żadnego oprogramowania (agenta) wewnątrz systemu operacyjnego VM.
+Analiza poprawności:
+VPC Flow Logs rejestrują metadane o wszystkich przepływach IP (źródło, cel, porty, liczba bajtów, czy ruch był dozwolony czy zablokowany) bezpośrednio na poziomie infrastruktury sieciowej VPC. Zaletą tego rozwiązania jest to, że działa ono w sposób "agentless" – nie wymaga instalowania żadnego oprogramowania na instancjach VM, co jest kluczowe, gdy chcemy monitorować sieć bez wpływu na wydajność czy bezpieczeństwo systemów operacyjnych.
 
-Dlaczego inne są błędne:
-A. Stackdriver Logging: Może zawierać logi aplikacji, ale nie rejestruje automatycznie ruchu sieciowego na poziomie pakietów IP bez dodatkowej konfiguracji.
-C. Cloud Trace: Służy do analizy opóźnień w aplikacjach mikroserwisowych (profilowanie), a nie do monitoringu ruchu sieciowego.
-D. Packet Mirroring: Kopiuje pełne pakiety dla celów inspekcji (IDS/IPS). Jest bardziej skomplikowane i droższe w analizie niż Flow Logs, które zazwyczaj wystarczają do wykrywania anomalii (np. nagłych skoków transferu).
+Dlaczego pozostałe są błędne:
+A (Stackdriver Logging): Choć logi przepływu są przesyłane do Cloud Logging (dawniej Stackdriver), to samo Logging nie jest usługą generującą logi sieciowe. Bez włączonych Flow Logs, nie ma co logować.
+C (Cloud Trace): Służy do analizy opóźnień wewnątrz aplikacji (profilowanie wydajności mikroserwisów), a nie do monitoringu ruchu sieciowego.
+D (Packet Mirroring): Kopiuje pełną zawartość pakietów sieciowych (payload) dla zaawansowanej inspekcji (IDS/IPS). Jest to rozwiązanie znacznie droższe i bardziej skomplikowane niż Flow Logs, które w zupełności wystarczają do wykrywania anomalii (np. nagłych skoków transferu).
 
-Konsensus społeczności ExamTopics: Wyraźna przewaga opcji B jako najprostszej i 'agentless' metody monitoringu sieci.</pre>
+Wskazówki egzaminacyjne:
+- "Analyze VPC traffic" + "Without installing agents": To hasło-klucz dla "VPC Flow Logs".
+- "Anomalies": Flow Logs to najlepsze narzędzie do wykrywania anomalii typu "gdzieś nagle poszło dużo danych".
+- Eliminacja: Jeśli widzisz "Agentless" + "Network", nigdy nie zaznaczaj niczego innego niż Flow Logs.
+
+Dokumentacja:
+<a href="https://cloud.google.com/vpc/docs/using-flow-logs" target="_blank">https://cloud.google.com/vpc/docs/using-flow-logs</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Flow Logs są próbkowane, co pozwala na monitoring ogromnego ruchu przy minimalnym wpływie na wydajność sieci i koszty przechowywania logów.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Flow Logs są próbkowane (sampled), co pozwala na monitoring ogromnego ruchu przy minimalnym wpływie na wydajność sieci i kosztach przechowywania logów. To sprawia, że są one idealne do monitoringu ciągłego.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc/docs/using-flow-logs" target="_blank">https://cloud.google.com/vpc/docs/using-flow-logs</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: Wyraźna przewaga opcji B jako najprostszej
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

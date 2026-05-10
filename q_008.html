@@ -88,23 +88,31 @@ A customer implements Cloud Identity-Aware Proxy for their ERP system hosted on 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Poprawna odpowiedź: A (Make sure that the ERP system can validate the JWT assertion in the HTTP requests.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. JWT validation: IAP dołącza do każdego żądania nagłówek `x-goog-iap-jwt-assertion`. Jest to token podpisany przez Google. Weryfikacja tego podpisu przez aplikację ERP daje pewność, że żądanie nie zostało sfałszowane i rzeczywiście przeszło przez IAP, a nie zostało wysłane bezpośrednio do serwera (np. z wnętrza sieci).
+Analiza poprawności:
+Identity-Aware Proxy (IAP) dołącza do każdego żądania HTTP nagłówek `x-goog-iap-jwt-assertion`. Jest to token JWT (JSON Web Token) podpisany przez Google. Weryfikacja podpisu tego tokenu przez aplikację ERP (przy użyciu publicznych kluczy Google) daje pewność, że żądanie rzeczywiście przeszło przez IAP. Dzięki temu aplikacja nie musi ufać sieci i może odrzucić każde połączenie, które nie posiada poprawnego, zweryfikowanego podpisu Google, co chroni przed atakami typu "bypass" (połączenie bezpośrednie do serwera z pominięciem IAP).
 
-Dlaczego inne są błędne:
-B, D: Zwykłe nagłówki (np. `x-goog-authenticated-user-email`) mogą być łatwo sfałszowane przez każdego, kto uzyska dostęp do sieci wewnętrznej. Tylko kryptograficzny podpis JWT (A) gwarantuje autentyczność.
-C. x-forwarded-for: Zawiera tylko adres IP, który nie jest dowodem tożsamości w modelu Zero Trust.
+Dlaczego pozostałe są błędne:
+B, D: Nagłówki takie jak `x-goog-authenticated-user-email` czy inne identyfikatory użytkownika mogą być łatwo sfałszowane przez każdego, kto uzyska dostęp do sieci wewnętrznej (np. z innej maszyny w tym samym VPC). Sama obecność nagłówka nie jest dowodem autentyczności.
+C: Nagłówek `x-forwarded-for` informuje o adresie IP klienta pierwotnego, ale nie pełni funkcji zabezpieczającej ani weryfikującej, że żądanie przeszło przez bezpieczną bramę IAP.
 
-Konsensus społeczności ExamTopics: 100% na A. To 'najbezpieczniejsza' metoda implementacji IAP.</pre>
+Wskazówki egzaminacyjne:
+- Zero Trust: Zawsze wybieraj opcje, które zakładają, że sieć może być skompromitowana, a aplikacja musi sama weryfikować tożsamość żądania (podpis JWT).
+- JWT assertion: To słowo-klucz w pytaniach o bezpieczeństwo IAP.
+- Eliminacja: Jeśli widzisz "headers" w kontekście bezpieczeństwa IAP, zawsze szukaj słowa "signed" lub "JWT assertion".
+
+Dokumentacja:
+<a href="https://cloud.google.com/iap/docs/signed-headers-howto" target="_blank">https://cloud.google.com/iap/docs/signed-headers-howto</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Wielu deweloperów uważa, że wystarczy firewall blokujący wszystko poza IP Load Balancera. Jednak eksperci security na forach podkreślają, że w modelu 'Defense in Depth' aplikacja nigdy nie powinna ufać sieci. Weryfikacja JWT to jedyna metoda, która chroni przed atakami typu 'lateral movement' wewnątrz chmury.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Wielu deweloperów uważa, że wystarczy firewall blokujący wszystko poza IP Load Balancera. Jednak eksperci security na forach podkreślają, że w modelu "Defense in Depth" aplikacja nigdy nie powinna ufać sieci. Weryfikacja JWT to jedyna metoda, która chroni przed atakami typu "lateral movement" wewnątrz chmury.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/iap/docs/signed-headers-howto" target="_blank">https://cloud.google.com/iap/docs/signed-headers-howto</a></li>
@@ -112,12 +120,13 @@ Konsensus społeczności ExamTopics: 100% na A. To 'najbezpieczniejsza' metoda i
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -132,8 +141,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

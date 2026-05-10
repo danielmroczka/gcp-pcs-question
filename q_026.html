@@ -88,22 +88,30 @@ An organization is migrating to G Suite. The risk team wants to ensure that netw
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Poprawna odpowiedź: C (Network security is a built-in solution and Google's responsibility for SaaS products.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Built-in security for SaaS: G Suite (Google Workspace) to produkt typu Software-as-a-Service. W tym modelu dostawca (Google) w pełni odpowiada za bezpieczeństwo infrastruktury, w tym za warstwę sieciową i ochronę przed atakami DDoS. Klient nie ma możliwości (ani potrzeby) konfigurowania własnych firewalli wewnątrz G Suite.
+Analiza poprawności:
+Google Workspace (dawniej G Suite) to usługa typu Software-as-a-Service (SaaS). W tym modelu odpowiedzialności współdzielonej (Shared Responsibility Model), Google zarządza pełnym stosem technologicznym aplikacji: od fizycznych serwerów, przez system operacyjny, aż po warstwę sieciową i bezpieczeństwo infrastruktury (w tym ochronę przed DDoS). Klient (organizacja) ma ograniczony wpływ na konfigurację sieciową tych usług, ponieważ nie działają one wewnątrz Twojej prywatnej sieci VPC.
 
-Dlaczego inne są błędne:
-A, B, D: Wszystkie te opcje dotyczą produktów IaaS/PaaS (jak Compute Engine czy Load Balancery), gdzie budujesz własne sieci VPC. Nie mają one zastosowania do G Suite, który nie działa wewnątrz Twojej sieci VPC.
+Dlaczego pozostałe są błędne:
+A, B, D: Wszystkie te opcje (firewall, Cloud Armor, sieci VPC) dotyczą usług IaaS (Infrastructure as a Service - np. Compute Engine) lub PaaS (Platform as a Service - np. App Engine/GKE), gdzie klient ma bezpośrednią kontrolę nad konfiguracją sieciową (VPC) lub przynajmniej może ją w pewnym stopniu modyfikować. W SaaS te opcje są niedostępne lub nie mają zastosowania.
 
-Konsensus społeczności ExamTopics: Prawie 100% na C. To kluczowe pytanie sprawdzające zrozumienie modelu współdzielonej odpowiedzialności (Shared Responsibility Model).</pre>
+Wskazówki egzaminacyjne:
+- "SaaS" / "G Suite" / "Google Workspace": Jeśli pytanie dotyczy tych produktów – szukaj opcji mówiącej, że to odpowiedzialność Google.
+- "Shared Responsibility Model": Pamiętaj, że w SaaS Twoja rola kończy się na zarządzaniu tożsamością (kto ma dostęp) i ochronie danych (co użytkownicy robią z danymi), a nie na konfiguracji sieci.
+- Eliminacja: Jeśli opcje dotyczą sieci (firewall, VPC, Armor) – prawdopodobnie są błędne dla usług SaaS.
+
+Dokumentacja:
+<a href="https://cloud.google.com/security/shared-responsibility-model" target="_blank">https://cloud.google.com/security/shared-responsibility-model</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> W SaaS Twoja odpowiedzialność kończy się na zarządzaniu tożsamością (kto ma dostęp) i ochronie samych danych. Sieć jest 'pod maską' i zarządza nią dostawca.</p>
+<p><b>Analiza spornych kwestii (AI):</b> W modelu SaaS sieć jest "pod maską" i zarządza nią wyłącznie dostawca. To częsty błąd egzaminacyjny – kandydaci próbują przenosić wiedzę o IaaS (VPC/Firewalls) na SaaS (Workspace), co jest technicznie niemożliwe.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/security/shared-responsibility-model" target="_blank">https://cloud.google.com/security/shared-responsibility-model</a></li>
@@ -111,12 +119,13 @@ Konsensus społeczności ExamTopics: Prawie 100% na C. To kluczowe pytanie spraw
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -131,8 +140,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

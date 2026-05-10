@@ -88,24 +88,32 @@ You need to store secrets that are automatically rotated every 30 days. Which se
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Poprawna odpowiedź: B (Secret Manager)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Secret Manager: To dedykowana usługa GCP do zarządzania sekretami (hasła, klucze API). Posiada ona natywną funkcję rotacji, która potrafi automatycznie wywołać funkcję Cloud Function co X dni w celu wygenerowania nowego hasła i aktualizacji np. w bazie danych.
+Analiza poprawności:
+Secret Manager to dedykowana usługa GCP służąca do bezpiecznego przechowywania sekretów (hasła, klucze API, certyfikaty). Posiada ona wbudowaną, natywną funkcjonalność "automatycznej rotacji" (Secret Rotation). Administrator może skonfigurować harmonogram (np. co 30 dni) i powiązać go z funkcją Cloud Function, która automatycznie wygeneruje nowe hasło (np. w bazie danych), zaktualizuje je w Secret Managerze i zaktualizuje aplikację. Jest to rozwiązanie klasy Enterprise, które w pełni automatyzuje proces rotacji.
 
-Dlaczego inne są błędne:
-A. Cloud KMS: Służy do zarządzania kluczami SZYFRUJĄCYMI (KEK). Można nim rotować klucze, ale nie służy do przechowywania i rotowania haseł tekstowych czy kluczy API aplikacji.
-C. Metadata: Dane tam zapisane są jawne (nieszyfrowane) dla każdego, kto ma dostęp do VM. Nie wspiera rotacji.
-D. Cloud SQL: To baza danych. Możesz tam trzymać hasła, ale musisz sam napisać całą logikę ich bezpiecznego pobierania i rotowania.
+Dlaczego pozostałe są błędne:
+A (Cloud KMS): KMS służy do zarządzania *kluczami szyfrującymi* (KEK/DEK), a nie do przechowywania haseł tekstowych czy kluczy API aplikacji. Rotacja kluczy KMS to proces kryptograficzny, a nie rotacja hasła w aplikacji.
+C (Compute Engine Metadata): Metadane instancji są jawne (nieszyfrowane) dla wszystkich użytkowników z dostępem do maszyny wirtualnej. Nie oferują żadnego mechanizmu automatycznej rotacji.
+D (Cloud SQL): To baza danych. Możesz w niej trzymać hasła (np. w tabeli), ale sam musiałbyś zaprogramować całą logikę ich bezpiecznego pobierania, rotowania i aktualizacji. Nie jest to usługa do *zarządzania* sekretami.
 
-Konsensus społeczności ExamTopics: 100% na B. Secret Manager to właściwe miejsce na sekrety aplikacji.</pre>
+Wskazówki egzaminacyjne:
+- "Secrets" + "Automatically rotated": Zawsze wybieraj "Secret Manager".
+- "Store": Jeśli pytanie dotyczy przechowywania hasła, API key lub certyfikatu – tylko Secret Manager.
+- Eliminacja: Jeśli pytanie pyta o hasła/klucze API, nigdy nie wybieraj KMS (KMS jest do szyfrowania danych, nie do przechowywania haseł).
+
+Dokumentacja:
+<a href="https://cloud.google.com/secret-manager/docs/rotating-secrets" target="_blank">https://cloud.google.com/secret-manager/docs/rotating-secrets</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Secret Manager jest wersjonowany. Aplikacja może zawsze prosić o wersję 'latest', co sprawia, że rotacja jest przezroczysta dla kodu aplikacji.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Secret Manager jest wersjonowany. Aplikacja zawsze prosi o wersję "latest", co sprawia, że po rotacji hasła w Secret Managerze aplikacja automatycznie, przy następnym pobraniu, otrzyma nową wartość – rotacja jest więc dla kodu aplikacji przezroczysta.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/secret-manager/docs/rotating-secrets" target="_blank">https://cloud.google.com/secret-manager/docs/rotating-secrets</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: 100% na B. Secret Manager to właściwe mie
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

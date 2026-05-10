@@ -88,23 +88,31 @@ Your team sets up a Shared VPC. They need to enable Engineering Group A to attac
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Poprawna odpowiedź: B (Compute Network User at the subnet level.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Compute Network User at the subnet level: Nadanie roli Network User bezpośrednio na zasobie podsieci (a nie na całym projekcie) precyzyjnie ogranicza uprawnienia inżynierów. Będą oni widzieć i mogli używać tylko tej jednej, konkretnej podsieci.
+Analiza poprawności:
+Shared VPC to usługa pozwalająca na centralizację zarządzania siecią. W tym modelu "Właściciel Sieci" (Host Project) udostępnia podsieci projektom "Usługowym" (Service Projects). Aby inżynier mógł użyć konkretnej podsieci, musisz przyznać mu rolę `Compute Network User` (użytkownik sieci). Najważniejszą praktyką bezpieczeństwa (zasada najmniejszych uprawnień) jest nadanie tej roli **bezpośrednio na poziomie konkretnej podsieci**, a nie na poziomie całego projektu hosta. Dzięki temu inżynierowie z grupy A mają dostęp tylko do tej jednej, konkretnej podsieci, o którą prosił zespół.
 
-Dlaczego inne są błędne:
-A. Host project level: Nadanie roli na poziomie całego projektu pozwoliłoby inżynierom używać KAŻDEJ podsieci w tym projekcie hosta, co narusza zasadę najniższych uprawnień.
-C, D. Shared VPC Admin: To rola o bardzo wysokich uprawnieniach, pozwalająca na konfigurowanie całej architektury Shared VPC, a nie tylko na 'używanie' sieci do tworzenia VM.
+Dlaczego pozostałe są błędne:
+A (Host project level): Nadanie tej roli na poziomie projektu (hosta) dałoby inżynierom uprawnienia do używania WSZYSTKICH podsieci w tym projekcie. Jest to naruszenie zasady najmniejszych uprawnień (Least Privilege).
+C, D (Compute Shared VPC Admin): To rola o znacznie szerszych uprawnieniach – pozwala ona na *administrowanie* całą infrastrukturą Shared VPC (tworzenie/usuwanie podsieci, zarządzanie trasami), a nie tylko na "używanie" podsieci do przyłączenia maszyny.
 
-Konsensus społeczności ExamTopics: Silne poparcie dla B. Jest to klasyczny przykład granularności IAM w GCP.</pre>
+Wskazówki egzaminacyjne:
+- "Only the... subnet": Jeśli pytanie mówi o "tylko jednej" podsieci, zawsze szukaj odpowiedzi z "subnet level".
+- "Shared VPC" + "IAM": Zawsze szukaj "Compute Network User". Jeśli widzisz "Admin" – zazwyczaj jest to zbyt szerokie uprawnienie.
+- Eliminacja: Odrzucaj "Host project level" w pytaniach wymagających precyzyjnego ograniczenia dostępu do zasobu.
+
+Dokumentacja:
+<a href="https://cloud.google.com/vpc/docs/shared-vpc#iam_in_shared_vpc" target="_blank">https://cloud.google.com/vpc/docs/shared-vpc#iam_in_shared_vpc</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> W Shared VPC projekt hosta 'wypożycza' podsieci projektom usługowym. Zarządzanie tym 'wypożyczaniem' na poziomie pojedynczych podsieci to najlepsza praktyka bezpieczeństwa sieciowego.</p>
+<p><b>Analiza spornych kwestii (AI):</b> W Shared VPC projekt hosta "wypożycza" podsieci projektom usługowym. Zarządzanie tym "wypożyczaniem" na poziomie pojedynczych podsieci to absolutna podstawa zarządzania dostępem (Access Management) w GCP.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc/docs/shared-vpc#iam_in_shared_vpc" target="_blank">https://cloud.google.com/vpc/docs/shared-vpc#iam_in_shared_vpc</a></li>
@@ -112,12 +120,13 @@ Konsensus społeczności ExamTopics: Silne poparcie dla B. Jest to klasyczny prz
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -132,8 +141,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

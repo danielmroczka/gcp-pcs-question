@@ -88,24 +88,32 @@ A user needs to view the configuration of a VPC network but should not be able t
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Poprawna odpowiedź: B (Compute Network Viewer)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Compute Network Viewer: Rola ta (`roles/compute.networkViewer`) jest precyzyjnie dopasowana do wymogu. Pozwala na podgląd wszystkich zasobów sieciowych (VPC, firewall, trasy), ale nie daje dostępu do podglądu samych maszyn wirtualnych ani żadnych uprawnień edycji.
+Analiza poprawności:
+Rola `roles/compute.networkViewer` (`Compute Network Viewer`) jest precyzyjnie dopasowana do wymagań audytowych. Użytkownik z tą rolą może przeglądać (podglądać) wszystkie zasoby sieciowe w projekcie (takie jak VPC, Firewall Rules, trasy statyczne), ale nie ma absolutnie żadnych uprawnień do wprowadzania w nich jakichkolwiek zmian (brak uprawnień `compute.networks.update`, `compute.firewalls.delete` itp.). Spełnia to zasadę najniższych uprawnień (Least Privilege) – użytkownik widzi stan infrastruktury, ale nie może go zepsuć.
 
-Dlaczego inne są błędne:
-A. Compute Network Admin: Pozwala na modyfikację sieci - naruszenie wymogu 'should not be able to change'.
-C. Compute Viewer: Pozwala na podgląd zasobów obliczeniowych (VM), co jest zbyt szerokim uprawnieniem, jeśli użytkownik potrzebuje tylko wglądu w sieć.
-D. Project Viewer: Daje dostęp do podglądu WSZYSTKICH usług w projekcie (SQL, Storage itp.) - naruszenie zasady najniższych uprawnień.
+Dlaczego pozostałe są błędne:
+A (Compute Network Admin): Daje pełną władzę nad siecią: możliwość tworzenia, edycji i usuwania reguł firewall, tras i VPC. Jest to sprzeczne z wymogiem "should not be able to change anything".
+C (Compute Viewer): Daje dostęp do podglądu zasobów obliczeniowych (VM, Instance Templates, dyski). To uprawnienie jest szersze niż potrzeba i niepotrzebnie pokazuje inżynierowi listę maszyn wirtualnych, co narusza zasadę najniższych uprawnień.
+D (Project Viewer): To rola o najwyższym poziomie uprawnień do przeglądania wewnątrz całego projektu (SQL, Storage, IAM, logi). Daje wgląd w dane, do których inżynier sieci nie powinien mieć dostępu.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na B jako najbardziej granularną rolę dla administratora sieci bez uprawnień edycji.</pre>
+Wskazówki egzaminacyjne:
+- "Manage" + "Config" + "Cannot change": Szukaj roli "*Viewer" (w tym przypadku Network Viewer).
+- "Specific service" / "Granular": Jeśli pytanie prosi o rolę do konkretnej usługi (sieć), wybieraj role dedykowane (Compute Network Viewer), a nie ogólne (Project Viewer).
+- Eliminacja: Zawsze odrzucaj role "Admin" jeśli wymagane jest tylko "przeglądanie".
+
+Dokumentacja:
+<a href="https://cloud.google.com/compute/docs/access/iam#compute.networkViewer" target="_blank">https://cloud.google.com/compute/docs/access/iam#compute.networkViewer</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Wybieranie ról specyficznych dla usługi (np. Network Viewer) zamiast ogólnych (Project Viewer) to kluczowy element zdania egzaminu Professional Security Engineer.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Wybieranie ról specyficznych dla usługi (np. Network Viewer) zamiast ogólnych (Project Viewer) to kluczowy element zdania egzaminu Professional Security Engineer. Zawsze szukaj najbardziej granularnej (najwęższej) roli, która spełnia wymagania biznesowe.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/compute/docs/access/iam#compute.networkViewer" target="_blank">https://cloud.google.com/compute/docs/access/iam#compute.networkViewer</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: Zdecydowana większość na B jako najbardz
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

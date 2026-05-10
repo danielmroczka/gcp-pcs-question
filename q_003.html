@@ -88,17 +88,25 @@ A customer needs an alternative to storing their plain text secrets in their sou
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Poprawna odpowiedź: B (Encrypt the secrets with a Customer-Managed Encryption Key (CMEK), and store them in Cloud Storage.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Encrypt + GCS: Zaszyfrowanie sekretów kluczem KMS (CMEK) i przechowywanie ich jako zaszyfrowane obiekty w Cloud Storage to sprawdzony wzorzec bezpieczeństwa. Chroni sekrety przed odczytem nawet w przypadku uzyskania dostępu do systemu storage.
+Analiza poprawności:
+W kontekście starszych pytań egzaminacyjnych, użycie Customer-Managed Encryption Key (CMEK) w połączeniu z Cloud Storage było uznawane za najlepszą dostępną praktykę do przechowywania sekretów poza kodem źródłowym. Szyfrowanie kluczem zarządzanym przez klienta zapewnia kontrolę nad dostępem i bezpieczeństwem danych, nawet jeśli dostęp do bucketa GCS zostanie uzyskany przez niepowołane osoby.
 
-Dlaczego inne są błędne:
-A. Cloud SQL: Przechowywanie haseł w bazie danych bez dodatkowego szyfrowania aplikacyjnego to tylko przeniesienie problemu z jednego miejsca w drugie.
-C. DLP API: DLP służy do wykrywania wycieków (identyfikacji), a nie do bezpiecznego cyklu życia sekretów.
-D. VM settings: Nie ma żadnego związku z bezpieczeństwem materiału sekretu w kodzie.
+Dlaczego pozostałe są błędne:
+A. Cloud Source Repositories + Cloud SQL: Przechowywanie haseł w bazie danych bez dodatkowych zabezpieczeń (jak aplikacyjne szyfrowanie) nie rozwiązuje problemu bezpieczeństwa – jedynie przenosi sekrety z systemu SCM do bazy danych.
+C. Cloud Data Loss Prevention (DLP) API: To narzędzie służy do identyfikacji i maskowania wrażliwych danych w już istniejących zbiorach. Nie jest przeznaczone do zarządzania cyklem życia sekretów.
+D. SCM na Compute Engine z lokalnym SSD: To podejście czysto infrastrukturalne, które w żaden sposób nie adresuje problemu bezpiecznego przechowywania sekretów (hasła nadal byłyby w plikach konfiguracyjnych wewnątrz SCM).
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na B. Pojawia się jednak dyskusja, że w nowszych wersjach egzaminu właściwą odpowiedzią byłby Secret Manager.</pre>
+Wskazówki egzaminacyjne:
+- "Secret Manager": Jeśli w pytaniu pojawia się nowsza usługa GCP (jak Secret Manager), zawsze wybieraj ją jako rozwiązanie dedykowane.
+- "Best practice (historyczne)": Jeśli pytanie jest stare i nie ma opcji Secret Manager, szukaj wzorca: Szyfrowanie (CMEK/KMS) + Izolacja w bezpiecznym storage'u (Cloud Storage).
+- Eliminacja: Odpowiedzi sugerujące bazy danych (Cloud SQL) bez wspomnienia o szyfrowaniu zazwyczaj są błędne.
+
+Dokumentacja:
+<a href="https://cloud.google.com/kms/docs/cmek" target="_blank">https://cloud.google.com/kms/docs/cmek</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

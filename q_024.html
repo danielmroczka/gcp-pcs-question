@@ -88,36 +88,50 @@ A company's application is deployed with a user-managed Service Account key. You
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Poprawna odpowiedź: C (Create a new key, update the application, and delete the old key.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Manual rotation process: Google nie oferuje automatycznej rotacji dla kluczy POBRANYCH (JSON keys). Zalecany proces to: 1. Stworzenie nowego klucza. 2. Wdrożenie go do aplikacji. 3. Upewnienie się, że aplikacja działa. 4. Skasowanie starego klucza.
+Analiza poprawności:
+Google Cloud nie oferuje automatycznej rotacji dla kluczy serwisowych (Service Account Keys) w formacie JSON, które zostały pobrane przez użytkownika ("user-managed"). Bezpieczna procedura rotacji, zgodna z najlepszymi praktykami, to:
+1. Utwórz nowy klucz (z nowym identyfikatorem).
+2. Wdróż aplikację z nowym kluczem.
+3. Upewnij się, że aplikacja poprawnie uwierzytelnia się nowym kluczem.
+4. Usuń stary klucz.
+Taka procedura gwarantuje brak przestojów w działaniu aplikacji.
 
-Dlaczego inne są błędne:
-A, B. Komendy enable-auto-rotate lub keys rotate nie istnieją w gcloud dla kluczy zarządzanych przez użytkownika. Google automatycznie rotuje tylko klucze, których NIE pobierasz (system-managed keys).
-D. Backup: Przechowywanie starych kluczy po rotacji jest niebezpieczne i sprzeczne z celem rotacji (zmniejszenie ryzyka przy wycieku).
+Dlaczego pozostałe są błędne:
+A, B (Auto-rotate): Takie komendy nie istnieją w `gcloud` dla kluczy typu "user-managed". Google automatyzuje rotację wyłącznie dla kluczy zarządzanych przez system (system-managed keys), do których użytkownik nie ma bezpośredniego dostępu.
+D (Store old key): Przechowywanie starych kluczy "na wszelki wypadek" jest poważnym naruszeniem bezpieczeństwa. Rotacja ma na celu unieważnienie starych kluczy, aby ograniczyć skutki ich ewentualnego wycieku w przeszłości.
 
-Konsensus społeczności ExamTopics: 100% na C. To standardowa procedura operacyjna dla kluczy SA.</pre>
+Wskazówki egzaminacyjne:
+- "User-managed key" + "Rotate": Szukaj procedury ręcznej (utwórz nowy -> usuń stary).
+- "Automatically rotate": Jeśli w pytaniu o klucze SA widzisz "auto-rotate", to prawie zawsze jest to dystraktor.
+- Eliminacja: Zawsze usuwaj stare klucze po rotacji.
+
+Dokumentacja:
+<a href="https://cloud.google.com/iam/docs/creating-managing-service-account-keys#rotating" target="_blank">https://cloud.google.com/iam/docs/creating-managing-service-account-keys#rotating</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Najlepszą praktyką jest całkowite odejście od kluczy JSON na rzecz tożsamości instancji lub Workload Identity Federation, co eliminuje potrzebę manualnej rotacji.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Najlepszą praktyką jest całkowite odejście od kluczy JSON (Service Account Keys) na rzecz tożsamości instancji (dla VM/GKE) lub Workload Identity Federation (dla innych usług), co całkowicie eliminuje potrzebę manualnej rotacji.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/iam/docs/key-rotation" target="_blank">https://cloud.google.com/iam/docs/key-rotation</a></li>
+<li><a href="https://cloud.google.com/iam/docs/creating-managing-service-account-keys#rotating" target="_blank">https://cloud.google.com/iam/docs/creating-managing-service-account-keys#rotating</a></li>
 </ul>
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -132,8 +146,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

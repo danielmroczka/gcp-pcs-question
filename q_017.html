@@ -88,24 +88,32 @@ An employer wants to track how bonus compensations have changed over time to ide
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Poprawna odpowiedź: D (CryptoReplaceFfxFpeConfig)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. CryptoReplaceFfxFpeConfig: Jest to technika szyfrowania zachowującego format (FPE - Format-Preserving Encryption). Pozwala ona na transformację danych (np. kwot) w taki sposób, że zachowują one swój kształt, są odwracalne (przy posiadaniu klucza) i co najważniejsze - zachowują relacje między danymi, co pozwala na identyfikację 'outlierów'.
+Analiza poprawności:
+Technika ta wykorzystuje "Szyfrowanie Zachowujące Format" (Format-Preserving Encryption - FPE). Jest ona idealna w scenariuszach, gdzie musimy zanonimizować dane (np. numery kart kredytowych, kwoty bonusów), ale nadal potrzebujemy zachować ich pierwotny "kształt" i relacje, aby umożliwić analitykom identyfikację anomalii (outliers). Kluczową cechą FPE jest jej odwracalność – przy posiadaniu odpowiedniego klucza szyfrującego, możemy w każdej chwili przywrócić oryginalną wartość, aby zidentyfikować konkretnego pracownika po wykryciu przez analityka, że "ta konkretna kwota jest anomalna".
 
-Dlaczego inne są błędne:
-A. Generalization: Zastępuje dane zakresami (np. 5000-6000). Jest nieodwracalna w sposób precyzyjny.
-B. Redaction: Usuwa dane całkowicie (np. czarny pasek na kwocie). Uniemożliwia jakąkolwiek analizę.
-C. CryptoHashConfig: Haszowanie jest procesem jednokierunkowym (nieodwracalnym), co uniemożliwia późniejszą identyfikację pracownika po znalezieniu anomalii.
+Dlaczego pozostałe są błędne:
+A (Generalization): Zastępuje dane bardziej ogólnymi wartościami (np. wiek 35 -> "30-40"). Utrudnia to precyzyjną analizę anomalii, gdyż dane tracą swoją szczegółowość.
+B (Redaction): Całkowicie usuwa dane (np. zamienia na "***"). Uniemożliwia jakąkolwiek analizę statystyczną czy identyfikację anomalii.
+C (CryptoHashConfig): Haszowanie jest funkcją jednokierunkową. Po przekształceniu danych w hasz nie da się wrócić do oryginalnej wartości (nieodwracalne), więc nie można zidentyfikować pracownika, który otrzymał anomalityczny bonus.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na D. FPE to jedyna metoda spełniająca wymóg odwracalności i użyteczności danych jednocześnie.</pre>
+Wskazówki egzaminacyjne:
+- "Reversible" (odwracalne) + "Analyze": To zawsze wskazuje na techniki szyfrowania, a nie maskowania/haszowania.
+- "Format-Preserving": Jeśli w pytaniu o DLP API widzisz to hasło – szukaj "CryptoReplaceFfxFpeConfig".
+- Eliminacja: Haszowanie (Hash) = nieodwracalne. Redakcja (Redaction) = nieużyteczne.
+
+Dokumentacja:
+<a href="https://cloud.google.com/dlp/docs/concepts-pseudonymization" target="_blank">https://cloud.google.com/dlp/docs/concepts-pseudonymization</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> FPE jest idealne dla baz danych, ponieważ zaszyfrowana wartość może pasować do tego samego typu danych co oryginał (np. zaszyfrowany numer PESEL nadal wygląda jak PESEL), co nie psuje schematów tabel.</p>
+<p><b>Analiza spornych kwestii (AI):</b> FPE jest wysoce cenione w branżach finansowych i medycznych, ponieważ zaszyfrowana wartość może pasować do tego samego schematu bazy danych co oryginał (np. zaszyfrowany numer PESEL nadal wygląda jak PESEL), co pozwala na działanie istniejących aplikacji analitycznych bez ich przebudowywania.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/dlp/docs/concepts-pseudonymization" target="_blank">https://cloud.google.com/dlp/docs/concepts-pseudonymization</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: Zdecydowana większość na D. FPE to jedyn
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

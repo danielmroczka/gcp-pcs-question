@@ -88,24 +88,32 @@ How can you restrict access to a specific Cloud Storage bucket so that only user
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Poprawna odpowiedź: C (VPC Service Controls with Access Levels)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. VPC Service Controls (VPC SC): Pozwala na stworzenie perymetru wokół usług API Google (np. Cloud Storage API). W połączeniu z Access Levels (zdefiniowanymi w Access Context Manager) można zablokować dostęp do API każdemu, kto nie łączy się z konkretnego zakresu adresów IP (Twój corporate network).
+Analiza poprawności:
+VPC Service Controls (VPC SC) to zaawansowana usługa bezpieczeństwa Google Cloud, która pozwala na tworzenie "perymetrów bezpieczeństwa" wokół usług Google, takich jak Cloud Storage. W połączeniu z Access Context Manager (gdzie definiujesz "Access Levels"), możesz stworzyć regułę: "Dostęp do tego API jest dozwolony tylko, jeśli żądanie pochodzi z zakresu IP mojej sieci korporacyjnej". Jest to najskuteczniejszy sposób na walkę z kradzieżą danych (data exfiltration), ponieważ nawet jeśli ktoś ukradnie poprawne klucze administratora, nie pobierze danych spoza Twojego biura.
 
-Dlaczego inne są błędne:
-A. Cloud IAM: Zarządza TOŻSAMOŚCIĄ (kto), ale nie potrafi natywnie odciąć dostępu dla uprawnionego użytkownika logującego się z publicznego internetu zamiast z biura.
-B. Bucket ACLs: Podobnie jak IAM, zarządzają tożsamością, nie mają pojęcia o lokalizacji sieciowej użytkownika.
-D. Firewall rules: Chronią maszyny VM, ale nie chronią publicznego API Cloud Storage (storage.googleapis.com), które znajduje się poza Twoją siecią VPC.
+Dlaczego pozostałe są błędne:
+A (Cloud IAM): IAM weryfikuje *tożsamość* (kto?), a nie *lokalizację* (skąd?). Nawet uprawniony administrator nie powinien mieć dostępu z dowolnego miejsca w internecie, jeśli polityka firmy tego zabrania.
+B (Bucket ACLs): ACL-e (Access Control Lists) to tradycyjna metoda kontroli dostępu do bucketów (kto ma dostęp do pliku). Podobnie jak IAM, nie sprawdzają adresu IP źródła żądania.
+D (Firewall rules): Reguły firewall działają tylko na poziomie sieci VPC (np. ruch do/z maszyn VM w Twojej sieci). API Cloud Storage znajduje się poza Twoją siecią VPC (w sieci Google), więc reguły firewall VPC nie mają na nie wpływu.
 
-Konsensus społeczności ExamTopics: Prawie 100% na C. To jedyna metoda na 'obwód bezpieczeństwa' dla usług zarządzanych (PaaS/SaaS) w GCP.</pre>
+Wskazówki egzaminacyjne:
+- "Restrict access to a specific Cloud Storage bucket" + "Only from corporate network": Zawsze szukaj "VPC Service Controls" (VPC SC).
+- "Data Exfiltration": Jeśli pytanie wspomina o zapobieganiu kradzieży danych – VPC SC to najlepsze narzędzie.
+- Eliminacja: Odrzucaj IAM i ACL, bo nie sprawdzają one lokalizacji użytkownika (IP).
+
+Dokumentacja:
+<a href="https://cloud.google.com/vpc-service-controls/docs/access-level-usage" target="_blank">https://cloud.google.com/vpc-service-controls/docs/access-level-usage</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> VPC Service Controls to jedyny sposób na walkę z kradzieżą danych (data exfiltration). Nawet jeśli ktoś ukradnie klucze administratora, nie pobierze danych spoza biura, jeśli perymetr na to nie pozwala.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Wiele osób myli IAP (Identity-Aware Proxy) z VPC SC. IAP służy do kontroli dostępu do *Twoich* aplikacji (np. webowych na App Engine), natomiast VPC SC służy do ochrony *usług Google* (jak Cloud Storage API), z których korzystasz w swoim projekcie.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc-service-controls/docs/access-level-usage" target="_blank">https://cloud.google.com/vpc-service-controls/docs/access-level-usage</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: Prawie 100% na C. To jedyna metoda na 'obw�
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

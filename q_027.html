@@ -88,24 +88,35 @@ Your team wants visibility into all projects and wants to organize projects base
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Poprawna odpowiedź: A (Create an organization node, and assign folders for each business unit.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Folders under Organization Node: Hierarchia GCP (Organizacja -> Foldery -> Projekty) to jedyny sposób na strukturalne uporządkowanie zasobów. Foldery pozwalają na grupowanie projektów wg jednostek biznesowych i delegowanie uprawnień IAM na poziomie tych grup.
+Analiza poprawności:
+Hierarchia zasobów Google Cloud (Organizacja -> Foldery -> Projekty -> Zasoby) jest zaprojektowana tak, aby odzwierciedlać strukturę firmy.
+- Organization Node: Reprezentuje firmę i jest najwyższym poziomem hierarchii.
+- Foldery: Służą do grupowania projektów (np. wg jednostek biznesowych "Marketing", "HR", "IT"). Umożliwiają delegowanie polityk bezpieczeństwa (Organization Policies) i uprawnień (IAM) na całe grupy projektów naraz.
+Jest to jedyny poprawny sposób na zachowanie ładu i centralnej kontroli (Governance) w dużej organizacji.
 
-Dlaczego inne są błędne:
-B. gmail.com accounts: Konta prywatne są niezarządzalne w firmie i stanowią ogromne ryzyko bezpieczeństwa (brak centralnej kontroli).
-C. Labels: Etykiety są przydatne do filtrowania kosztów (billing), ale nie dają struktury hierarchicznej ani nie pozwalają na dziedziczenie uprawnień IAM.
-D. VPC: Sieć VPC to element techniczny, nie służy do organizacji projektów ani zarządzania widocznością uprawnień w skali firmy.
+Dlaczego pozostałe są błędne:
+B (gmail.com accounts): Konta prywatne są niezarządzalne w firmie. Prowadzi to do całkowitej utraty kontroli (brak centralnego nadzoru, brak możliwości wymuszenia MFA, brak logów audytowych).
+C (Labels): Etykiety służą do "metadanych" (np. do grupowania kosztów w raporcie billingowym), ale nie mają żadnej mocy w IAM (nie dziedziczą uprawnień) ani w strukturze organizacyjnej (nie grupuje projektów w foldery).
+D (VPC): Sieć VPC jest zasobem technicznym wewnątrz projektu. Budowanie sieci nie organizuje struktury projektów ani nie poprawia widoczności (Governance).
 
-Konsensus społeczności ExamTopics: Zdecydowane A. Foldery to fundament ładu (governance) w Google Cloud.</pre>
+Wskazówki egzaminacyjne:
+- "Organize projects": Szukaj w odpowiedzi słowa "Folders".
+- "Business units": Jeśli masz wiele jednostek biznesowych, zawsze grupuj je w osobne foldery wewnątrz organizacji.
+- Eliminacja: Zawsze odrzucaj konta prywatne (gmail.com) w pytaniach o Enterprise Governance.
+
+Dokumentacja:
+<a href="https://cloud.google.com/resource-manager/docs/creating-managing-folders" target="_blank">https://cloud.google.com/resource-manager/docs/creating-managing-folders</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Posiadanie 'Organization Node' jest warunkiem koniecznym do używania folderów. Bez niego każdy projekt jest 'samotną wyspą' bez centralnego nadzoru.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Posiadanie 'Organization Node' jest warunkiem koniecznym do używania folderów. Bez niego każdy projekt jest 'samotną wyspą' bez centralnego nadzoru, co w dużych firmach jest niedopuszczalne ze względów bezpieczeństwa i compliance.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/resource-manager/docs/creating-managing-folders" target="_blank">https://cloud.google.com/resource-manager/docs/creating-managing-folders</a></li>
@@ -113,12 +124,13 @@ Konsensus społeczności ExamTopics: Zdecydowane A. Foldery to fundament ładu (
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +145,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

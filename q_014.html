@@ -88,24 +88,32 @@ A business unit at a multinational corporation signs up for GCP and starts movin
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Poprawna odpowiedź: A (Organization Administrator)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Organization Administrator: Jest to najwyższa rola w hierarchii GCP. Daje ona pełną kontrolę nad wszystkimi zasobami w organizacji, w tym możliwość nadawania uprawnień IAM innym użytkownikom i audytowania dowolnego projektu.
+Analiza poprawności:
+Rola "Organization Administrator" jest najwyższą rolą w hierarchii Google Cloud (zaraz po Super Administratorze w Cloud Identity/Workspace). Osoba posiadająca tę rolę ma pełną kontrolę nad wszystkimi zasobami w ramach organizacji. Obejmuje to prawo do nadawania i odbierania uprawnień IAM w dowolnym projekcie, zarządzania politykami bezpieczeństwa (Organization Policies), przeglądania logów audytowych oraz zarządzania strukturą folderów i projektów. Jest to jedyna rola, która daje pełną władzę nad "zarządzaniem" i "audytowaniem" domeny w żądanym zakresie.
 
-Dlaczego inne są błędne:
-B. Security Reviewer: Pozwala na podgląd polityk bezpieczeństwa i logów, ale nie pozwala na ich modyfikację (zarządzanie uprawnieniami).
-C. Organization Role Administrator: Pozwala na tworzenie ról niestandardowych, ale nie daje wglądu we wszystkie projekty ani zarządzania dostępem globalnym.
-D. Organization Policy Administrator: Pozwala na ustawianie restrykcji (constraints) na poziomie organizacji, ale nie służy do zarządzania uprawnieniami IAM użytkowników.
+Dlaczego pozostałe są błędne:
+B (Security Reviewer): Pozwala jedynie na przeglądanie konfiguracji bezpieczeństwa i logów, ale nie daje uprawnień do zmiany polityk czy nadawania dostępów (brak prawa do "zarządzania").
+C (Organization Role Administrator): Ta rola ogranicza się wyłącznie do zarządzania rolami niestandardowymi (custom roles). Nie daje wglądu w projekty ani prawa do zarządzania dostępem użytkowników do tych projektów.
+D (Organization Policy Administrator): Pozwala na definiowanie ograniczeń (np. "zabroń tworzenia publicznych bucketów"), ale nie służy do zarządzania uprawnieniami IAM użytkowników czy audytowania zasobów w projektach.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na A. Aby przejąć pełną kontrolę ('take over managing'), niezbędna jest rola Admina Organizacji.</pre>
+Wskazówki egzaminacyjne:
+- "Take over managing": Szukaj roli "Administrator".
+- "Auditing": Często mylnie wskazuje się Security Reviewer, ale on nie pozwala na "zarządzanie" (tylko podgląd). Jeśli musisz zarówno zarządzać, jak i audytować – potrzebujesz Administratora Organizacji.
+- Hierarchia: Pamiętaj, że Admin Organizacji "dziedziczy" uprawnienia w dół do wszystkich folderów i projektów.
+
+Dokumentacja:
+<a href="https://cloud.google.com/resource-manager/docs/access-control-org" target="_blank">https://cloud.google.com/resource-manager/docs/access-control-org</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Rola ta powinna być nadawana z dużą ostrożnością. Zazwyczaj zaleca się posiadanie co najmniej dwóch kont z tą rolą, zabezpieczonych sprzętowym kluczem MFA.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Rola ta powinna być nadawana z ogromną ostrożnością (zasada "Least Privilege"). Zazwyczaj zaleca się posiadanie co najmniej dwóch kont z tą rolą, zabezpieczonych sprzętowym kluczem MFA, aby uniknąć ryzyka "lockoutu" (utraty dostępu do zarządzania organizacją).</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/resource-manager/docs/access-control-org" target="_blank">https://cloud.google.com/resource-manager/docs/access-control-org</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: Zdecydowana większość na A. Aby przeją�
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

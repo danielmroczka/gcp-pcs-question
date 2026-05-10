@@ -88,23 +88,34 @@ Each department has a Google Group. All members of a department should have read
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Poprawna odpowiedź: A (Create a Folder per department, assign Project Viewer role to the group.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Folder level + Project Viewer: Nadanie uprawnień na poziomie FOLDERA sprawia, że są one automatycznie dziedziczone przez wszystkie projekty (obecne i przyszłe) wewnątrz tego foldera. Rola Project Viewer daje wymagany dostęp 'read-only' do zasobów.
+Analiza poprawności:
+Hierarchia zasobów Google Cloud (Organizacja -> Foldery -> Projekty -> Zasoby) została zaprojektowana w celu odzwierciedlenia struktury firmy.
+- Organization Node: Reprezentuje firmę i jest najwyższym poziomem hierarchii.
+- Foldery: Służą do grupowania projektów (np. wg jednostek biznesowych: "Marketing", "HR", "IT"). Umożliwiają one delegowanie polityk bezpieczeństwa (Organization Policies) oraz uprawnień (IAM) na całe grupy projektów naraz.
+Nadanie roli `Project Viewer` na poziomie folderu sprawia, że uprawnienia te są automatycznie dziedziczone przez wszystkie projekty wewnątrz tego folderu (obecne i przyszłe), co stanowi idealną automatyzację dostępu.
 
-Dlaczego inne są błędne:
-B. Project Browser: Ta rola pozwala tylko na przeglądanie hierarchii projektów (widzenie ich nazw), ale nie daje wglądu w ich zasoby (np. nie pozwala zobaczyć listy VM czy bucketów).
-C, D. Project level: Wymagałoby to ręcznego nadawania uprawnień przy każdym nowym projekcie, co jest sprzeczne z wymogiem automatyzacji dla 'all new project resources'.
+Dlaczego pozostałe są błędne:
+B (Project Browser): Ta rola pozwala jedynie na przeglądanie hierarchii projektów (widzenie ich nazw), ale nie daje wglądu wewnątrz tych projektów (np. nie pozwala zobaczyć listy VM czy bucketów).
+C, D (Project level): Nadawanie uprawnień na poziomie każdego projektu z osobna ("Project per department") jest sprzeczne z wymogiem obsługi "wszystkich nowych projektów". Wymagałoby to ręcznej interwencji administratora za każdym razem, gdy powstaje nowy projekt.
 
-Konsensus społeczności ExamTopics: Bardzo wysoka zgodność dla A. Dziedziczenie w hierarchii to klucz do automatyzacji IAM.</pre>
+Wskazówki egzaminacyjne:
+- "Organize projects" + "All new project resources": Szukaj rozwiązania z "Folderami".
+- Dziedziczenie: Uprawnienia IAM w GCP są dziedziczone w dół (z wyższego poziomu hierarchii do niższych).
+- Eliminacja: Zawsze odrzucaj nadawanie uprawnień "na poziomie projektu" w pytaniach wymagających automatyzacji dostępu dla wielu projektów.
+
+Dokumentacja:
+<a href="https://cloud.google.com/resource-manager/docs/access-control-folders" target="_blank">https://cloud.google.com/resource-manager/docs/access-control-folders</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> To podejście 'Governance-by-design'. Nowy projekt deweloperski wrzucony do foldera 'Marketing' automatycznie stanie się widoczny dla grupy 'Marketing-Viewers' bez ingerencji administratora.</p>
+<p><b>Analiza spornych kwestii (AI):</b> To podejście typu "Governance-by-design". Nowy projekt stworzony przez programistów w folderze "Marketing" automatycznie stanie się widoczny dla grupy "Marketing-Viewers" bez konieczności ingerencji administratora IAM.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/resource-manager/docs/access-control-folders" target="_blank">https://cloud.google.com/resource-manager/docs/access-control-folders</a></li>
@@ -112,12 +123,13 @@ Konsensus społeczności ExamTopics: Bardzo wysoka zgodność dla A. Dziedziczen
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -132,8 +144,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

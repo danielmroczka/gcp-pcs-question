@@ -88,24 +88,32 @@ A website design company recently migrated all customer sites to App Engine. Som
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Poprawna odpowiedź: C (Enable Cloud Identity-Aware Proxy (IAP).)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Cloud Identity-Aware Proxy (IAP): To najlepsze rozwiązanie dla aplikacji webowych. IAP weryfikuje tożsamość użytkownika (Identity) oraz kontekst (Context), pozwalając na dostęp z dowolnej lokalizacji (Any location) bez potrzeby używania VPN, o ile użytkownik jest zautoryzowany w IAM.
+Analiza poprawności:
+Identity-Aware Proxy (IAP) to kluczowe narzędzie Google w architekturze "Zero Trust" (BeyondCorp). Pozwala ono na zabezpieczenie aplikacji webowych (np. na App Engine) bez konieczności wystawiania ich bezpośrednio do publicznego internetu (brak publicznego IP) lub wymuszania użycia VPN. IAP weryfikuje tożsamość użytkownika (przez Cloud Identity) oraz kontekst (np. czy urządzenie jest zarządzane, lokalizacja) przed przyznaniem dostępu. Dla pracowników jest to najbardziej wygodne rozwiązanie – dostęp odbywa się przez zwykłą przeglądarkę, z dowolnego miejsca.
 
-Dlaczego inne są błędne:
-A. .htaccess: App Engine nie jest serwerem Apache; pliki .htaccess nie są obsługiwane.
-B. App Engine firewall: Pozwala tylko na filtrowanie adresów IP. Jeśli pracownicy są 'w dowolnej lokalizacji' (dynamiczne IP), nie da się stworzyć skutecznej listy allowlist.
-D. Cloud VPN: Wymagałby od każdego klienta i pracownika posiadania tunelu VPN lub klienta VPN, co jest skomplikowane i niepotrzebne przy aplikacjach HTTP.
+Dlaczego pozostałe są błędne:
+A (.htaccess): App Engine to środowisko PaaS/Serverless. Nie obsługuje bezpośrednio serwerów WWW typu Apache/Nginx, więc pliki .htaccess nie mają tam zastosowania.
+B (App Engine firewall): Reguły te operują na adresach IP. Jeśli pracownicy są "w dowolnej lokalizacji" (używają domowego internetu, kawiarni, hoteli), ich adresy IP są dynamiczne i nieprzewidywalne, więc nie da się stworzyć skutecznej listy dozwolonych adresów.
+D (Cloud VPN): VPN wymusza na użytkowniku (pracowniku lub kliencie) instalację dodatkowego oprogramowania klienckiego i konfigurację tunelu. Jest to rozwiązanie znacznie trudniejsze w zarządzaniu i mniej wygodne ("overhead") niż IAP.
 
-Konsensus społeczności ExamTopics: Prawie 100% wskazuje na C. IAP to fundament modelu BeyondCorp (Zero Trust).</pre>
+Wskazówki egzaminacyjne:
+- "Zero Trust" / "Any location": Szukaj IAP. To jedyna technologia GCP zaprojektowana do bezpiecznego dostępu bez VPN.
+- "In-progress sites": Często mylnie chce się użyć VPN, ale pamiętaj: VPN = trudna obsługa użytkowników; IAP = przeglądarka + zalogowanie się kontem Google.
+- Eliminacja: Jeśli widzisz VPN w kontekście dostępu dla pracowników do aplikacji webowych, zazwyczaj jest to dystraktor (zbyt skomplikowane).
+
+Dokumentacja:
+<a href="https://cloud.google.com/iap" target="_blank">https://cloud.google.com/iap</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> IAP działa na poziomie warstwy 7. Po włączeniu IAP, App Engine odrzuca wszystkie żądania, które nie posiadają ważnego dowodu tożsamości od proxy Google.</p>
+<p><b>Analiza spornych kwestii (AI):</b> IAP działa na poziomie warstwy 7 modelu OSI. Po włączeniu IAP dla aplikacji, App Engine odrzuca absolutnie wszystkie przychodzące żądania, które nie posiadają ważnego dowodu tożsamości wystawionego przez proxy Google.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/iap" target="_blank">https://cloud.google.com/iap</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: Prawie 100% wskazuje na C. IAP to fundament
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

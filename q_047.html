@@ -88,24 +88,32 @@ You want to protect your public-facing application from DDoS attacks and SQL inj
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Poprawna odpowiedź: B (Cloud Armor)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Cloud Armor: Jest to usługa WAF (Web Application Firewall) i ochrony przed DDoS od Google. Oferuje gotowe reguły chroniące przed atakami z listy OWASP Top 10 (w tym SQL Injection, XSS) oraz zaawansowaną ochronę przed atakami wolumetrycznymi DDoS na warstwie 3, 4 i 7.
+Analiza poprawności:
+Cloud Armor to w pełni zarządzana usługa Google Cloud, która pełni rolę Web Application Firewall (WAF) oraz mechanizmu ochrony przed atakami DDoS (Distributed Denial of Service). Zapewnia ona wbudowane, gotowe reguły chroniące aplikacje przed najczęstszymi atakami wymienionymi w raporcie OWASP Top 10, w tym SQL Injection oraz Cross-Site Scripting (XSS). Współpracuje bezpośrednio z globalnym Load Balancerem HTTP(S), co pozwala filtrować ruch na brzegu sieci Google (Edge), zanim dotrze on do Twojej infrastruktury VPC.
 
-Dlaczego inne są błędne:
-A. VPC Firewall: Działa na warstwie 3/4 (IP/Port). Nie potrafi 'zrozumieć' treści żądania HTTP, więc nie wykryje ataku SQL Injection zaszytego w adresie URL.
-C. Cloud IAP: Służy do uwierzytelniania użytkowników, a nie do inspekcji ruchu pod kątem ataków hakerskich.
-D. Cloud Endpoints: To brama API (API Gateway) służąca do zarządzania i monitorowania API, nie jest to narzędzie stricte obronne typu WAF.
+Dlaczego pozostałe są błędne:
+A (VPC Firewall): Działa w warstwach 3 i 4 modelu OSI (IP, porty, protokoły). Nie posiada umiejętności inspekcji treści żądania HTTP (np. szukania kodu SQL w adresie URL), dlatego nie może zatrzymać SQL Injection.
+C (Cloud IAP): Służy do kontroli dostępu do aplikacji (kto może się zalogować), a nie do filtrowania złośliwych treści w ruchu sieciowym.
+D (Cloud Endpoints): To rozwiązanie typu API Gateway, służące do zarządzania, monitorowania i zabezpieczania API. Choć może mieć pewne funkcje kontroli dostępu, nie jest dedykowanym narzędziem klasy WAF do ochrony przed DDoS i SQLi.
 
-Konsensus społeczności ExamTopics: 100% na B. Cloud Armor to jedyna poprawna odpowiedź dla ochrony L7 (SQLi/XSS).</pre>
+Wskazówki egzaminacyjne:
+- "SQL injection" / "XSS" + "Public-facing application": Zawsze szukaj "Cloud Armor".
+- "WAF": Jeśli pytanie dotyczy WAF, odpowiedzią jest Cloud Armor.
+- Eliminacja: VPC Firewall nie potrafi analizować treści HTTP, więc nigdy nie zaznaczaj go w pytaniach o SQLi/XSS.
+
+Dokumentacja:
+<a href="https://cloud.google.com/armor/docs/cloud-armor-overview" target="_blank">https://cloud.google.com/armor/docs/cloud-armor-overview</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Cloud Armor współpracuje z Load Balancerem HTTP(S). Ruch jest filtrowany na brzegu sieci Google (Edge), co oznacza, że szkodliwe pakiety nigdy nie docierają do Twojej sieci VPC.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Cloud Armor jest niezwykle skuteczny, ponieważ korzysta z tej samej technologii, którą Google używa do ochrony własnych usług (Search, YouTube, Gmail). Dzięki temu może filtrować ataki na wielką skalę, które mogłyby położyć każdą własną infrastrukturę.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/armor/docs/cloud-armor-overview" target="_blank">https://cloud.google.com/armor/docs/cloud-armor-overview</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: 100% na B. Cloud Armor to jedyna poprawna o
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>

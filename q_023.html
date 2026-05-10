@@ -88,24 +88,32 @@ Leadership team is concerned that PII is being stored as part of the regular cha
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Poprawna odpowiedź: C (Use image inspection and redaction actions of the DLP API.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. DLP API (Redaction): Funkcja 'redaction' (redagowanie/zamazywanie) w DLP API pozwala na wykrycie danych wrażliwych (np. w tekście lub na zrzutach ekranu z chatu) i ich trwałe usunięcie lub zamaskowanie. Pozwala to zachować resztę logów do analizy (data utility).
+Analiza poprawności:
+DLP (Data Loss Prevention) API to zaawansowane narzędzie GCP do identyfikacji, monitorowania i ochrony danych wrażliwych. W przypadku logów tekstowych lub obrazów (np. zrzutów ekranu z czatów), DLP API oferuje potężne mechanizmy "inspection" (wykrywanie wzorców: numery kart, adresy email, imiona) oraz "redaction" (trwałe usunięcie lub zamaskowanie tych danych). Jest to jedyny sposób, aby oczyścić dane (usunięcie PII) przy jednoczesnym zachowaniu użyteczności reszty logów (Data Utility) dla celów analitycznych.
 
-Dlaczego inne są błędne:
-A. Cloud KMS: Szyfrowanie ukrywa dane przed niepowołanymi, ale nie usuwa ich z logów. Użytkownik z kluczem nadal widzi PII, co nie rozwiązuje obawy o ich samo 'przechowywanie'.
-B. Lifecycle Management: Usunięcie całych rekordów chatu niszczy użyteczność danych (data utility).
-D. Generalization/Bucketing: Są to techniki de-identyfikacji dla danych strukturalnych (np. wiek zamieniony na przedział). Dla logów tekstowych ('regular chat logs') najskuteczniejsza jest redakcja.
+Dlaczego pozostałe są błędne:
+A (Cloud KMS): KMS służy do szyfrowania danych (np. danych w spoczynku). Szyfrowanie nie usuwa danych z logów – sprawia tylko, że są one nieczytelne dla osób bez klucza, ale sama informacja (PII) nadal tam jest fizycznie obecna.
+B (Object Lifecycle Management): Ta usługa automatyzuje usuwanie lub przenoszenie plików (np. "usuń logi starsze niż 30 dni"). Usunięcie całych plików/logów niszczy użyteczność danych, podczas gdy my chcemy logi zatrzymać, ale bez PII.
+D (Generalization and bucketing): Techniki te służą do anonimizacji danych STRUKTURALNYCH (np. zamiana konkretnego wieku 28 na zakres "20-30"). Dla nieustrukturyzowanych logów tekstowych lub obrazów, "Redaction" (usunięcie/zamaskowanie) jest dużo bardziej efektywne i zgodne z praktyką czyszczenia logów.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na C. Redakcja to standardowe podejście do czyszczenia logów z PII.</pre>
+Wskazówki egzaminacyjne:
+- "Chat logs" / "Images" + "PII": Zawsze wybieraj DLP API.
+- "Maintain data utility": To hasło sugeruje, że chcesz usunąć tylko wrażliwe elementy, zostawiając resztę logów. To definicja "Redaction".
+- Eliminacja: Jeśli pytanie pyta o usuwanie PII z tekstów/obrazów, odrzuć KMS (szyfrowanie to nie usuwanie) i Lifecycle (usuwa wszystko).
+
+Dokumentacja:
+<a href="https://cloud.google.com/dlp/docs/redacting-sensitive-data-images" target="_blank">https://cloud.google.com/dlp/docs/redacting-sensitive-data-images</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> DLP API posiada ponad 150 wbudowanych detektorów (infoTypes), które automatycznie rozpoznają numery kart, adresy i imiona w strumieniach tekstowych.</p>
+<p><b>Analiza spornych kwestii (AI):</b> DLP API posiada ponad 150 wbudowanych detektorów (tzw. "infoTypes"), które automatycznie rozpoznają numery kart płatniczych, adresy, imiona czy daty urodzenia w strumieniach tekstowych. To sprawia, że proces redakcji jest niezwykle szybki i nie wymaga ręcznego pisania wyrażeń regularnych.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/dlp/docs/redacting-sensitive-data-images" target="_blank">https://cloud.google.com/dlp/docs/redacting-sensitive-data-images</a></li>
@@ -113,12 +121,13 @@ Konsensus społeczności ExamTopics: Zdecydowana większość na C. Redakcja to 
 </div>
 </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
+    const revealButton = document.querySelector('.reveal-solution');
+    if (revealButton) {
         let isVisible = false;
-        button.addEventListener('click', function(e) {
+        revealButton.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,8 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    });
+    }
 });
 </script>
+
 </body>
 </html>
