@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pl">
 <head>
 <meta charset="utf-8"/>
@@ -51,7 +52,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 69</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -72,7 +73,6 @@ An organization uses a well-established directory service as the `source of trut
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud Identity</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> SAML</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Pub/Sub</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -88,32 +88,38 @@ An organization uses a well-established directory service as the `source of trut
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>Poprawna odpowiedź: A
 
-Wyjaśnienie (Dlaczego poprawna):
-A. GCDS: Jest to standardowe narzędzie Google do łączenia zewnętrznych systemów tożsamości (LDAP/AD) z chmurą Google. Pozwala zachować on-premises jako 'źródło prawdy', przesyłając dane o użytkownikach i grupach do Google.
+Analiza poprawności:
+W sytuacjach, gdy organizacja posiada już "source of truth" (np. Active Directory lub LDAP), wymagany jest mechanizm synchronizacji, który przeniesie te tożsamości do Google Cloud.
+1. GCDS (Google Cloud Directory Sync): Jest to dedykowane narzędzie Google, które służy właśnie do synchronizacji katalogów użytkowników (LDAP/AD) z Google Cloud Identity. Zapewnia ono, że tożsamości w GCP są odzwierciedleniem tego, co znajduje się w lokalnym katalogu.
+2. Source of Truth: GCDS pozwala na zachowanie lokalnego katalogu jako głównego miejsca zarządzania użytkownikami, co było wymogiem pytania.
 
-Dlaczego inne są błędne:
-B. Cloud Identity: To nazwa usługi docelowej, a nie 'rozwiązanie łączące' z on-premises.
-C. SAML: Służy do logowania (authentication), ale nie przesyła danych o strukturze kont i grup (provisioning). Do pełnego wdrożenia zazwyczaj potrzebujesz OBU: GCDS i SAML.
-D. Pub/Sub: To usługa przesyłania wiadomości, nie ma nic wspólnego z zarządzaniem tożsamością.
+Dlaczego pozostałe są błędne:
+B. Cloud Identity: To platforma tożsamości (IdP w chmurze), a nie narzędzie do synchronizacji. Cloud Identity może być *odbiorcą* synchronizacji, ale nie jest rozwiązaniem realizującym automatyczną replikację z on-premises.
+C. SAML: Jest protokołem federacji tożsamości (pozwala na SSO), ale sam w sobie nie synchronizuje rekordów użytkowników, grup ani nie zarządza ich cyklem życia.
+D. Pub/Sub: Jest usługą przesyłania komunikatów, kompletnie niezwiązaną z zarządzaniem tożsamościami.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla A. GCDS to 'most' łączący lokalne katalogi z chmurą.</pre>
+Wskazówki egzaminacyjne:
+- "Synchronizacja z lokalnym katalogiem" = GCDS.
+- "Federacja tożsamości / SSO" = SAML / OIDC.
+- Zawsze odróżniaj *synchronizację danych* (GCDS) od *uwierzytelniania* (SSO/SAML).
+
+Dokumentacja:
+<a href="https://cloud.google.com/directorysync/docs" target="_blank">https://cloud.google.com/directorysync/docs</a></pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> GCDS jest darmowy i instalowany lokalnie u klienta. Odczytuje dane z AD przez LDAP i wysyła je do Google przez bezpieczne HTTPS API.</p>
+<p><b>Głęboka analiza:</b> To klasyczne pytanie testujące zrozumienie różnicy między narzędziami do synchronizacji baz tożsamości (GCDS) a mechanizmami ich federacji (SAML). Organizacje z on-premises zawsze potrzebują GCDS jako fundamentu zarządzania użytkownikami.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction" target="_blank">https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction</a></li>
+<li><a href="https://cloud.google.com/directorysync/docs" target="_blank">https://cloud.google.com/directorysync/docs</a></li>
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const revealButton = document.querySelector('.reveal-solution');
@@ -137,6 +143,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-
 </body>
 </html>

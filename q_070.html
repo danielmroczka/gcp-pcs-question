@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pl">
 <head>
 <meta charset="utf-8"/>
@@ -51,7 +52,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 70</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -72,7 +73,6 @@ Which international compliance standard provides guidelines for information secu
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> ISO 27002</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> ISO 27017</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> ISO 27018</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -88,32 +88,37 @@ Which international compliance standard provides guidelines for information secu
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>Poprawna odpowiedź: C
 
-Wyjaśnienie (Dlaczego poprawna):
-C. ISO/IEC 27017: Jest to rozszerzenie normy ISO 27001, zawierające specyficzne wytyczne dotyczące bezpieczeństwa usług w chmurze (zarówno dla dostawców, jak i klientów). Adresuje takie tematy jak separacja danych, dostęp administratora dostawcy czy zarządzanie incydentami w chmurze.
+Analiza poprawności:
+Standardy ISO z rodziny 27000 są podstawą dla bezpieczeństwa informacji, a w kontekście chmury dedykowane są specyficzne normy:
+1. ISO/IEC 27017: Jest to międzynarodowy standard, który dostarcza wytyczne dotyczące kontroli bezpieczeństwa informacji specyficznie dla dostawców chmurowych (CSP) oraz klientów chmurowych. Stanowi rozszerzenie standardu ISO/IEC 27002.
 
-Dlaczego inne są błędne:
-A. ISO 27001: Ogólny standard systemu zarządzania bezpieczeństwem informacji (ISMS), nie ogranicza się tylko do chmury.
-B. ISO 27002: Kodeks praktyk dla kontroli bezpieczeństwa (lista 'co robić'), ale ISO 27017 jest bardziej specyficzny dla wymogów chmurowych.
-D. ISO 27018: Skupia się wyłącznie na ochronie danych osobowych (PII) w chmurze publicznej.
+Dlaczego pozostałe są błędne:
+A. ISO 27001: Jest to podstawowy standard certyfikacji systemu zarządzania bezpieczeństwem informacji (ISMS), ale ma charakter ogólny, a nie specyficzny dla chmury.
+B. ISO 27002: Dostarcza zbiór dobrych praktyk i kontroli bezpieczeństwa (ogólne), ale nie koncentruje się na specyficznych wyzwaniach chmurowych.
+D. ISO 27018: Dotyczy ochrony danych osobowych (PII) w publicznej chmurze. Choć związane z chmurą, nie definiuje ogólnych kontroli bezpieczeństwa dla usług chmurowych, lecz skupia się na prywatności.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na C. To czysto teoretyczne pytanie z zakresu certyfikacji.</pre>
+Wskazówki egzaminacyjne:
+- ISO 27017 = "Cloud security controls" (Security controls for cloud).
+- ISO 27018 = "Privacy in cloud" (PII protection).
+- Na egzaminie Professional Cloud Security Engineer musisz znać rozróżnienie między kontrolami bezpieczeństwa (27017) a ochroną prywatności (27018).
+
+Dokumentacja:
+<a href="https://cloud.google.com/security/compliance/iso-27017" target="_blank">https://cloud.google.com/security/compliance/iso-27017</a></pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Google Cloud posiada certyfikację dla wszystkich powyższych norm, co ułatwia klientom budowanie własnych systemów zgodnych z tymi standardami.</p>
+<p><b>Głęboka analiza:</b> Egzaminy Google Cloud często testują wiedzę o standardach branżowych, których Google przestrzega. ISO 27017 jest kluczowym standardem dla sektora cloud, dlatego jego znajomość jest wymagana na poziomie Professional.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/security/compliance/iso-27017" target="_blank">https://cloud.google.com/security/compliance/iso-27017</a></li>
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const revealButton = document.querySelector('.reveal-solution');
@@ -137,6 +142,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-
 </body>
 </html>
