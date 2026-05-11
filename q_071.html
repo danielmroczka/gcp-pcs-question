@@ -88,24 +88,32 @@ You need to create a Service Account that can list Compute Engine instances. You
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>Poprawna odpowiedź: B
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Custom Role: Najlepszą praktyką bezpieczeństwa (Least Privilege) jest nadanie tylko tych uprawnień, które są absolutnie niezbędne. Stworzenie roli niestandardowej z tylko jednym uprawnieniem `compute.instances.list` jest bardziej precyzyjne niż użycie jakiejkolwiek roli predefiniowanej.
+Analiza poprawności:
+Zasada najniższych uprawnień (Least Privilege) jest fundamentem bezpieczeństwa w Google Cloud.
+1. Rola Custom (Niestandardowa): W pytaniu wymieniono konkretne, bardzo wąskie zadanie (listowanie instancji). Rola niestandardowa pozwala na przypisanie dokładnie jednej uprawnienia: `compute.instances.list`.
+2. Zgodność: Dzięki temu konto serwisowe nie ma wglądu w inne zasoby obliczeniowe czy konfiguracje w projekcie, co drastycznie ogranicza potencjalne skutki w przypadku jego przejęcia.
 
-Dlaczego inne są błędne:
-A. Access Scopes: To przestarzała metoda (legacy). Obecnie steruje się dostępem wyłącznie przez role IAM. Scopes nie zastępują uprawnień IAM.
-C. Compute Viewer: Daje dostęp do listy, ale TEŻ do podglądu wszystkich szczegółów maszyn, ich dysków, obrazów itp. - to za dużo.
-D. Project Viewer: Daje dostęp do podglądu wszystkiego w całym projekcie (Storage, SQL, BigQuery) - skrajne naruszenie zasady najniższych uprawnień.
+Dlaczego pozostałe są błędne:
+A. Access Scopes: To rozwiązanie historyczne (legacy), które nie powinno być stosowane w nowych konfiguracjach. IAM jest obecnie jedynym rekomendowanym sposobem kontroli dostępu.
+C. Compute Viewer: Ta rola predefiniowana daje dostęp do listy instancji, ale także do metadanych, dysków, obrazów i innych szczegółów technicznych – to naruszenie zasady najniższych uprawnień (za szeroki dostęp).
+D. Project Viewer: To rola dająca wgląd w niemal wszystkie zasoby projektu (Storage, SQL, BigQuery itd.). Użycie jej do prostego listowania instancji to krytyczne naruszenie bezpieczeństwa.
 
-Konsensus społeczności ExamTopics: Silne poparcie dla B. Role Custom to 'złoty standard' dla precyzyjnych zadań automatyzacji.</pre>
+Wskazówki egzaminacyjne:
+- "Minimum access" / "Google-recommended practices" = Zawsze rola niestandardowa (Custom Role), jeśli dostępne role predefiniowane są zbyt szerokie.
+- Nigdy nie używaj "Access Scopes" (Są wycofywane i zastępowane rolami IAM).
+- Czytaj uważnie: "List instances" to nie to samo co "View instance details".
+
+Dokumentacja:
+<a href="https://cloud.google.com/iam/docs/creating-custom-roles" target="_blank">https://cloud.google.com/iam/docs/creating-custom-roles</a></pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Jeśli zadanie można wykonać rolą predefiniowaną, która nie ma nadmiarowych uprawnień, użyj jej. Jeśli jednak każda rola gotowa jest zbyt szeroka (jak tu), stwórz rolę Custom.</p>
+<p><b>Głęboka analiza:</b> To pytanie sprawdza znajomość hierarchii uprawnień i umiejętność stosowania zasady Least Privilege. W GCP zawsze dążymy do użycia jak najwęższej roli (w tym ról Custom), zamiast polegać na zbyt szerokich rolach predefiniowanych.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/iam/docs/creating-custom-roles" target="_blank">https://cloud.google.com/iam/docs/creating-custom-roles</a></li>

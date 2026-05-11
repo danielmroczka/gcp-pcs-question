@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 73</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -72,7 +72,6 @@ An organization wants to migrate its ongoing data backup and disaster recovery s
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud Storage using gsutil via Cloud Interconnect.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Compute Engine Persistent Disks.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Datastore batch upload.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -88,17 +87,25 @@ An organization wants to migrate its ongoing data backup and disaster recovery s
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>Poprawna odpowiedź: B
 
-Wyjaśnienie (Dlaczego poprawna):
-B. GCS via Interconnect: Cloud Interconnect zapewnia stabilne, prywatne łącze o dużej przepustowości, co jest niezbędne dla dużych backupów. Cloud Storage jest naturalnym celem dla plików kopii zapasowych, a gsutil to optymalne narzędzie do ich przesyłania.
+Analiza poprawności:
+Migracja backupu z środowiska on-premises do GCP wymaga dwóch kluczowych komponentów: przepustowości oraz odpowiedniego miejsca docelowego.
+1. Cloud Interconnect: Zapewnia stabilne, prywatne łącze o wysokiej przepustowości, co jest niezbędne dla dużych wolumenów danych w backupach. Eliminuje opóźnienia i problemy z przepustowością publicznego Internetu.
+2. Cloud Storage (GCS): Jest idealnym, skalowalnym magazynem obiektowym dla nieustrukturyzowanych plików kopii zapasowych.
 
-Dlaczego inne są błędne:
-A. BigQuery: Nie służy do backupu plików systemowych czy obrazów maszyn.
-C. Persistent Disks: Nie można do nich przesyłać danych bezpośrednio z on-premises bez pośrednictwa VM, co komplikuje architekturę backupu.
-D. Cloud Datastore: To baza NoSQL, nie nadaje się do przechowywania dużych plików/blobów backupowych.
+Dlaczego pozostałe są błędne:
+A. BigQuery: Jest to baza danych analityczna (OLAP), nie nadaje się do przechowywania plików backupowych (plików płaskich).
+C. Persistent Disks: Są blokową pamięcią masową dla instancji VM. Nie można bezpośrednio "backupować" na nie danych z on-premises bez uruchamiania pośrednich VM, co jest nieefektywne.
+D. Cloud Datastore: To baza typu NoSQL, która nie służy do składowania dużych wolumenów danych backupowych (limit rozmiaru dokumentu).
 
-Konsensus społeczności ExamTopics: 100% na B. To podręcznikowy scenariusz wykorzystania Interconnect i GCS.</pre>
+Wskazówki egzaminacyjne:
+- "Ongoing backup" + "High bandwidth" = Cloud Storage + Interconnect.
+- "PaaS/Big Data" = BigQuery/Datastore/Dataproc.
+- Jeśli widzisz zapytanie o storage plików (backup) = zawsze Cloud Storage (GCS).
+
+Dokumentacja:
+<a href="https://cloud.google.com/storage/docs/gsutil" target="_blank">https://cloud.google.com/storage/docs/gsutil</a></pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
@@ -112,14 +119,12 @@ Konsensus społeczności ExamTopics: 100% na B. To podręcznikowy scenariusz wyk
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +139,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>
