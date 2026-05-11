@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pl">
 <head>
 <meta charset="utf-8"/>
@@ -51,7 +52,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 65</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -68,11 +69,10 @@ A customer has an analytics workload running on Compute Engine. Your team create
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create an egress rule to allow traffic to the repository CIDR with priority > 1000.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create an egress rule to allow traffic to the repository CIDR with priority < 1000.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create an egress rule to allow traffic to the hostname with priority > 1000.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create an egress rule to allow traffic to the hostname with priority < 1000.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create an egress rule to allow traffic to the repository CIDR with priority &gt; 1000.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create an egress rule to allow traffic to the repository CIDR with priority &lt; 1000.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create an egress rule to allow traffic to the hostname with priority &gt; 1000.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create an egress rule to allow traffic to the hostname with priority &lt; 1000.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -88,31 +88,37 @@ A customer has an analytics workload running on Compute Engine. Your team create
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>Poprawna odpowiedź: B
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Priority < 1000: W firewallu GCP niższy numer priorytetu oznacza WYŻSZĄ ważność reguły. Aby 'wyciąć' wyjątek z ogólnej blokady (deny, prio 1000), musisz stworzyć regułę allow z priorytetem np. 999. Reguły firewalla operują na zakresach IP (CIDR).
+Analiza poprawności:
+W scenariuszu z zaostrzonymi regułami firewalla (egress deny), gdzie instancje wymagają dostępu do zewnętrznego repozytorium, kluczowe jest zrozumienie hierarchii i priorytetów reguł w GCP.
+1. Priorytety: Reguły firewalla w GCP są przetwarzane zgodnie z priorytetem (im niższa liczba, tym wyższy priorytet). Jeśli istnieje reguła deny o priorytecie 1000, stworzenie nowej reguły allow z priorytetem niższym (np. 900) nadpisze blokadę dla konkretnego ruchu.
+2. Zgodność: Jest to poprawne rozwiązanie, ponieważ pozwala na selektywne otwarcie ruchu tylko do wymaganego zasobu zewnętrznego, przy jednoczesnym zachowaniu pierwotnej blokady dla pozostałego ruchu internetowego.
 
-Dlaczego inne są błędne:
-A. Priority > 1000: Reguła o priorytecie np. 1001 zostanie przetworzona PO regule blokującej (1000), więc ruch i tak zostanie odrzucony.
-C, D. Hostname: Standardowy VPC Firewall nie wspiera filtrowania po nazwach domenowych (FQDN). Wymagałoby to Secure Web Proxy lub Cloud NGFW Enterprise.
+Dlaczego pozostałe są błędne:
+A. Priorytet wyższy niż 1000: W GCP reguły o wyższym numerze mają NIŻSZY priorytet. Reguła z priorytetem 1001 zostanie przetworzona PO regule 1000, więc nigdy nie uzyska pierwszeństwa (reguła deny 1000 już zablokuje ruch).
+C/D. Hostname: Reguły firewalla VPC w GCP działają na poziomie warstwy 3 (adresy IP/CIDR), a nie warstwy 7 (nazwy domen/hostname). Firewall VPC nie potrafi "zrozumieć" nazwy hosta, dlatego reguły oparte na hostname nie zadziałają na tym poziomie sieci.
 
-Konsensus społeczności ExamTopics: 100% na B. Podstawowa wiedza o priorytetach i adresacji IP w firewallu VPC.</pre>
+Wskazówki egzaminacyjne:
+- Firewall VPC = L3/L4 (IP/Port), a nie L7 (FQDN).
+- Niższy numer priorytetu = Wyższy priorytet (ważniejsze są "małe" liczby).
+- Jeśli aplikacja wymaga dostępu do domeny, rozważ Cloud NAT (dla ruchu wychodzącego) lub Cloud Armor (jeśli dotyczy to ruchu przychodzącego na poziomie HTTP), ale NIGDY firewall VPC po hostname.
+
+Dokumentacja:
+<a href="https://cloud.google.com/vpc/docs/firewalls" target="_blank">https://cloud.google.com/vpc/docs/firewalls</a></pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Priorytety w GCP mieszczą się w zakresie 0-65535. Reguły domniemane mają 65535. Twoje reguły zazwyczaj zaczynają się od 1000, co daje duży margines na dodawanie wyjątków 'nad' nimi (niższe numery).</p>
+<p><b>Głęboka analiza:</b> Najczęstszą pułapką w tym pytaniu jest mylenie numeracji priorytetów firewalla w GCP. Wiele osób myśli, że wyższa liczba to wyższy priorytet, co w GCP jest odwrotne. Dodatkowo, testowana jest znajomość modelu OSI – VPC Firewall to nie jest WAF, więc FQDN/hostname nie wchodzą w grę.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc/docs/firewalls#priority-order" target="_blank">https://cloud.google.com/vpc/docs/firewalls#priority-order</a></li>
+<li><a href="https://cloud.google.com/vpc/docs/firewalls" target="_blank">https://cloud.google.com/vpc/docs/firewalls</a></li>
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const revealButton = document.querySelector('.reveal-solution');
@@ -136,6 +142,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-
 </body>
 </html>

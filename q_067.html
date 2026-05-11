@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pl">
 <head>
 <meta charset="utf-8"/>
@@ -51,7 +52,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 67</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -72,7 +73,6 @@ A company is backing up logs to Cloud Storage. Analysts should only access logs 
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Upload logs to both buckets and delete PII files from the shared one.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use Object Lifecycle Management to delete PII objects.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure a Cloud Storage Trigger for PII data.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -88,32 +88,39 @@ A company is backing up logs to Cloud Storage. Analysts should only access logs 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>Poprawna odpowiedź: A
 
-Wyjaśnienie (Dlaczego poprawna):
-A. DLP + Cloud Functions: Cloud Storage nie posiada wbudowanego skanera PII. Należy zautomatyzować proces: zdarzenie 'upload' do bucketu wyzwala Cloud Function, która przesyła dane do DLP API. Jeśli DLP znajdzie PII, funkcja przenosi plik do bucketu administratora.
+Analiza poprawności:
+Wymóg segregacji danych z PII w czasie rzeczywistym wymaga zautomatyzowanego potoku przetwarzania zdarzeń.
+1. Cloud Storage Trigger + Cloud Functions: Każde przesłanie pliku (Object Finalize) wyzwala zdarzenie, które jest przekazywane przez Pub/Sub do Cloud Functions.
+2. DLP API: Funkcja wywołuje Cloud DLP (Data Loss Prevention), aby sprawdzić zawartość pliku pod kątem obecności PII.
+3. Segregacja: Jeśli DLP potwierdzi obecność PII, Cloud Function przenosi obiekt do bezpiecznego bucketa, do którego dostęp ma tylko administrator, zapewniając zgodność z polityką prywatności.
 
-Dlaczego inne są błędne:
-B. Upload to both: Ryzykowne i nieefektywne. Dane wrażliwe i tak trafiają do 'shared' bucketu przed ich usunięciem.
-C. Lifecycle Management: Działa na podstawie wieku lub wersji obiektu, nie potrafi analizować treści plików i wykrywać PII.
-D. Trigger for PII: Nie istnieje taki natywny wyzwalacz w GCS. Trigerem jest 'zapis pliku', a logika wykrywania PII musi być w kodzie funkcji.
+Dlaczego pozostałe są błędne:
+B. Upload do obu bucketów: Jest to rozwiązanie kosztowne (podwójna opłata za storage) i niebezpieczne – PII nadal trafia do współdzielonego bucketa, co samo w sobie jest naruszeniem zasad.
+C. Object Lifecycle Management (OLM): Służy do automatycznego usuwania starych plików lub zmiany ich klasy przechowywania, ale nie posiada wbudowanej logiki inspekcji zawartości plików pod kątem PII.
+D. Cloud Storage Trigger dla PII: Cloud Storage nie posiada natywnego wyzwalacza "wykryj PII". Trigger uruchamia się po zmianie stanu obiektu, a inspekcja musi zostać wykonana przez zewnętrzny kod (Cloud Functions + DLP).
 
-Konsensus społeczności ExamTopics: 100% na A. To klasyczny wzorzec architektury 'Event-driven security' w GCP.</pre>
+Wskazówki egzaminacyjne:
+- "Segregacja danych" w oparciu o treść = zawsze myśl o Cloud DLP.
+- "Real-time" / "Automatyzacja po zdarzeniu" = zawsze myśl o Cloud Functions + Pub/Sub.
+- Pamiętaj, że Cloud Storage OLM nie "widzi" treści plików (tylko metadane).
+
+Dokumentacja:
+<a href="https://cloud.google.com/dlp/docs/creating-dlp-jobs" target="_blank">https://cloud.google.com/dlp/docs/creating-dlp-jobs</a></pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Ten proces zapewnia, że analitycy nigdy nie zobaczą nieprzeprocesowanych logów. Jest to jedyna metoda gwarantująca zachowanie poufności danych wrażliwych przy automatycznym backupie.</p>
+<p><b>Głęboka analiza:</b> Kluczowe w tym pytaniu jest zrozumienie różnicy między zarządzaniem cyklem życia obiektu (metadane) a głęboką inspekcją zawartości (DLP API). Architektura sterowana zdarzeniami jest jedynym sposobem na automatyzację tego procesu w czasie rzeczywistym.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/dlp/docs/tutorials/gcs-notifications" target="_blank">https://cloud.google.com/dlp/docs/tutorials/gcs-notifications</a></li>
+<li><a href="https://cloud.google.com/dlp/docs/creating-dlp-jobs" target="_blank">https://cloud.google.com/dlp/docs/creating-dlp-jobs</a></li>
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const revealButton = document.querySelector('.reveal-solution');
@@ -137,6 +144,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-
 </body>
 </html>

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pl">
 <head>
 <meta charset="utf-8"/>
@@ -51,7 +52,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 63</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -72,7 +73,6 @@ For compliance reasons, an organization needs to ensure that in-scope PCI Kubern
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a node pool with the label inscope: true and a Pod Security Policy that only allows the Pods to run on Nodes with that label.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Place a taint on the Nodes with the label inscope: true and effect NoSchedule and a toleration to match in the Pod configuration.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Run all in-scope Pods in the namespace in-scope-pci.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -88,32 +88,36 @@ For compliance reasons, an organization needs to ensure that in-scope PCI Kubern
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>Poprawna odpowiedź: C
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Taints and Tolerations: To jedyny mechanizm w Kubernetes gwarantujący WYŁĄCZNOŚĆ. 'Taint' na węźle odpycha wszystkie pody, które nie mają odpowiedniej 'tolerancji'. Dzięki temu tylko pody PCI (z tolerancją) mogą tam trafić, a żadne inne pody (bez tolerancji) nigdy nie zostaną tam uruchomione.
+Analiza poprawności:
+W środowiskach GKE wymagających spełnienia rygorystycznych wymogów zgodności (jak PCI DSS), kluczowe jest zapewnienie fizycznej lub logicznej separacji obciążeń wrażliwych od standardowych. 
+1. Tainty i Tolerancje: Tainty na węzłach (nodes) oznaczają je jako "niechciane" dla standardowych podów. Pod (PCI) musi posiadać odpowiednią tolerancję (toleration), aby "tolerować" taint i móc zostać uruchomionym na tych specjalnych węzłach.
+2. Izolacja: Mechanizm ten gwarantuje, że na węzłach oznaczonych jako `in-scope` uruchamiane są tylko pody z PCI, spełniając wymóg izolacji.
 
-Dlaczego inne są błędne:
-A. nodeSelector: Gwarantuje, że pod PCI trafi na węzeł PCI, ale NIE ZABRANIA innym, zwykłym podom trafienia na ten sam węzeł. To nie zapewnia wymaganej izolacji ('Nodes can ONLY contain in-scope Pods').
-B. Pod Security Policy: Służy do ograniczania uprawnień wewnątrz kontenera (np. brak roota), a nie do sterowania harmonogramowaniem na węzłach w celu izolacji sprzętowej.
-D. Namespaces: To izolacja logiczna wewnątrz API, nie ma wpływu na fizyczne rozmieszczenie podów na węzłach.
+Dlaczego pozostałe są błędne:
+A. nodeSelector: Jest to mechanizm wyboru węzłów, ale nie posiada funkcji "blokującej". Jeśli węzeł nie posiada tainty, inne pody nadal mogłyby zostać na nim zaplanowane (scheduling), co narusza wymóg wyłączności.
+B. Pod Security Policy (PSP): PSP jest mechanizmem wycofanym (deprecated) w Kubernetesie. Ponadto służy do definiowania uprawnień security kontekstu podów, a nie do bezpośredniego zarządzania fizycznym rozmieszczeniem (placement) podów na węzłach.
+D. Namespaces: Przestrzenie nazw (namespaces) są logiczną izolacją, ale nie zapewniają separacji na poziomie węzłów (fizycznego hosta/kernela), co jest wymagane przez PCI DSS w kontekście izolacji obciążeń.
 
-Konsensus społeczności ExamTopics: 100% na C. Izolacja PCI w K8s zawsze opiera się na Taints & Tolerations.</pre>
+Wskazówki egzaminacyjne:
+- "PCI compliance" w pytaniach o GKE prawie zawsze wskazuje na izolację na poziomie węzłów (Taints/Tolerations lub Node Affinity).
+- Jeśli widzisz "Pod Security Policy", traktuj to jako dystraktor (zazwyczaj błędna odpowiedź, bo standard wycofany).
+- Zawsze rozróżniaj izolację logiczną (namespaces) od fizycznej (taints/tolerations).</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Aby spełnić wymogi PCI DSS w GKE, musisz udowodnić, że dane kart płatniczych nie są procesowane na tym samym kernelu co inne, mniej bezpieczne aplikacje.</p>
+<p><b>Głęboka analiza:</b> Wymogi PCI DSS kładą nacisk na izolację. W GKE, taint/toleration to jedyny natywny sposób na zapewnienie, że "wrażliwe" pody nie współdzielą fizycznych węzłów z nieautoryzowanymi obciążeniami.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/" target="_blank">https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/</a></li>
+<li><a href="https://cloud.google.com/kubernetes-engine/docs/concepts/taints-and-tolerations" target="_blank">https://cloud.google.com/kubernetes-engine/docs/concepts/taints-and-tolerations</a></li>
 </ul>
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const revealButton = document.querySelector('.reveal-solution');
@@ -137,6 +141,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-
 </body>
 </html>

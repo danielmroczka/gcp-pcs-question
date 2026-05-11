@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pl">
 <head>
 <meta charset="utf-8"/>
@@ -51,7 +52,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 68</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -72,7 +73,6 @@ A customer terminates an engineer and needs to make sure the engineer's Google a
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use Cloud SDK to deprovision users.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure Cloud Directory Sync (GCDS) with their directory service.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Manually delete the user in Admin Console.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -87,33 +87,37 @@ A customer terminates an engineer and needs to make sure the engineer's Google a
 </div>
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
-<h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>Poprawna odpowiedź: C
 
-Wyjaśnienie (Dlaczego poprawna):
-C. GCDS: Narzędzie to synchronizuje stan Twojego lokalnego katalogu (np. Active Directory) z Cloud Identity. Gdy HR usunie inżyniera z AD, przy kolejnej synchronizacji GCDS automatycznie zawiesi lub usunie jego konto w Google, zapewniając automatyzm i brak 'osieroconych' kont.
+Analiza poprawności:
+Zarządzanie cyklem życia tożsamości (Identity Lifecycle Management) w GCP powinno opierać się na źródle prawdy (LDAP/Active Directory).
+1. GCDS (Google Cloud Directory Sync): Jest to narzędzie, które automatyzuje proces synchronizacji użytkowników i grup z on-premises Directory Service do Google Cloud Identity.
+2. Automatyzacja: Po skonfigurowaniu GCDS, każda zmiana w LDAP (np. usunięcie pracownika) jest automatycznie (według harmonogramu) replikowana do Cloud Identity, co powoduje zablokowanie konta (deprovisioning).
 
-Dlaczego inne są błędne:
-A. Remove IAM: To tylko odbiera uprawnienia w chmurze, ale użytkownik nadal może się logować do innych usług Google (np. Drive, Gmail). To nie jest deprovisioning konta.
-B. Cloud SDK: Można napisać skrypt, ale nie jest to 'automatyczny' mechanizm systemowy tak jak GCDS.
-D. Manually delete: Rozwiązanie manualne, podatne na błędy i zapomnienia, sprzeczne z wymogiem automatyzacji.
+Dlaczego pozostałe są błędne:
+A/B. Cloud SDK: Służy do automatyzacji zadań operacyjnych (np. tworzenie instancji, zarządzanie zasobami), a nie do automatycznego, ciągłego zarządzania cyklem życia użytkowników w ramach całego katalogu.
+D. Usuwanie IAM: GCDS nie zarządza bezpośrednio rolami IAM; zarządza tożsamościami użytkowników (kontami w Cloud Identity). Uprawnienia IAM są przyznawane tym tożsamościom, więc ich deprovisioning naturalnie usuwa dostęp.
 
-Konsensus społeczności ExamTopics: 100% na C. GCDS to jedyne poprawne rozwiązanie dla automatycznego cyklu życia użytkownika hybrydowego.</pre>
+Wskazówki egzaminacyjne:
+- "Automatic deprovisioning" / "Source of truth" = Zawsze szukaj GCDS (Google Cloud Directory Sync).
+- Pamiętaj, że GCDS jest narzędziem jednokierunkowym (LDAP -> Google).
+- GCDS nie zarządza bezpośrednio IAM; zarządza tożsamością, która IAM konsumuje.
+
+Dokumentacja:
+<a href="https://cloud.google.com/directorysync/docs" target="_blank">https://cloud.google.com/directorysync/docs</a></pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Automatyczny deprovisioning to krytyczny wymóg większości audytów bezpieczeństwa (np. SOC2, ISO 27001). Zapobiega on dostępowi byłych pracowników do zasobów firmy.</p>
+<p><b>Głęboka analiza:</b> Kluczowym pojęciem egzaminacyjnym jest "Identity Synchronization". Pamiętaj, że GCDS nie usuwa uprawnień IAM w sposób bezpośredni; robi to poprzez eliminację tożsamości, do której te uprawnienia były przypisane.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://support.google.com/a/answer/106368" target="_blank">https://support.google.com/a/answer/106368</a></li>
+<li><a href="https://cloud.google.com/directorysync/docs" target="_blank">https://cloud.google.com/directorysync/docs</a></li>
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const revealButton = document.querySelector('.reveal-solution');
@@ -137,6 +141,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-
 </body>
 </html>

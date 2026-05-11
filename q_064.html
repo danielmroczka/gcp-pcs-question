@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pl">
 <head>
 <meta charset="utf-8"/>
@@ -51,7 +52,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 64</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -72,7 +73,6 @@ In an effort for your company messaging app to comply with FIPS 140-2, a decisio
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Set Disk Encryption on the Instance Template to customer-managed key and use BoringSSL for all data transit.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Change the app instance-to-instance communications from UDP to TCP and enable BoringSSL.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Set Disk Encryption to Google-managed Key and use BoringSSL library.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -88,31 +88,38 @@ In an effort for your company messaging app to comply with FIPS 140-2, a decisio
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>Poprawna odpowiedź: A
 
-Wyjaśnienie (Dlaczego poprawna):
-A. BoringCrypto: Google używa modułu BoringCrypto (część BoringSSL), który posiada certyfikację FIPS 140-2. Aby zapewnić zgodność w warstwie aplikacji, należy używać tej biblioteki zarówno do szyfrowania danych na dyskach lokalnych (SSD), jak i do zabezpieczania komunikacji między instancjami.
+Analiza poprawności:
+Wymóg zgodności FIPS 140-2 (Federal Information Processing Standard) w chmurze wymaga, aby wszystkie operacje kryptograficzne były wykonywane przez moduły certyfikowane przez NIST.
+1. BoringCrypto: Google Cloud wykorzystuje moduł BoringCrypto w swoich instancjach i usługach. Jest to zweryfikowana wersja biblioteki BoringSSL, która spełnia wymogi FIPS 140-2.
+2. Zastosowanie: W przypadku aplikacji komunikującej się przez UDP i korzystającej z Local SSD (dane w spoczynku), zapewnienie zgodności FIPS wymaga włączenia szyfrowania przy użyciu tego certyfikowanego modułu zarówno dla danych zapisywanych na dysku, jak i dla ruchu sieciowego (wspierającego TLS/SSL/DTLS).
 
-Dlaczego inne są błędne:
-B, D: Szyfrowanie dysków (CMEK/GMEK) odbywa się na poziomie infrastruktury Google i jest zgodne z FIPS, ale nie rozwiązuje problemu szyfrowania ruchu UDP w warstwie aplikacji.
-C: Zmiana UDP na TCP nie jest wymagana przez FIPS; FIPS dotyczy algorytmów i bibliotek kryptograficznych, a nie protokołu transportowego.
+Dlaczego pozostałe są błędne:
+B. Customer-managed keys (CMEK): Choć CMEK jest dobrym wzorcem, sama konfiguracja CMEK dla dysku nie zapewnia automatycznie, że cała komunikacja sieciowa instancji (zwłaszcza UDP) jest szyfrowana za pomocą FIPS-validated modułów.
+C. Zmiana UDP na TCP: Choć zmiana protokołu może ułatwić użycie standardowego TLS, pytanie wymaga spełnienia FIPS w ramach istniejącej architektury, a nie jej drastycznej przebudowy, jeśli istnieją bardziej bezpośrednie sposoby (np. wykorzystanie bibliotek zgodnych z FIPS wewnątrz aplikacji).
+D. Google-managed Key: Klucze zarządzane przez Google są szyfrowane zgodnie z FIPS, ale nie dają administratorowi zgodności (compliance officer) pełnej kontroli nad cyklem życia klucza, co często jest wymogiem w rygorystycznych regulacjach.
 
-Konsensus społeczności ExamTopics: Większość na A. BoringCrypto to kluczowe pojęcie przy pytaniach o FIPS w GCP.</pre>
+Wskazówki egzaminacyjne:
+- FIPS 140-2 = szukaj "BoringCrypto" lub "validated modules".
+- Jeśli aplikacja korzysta z niestandardowego protokołu (UDP) lub dysków (Local SSD), certyfikacja musi dotyczyć całego łańcucha kryptograficznego.
+- Nie daj się zwieść "Customer-managed keys" w pytaniach o FIPS – to dwa różne aspekty (zarządzanie kluczem vs moduł kryptograficzny).
+
+Dokumentacja:
+<a href="https://cloud.google.com/security/fips-140-2-compliance" target="_blank">https://cloud.google.com/security/fips-140-2-compliance</a></pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Google Cloud zapewnia zgodność FIPS dla infrastruktury, ale klient jest odpowiedzialny za to, aby jego własna aplikacja używała zatwierdzonych modułów kryptograficznych do operacji wykonywanych 'wewnątrz' systemu operacyjnego.</p>
+<p><b>Głęboka analiza:</b> FIPS 140-2 to standard sprzętowo-programowy. W GCP kluczem jest zrozumienie, że Google zapewnia certyfikowaną bibliotekę (BoringCrypto). Użytkownik musi tylko upewnić się, że jego aplikacja i konfiguracja instancji z niej korzystają.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/security/fips-140-2-compliance" target="_blank">https://cloud.google.com/security/fips-140-2-compliance</a></li>
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const revealButton = document.querySelector('.reveal-solution');
@@ -136,6 +143,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-
 </body>
 </html>
