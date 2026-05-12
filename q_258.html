@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 258</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,13 +64,13 @@
 <h2>Question 258 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Access Context Manager: allow access only from corporate network (specific IPs) or VPN pool. Specific project in perimeter. What to do?
+Your organization is adopting Google Cloud and wants to ensure sensitive resources are only accessible from devices within the internal on-premises corporate network. You must configure Access Context Manager to enforce this requirement. These considerations apply:<br/>• The internal network uses IP ranges 10.100.0.0/16 and 192.168.0.0/16.<br/>• Some employees work remotely but connect securely through a company-managed virtual private network (VPN). The VPN dynamically allocates IP addresses from the pool 172.16.0.0/20.<br/>• Access should be restricted to a specific Google Cloud project that is contained within an existing service perimeter.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Authorized Devices level.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Internal Network Only level (IPs + OS).</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Corporate Access level (IP ranges).</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create an access level named "Authorized Devices." Utilize the Device Policy attribute to require corporate-managed devices. Apply the access level to the Google Cloud project and instruct all employees to enroll their devices in the organization's management system.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create an access level titled "Internal Network Only." Add a condition with these attributes: IP Subnetworks: 10.100.0.0/16, 192.168.0.0/16. Device Policy: Require OS as Windows or macOS. Apply this access level to the sensitive Google Cloud project.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create an access level titled "Corporate Access." Add a condition with the IP Subnetworks attribute, including the ranges: 10.100.0.</li>
 
 </ul>
 </div>
@@ -79,7 +79,7 @@ Access Context Manager: allow access only from corporate network (specific IPs) 
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">C</span>
+<span class="correct-answer"></span>
 <br/>
 </span>
 </div>
@@ -87,37 +87,38 @@ Access Context Manager: allow access only from corporate network (specific IPs) 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: C.
 
 Wyjaśnienie (Dlaczego poprawna):
-C. Access Level with IP ranges: Najprostszym i najskuteczniejszym sposobem na zdefiniowanie 'sieci korporacyjnej' w polityce dostępu jest wskazanie zakresów publicznych adresów IP Twoich biur i bramek VPN.
+C. Access Level with IP ranges: Najbardziej bezpośrednim sposobem na zdefiniowanie 'sieci korporacyjnej' w polityce dostępu jest podanie zakresów publicznych adresów IP Twoich biur i bramek VPN.
 
 Dlaczego inne są błędne:
-A. Authorized Devices: Skupia się na sprzęcie, a nie na lokalizacji sieciowej użytkownika.
-B. IPs + OS: Dodanie wymogu OS niepotrzebnie komplikuje politykę i zwiększa narzut operacyjny.
+A. Authorized Devices: Skupia się na sprzęcie, a wymóg mówi o lokalizacji sieciowej.
+B. IPs + OS: Dodanie wymogu OS niepotrzebnie komplikuje politykę, jeśli celem jest tylko filtracja po IP biurowym.
 
-Konsensus społeczności ExamTopics: 100% na C. IP allowlisting to fundament polityk dostępu kontekstowego.</pre>
+Konsensus społeczności ExamTopics: 100% na C. IP allowlisting to fundament polityk ACM.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Ten 'Access Level' przypisujesz następnie do perymetru VPC SC, co tworzy 'mur' chroniący Twoje dane przed dostępem z publicznego internetu.</p>
+<p><b>Sugerowana odpowiedź: </b></p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Pamiętaj, że adresy te muszą być adresami PUBLICZNYMI (po NAT), pod którymi Twoi pracownicy są widoczni w internecie.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/access-context-manager/docs/create-access-level" target="_blank">https://cloud.google.com/access-context-manager/docs/create-access-level</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -132,9 +133,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 250</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 250 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Ensure that all Compute Engine instances are created with 'OS Login' enabled by default across the organization. Which tool?
+You are managing data in your organization's Cloud Storage buckets and are required to retain objects. To reduce storage costs, you must automatically downgrade the storage class of objects older than 365 days to Coldline storage. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> IAM roles</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Organization Policy: compute.requireOsLogin</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Instance Templates</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> VPC Service Controls</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use Cloud Asset Inventory to generate a report of the configuration of all storage buckets. Examine the Lifecycle management policy settings and ensure that they are set correctly.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Set up a CloudRun Job with Cloud Scheduler to execute a script that searches for and removes files older than 365 days from your Cloud Storage.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Enable the Autoclass feature to manage all aspects of bucket storage classes.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Define a lifecycle policy JSON with an action on SetStorageClass to COLDLINE with an age condition of 365 and matchStorageClass STANDARD.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Ensure that all Compute Engine instances are created with 'OS Login' enabled by 
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">D</span>
 <br/>
 </span>
 </div>
@@ -88,38 +88,31 @@ Ensure that all Compute Engine instances are created with 'OS Login' enabled by 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: D.
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Organization Policy: Polityka `compute.requireOsLogin` pozwala na wymuszenie użycia systemu OS Login dla wszystkich maszyn w firmie. OS Login integruje dostęp SSH z tożsamością IAM Google Cloud, eliminując potrzebę zarządzania statycznymi kluczami SSH przez administratorów.
-
-Dlaczego inne są błędne:
-A. IAM: Nie wymusza tej funkcji systemowej.
-C. Templates: Deweloper może je pominąć przy ręcznym tworzeniu VM.
-D. VPC SC: Dla API, nie dla logowania do systemu operacyjnego.
-
-Konsensus społeczności ExamTopics: 100% poparcia dla B. OS Login to fundament bezpiecznego SSH w GCP.</pre>
+Wyjaśnienie: Object Lifecycle Management to wbudowana funkcja GCS do automatycznej zmiany klasy storage (np. Standard -> Coldline) bez pisania kodu.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Eksperci na forach podkreślają: 'Klucze SSH w metadanych projektu to zmora bezpieczeństwa'. Wymuszenie OS Login polityką (B) sprawia, że gdy pracownik odchodzi z firmy i traci konto Google, automatycznie traci też dostęp do wszystkich maszyn Linux, co jest niemożliwe do uzyskania przy tradycyjnych kluczach SSH.</p>
+<p><b>Sugerowana odpowiedź: D</b></p>
+<p><b>Głęboka analiza:</b> <p>Autoclass (C) zarządza klasami dynamicznie na podstawie dostępu, ale tu mamy konkretny wymóg czasowy (365 dni).</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/compute/docs/oslogin" target="_blank">https://cloud.google.com/compute/docs/oslogin</a></li>
+<li><a href="https://cloud.google.com/storage/docs/lifecycle" target="_blank">https://cloud.google.com/storage/docs/lifecycle</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

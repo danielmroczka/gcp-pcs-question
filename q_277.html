@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 277</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 277 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Enforce password length 12-16. Users still use shorter passwords. Fix in Admin console.
+You work for a large organization that is using Cloud Identity as the identity provider (IdP) on Google Cloud. Your InfoSec team has mandated the enforcement of a strong password with a length between 12 and 16 characters for all users. After configuring this requirement, users are still able to access the Google Cloud console with passwords that are less than 12 characters. You need to fix this problem within the Admin console. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Reset existing passwords.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Select 'Enforce password policy at the next sign-in'.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Select 'Enforce strong password'.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Organization password management settings.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Review each user's password configuration and reset existing passwords.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Review the organization password management setting and select Enforce password policy at the next sign-in.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Review each user's password configuration and select Enforce strong password.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Review the organization password management setting and select Enforce strong password.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Enforce password length 12-16. Users still use shorter passwords. Fix in Admin c
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
 B. Enforce at next sign-in: Gdy zmieniasz politykę haseł w Google Workspace, nie wpływa ona na osoby już zalogowane. Aby wymusić natychmiastową zgodność, musisz zaznaczyć opcję, która przy kolejnej próbie logowania zmusi użytkownika do zmiany hasła na takie, które spełnia nowe wymogi (12-16 znaków).
@@ -98,28 +99,28 @@ A. Reset passwords: Zbyt agresywne i uciążliwe. B zrobi to samo w sposób kont
 C. Enforce strong password: To ogólna flaga (sprawdza czy są cyfry/litery), ale to opcja B gwarantuje natychmiastową aktualizację haseł u wszystkich użytkowników.
 D. Organization settings: To miejsce, gdzie definiujesz długość, ale to opcja B jest 'akcją' wymuszającą poprawę stanu obecnego.
 
-Konsensus społeczności ExamTopics: 100% na B. To standardowa procedura 'hygiene' haseł.</pre>
+Konsensus społeczności ExamTopics: 100% na B. To standardowa procedura 'hygiene' haseł.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Bez zaznaczenia tej opcji, Twoi użytkownicy mogliby używać starych, 8-znakowych haseł jeszcze przez miesiące, aż do ich naturalnego wygaśnięcia.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Bez zaznaczenia tej opcji, Twoi użytkownicy mogliby używać starych, 8-znakowych haseł jeszcze przez miesiące, aż do ich naturalnego wygaśnięcia.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://support.google.com/a/answer/139399" target="_blank">https://support.google.com/a/answer/139399</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

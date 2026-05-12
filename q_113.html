@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 113</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 113 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Access denied between CE instances in Shared VPC and BigQuery in a perimeter. What to do?
+You are troubleshooting access denied errors between Compute Engine instances connected to a Shared VPC and BigQuery datasets. The datasets reside in a project protected by a VPC Service Controls perimeter. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Add host project to the perimeter.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Add service project to the perimeter.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create perimeter bridge between service and host projects.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create perimeter bridge between service project and BQ perimeter.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Add the host project containing the Shared VPC to the service perimeter.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Add the service project where the Compute Engine instances reside to the service perimeter.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a service perimeter between the service project where the Compute Engine instances reside and the host project that contains the Shared VPC.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a perimeter bridge between the service project where the Compute Engine instances reside and the perimeter that contains the protected BigQuery datasets.</li>
 
 </ul>
 </div>
@@ -88,37 +88,38 @@ Access denied between CE instances in Shared VPC and BigQuery in a perimeter. Wh
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
-A. Add host project: W architekturze Shared VPC, sieć fizycznie 'należy' do projektu hosta. Gdy VM z projektu usługowego (service project) próbuje połączyć się z usługą chronioną perymetrem (BigQuery), VPC Service Controls sprawdza, czy sieć, z której pochodzi ruch, jest zaufana. Dlatego to projekt HOSTA sieci musi być częścią perymetru.
+A. Add host project: W Shared VPC sieć fizycznie 'należy' do projektu hosta. Gdy VM z projektu usługowego woła BigQuery chronione przez VPC SC, system sprawdza czy sieć, z której pochodzi ruch, jest zaufana. Jeśli host sieci nie jest w perymetrze, ruch zostanie odrzucony jako 'pochodzący z zewnątrz'.
 
 Dlaczego inne są błędne:
-B. Service project: Sam projekt usługowy zazwyczaj już jest w perymetrze, ale to nie wystarcza, bo ruch 'sieciowy' jest przypisany do hosta sieci.
-C, D. Perimeter bridge: Służą do łączenia OBU projektów, jeśli są w RÓŻNYCH perymetrach. Tutaj kluczowym problemem jest brak hosta sieci w obwodzie bezpieczeństwa.
+B. Service project: Zazwyczaj już tam jest, ale to nie wystarcza przy Shared VPC.
+C, D. Bridge: Służą do łączenia różnych perymetrów, tutaj problemem jest brak fundamentu (hosta sieci) w obwodzie bezpieczeństwa.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na A. To jeden z najczęstszych błędów przy wdrażaniu VPC SC w Shared VPC.</pre>
+Konsensus społeczności ExamTopics: 100% na A. To najczęstsza przyczyna błędów VPC SC w dużych firmach.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> VPC Service Controls chroni nie tylko projekty, ale całe sieci VPC. W Shared VPC 'tożsamością sieciową' jest projekt hosta.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Dyskusja na forach zwraca uwagę na pułapkę architektoniczną: 'VPC SC chroni nie projekt, a sieć'. W modelu Shared VPC sieć jest w projekcie hosta, więc to on musi być 'zaklęty' w perymetrze, aby jego maszyny mogły rozmawiać z chronionymi API.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc-service-controls/docs/shared-vpc" target="_blank">https://cloud.google.com/vpc-service-controls/docs/shared-vpc</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

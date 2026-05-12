@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 202</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 202 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Grant a user access to manage and view all audit logs across the organization. Which role?
+Your Google Cloud organization allows for administrative capabilities to be distributed to each team through provision of a Google Cloud project with Owner role (roles/owner). The organization contains thousands of Google Cloud projects. Security Command Center Premium has surfaced multiple OPEN_MYSQL_PORT findings. You are enforcing the guardrails and need to prevent these types of common misconfigurations.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> roles/logging.admin</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> roles/logging.viewer</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> roles/logging.privateLogViewer</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> roles/iam.securityReviewer</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a hierarchical firewall policy configured at the organization to deny all connections from 0.0.0.0/0.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a hierarchical firewall policy configured at the organization to allow connections only from internal IP ranges.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a Google Cloud Armor security policy to deny traffic from 0.0.0.0/0.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a firewall rule for each virtual private cloud (VPC) to deny traffic from 0.0.0.0/0 with priority 0.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Grant a user access to manage and view all audit logs across the organization. W
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">B</span>
 <br/>
 </span>
 </div>
@@ -88,38 +88,31 @@ Grant a user access to manage and view all audit logs across the organization. W
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: B.
 
-Wyjaśnienie (Dlaczego poprawna):
-A. logging.admin: Ta rola daje pełną kontrolę nad usługą Cloud Logging w całej firmie. Pozwala na tworzenie zlewów (sinks), ustawianie retencji oraz przeglądanie wszystkich logów, w tym audytowych.
-
-Dlaczego inne są błędne:
-B. Viewer: Nie widzi logów Data Access ani Access Transparency (tych najbardziej wrażliwych).
-C. PrivateLogViewer: Pozwala czytać logi prywatne, ale nie pozwala na ich 'zarządzanie' (np. eksport do BigQuery), o co pyta zadanie ('manage').
-D. SecurityReviewer: Widzi polityki IAM i niektóre logi, ale nie jest rolą 'zarządzającą' systemem logowania.
-
-Konsensus społeczności ExamTopics: 100% na A. Zarządzanie logowaniem = Logging Admin.</pre>
+Wyjaśnienie: Hierarchiczne polityki firewalla pozwalają na wymuszenie reguł na poziomie całej organizacji, które nadpisują lokalne ustawienia projektów (Owner nie może ich zmienić).
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Na forach podkreśla się, że Logging Admin (A) to rola 'niebezpieczna', bo pozwala usunąć logi (tzw. log deletion), co hakerzy robią po włamanie, by zatrzeć ślady. Zaleca się nadawanie jej tylko centralnemu zespołowi SOC.</p>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p><b>Głęboka analiza:</b> <p>Zdefiniowanie 'allow only internal' na górze hierarchii skutecznie blokuje publiczny dostęp do baz danych we wszystkich podległych sieciach.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/logging/docs/access-control" target="_blank">https://cloud.google.com/logging/docs/access-control</a></li>
+<li><a href="https://cloud.google.com/vpc/docs/firewall-policies" target="_blank">https://cloud.google.com/vpc/docs/firewall-policies</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

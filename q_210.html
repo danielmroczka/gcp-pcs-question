@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 210</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 210 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Protect a web application from 'Log4j' type vulnerabilities (JNDI injection). Which service?
+Your company uses Google Cloud and has publicly exposed network assets. You want to discover the assets and perform a security audit on these assets by using a software tool in the least amount of time.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> VPC Firewall</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud Armor</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud IDS</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> IAP</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Run a platform security scanner on all instances in the organization.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Identify all external assets by using Cloud Asset Inventory, and then run a network security scanner against them.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Contact a Google approved security vendor to perform the audit.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Notify Google about the pending audit, and wait for confirmation before performing the scan.</li>
 
 </ul>
 </div>
@@ -88,38 +88,31 @@ Protect a web application from 'Log4j' type vulnerabilities (JNDI injection). Wh
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Cloud Armor: Posiada predefiniowane reguły WAF (np. `cve-canary`), które są aktualizowane przez Google w odpowiedzi na nowe zagrożenia. W przypadku Log4j, Cloud Armor potrafi zidentyfikować i zablokować złośliwe ciągi `${jndi:ldap...}` w nagłówkach i parametrach zapytań HTTP.
-
-Dlaczego inne są błędne:
-A. Firewall: Nie analizuje treści pakietów aplikacyjnych.
-C. Cloud IDS: Wykryje atak, ale go nie zablokuje w czasie rzeczywistym przed dotarciem do serwera tak skutecznie jak Armor.
-D. IAP: Nie chroni przed błędami w kodzie dla osób zalogowanych.
-
-Konsensus społeczności ExamTopics: 100% na B. To klasyczny przypadek użycia WAF dla 'Zero-day protection'.</pre>
+Wyjaśnienie: Cloud Asset Inventory pozwala na błyskawiczne wyliczenie wszystkich zasobów z publicznymi IP. Następnie skaner (jak Web Security Scanner lub Nessus) może je przetestować.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Na forach security podkreśla się, że Cloud Armor (B) to 'pierwsza linia obrony'. Nawet jeśli nie zdążyłeś jeszcze zpatchować wszystkich swoich serwerów Java, reguła WAF kupuje Ci czas, blokując exploit na brzegu sieci Google.</p>
+<p><b>Głęboka analiza:</b> <p>Automatyzacja odkrywania zasobów jest kluczowa w dynamicznych środowiskach chmurowych.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/armor/docs/rule-tuning#cve-protection" target="_blank">https://cloud.google.com/armor/docs/rule-tuning#cve-protection</a></li>
+<li><a href="https://cloud.google.com/asset-inventory/docs/overview" target="_blank">https://cloud.google.com/asset-inventory/docs/overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

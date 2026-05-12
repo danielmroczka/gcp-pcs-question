@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 252</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 252 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Migrate PII workflow to GCP. Mitigate risk of data exfiltration. Design security measures.
+Your organization is migrating a sensitive data processing workflow from on-premises infrastructure to Google Cloud. This workflow involves the collection, storage, and analysis of customer information that includes personally identifiable information (PII). You need to design security measures to mitigate the risk of data exfiltration in this new cloud environment. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Encryption in transit/at rest.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud DLP to scan/redact + VPC SC to block exfiltration.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Restrict all outbound traffic.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Employee expertise.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Encrypt all sensitive data in transit and at rest. Establish secure communication channels by using TLS and HTTPS protocols.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Implement a Cloud DLP solution to scan and identify sensitive information, and apply redaction or masking techniques to the PII. Integrate VPC SC with your network security controls to block potential data exfiltration attempts.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Restrict all outbound network traffic from cloud resources. Implement rigorous access controls and logging for all sensitive data and the systems that process the data.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Rely on employee expertise to prevent accidental data exfiltration incidents.</li>
 
 </ul>
 </div>
@@ -88,38 +88,39 @@ Migrate PII workflow to GCP. Mitigate risk of data exfiltration. Design security
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
-B. Cloud DLP + VPC SC: To połączenie adresuje dwa aspekty wycieku danych. Cloud DLP (Sensitive Data Protection) znajduje i maskuje dane wrażliwe Wewnątrz plików (np. zamiana numeru PESEL na [PII]). VPC Service Controls tworzy barierę na poziomie sieciowym API, która uniemożliwia fizyczne WYNIESIENIE danych poza zaufane projekty firmy.
+B. Cloud DLP + VPC SC: To duet idealny. Cloud DLP (Sensitive Data Protection) znajduje i maskuje dane wrażliwe wewnątrz plików (poufność treści). VPC Service Controls tworzy perymetr sieciowy, który fizycznie uniemożliwia wyniesienie danych do nieautoryzowanych projektów (blokada exfiltration).
 
 Dlaczego inne są błędne:
-A. Encryption: Chroni przed odczytem przez osoby niepowołane, ale nie zapobiega ich 'wyniesieniu' przez uprawnionego pracownika (tzw. Insider Threat).
-C. Restrict all traffic: Zbyt drastyczne, uniemożliwiłoby działanie platformy. VPC SC (B) jest bardziej inteligentnym sposobem blokowania eksfiltracji przez API usług Google.
-D. Expertise: Procedury nie zastępują technicznych barier systemowych.
+A. Encryption: Chroni przed odczytem przez osoby trzecie, ale nie zapobiega 'wyniesieniu' danych przez uprawnionego użytkownika.
+C. Restrict all traffic: Zbyt drastyczne, uniemożliwiłoby działanie wielu usług chmurowych.
+D. Expertise: Procedury nie zastępują technicznych barier (enforcement).
 
-Konsensus społeczności ExamTopics: 100% na B. To duet 'Defense in Depth' dla ochrony danych osobowych.</pre>
+Konsensus społeczności ExamTopics: 100% na B. VPC SC to standardowa odpowiedź na wymóg 'exfiltration control'.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> VPC SC to jedyna ochrona przed kopiowaniem danych między różnymi organizacjami GCP przez uprawnionego administratora.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Pamiętaj, że VPC SC chroni dane przed kopiowaniem nawet między różnymi organizacjami Google Cloud.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc-service-controls/docs/overview" target="_blank">https://cloud.google.com/vpc-service-controls/docs/overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

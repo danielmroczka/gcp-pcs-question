@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 301</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 301 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Developers deploy code but cannot change firewall rules. Separation of duties. What to do?
+Your organization is implementing separation of duties in a Google Cloud project. A group of developers must deploy new code, but cannot have permission to change network firewall rules. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Network admin role + tell not to change.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> CAA for admins only.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Two custom roles: deployer and network admin.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Editor role + IAM deny policies.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Assign the network administrator IAM role to all developers. Tell developers not to change firewall settings.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use Access Context Manager to create conditions that allow only authorized administrators to change firewall rules based on attributes such as IP address or device security posture.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create and assign two custom IAM roles. Assign the deployer role to control Compute Engine and deployment-related permissions. Assign the network administrator role to manage firewall permissions.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Grant the editor IAM role to the developer group. Explicitly negate any firewall modification permissions by using IAM deny policies.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Developers deploy code but cannot change firewall rules. Separation of duties. W
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: C.
 
 Wyjaśnienie (Dlaczego poprawna):
 C. Granular Roles: Aby wymusić separację obowiązków (Separation of Duties), należy użyć ról o wąskich uprawnieniach. Deweloper dostaje rolę `compute.instanceAdmin` (bez uprawnień sieciowych), a zespół sieciowy rolę `compute.networkAdmin`. To jedyna metoda gwarantująca techniczne wymuszenie blokady zmian sieci przez programistów.
@@ -98,28 +99,28 @@ A. Verbal instruction: Błąd. Bezpieczeństwo musi być wymuszone systemowo, a 
 B. CAA: Kontroluje lokalizację logowania, a nie uprawnienia do edycji zasobów (IAM to robi).
 D. Editor + Deny: IAM Deny Policies są trudniejsze w zarządzaniu niż proste nadanie tylko niezbędnych ról (C).
 
-Konsensus społeczności ExamTopics: 100% na C. Podstawowa zasada IAM: nadawaj tylko to, co jest niezbędne.</pre>
+Konsensus społeczności ExamTopics: 100% na C. Podstawowa zasada IAM: nadawaj tylko to, co jest niezbędne.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Google dąży do całkowitego wyeliminowania ról podstawowych (Owner/Editor) na rzecz ról predefiniowanych o wąskim zakresie.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Google dąży do całkowitego wyeliminowania ról podstawowych (Owner/Editor) na rzecz ról predefiniowanych o wąskim zakresie.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/iam/docs/understanding-roles" target="_blank">https://cloud.google.com/iam/docs/understanding-roles</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

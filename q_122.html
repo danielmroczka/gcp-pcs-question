@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 122</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 122 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Only allow communication between Web and App tiers. Consistent security when autoscaling. Prevent Instance Admins from altering traffic. How?
+Your organization acquired a new workload. The Web and Application (App) servers will be running on Compute Engine in a newly created custom VPC. You are responsible for configuring a secure network communication solution that meets the following requirements: Only allows communication between the Web and App tiers. Enforces consistent network security when autoscaling the Web and App tiers. Prevents Compute Engine Instance Admins from altering network traffic. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Network tags.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Service accounts.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Instance templates with tags.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Instance templates with service accounts.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> 1. Configure all running Web and App servers with respective network tags. 2. Create an allow VPC firewall rule that specifies the target/source with respective network tags.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> 1. Configure all running Web and App servers with respective service accounts. 2. Create an allow VPC firewall rule that specifies the target/source with respective service accounts.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> 1. Re-deploy the Web and App servers with instance templates configured with respective network tags. 2. Create an allow VPC firewall rule that specifies the target/source with respective network tags.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> 1. Re-deploy the Web and App servers with instance templates configured with respective service accounts. 2. Create an allow VPC firewall rule that specifies the target/source with respective service accounts.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Only allow communication between Web and App tiers. Consistent security when aut
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: D.
 
 Wyjaśnienie (Dlaczego poprawna):
 D. Instance templates with service accounts: Użycie Kont Serwisowych (SA) w regułach firewalla jest bezpieczniejsze niż tagów, ponieważ Instance Admin nie może zmienić SA przypisanego do maszyny bez posiadania uprawnienia `iam.serviceAccounts.actAs`. Szablon instancji (Instance Template) gwarantuje, że każda nowa maszyna utworzona przez autoskalowanie automatycznie otrzyma właściwe konto SA.
@@ -97,28 +98,28 @@ Dlaczego inne są błędne:
 A, C. Tags: Tagi sieciowe są mniej bezpieczne, ponieważ każdy `Compute Instance Admin` może je dowolnie modyfikować na działającej maszynie, omijając w ten sposób restrykcje firewalla.
 B. Service accounts: Sama tożsamość jest poprawna, ale bez użycia szablonów (D) trudniej o 'konsystencję przy autoskalowaniu'.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na D. SA to tożsamość, której nie da się łatwo 'podrobić' jak tagu.</pre>
+Konsensus społeczności ExamTopics: Zdecydowana większość na D. SA to tożsamość, której nie da się łatwo 'podrobić' jak tagu.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Reguła firewalla typu: 'Zezwól na port 8080 z SA-WEB do SA-APP' jest niezależna od adresów IP i tagów, co czyni ją odporną na błędy konfiguracyjne deweloperów.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Reguła firewalla typu: 'Zezwól na port 8080 z SA-WEB do SA-APP' jest niezależna od adresów IP i tagów, co czyni ją odporną na błędy konfiguracyjne deweloperów.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc/docs/firewalls#service-accounts" target="_blank">https://cloud.google.com/vpc/docs/firewalls#service-accounts</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

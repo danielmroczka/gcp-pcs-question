@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 96</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,7 +64,7 @@
 <h2>Question 96 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Regulated workload audit evidence for access reviews. Which tool should you use?
+You are the project owner for a regulated workload that runs in a project you own and manage as an Identity and Access Management (IAM) admin. For an upcoming audit, you need to provide access reviews evidence. Which tool should you use?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -88,38 +88,39 @@ Regulated workload audit evidence for access reviews. Which tool should you use?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
-B. Policy Analyzer: Jest to dedykowane narzędzie do audytu uprawnień. Potrafi odpowiedzieć na skomplikowane pytania typu: 'Kto ma dostęp do tego konkretnego bucketu, uwzględniając grupy i dziedziczenie?'. Pozwala na generowanie raportów, które są idealnym dowodem (audit evidence) dla audytorów.
+B. Policy Analyzer: Pozwala na tworzenie raportów 'kto ma dostęp do czego'. Potrafi odpowiedzieć na skomplikowane pytania uwzględniając grupy i hierarchię projektów, co jest idealnym dowodem (audit evidence) dla audytorów.
 
 Dlaczego inne są błędne:
-A. Policy Troubleshooter: Służy do sprawdzania, dlaczego KONKRETNY użytkownik nie ma dostępu do KONKRETNEGO zasobu w danej chwili. Nie nadaje się do masowych przeglądów dostępów.
-C. IAM Recommender: Podpowiada jak ZMNIEJSZYĆ uprawnienia na podstawie historii użycia (Least Privilege), ale nie służy do raportowania aktualnego stanu dla audytu.
-D. Policy Simulator: Pozwala sprawdzić wpływ zmiany uprawnień ZANIM ją wprowadzisz, aby niczego nie popsuć.
+A. Policy Troubleshooter: Służy do sprawdzania, dlaczego KONKRETNY użytkownik nie ma dostępu do KONKRETNEGO zasobu TERAZ. Nie nadaje się do masowych raportów audytowych.
+C. IAM Recommender: Podpowiada jak ZMNIEJSZYĆ uprawnienia, ale nie raportuje aktualnego stanu dla audytu.
+D. Policy Simulator: Sprawdza wpływ zmiany uprawnień ZANIM ją wprowadzisz.
 
-Konsensus społeczności ExamTopics: 100% na B. Policy Analyzer to 'must-have' przy każdym audycie IAM.</pre>
+Konsensus społeczności ExamTopics: 100% na B. Policy Analyzer to główne narzędzie audytowe IAM.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Policy Analyzer potrafi wyeksportować wyniki do BigQuery lub JSON, co umożliwia dalszą automatyczną analizę zgodności z wymogami regulacyjnymi.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Dyskusja na Reddit podkreśla, że Policy Analyzer potrafi wyeksportować dane do BigQuery, co pozwala audytorom na pisanie własnych zapytań SQL w celu weryfikacji skomplikowanych reguł zgodności.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/iam/docs/policy-analyzer-overview" target="_blank">https://cloud.google.com/iam/docs/policy-analyzer-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

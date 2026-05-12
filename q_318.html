@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 318</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 318 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-strongest level of security and control for highly sensitive data in GCP. What to do?
+Your organization must store highly sensitive data within Google Cloud. You need to design a solution that provides the strongest level of security and control. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> GCS with CSEK + VPC SC + DLP.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> GCS with CMEK + DLP + Secret Manager.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> GCS with client-side encryption + Cloud KMS/HSM.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> GCS with server-side encryption + BQ column encryption + IAM.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use Cloud Storage with customer-supplied encryption keys (CSEK), VPC Service Controls for network isolation, and Cloud DLP for data inspection.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use Cloud Storage with customer-managed encryption keys (CMEK), Cloud DLP for data classification, and Secret Manager for storing API access tokens.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use Cloud Storage with client-side encryption, Cloud KMS for key management, and Cloud HSM for cryptographic operations.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use Cloud Storage with server-side encryption, BigQuery with column-level encryption, and IAM roles for access control.</li>
 
 </ul>
 </div>
@@ -88,37 +88,39 @@ strongest level of security and control for highly sensitive data in GCP. What t
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
-C. Client-side encryption + HSM: To najwyższy poziom bezpieczeństwa (Strongest level). Dane są szyfrowane PRZED wysłaniem do chmury. Google widzi tylko nieczytelne bloki bajtów. Użycie Cloud HSM do ochrony kluczy nadrzędnych zapewnia, że nawet przy posiadaniu kluczy w chmurze, są one chronione sprzętowo (FIPS 140-2 Level 3).
+A. logging.admin: Ta rola pozwala na pełne zarządzanie usługą logowania (tworzenie sinków, retencja) oraz przeglądanie wszystkich logów (w tym audytowych), ale celowo NIE daje uprawnień do innych zasobów projektu (np. nie pozwala na startowanie VM czy czytanie baz danych).
 
 Dlaczego inne są błędne:
-A. CSEK: Bardzo silne, ale CSEK szyfruje dane 'server-side' (klucz trafia na chwilę do RAM Google). Szyfrowanie 'client-side' (C) jest silniejsze, bo Google nigdy nie widzi klucza.
-B, D: Opierają się na zaufaniu do infrastruktury Google (server-side encryption), co z definicji jest słabsze niż szyfrowanie u siebie (client-side).
+B. Viewer: Nie widzi logów Data Access (prywatnych).
+C. Admin: Zdecydowanie zbyt wysoka rola.
+D. Viewer: Widzi zasoby biznesowe, co narusza zasadę separacji obowiązków.
 
-Konsensus społeczności ExamTopics: 100% na C. Szyfrowanie u klienta to 'ultimate security' w chmurze.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla A. To standardowa rola dla zespołu SOC (Security Operations Center).
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Wadą opcji C jest brak możliwości wyszukiwania i analizy danych przez natywne usługi chmurowe (np. BQ nie przeszuka zaszyfrowanego pliku). Jednak wymogiem pytania jest Maksymalne Bezpieczeństwo, a nie Użyteczność.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Wiele osób wybiera B. Eksperci na forach przypominają: audytor potrzebuje widzieć 'kto czytał dane' (Data Access Logs), a te logi są widoczne tylko dla roli Admin (A) lub Private Log Viewer. Ponieważ zadanie mówi o 'zarządzaniu' (manage), Admin jest jedyną opcją.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/storage/docs/encryption/client-side" target="_blank">https://cloud.google.com/storage/docs/encryption/client-side</a></li>
+<li><a href="https://cloud.google.com/logging/docs/access-control" target="_blank">https://cloud.google.com/logging/docs/access-control</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

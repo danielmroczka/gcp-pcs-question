@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 110</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 110 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Confirm unauthorized access by a former employee using a SA key in the past 2 months. Determine user activity.
+Your Security team believes that a former employee of your company gained unauthorized access to Google Cloud resources some time in the past 2 months by using a service account key. You need to confirm the unauthorized access and determine the user activity. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Security Health Analytics</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud Monitoring to filter audit logs by user.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> DLP to query logs in GCS.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Logs Explorer to search for user activity.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use Security Health Analytics to determine user activity.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use the Cloud Monitoring console to filter audit logs by user.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use the Cloud Data Loss Prevention API to query logs in Cloud Storage.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use the Logs Explorer to search for user activity.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Confirm unauthorized access by a former employee using a SA key in the past 2 mo
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">D</span>
+<span class="correct-answer">B</span>
 <br/>
 </span>
 </div>
@@ -88,38 +88,38 @@ Confirm unauthorized access by a former employee using a SA key in the past 2 mo
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D. (Uwaga: B jest technicznie podobne, ale Logs Explorer to dedykowane narzędzie do tego celu).
+<pre>
+Odpowiedź: D.
 
 Wyjaśnienie (Dlaczego poprawna):
-D. Logs Explorer: Jest to główne narzędzie do przeszukiwania logów audytowych (Audit Logs). Pozwala na filtrowanie zdarzeń po `principalEmail` (identyfikatorze konta serwisowego) oraz po `serviceAccountKeyName`, co pozwoli precyzyjnie określić, co i kiedy zostało zrobione przy użyciu skradzionego klucza w ciągu ostatnich 2 miesięcy.
+D. Logs Explorer: Jest to główne narzędzie do analizy kryminalistycznej (forensics) w GCP. Pozwala na przeszukiwanie historycznych logów Admin Activity i Data Access (retencja do 400 dni) pod kątem konkretnego konta serwisowego i jego klucza.
 
 Dlaczego inne są błędne:
-A. Security Health Analytics: Wykrywa błędy konfiguracji (np. 'klucz jest stary'), ale nie służy do analizy aktywności historycznej (kto co zrobił).
-B. Cloud Monitoring: Służy do wyświetlania wykresów i metryk (np. liczba błędów), nie jest optymalny do szczegółowego dochodzenia (forensics) w treści logów audytowych.
-C. DLP: Służy do szukania danych wrażliwych, nie do audytu aktywności systemowej.
+A. SHA: Wykrywa błędy konfiguracji 'teraz', nie analizuje historii działań użytkowników.
+B. Cloud Monitoring: Służy do metryk (wykresy zużycia), a nie do śledzenia pojedynczych zdarzeń w logach audytowych.
 
-Konsensus społeczności ExamTopics: Przewaga głosów na D. Logs Explorer to narzędzie pierwszego wyboru przy incydentach.</pre>
+Konsensus społeczności ExamTopics: 100% na D. Logs Explorer to jedyne narzędzie do przeszukiwania treści logów historycznych.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Logi 'Admin Activity' są przechowywane domyślnie przez 400 dni, więc okres 2 miesięcy mieści się w standardowej retencji Logs Explorera.</p>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Eksperci na forach podkreślają, że w logach audytowych pole `principalEmail` pokaże Ci nazwę konta serwisowego, a pole `serviceAccountKeyName` pozwoli zidentyfikować konkretny klucz użyty do włamania, co jest niezbędne w procesie dochodzeniowym.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/logging/docs/audit" target="_blank">https://cloud.google.com/logging/docs/audit</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

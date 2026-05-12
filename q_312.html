@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 312</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 312 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-subset of Google Cloud logs for on-prem SIEM, minimize risk of data exposure. What to do?
+A team at your organization collects logs in an on-premises security information and event management system (SIEM). You must provide a subset of Google Cloud logs for the SIEM, and minimize the risk of data exposure in your cloud environment. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> BQ stream all logs, WIF access.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Log view for relevant logs, Workforce Identity access.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Log sink for relevant logs to Pub/Sub -> Dataflow -> SIEM.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> GCS bucket, SA key to SIEM team.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a new BigQuery dataset. Stream all logs to this dataset. Provide the on-premises SIEM system access to the data in BigQuery by using workload identity federation and let the SIEM team filter for the relevant log data.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Define a log view for the relevant logs. Provide access to the log view to a principal from your on-premises identity provider by using workforce identity federation.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a log sink for the relevant logs. Send the logs to Pub/Sub. Retrieve the logs from Pub/Sub and push the logs to the SIEM by using Dataflow.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Filter for the relevant logs. Store the logs in a Cloud Storage bucket. Grant the service account access to the bucket. Provide the service account key to the SIEM team.</li>
 
 </ul>
 </div>
@@ -88,38 +88,39 @@ subset of Google Cloud logs for on-prem SIEM, minimize risk of data exposure. Wh
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
-C. Filtered Log Sink + Pub/Sub: To najbardziej bezpieczna i wydajna metoda. Tworzysz 'Log Sink' z precyzyjnym filtrem (np. tylko logi bezpieczeństwa, bez logów aplikacji z PII), co spełnia wymóg 'subset' i 'minimize exposure'. Pub/Sub i Dataflow zapewniają bezpieczne i skalowalne dostarczenie tych danych do SIEM on-prem.
+B. Secure Web Proxy (SWP): Jest to usługa zaprojektowana do filtrowania ruchu wychodzącego (egress). W przeciwieństwie do zwykłych firewalli, SWP potrafi przeprowadzać inspekcję TLS (TLS decryption), co pozwala na blokowanie złośliwych URL-i ukrytych wewnątrz szyfrowanych sesji HTTPS.
 
 Dlaczego inne są błędne:
-A. All logs: Narusza wymóg 'minimize risk' (niepotrzebne przesyłanie wrażliwych logów aplikacyjnych).
-B. Log view: Służy do ograniczania widoczności logów WEWNĄTRZ chmury (w Logs Explorerze), nie jest to mechanizm eksportu do systemów on-premises.
-D. GCS + SA key: Przesyłanie statycznych kluczy JSON (SA keys) poza chmurę jest odradzane.
+A. Cloud NAT: Służy do translacji adresów, nie posiada funkcji inspekcji TLS i filtrowania URL.
+C. VPC Firewall: Działa na warstwach 3/4, nie widzi treści wewnątrz sesji TLS.
+D. Cloud Armor: Chroni ruch PRZYCHODZĄCY (ingress) do Load Balancera.
 
-Konsensus społeczności ExamTopics: 100% na C. Filtrowany sink to jedyna metoda na precyzyjny eksport danych logowania.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla B. SWP to jedyne natywne rozwiązanie proxy z inspekcją TLS.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Wykorzystanie filtra w sinku (`resource.type="gce_instance" AND severity>=WARNING`) drastycznie zmniejsza koszty przesyłu danych i ułatwia pracę analitykom SIEM.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Debata w sieci dotyczy złożoności wdrożenia. SWP (B) wymaga zainstalowania certyfikatu CA firmy na wszystkich maszynach, co jest narzutem, ale w sektorach regulowanych (bankowość) jest to jedyny sposób na walkę z wyciekiem danych przez HTTPS.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/architecture/exporting-stackdriver-logs-to-splunk" target="_blank">https://cloud.google.com/architecture/exporting-stackdriver-logs-to-splunk</a></li>
+<li><a href="https://cloud.google.com/secure-web-proxy/docs/overview" target="_blank">https://cloud.google.com/secure-web-proxy/docs/overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

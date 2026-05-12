@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 289</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 289 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Secure GCS buckets: varying access, rest encryption, track changes, control over keys. What to do?
+You work for an organization that handles sensitive customer data. You must secure a series of Google Cloud Storage buckets housing this data and meet these requirements:<br/>- Multiple teams need varying access levels (some read-only, some read-write).<br/>- Data must be protected in storage and at rest.<br/>- It's critical to track file changes and audit access for compliance purposes.<br/>- For compliance purposes, the organization must have control over the encryption keys.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> IAM groups, server-side encryption, versioning.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Individual permissions, ACLs, TLS, versioning, audit logs.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Predefined roles, CSEK, TLS, versioning, audit logs.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Object-level permissions, third-party encryption.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create IAM groups for each team and manage permissions at the group level. Employ server-side encryption and Object Versioning by Google Cloud Storage. Configure cloud monitoring tools to alert on anomalous data access patterns.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Set individual permissions for each team and apply access control lists (ACLs) to each bucket and file. Enforce TLS encryption for file transfers. Enable Object Versioning and Cloud Audit Logs for the storage buckets.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use predefined IAM roles tailored to each team's access needs, such as Storage Object Viewer and Storage Object User. Utilize customer-supplied encryption keys (CSEK) and enforce TLS encryption. Turn on both Object Versioning and Cloud Audit Logs for the storage buckets.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Assign IAM permissions for all teams at the object level. Implement third-party software to encrypt data at rest. Track data access by using network logs.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Secure GCS buckets: varying access, rest encryption, track changes, control over
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: C.
 
 Wyjaśnienie (Dlaczego poprawna):
 C. Comprehensive GCS Security: 1. Predefined roles (granularny dostęp). 2. CSEK (pełna kontrola klienta nad kluczami). 3. TLS (bezpieczny transport). 4. Versioning + Audit logs (śledzenie zmian). Ten zestaw spełnia wszystkie rygorystyczne wymogi pytania.
@@ -98,28 +99,28 @@ A. Server-side: Bez doprecyzowania oznacza klucze Google, co narusza wymóg 'con
 B. ACLs: Są przestarzałe i odradzane przez Google na rzecz IAM.
 D. Object-level: Bardzo trudne w zarządzaniu i audycie w porównaniu do polityk na poziomie bucketu.
 
-Konsensus społeczności ExamTopics: 100% na C. CSEK to najwyższy wymóg kontroli klucza w GCS.</pre>
+Konsensus społeczności ExamTopics: 100% na C. CSEK to najwyższy wymóg kontroli klucza w GCS.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Przy CSEK musisz dostarczać klucz przy każdej operacji gsutil. Jeśli go zgubisz, dane w buckecie stają się bezpowrotnie nieczytelne.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Przy CSEK musisz dostarczać klucz przy każdej operacji gsutil. Jeśli go zgubisz, dane w buckecie stają się bezpowrotnie nieczytelne.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/storage/docs/encryption/customer-supplied-keys" target="_blank">https://cloud.google.com/storage/docs/encryption/customer-supplied-keys</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

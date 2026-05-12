@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 214</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 214 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-What is the primary purpose of the Google Cloud Confidential VMs?
+Your organization processes sensitive health information. You want to ensure that data is encrypted while in use by the virtual machines (VMs). You must create a policy that is enforced across the entire organization.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> To automate VM patching.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> To encrypt data in use (in RAM) using hardware-based encryption.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> To manage SSH keys.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> To provide a VPN for VMs.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Implement an organization policy that ensures that all VM resources created across your organization use customer-managed encryption keys (CMEK) protection.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Implement an organization policy that ensures all VM resources created across your organization are Confidential VM instances.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Implement an organization policy that ensures that all VM resources created across your organization use Cloud External Key Manager (EKM) protection.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> No action is necessary because Google encrypts data while it is in use by default.</li>
 
 </ul>
 </div>
@@ -88,36 +88,31 @@ What is the primary purpose of the Google Cloud Confidential VMs?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Confidential VMs: To technologia chroniąca dane 'w użyciu'. Wykorzystuje sprzętowe szyfrowanie pamięci RAM (np. AMD SEV), dzięki czemu nawet jeśli haker (lub Google) uzyska dostęp do fizycznej pamięci serwera, zobaczy tylko zaszyfrowane dane.
-
-Dlaczego inne są błędne:
-A, C, D: To funkcje innych usług (VM Manager, OS Login, Cloud VPN).
-
-Konsensus społeczności ExamTopics: 100% na B. Confidential Computing = Encryption in Use.</pre>
+Wyjaśnienie: Confidential VMs to technologia Google Cloud (oparta na AMD SEV), która szyfruje pamięć RAM podczas pracy maszyny.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Inżynierowie na forach podkreślają, że Confidential VMs (B) to 'trzeci filar' szyfrowania. GCP szyfruje dane 'at rest' (dysk) i 'in transit' (sieć) domyślnie. Ta technika zamyka lukę, chroniąc dane podczas ich aktywnego procesowania w procesorze i pamięci.</p>
+<p><b>Głęboka analiza:</b> <p>CMEK/EKM chronią dane 'at rest' (na dysku), a Confidential VM chroni dane 'in use'.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/confidential-computing/confidential-vm/docs/introduction" target="_blank">https://cloud.google.com/confidential-computing/confidential-vm/docs/introduction</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -132,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

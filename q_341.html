@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 341</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 341 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-protect Compute Engine app from SQLi/XSS, control traffic based on IP and user identity. What to do?
+Your organization is deploying a new web application on Compute Engine and needs robust perimeter security. You need to protect the application from common web attacks, including SQL injection and cross-site scripting (XSS), while also controlling network traffic based on the source IP address and user identity. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Load Balancing + Cloud DNS + Cloud CDN + Cloud Armor.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud Armor WAF + network firewall + Cloud IAM.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud Armor WAF + VPC SC + Cloud IAM.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Armor + Cloud Firewall + Identity-Aware Proxy (IAP).</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Implement Cloud Load Balancing and Cloud DNS. Set up Cloud CDN to cache content and mitigate some DDoS attacks. Configure Cloud Armor to provide layer 7 protection.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Deploy Cloud Armor with its default WAF rules enabled. Configure network firewall rules on the Compute Engine instances to control all traffic based on source IP addresses. Use Cloud IAM to manage which users have roles granting access to the web application.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use Google Cloud Armor with pre-configured WAF rules to filter malicious traffic. Implement VPC Service Controls to create a secure perimeter around the application's resources. Manage users with Cloud IAM.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Deploy Cloud Armor, and configure Cloud Firewall rules to control traffic based on source IP addresses. Integrate with Identity-Aware Proxy to control access based on user identity.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ protect Compute Engine app from SQLi/XSS, control traffic based on IP and user i
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: D.
 
 Wyjaśnienie (Dlaczego poprawna):
 D. Trio ochronne: 1. Cloud Armor (WAF) chroni przed SQLi/XSS. 2. Cloud Firewall (VPC) kontroluje ruch na poziomie portów i adresów IP. 3. Identity-Aware Proxy (IAP) wymusza weryfikację tożsamości użytkownika przed wpuszczeniem go do aplikacji. To połączenie realizuje wszystkie wymogi pytania.
@@ -97,28 +98,28 @@ Dlaczego inne są błędne:
 A. DNS/CDN: Przyspieszają i chronią domenę, ale nie kontrolują tożsamości użytkownika (brak IAP).
 B, C: Brakuje im mechanizmu kontroli tożsamości użytkownika przeglądarkowego 'w locie' (brak IAP). Cloud IAM sam w sobie nie blokuje ruchu sieciowego bez pośrednictwa proxy.
 
-Konsensus społeczności ExamTopics: 100% na D. To wzorcowy stos 'Zero Trust Web Security'.</pre>
+Konsensus społeczności ExamTopics: 100% na D. To wzorcowy stos 'Zero Trust Web Security'.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> IAP i Cloud Armor działają na Load Balancerze, tworząc potężny front-end bezpieczeństwa, który odrzuca większość ataków zanim dotrą one do serwerów aplikacji.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> IAP i Cloud Armor działają na Load Balancerze, tworząc potężny front-end bezpieczeństwa, który odrzuca większość ataków zanim dotrą one do serwerów aplikacji.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/security/products" target="_blank">https://cloud.google.com/security/products</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

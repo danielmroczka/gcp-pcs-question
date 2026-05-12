@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 256</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 256 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Copy data between two VPC SC perimeters (A and B). Minimize exfiltration risk, least privilege. What to do?
+Your organization has two VPC Service Controls service perimeters, Perimeter-A and Perimeter-B, in Google Cloud. You want to allow data to be copied from a Cloud Storage bucket in Perimeter-A to another Cloud Storage bucket in Perimeter-B. You must minimize exfiltration risk, only allow required connections, and follow the principle of least privilege. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Perimeter bridge specifying buckets.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Perimeter bridge between projects.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Egress rule in A and corresponding Ingress rule in B.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Bidirectional rules.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure a perimeter bridge between Perimeter-A and Perimeter-B, and specify the Cloud Storage buckets as the resources involved.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure a perimeter bridge between the projects hosting the Cloud Storage buckets in Perimeter-A and Perimeter-B.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure an egress rule for the Cloud Storage bucket in Perimeter-A and a corresponding ingress rule in Perimeter-B.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure a bidirectional egress/ingress rule for the Cloud Storage buckets in Perimeter-A and Perimeter-B.</li>
 
 </ul>
 </div>
@@ -88,37 +88,38 @@ Copy data between two VPC SC perimeters (A and B). Minimize exfiltration risk, l
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: C.
 
 Wyjaśnienie (Dlaczego poprawna):
-C. Ingress/Egress Rules: Są bardziej precyzyjne niż mosty (bridges). Pozwalają na zezwolenie na konkretną operację (np. tylko `objects.get`) tylko dla wybranej tożsamości, co realizuje zasadę najniższych uprawnień lepiej niż otwarcie całego projektu mostem.
+C. Ingress/Egress Rules: Są bardziej precyzyjne niż mosty (bridges). Pozwalają na zezwolenie na konkretną operację (np. tylko `objects.get`) tylko dla konkretnej tożsamości między perymetrami, co realizuje zasadę najniższych uprawnień lepiej niż otwarcie całego projektu mostem.
 
 Dlaczego inne są błędne:
-A, B. Perimeter bridge: Otwiera zaufanie dla WSZYSTKICH usług i tożsamości między projektami, co zwiększa ryzyko eksfiltracji danych.
-D. Bidirectional: Jeśli kopiujemy w jedną stronę, dwukierunkowe zaufanie jest niepotrzebnym ryzykiem.
+A, B. Perimeter bridge: Jest to metoda 'stara' lub mniej granularna. Bridge łączy wszystkie usługi w perymetrach, co zwiększa powierzchnię ataku.
+D. Bidirectional: Jeśli potrzebujemy kopiować tylko w jedną stronę, dwukierunkowe zaufanie jest niepotrzebnym ryzykiem.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na C. Nowoczesne VPC SC opiera się na granularnych regułach wejścia/wyjścia.</pre>
+Konsensus społeczności ExamTopics: Zdecydowana większość na C. Nowoczesne VPC SC opiera się na granularnych regułach wejścia/wyjścia.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Reguły te pozwalają na filtrowanie po atrybutach takich jak metoda API czy źródłowe konto serwisowe.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Reguły Ingress/Egress pozwalają na filtrowanie nawet po poziomach dostępu (Access Levels), co daje dodatkową kontrolę kontekstową.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules" target="_blank">https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

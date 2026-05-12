@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 273</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 273 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Vertex AI: all data encrypted by keys in EU controlled by organization. No impact on performance. What to do?
+You are working with developers to secure custom training jobs running on Vertex AI. For compliance reasons, all supported data types must be encrypted by key materials that reside in the Europe region and are controlled by your organization. The encryption activity must not impact the training operation in Vertex AI. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Google default for data, CMEK for models.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> CMEK for all data types.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> CMEK for code, data, and exported models.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Google default + Cloud KMS location policy.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Encrypt the code, training data, and metadata with Google default encryption. Use customer-managed encryption keys (CMEK) for the trained models exported to Cloud Storage buckets.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Encrypt the code, training data, metadata, and exported trained models with customer-managed encryption keys (CMEK).</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Encrypt the code, training data, and exported trained models with customer-managed encryption keys (CMEK).</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Encrypt the code, training data, and metadata with Google default encryption. Implement an organization policy that enforces a constraint to restrict the Cloud KMS location to the Europe region.</li>
 
 </ul>
 </div>
@@ -88,31 +88,32 @@ Vertex AI: all data encrypted by keys in EU controlled by organization. No impac
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: C.
 
 Wyjaśnienie (Dlaczego poprawna):
-C. Comprehensive CMEK: Aby spełnić wymóg pełnej kontroli ('controlled by organization') nad całym cyklem AI, należy użyć kluczy CMEK dla wszystkich kluczowych elementów procesu ML.</pre>
+C. Comprehensive CMEK: Aby spełnić wymóg pełnej kontroli ('controlled by organization') nad całym cyklem AI, należy użyć kluczy CMEK dla wszystkich kluczowych elementów procesu ML.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Vertex AI wspiera CMEK dla zbiorów danych, treningu i modeli.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Vertex AI wspiera CMEK dla zbiorów danych, treningu i modeli.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vertex-ai/docs/general/cmek" target="_blank">https://cloud.google.com/vertex-ai/docs/general/cmek</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -127,9 +128,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

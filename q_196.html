@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 196</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 196 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Protect a GKE cluster against 'Container Escape' attacks where a malicious process tries to access the host kernel. Which feature?
+Your organization previously stored files in Cloud Storage by using Google Managed Encryption Keys (GMEK), but has recently updated the internal policy to require Customer Managed Encryption Keys (CMEK). You need to re-encrypt the files quickly and efficiently with minimal cost.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> VPC Firewall</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> GKE Sandbox (gVisor)</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud Armor</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Network Policies</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Reupload the files to the same Cloud Storage bucket specifying a key file by using gsutil.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Encrypt the files locally, and then use gsutil to upload the files to a new bucket.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Copy the files to a new bucket with CMEK enabled in a secondary region.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Change the encryption type on the bucket to CMEK, and rewrite the objects.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Protect a GKE cluster against 'Container Escape' attacks where a malicious proce
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">D</span>
 <br/>
 </span>
 </div>
@@ -88,37 +88,31 @@ Protect a GKE cluster against 'Container Escape' attacks where a malicious proce
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: D.
 
-Wyjaśnienie (Dlaczego poprawna):
-B. GKE Sandbox: Wykorzystuje technologię gVisor, która tworzy dodatkową warstwę izolacji (user-space kernel) dla każdego poda. Jeśli proces w kontenerze 'ucieknie', trafi do piaskownicy gVisor, a nie do prawdziwego jądra systemu operacyjnego węzła (hosta).
-
-Dlaczego inne są błędne:
-A, D: Chronią sieć, nie izolują procesów od jądra systemu.
-C. Cloud Armor: Chroni HTTP, nie ma wpływu na bezpieczeństwo procesów wewnątrz Linuxa.
-
-Konsensus społeczności ExamTopics: 100% na B. Container Escape = GKE Sandbox.</pre>
+Wyjaśnienie: Operacja 'rewrite' w GCS pozwala na zmianę parametrów obiektu (np. klucza szyfrującego) bez przesyłania danych poza chmurę.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Dyskusja w sieci dotyczy wydajności. GKE Sandbox (B) generuje narzut (~10-20%), dlatego inżynierowie radzą używać go tylko dla 'Untrusted Code' – czyli aplikacji od dostawców zewnętrznych lub takich, które przetwarzają dane z nieznanych źródeł.</p>
+<p><b>Sugerowana odpowiedź: D</b></p>
+<p><b>Głęboka analiza:</b> <p>Można to zrobić za pomocą polecenia 'gsutil rewrite' lub przez konsolę po zmianie domyślnego klucza bucketu.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/kubernetes-engine/docs/concepts/sandbox" target="_blank">https://cloud.google.com/kubernetes-engine/docs/concepts/sandbox</a></li>
+<li><a href="https://cloud.google.com/storage/docs/using-customer-managed-encryption-keys#rewrite" target="_blank">https://cloud.google.com/storage/docs/using-customer-managed-encryption-keys#rewrite</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

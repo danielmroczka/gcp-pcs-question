@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 198</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 198 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Analyze VPC flow logs to detect potential beaconing behavior to a known malicious IP. Which tool?
+Your organization has on-premises hosts that need to access Google Cloud APIs. You must enforce private connectivity between these hosts, minimize costs, and optimize for operational efficiency.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> BigQuery via Log Sink</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Event Threat Detection (ETD)</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud Trace</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Packet Mirroring</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Set up VPC peering between the hosts on-premises and the VPC through the internet.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Route all on-premises traffic to Google Cloud through an IPsec VPN tunnel to a VPC with Private Google Access enabled.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Enforce a security policy that mandates all applications to encrypt data with a Cloud Key Management Service (KMS) key before you send it over the network.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Route all on-premises traffic to Google Cloud through a dedicated or Partner Interconnect to a VPC with Private Google Access enabled.</li>
 
 </ul>
 </div>
@@ -88,38 +88,31 @@ Analyze VPC flow logs to detect potential beaconing behavior to a known maliciou
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Event Threat Detection: Jest to usługa, która w czasie rzeczywistym skanuje logi i szuka wzorców ataków. Beaconing (regularne wysyłanie sygnałów do serwera C2) jest jednym z podstawowych wzorców, które ETD wykrywa automatycznie dzięki integracji z Threat Intelligence Google.
-
-Dlaczego inne są błędne:
-A. BigQuery: Pozwala na analizę ręczną, ale nie jest systemem Automatycznej detekcji w czasie rzeczywistym.
-C. Cloud Trace: Dla wydajności kodu.
-D. Packet Mirroring: Zbyt ciężkie i drogie rozwiązanie do wykrywania Beaconingu, który widać doskonale w samych metadanych logów Flow (B).
-
-Konsensus społeczności ExamTopics: 100% na B. Beaconing = Event Threat Detection.</pre>
+Wyjaśnienie: Cloud VPN jest tańszy niż Interconnect. Private Google Access dla on-premises pozwala na dostęp do API Google przez tunel VPN przy użyciu prywatnych adresów IP.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Eksperci na GitHubie podkreślają, że ETD oszczędza mnóstwo czasu analitykom SOC. Zamiast pisać zapytania SQL szukające regularności w logach, dostajesz gotowy alert: 'VM X rozmawia z C2 co dokładnie 60 sekund'.</p>
+<p><b>Głęboka analiza:</b> <p>Wymaga to konfiguracji 'private.googleapis.com' lub 'restricted.googleapis.com' w lokalnym DNS.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/security-command-center/docs/concepts-event-threat-detection-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-event-threat-detection-overview</a></li>
+<li><a href="https://cloud.google.com/vpc/docs/configure-private-google-access-settings" target="_blank">https://cloud.google.com/vpc/docs/configure-private-google-access-settings</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

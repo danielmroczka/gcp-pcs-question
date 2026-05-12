@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 304</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 304 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Folders for teams. Teams need flexibility to modify org policies relevant to their work. Recommended security practices. What to do?
+You are managing a Google Cloud environment that is organized into folders that represent different teams. These teams need the flexibility to modify organization policies relevant to their work. You want to grant the teams the necessary permissions while upholding Google-recommended security practices and minimizing administrative complexity. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Custom IAM role with org policy admin on folder.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Central SA credentials provided to teams.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Org-level tag + IAM condition restrict role to resources with that tag.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Org policy admin role at org level for all.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a custom IAM role with the organization policy administrator permission and grant the permission to each team's folder. Limit policy modifications based on folder names within the custom role's definition.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Assign the organization policy administrator role to a central service account and provide teams with the credentials to use the service account when needed.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create an organization-level tag. Attach the tag to relevant folders. Use an IAM condition to restrict the organization policy administrator role to resources with that tag.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Grant each team the organization policy administrator role at the organization level.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Folders for teams. Teams need flexibility to modify org policies relevant to the
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: C.
 
 Wyjaśnienie (Dlaczego poprawna):
 C. Tags + IAM Conditions: To najbardziej nowoczesna i bezpieczna metoda delegacji (least privilege). Pozwala nadać zespołowi uprawnienia administratora polityk organizacji, ale TYLKO pod warunkiem (Condition), że operacja dotyczy folderu oznaczonego konkretnym tagiem. Dzięki temu deweloperzy nie mogą zmienić polityk w cudzych folderach ani na poziomie całej firmy.
@@ -98,28 +99,28 @@ A. Custom role on folder: Choć bliskie prawdy, to Tagi (C) są obecnie silniej 
 B. Shared credentials: Błąd krytyczny. Nigdy nie udostępniaj poświadczeń kont serwisowych ludziom.
 D. Org level for all: Skrajne naruszenie izolacji bezpieczeństwa.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na C. IAM Conditions to potężne narzędzie bezpiecznego zarządzania w skali.</pre>
+Konsensus społeczności ExamTopics: Zdecydowana większość na C. IAM Conditions to potężne narzędzie bezpiecznego zarządzania w skali.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Tagi zasobów (Resource Tags) są odporne na zmiany nazw folderów i działają niezależnie od hierarchii technicznej, co ułatwia zarządzanie.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Tagi zasobów (Resource Tags) są odporne na zmiany nazw folderów i działają niezależnie od hierarchii technicznej, co ułatwia zarządzanie.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/iam/docs/conditions-overview" target="_blank">https://cloud.google.com/iam/docs/conditions-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

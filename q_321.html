@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 321</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,15 +64,15 @@
 <h2>Question 321 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-200 developers using Gemini in Vertex AI. Prevent and detect proper security policies. Which two?
+Your organization strives to be a market leader in software innovation. You provided a large number of Google Cloud environments so developers can test the integration of Gemini in Vertex AI into their existing applications or create new projects. Your organization has 200 developers and a five-person security team. You must prevent and detect proper security policies across the Google Cloud environments. What should you do? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Org policy constraints + SHA drift detection.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Publish guidelines.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud Logging filters + Cloud Run remediation.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> AI-recommended security posture template in SCC.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Least privileged IAM.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Apply organization policy constraints. Detect and monitor drifts by using Security Health Analytics.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Publish internal policies and clear guidelines to securely develop applications.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use Cloud Logging to create log filters to detect misconfigurations. Trigger Cloud Run functions to remediate misconfigurations.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Apply a predefined AI-recommended security posture template for Gemini in Vertex AI in Security Command Center Enterprise or Premium tiers.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Implement the least privileged access Identity and Access Management roles to prevent misconfigurations.</li>
 
 </ul>
 </div>
@@ -89,7 +89,8 @@
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: AD.
+<pre>
+Odpowiedź: AD.
 
 Wyjaśnienie (Dlaczego poprawna):
 A. Org Policies + SHA: Polityki organizacji blokują niebezpieczne akcje (Prevent), a Security Health Analytics wykrywa zmiany w konfiguracji (Detect), które mogłyby osłabić bezpieczeństwo.
@@ -100,28 +101,28 @@ B. Guidelines: Dokumentacja papierowa nie jest technicznym mechanizmem zapobiega
 C. Cloud Run: Gemini w Vertex AI ne ma bezpośredniego związku z Cloud Run w kontekście polityk bezpieczeństwa platformy.
 E. Least privileged IAM: To fundament, ale przy 200 deweloperach i nowych usługach AI, samo IAM nie wystarczy do pełnej ochrony i detekcji 'driftu' konfiguracji tak dobrze jak zestaw AD.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na AD. Posture Management to król ochrony nowych technologii w GCP.</pre>
+Konsensus społeczności ExamTopics: Zdecydowana większość na AD. Posture Management to król ochrony nowych technologii w GCP.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: AD</b></p>
-<p><b>Głęboka analiza:</b> Posture templates pozwalają na monitorowanie 'zgodności' z Twoim własnym standardem bezpieczeństwa AI w skali całej organizacji.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Posture templates pozwalają na monitorowanie 'zgodności' z Twoim własnym standardem bezpieczeństwa AI w skali całej organizacji.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/security-command-center/docs/concepts-security-postures-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-security-postures-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -136,9 +137,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

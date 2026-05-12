@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 226</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 226 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Grant a user access to view and manage all firewall rules in a specific project. Which role?
+Your organization wants to protect all workloads that run on Compute Engine VM to ensure that the instances weren't compromised by boot-level or kernel-level malware. Also, you need to ensure that data in use on the VM cannot be read by the underlying host system by using a hardware-based solution.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> roles/compute.networkAdmin</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> roles/compute.securityAdmin</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> roles/compute.admin</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> roles/iam.securityAdmin</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> 1. Use Google Shielded VM including secure boot, Virtual Trusted Platform Module (vTPM), and integrity monitoring. 2. Create a Cloud Run function to check for the VM settings, generate metrics, and run the function regularly.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> 1. Activate Virtual Machine Threat Detection in Security Command Center (SCC) Premium. 2. Monitor the findings in SCC.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> 1. Use Google Shielded VM including secure boot, Virtual Trusted Platform Module (vTPM), and integrity monitoring. 2. Activate Confidential Computing. 3. Enforce these actions by using organization policies.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> 1. Use secure hardened images from the Google Cloud Marketplace. 2. When deploying the images, activate the Confidential Computing option. 3. Enforce the use of the correct images and Confidential Computing by using organization policies.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Grant a user access to view and manage all firewall rules in a specific project.
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">C</span>
 <br/>
 </span>
 </div>
@@ -88,7 +88,8 @@ Grant a user access to view and manage all firewall rules in a specific project.
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
 B. compute.securityAdmin: Ta rola jest zaprojektowana specjalnie dla administratorów bezpieczeństwa sieciowego. Daje uprawnienia do tworzenia, usuwania i modyfikowania reguł firewalla, certyfikatów SSL i polityk Cloud Armor, bez konieczności nadawania uprawnień do zarządzania samymi maszynami VM czy trasami.
@@ -98,28 +99,28 @@ A. networkAdmin: Pozwala na zarządzanie całą siecią (trasy, podsieci), co je
 C. compute.admin: Zdecydowanie za wysokie uprawnienia (może kasować VM).
 D. iam.securityAdmin: Zarządza uprawnieniami LUDZI, nie regułami SIECI.
 
-Konsensus społeczności ExamTopics: 100% na B. To standardowa rola dla 'Network Security'.</pre>
+Konsensus społeczności ExamTopics: 100% na B. To standardowa rola dla 'Network Security'.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Na forach często pada pytanie o różnicę między A i B. Eksperci wyjaśniają: jeśli Twoim zadaniem jest 'bezpieczeństwo' (firewall), wybierz Security Admin (B). Jeśli zadaniem jest 'budowanie sieci' (IP, subnets), wybierz Network Admin (A).</p>
+<p><b>Sugerowana odpowiedź: C</b></p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Na forach często pada pytanie o różnicę między A i B. Eksperci wyjaśniają: jeśli Twoim zadaniem jest 'bezpieczeństwo' (firewall), wybierz Security Admin (B). Jeśli zadaniem jest 'budowanie sieci' (IP, subnets), wybierz Network Admin (A).</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/compute/docs/access/iam#compute.securityAdmin" target="_blank">https://cloud.google.com/compute/docs/access/iam#compute.securityAdmin</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

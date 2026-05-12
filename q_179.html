@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 179</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 179 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Identify which service accounts have been granted permissions outside of their home project. Which tool?
+You need to set up a Cloud Interconnect connection between your company's on-premises data center and VPC host network. You want to make sure that on-premises applications can only access Google APIs over the Cloud Interconnect and not through the public internet. You are required to only use APIs that are supported by VPC Service Controls to mitigate against exfiltration risk to non-supported APIs. How should you configure the network?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Policy Analyzer</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Policy Troubleshooter</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> IAM Recommender</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Audit Logs</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enable Private Google Access on the regional subnets and global dynamic routing mode.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a CNAME to map *.googleapis.com to restricted.googleapis.com, and create A records for restricted.googleapis.com mapped to 199.36.153.8/30.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use private.googleapis.com to access Google APIs using a set of IP addresses only routable from within Google Cloud, which are advertised as routes over the connection.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use restricted googleapis.com to access Google APIs using a set of IP addresses only routable from within Google Cloud, which are advertised as routes over the Cloud Interconnect connection.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Identify which service accounts have been granted permissions outside of their h
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">D</span>
 <br/>
 </span>
 </div>
@@ -88,38 +88,31 @@ Identify which service accounts have been granted permissions outside of their h
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: D.
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Policy Analyzer: Pozwala na zapytania typu: 'Znajdź wszystkie przypisania ról, gdzie członkiem (member) jest Service Account z projektu A, ale zasobem (resource) jest cokolwiek poza projektem A'. Jest to potężne narzędzie do audytu krzyżowego projektów.
-
-Dlaczego inne są błędne:
-B. Policy Troubleshooter: Działa tylko w kontekście 'jeden użytkownik -> jeden zasób'.
-C. IAM Recommender: Sugeruje zmiany wewnątrz jednego projektu, nie robi analizy topologii uprawnień w całej organizacji.
-D. Cloud Audit Logs: Rejestrują tylko moment nadania, nie dają aktualnej mapy uprawnień.
-
-Konsensus społeczności ExamTopics: 100% na A. To unikalna funkcja analityczna tego narzędzia.</pre>
+Wyjaśnienie: Identycznie jak w pytaniu 134. Użycie domeny 'restricted' zapewnia, że ruch z on-premises trafia tylko do bezpiecznych usług objętych perymetrem VPC SC.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Na GitHubie specjaliści od security Landing Zone wskazują Policy Analyzer jako kluczowe narzędzie do wykrywania 'Cross-Project SA misuse'. Pozwala to na szybkie znalezienie kont serwisowych, które mają zbyt wysokie uprawnienia w cudzych środowiskach.</p>
+<p><b>Sugerowana odpowiedź: D</b></p>
+<p><b>Głęboka analiza:</b> <p>Konfiguracja wymaga odpowiednich wpisów w lokalnym DNS i tras (routes) w BGP.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/iam/docs/policy-analyzer-overview" target="_blank">https://cloud.google.com/iam/docs/policy-analyzer-overview</a></li>
+<li><a href="https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity" target="_blank">https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

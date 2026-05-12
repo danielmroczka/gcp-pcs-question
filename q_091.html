@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 91</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,15 +64,15 @@
 <h2>Question 91 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Convert existing unmanaged users (using corporate domain for personal accounts) to managed accounts. Use single sign-on. Which two actions? (Choose two.)
+You need to provide a corporate user account in Google Cloud for each of your developers and operational staff who need direct access to GCP resources.<br/>Corporate policy requires you to maintain the user identity in a third-party identity management provider and leverage single sign-on. You learn that a significant number of users are using their corporate domain email addresses for personal Google accounts, and you need to follow Google recommended practices to convert existing unmanaged users to managed accounts.<br/>Which two actions should you take? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> GCDS to sync local identity to Cloud Identity.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Google Admin console to view recovery emails.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Force change email addresses.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Transfer Tool for Unmanaged Users (TTUU).</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Ask users to delete personal accounts.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use Google Cloud Directory Sync to synchronize your local identity management system to Cloud Identity.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use the Google Admin console to view which managed users are using a personal account for their recovery email.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Add users to your managed Google account and force users to change the email addresses associated with their personal accounts.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use the Transfer Tool for Unmanaged Users (TTUU) to find users with conflicting accounts and ask them to transfer their personal Google accounts.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Send an email to all of your employees and ask those users with corporate email addresses for personal Google accounts to delete the personal accounts immediately.</li>
 
 </ul>
 </div>
@@ -89,39 +89,40 @@ Convert existing unmanaged users (using corporate domain for personal accounts) 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: AD.
+<pre>
+Odpowiedź: AD.
 
 Wyjaśnienie (Dlaczego poprawna):
-A. GCDS: Najpierw synchronizujesz tożsamości z lokalnego AD do Google, aby system wiedział, jakie konta POWINNY istnieć.
-D. Transfer Tool (TTUU): To narzędzie identyfikuje konta 'osobiste' założone na adresy w Twojej domenie i pozwala wysłać do ich właścicieli prośbę o przekazanie konta pod zarząd firmy (migracja do konta zarządzanego).
+A. GCDS: Najpierw synchronizujesz tożsamości z AD do Google, aby system wiedział, jakie konta są 'oficjalne'. GCDS stworzy konta dla osób, których jeszcze nie ma w Google.
+D. Transfer Tool (TTUU): Narzędzie to identyfikuje konflikty (konta osobiste @firma.com) i pozwala wysłać zaproszenia do użytkowników, aby przekazali swoje konta pod zarząd firmy. To jedyna metoda zachowania danych użytkownika przy przejmowaniu kontroli.
 
 Dlaczego inne są błędne:
-B. Recovery emails: Nie pomagają w przejęciu kontroli nad kontem.
-C. Force change: Można to zrobić, ale jest to bardzo inwazyjne i nie rozwiązuje problemu istniejących danych na kontach. TTUU jest zalecaną, łagodniejszą ścieżką.
-E. Ask to delete: Mało skuteczne i powoduje utratę danych służbowych, które pracownik mógł tam zgromadzić.
+B. Recovery emails: Nie pomagają w procesie konwersji kont na zarządzane.
+C. Force change: Jest to technicznie możliwe (poprzez stworzenie konta zarządzanego o tej samej nazwie), ale powoduje powstanie 'conflicting accounts', co jest mniej eleganckie i bezpieczne niż proces TTUU.
+E. Manual delete: Nieskalowalne i ryzykowne (utrata danych firmowych na koncie osobistym).
 
-Konsensus społeczności ExamTopics: 100% poparcia dla AD. To standardowa procedura 'domykania' domeny w Google Cloud.</pre>
+Konsensus społeczności ExamTopics: 100% na AD. To standardowa ścieżka 'Cleanup' domeny.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: AD</b></p>
-<p><b>Głęboka analiza:</b> Konflikt kont (Conflicting Accounts) powstaje, gdy GCDS próbuje stworzyć konto, które już istnieje jako osobiste. TTUU to jedyny sposób na czyste rozwiązanie tego problemu.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Wiele dyskusji dotyczy tego, co się dzieje, gdy użytkownik odrzuci zaproszenie. Eksperci przypominają: po 30 dniach odrzucenia, jeśli administrator stworzy konto zarządzane, stare konto osobiste użytkownika zostanie przemianowane na `@gtempaccount.com`, co wymusza na użytkowniku zmianę adresu, ale chroni domenę firmy.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://support.google.com/cloudidentity/answer/7062710" target="_blank">https://support.google.com/cloudidentity/answer/7062710</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -136,9 +137,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

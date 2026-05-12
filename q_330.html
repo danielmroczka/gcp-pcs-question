@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 330</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 330 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Apps access external web services. monitor, control, and log access. What to do?
+Your organization has Google Cloud applications that require access to external web services. You must monitor, control, and log access to these services. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Secure Web Proxy.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud NAT.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> VPC firewall rules.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Armor.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Set up a Secure Web Proxy that allows access to the specific external web services. Configure applications to use the proxy for the web service requests.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Set up a Cloud NAT instance to allow egress traffic from your VPC.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure VPC firewall rules to allow the services to access the IP addresses of required external web services.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure Google Cloud Armor to monitor and protect your applications by checking incoming traffic patterns for attack patterns.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Apps access external web services. monitor, control, and log access. What to do?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
 A. Secure Web Proxy: To dedykowana usługa Google Cloud do filtrowania ruchu WYCHODZĄCEGO (egress) do internetu. Pozwala na tworzenie reguł opartych na nazwach FQDN (np. 'pozwól tylko na github.com'), monitorowanie pełnych adresów URL oraz logowanie całej aktywności sieciowej aplikacji.
@@ -98,28 +99,28 @@ B. Cloud NAT: Pozwala na wyjście, ale nie oferuje zaawansowanego filtrowania po
 C. Firewall rules: Operują na adresach IP. Większość usług webowych ma dynamiczne IP, co czyni firewall bezużytecznym do blokowania domen.
 D. Cloud Armor: Chroni ruch PRZYCHODZĄCY (ingress) do Twoich aplikacji, nie zajmuje się tym, gdzie Twoje aplikacje same 'dzwonią'.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla A. SWP to brakujące ogniwo ochrony egress w GCP.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla A. SWP to brakujące ogniwo ochrony egress w GCP.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Secure Web Proxy nie wymaga instalowania agentów na VM. Działa jako transparentne lub jawne proxy wewnątrz Twojej sieci VPC.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Secure Web Proxy nie wymaga instalowania agentów na VM. Działa jako transparentne lub jawne proxy wewnątrz Twojej sieci VPC.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/secure-web-proxy/docs/overview" target="_blank">https://cloud.google.com/secure-web-proxy/docs/overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

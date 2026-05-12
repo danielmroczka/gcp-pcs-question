@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 143</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 143 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Connect CE instances between two organizations. Encrypted connection, private IP addresses. What to do?
+Your organization hosts a financial services application running on Compute Engine instances for a third-party company. The third-party company's servers that will consume the application also run on Compute Engine in a separate Google Cloud organization. You need to configure a secure network connection between the Compute Engine instances. You have the following requirements:<br/>- The network connection must be encrypted.<br/>- The communication between servers must be over private IP addresses.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud VPN.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> VPC peering.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> VPC SC with access level.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Apigee proxy TLS.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure a Cloud VPN connection between your organization's VPC network and the third party's that is controlled by VPC firewall rules.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure a VPC peering connection between your organization's VPC network and the third party's that is controlled by VPC firewall rules.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure a VPC Service Controls perimeter around your Compute Engine instances, and provide access to the third party via an access level.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure an Apigee proxy that exposes your Compute Engine-hosted application as an API, and is encrypted with TLS which allows access only to the third party.</li>
 
 </ul>
 </div>
@@ -88,38 +88,39 @@ Connect CE instances between two organizations. Encrypted connection, private IP
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
-A. Cloud VPN: Umożliwia połączenie dwóch sieci VPC (nawet w różnych organizacjach) przy użyciu prywatnych adresów IP. Ruch jest automatycznie szyfrowany za pomocą tunelu IPsec, co spełnia oba wymogi: 'private IPs' i 'encrypted connection'.
+B. Organization Policy Service: To narzędzie 'polityki prewencyjnej'. Pozwala na zdefiniowanie twardych reguł (np. zakaz tworzenia zewnętrznych IP, zakaz tworzenia VM poza Europą). Każdy zasób stworzony w organizacji MUSI być z nimi zgodny, inaczej Google odrzuci żądanie jego utworzenia.
 
 Dlaczego inne są błędne:
-B. VPC Peering: Pozwala na komunikację po prywatnych IP, ale sam w sobie NIE szyfruje ruchu (ruch idzie siecią Google w jawnym tekście, choć jest odizolowany od internetu). Pytanie prosi o 'encrypted connection'.
-C. VPC SC: To bariera dla API usług, nie jest to tunel komunikacyjny dla maszyn VM.
-D. Apigee: Służy do zarządzania API, nie do łączenia warstwy sieciowej (L3) między maszynami wirtualnymi.
+A. IAM: Mówi kto może stworzyć zasób, ale nie mówi JAK ten zasób ma być skonfigurowany.
+C. Audit Logs: Rejestrują co się stało (reaktywne), nie zapewniają zgodności PRZED powstaniem zasobu.
+D. Monitoring: Tylko dla wydajności.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na A. VPN to standardowa odpowiedź na wymóg 'encrypted private link'.</pre>
+Konsensus społeczności ExamTopics: 100% na B. Org Policy to 'Compliance Guardrails' w chmurze.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Choć sieć Google jest bardzo bezpieczna, niektóre standardy (jak PCI czy HIPAA) wymagają jawnego szyfrowania (np. AES) przy przechodzeniu między różnymi podmiotami prawnymi (organizacjami).</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Dyskusja na GitHubie przy okazji budowania 'Secure Landing Zone' pokazuje, że polityki organizacji są fundamentem bezpieczeństwa w skali Enterprise. Są one znacznie silniejsze niż IAM, bo działają na poziomie platformy, a nie użytkownika.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/network-connectivity/docs/vpn/concepts/overview" target="_blank">https://cloud.google.com/network-connectivity/docs/vpn/concepts/overview</a></li>
+<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/overview" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

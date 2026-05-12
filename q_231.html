@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 231</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 231 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Grant a user access to manage and view all organization policies, but not modify VPC networks. Which role?
+You are migrating an application into the cloud. The application will need to read data from a Cloud Storage bucket. Due to local regulatory requirements, you need to hold the key material used for encryption fully under your control and you require a valid rationale for accessing the key material.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> roles/resourcemanager.organizationAdmin</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> roles/orgpolicy.policyAdmin</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> roles/compute.networkAdmin</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> roles/viewer</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Encrypt the data in the Cloud Storage bucket by using Customer Managed Encryption Keys. Configure an IAM deny policy for unauthorized groups.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Generate a key in your on-premises environment to encrypt the data before you upload the data to the Cloud Storage bucket. Upload the key to the Cloud Key Management Service (KMS). Activate Key Access Justifications (KAJ) and have the external key system reject unauthorized accesses.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Encrypt the data in the Cloud Storage bucket by using Customer Managed Encryption Keys backed by a Cloud Hardware Security Module (HSM). Enable data access logs.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Generate a key in your on-premises environment and store it in a Hardware Security Module (HSM) that is managed on-premises. Use this key as an external key in the Cloud Key Management Service (KMS). Activate Key Access Justifications (KAJ) and set the external key system to reject unauthorized accesses.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Grant a user access to manage and view all organization policies, but not modify
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">D</span>
 <br/>
 </span>
 </div>
@@ -88,7 +88,8 @@ Grant a user access to manage and view all organization policies, but not modify
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
 B. orgpolicy.policyAdmin: Jak już ustaliliśmy (216, 222), ta rola służy do zarządzania Standardami Floty (Governance). Pozwala na nałożenie zakazu np. tworzenia publicznych IP, ale sama w sobie nie daje uprawnień do edycji sieci VPC (subnets, routes).
@@ -98,28 +99,28 @@ A. organizationAdmin: Może wszystko, w tym zmieniać sieć.
 C. networkAdmin: Służy właśnie do modyfikacji sieci, co jest zakazane.
 D. Viewer: Tylko do odczytu.
 
-Konsensus społeczności ExamTopics: 100% na B. Podstawowa separacja obowiązków.</pre>
+Konsensus społeczności ExamTopics: 100% na B. Podstawowa separacja obowiązków.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Pytanie to testuje precyzyjne rozróżnienie między 'Governance' (zasady) a 'Infrastructure Administration' (realizacja). Rola B to 'ustawodawca', rola C to 'wykonawca'. Compliance officer powinien mieć tylko rolę B.</p>
+<p><b>Sugerowana odpowiedź: D</b></p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Pytanie to testuje precyzyjne rozróżnienie między 'Governance' (zasady) a 'Infrastructure Administration' (realizacja). Rola B to 'ustawodawca', rola C to 'wykonawca'. Compliance officer powinien mieć tylko rolę B.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/overview" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

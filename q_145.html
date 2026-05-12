@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 145</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,15 +64,15 @@
 <h2>Question 145 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Data at rest residency within specific geographic boundaries. Recommendation?
+You are a consultant for an organization that is considering migrating their data from its private cloud to Google Cloud. The organization's compliance team is not familiar with Google Cloud and needs guidance on how compliance requirements will be met on Google Cloud. One specific compliance requirement is for customer data at rest to reside within specific geographic boundaries. Which option should you recommend for the organization to meet their data residency requirements on Google Cloud?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Organization Policy constraints.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Shielded VMs.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> ACLs.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Geolocation access controls.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Cloud Armor.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Organization Policy Service constraints</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Shielded VM instances</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Access control lists</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Geolocation access controls</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Google Cloud Armor</li>
 
 </ul>
 </div>
@@ -89,39 +89,39 @@ Data at rest residency within specific geographic boundaries. Recommendation?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
-A. Organization Policy constraints: Ograniczenie `gcp.resourceLocations` jest jedynym systemowym mechanizmem w GCP, który pozwala administratorowi centralnie wymusić lokalizację fizyczną danych (regiony/strefy) dla wszystkich usług (Storage, Compute, SQL).
+B. billing.viewer: Ta rola pozwala na wgląd we wszystkie koszty, faktury i historię płatności na poziomie konta rozliczeniowego, bez możliwości dokonywania jakichkolwiek płatności czy zmian.
 
 Dlaczego inne są błędne:
-B. Shielded VMs: Chronią integralność kernela i bootloadera, nie mają wpływu na to, w którym kraju stoi serwer.
-C. ACLs: Zarządzają uprawnieniami dostępu do plików, a nie ich lokalizacją fizyczną.
-D. Geolocation access: Służy do blokowania dostępu użytkownikom z danych krajów, ale dane firmy mogą nadal leżeć w innym kraju (to nie jest residency).
-E. Cloud Armor: Firewall L7, nie kontroluje miejsca składowania danych.
+A. Admin: Pozwala na zmianę metod płatności i zamykanie konta - zbyt wysokie uprawnienia.
+C. Organization Viewer: Pozwala widzieć Strukturę firmy, ale nie daje wglądu w dane Finansowe (billing).
+D. Project Viewer: Daje wgląd w zasoby projektu, ale zazwyczaj nie widzi szczegółów faktur całego konta billingowego.
 
-Konsensus społeczności ExamTopics: 100% na A. Residency = Org Policy w terminologii GCP.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla B. Standardowa rola dla działu finansowego.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Polityka ta działa prewencyjnie. Jeśli deweloper spróbuje stworzyć bucket w `us-central1`, a dozwolone jest tylko `europe-west1`, otrzyma błąd 'Policy violation'.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Pamiętaj, że w GCP Billing i Zasoby to dwa oddzielne drzewa uprawnień. Możesz być Adminem projektu i NIE widzieć faktur, lub być Viewerem billingu i NIE widzieć co jest w środku projektów. Opcja B jest poprawnym rozdzieleniem tych obowiązków.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations</a></li>
+<li><a href="https://cloud.google.com/billing/docs/how-to/billing-access" target="_blank">https://cloud.google.com/billing/docs/how-to/billing-access</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -136,9 +136,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 123</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 123 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Connect on-prem to Shared VPC. Private transport link, private API endpoints from on-prem, APIs only via VPC SC. How?
+You need to connect your organization's on-premises network with an existing Google Cloud environment that includes one Shared VPC with two subnets named Production and Non-Production. You are required to: Use a private transport link. Configure access to Google Cloud APIs through private API endpoints originating from on-premises environments. Ensure that Google Cloud APIs are only consumed via VPC Service Controls. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud VPN, restricted.googleapis.com.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Partner Interconnect, private.googleapis.com.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Direct Peering, private access for subnets.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Dedicated Interconnect, restricted.googleapis.com.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> 1. Set up a Cloud VPN link between the on-premises environment and Google Cloud. 2. Configure private access using the restricted.googleapis.com domains in on-premises DNS configurations.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> 1. Set up a Partner Interconnect link between the on-premises environment and Google Cloud. 2. Configure private access using the private.googleapis.com domains in on-premises DNS configurations.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> 1. Set up a Direct Peering link between the on-premises environment and Google Cloud. 2. Configure private access for both VPC subnets.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> 1. Set up a Dedicated Interconnect link between the on-premises environment and Google Cloud. 2. Configure private access using the restricted.googleapis.com domains in on-premises DNS configurations.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Connect on-prem to Shared VPC. Private transport link, private API endpoints fro
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: D.
 
 Wyjaśnienie (Dlaczego poprawna):
 D. Dedicated Interconnect + restricted.googleapis.com: Dedicated Interconnect zapewnia fizyczne, prywatne łącze (Private transport link). Domena `restricted.googleapis.com` (199.36.153.4/30) jest jedyną domeną VIP, która wymusza obsługę wyłącznie usług wspieranych przez VPC Service Controls, co spełnia wymóg 'APIs only via VPC SC'.
@@ -98,28 +99,28 @@ A. Cloud VPN: Choć bezpieczny, nie jest to 'dedykowane łącze fizyczne' (Inter
 B. private.googleapis.com: Ta domena (199.36.153.8/30) daje dostęp do WSZYSTKICH API Google (w tym YouTube, Gmail), a nie tylko tych chronionych przez VPC SC.
 C. Direct Peering: To peering publiczny dla API, nie zapewnia prywatnego łącza transportowego do sieci VPC.
 
-Konsensus społeczności ExamTopics: 100% na D.restricted VIP to standard dla VPC SC i łączności hybrydowej.</pre>
+Konsensus społeczności ExamTopics: 100% na D.restricted VIP to standard dla VPC SC i łączności hybrydowej.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Użycie 'restricted' VIP zapobiega wyciekowi danych do usług Google, które nie są objęte perymetrem bezpieczeństwa Twojej firmy.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Użycie 'restricted' VIP zapobiega wyciekowi danych do usług Google, które nie są objęte perymetrem bezpieczeństwa Twojej firmy.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity" target="_blank">https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

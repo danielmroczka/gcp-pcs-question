@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 185</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 185 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Identify security misconfigurations like world-readable Cloud Storage buckets across the organization. Which tool?
+Your organization is moving virtual machines (VMs) to Google Cloud. You must ensure that operating system images that are used across your projects are trusted and meet your security requirements.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Security Command Center: Security Health Analytics</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Event Threat Detection</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> VPC Flow Logs</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Audit Logs</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Implement an organization policy to enforce that boot disks can only be created from images that come from the trusted image project.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Implement an organization policy constraint that enables the Shielded VM service on all projects to enforce the trusted image repository usage.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a Cloud Function that is automatically triggered when a new virtual machine is created from the trusted image repository. Verify that the image is not deprecated.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Automate a security scanner that verifies that no common vulnerabilities and exposures (CVEs) are present in your trusted image repository.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Identify security misconfigurations like world-readable Cloud Storage buckets ac
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
 A. Security Health Analytics (SHA): To moduł SCC, który automatycznie skanuje konfigurację Twoich zasobów (Posture Management). Wykrywa on setki błędów, w tym publicznie dostępne buckety, i zgłasza je jako 'findings'.
@@ -98,28 +99,28 @@ B. ETD: Szuka śladów ataków (np. mining, brute force) w logach, a nie błęd�
 C. Flow Logs: Pokazują ruch, ale nie wiedzą czy bucket jest publiczny (ruch do bucketu to API, nie Flow Logi).
 D. Audit Logs: Powie Ci kto udostępnił bucket, ale nie daje zbiorczego dashboardu 'co jest źle teraz'.
 
-Konsensus społeczności ExamTopics: 100% na A. SHA to fundament widoczności bezpieczeństwa.</pre>
+Konsensus społeczności ExamTopics: 100% na A. SHA to fundament widoczności bezpieczeństwa.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Wiele osób pyta: 'A co z Forseti?'. Wyjaśnienie: Forseti było prekursorem, ale obecnie SHA (A) jest wbudowanym, natywnym i wspieranym przez Google rozwiązaniem klasy Enterprise dostępnym w konsoli SCC.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Wiele osób pyta: 'A co z Forseti?'. Wyjaśnienie: Forseti było prekursorem, ale obecnie SHA (A) jest wbudowanym, natywnym i wspieranym przez Google rozwiązaniem klasy Enterprise dostępnym w konsoli SCC.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/security-command-center/docs/concepts-security-health-analytics-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-security-health-analytics-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

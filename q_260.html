@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 260</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,13 +64,13 @@
 <h2>Question 260 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Process large location data securely, adhering to data residency. What to do?
+Your organization uses Google Cloud to process large amounts of location data for analysis and visualization. The location data is potentially sensitive. You must design a solution that allows storing and processing the location data securely, minimizing data exposure risks, and adhering to both regulatory guidelines and your organization's internal data residency policies. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Location restrictions on CE and disks, labels.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> DLP scan + Global GCS buckets.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Regional GCS buckets + Object Lifecycle.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enable location restrictions on Compute Engine instances and virtual disk resources where the data is handled. Apply labels to tag geographic metadata for all stored data.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use the Cloud Data Loss Prevention (Cloud DLP) API to scan for sensitive location data before any storage or processing. Create Cloud Storage buckets with global availability for optimal performance, relying on Cloud DLP results to filter and control data access.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create regional Cloud Storage buckets with Object</li>
 
 </ul>
 </div>
@@ -79,7 +79,7 @@ Process large location data securely, adhering to data residency. What to do?
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">C</span>
+<span class="correct-answer"></span>
 <br/>
 </span>
 </div>
@@ -87,37 +87,38 @@ Process large location data securely, adhering to data residency. What to do?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: C.
 
 Wyjaśnienie (Dlaczego poprawna):
-C. Regional buckets: Gwarantują, że dane fizycznie nie opuszczą wybranego regionu (np. Warszawy), co spełnia wymogi rezydencji danych. Object Lifecycle pozwala na automatyczne sprzątanie danych po ich przetworzeniu.
+C. Regional buckets: Zapewniają, że dane fizycznie nie opuszczą wybranego regionu (np. Warszawy), co jest twardym wymogiem rezydencji danych. Object Lifecycle pozwala na automatyczne sprzątanie danych po ich przetworzeniu.
 
 Dlaczego inne są błędne:
 A. Labels: To tylko opisy, nie gwarantują lokalizacji danych na dysku.
-B. Global buckets: Rozrzucają dane po całym kontynencie, co narusza wymogi rezydencji.
+B. Global buckets: Rozrzucają dane po całym świecie/kontynencie, co narusza wymogi rezydencji.
 
-Konsensus społeczności ExamTopics: 100% na C. Rezydencja danych = Regional resources.</pre>
+Konsensus społeczności ExamTopics: 100% na C. Rezydencja danych = Regional resources.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Przy rezydencji danych kluczowe jest również monitorowanie logów audytowych, aby upewnić się, że żadna operacja administracyjna nie spowodowała wycieku danych do innego regionu.</p>
+<p><b>Sugerowana odpowiedź: </b></p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Przy rezydencji danych kluczowe jest również monitorowanie logów audytowych, aby upewnić się, że żadna operacja administracyjna nie spowodowała wycieku danych do innego regionu.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/storage/docs/locations" target="_blank">https://cloud.google.com/storage/docs/locations</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -132,9 +133,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 287</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 287 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Banking: audit key usage, deny decrypt requests independent of CSP. Migration. What to do?
+You work for a banking organization. You are migrating sensitive customer data to Google Cloud that is currently encrypted at rest while on-premises. There are strict regulatory requirements when moving sensitive data to the cloud. Independent of the cloud service provider, you must be able to audit key usage and be able to deny certain types of decrypt requests. You must choose an encryption strategy that will ensure robust security and compliance with the regulations. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Google default encryption.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud EKM with Access Approval.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud EKM with Key Access Justifications (KAJ).</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> CMEK in CE with Confidential Compute.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Utilize Google default encryption and Cloud IAM to keep the keys within your organization's control.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Implement Cloud External Key Manager (Cloud EKM) with Access Approval, to integrate with your existing on-premises key management solution.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Implement Cloud External Key Manager (Cloud EKM) with Key Access Justifications to integrate with your existing on-premises key management solution.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Utilize customer-managed encryption keys (CMEK) created in a dedicated Google Compute Engine instance with Confidential Compute encryption, under your organization's control.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Banking: audit key usage, deny decrypt requests independent of CSP. Migration. W
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: C.
 
 Wyjaśnienie (Dlaczego poprawna):
 C. Cloud EKM + KAJ: To najwyższy poziom suwerenności. EKM trzyma klucz poza Google. KAJ zmusza Google do podania powodu każdego użycia klucza. Możesz automatycznie odrzucać żądania (deny requests), których powód nie zgadza się z Twoją polityką, co daje Ci pełną niezależność od dostawcy (CSP).
@@ -98,28 +99,28 @@ A. Default: Całkowity brak kontroli klienta.
 B. Access Approval: Pozwala zatwierdzić dostęp personelu, ale nie daje automatycznej blokady operacji kryptograficznych na poziomie polityki tak jak KAJ.
 D. Confidential Compute: Chroni dane w pamięci, ale nie kontroluje klucza głównego do deszyfrowania dysków.
 
-Konsensus społeczności ExamTopics: 100% na C. To unikalne combo Google Cloud dla pełnej suwerenności.</pre>
+Konsensus społeczności ExamTopics: 100% na C. To unikalne combo Google Cloud dla pełnej suwerenności.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> KAJ to jedyny mechanizm na rynku, który pozwala zablokować dostęp do danych nawet w przypadku nakazu sądowego wydanego dostawcy chmury.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> KAJ to jedyny mechanizm na rynku, który pozwala zablokować dostęp do danych nawet w przypadku nakazu sądowego wydanego dostawcy chmury.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/key-access-justifications/docs/overview" target="_blank">https://cloud.google.com/key-access-justifications/docs/overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

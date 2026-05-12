@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 85</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 85 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You want to synchronize security groups with email addresses from LDAP to Cloud IAM. What should you do?
+You are the Security Admin in your company. You want to synchronize all security groups that have an email address from your LDAP directory in Cloud IAM.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure GCDS to sync security groups using LDAP search rules with 'user email address' attribute.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure GCDS for bidirectional sync.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use a management tool for subset sync based on email.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Sync based on group object class attribute.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure Google Cloud Directory Sync to sync security groups using LDAP search rules that have "user email address" as the attribute to facilitate one-way sync.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure Google Cloud Directory Sync to sync security groups using LDAP search rules that have "user email address" as the attribute to facilitate bidirectional sync.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use a management tool to sync the subset based on the email address attribute. Create a group in the Google domain. A group created in a Google domain will automatically have an explicit Google Cloud Identity and Access Management (IAM) role.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use a management tool to sync the subset based on group object class attribute. Create a group in the Google domain. A group created in a Google domain will automatically have an explicit Google Cloud Identity and Access Management (IAM) role.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ You want to synchronize security groups with email addresses from LDAP to Cloud 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
 A. GCDS search rules: Google Cloud Directory Sync pozwala na precyzyjne określenie, które grupy z LDAP mają zostać przeniesione do chmury. Filtrowanie po atrybucie adresu e-mail zapewnia, że zsynchronizowane zostaną tylko grupy, które mogą funkcjonować w ekosystemie Google (gdzie tożsamość oparta jest na e-mailu).
@@ -98,28 +99,28 @@ B. Bidirectional sync: GCDS wspiera tylko synchronizację JEDNOSTRONNĄ (LDAP ->
 C. Subset sync tool: Brzmi jak ogólnik, podczas gdy A precyzuje jak to zrobić w oficjalnym narzędziu GCDS.
 D. Object class attribute: Sama klasa obiektu (np. groupOfNames) nie gwarantuje, że grupa ma przypisany adres e-mail, co jest wymagane do jej poprawnego działania w IAM.
 
-Konsensus społeczności ExamTopics: Zdecydowane A. Skuteczna synchronizacja wymaga dobrze zdefiniowanych reguł wyszukiwania (Search Rules).</pre>
+Konsensus społeczności ExamTopics: Zdecydowane A. Skuteczna synchronizacja wymaga dobrze zdefiniowanych reguł wyszukiwania (Search Rules).
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> GCDS to narzędzie działające w modelu 'state comparison'. Przed każdą synchronizacją generuje raport zmian, który administrator musi zatwierdzić.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> GCDS to narzędzie działające w modelu 'state comparison'. Przed każdą synchronizacją generuje raport zmian, który administrator musi zatwierdzić.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://support.google.com/a/answer/612003" target="_blank">https://support.google.com/a/answer/612003</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

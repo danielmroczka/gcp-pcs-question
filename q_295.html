@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 295</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 295 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Binary Authorization: ensure only images built by Cloud Build are deployed and pass checks. What to do?
+Your organization heavily utilizes serverless applications while prioritizing security best practices. You are responsible for enforcing image provenance and compliance with security standards before deployment. You leverage Cloud Build as your continuous integration and continuous deployment (CI/CD) tool for building container images. You must configure Binary Authorization to ensure that only images built by your Cloud Build pipeline are deployed and that the images pass security standard compliance checks. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Attestor scans SCM.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Attestor evaluates build processes.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Attestor retrieves Cloud Build build ID attestation.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Custom SHA module.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a Binary Authorization attestor that uses a scanner to assess source code management repositories. Deploy images only if the attestor validates results against a security policy.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a Binary Authorization attestor that utilizes a scanner to evaluate container image build processes. Define a policy that requires deployment of images only if this attestation is present.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a Binary Authorization attestor that retrieves the Cloud Build build ID of the container image. Configure a policy to allow deployment only if there's a matching build ID attestation.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Utilize a custom Security Health Analytics module to create a policy. Enforce the policy through Binary Authorization to prevent deployment of images that do not meet predefined security standards.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Binary Authorization: ensure only images built by Cloud Build are deployed and p
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: C.
 
 Wyjaśnienie (Dlaczego poprawna):
 C. Cloud Build Attestation: Cloud Build potrafi automatycznie generować podpisaną atestację zawierającą ID procesu budowania. Binary Authorization w klastrze GKE weryfikuje ten podpis. To daje pewność, że obraz kontenera pochodzi z Twojego zaufanego pipeline'u, a nie został zbudowany lokalnie na laptopie dewelopera.
@@ -97,28 +98,28 @@ Dlaczego inne są błędne:
 A, B: Nie są to techniczne mechanizmy wbudowane w Binary Authorization.
 D. SHA: Służy do detekcji po fakcie, nie jest 'bramkarzem' wdrożeń.
 
-Konsensus społeczności ExamTopics: 100% na C. Integracja Cloud Build z BinAuth to fundament bezpieczeństwa kontenerów.</pre>
+Konsensus społeczności ExamTopics: 100% na C. Integracja Cloud Build z BinAuth to fundament bezpieczeństwa kontenerów.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> To rozwiązanie realizuje standard SLSA (Supply-chain Levels for Software Artifacts), gwarantując integralność artefaktu binarnego.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> To rozwiązanie realizuje standard SLSA (Supply-chain Levels for Software Artifacts), gwarantując integralność artefaktu binarnego.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/binary-authorization/docs/cloud-build-attestations" target="_blank">https://cloud.google.com/binary-authorization/docs/cloud-build-attestations</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

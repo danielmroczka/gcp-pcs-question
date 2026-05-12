@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 153</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 153 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You need to analyze VPC flow logs to identify data exfiltration attempts. Which service provides a way to run SQL queries over these logs?
+You need to use Cloud External Key Manager to create an encryption key to encrypt specific BigQuery data at rest in Google Cloud. Which steps should you do first?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> BigQuery via Log Sink</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud Armor</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud Trace</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Security Command Center</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> 1. Create or use an existing key with a unique uniform resource identifier (URI) in your Google Cloud project. 2. Grant your Google Cloud project access to a supported external key management partner system.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> 1. Create or use an existing key with a unique uniform resource identifier (URI) in Cloud Key Management Service (Cloud KMS). 2. In Cloud KMS, grant your Google Cloud project access to use the key.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> 1. Create or use an existing key with a unique uniform resource identifier (URI) in a supported external key management partner system. 2. In the external key management partner system, grant access for this key to use your Google Cloud project.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> 1. Create an external key with a unique uniform resource identifier (URI) in Cloud Key Management Service (Cloud KMS). 2. In Cloud KMS, grant your Google Cloud project access to use the key.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ You need to analyze VPC flow logs to identify data exfiltration attempts. Which 
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">C</span>
 <br/>
 </span>
 </div>
@@ -88,38 +88,31 @@ You need to analyze VPC flow logs to identify data exfiltration attempts. Which 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: C.
 
-Wyjaśnienie (Dlaczego poprawna):
-A. BigQuery: Logi Flow (VPC Flow Logs) można wyeksportować za pomocą mechanizmu 'Log Sink' do BigQuery. Tam, dzięki potężnemu silnikowi SQL, można analizować miliony rekordów w poszukiwaniu nietypowych ilości danych wysyłanych pod nieznane, zewnętrzne adresy IP.
-
-Dlaczego inne są błędne:
-B. Cloud Armor: To firewall, nie służy do analityki historycznej SQL.
-C. Cloud Trace: Służy do analizy opóźnień aplikacji.
-D. SCC: Pokazuje gotowe alerty, ale nie jest interaktywnym silnikiem SQL do samodzielnej analizy surowych Flow Logów.
-
-Konsensus społeczności ExamTopics: 100% poparcia dla A. Analiza Big Data logów = BigQuery.</pre>
+Wyjaśnienie: Przy EKM klucz fizycznie znajduje się poza Google (u partnera jak Equinix, Thales, Fortanix). Najpierw tworzysz klucz tam, a potem łączysz go z Cloud KMS podając URI partnera.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Eksperci na GitHubie sugerują użycie gotowych dashboardów w Lookerze podpiętych pod BigQuery. Pozwala to na wizualizację trendów wyjścia danych (Egress), co znacznie ułatwia wykrycie 'powolnej' eksfiltracji, która mogłaby umknąć standardowym systemom IDS.</p>
+<p><b>Sugerowana odpowiedź: C</b></p>
+<p><b>Głęboka analiza:</b> <p>EKM pozwala na zachowanie fizycznej separacji kluczy od chmury, w której znajdują się dane.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc/docs/using-flow-logs#bq-queries" target="_blank">https://cloud.google.com/vpc/docs/using-flow-logs#bq-queries</a></li>
+<li><a href="https://cloud.google.com/kms/docs/ekm" target="_blank">https://cloud.google.com/kms/docs/ekm</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

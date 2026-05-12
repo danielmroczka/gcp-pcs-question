@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 243</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 243 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Analyze VPC network traffic to detect data exfiltration via SSH tunneling. Which service?
+An administrative application is running on a virtual machine (VM) in a managed group at port 5601 inside a Virtual Private Cloud (VPC) instance without access to the internet currently. You want to expose the web interface at port 5601 to users and enforce authentication and authorization Google credentials.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud Armor</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud IDS</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> VPC Flow Logs</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> IAP</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure the bastion host with OS Login enabled and allow connection to port 5601 at VPC firewall. Log in to the bastion host from the Google Cloud console by using SSH-in-browser and then to the web application.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Modify the VPC routing with the default route point to the default internet gateway. Modify the VPC Firewall rule to allow access from the internet 0.0.0.0/0 to port 5601 on the application instance.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure Secure Shell Access (SSH) bastion host in a public network, and allow only the bastion host to connect to the application on port 5601. Use a bastion host as a jump host to connect to the application.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure an HTTP Load Balancing instance that points to the managed group with Identity-Aware Proxy (IAP) protection with Google credentials. Modify the VPC firewall to allow access from IAP network range.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Analyze VPC network traffic to detect data exfiltration via SSH tunneling. Which
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">D</span>
 <br/>
 </span>
 </div>
@@ -88,38 +88,31 @@ Analyze VPC network traffic to detect data exfiltration via SSH tunneling. Which
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: D.
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Cloud IDS: SSH Tunneling to metoda 'ukrywania' ruchu wewnątrz szyfrowanego połączenia SSH. Cloud IDS posiada zaawansowane algorytmy detekcji, które potrafią rozpoznać nietypowe przepływy danych wewnątrz sesji SSH, co wskazuje na próbę eksfiltracji danych.
-
-Dlaczego inne są błędne:
-A. Cloud Armor: Chroni LB, nie monitoruje portu 22 (SSH) maszyn VM.
-C. Flow Logs: Zobaczą tylko 'ruch na porcie 22', nie 'zrozumieją' co jest w środku sesji SSH.
-D. IAP: Służy do bezpiecznego logowania przez SSH, ale nie jest systemem detekcji włamań (IDS) analizującym treść ruchu.
-
-Konsensus społeczności ExamTopics: 100% poparcia dla B. SSH tunneling detection = Cloud IDS.</pre>
+Wyjaśnienie: Identity-Aware Proxy (IAP) w połączeniu z Load Balancerem to jedyna metoda na wystawienie usługi webowej z jednoczesnym wymuszeniem uwierzytelniania Google bez VPN.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Eksperci security na Reddit podkreślają: hakerzy często używają SSH do 'wyprowadzania' danych, bo ten port jest zazwyczaj otwarty. Cloud IDS (B) to jedyne narzędzie w GCP, które potrafi to wykryć na podstawie wzorców ruchu (Traffic analysis).</p>
+<p><b>Sugerowana odpowiedź: D</b></p>
+<p><b>Głęboka analiza:</b> <p>Firewall musi pozwalać na ruch z zakresu IP Load Balancera/IAP (35.191.0.0/16 i 130.211.0.0/22).</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/intrusion-detection-system/docs/overview" target="_blank">https://cloud.google.com/intrusion-detection-system/docs/overview</a></li>
+<li><a href="https://cloud.google.com/iap/docs/tutorial-gce" target="_blank">https://cloud.google.com/iap/docs/tutorial-gce</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

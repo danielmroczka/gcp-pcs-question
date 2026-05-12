@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 251</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 251 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-On-premises apps access Google Cloud without hard coded credentials using existing IdP. What to do?
+Your organization has a centralized identity provider that is used to manage human and machine access. You want to leverage this existing identity management system to enable on-premises applications to access Google Cloud without hard coded credentials. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Secure Web Proxy.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Workforce Identity Federation.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> IAP.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Workload Identity Federation.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enable Secure Web Proxy. Create a proxy subnet for each region that Secure Web Proxy will be deployed. Deploy an SSL certificate to Certificate Manager. Create a Secure Web Proxy policy and rules that allow access to Google Cloud services.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Enable Workforce Identity Federation. Create a workforce identity pool and specify the on-premises identity provider as a workforce identity pool provider. Create an attribute mapping to map the on-premises identity provider token to a Google STS token. Create an IAM binding that binds the required role(s) to the external identity by specifying the project ID, workload identity pool, and attribute that should be matched.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Enable Identity-Aware Proxy (IAP). Configure IAP by specifying the groups and service accounts that should have access to the application. Grant these identities the IAP-secured web app user role.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enable Workload Identity Federation. Create a workload identity pool and specify the on-premises identity provider as a workload identity pool provider. Create an attribute mapping to map the on-premises identity provider token to a Google STS token. Create a service account with the necessary permissions for the workload. Grant the external identity the Workload Identity user role on the service account.</li>
 
 </ul>
 </div>
@@ -88,38 +88,39 @@ On-premises apps access Google Cloud without hard coded credentials using existi
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: D.
 
 Wyjaśnienie (Dlaczego poprawna):
-D. Workload Identity Federation (WIF): Jest to usługa zaprojektowana dokładnie dla tego scenariusza. Pozwala ona aplikacjom działającym poza Google Cloud (on-prem, AWS, Azure) na używanie ich własnych tożsamości do bezpiecznego pobierania krótkotrwałych tokenów GCP. Eliminuje to potrzebę używania statycznych i niebezpiecznych kluczy JSON (hard coded credentials).
+D. Workload Identity Federation (WIF): Pozwala aplikacjom działającym poza Google Cloud (on-premises, AWS, Azure) na używanie ich własnych tożsamości do bezpiecznego pobierania krótkotrwałych tokenów GCP. Eliminuje to potrzebę przechowywania statycznych i niebezpiecznych kluczy JSON (hard coded credentials).
 
 Dlaczego inne są błędne:
 A. Secure Web Proxy: Służy do filtrowania ruchu wychodzącego Z chmury, nie zarządza tożsamością maszyn on-prem.
-B. Workforce Identity Federation: Służy do logowania pracowników (ludzi), a nie procesów aplikacyjnych (workloads).
-C. Identity-Aware Proxy (IAP): Zarządza dostępem do aplikacji webowych, nie jest mechanizmem uwierzytelniania API dla on-prem.
+B. Workforce Identity Federation: Służy do logowania pracowników (ludzi), a nie aplikacji (workloads).
+C. Identity-Aware Proxy (IAP): Zarządza dostępem do aplikacji webowych, nie służy do uwierzytelniania procesów on-prem w API Google.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla D. WIF to 'keyless' przyszłość integracji hybrydowej.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla D. WIF to obecnie jedyny zalecany sposób na 'keyless' dostęp spoza chmury.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> WIF wspiera OIDC i SAML, co pozwala na mapowanie np. ról z Active Directory bezpośrednio na role IAM w chmurze bez żadnych haseł zapisanych w kodzie.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> WIF wspiera standardy OIDC i SAML, co pozwala na integrację z niemal każdym nowoczesnym systemem tożsamości on-premises.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/iam/docs/workload-identity-federation" target="_blank">https://cloud.google.com/iam/docs/workload-identity-federation</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

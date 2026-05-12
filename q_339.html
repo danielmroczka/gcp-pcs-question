@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 339</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 339 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-3-tier web app hybrid cloud: frontend GCP, backend/DB on-prem. Secure and efficient communication, minimize latency. What to do?
+Your company is migrating a three-tier web application to Google Cloud. The application consists of a web frontend, an application backend, and a database. Due to regulatory requirements and existing on-premises infrastructure dependencies, you need to implement a hybrid cloud architecture. The web frontend will be hosted on Google Cloud, while the application backend and the database will remain on-premises initially. You need to ensure secure and efficient communication between the cloud-based frontend and the on-premises backend and database, minimizing latency and maximizing availability. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Dedicated Interconnect.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Direct internet connection.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Hybrid connectivity network endpoint group.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> HA Cloud VPN.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Establish a Dedicated Interconnect connection between the Google Cloud VPC network and the on-premises network. Configure firewall rules to allow communication between the three tiers.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Establish a direct internet connection between the Google Cloud VPC network hosting the web frontend and the on-premises network that hosts the backend and database. Configure firewall rules to allow communication between the three tiers.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Replicate the on-premises backend and database to Google Cloud. Use a hybrid connectivity network endpoint group for the primary. Backup to the zonal network endpoint group.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use a highly-available Cloud VPN connection over the public internet to connect the Google Cloud VPC network to the on-premises network.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
 A. Dedicated Interconnect: Jest to rozwiązanie oferujące najniższe opóźnienia (latency) i najwyższą stabilność (przepustowość fizyczna). Dla aplikacji, gdzie frontend w chmurze musi przy każdym żądaniu pytać bazę danych on-premise, czas odpowiedzi łącza jest krytyczny. Interconnect jest znacznie szybszy i bardziej przewidywalny niż VPN.
@@ -98,28 +99,28 @@ B. Direct internet: Skrajnie niebezpieczne (brak prywatności) i zmienna wydajno
 C. Hybrid NEGs: To mechanizm Load Balancera służący do adresowania backendów on-prem, ale potrzebuje on pod spodem bezpiecznego 'kabla', którym jest Interconnect (A).
 D. HA VPN: Bezpieczny, ale wprowadza narzut na szyfrowanie i korzysta z publicznego internetu, co zwiększa opóźnienia i ryzyko pętelek opóźnień (jitter).
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na A. Latency = Interconnect.</pre>
+Konsensus społeczności ExamTopics: Zdecydowana większość na A. Latency = Interconnect.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> W architekturze hybrydowej każda milisekunda na łączu między chmurą a bazą danych przekłada się na gorsze odczucia użytkownika końcowego. Interconnect to 'światłowód pod biurkiem' Google.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> W architekturze hybrydowej każda milisekunda na łączu między chmurą a bazą danych przekłada się na gorsze odczucia użytkownika końcowego. Interconnect to 'światłowód pod biurkiem' Google.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview" target="_blank">https://cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

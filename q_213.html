@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 213</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 213 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Audit which users have been granted the 'Service Account User' role across the organization. Which tool?
+Your organization is using GitHub Actions as a continuous integration and delivery (CI/CD) platform. You must enable access to Google Cloud resources from the CI/CD pipelines in the most secure way.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Policy Analyzer</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Policy Troubleshooter</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> IAM Recommender</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Audit Logs</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a service account key, and add it to the GitHub pipeline configuration file.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a service account key, and add it to the GitHub repository content.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure a Google Kubernetes Engine cluster that uses Workload Identity to supply credentials to GitHub.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure workload identity federation to use GitHub as an identity pool provider.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Audit which users have been granted the 'Service Account User' role across the o
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">D</span>
 <br/>
 </span>
 </div>
@@ -88,36 +88,31 @@ Audit which users have been granted the 'Service Account User' role across the o
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: D.
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Policy Analyzer: Pozwala na zadanie pytania o konkretną rolę (`roles/iam.serviceAccountUser`) w skali całej organizacji. Jest to kluczowe, bo ta rola pozwala na impersonację kont serwisowych i jest częstym celem audytów bezpieczeństwa.
-
-Dlaczego inne są błędne:
-B, C, D: Jak w poprzednich analogicznych pytaniach – te narzędzia nie służą do inwentaryzacji 'kto ma daną rolę' w skali globalnej.
-
-Konsensus społeczności ExamTopics: 100% poparcia dla A. To standardowe zadanie audytowe IAM.</pre>
+Wyjaśnienie: Workload Identity Federation pozwala GitHubowi na pobranie tymczasowych tokenów GCP na podstawie własnego tokena OIDC, bez potrzeby używania statycznych kluczy JSON.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Dyskusja w sieci skupia się na niebezpieczeństwie roli SA User. Jeśli ktoś ma tę rolę na poziomie folderu, może 'stać się' dowolnym kontem serwisowym w projektach pod spodem. Policy Analyzer (A) to jedyny sposób, by to szybko wyłapać.</p>
+<p><b>Sugerowana odpowiedź: D</b></p>
+<p><b>Głęboka analiza:</b> <p>Jest to obecnie złoty standard bezpieczeństwa dla zewnętrznych systemów CI/CD.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/iam/docs/policy-analyzer-overview" target="_blank">https://cloud.google.com/iam/docs/policy-analyzer-overview</a></li>
+<li><a href="https://cloud.google.com/iam/docs/workload-identity-federation" target="_blank">https://cloud.google.com/iam/docs/workload-identity-federation</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -132,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

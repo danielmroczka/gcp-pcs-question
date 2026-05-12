@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 356</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 356 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-export user login events to third-party SIEM in real time. What to do?
+Your organization is using Google Workspace, Google Cloud, and a third-party SIEM. You need to export events such as user logins, successful logins, and failed logins to the SIEM. Logs need to be ingested in real time or near real-time. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> gcloud logging read polling.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Google Workspace direct send to SIEM.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> GCS sink with periodic scan.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Logging sink to Pub/Sub topic.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Poll Cloud Logging for authentication events using the gcloud logging read tool. Forward the events to the SIEM.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure Google Workspace to directly send logs to the API endpoint of the third-party SIEM.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a Cloud Storage bucket as a sink for all logs. Configure the SIEM to periodically scan the bucket for new log files.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a Cloud Logging sink to export relevant authentication logs to a Pub/Sub topic for SIEM subscription.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ export user login events to third-party SIEM in real time. What to do?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: D.
 
 Wyjaśnienie (Dlaczego poprawna):
 D. Pub/Sub Sink: Jest to jedyna metoda gwarantująca dostarczanie logów w czasie zbliżonym do rzeczywistego (real time). Pub/Sub działa w modelu 'push', więc sekundy po zalogowaniu użytkownika, informacja o tym trafia do SIEM.
@@ -98,28 +99,28 @@ A. Polling: Jest wolny i nieefektywny (możesz przegapić zdarzenia między odpy
 B. Workspace direct: Nie wszystkie zdarzenia logowania do GCP (zwłaszcza przez SA czy API) przechodzą przez standardowe logi Workspace. Cloud Logging (D) jest bardziej kompletny.
 C. GCS sink: Zapisuje logi w paczkach co kilka minut - nie jest to 'real time'.
 
-Konsensus społeczności ExamTopics: 100% na D. Pub/Sub to domyślny transport dla SIEM.</pre>
+Konsensus społeczności ExamTopics: 100% na D. Pub/Sub to domyślny transport dla SIEM.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Po stronie SIEM zazwyczaj uruchamia się mały proces (subscriber), który natychmiast 'wyciąga' wiadomości z Pub/Sub, co zapewnia minimalne opóźnienia (latency).</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Po stronie SIEM zazwyczaj uruchamia się mały proces (subscriber), który natychmiast 'wyciąga' wiadomości z Pub/Sub, co zapewnia minimalne opóźnienia (latency).</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/logging/docs/export/aggregated_sinks" target="_blank">https://cloud.google.com/logging/docs/export/aggregated_sinks</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

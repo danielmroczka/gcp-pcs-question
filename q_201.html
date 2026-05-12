@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 201</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 201 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-A company wants to ensure that their database is protected against ransomware. Which feature of Cloud Storage can help?
+Your company's Google Cloud organization has about 200 projects and 1,500 virtual machines. There is no uniform strategy for logs and events management, which reduces visibility for your security operations team. You need to design a logs management solution that provides visibility and allows the security team to view the environment's configuration.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Versioning and Bucket Lock.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> CMEK.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> VPC Service Controls.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Armor.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> 1. Create a dedicated log sink for each project that is in scope. 2. Use a BigQuery dataset with time partitioning enabled as a destination of the log sinks. 3. Deploy alerts based on log metrics in every project. 4. Grant the role Monitoring Viewer to the security operations team in each project.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> 1. Create one log sink at the organization level that includes all the child resources. 2. Use as destination a Pub/Sub topic to ingest the logs into the security information and event management (SIEM) on-premises, and ensure that the right team can access the SIEM. 3. Grant the Viewer role at organization level to the security operations team.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> 1. Enable network logs and data access logs for all resources in the Production folder. 2. Do not create log sinks to avoid unnecessary costs and latency. 3. Grant the roles Logs Viewer and Browser at project level to the security operations team.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> 1. Create one sink for the Production folder that includes child resources and one sink for the logs ingested at the organization level that excludes child resources. 2. As destination, use a log bucket with a minimum retention period of 90 days in a project that can be accessed by the security team. 3. Grant the security operations team the role of Security Reviewer at organization level.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ A company wants to ensure that their database is protected against ransomware. W
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">B</span>
 <br/>
 </span>
 </div>
@@ -88,38 +88,31 @@ A company wants to ensure that their database is protected against ransomware. W
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: B.
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Versioning + Bucket Lock: Ransomware polega na zaszyfrowaniu lub usunięciu danych. Versioning sprawia, że każda próba nadpisania pliku tworzy jego nową kopię, zachowując oryginał. Bucket Lock (w trybie zablokowanym) uniemożliwia usunięcie tych wersji przez określony czas, nawet hakerowi z uprawnieniami admina.
-
-Dlaczego inne są błędne:
-B. CMEK: Jeśli haker przejmie Twoje uprawnienia, może użyć Twojego klucza CMEK do zaszyfrowania danych po swojemu. Szyfrowanie nie chroni przed nadpisaniem.
-C. VPC SC: Chroni przed kradzieżą danych (wyciekiem), ale nie przed ich zniszczeniem wewnątrz perymetru.
-D. Cloud Armor: Chroni przed atakami sieciowymi WWW, nie przed manipulacją plikami w storage przez przejęte konto serwisowe.
-
-Konsensus społeczności ExamTopics: 100% poparcia dla A. To standardowa strategia 'Anti-Ransomware' w chmurze.</pre>
+Wyjaśnienie: Centralny sink na poziomie organizacji (includeChildren=True) to jedyny sposób na efektywne i kompletne zbieranie logów z setek projektów.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Największa debata w sieci dotyczy terminu 'Immutable Storage'. Eksperci wyjaśniają: GCS z Bucket Lock (A) staje się 'WORM' (Write Once, Read Many). Jest to jedyna pewna ochrona, bo haker fizycznie nie może usunąć dowodów (starych wersji plików) przed upływem retencji.</p>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p><b>Głęboka analiza:</b> <p>Eksport do Pub/Sub pozwala na integrację z zewnętrznymi systemami SIEM w czasie rzeczywistym.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/storage/docs/bucket-lock" target="_blank">https://cloud.google.com/storage/docs/bucket-lock</a></li>
+<li><a href="https://cloud.google.com/logging/docs/export/aggregated_sinks" target="_blank">https://cloud.google.com/logging/docs/export/aggregated_sinks</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

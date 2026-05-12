@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 300</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 300 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Network architecture for 3-tier app processing orders. isolation, remote maintenance by vendors, least privilege. What to do?
+You work for an ecommerce company that stores sensitive customer data across multiple Google Cloud regions. The development team has built a new 3-tier application to process orders and must integrate the application into the production environment. You must design the network architecture to ensure strong security boundaries and isolation for the new application, facilitate secure remote maintenance by authorized third-party vendors, and follow the principle of least privilege. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Separate VPC per tier, peering, SSH keys.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Single VPC, separate subnets per tier, VPN.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Separate VPC per tier, peering, IAP for remote access.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Single VPC, separate subnets, Shared VPC.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create separate VPC networks for each tier. Use VPC peering between application tiers and other required VPCs. Provide vendors with SSH keys and root access only to the instances within the VPC for maintenance purposes.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a single VPC network and create different subnets for each tier. Create a new Google project specifically for the third-party vendors and grant the network admin role to the vendors. Deploy a VPN appliance and rely on the vendors' configurations to secure third-party access.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create separate VPC networks for each tier. Use VPC peering between application tiers and other required VPCs. Enable Identity-Aware Proxy (IAP) for remote access to management resources, limiting access to authorized vendors.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a single VPC network and create different subnets for each tier. Create a new Google project specifically for the third-party vendors. Grant the vendors ownership of that project and the ability to modify the Shared VPC configuration.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Network architecture for 3-tier app processing orders. isolation, remote mainten
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: C.
 
 Wyjaśnienie (Dlaczego poprawna):
 C. Multi-VPC + IAP: Izolacja warstw (Web, App, DB) w osobnych sieciach VPC zapewnia brak ruchu bocznego (peering nie jest tranzytywny). Użycie IAP TCP Forwarding dla dostawców (C) eliminuje potrzebę zarządzania niebezpiecznymi kluczami SSH i publicznymi adresami IP, co jest najbardziej bezpieczne (least privilege).
@@ -97,28 +98,28 @@ Dlaczego inne są błędne:
 A. SSH keys: Zarządzanie kluczami dla ludzi z zewnątrz jest trudne i ryzykowne (klucze wyciekają).
 B, D. Single VPC: Słabsza izolacja warstw aplikacji niż przy użyciu twardych granic sieci VPC.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na C. IAP to nowocześniejszy standard dostępu serwisowego.</pre>
+Konsensus społeczności ExamTopics: Zdecydowana większość na C. IAP to nowocześniejszy standard dostępu serwisowego.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Brak tranzytywności VPC Peeringu to potężna funkcja obronna - ruch z internetu (Web) nigdy nie trafi bezpośrednio do bazy (DB) przez sieć App.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Brak tranzytywności VPC Peeringu to potężna funkcja obronna - ruch z internetu (Web) nigdy nie trafi bezpośrednio do bazy (DB) przez sieć App.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/iap/docs/using-tcp-forwarding" target="_blank">https://cloud.google.com/iap/docs/using-tcp-forwarding</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

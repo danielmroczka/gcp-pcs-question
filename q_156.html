@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 156</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,15 @@
 <h2>Question 156 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Ensure that a specific group of users can only create Compute Engine instances in the 'europe-west1' region. Which tool?
+Your company plans to move most of its IT infrastructure to Google Cloud. They want to leverage their existing on-premises Active Directory as an identity provider for Google Cloud. Which two steps should you take to integrate the company's on-premises Active Directory with Google Cloud and configure access management? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> IAM conditions on the compute.instances.create permission.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Organization Policy constraint: compute.allowedLocations.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Resource Labels.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> VPC Service Controls.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use Identity Platform to provision users and groups to Google Cloud.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use Cloud Identity SAML integration to provision users and groups to Google Cloud.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Install Google Cloud Directory Sync and connect it to Active Directory and Cloud Identity.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create Identity and Access Management (IAM) roles with permissions corresponding to each Active Directory group.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Create Identity and Access Management (IAM) groups with permissions corresponding to each Active Directory group.</li>
 
 </ul>
 </div>
@@ -80,7 +81,7 @@ Ensure that a specific group of users can only create Compute Engine instances i
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">CE</span>
 <br/>
 </span>
 </div>
@@ -88,38 +89,31 @@ Ensure that a specific group of users can only create Compute Engine instances i
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: CE.
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Organization Policy: Polityka `gcp.resourceLocations` (często w pytaniach jako `compute.allowedLocations`) pozwala na zdefiniowanie 'dozwolonych regionów' dla zasobów. Jest to najsilniejsza metoda, działająca na poziomie platformy, gwarantująca zgodność z wymogami rezydencji danych (GDPR).
-
-Dlaczego inne są błędne:
-A. IAM conditions: Warunki IAM mogą filtrować po tagach, ale filtrowanie samej operacji 'Create' po regionie jest znacznie trudniejsze i mniej niezawodne niż odgórna polityka organizacji (B).
-C. Labels: To tylko opisy, nie blokują technicznie stworzenia zasobu w innym regionie.
-D. VPC Service Controls: Chroni przed eksfiltracją, a nie przed wyborem regionu dla nowych VM.
-
-Konsensus społeczności ExamTopics: 100% poparcia dla B. Rezydencja danych = Org Policy.</pre>
+Wyjaśnienie: GCDS (C) synchronizuje konta i grupy z AD. Następnie nadajesz uprawnienia tym zsynchronizowanym grupom (E) w IAM.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Dyskusja na forach dotyczy tego, jak polityka ta wpływa na już istniejące zasoby. Odpowiedź: Polityka organizacji blokuje PRZYSZŁE akcje. Jeśli masz już VM w USA, a włączysz politykę na EU, stara maszyna będzie działać dalej, ale nowej w USA już nikt nie stworzy.</p>
+<p><b>Sugerowana odpowiedź: CE</b></p>
+<p><b>Głęboka analiza:</b> <p>Nie nadawaj uprawnień rolom (D), lecz przypisuj role grupom (E).</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations</a></li>
+<li><a href="https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction" target="_blank">https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +128,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

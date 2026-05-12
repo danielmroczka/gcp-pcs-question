@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 255</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 255 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Old financial application. Risk of side-channel attacks. Protect confidentiality in memory while running. What to do?
+Your organization's financial modeling application is already deployed on Google Cloud. The application processes large amounts of sensitive customer financial data. Application code is old and poorly understood by your current software engineers. Recent threat modeling exercises have highlighted the potential risk of sophisticated side-channel attacks against the application while the application is running. You need to further harden the Google Cloud solution to mitigate the risk of these side-channel attacks, ensuring maximum protection for the confidentiality of financial data during processing, while minimizing application problems. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Stricter access control.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Runtime library noise.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Confidential VMs.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> CMEK.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enforce stricter access controls for Compute Engine instances by using service accounts, least privilege IAM policies, and limit network access.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Implement a runtime library designed to introduce noise and timing variations into the application's execution which will disrupt side-channel attack.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Migrate the application to Confidential VMs to provide hardware-level encryption of memory and protect sensitive data during processing.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Utilize customer-managed encryption keys (CMEK) to ensure complete control over the encryption process.</li>
 
 </ul>
 </div>
@@ -88,37 +88,38 @@ Old financial application. Risk of side-channel attacks. Protect confidentiality
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: C.
 
 Wyjaśnienie (Dlaczego poprawna):
-C. Confidential VMs: Wykorzystują sprzętowe szyfrowanie pamięci RAM (AMD SEV). Dane są deszyfrowane dopiero wewnątrz procesora, co chroni je przed odczytem z poziomu hypervisora lub innych procesów próbujących wykorzystać luki w architekturze sprzętowej.
+C. Confidential VMs: Technologia ta wykorzystuje sprzętowe szyfrowanie pamięci RAM (AMD SEV). Dane są deszyfrowane dopiero wewnątrz procesora, co chroni je przed odczytem przez złośliwy kod próbujący wykorzystać luki typu side-channel w architekturze hosta.
 
 Dlaczego inne są błędne:
-A. Access control: Chroni przed logowaniem, ale nie chroni przed lukami sprzętowymi procesora.
+A. Access control: Nie chroni przed atakami na poziomie sprzętowym procesora.
 D. CMEK: Szyfruje dane na dysku, dane w RAM są jawne bez technologii Confidential VM.
 
-Konsensus społeczności ExamTopics: 100% na C. Słowo 'in memory' to zawsze Confidential Computing.</pre>
+Konsensus społeczności ExamTopics: 100% na C. Słowo 'in memory' zawsze wskazuje na Confidential Computing.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Confidential Computing pozwala na przetwarzanie danych bez ich deszyfrowania w niebezpiecznych warstwach stosu technologicznego (tzw. Trusted Execution Environment).</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Confidential VMs są szczególnie ważne w sektorze finansowym (PCI DSS) i medycznym (HIPAA), gdzie ochrona danych musi być zachowana w każdym stanie: at rest, in transit i in use.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/confidential-computing/confidential-vm/docs/introduction" target="_blank">https://cloud.google.com/confidential-computing/confidential-vm/docs/introduction</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

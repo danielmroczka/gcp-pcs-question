@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 92</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 92 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Web app in staging on GKE includes user data without validation. Attackers could execute commands in victim's browser. How to prevent and fix?
+You are on your company's development team. You noticed that your web application hosted in staging on GKE dynamically includes user data in web pages without first properly validating the inputted data. This could allow an attacker to execute gibberish commands and display arbitrary content in a victim user's browser in a production environment.<br/>How should you prevent and fix this vulnerability?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud IAP based on IP.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> HTTPS LB and Cloud Armor.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Web Security Scanner for outdated libraries.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Web Security Scanner in staging to simulate XSS and use contextual auto-escaping.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use Cloud IAP based on IP address or end-user device attributes to prevent and fix the vulnerability.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Set up an HTTPS load balancer, and then use Cloud Armor for the production environment to prevent the potential XSS attack.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use Web Security Scanner to validate the usage of an outdated library in the code, and then use a secured version of the included library.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use Web Security Scanner in staging to simulate an XSS injection attack, and then use a templating system that supports contextual auto-escaping.</li>
 
 </ul>
 </div>
@@ -88,38 +88,39 @@ Web app in staging on GKE includes user data without validation. Attackers could
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: D.
 
 Wyjaśnienie (Dlaczego poprawna):
-D. WSS and Auto-escaping: Opisany atak to Cross-Site Scripting (XSS). Web Security Scanner potrafi symulować takie ataki w środowisku stagingowym i je wykrywać. Rozwiązaniem programistycznym ('fix') jest użycie mechanizmów auto-escaping w silniku szablonów, co uniemożliwia interpretację danych użytkownika jako kodu JS.
+D. WSS and Auto-escaping: Opisany atak to Cross-Site Scripting (XSS). Web Security Scanner potrafi symulować takie ataki w środowisku stagingowym (identyfikacja). Naprawą systemową ('fix') jest użycie mechanizmów auto-escaping w silniku szablonów aplikacji, co uniemożliwia interpretację danych użytkownika jako kodu.
 
 Dlaczego inne są błędne:
-A. IAP: Chroni przed nieautoryzowanym wejściem, ale nie naprawia błędów w kodzie samej aplikacji (XSS zadziała dla zalogowanego użytkownika).
-B. Cloud Armor: Może blokować próby ataku, ale pytanie prosi o 'prevent and FIX' (naprawę), a naprawa musi nastąpić w kodzie.
-C. Outdated libraries: To tylko jeden z wielu powodów XSS. WSS szuka błędów logicznych w wyświetlaniu danych, a nie tylko wersji bibliotek.
+A. IAP: Blokuje nieuprawnionych, ale nie chroni przed lukami w samym kodzie dla osób zalogowanych.
+B. Cloud Armor: Może blokować próby, ale nie 'naprawia' (fix) podatności u źródła.
+C. Outdated libraries: To tylko jeden z powodów XSS, WSS szuka błędów logicznych w wyświetlaniu danych.
 
-Konsensus społeczności ExamTopics: 100% na D. Połączenie testów DAST i poprawnych praktyk kodowania to jedyna droga.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla D. To kompletna odpowiedź na 'identyfikację i naprawę'.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> XSS polega na wstrzyknięciu złośliwego skryptu, który uruchamia się u innego użytkownika. Kontekstowy auto-escaping sprawia, że znaki takie jak `<` stają się bezpiecznym `&lt;`.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Debata na Reddit skupia się na 'Context-aware escaping'. Inżynierowie podkreślają, że samo 'zwykłe' escapowanie to za mało – system musi wiedzieć, czy dane trafiają do atrybutu HTML, tagu `<script>` czy CSS, aby dobrać odpowiednią metodę maskowania.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/security-command-center/docs/concepts-web-security-scanner-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-web-security-scanner-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

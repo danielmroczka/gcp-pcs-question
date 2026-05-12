@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 118</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 118 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Inspect traffic between trusted and untrusted subnets using a virtual appliance (NGFW). How to design?
+You need to set up two network segments: one with an untrusted subnet and the other with a trusted subnet. You want to configure a virtual appliance such as a next-generation firewall (NGFW) to inspect all traffic between the two network segments. How should you design the network to inspect the traffic?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> One VPC, two subnets, custom route 0.0.0.0/0 to appliance.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> One VPC, custom route for RFC1918 to appliance.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Two VPCs peered, custom routes to appliance.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Two VPC networks, appliance with multiple NICs connected to each.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> 1. Set up one VPC with two subnets: one trusted and the other untrusted. 2. Configure a custom route for all traffic (0.0.0.0/0) pointed to the virtual appliance.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> 1. Set up one VPC with two subnets: one trusted and the other untrusted. 2. Configure a custom route for all RFC1918 subnets pointed to the virtual appliance.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> 1. Set up two VPC networks: one trusted and the other untrusted, and peer them together. 2. Configure a custom route on each network pointed to the virtual appliance.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> 1. Set up two VPC networks: one trusted and the other untrusted. 2. Configure a virtual appliance using multiple network interfaces, with each interface connected to one of the VPC networks.</li>
 
 </ul>
 </div>
@@ -88,37 +88,39 @@ Inspect traffic between trusted and untrusted subnets using a virtual appliance 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
-D. Multi-NIC Appliance: Aby firewall (virtual appliance) mógł skutecznie filtrować ruch między dwiema strefami, musi on fizycznie (logicznie w chmurze) znajdować się w OBU tych strefach jednocześnie. Model Multi-NIC (instancja z wieloma interfejsami sieciowymi, z których każdy jest w innym VPC) to standardowa architektura NGFW w chmurze.
+A. Logging Sinks: Mechanizm 'Sink' (zlewozmywak) pozwala na automatyczne przekierowanie logów do różnych celów, w tym do BigQuery. Jest to standardowa metoda na analizę SQL ogromnych zbiorów logów historycznych.
 
 Dlaczego inne są błędne:
-A, B. One VPC: Wewnątrz jednej sieci VPC maszyny mogą często komunikować się bezpośrednio przez trasy domyślne, co utrudnia wymuszenie 'przejścia' przez firewall. Dwie sieci VPC dają twardą izolację.
-C. VPC Peering: Peering służy do bezpośredniej komunikacji z pominięciem firewalla. Bardzo trudno jest 'wstawić' appliance w środek peeringu bez skomplikowanego routingu (Transit VPC).
+B. Cloud Trace: Służy do analizy opóźnień aplikacji.
+C. Cloud Debugger: Służy do inspekcji kodu w czasie rzeczywistym.
+D. SCC: Pokazuje alerty, ale nie jest mechanizmem eksportu surowych logów do BigQuery.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na D. To klasyczna architektura 'Network hub' lub 'Security VPC'.</pre>
+Konsensus społeczności ExamTopics: 100% na A. Sinks to klucz do analityki logów.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> W tej konfiguracji maszyna w VPC 'Untrusted' wysyła ruch do interfejsu eth0 firewalla, firewall go sprawdza i jeśli jest OK, wypuszcza przez interfejs eth1 do VPC 'Trusted'.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Eksperci na GitHubie zauważają, że eksport do BigQuery jest darmowy (płacisz tylko za storage i zapytania w BQ). Jest to preferowana metoda dla 'Security Retrospective' – gdy musisz sprawdzić co haker robił 3 miesiące temu, SQL w BigQuery jest najszybszym sposobem na znalezienie odpowiedzi.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/architecture/best-practices-vpc-design#multi-nic" target="_blank">https://cloud.google.com/architecture/best-practices-vpc-design#multi-nic</a></li>
+<li><a href="https://cloud.google.com/logging/docs/export/bigquery" target="_blank">https://cloud.google.com/logging/docs/export/bigquery</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

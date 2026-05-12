@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 98</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,15 @@
 <h2>Question 98 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Implementing protection against common web attacks. Validate policy changes before enforcement. What service?
+You have been tasked with implementing external web application protection against common web application attacks for a public application on Google Cloud. You want to validate these policy changes before they are enforced. What service should you use?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud Armor preconfigured rules in preview mode.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> VPC firewall in monitor mode.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Google Front End protections.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> VPC Service Controls in dry run.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Google Cloud Armor's preconfigured rules in preview mode</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Prepopulated VPC firewall rules in monitor mode</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> The inherent protections of Google Front End (GFE)</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Load Balancing firewall rules</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> VPC Service Controls in dry run mode</li>
 
 </ul>
 </div>
@@ -88,38 +89,38 @@ Implementing protection against common web attacks. Validate policy changes befo
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
-A. Cloud Armor Preview Mode: To kluczowa funkcja dla bezpieczeństwa bez przestojów. Pozwala na uruchomienie reguł WAF (np. przeciwko SQLi), które tylko LOGUJĄ co by się stało, zamiast faktycznie blokować ruch. Dzięki temu możesz sprawdzić, czy reguła nie blokuje legalnych użytkowników (false positives) przed jej ostatecznym włączeniem.
+A. Cloud Armor Preview Mode: Pozwala na uruchomienie reguł WAF (np. przeciwko SQLi), które tylko LOGUJĄ co by się stało, zamiast blokować ruch. Pozwala to na sprawdzenie, czy reguła nie blokuje legalnych użytkowników (false positives) przed jej włączeniem.
 
 Dlaczego inne są błędne:
-B. VPC firewall monitor: Firewall VPC nie posiada dedykowanego trybu 'monitor mode' w takim sensie jak WAF (rejestruje tylko dopuszczenia/odrzucenia, ale nie wspiera zaawansowanej symulacji zmian).
-C. GFE protections: Są domyślne i niezmienne, nie masz nad nimi kontroli 'pre-enforcement'.
-D. VPC SC dry run: Chroni przed kradzieżą danych (exfiltration), ale nie jest to narzędzie do walki z 'common web attacks' (SQLi/XSS).
+B. VPC firewall: Nie posiada tak zaawansowanego trybu 'monitor' z symulacją reguł aplikacyjnych.
+D. VPC SC dry run: Chroni przed kradzieżą danych (exfiltration), a nie przed 'common web attacks' (SQLi/XSS).
 
-Konsensus społeczności ExamTopics: 100% na A. Standardowy krok wdrożenia WAF w Enterprise.</pre>
+Konsensus społeczności ExamTopics: 100% na A. To standardowy krok wdrożenia WAF w Enterprise.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Po kilku dniach w trybie Preview administrator analizuje logi. Jeśli nie ma błędnych blokad, jednym kliknięciem zmienia tryb na 'enforced'.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Na forach inżynierowie przypominają: 'Nigdy nie włączaj nowej reguły WAF od razu w trybie Deny'. Preview mode (A) generuje logi, które można przeanalizować w BigQuery, aby upewnić się, że żadna ważna transakcja klienta nie zostanie przerwana.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/armor/docs/configure-security-policies#preview-mode" target="_blank">https://cloud.google.com/armor/docs/configure-security-policies#preview-mode</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

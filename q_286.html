@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 286</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 286 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Test checks on credit card PAN. Minimize risk of exposure for 10k real records. What to do?
+Your application development team is releasing a new critical feature. To complete their final testing, they requested 10 thousand real transaction records. The new feature includes format checking on the primary account number (PAN) of a credit card. You must support the request and minimize the risk of unintended personally identifiable information (PII) exposure. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Confidential Computing.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Scan/redact PII with DLP + format-preserving encryption (FPE) on PAN.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud KMS encryption.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Replace with random values.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Run the new application by using Confidential Computing to ensure PII and card PAN is encrypted in use.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Scan and redact PII from the records by using the Cloud Data Loss Prevention API. Perform format-preserving encryption on the card PAN.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Encrypt the records by using Cloud Key Management Service to protect the PII and card PAN.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Build a tool to replace the card PAN and PII fields with randomly generated values.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Test checks on credit card PAN. Minimize risk of exposure for 10k real records. 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
 B. DLP + FPE: Pytanie wymaga możliwości TESTOWANIA logiki formantu PAN. FPE szyfruje numer tak, że wynik nadal wygląda jak numer karty i ma poprawną długość, co pozwala aplikacji 'myśleć', że pracuje na realnych danych, mimo że są one bezpiecznie zanonimizowane.
@@ -98,28 +99,28 @@ A. Confidential Computing: Chroni przed hakerem, ale programista i tak widziałb
 C. KMS: Binarny szyfrogram niszczy format numeru karty, uniemożliwiając testowanie logiki pola tekstowego.
 D. Random values: Może zniszczyć sumy kontrolne (Luhn), które aplikacja może chcieć walidować.
 
-Konsensus społeczności ExamTopics: 100% na B. FPE to 'best practice' dla bezpiecznych danych testowych.</pre>
+Konsensus społeczności ExamTopics: 100% na B. FPE to 'best practice' dla bezpiecznych danych testowych.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> FPE jest deterministyczne - ten sam numer karty zawsze da ten sam token, co pozwala na testowanie złączeń (joins) między bazami bez ujawniania PII.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> FPE jest deterministyczne - ten sam numer karty zawsze da ten sam token, co pozwala na testowanie złączeń (joins) między bazami bez ujawniania PII.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/dlp/docs/pseudonymization#fpe" target="_blank">https://cloud.google.com/dlp/docs/pseudonymization#fpe</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

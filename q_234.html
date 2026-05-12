@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 234</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 234 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Audit which users have been granted permissions to modify encryption keys in Cloud KMS across the organization. Which tool?
+Your organization uses BigQuery to process highly sensitive, structured datasets. Following the "need to know" principle, you need to create the Identity and Access Management (IAM) design to meet the needs of these users:<br/>- Business user: must access curated reports.<br/>- Data engineer: must administrate the data lifecycle in the platform.<br/>- Security operator: must review user activity on the data platform.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Policy Analyzer</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Policy Troubleshooter</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> IAM Recommender</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Audit Logs</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure data access log for BigQuery services, and grant Project Viewer role to security operator.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Set row-based access control based on the "region" column, and filter the record from the United States for data engineers.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create curated tables in a separate dataset and assign the role roles/bigquery.dataViewer.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Generate a CSV data file based on the business user's needs, and send the data to their email addresses.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Audit which users have been granted permissions to modify encryption keys in Clo
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">C</span>
 <br/>
 </span>
 </div>
@@ -88,7 +88,8 @@ Audit which users have been granted permissions to modify encryption keys in Clo
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
 A. Policy Analyzer: Pozwala zadać pytanie o uprawnienia `cloudkms.cryptoKeys.update` lub rolę `roles/cloudkms.admin` w skali całej firmy. To jedyny sposób na szybki audyt 'Kto może dotykać moich kluczy'.
@@ -96,28 +97,28 @@ A. Policy Analyzer: Pozwala zadać pytanie o uprawnienia `cloudkms.cryptoKeys.up
 Dlaczego inne są błędne:
 B, C, D: Jak w poprzednich analogicznych pytaniach dotyczących inwentaryzacji dostępów.
 
-Konsensus społeczności ExamTopics: 100% na A. Audyt kluczy = Policy Analyzer.</pre>
+Konsensus społeczności ExamTopics: 100% na A. Audyt kluczy = Policy Analyzer.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Eksperci na forach security podkreślają: 'Klucze KMS to fundament zaufania'. Jeśli ktoś ma do nich prawo modyfikacji, może odciąć firmę od danych (ransomware). Policy Analyzer (A) pozwala wyłapać nadmiarowe uprawnienia przed katastrofą.</p>
+<p><b>Sugerowana odpowiedź: C</b></p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Eksperci na forach security podkreślają: 'Klucze KMS to fundament zaufania'. Jeśli ktoś ma do nich prawo modyfikacji, może odciąć firmę od danych (ransomware). Policy Analyzer (A) pozwala wyłapać nadmiarowe uprawnienia przed katastrofą.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/iam/docs/policy-analyzer-overview" target="_blank">https://cloud.google.com/iam/docs/policy-analyzer-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -132,9 +133,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

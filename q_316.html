@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 316</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 316 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-database servers must not have any direct communication with public internet. Secure, internal network. What to do?
+You want to set up a secure, internal network within Google Cloud for database servers. The servers must not have any direct communication with the public internet. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Private IP + NAT gateway.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Static public IP + firewall restrict.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> VPC with private subnet, private IP address.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Private + Public IP.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Assign a private IP address to each database server. Use a NAT gateway to provide internet connectivity to the database servers.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Assign a static public IP address to each database server. Use firewall rules to restrict external access.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a VPC with a private subnet. Assign a private IP address to each database server.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Assign both a private IP address and a public IP address to each database server.</li>
 
 </ul>
 </div>
@@ -88,37 +88,37 @@ database servers must not have any direct communication with public internet. Se
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
-C. Private Subnet + Private IP: Najbardziej bezpiecznym sposobem izolacji bazy danych jest przypisanie jej wyłącznie prywatnego adresu IP w podsieci, która nie posiada trasy (Default route) do internetu (brak Internet Gateway). Całkowity brak publicznego adresu IP na poziomie karty sieciowej VM eliminuje możliwość bezpośredniego ataku z zewnątrz.
+B. Key Access Justifications (KAJ): To mechanizm najwyższego zaufania. Zmusza on infrastrukturę Google do wysłania 'uzasadnienia' przy każdej próbie użycia Twojego klucza (np. przez EKM). Masz techniczny dowód na każdą operację i możesz ją zablokować na poziomie polityki klucza.
 
 Dlaczego inne są błędne:
-A. NAT Gateway: Pozwala na WYJŚCIE do internetu. Choć chroni przed wejściem, wymóg 'no DIRECT communication' przy bazach danych zazwyczaj implikuje całkowitą izolację, którą lepiej realizuje czyste C. (Uwaga: Wiele osób wybiera A, ale C jest bardziej fundamentalną odpowiedzią na brak jakiejkolwiek komunikacji).
-B, D: Posiadanie Public IP (nawet zablokowanego firewallem) zwiększa powierzchnię ataku i ryzyko błędu w regułach firewall.
+A, C, D: To nie są funkcje usługi KAJ.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na C. Dla krytycznych DB izolacja L3 (brak routingu) jest kluczowa.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla B. To definicja cyfrowej suwerenności w GCP.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Aby administrować taką bazą, powinieneś używać Bastion Host lub IAP TCP Forwarding, co pozwala na bezpieczne połączenie bez wystawiania bazy na świat.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Eksperci na forach zauważają, że KAJ (B) jest unikalne na rynku chmurowym. Pozwala ono firmom z UE na spełnienie wymogów dotyczących braku niekontrolowanego dostępu rządu USA do danych (tzw. odpowiedź na wyrok Schrems II).</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">https://cloud.google.com/vpc/docs/private-google-access</a></li>
+<li><a href="https://cloud.google.com/key-access-justifications/docs/overview" target="_blank">https://cloud.google.com/key-access-justifications/docs/overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +133,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

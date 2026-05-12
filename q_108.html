@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 108</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,7 +64,7 @@
 <h2>Question 108 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Transfer data between GCP and on-prem at 50 Gbps. Secure connectivity. What to use?
+An organization is moving applications to Google Cloud while maintaining a few mission-critical applications on-premises. The organization must transfer the data at a bandwidth of at least 50 Gbps. What should they use to ensure secure continued connectivity between sites?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -88,38 +88,38 @@ Transfer data between GCP and on-prem at 50 Gbps. Secure connectivity. What to u
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
-A. Dedicated Interconnect: To jedyne rozwiązanie oferujące tak ogromną przepustowość. Możesz zagregować kilka łączy 10 Gbps (LACP) lub użyć łączy 100 Gbps. Zapewnia prywatne, stabilne i bezpieczne połączenie fizyczne.
+A. Dedicated Interconnect: Jedyny sposób na uzyskanie 50 Gbps stabilnego, prywatnego łącza. Możesz zagregować 5 łączy po 10 Gbps lub użyć łączy 100 Gbps.
 
 Dlaczego inne są błędne:
-C. Cloud VPN: Przepustowość jednego tunelu to ok. 3 Gbps. Aby uzyskać 50 Gbps, potrzebowałbyś ok. 17 tuneli, co jest architektonicznym koszmarem i jest bardzo drogie. VPN służy do mniejszych obciążeń.
-D. Partner Interconnect: Zazwyczaj oferuje mniejsze przepustowości (od 50 Mbps do 10 Gbps). Dla 50 Gbps Dedicated Interconnect jest standardem.
-B. Cloud Router: To tylko komponent zarządzający routingiem (BGP), nie jest samym kablem/łączem o określonej przepustowości.
+C. Cloud VPN: Tunel ma limit ~3Gbps. 50Gbps wymagałoby absurdalnej liczby tuneli.
+D. Partner Interconnect: Zazwyczaj do 10Gbps. Dla tak dużych potrzeb (50G) Dedicated jest jedynym logicznym wyborem Enterprise.
 
-Konsensus społeczności ExamTopics: Zdecydowane A ze względu na wymóg '50 Gbps'. To domena Interconnecta.</pre>
+Konsensus społeczności ExamTopics: 100% na A. 50 Gbps = Dedicated Interconnect.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Pamiętaj, że Interconnect sam w sobie nie szyfruje ruchu (chyba że włączysz MACsec). Jeśli 'secure' w pytaniu oznacza szyfrowanie warstwy 3, musiałbyś uruchomić VPN PO Interconnectcie, ale przy 50Gbps jedyną wydajną opcją jest MACsec.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Niektórzy pytają o 'Security' – Interconnect nie jest szyfrowany domyślnie. Eksperci wyjaśniają: w tym scenariuszu 'Secure' oznacza fizycznie odizolowane łącze, które nie dotyka publicznego internetu. Jeśli wymagane jest szyfrowanie, należy dołożyć MACsec (L2) lub Cloud VPN over Interconnect (L3).</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview" target="_blank">https://cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

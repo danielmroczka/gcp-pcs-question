@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 144</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,15 +64,15 @@
 <h2>Question 144 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Migrate projects to a new organization node. Which two preparation steps?
+Your company's new CEO recently sold two of the company's divisions. Your Director asks you to help migrate the Google Cloud projects associated with those divisions to a new organization node. Which preparation steps are necessary before this migration occurs? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Remove custom IAM roles.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Disallow org policy inheritance.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Identify inherited IAM roles on projects.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create new folder for projects.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Remove projects from VPC SC perimeters.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Remove all project-level custom Identity and Access Management (IAM) roles.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Disallow inheritance of organization policies.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Identify inherited Identity and Access Management (IAM) roles on projects to be migrated.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a new folder for all projects to be migrated.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Remove the specific migration projects from any VPC Service Controls perimeters and bridges.</li>
 
 </ul>
 </div>
@@ -89,39 +89,39 @@ Migrate projects to a new organization node. Which two preparation steps?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: CE.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
-C. Identify inherited roles: Podczas migracji projekt traci wszystkie uprawnienia dziedziczone z 'starej' organizacji. Musisz wiedzieć, kogo dopisać w 'nowej' organizacji, aby systemy nie przestały działać.
-E. Remove from VPC SC: Projekt nie może zostać przeniesiony, dopóki jest częścią perymetru bezpieczeństwa. Musisz go najpierw 'uwolnić' z perymetru w starej organizacji i dodać do nowego perymetru w nowej organizacji po migracji.
+B. Packet Mirroring: Jest to jedyna usługa w GCP, która kopiuje CAŁĄ zawartość pakietu (payload) i wysyła go do wybranego miejsca (np. do maszyny z systemem IDS typu Snort lub Suricata). To niezbędne do 'Full Packet Inspection'.
 
 Dlaczego inne są błędne:
-A. Custom roles: Role niestandardowe na poziomie projektu migrują się razem z nim. Nie trzeba ich usuwać.
-B. Disallow inheritance: Nie jest to wymóg techniczny migracji, choć warto wiedzieć, co spłynie z góry w nowym miejscu.
-D. Create folder: Można to zrobić, ale nie jest to krytyczny krok 'przygotowawczy' (pre-requisite) tak jak C i E.
+A. Flow Logs: Widzą tylko nagłówki (skąd-dokąd-ile), nie widzą co jest w środku pakietu.
+C. Cloud Armor: Działa na brzegu sieci, nie widzi ruchu 'wschód-zachód' między Twoimi maszynami VM.
+D. VPC SC: Chroni API, nie analizuje pakietów sieciowych VM.
 
-Konsensus społeczności ExamTopics: 100% na CE. To techniczne wymogi procesu 'Project Move' między organizacjami.</pre>
+Konsensus społeczności ExamTopics: 100% na B. Packet Mirroring = Deep Packet Inspection (DPI).
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: CE</b></p>
-<p><b>Głęboka analiza:</b> Migracja projektu to operacja wysokiego ryzyka. Zawsze sprawdź, czy w nowej organizacji nie ma sprzecznych polityk (Org Policies), które mogłyby unieruchomić usługi w projekcie.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Inżynierowie ostrzegają: Packet Mirroring jest DROGI i generuje ogromne ilości danych. Powinien być używany tylko tam, gdzie jest to wymagane przez prawo (np. sektor finansowy) lub do celów dochodzeniowych po wykryciu włamania.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/project-migration" target="_blank">https://cloud.google.com/resource-manager/docs/project-migration</a></li>
+<li><a href="https://cloud.google.com/vpc/docs/packet-mirroring" target="_blank">https://cloud.google.com/vpc/docs/packet-mirroring</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -136,9 +136,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

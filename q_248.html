@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 248</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 248 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Grant a user access to manage and view all VPC flow logs for a specific folder. Where should you apply the IAM role?
+During a routine security review, your team discovered a suspicious login attempt to impersonate a highly privileged but regularly used service account by an unknown IP address. You need to effectively investigate in order to respond to this potential security incident. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Organization level</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Folder level</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Project level</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Resource level</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enable Cloud Audit Logs for the resources that the service account interacts with. Review the logs for further evidence of unauthorized activity.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Review Cloud Audit Logs for activity related to the service account. Focus on the time period of the suspicious login attempt.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Run a vulnerability scan to identify potentially exploitable weaknesses in systems that use the service account.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Check Event Threat Detection in Security Command Center for any related alerts. Cross-reference your findings with Cloud Audit Logs.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Grant a user access to manage and view all VPC flow logs for a specific folder. 
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">D</span>
 <br/>
 </span>
 </div>
@@ -88,38 +88,31 @@ Grant a user access to manage and view all VPC flow logs for a specific folder. 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: D.
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Folder level: Jeśli chcesz, aby administrator logów widział ruch we wszystkich projektach danego działu (np. 'Europe-Apps'), nadaj rolę `logging.admin` na poziomie ich wspólnego foldera. Dzięki dziedziczeniu, użytkownik zyska dostęp do logów we wszystkich obecnych i przyszłych projektach wewnątrz tego foldera.
-
-Dlaczego inne są błędne:
-A. Organization level: Zbyt szeroki zakres.
-C. Project level: Musiałbyś nadawać uprawnienia osobno dla każdego projektu, co jest nieefektywne.
-D. Resource level: Nie dotyczy zarządzania usługą logowania.
-
-Konsensus społeczności ExamTopics: 100% poparcia dla B. Skalowalne zarządzanie uprawnieniami per dział/zespół.</pre>
+Wyjaśnienie: Event Threat Detection (część SCC) automatycznie wykrywa podejrzane wzorce w logach (np. anomalie w impersonacji). Połączenie tego z ręczną analizą logów audytowych daje najpełniejszy obraz.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Pamiętaj: w GCP hierarchia zasobów (Org -> Foldery -> Projekty) to fundament bezpieczeństwa w skali Enterprise. Nadanie uprawnień na poziomie foldera (B) to 'złoty środek' między centralizacją a zbyt szerokimi dostępami.</p>
+<p><b>Sugerowana odpowiedź: D</b></p>
+<p><b>Głęboka analiza:</b> <p>SCC dostarcza gotowy alert, a Logs Explorer pozwala na szczegółowe dochodzenie (Forensics).</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/access-control-folders" target="_blank">https://cloud.google.com/resource-manager/docs/access-control-folders</a></li>
+<li><a href="https://cloud.google.com/security-command-center/docs/concepts-event-threat-detection-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-event-threat-detection-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

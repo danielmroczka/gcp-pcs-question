@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 193</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,13 @@
 <h2>Question 193 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Ensure that all Compute Engine instances in a project are created with a specific Service Account. Which tool?
+Your organization's Customers must scan and upload the contract and their driver license into a web portal in Cloud Storage. You must remove all personally identifiable information (PII) from files that are older than 12 months. Also, you must archive the anonymized files for retention purposes.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> IAM roles</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Organization Policy constraint: compute.restrictServiceAccounts</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Instance Templates</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Shared VPC</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Set a time to live (TTL) of 12 months for the files in the Cloud Storage bucket that removes PII and moves the files to the archive storage class.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a Cloud Data loss Prevention (DLP) inspection job that de-identifies PII in files created more than 12 months ago and archives them to another Cloud Storage bucket. Delete the original files.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure the Autoclass feature of the Cloud Stor</li>
 
 </ul>
 </div>
@@ -80,7 +79,7 @@ Ensure that all Compute Engine instances in a project are created with a specifi
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer"></span>
 <br/>
 </span>
 </div>
@@ -88,38 +87,31 @@ Ensure that all Compute Engine instances in a project are created with a specifi
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Organization Policy: Polityka `compute.restrictServiceAccounts` pozwala zdefiniować listę 'dozwolonych' kont serwisowych dla danego projektu. Każda próba stworzenia VM z innym kontem (lub z domyślnym kontem Compute Engine) zostanie zablokowana przez platformę.
-
-Dlaczego inne są błędne:
-A. IAM: Pozwala na nadanie praw, ale nie 'wymusza' użycia konkretnego konta przy tworzeniu zasobu.
-C. Templates: To tylko wzorce, użytkownik może stworzyć VM ręcznie omijając szablon.
-D. Shared VPC: Architektura sieciowa, brak wpływu na tożsamość maszyny.
-
-Konsensus społeczności ExamTopics: 100% na B. Org Policy to jedyny sposób na twarde wymuszenie tożsamości floty.</pre>
+Wyjaśnienie: DLP API posiada natywne funkcje skanowania bucketów GCS i tworzenia zanonimizowanych kopii danych.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Największym zagrożeniem w GCP jest używanie 'Default Service Account' (który ma rolę Editor). Na forach inżynierowie security radzą używać polityki B, aby ZMUSIĆ deweloperów do używania dedykowanych kont o niskich uprawnieniach.</p>
+<p><b>Sugerowana odpowiedź: </b></p>
+<p><b>Głęboka analiza:</b> <p>Lifecycle policy (A) potrafi tylko usuwać lub zmieniać klasę storage, nie potrafi modyfikować zawartości plików.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints</a></li>
+<li><a href="https://cloud.google.com/dlp/docs/inspecting-storage" target="_blank">https://cloud.google.com/dlp/docs/inspecting-storage</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +126,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

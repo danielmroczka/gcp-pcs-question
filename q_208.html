@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 208</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 208 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Audit which users have the permission to access a specific Secret in Secret Manager. Which tool?
+Your organization recently activated the Security Command Center (SCC) standard tier. There are a few Cloud Storage buckets that were accidentally made accessible to the public. You need to investigate the impact of the incident and remediate it.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Policy Analyzer</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Policy Troubleshooter</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> IAM Recommender</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Audit Logs</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> 1. Remove the Identity and Access Management (IAM) granting access to all Users from the buckets. 2. Apply the organization policy storage.uniformBucketLevelAccess to prevent regressions. 3. Query the data access logs to report on unauthorized access.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> 1. Change permissions to limit access for authorized users. 2. Enforce a VPC Service Controls perimeter around all the production projects to immediately stop any unauthorized access. 3. Review the administrator activity audit logs to report on any unauthorized access.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> 1. Change the bucket permissions to limit access. 2. Query the bucket's usage logs to report on unauthorized access to the data. 3. Enforce the organization policy storage.publicAccessPrevention to avoid regressions.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> 1. Change bucket permissions to limit access. 2. Query the data access audit logs for any unauthorized access to the buckets. 3. After the misconfiguration is corrected, mute the finding in the Security Command Center.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Audit which users have the permission to access a specific Secret in Secret Mana
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">C</span>
 <br/>
 </span>
 </div>
@@ -88,38 +88,29 @@ Audit which users have the permission to access a specific Secret in Secret Mana
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
-
-Wyjaśnienie (Dlaczego poprawna):
-A. Policy Analyzer: Pozwala na zadanie pytania: 'Kto ma dostęp do sekretu X?'. Przeszukuje on wszystkie przypisania ról (bezpośrednie i dziedziczone) i zwraca pełną listę uprawnionych tożsamości.
-
-Dlaczego inne są błędne:
-B. Policy Troubleshooter: Sprawdza 'dlaczego konkretna osoba nie ma dostępu', nie robi raportów dla zasobu.
-C. IAM Recommender: Sugeruje usuwanie uprawnień.
-D. Audit Logs: Nie dają aktualnego obrazu 'kto ma dostęp TERAZ'.
-
-Konsensus społeczności ExamTopics: 100% na A. To podstawowe narzędzie inwentaryzacji dostępów.</pre>
+<pre>
+Odpowiedź: C. (Uwaga: D również jest rozsądne, ale C kładzie nacisk na zapobieganie regresji przez politykę organizacji). Wyjaśnienie: publicAccessPrevention to najsilniejszy mechanizm ochronny przed ponownym upublicznieniem.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Eksperci na Reddit radzą: 'Jeśli audytor chce listę osób z dostępem do haseł produkcyjnych -> użyj Policy Analyzer'. Jest to jedyne narzędzie, które poprawnie interpretuje grupy i dziedziczenie z folderów dla usługi Secret Manager.</p>
+<p><b>Sugerowana odpowiedź: C</b></p>
+<p><b>Głęboka analiza:</b> <p>Bucket usage logs lub Data Access logs pozwalają sprawdzić, czy ktoś faktycznie pobrał dane, gdy były publiczne.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/iam/docs/policy-analyzer-overview" target="_blank">https://cloud.google.com/iam/docs/policy-analyzer-overview</a></li>
+<li><a href="https://cloud.google.com/storage/docs/public-access-prevention" target="_blank">https://cloud.google.com/storage/docs/public-access-prevention</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +125,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

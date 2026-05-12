@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 93</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 93 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Cloud Storage bucket in Project A should only be readable from Project B. Data cannot be accessed from or copied to buckets outside the network. What should you do?
+You are part of a security team that wants to ensure that a Cloud Storage bucket in Project A can only be readable from Project B. You also want to ensure that data in the Cloud Storage bucket cannot be accessed from or copied to Cloud Storage buckets outside the network, even if the user has the correct credentials.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enable VPC Service Controls and create a perimeter with A and B.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Domain Restricted Sharing and Bucket Policy Only.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Private Access in networks.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> VPC Peering.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enable VPC Service Controls, create a perimeter with Project A and B, and include Cloud Storage service.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Enable Domain Restricted Sharing Organization Policy and Bucket Policy Only on the Cloud Storage bucket.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Enable Private Access in Project A and B networks with strict firewall rules to allow communication between the networks.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enable VPC Peering between Project A and B networks with strict firewall rules to allow communication between the networks.</li>
 
 </ul>
 </div>
@@ -88,38 +88,39 @@ Cloud Storage bucket in Project A should only be readable from Project B. Data c
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
-A. VPC Service Controls (Perimeter): To jedyne rozwiązanie w GCP, które zapobiega eksfiltracji danych między zaufanymi a niezaufanymi projektami. Umieszczenie projektów A i B w jednym perymetrze pozwala im na wymianę danych, ale blokuje każdą próbę kopiowania danych poza ten perymetr (nawet przez użytkownika z pełnymi uprawnieniami IAM).
+A. VPC Service Controls (Perimeter): Tworzy twardą granicę na poziomie API Google. Maszyny w projekcie B mogą czytać dane z projektu A, ale żadne z nich nie może wysłać tych danych do bucketu poza perymetrem (exfiltration).
 
 Dlaczego inne są błędne:
-B. Domain Restricted Sharing: Uniemożliwia nadawanie uprawnień osobom spoza firmy, ale nie blokuje 'wynoszenia' danych przez pracowników na ich prywatne konta w chmurze.
-C. Private Access: Pozwala na dostęp do API Google bez internetu, ale nie nakłada restrykcji na TO, do których bucketów (Twoich czy obcych) można pisać.
-D. VPC Peering: Łączy sieci, nie ma wpływu na bezpieczeństwo usług API takich jak Cloud Storage.
+B. Domain Restricted: Chroni przed udostępnianiem osobom trzecim, ale nie chroni przed wynoszeniem danych przez pracowników na ich prywatne konta w chmurze (to potrafi tylko VPC SC).
+C. Private Access: Pozwala na dostęp bez internetu, ale nie nakłada restrykcji na logiczne granice kopiowania danych.
+D. VPC Peering: To technologia sieciowa, nie ma wpływu na bezpieczeństwo usług API Cloud Storage.
 
-Konsensus społeczności ExamTopics: 100% na A. VPC SC to standardowa odpowiedź na wymóg 'cannot be copied to buckets outside'.</pre>
+Konsensus społeczności ExamTopics: 100% na A. Słowo 'copied to buckets outside' to kluczowy indykator dla VPC SC.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Perymetr VPC SC tworzy 'mur' na poziomie API Google. To tak, jakby Twoje buckety przestały istnieć dla reszty świata, a te ze świata przestały istnieć dla Twoich VM.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Wiele osób pyta, czy IAM nie wystarczy. Eksperci na forach odpowiadają: IAM mówi kto MOŻE czytać. VPC SC mówi, skąd i dokąd te dane MOGĄ płynąć. Nawet administrator z uprawnieniami Owner nie ominie perymetru VPC SC.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc-service-controls/docs/overview" target="_blank">https://cloud.google.com/vpc-service-controls/docs/overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

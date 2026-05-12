@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 80</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,7 +64,7 @@
 <h2>Question 80 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-An engineering team is launching a public web application. They want to avoid exposing the application directly and deny traffic from a specific list of malicious IPs. Which solution should they implement?
+An engineering team is launching a web application that will be public on the internet. The web application is hosted in multiple GCP regions and will be directed to the respective backend based on the URL request.<br/>Your team wants to avoid exposing the application directly on the internet and wants to deny traffic from a specific list of malicious IP addresses.<br/>Which solution should your team implement to meet these requirements?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -88,7 +88,8 @@ An engineering team is launching a public web application. They want to avoid ex
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
 A. Cloud Armor: Jest to jedyna usługa w GCP, która oferuje 'IP Blacklisting' i 'IP Whitelisting' na brzegu sieci (Edge) dla aplikacji webowych. Pozwala na zdefiniowanie polityk bezpieczeństwa, które odrzucają ruch ze wskazanych zakresów IP zanim trafią do Load Balancera.
@@ -98,28 +99,28 @@ B. Network LB: Działa na warstwie 4. Filtrowanie IP musiałbyś robić ręcznie
 C. SSL Proxy LB: Nie posiada wbudowanego silnika WAF ani tak łatwego zarządzania czarnymi listami IP jak Cloud Armor.
 D. NAT Gateway: Służy do ukrywania adresów IP maszyn wychodzących do internetu, nie chroni aplikacji przed ruchem przychodzącym.
 
-Konsensus społeczności ExamTopics: 100% na A. Cloud Armor to standardowa odpowiedź na wszystko co dotyczy 'IP blocking' dla publicznych stron WWW.</pre>
+Konsensus społeczności ExamTopics: 100% na A. Cloud Armor to standardowa odpowiedź na wszystko co dotyczy 'IP blocking' dla publicznych stron WWW.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Cloud Armor pozwala również na stosowanie list IP od dostawców trzecich oraz automatyczne blokowanie adresów na podstawie geolokalizacji.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Cloud Armor pozwala również na stosowanie list IP od dostawców trzecich oraz automatyczne blokowanie adresów na podstawie geolokalizacji.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/armor" target="_blank">https://cloud.google.com/armor</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

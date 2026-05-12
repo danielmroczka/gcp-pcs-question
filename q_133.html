@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 133</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,7 +64,7 @@
 <h2>Question 133 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Data residency requirements. Store data in specific locations. Hierarchy contain multiple residency locations. At which level set Resource Location Restriction?
+Your company's Chief Information Security Officer (CISO) creates a requirement that business data must be stored in specific locations due to regulatory requirements that affect the company's global expansion plans. After working on the details to implement this requirement, you determine the following: The services in scope are included in the Google Cloud Data Residency Terms. The business data remains within specific locations under the same organization. The folder structure can contain multiple data residency locations. You plan to use the Resource Location Restriction organization policy constraint. At which level in the resource hierarchy should you set the constraint?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -88,37 +88,39 @@ Data residency requirements. Store data in specific locations. Hierarchy contain
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
-C. Project Level: Ustawienie polityki organizacji na poziomie projektu zapewnia największą precyzję (granularność). Jeśli Twoja firma działa globalnie, ustawienie restrykcji na poziomie Organizacji (D) lub Folderu (A) mogłoby zablokować deweloperom możliwość tworzenia zasobów w regionach, które są im potrzebne w innych projektach.
+B. Organization Policy: Polityki organizacji pozwalają na wymuszanie standardów (constraints) na poziomie całej firmy. Specyficzne polityki dla Compute Engine pozwalają na ograniczanie lub wymuszanie konkretnych ustawień metadanych podczas tworzenia zasobów.
 
 Dlaczego inne są błędne:
-A, D: Zbyt szerokie. Dziedziczenie w dół zablokowałoby całą firmę lub cały pion biznesowy do jednego regionu.
-B. Resource: Polityki organizacji (Constraints) ustawia się na węzłach hierarchii (Org/Folder/Project), nie ustawia się ich bezpośrednio 'na zasobie' (np. na pojedynczym dysku).
+A. IAM: Kontroluje kto może tworzyć VM, ale nie 'wymusza' zawartości konfiguracji tej VM.
+C. Project metadata: To tylko domyślne wartości, użytkownik może je nadpisać podczas tworzenia instancji, więc nie jest to 'wymuszenie' (enforcement).
+D. Shared VPC: To architektura sieciowa, nie ma nic wspólnego z metadanymi VM.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na C. Poziom projektu to najbezpieczniejsze miejsce na specyficzne wymogi prawne bez psucia reszty środowiska.</pre>
+Konsensus społeczności ExamTopics: 100% na B. Org Policy to jedyny mechanizm twardego wymuszania parametrów zasobów.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Możesz również użyć Tagów i Warunków (IAM Conditions), ale standardowa polityka `gcp.resourceLocations` na poziomie projektu jest najbardziej uznawaną odpowiedzią egzaminacyjną.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> W nowszych wersjach GCP do takich zadań używa się również **Policy Controller** lub **Terraform Validator**. Jednak w ramach standardowych narzędzi GCP, polityki organizacji (B) są podstawową odpowiedzią na wymóg 'compliance enforcement' u źródła.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations</a></li>
+<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 89</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 89 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You have 3,000 objects in a bucket. You don't want individual object management or uploader full control. Use Cloud Audit Logs. What should you do?
+You are the security admin of your company. You have 3,000 objects in your Cloud Storage bucket. You do not want to manage access to each object individually.<br/>You also do not want the uploader of an object to always have full control of the object. However, you want to use Cloud Audit Logs to manage access to your bucket.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> ACL OWNER allUsers.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> ACL READER allUsers.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Default bucket ACL.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Uniform bucket-level access and IAM.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Set up an ACL with OWNER permission to a scope of allUsers.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Set up an ACL with READER permission to a scope of allUsers.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Set up a default bucket ACL and manage access for users using IAM.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Set up Uniform bucket-level access on the Cloud Storage bucket and manage access for users using IAM.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ You have 3,000 objects in a bucket. You don't want individual object management 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: D.
 
 Wyjaśnienie (Dlaczego poprawna):
 D. Uniform bucket-level access (UBLA): Wyłącza on system ACL (Access Control Lists) dla pojedynczych obiektów i wymusza używanie wyłącznie systemu IAM na poziomie całego bucketu. Zapewnia to spójność, łatwiejszy audyt (wszystko widać w IAM) i eliminuje ryzyko, że pojedynczy plik zostanie 'zapomniany' z błędnym uprawnieniem.
@@ -97,28 +98,28 @@ Dlaczego inne są błędne:
 A, B. allUsers: Udostępnia dane całemu światu - absolutny błąd bezpieczeństwa.
 C. Default bucket ACL: Nadal używa systemu ACL, który jest trudny do audytowania w skali tysięcy obiektów i nie daje centralnego wglądu tak jak IAM.
 
-Konsensus społeczności ExamTopics: 100% na D. UBLA to nowoczesny standard zarządzania dostępem do danych w GCS.</pre>
+Konsensus społeczności ExamTopics: 100% na D. UBLA to nowoczesny standard zarządzania dostępem do danych w GCS.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Przy 3000 obiektach zarządzanie każdym z nich z osobna (ACL) jest niemożliwe. IAM na poziomie bucketu to jedyny sposób na zachowanie ładu i zgodności z politykami firmy.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Przy 3000 obiektach zarządzanie każdym z nich z osobna (ACL) jest niemożliwe. IAM na poziomie bucketu to jedyny sposób na zachowanie ładu i zgodności z politykami firmy.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/storage/docs/uniform-bucket-level-access" target="_blank">https://cloud.google.com/storage/docs/uniform-bucket-level-access</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

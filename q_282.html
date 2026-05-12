@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 282</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 282 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Efficiently route logs from _Default to a new log bucket. What to do?
+You have just created a new log bucket to replace the _Default log bucket. You want to route all log entries that are currently routed to the _Default log bucket to this new log bucket, in the most efficient manner. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Exclusion filters + new sink.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Disable _Default + new sink.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> User-defined sink with filters.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Edit _Default sink and select new log bucket.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create exclusion filters for the _Default sink to prevent it from receiving new logs. Create a user-defined sink, and select the new log bucket as the sink destination.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Disable the _Default sink. Create a user-defined sink and select the new log bucket as the sink destination.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a user-defined sink with inclusion filters copied from the _Default sink. Select the new log bucket as the sink destination.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Edit the _Default sink, and select the new log bucket as the sink destination.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Efficiently route logs from _Default to a new log bucket. What to do?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: D.
 
 Wyjaśnienie (Dlaczego poprawna):
 D. Edit _Default sink: To najprostsza metoda (least effort). Sink `_Default` jest systemowym mechanizmem zbierania logów. Edytując jego cel (destination) i wskazując nowy Log Bucket, zmieniasz kierunek całego domyślnego potoku danych bez potrzeby tworzenia nowych, skomplikowanych reguł.
@@ -96,28 +97,28 @@ D. Edit _Default sink: To najprostsza metoda (least effort). Sink `_Default` jes
 Dlaczego inne są błędne:
 A, B, C: Wymagają więcej kroków (tworzenie nowych zasobów, zarządzanie filtrami wykluczeń), co jest mniej efektywne i trudniejsze w utrzymaniu.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla D. Zawsze edytuj istniejące systemowe zlewy logów, jeśli to możliwe.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla D. Zawsze edytuj istniejące systemowe zlewy logów, jeśli to możliwe.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Log Buckets pozwalają na ustawienie retencji niezależnie od projektu, co jest kluczowe dla optymalizacji kosztów.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Log Buckets pozwalają na ustawienie retencji niezależnie od projektu, co jest kluczowe dla optymalizacji kosztów.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/logging/docs/routing/overview#sinks" target="_blank">https://cloud.google.com/logging/docs/routing/overview#sinks</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -132,9 +133,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

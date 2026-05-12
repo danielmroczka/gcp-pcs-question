@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 283</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 283 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Identify common misconfigurations and compliance violations across organization in a dashboard. What to do?
+Your organization's use of the Google Cloud has grown substantially and there are many different groups using different cloud resources independently. You must identify common misconfigurations and compliance violations across the organization and track findings for remedial action in a dashboard. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud Asset Inventory filter.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Secure Health Analytics in SCC Premium.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud Audit Logs filters.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Event Threat Detection.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a filter set in Cloud Asset Inventory to identify service accounts with high privileges and IAM principals with Gmail domains.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Scan and alert vulnerabilities and misconfigurations by using Secure Health Analytics detectors in Security Command Center Premium.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Set up filters on Cloud Audit Logs to flag log entries for specific, risky API calls, and display the calls in a Cloud Log Analytics dashboard.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Alert and track emerging attacks detected in your environment by using Event Threat Detection detectors.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Identify common misconfigurations and compliance violations across organization 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
 B. Security Health Analytics (SHA): To moduł SCC Premium dedykowany do 'Posture Management'. Automatycznie skanuje on zasoby (bucket, VM, IAM) pod kątem błędów (np. brak MFA, publiczne porty) i prezentuje je w czytelnym dashboardzie Compliance.
@@ -98,28 +99,28 @@ A. Asset Inventory: To tylko lista zasobów, nie posiada silnika analizy podatno
 C. Audit Logs: Pokazują historię zmian, ale nie dają gotowej oceny stanu bezpieczeństwa 'na teraz'.
 D. Event Threat Detection: Szuka aktywnych włamań (malware, mining), a nie błędów w konfiguracji (compliance).
 
-Konsensus społeczności ExamTopics: 100% na B. SHA to fundament widoczności bezpieczeństwa w GCP.</pre>
+Konsensus społeczności ExamTopics: 100% na B. SHA to fundament widoczności bezpieczeństwa w GCP.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> SHA wspiera standardy takie jak CIS, NIST i PCI DSS, automatycznie przypisując błędy do konkretnych wymogów tych norm.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> SHA wspiera standardy takie jak CIS, NIST i PCI DSS, automatycznie przypisując błędy do konkretnych wymogów tych norm.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/security-command-center/docs/concepts-security-health-analytics-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-security-health-analytics-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

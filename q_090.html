@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 90</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 90 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Development team creates multiple projects under a folder. Prevent data exfiltration by insiders without restricting communication between projects. What should you do?
+You are the security admin of your company. Your development team creates multiple GCP projects under the "implementation" folder for several dev, staging, and production workloads. You want to prevent data exfiltration by malicious insiders or compromised code by setting up a security perimeter. However, you do not want to restrict communication between the projects.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Shared VPC and firewall rules.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Access levels in Access Context Manager and Shared VPC.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Single service perimeter with IaC monitoring folder changes.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Three different service perimeters.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use a Shared VPC to enable communication between all projects, and use firewall rules to prevent data exfiltration.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create access levels in Access Context Manager to prevent data exfiltration, and use a shared VPC for communication between projects.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use an infrastructure-as-code software tool to set up a single service perimeter and to deploy a Cloud Function that monitors the "implementation" folder via Stackdriver and Cloud Pub/Sub. When the function notices that a new project is added to the folder, it executes Terraform to add the new project to the associated perimeter.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use an infrastructure-as-code software tool to set up three different service perimeters for dev, staging, and prod and to deploy a Cloud Function that monitors the "implementation" folder via Stackdriver and Cloud Pub/Sub. When the function notices that a new project is added to the folder, it executes Terraform to add the new project to the respective perimeter.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Development team creates multiple projects under a folder. Prevent data exfiltra
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">C</span>
+<span class="correct-answer">B</span>
 <br/>
 </span>
 </div>
@@ -88,7 +88,8 @@ Development team creates multiple projects under a folder. Prevent data exfiltra
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: C.
 
 Wyjaśnienie (Dlaczego poprawna):
 C. Single Service Perimeter: Umieszczenie wszystkich projektów wewnątrz JEDNEGO perymetru VPC Service Controls pozwala im na swobodną komunikację między sobą (brak restrykcji wewnątrz), ale jednocześnie tworzy twardą barierę chroniącą przed kopiowaniem danych na zewnątrz perymetru (data exfiltration). Automatyzacja (IaC) zapewnia, że nowe projekty w folderze są automatycznie dodawane do ochrony.
@@ -98,28 +99,28 @@ A. Shared VPC: Chroni tylko warstwę sieciową, nie zapobiega kopiowaniu danych 
 B. Access levels: Kontrolują kto może wejść DO perymetru, ale nie blokują wyjścia danych przez uprawnionego użytkownika.
 D. Three perimeters: Zablokowałyby komunikację między projektami, co jest sprzeczne z wymogiem 'without restricting communication'.
 
-Konsensus społeczności ExamTopics: Silne poparcie dla C. Jeden perymetr dla grupy projektów to standardowy wzorzec izolacji zespołów.</pre>
+Konsensus społeczności ExamTopics: Silne poparcie dla C. Jeden perymetr dla grupy projektów to standardowy wzorzec izolacji zespołów.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> VPC SC działa na poziomie API Google. Nawet jeśli masz uprawnienia Ownera, nie skopiujesz danych do prywatnego bucketu, jeśli Twój projekt jest w perymetrze firmy, a docelowy nie.</p>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> VPC SC działa na poziomie API Google. Nawet jeśli masz uprawnienia Ownera, nie skopiujesz danych do prywatnego bucketu, jeśli Twój projekt jest w perymetrze firmy, a docelowy nie.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc-service-controls/docs/overview" target="_blank">https://cloud.google.com/vpc-service-controls/docs/overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

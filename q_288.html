@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 288</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 288 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Manage identities for corporate and public users. Corporate must use domain name. What to do?
+Your organization is developing an application that will have both corporate and public end-users. You want to centrally manage those customers' identities and authorizations. Corporate end users must access the application by using their corporate user and domain name. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Domain restricted sharing.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Workforce Identity Federation.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Google Workspace identities.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> CIAM tool like Identity Platform.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Add the corporate and public end-user domains to domain restricted sharing on the organization.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Federate the customers' identity provider (IdP) with Workforce Identity Federation in your application's project.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Do nothing. Google Workspace identities will allow you to filter personal accounts and disable their access.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use a customer identity and access management tool (CIAM) like Identity Platform.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Manage identities for corporate and public users. Corporate must use domain name
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: D.
 
 Wyjaśnienie (Dlaczego poprawna):
 D. Identity Platform: Jest to usługa CIAM (Customer Identity and Access Management). Pozwala na obsługę milionów użytkowników publicznych (przez e-mail, telefon, social login) oraz jednoczesną integrację z korporacyjnymi IdP dla pracowników. Spełnia wymóg zarządzania obiema grupami w jednym systemie.
@@ -98,28 +99,28 @@ A. Domain restricted: To polityka blokowania, nie system tożsamości.
 B. Workforce Federation: Służy tylko do logowania pracowników do konsoli chmury, nie dla użytkowników publicznych aplikacji.
 C. Workspace: Nie nadaje się do zarządzania milionami anonimowych klientów (koszt licencji i bezpieczeństwo).
 
-Konsensus społeczności ExamTopics: 100% poparcia dla D. Identity Platform to odpowiedź na każdy scenariusz CIAM.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla D. Identity Platform to odpowiedź na każdy scenariusz CIAM.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Identity Platform bazuje na Firebase Auth, ale oferuje funkcje klasy Enterprise, takie jak multi-tenancy i wsparcie dla protokołów SAML/OIDC.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Identity Platform bazuje na Firebase Auth, ale oferuje funkcje klasy Enterprise, takie jak multi-tenancy i wsparcie dla protokołów SAML/OIDC.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/identity-platform" target="_blank">https://cloud.google.com/identity-platform</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

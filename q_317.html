@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 317</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 317 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-100GB Cloud Interconnect operational but MACsec is down. Resolve error.
+You work for a large organization that recently implemented a 100GB Cloud Interconnect connection between your Google Cloud and your on-premises edge router. While routinely checking the connectivity, you noticed that the connection is operational but there is an error message that indicates MACsec is operationally down. You need to resolve this error. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Check MACsec support.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Check on-prem router.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Check pre-shared key expiration.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Ensure active pre-shared key matches on both ends.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Ensure that the Cloud Interconnect connection supports MACsec.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Ensure that the on-premises router is not down.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Ensure that the active pre-shared key created for MACsec is not expired on both the on-premises and Google edge routers.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Ensure that the active pre-shared key matches on both the on-premises and Google edge routers.</li>
 
 </ul>
 </div>
@@ -88,38 +88,39 @@
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
-D. Key Mismatch: MACsec (szyfrowanie warstwy 2) wymaga tzw. Pre-Shared Key (PSK). Jeśli klucz po stronie Google nie pasuje do klucza na Twoim routerze on-prem, sesja MACsec nie zostanie nawiązana, mimo że fizyczny link jest sprawny. Jest to najczęstsza przyczyna błędów konfiguracyjnych.
+B. Metadata Concealment / Workload Identity: Serwer metadanych węzła zawiera bardzo wrażliwe informacje (np. tokeny konta serwisowego maszyny). Workload Identity automatycznie zabezpiecza dostęp do metadanych, sprawiając, że pody widzą tylko własne, ograniczone informacje, a nie metadane całego węzła.
 
 Dlaczego inne są błędne:
-A. MACsec support: Skoro link był 'operational' (według treści), to znaczy, że sprzęt wspiera MACsec, a problem powstał później.
-B. Router: Zbyt ogólne. Trzeba sprawdzić konkretnie konfigurację kluczy.
-C. Key expiration: Klucze MACsec w GCP nie wygasają automatycznie w taki sposób, aby powodować 'down' bez zmiany konfiguracji, ale niespójność kluczy (D) przy próbie zmiany jest pewniejszym powodem awarii.
+A. VPC Firewall: Nie blokuje ruchu do lokalnego adresu `169.254.169.254` wewnątrz interfejsu loopback/bridge.
+C. Network Policies: Mogą blokować, ale WI (B) jest bardziej kompletnym i zalecanym sposobem izolacji tożsamości w GKE.
+D. Cloud Armor: Dla ruchu zewnętrznego.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla D. Diagnostyka MACsec zaczyna się od weryfikacji PSK.</pre>
+Konsensus społeczności ExamTopics: 100% na B. Workload Identity to podstawowy element 'Hardeningu' klastra GKE.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> MACsec w GCP wymaga użycia klucza Connectivity Association Key (CAK) i Connectivity Association Key Name (CKN). Oba te parametry muszą być identyczne po obu stronach światłowodu.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Na GitHubie specjaliści ostrzegają: 'Bez WI, każdy pod w klastrze może udawać węzeł'. Włączenie Workload Identity (B) to nie tylko wygoda, ale krytyczny krok blokujący jeden z najczęstszych wektorów eskalacji uprawnień w Kubernetes.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/network-connectivity/docs/interconnect/concepts/macsec-overview" target="_blank">https://cloud.google.com/network-connectivity/docs/interconnect/concepts/macsec-overview</a></li>
+<li><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity" target="_blank">https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

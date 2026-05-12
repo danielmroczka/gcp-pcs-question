@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 241</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 241 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Protect your VPC from unauthorized communication by using 'Shared VPC'. What is the primary benefit?
+You are developing a new application that uses exclusively Compute Engine VMs. Once a day, this application will execute five different batch jobs. Each of the batch jobs requires a dedicated set of permissions on Google Cloud resources outside of your application. You need to design a secure access concept for the batch jobs that adheres to the least-privilege principle.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> It automates the build of container images.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> It allows a central project to manage the network resources while service projects use them.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> It manages Kubernetes namespaces.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> It provides a container registry.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> 1. Create a general service account "g-sa" to orchestrate the batch jobs. 2. Create one service account per batch job 'b-sa-[1-5]'. Grant only the permissions required to run the individual batch jobs to the service accounts and generate service account keys for each of these service accounts. 3. Store the service account keys in Secret Manager. Grant g-sa access to Secret Manager and run the batch jobs with the permissions of b-sa-[1-5].</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> 1. Create a general service account "g-sa" to execute the batch jobs. 2. Grant the permissions required to execute the batch jobs to g-sa. 3. Execute the batch jobs with the permissions granted to g-sa.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> 1. Create a workload identity pool and configure workload identity pool providers for each batch job. 2. Assign the workload identity user role to each of the identities configured in the providers. 3. Create one service account per batch job "b-sa-[1-5]", and grant only the permissions required to run the individual batch jobs to the service accounts. 4. Generate credential configuration files for each of the providers. Use these files to execute the batch jobs with the permissions of b-sa-[1-5].</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> 1. Create a general service account "g-sa" to orchestrate the batch jobs. 2. Create one service account per batch job "b-sa-[1-5]", and grant only the permissions required to run the individual batch jobs to the service accounts. 3. Grant the Service Account Token Creator role to g-sa. Use g-sa to obtain short-lived access tokens for b-sa-[1-5] and to execute the batch jobs with the permissions of b-sa-[1-5].</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Protect your VPC from unauthorized communication by using 'Shared VPC'. What is 
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">D</span>
 <br/>
 </span>
 </div>
@@ -88,36 +88,31 @@ Protect your VPC from unauthorized communication by using 'Shared VPC'. What is 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: D.
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Shared VPC: Pozwala na centralizację zarządzania siecią (firewall, routing, subnets) w jednym projekcie 'Host'. Projekty 'Service' (np. od deweloperów) mogą tylko korzystać z tej sieci, ale nie mogą jej zmieniać. To drastycznie zmniejsza ryzyko błędów w konfiguracji sieciowej.
-
-Dlaczego inne są błędne:
-A, C, D: Jak w analogicznych pytaniach – to funkcje innych systemów.
-
-Konsensus społeczności ExamTopics: 100% poparcia dla B. Shared VPC = Centralized Networking.</pre>
+Wyjaśnienie: Impersonacja kont serwisowych (Token Creator role) jest bezpieczniejsza niż używanie statycznych kluczy (A). Orchestrator (g-sa) pobiera krótkotrwałe tokeny dla poszczególnych zadań (b-sa-1..5).
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Dyskusja w sieci skupia się na 'Separation of Duties'. Shared VPC (B) to fundament architektury Enterprise w GCP. Pozwala oddzielić zespół sieciowy (zajmujący się bezpieczeństwem i łącznością) od zespołów aplikacyjnych.</p>
+<p><b>Sugerowana odpowiedź: D</b></p>
+<p><b>Głęboka analiza:</b> <p>To rozwiązanie eliminuje ryzyko wycieku kluczy JSON i zapewnia pełną izolację uprawnień dla każdego zadania.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc/docs/shared-vpc" target="_blank">https://cloud.google.com/vpc/docs/shared-vpc</a></li>
+<li><a href="https://cloud.google.com/iam/docs/service-account-impersonation" target="_blank">https://cloud.google.com/iam/docs/service-account-impersonation</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -132,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

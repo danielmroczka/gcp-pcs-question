@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 160</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,15 @@
 <h2>Question 160 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Grant a user access to view security alerts in SCC, but only for a specific project, not the entire organization. Where should you apply the IAM role?
+You are working with a client that is concerned about control of their encryption keys for sensitive data. The client does not want to store encryption keys at rest in the same cloud service provider (CSP) as the data that the keys are encrypting. Which Google Cloud encryption solutions should you recommend to this client? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Organization level</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Folder level</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Project level</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Resource level</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Customer-supplied encryption keys.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Google default encryption</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Secret Manager</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud External Key Manager</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Customer-managed encryption keys</li>
 
 </ul>
 </div>
@@ -80,7 +81,7 @@ Grant a user access to view security alerts in SCC, but only for a specific proj
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">C</span>
+<span class="correct-answer">AD</span>
 <br/>
 </span>
 </div>
@@ -88,37 +89,31 @@ Grant a user access to view security alerts in SCC, but only for a specific proj
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: AD.
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Project level: Security Command Center wspiera hierarchię IAM. Jeśli użytkownik ma analizować zagrożenia tylko dla jednego zespołu/aplikacji, rolę `securitycenter.findingsViewer` należy nadać na poziomie tego konkretnego projektu.
-
-Dlaczego inne są błędne:
-A, B: Dałoby to dostęp do alertów z innych projektów (naruszenie Least Privilege).
-D: SCC zazwyczaj operuje na poziomie projektów lub organizacji, nie nadaje się ról SCC na poziomie 'pojedynczego dysku' (Resource).
-
-Konsensus społeczności ExamTopics: 100% na C. Podstawowa zasada ograniczania zasięgu uprawnień.</pre>
+Wyjaśnienie: CSEK (A) - klucz dostarczany przez klienta 'w locie'. Cloud EKM (D) - klucz przechowywany u zewnętrznego dostawcy HSM.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Na forach podkreśla się, że aby widzieć alerty na poziomie projektu, SCC musi być najpierw poprawnie skonfigurowane na poziomie Organizacji (Onboarding). Dopiero wtedy uprawnienia projektowe (C) pozwalają użytkownikowi na 'wycinek' widoku dla jego potrzeb.</p>
+<p><b>Sugerowana odpowiedź: AD</b></p>
+<p><b>Głęboka analiza:</b> <p>W obu przypadkach fizyczny klucz 'at rest' nie znajduje się na dyskach Google zarządzanych przez ich systemy KMS.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/security-command-center/docs/access-control#project-level-roles" target="_blank">https://cloud.google.com/security-command-center/docs/access-control#project-level-roles</a></li>
+<li><a href="https://cloud.google.com/kms/docs/ekm" target="_blank">https://cloud.google.com/kms/docs/ekm</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +128,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

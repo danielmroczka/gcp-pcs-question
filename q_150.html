@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 150</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 150 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Reduce internet exposure of VMs hosting web services for external users. Already removed public IPs. What to do?
+Your organization's Google Cloud VMs are deployed via an instance template that configures them with a public IP address in order to host web services for external users. The VMs reside in a service project that is attached to a host (VPC) project containing one custom Shared VPC for the VMs. You have been asked to reduce the exposure of the VMs to the internet while continuing to service external users. You have already recreated the instance template without a public IP address configuration to launch the managed instance group (MIG). What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud NAT in service project.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud NAT in host project.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> External HTTP(S) LB in service project with MIG as backend.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> External HTTP(S) LB in host project.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Deploy a Cloud NAT Gateway in the service project for the MIG.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Deploy a Cloud NAT Gateway in the host (VPC) project for the MIG.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Deploy an external HTTP(S) load balancer in the service project with the MIG as a backend.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Deploy an external HTTP(S) load balancer in the host (VPC) project with the MIG as a backend.</li>
 
 </ul>
 </div>
@@ -88,37 +88,39 @@ Reduce internet exposure of VMs hosting web services for external users. Already
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
-C. External HTTP(S) LB: Jest to zalecana architektura. Load Balancer posiada publiczny adres IP i przyjmuje ruch od użytkowników, a następnie przekazuje go do Twoich maszyn wirtualnych przez sieć wewnętrzną Google. Dzięki temu VM-y mogą pozostać w 100% prywatne (bez publicznych IP), co drastycznie zmniejsza ich powierzchnię ataku.
+B. Advanced Security: Wersja Premium SCC to pełnoprawny system CNAPP (Cloud Native Application Protection Platform). Oferuje wykrywanie ataków w czasie rzeczywistym (ETD), ciągłe monitorowanie zgodności z normami (Compliance) oraz automatyczne skanowanie podatności maszyn i kontenerów.
 
 Dlaczego inne są błędne:
-A, B. Cloud NAT: Służy do ruchu WYCHODZĄCEGO (z VM do internetu). Nie pozwoli użytkownikom z zewnątrz połączyć się z Twoimi usługami webowymi.
-D. Host project: Choć Shared VPC jest dobra, to zazwyczaj aplikacje (MIG) i ich Load Balancery tworzy się w projektach usługowych, aby zespoły deweloperskie miały autonomię w zarządzaniu swoimi usługami.
+A. Basic logs: To zadanie dla Cloud Logging (dostępne w wersji Standard).
+C. IAM management: Tym zajmuje się usługa IAM.
+D. VPN: To usługa sieciowa.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla C. To standardowy wzorzec 'Safe Internet Front-end'.</pre>
+Konsensus społeczności ExamTopics: 100% na B. SCC Premium to mózg operacyjny bezpieczeństwa w chmurze.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Load Balancer HTTP(S) działa jako reverse-proxy. Haker nie może połączyć się bezpośrednio z Twoją maszyną (np. przez SSH czy luki protokołu TCP), bo LB 'rozumie' tylko protokół HTTP/HTTPS.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Głównym punktem debaty w sieci jest cena. SCC Premium jest drogie, ale inżynierowie Enterprise podkreślają, że automatyzacja Compliance (B) oszczędza setki godzin pracy ręcznej przy przygotowywaniu audytów PCI, HIPAA czy ISO.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/load-balancing/docs/https" target="_blank">https://cloud.google.com/load-balancing/docs/https</a></li>
+<li><a href="https://cloud.google.com/security-command-center/docs/concepts-security-command-center-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-security-command-center-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

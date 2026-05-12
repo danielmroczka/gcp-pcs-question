@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 148</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,13 +64,13 @@
 <h2>Question 148 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Enforce access control policies for applications and resources. Which service?
+Which Google Cloud service should you use to enforce access control policies for applications and resources?
 </p>
 <div class="question-choices-container">
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Identity-Aware Proxy</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud NAT</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud Armor</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Google Cloud Armor</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Shielded VMs</li>
 
 </ul>
@@ -88,38 +88,39 @@ Enforce access control policies for applications and resources. Which service?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
-A. Identity-Aware Proxy (IAP): Jest to centralny punkt egzekwowania polityk dostępu (Access Control Policies) w modelu Zero Trust. IAP weryfikuje tożsamość użytkownika i warunki kontekstowe (np. czy to laptop firmowy) przed każdą sesją dostępu do zasobu.
+B. Cloud DLP API: Posiada specjalne techniki transformacji danych (de-identification), takie jak maskowanie, szyfrowanie zachowujące format (FPE) czy k-anonimizacja. Są one idealne do przygotowywania bezpiecznych zestawów danych testowych na podstawie realnych danych produkcyjnych.
 
 Dlaczego inne są błędne:
-B. Cloud NAT: Służy do translacji adresów dla wyjścia do internetu, nie kontroluje uprawnień dostępu użytkowników do aplikacji.
-C. Cloud Armor: To firewall warstwy 7, chroni przed atakami (WAF), ale 'standardowe' polityki dostępu oparte na tożsamości osób to domena IAP.
-D. Shielded VMs: Zapewniają integralność sprzętową i systemową maszyn, nie zarządzają dostępem użytkowników do tych maszyn w warstwie IAM/Auth.
+A. KMS: Szyfruje dane tak, że stają się nieczytelnym 'bełkotem', co uniemożliwia testowanie logiki aplikacji na nich.
+C. BigQuery: To baza, nie silnik transformacji danych wrażliwych.
+D. Web Security Scanner: Szuka luk w kodzie stron WWW.
 
-Konsensus społeczności ExamTopics: 100% na A. IAP = Access Control w modelu nowoczesnym.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla B. DLP to standard dla czyszczenia danych deweloperskich.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> IAP zastępuje potrzebę posiadania wielu skomplikowanych reguł firewalla i tuneli VPN jednym, spójnym systemem autoryzacji Google.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Na forach podkreśla się technikę 'Format Preserving Encryption' (część DLP). Pozwala ona np. zamienić prawdziwy numer karty kredytowej na inny, fałszywy, który nadal przechodzi walidację sumy kontrolnej Luhna, co jest kluczowe dla poprawności testów aplikacji bankowych.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/iap" target="_blank">https://cloud.google.com/iap</a></li>
+<li><a href="https://cloud.google.com/dlp/docs/concepts-pseudonymization" target="_blank">https://cloud.google.com/dlp/docs/concepts-pseudonymization</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

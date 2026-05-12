@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 355</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 355 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-prevent and detect misconfigurations in folder based on industry-specific and internal compliance. What to do?
+You work at a company in a regulated industry and are responsible for ongoing security of the Cloud environment. You need to prevent and detect misconfigurations in a particular folder based on specific compliance policies. You need to adhere to industry-specific compliance policies and policies that are internal to your company. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create Posture file using SHA/org policies, enforce on folder.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Custom org policies.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Assured Workloads on folder.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Workload Manager custom Rego policies.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a Posture file by using custom and predefined SHA or organization policies. Enforce the posture on the folder level.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create custom organization policies that follow specific business requirements. Enforce the policies on the folder level.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Enable Assured Workloads on the folder level, with the specific control bundle appropriate for your industry's regulations.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use Workload Manager with custom Rego policies to continuously scan the environment for misconfigurations on the folder level.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ prevent and detect misconfigurations in folder based on industry-specific and in
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
 A. Security Posture Management: To najnowocześniejsze narzędzie w SCC. Pozwala zdefiniować cały zestaw reguł (polityki organizacji + detektory SHA) w jednym pliku YAML ('Posture file'). Możesz go następnie 'przypiąć' do folderu, co zapewnia zarówno blokowanie błędów (prevent), jak i stałe monitorowanie zgodności (detect).
@@ -98,28 +99,28 @@ B. Custom policies: To tylko połowa sukcesu (prevent), nie oferują dashboardu 
 C. Assured Workloads: Świetne dla rezydencji danych, ale Posture (A) jest bardziej elastyczne dla specyficznych 'internal compliance' i reguł SHA.
 D. Workload Manager: Skupia się na aplikacjach Enterprise (SAP, SQL Server), nie jest ogólnym narzędziem 'Posture' dla folderu.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na A. Posture Management to nowy standard 'Governance as Code' w GCP.</pre>
+Konsensus społeczności ExamTopics: Zdecydowana większość na A. Posture Management to nowy standard 'Governance as Code' w GCP.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Dzięki Posture Management zespół security może przygotować 'szablon bezpiecznego folderu' i mieć pewność, że każdy projekt w nim stworzony będzie od razu zgodny ze standardem firmy.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Dzięki Posture Management zespół security może przygotować 'szablon bezpiecznego folderu' i mieć pewność, że każdy projekt w nim stworzony będzie od razu zgodny ze standardem firmy.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/security-command-center/docs/concepts-security-postures-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-security-postures-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

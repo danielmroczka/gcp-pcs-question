@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 116</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 116 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Export logs to GCS. Error: log sinks don't support uniform bucket-level access. How to resolve?
+You are exporting application logs to Cloud Storage. You encounter an error message that the log sinks don't support uniform bucket-level access policies. How should you resolve this error?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Change access control model for bucket.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Update sink destination.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Add logging.logWriter role to bucket.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Add logging.bucketWriter role to bucket.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Change the access control model for the bucket</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Update your sink with the correct bucket destination.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Add the roles/logging.logWriter Identity and Access Management (IAM) role to the bucket for the log sink identity.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Add the roles/logging.bucketWriter Identity and Access Management (IAM) role to the bucket for the log sink identity.</li>
 
 </ul>
 </div>
@@ -88,37 +88,40 @@ Export logs to GCS. Error: log sinks don't support uniform bucket-level access. 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A. (Uwaga: To pytanie historyczne, obecnie Cloud Logging wspiera UBLA).
+<pre>
+Odpowiedź: AC.
 
 Wyjaśnienie (Dlaczego poprawna):
-A. Change to Fine-grained access: Starsze wersje mechanizmu eksportu logów (Sink) wymagały użycia list ACL na poziomie pojedynczych obiektów (plików logów), aby poprawnie zapisywać dane. Uniform Bucket-Level Access (UBLA) wyłącza ACL, co powodowało błąd. Rozwiązaniem było przełączenie bucketu na model 'Fine-grained'.
+A. Cloud KMS: To usługa do zarządzania kluczami szyfrującymi. Pozwala na automatyczną rotację kluczy (KEK) zgodnie z harmonogramem (np. co 90 dni).
+C. Cloud Storage (GCS): Wspiera integrację z KMS (CMEK), co pozwala na szyfrowanie obiektów w bucketach kluczami zarządzanymi przez klienta, które podlegają rotacji.
 
 Dlaczego inne są błędne:
-B. Update destination: Zmiana celu nie rozwiązuje problemu konfiguracji uprawnień na buckecie GCS.
-C, D: Nadanie roli IAM jest poprawne w nowym modelu, ale pytanie opisuje konkretny błąd techniczny ('sinks don't support uniform...'), którego jedyną solucją w tamtym czasie było wyłączenie uniform access.
+B. Secret Manager: Służy do haseł, nie do kluczy szyfrujących wolumeny danych.
+D. Compute Engine: Wspiera CMEK, ale GCS (C) jest bardziej fundamentalnym przykładem składowania danych wymagającego kluczy rotowanych w tym scenariuszu (często GCS i KMS idą w parze w pytaniach o compliance).
+E. IAM: Zarządza uprawnieniami, nie szyfrowaniem.
 
-Konsensus społeczności ExamTopics: Większość na A ze względu na historyczny kontekst pytania. Warto jednak wiedzieć, że dzisiaj (2024+) opcja C/D byłaby bardziej pożądana.</pre>
+Konsensus społeczności ExamTopics: Zdecydowana większość na AC. KMS to mózg operacji, GCS to serce danych.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Google stale aktualizuje swoje usługi. Zawsze zwracaj uwagę, czy pytanie dotyczy 'ograniczenia technicznego' (które może być stare) czy 'najlepszej praktyki' (która ewoluuje).</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Niektórzy inżynierowie sugerują AD (KMS + Compute Engine). Jednak w kontekście ogólnego wymogu 'all data stored', GCS jest postrzegany jako główny magazyn danych w GCP. Kluczem jest zrozumienie, że KMS sam w sobie nie przechowuje danych, potrzebuje usługi storage'owej (C), aby spełnić wymóg biznesowy.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/logging/docs/export/using_exported_logs" target="_blank">https://cloud.google.com/logging/docs/export/using_exported_logs</a></li>
+<li><a href="https://cloud.google.com/kms/docs/key-rotation" target="_blank">https://cloud.google.com/kms/docs/key-rotation</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +136,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

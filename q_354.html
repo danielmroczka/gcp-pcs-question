@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 354</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 354 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Defense: master encryption key never leaves on-prem hardware. Revoke access independent of CSP. What to do?
+Your global defense company is migrating top-secret classified data to BigQuery and Cloud Storage. National security regulations demand that master encryption key material never leaves the accredited on-premises cryptographic hardware. You must retain the unilateral ability to revoke data access, independent of any cloud provider. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> CMEK in Cloud KMS.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> CSEK per operation.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Import master keys into Cloud KMS.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud EKM integrated with on-prem HSM.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use customer-managed encryption keys (CMEKs) for the BigQuery datasets and Cloud Storage buckets. Store the keys in Cloud Key Management Service (Cloud KMS).</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use customer-supplied encryption keys (CSEKs) by providing your own encryption keys with each data operation in Cloud Storage and BigQuery.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Import existing on-premises master encryption keys into Cloud Key Management Service (Cloud KMS). Use the imported keys for BigQuery and Cloud Storage encryption.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure Cloud External Key Manager (Cloud EKM) for the BigQuery datasets and Cloud Storage buckets. Integrate EKM with your existing on-premises hardware security modules (HSMs).</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Defense: master encryption key never leaves on-prem hardware. Revoke access inde
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: D.
 
 Wyjaśnienie (Dlaczego poprawna):
 D. Cloud EKM: To jedyna usługa, gdzie materiał klucza (master key) fizycznie NIGDY nie opuszcza Twojego lokalnego urządzenia HSM (D). Google tylko 'prosi' Twój HSM o wykonanie operacji. Możesz natychmiast 'odciąć' chmurę (Revoke access) poprzez wyłączenie klucza u siebie, całkowicie niezależnie od systemów Google (CSP).
@@ -98,28 +99,28 @@ A. CMEK: Klucz jest w Google.
 B. CSEK: Klucz trafia na chwilę do pamięci RAM Google podczas operacji szyfrowania - technicznie 'opuszcza on-prem'.
 C. Imported keys: Po imporcie klucz rezyduje w chmurze Google.
 
-Konsensus społeczności ExamTopics: 100% na D. EKM to fundament suwerenności kluczy w chmurze.</pre>
+Konsensus społeczności ExamTopics: 100% na D. EKM to fundament suwerenności kluczy w chmurze.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> To rozwiązanie jest wymagane przez organizacje, które mają prawny zakaz powierzania materiału klucza podmiotom trzecim (nawet w formie zaszyfrowanej).</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> To rozwiązanie jest wymagane przez organizacje, które mają prawny zakaz powierzania materiału klucza podmiotom trzecim (nawet w formie zaszyfrowanej).</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/kms/docs/ekm" target="_blank">https://cloud.google.com/kms/docs/ekm</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 120</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,7 +64,7 @@
 <h2>Question 120 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Enable VPC Service Controls and allow perimeter changes without preventing access. Which mode?
+You need to enable VPC Service Controls and allow changes to perimeters in existing environments without preventing access to resources. Which VPC Service Controls mode should you use?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -88,38 +88,39 @@ Enable VPC Service Controls and allow perimeter changes without preventing acces
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
-D. Dry run mode: Pozwala na zdefiniowanie konfiguracji perymetru i sprawdzenie w logach, co ZOSTAŁOBY zablokowane, gdyby polityka była aktywna. Nie przerywa jednak żadnego rzeczywistego ruchu API, co pozwala na bezpieczne testowanie bez ryzyka przestoju produkcyjnego.
+B. Cloud HSM: To dedykowana usługa Google, która pozwala na przechowywanie kluczy w fizycznych urządzeniach HSM certyfikowanych wg standardu FIPS 140-2 Level 3. Usługa jest w pełni zarządzana przez Google, więc nie musisz dbać o sprzęt.
 
 Dlaczego inne są błędne:
-A. Cloud Run: To usługa obliczeniowa, a nie tryb pracy perymetru.
-B. Native: Nie istnieje taki tryb w VPC SC.
-C. Enforced: To tryb aktywny, który natychmiast blokuje niedozwolony ruch - przeciwieństwo wymogu 'without preventing access'.
+A. Cloud KMS: To ogólna usługa zarządzania kluczami. Może używać HSM jako backendu, ale to Cloud HSM (B) precyzuje wymóg sprzętowy.
+C. Cloud EKM: Służy do łączenia się z TWOIM HSM-em poza Google.
+D. Secret Manager: Służy do haseł, nie jest usługą HSM.
 
-Konsensus społeczności ExamTopics: 100% na D. To standardowy etap każdego wdrożenia VPC SC.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla B. Pytanie o definicję usługi.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Logi z trybu Dry Run zawierają szczegółowe informacje o 'violations', co pozwala administratorowi na precyzyjne dopisanie brakujących wyjątków przed ostatecznym włączeniem blokad.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Wiele osób myli KMS i HSM. Eksperci wyjaśniają: KMS to interfejs (API). HSM to miejsce, gdzie klucz fizycznie 'mieszka'. Wybierając Cloud HSM, decydujesz, że operacje kryptograficzne Twoich kluczy w KMS będą wykonywane na certyfikowanym sprzęcie, a nie w oprogramowaniu.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc-service-controls/docs/dry-run-overview" target="_blank">https://cloud.google.com/vpc-service-controls/docs/dry-run-overview</a></li>
+<li><a href="https://cloud.google.com/hsm" target="_blank">https://cloud.google.com/hsm</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 87</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 87 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Frontend VM in subnet A needs to access MySQL VM in subnet B on port 3306. Subnets have other VMs. You want minimal access. What should you do?
+You have an application where the frontend is deployed on a managed instance group in subnet A and the data layer is stored on a mysql Compute Engine virtual machine (VM) in subnet B on the same VPC. Subnet A and Subnet B hold several other Compute Engine VMs. You only want to allow the application frontend to access the data in the application's mysql instance on port 3306.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Allow subnet A IP range to 'data-tag' on port 3306.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Allow communication from frontend's service account to MySQL's service account on port 3306.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure tags and egress rule from subnet B.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure tags and ingress rule from subnet A to subnet B.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure an ingress firewall rule that allows communication from the src IP range of subnet A to the tag "data-tag" that is applied to the mysql Compute Engine VM on port 3306.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure an ingress firewall rule that allows communication from the frontend's unique service account to the unique service account of the mysql Compute Engine VM on port 3306.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure a network tag "fe-tag" to be applied to all instances in subnet A and a network tag "data-tag" to be applied to all instances in subnet B. Then configure an egress firewall rule that allows communication from Compute Engine VMs tagged with data-tag to destination Compute Engine VMs tagged fe-tag.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure a network tag "fe-tag" to be applied to all instances in subnet A and a network tag "data-tag" to be applied to all instances in subnet B. Then configure an ingress firewall rule that allows communication from Compute Engine VMs tagged with fe-tag to destination Compute Engine VMs tagged with data-tag.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Frontend VM in subnet A needs to access MySQL VM in subnet B on port 3306. Subne
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
 B. Service Account based rules: To najbardziej precyzyjna i bezpieczna metoda. Adresy IP mogą się zmieniać, a tagi mogą być omyłkowo przypisane do innych maszyn w podsieci. Reguła firewalla oparta na TOŻSAMOŚCI (Service Account) gwarantuje, że tylko konkretna aplikacja frontendu może rozmawiać z konkretną bazą, niezależnie od tego, jakie inne maszyny są w tych podsieciach.
@@ -97,28 +98,28 @@ Dlaczego inne są błędne:
 A. Subnet IP range: Zbyt szerokie. Każda inna maszyna w podsieci A (nawet zainfekowana) mogłaby wtedy uderzyć do bazy danych.
 C, D. Tags: Tagi są lepsze niż IP, ale nadal są mniej bezpieczne niż SA, ponieważ administrator instancji (Instance Admin) może dowolnie dodawać/usuwać tagi, podczas gdy do zmiany SA wymagane są wyższe uprawnienia (ServiceAccountUser).
 
-Konsensus społeczności ExamTopics: Zdecydowana większość za B. Korzystanie z SA w regułach firewalla to 'best practice' dla mikroserwisów w GCP.</pre>
+Konsensus społeczności ExamTopics: Zdecydowana większość za B. Korzystanie z SA w regułach firewalla to 'best practice' dla mikroserwisów w GCP.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Reguły oparte na SA są bezpieczniejsze, ponieważ są 'stałe' dla danej funkcji logicznej, nawet jeśli zmienisz architekturę sieciową lub adresację IP.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Reguły oparte na SA są bezpieczniejsze, ponieważ są 'stałe' dla danej funkcji logicznej, nawet jeśli zmienisz architekturę sieciową lub adresację IP.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc/docs/firewalls#service-accounts" target="_blank">https://cloud.google.com/vpc/docs/firewalls#service-accounts</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

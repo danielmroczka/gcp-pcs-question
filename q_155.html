@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 155</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 155 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Identify unused firewall rules to reduce the attack surface. Which tool?
+You want to make sure that your organization's Cloud Storage buckets cannot have data publicly available to the internet. You want to enforce this across all Cloud Storage buckets. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Firewall Insights</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> VPC Flow Logs</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud Audit Logs</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Security Command Center Standard</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Remove Owner roles from end users, and configure Cloud Data Loss Prevention.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Remove Owner roles from end users, and enforce domain restricted sharing in an organization policy.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure uniform bucket-level access, and enforce domain restricted sharing in an organization policy.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Remove *.setIamPolicy permissions from all roles, and enforce domain restricted sharing in an organization policy.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Identify unused firewall rules to reduce the attack surface. Which tool?
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">C</span>
 <br/>
 </span>
 </div>
@@ -88,38 +88,31 @@ Identify unused firewall rules to reduce the attack surface. Which tool?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: C.
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Firewall Insights: To narzędzie analityczne, które monitoruje użycie reguł firewalla w czasie rzeczywistym. Potrafi ono wskazać reguły, przez które nie przeszedł żaden pakiet przez ostatnie 30 dni, co pozwala na ich bezpieczne usunięcie.
-
-Dlaczego inne są błędne:
-B. Flow Logs: Pokazują co przeszło, ale nie analizują automatycznie 'czego brakuje' w odniesieniu do bazy reguł.
-C. Audit Logs: Pokazują kto stworzył regułę, nie czy jest ona używana przez ruch sieciowy.
-D. SCC Standard: Nie posiada tak zaawansowanej analityki sieciowej jak dedykowany moduł Firewall Insights.
-
-Konsensus społeczności ExamTopics: 100% na A. To jedyne narzędzie do higieny firewalli.</pre>
+Wyjaśnienie: Uniform bucket-level access (UBLA) wymusza użycie IAM, a polityka 'Domain Restricted Sharing' uniemożliwia nadawanie uprawnień użytkownikom spoza Twojej domeny (np. allUsers).
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Eksperci przypominają: nieużywana reguła 'Allow' to potencjalna 'dziura' czekająca na wykorzystanie przez hakera po zmianie konfiguracji innej maszyny. Firewall Insights (A) to fundament procesu 'Rule Pruning' w dużych organizacjach.</p>
+<p><b>Sugerowana odpowiedź: C</b></p>
+<p><b>Głęboka analiza:</b> <p>To połączenie jest najsilniejszą bronią przeciwko przypadkowemu upublicznieniu danych w bucketach.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/firewall-insights/docs/overview" target="_blank">https://cloud.google.com/firewall-insights/docs/overview</a></li>
+<li><a href="https://cloud.google.com/storage/docs/org-policy-constraints#domain-restricted-sharing" target="_blank">https://cloud.google.com/storage/docs/org-policy-constraints#domain-restricted-sharing</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

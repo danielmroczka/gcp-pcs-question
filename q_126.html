@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 126</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,7 +64,7 @@
 <h2>Question 126 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Maintain client IP by default while using Standard network tier. Which LB?
+Which type of load balancer should you use to maintain client IP by default while using the standard network tier?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -88,7 +88,8 @@ Maintain client IP by default while using Standard network tier. Which LB?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: D.
 
 Wyjaśnienie (Dlaczego poprawna):
 D. TCP/UDP Network Load Balancer: Jest to Load Balancer 'pass-through'. Nie kończy on połączenia TCP/UDP, tylko przekazuje pakiety bezpośrednio do VM. Dzięki temu docelowa maszyna widzi oryginalny adres IP klienta w nagłówkach IP bez żadnej dodatkowej konfiguracji.
@@ -97,28 +98,28 @@ Dlaczego inne są błędne:
 A, B. Proxy LBs: Są to urządzenia typu proxy, które kończą połączenie u siebie i nawiązują nowe do VM. Aby zobaczyć IP klienta, wymagają użycia nagłówków PROXY protocol.
 C. Internal TCP/UDP: Choć zachowuje IP, działa tylko wewnątrz sieci VPC, nie jest dostępny dla użytkowników zewnętrznych w Standard Tierze.
 
-Konsensus społeczności ExamTopics: 100% na D. Network LB = IP visibility by default.</pre>
+Konsensus społeczności ExamTopics: 100% na D. Network LB = IP visibility by default.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Network LB jest tańszy i prostszy, ale nie wspiera zaawansowanych funkcji L7 (jak URL routing czy Cloud Armor).</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Network LB jest tańszy i prostszy, ale nie wspiera zaawansowanych funkcji L7 (jak URL routing czy Cloud Armor).</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/load-balancing/docs/network" target="_blank">https://cloud.google.com/load-balancing/docs/network</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

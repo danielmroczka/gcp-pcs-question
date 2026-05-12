@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 290</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 290 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Restriction for BigQuery in a folder. Analytics team manage restrictions only at folder level. What to do?
+You are implementing communications restrictions for specific services in your Google Cloud organization. Your data analytics team works in a dedicated folder. You need to ensure that access to BigQuery is controlled for that folder and its projects. The data analytics team must be able to control the restrictions only at the folder level. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Org-level service perimeter, ACM Editor.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Scoped policy on folder with service perimeter, ACM Editor.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Hierarchical firewall policy.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Restrict Resource Service Usage org policy.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create an organization-level access policy with a service perimeter to restrict BigQuery access. Assign the data analytics team the Access Context Manager Editor role on the access policy to allow the team to configure the access policy.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a scoped policy on the folder with a service perimeter to restrict BigQuery access. Assign the data analytics team the Access Context Manager Editor role on the scoped policy to allow the team to configure the scoped policy.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Define a hierarchical firewall policy on the folder to deny BigQuery access. Assign the data analytics team the Compute Organization Firewall Policy Admin role to allow the team to configure rules for the firewall policy.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enforce the Restrict Resource Service Usage organization policy constraint on the folder to restrict BigQuery access. Assign the data analytics team the Organization Policy Administrator role to allow the team to manage exclusions within the folder.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Restriction for BigQuery in a folder. Analytics team manage restrictions only at
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
 B. Scoped Access Policies: Pozwalają one na delegowanie zarządzania perymetrami VPC Service Controls do konkretnych folderów. Zespół analityczny dostaje rolę ACM Editor TYLKO na swojej polityce 'scoped', co pozwala im na izolację BigQuery bez dostępu do globalnych ustawień firmy.
@@ -98,28 +99,28 @@ A. Org-level: Narusza zasadę 'least privilege' i autonomii zespołu.
 C. Firewall: Nie chroni API BigQuery (to rola VPC SC).
 D. Restrict Service Usage: Blokuje włączenie usługi, a nie dostęp sieciowy do danych wewnątrz niej.
 
-Konsensus społeczności ExamTopics: 100% na B. Scoped policies to klucz do delegowanego bezpieczeństwa w Enterprise.</pre>
+Konsensus społeczności ExamTopics: 100% na B. Scoped policies to klucz do delegowanego bezpieczeństwa w Enterprise.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Dzięki Scoped Policies możesz uniknąć 'wąskiego gardła' w centralnym zespole IT, dając zaufanym zespołom kontrolę nad ich własnymi granicami danych.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Dzięki Scoped Policies możesz uniknąć 'wąskiego gardła' w centralnym zespole IT, dając zaufanym zespołom kontrolę nad ich własnymi granicami danych.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/access-context-manager/docs/scoped-access-policies" target="_blank">https://cloud.google.com/access-context-manager/docs/scoped-access-policies</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

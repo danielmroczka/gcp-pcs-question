@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 191</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 191 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You need to analyze VPC network traffic for compliance violations using full packet captures. Which feature?
+Employees at your company use their personal computers to access your organization's Google Cloud console. You need to ensure that users can only access the Google Cloud console from their corporate-issued devices and verify that they have a valid enterprise certificate.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> VPC Flow Logs</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Packet Mirroring</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud Armor</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> VPC Service Controls</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Implement an Access Policy in BeyondCorp Enterprise to verify the device certificate. Create an access binding with the access policy just created.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Implement a VPC firewall policy. Activate packet inspection and create an allow rule to validate and verify the device certificate.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Implement an organization policy to verify the certificate from the access context.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Implement an Identity and Access Management (IAM) conditional policy to verify the device certificate.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ You need to analyze VPC network traffic for compliance violations using full pac
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">A</span>
 <br/>
 </span>
 </div>
@@ -88,38 +88,31 @@ You need to analyze VPC network traffic for compliance violations using full pac
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: A.
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Packet Mirroring: Pozwala na przechwytywanie pełnej treści pakietów (L3-L7) i przesyłanie ich do zewnętrznego narzędzia inspekcji. Jest to niezbędne, gdy audytor wymaga dowodów z warstwy aplikacyjnej (Full Packet Capture).
-
-Dlaczego inne są błędne:
-A. Flow Logs: Zawierają tylko metadane (nagłówki), brak treści (payloadu).
-C. Cloud Armor: Rejestruje logi HTTP, ale nie jest systemem przechwytywania surowych pakietów sieciowych.
-D. VPC SC: Mechanizm blokujący API, nie sieciowy sniffer.
-
-Konsensus społeczności ExamTopics: 100% poparcia dla B. Full Packet Capture = Packet Mirroring.</pre>
+Wyjaśnienie: BeyondCorp Enterprise pozwala na definiowanie polityk dostępu kontekstowego, które sprawdzają stan urządzenia (np. posiadanie certyfikatu enterprise).
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Dyskusja na Reddit dotyczy wydajności. Packet Mirroring (B) nie spowalnia Twoich maszyn VM, bo kopiowanie pakietów odbywa się na poziomie wirtualnego switcha Google, co czyni to rozwiązanie idealnym dla rygorystycznych wymogów compliance bez wpływu na UX.</p>
+<p><b>Sugerowana odpowiedź: A</b></p>
+<p><b>Głęboka analiza:</b> <p>Dostęp kontekstowy (CAA) to fundament modelu Zero Trust w Google Cloud.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc/docs/packet-mirroring" target="_blank">https://cloud.google.com/vpc/docs/packet-mirroring</a></li>
+<li><a href="https://cloud.google.com/access-context-manager/docs/device-policy" target="_blank">https://cloud.google.com/access-context-manager/docs/device-policy</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

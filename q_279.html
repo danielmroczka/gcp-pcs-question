@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 279</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 279 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Hybrid cloud, private Artifact Registry. On-prem cannot resolve hostname. VPN/Interconnect active, no internet. Fix?
+Your organization operates a hybrid cloud environment and has recently deployed a private Artifact Registry repository in Google Cloud. On-premises developers cannot resolve the Artifact Registry hostname and therefore cannot push or pull artifacts. You've verified the following:<br/>• Connectivity to Google Cloud is established by Cloud VPN or Cloud Interconnect.<br/>• No custom DNS configurations exist on-premises.<br/>• There is no route to the internet from the on-premises network.<br/>You need to identify the cause and enable the developers to push and pull artifacts. What is likely causing the issue and what should you do to fix the issue?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> DNS records for restricted/private domains in on-prem DNS.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> artifactregistry.writer role.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> PGA on subnet.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Firewall rules for 80/443.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> On-premises DNS servers lack the necessary records to resolve private Google API domains. Create DNS records for restricted.googleapis.com or private.googleapis.com pointing to Google's published IP ranges.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Developers must be granted the artifactregistry.writer IAM role. Grant the relevant developer group this role.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Private Google Access is not enabled for the subnet hosting the Artifact Registry. Enable Private Google Access for the appropriate subnet.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Artifact Registry requires external HTTP/HTTPS access. Create a new firewall rule allowing ingress traffic on ports 80 and 443 from the developer's IP ranges.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Hybrid cloud, private Artifact Registry. On-prem cannot resolve hostname. VPN/In
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
 A. DNS for restricted/private domains: Artifact Registry używa publicznych nazw FQDN (`*.pkg.dev`). Jeśli Twoja sieć on-prem nie ma internetu, jej standardowy DNS nie rozwiąże tych nazw. Musisz stworzyć lokalną strefę DNS, która skieruje zapytania o Artifact Registry do adresów IP Private Google Access (zakresy `private.googleapis.com` lub `restricted.googleapis.com`).
@@ -98,28 +99,28 @@ B. IAM role: Nie pomoże, jeśli serwer w ogóle nie może 'znaleźć' adresu IP
 C. PGA on subnet: Dotyczy ruchu Z CHMURY, nie rozwiązuje problemu DNS po stronie on-premises.
 D. Firewall: Może być otwarty, ale bez poprawnego DNS-a pakiet nigdy nie zostanie wysłany pod właściwy adres.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla A. To standardowy problem łączności hybrydowej 'DNS split-horizon'.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla A. To standardowy problem łączności hybrydowej 'DNS split-horizon'.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Aby to zadziałało, musisz skonfigurować swój lokalny DNS tak, aby dla domeny `pkg.dev` zwracał adresy CNAME kierujące do `restricted.googleapis.com`.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Aby to zadziałało, musisz skonfigurować swój lokalny DNS tak, aby dla domeny `pkg.dev` zwracał adresy CNAME kierujące do `restricted.googleapis.com`.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc/docs/configure-private-google-access-settings#dns-on-prem" target="_blank">https://cloud.google.com/vpc/docs/configure-private-google-access-settings#dns-on-prem</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

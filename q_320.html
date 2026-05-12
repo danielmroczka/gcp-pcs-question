@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 320</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 320 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-App on CE VM access variable buckets in other projects. Google-recommended practices. What to do?
+You are developing an application that runs on a Compute Engine VM. The application needs to access data stored in Cloud Storage buckets in other Google Cloud projects. The required access to the buckets is variable. You need to provide access to these resources while following Google-recommended practices. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Access scopes.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> IAM bindings for VM service account and required buckets.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Domain-wide delegation.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> IAM groups for buckets, assign VM SA to group.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Limit the VMs access to the Cloud Storage buckets by setting the relevant access scope of the VM.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create IAM bindings for the VM's service account and the required buckets that allow appropriate access to the data stored in the buckets.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Grant the VM's service account access to the required buckets by using domain-wide delegation.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a group and assign IAM bindings to the group for each bucket that the application needs to access. Assign the VM's service account to the group.</li>
 
 </ul>
 </div>
@@ -88,38 +88,40 @@ App on CE VM access variable buckets in other projects. Google-recommended pract
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: AB.
 
 Wyjaśnienie (Dlaczego poprawna):
-B. Direct IAM Bindings: Zalecaną praktyką jest nadanie roli (np. `roles/storage.objectViewer`) kontu serwisowemu (SA), które jest przypisane do Twojej maszyny VM, bezpośrednio na zasobie (buckecie), do którego ma on mieć dostęp. Jest to najbardziej granularne i audytowalne rozwiązanie.
+A. Cloud KMS: Usługa do zarządzania kluczami, która zapewnia mechanizm automatycznej rotacji (np. co 30 dni).
+B. Compute Engine: Usługa infrastrukturalna, w której konfigurujesz użycie kluczy CMEK z KMS dla swoich dysków.
 
 Dlaczego inne są błędne:
-A. Access scopes: To metoda przestarzała (legacy). Scopes nie powinny być używane do precyzyjnej autoryzacji; do tego służy IAM.
-C. Domain-wide delegation: Służy do dostępu do Google Workspace (Drive, Gmail), nie do Cloud Storage.
-D. Groups for SA: Choć grupy są świetne dla LUDZI, to dla tożsamości technicznych (SA) bezpośrednie przypisanie roli do zasobu jest zazwyczaj prostsze i bardziej czytelne w audycie (widzisz od razu która maszyna co widzi).
+C. Cloud HSM: To tylko sprzętowy backend dla KMS (opcjonalny, KMS sam w sobie wystarcza).
+D. Secret Manager: Do haseł, nie do kluczy szyfrujących wolumeny danych.
+E. IAM: Zarządza uprawnieniami, nie samym procesem szyfrowania.
 
-Konsensus społeczności ExamTopics: 100% na B. IAM roles na koncie SA to fundament bezpieczeństwa GCP.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla AB. Klasyczna para dla wymogów Encryption Control.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Zawsze używaj <b>Custom Service Accounts</b> zamiast domyślnego konta Compute Engine, aby móc nadać tak precyzyjne uprawnienia bez ryzyka nadmiarowego dostępu.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Dyskusja w sieci skupia się na 're-encryption'. Zapamiętaj: rotacja klucza w KMS (A) nie powoduje natychmiastowego re-szyfrowania starych danych na dysku (B). Nowy klucz będzie używany do nowych zapisów, co jest akceptowalne dla większości audytorów jako 'rotacja klucza'.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/iam/docs/best-practices-for-using-service-accounts" target="_blank">https://cloud.google.com/iam/docs/best-practices-for-using-service-accounts</a></li>
+<li><a href="https://cloud.google.com/compute/docs/disks/customer-managed-encryption" target="_blank">https://cloud.google.com/compute/docs/disks/customer-managed-encryption</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +136,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 331</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 331 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Automated system to ensure only approved images deployed to GKE. managed services. What to do?
+Your organization uses a microservices architecture based on Google Kubernetes Engine (GKE). Recent security reviews recommend tighter controls around deployed container images to reduce potential vulnerabilities and maintain compliance. You need to implement an automated system by using managed services to ensure that only approved container images are deployed to the GKE clusters. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Restrict to specific Artifact Registry project.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Enforce Binary Authorization + CI/CD vulnerability scanning.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud Build triggers + firewall.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Custom scripts + CVE databases.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Develop custom organization policies that restrict GKE cluster deployments to container images hosted within a specific Artifact Registry project where your approved images reside.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Enforce Binary Authorization in your GKE clusters. Integrate container image vulnerability scanning into the CI/CD pipeline and require vulnerability scan results to be used for Binary Authorization policy decisions.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Automatically deploy new container images upon successful CI/CD builds by using Cloud Build triggers. Set up firewall rules to limit and control access to instances to mitigate malware injection.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Build a system using third-party vulnerability databases and custom scripts to identify potential Common Vulnerabilities and Exposures (CVEs) in your container images. Prevent image deployment if the CVE impact score is beyond a specified threshold.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Automated system to ensure only approved images deployed to GKE. managed service
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
 B. Binary Authorization + Skanowanie: To jedyne kompletne i zautomatyzowane rozwiązanie 'managed' w GCP. Binary Authorization fizycznie blokuje wdrożenie, jeśli obraz nie posiada podpisu (atestacji) wystawionego przez zautomatyzowany skaner podatności (Container Analysis) w pipeline CI/CD.
@@ -98,28 +99,28 @@ A. Restrict registry: Można ograniczyć źródło, ale to nie gwarantuje, że o
 C. Cloud Build triggers: Służy do budowania, ale nie mają mechanizmu blokady wewnątrz klastra GKE (runtime enforcement).
 D. Custom scripts: Przeciwieństwo wymogu 'managed services' (zwiększa narzut operacyjny).
 
-Konsensus społeczności ExamTopics: 100% na B. BinAuth to standard dla zaufanych wdrożeń GKE.</pre>
+Konsensus społeczności ExamTopics: 100% na B. BinAuth to standard dla zaufanych wdrożeń GKE.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> To rozwiązanie realizuje koncepcję 'Shift Left' - bezpieczeństwo jest sprawdzane w pipeline, a chmura tylko weryfikuje 'bilet wstępu' (atestację) przy bramie klastra.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> To rozwiązanie realizuje koncepcję 'Shift Left' - bezpieczeństwo jest sprawdzane w pipeline, a chmura tylko weryfikuje 'bilet wstępu' (atestację) przy bramie klastra.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/binary-authorization" target="_blank">https://cloud.google.com/binary-authorization</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

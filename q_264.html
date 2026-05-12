@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 264</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 264 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Customers complain about errors. Suspect Cloud Armor rules too strict. Collect request logs to investigate. What to do?
+Customers complain about error messages when they access your organization's website. You suspect that the web application firewall rules configured in Cloud Armor are too strict. You want to collect request logs to investigate what triggered the rules and blocked the traffic. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Increase ALB log sample rate.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Enable logging in ALB backend + log level VERBOSE in Cloud Armor.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud Armor preview mode.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Log sink for redirected_by_security_policy.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Modify the Application Load Balancer backend and increase the log sample rate to a higher number.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Enable logging in the Application Load Balancer backend and set the log level to VERBOSE in the Cloud Armor policy.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Change the configuration of suspicious web application firewall rules in the Cloud Armor policy to preview mode.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a log sink with a filter for logs containing redirected_by_security_policy and set a BigQuery dataset as destination.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Customers complain about errors. Suspect Cloud Armor rules too strict. Collect r
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
 B. ALB Request Logging: Logi Cloud Armor są dołączane do logów żądań Load Balancera. Jeśli nie włączysz logowania na 'Backend Service' Load Balancera, nie zobaczysz dlaczego użytkownicy są blokowani. Poziom VERBOSE (lub po prostu 'enabled') ujawni identyfikator reguły Armor, która odrzuciła żądanie.
@@ -98,28 +99,28 @@ A. Sample rate: Pomoże, jeśli logowanie jest już włączone, ale tu problemem
 C. Preview mode: Służy do sprawdzania NOWYCH reguł, a tu badamy błędy w regułach już DZIAŁAJĄCYCH.
 D. Log sink: To metoda eksportu logów, a nie ich generowania u źródła.
 
-Konsensus społeczności ExamTopics: 100% na B. Bez logów na LB, Cloud Armor jest 'niewidoczny' dla analityka.</pre>
+Konsensus społeczności ExamTopics: 100% na B. Bez logów na LB, Cloud Armor jest 'niewidoczny' dla analityka.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> W logach szukaj pola `enforcedSecurityPolicy` – tam znajdziesz nazwę reguły, która 'zabiła' połączenie klienta.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> W logach szukaj pola `enforcedSecurityPolicy` – tam znajdziesz nazwę reguły, która 'zabiła' połączenie klienta.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/armor/docs/request-logging" target="_blank">https://cloud.google.com/armor/docs/request-logging</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

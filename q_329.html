@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 329</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 329 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Python app on Cloud Run connect to Cloud SQL in different project securely with minimal overhead. What to do?
+Your organization is implementing a new Python application that will be deployed on Cloud Run. The application needs to connect to a MySQL database that runs on Cloud SQL in a different project in your Google Cloud organization. You must secure the connection from the application to the Cloud SQL instance while minimizing management overhead. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Public IP + Python Connector.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Private IP + Cloud SQL Auth Proxy in Cloud Run.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Private IP + client certificate.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Private IP + authorized network.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use a public IP address for the Cloud SQL instance. Integrate the Cloud SQL Python Connector into your application code to connect to the Cloud SQL instance.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Ensure that the Cloud SQL instance doesn't have a public IP address. Configure Cloud Run to use Cloud SQL Auth Proxy to connect to the Cloud SQL instance.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Ensure that the Cloud SQL instance doesn't have a public IP address. Enforce SSL/TLS. Require the use of a trusted client certificate to connect to the Cloud SQL instance.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Ensure that the Cloud SQL instance doesn't have a public IP address. Configure the application's IP address as an authorized network to connect to the Cloud SQL instance.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Python app on Cloud Run connect to Cloud SQL in different project securely with 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
 B. Cloud SQL Auth Proxy: Jest to natywny i najbardziej bezpieczny sposób łączenia się z bazami SQL w Google Cloud. Cloud Run posiada wbudowaną integrację (wystarczy zaznaczyć bazę w ustawieniach), która uruchamia proxy automatycznie. Użycie 'Private IP' zapewnia, że ruch nie opuszcza sieci Google, a proxy dba o autoryzację IAM i szyfrowanie TLS bez potrzeby zarządzania certyfikatami (minimal overhead).
@@ -98,28 +99,28 @@ A. Public IP: Zwiększa powierzchnię ataku na bazę danych.
 C. Client certificate: Bardzo trudne w zarządzaniu przy wielu mikroserwisach (overhead związany z rotacją certyfikatów). Proxy (B) robi to za Ciebie.
 D. Authorized network: Nie zadziała bezpośrednio dla Cloud Run, który nie posiada stałego adresu IP, który można by dodać do listy. Wymagałoby to użycia Cloud NAT lub Proxy.
 
-Konsensus społeczności ExamTopics: 100% na B. Cloud SQL Proxy to standardowy łącznik dla serverless.</pre>
+Konsensus społeczności ExamTopics: 100% na B. Cloud SQL Proxy to standardowy łącznik dla serverless.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Auth Proxy weryfikuje uprawnienia konta serwisowego Cloud Run do bazy danych. Jeśli deweloper nie nadał roli `Cloud SQL Client`, połączenie zostanie odrzucone mimo poprawnych haseł do bazy.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Auth Proxy weryfikuje uprawnienia konta serwisowego Cloud Run do bazy danych. Jeśli deweloper nie nadał roli `Cloud SQL Client`, połączenie zostanie odrzucone mimo poprawnych haseł do bazy.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/sql/docs/mysql/connect-run" target="_blank">https://cloud.google.com/sql/docs/mysql/connect-run</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 267</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 267 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Access Approval with custom signing key stored in HSM outside Google Cloud (EKM). How to configure?
+Your organization operates in a highly regulated industry and needs to implement strict controls around temporary access to sensitive Google Cloud resources. You have been using Access Approval to manage this access, but your compliance team has mandated the use of a custom signing key. Additionally, they require that the key be stored in a hardware security module (HSM) located outside Google Cloud. You need to configure Access Approval to use a custom signing key that meets the compliance requirements. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Asymmetric key in Cloud KMS.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Export key from Google to HSM.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create key in external HSM, integrate via Cloud EKM, configure Access Approval.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Asymmetric key in Cloud KMS, 30d rotation.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a new asymmetric signing key in Cloud Key Management System (Cloud KMS) using a supported algorithm and grant the Access Approval service account the IAM signerVerifier role on the key.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Export your existing Access Approval signing key as a PEM file. Upload the file to your external HSM and reconfigure Access Approval to use the key from the HSM.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a signing key in your external HSM. Integrate the HSM with Cloud External Key Manager (Cloud EKM) and make the key available within your project. Configure Access Approval to use this key.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a new asymmetric signing key in Cloud KMS and configure the key with a rotation period of 30 days. Add the corresponding public key to your external HSM.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Access Approval with custom signing key stored in HSM outside Google Cloud (EKM)
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: C.
 
 Wyjaśnienie (Dlaczego poprawna):
 C. External HSM + Cloud EKM: To zaawansowana konfiguracja suwerenności. Klucz podpisu Twojej zgody na dostęp personelu Google nie rezyduje w chmurze. Dzięki EKM, Google prosi Twój lokalny system o podpisanie autoryzacji dostępu. Bez fizycznego działania Twojego HSM, inżynier Google nie wejdzie do projektu.
@@ -97,28 +98,28 @@ Dlaczego inne są błędne:
 A, D: Klucz byłby wewnątrz Google, co narusza wymóg 'outside Google Cloud'.
 B. Export: Google Cloud KMS nie wspiera eksportu materiału klucza na zewnątrz w celu jego 'stałego' tam używania przez usługi chmurowe.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla C. To szczytowy punkt kontroli nad dostępem dostawcy.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla C. To szczytowy punkt kontroli nad dostępem dostawcy.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> To rozwiązanie zapewnia tzw. 'Veto Power' dla klienta. Nawet nakaz sądowy wydany chmurze nie pozwoli na odczyt danych bez akcji Twojego zewnętrznego klucza.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> To rozwiązanie zapewnia tzw. 'Veto Power' dla klienta. Nawet nakaz sądowy wydany chmurze nie pozwoli na odczyt danych bez akcji Twojego zewnętrznego klucza.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/kms/docs/ekm" target="_blank">https://cloud.google.com/kms/docs/ekm</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

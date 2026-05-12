@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 105</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,11 +64,11 @@
 <h2>Question 105 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Use gcloud tool to authenticate with third-party SSO SAML IdP. Which two options are necessary?
+You want to use the gcloud command-line tool to authenticate using a third-party single sign-on (SSO) SAML identity provider. Which options are necessary to ensure that authentication is supported by the third-party identity provider (IdP)? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> SSO SAML as third-party IdP</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> SSO SAML as a third-party IdP</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Identity Platform</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> OpenID Connect</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Identity-Aware Proxy</li>
@@ -89,39 +89,40 @@ Use gcloud tool to authenticate with third-party SSO SAML IdP. Which two options
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: AE.
+<pre>
+Odpowiedź: AE.
 
 Wyjaśnienie (Dlaczego poprawna):
-A. SSO SAML: Niezbędny komponent po stronie dostawcy tożsamości, który obsłuży zapytanie o autentykację.
-E. Cloud Identity: To usługa Google, która musi być skonfigurowana, aby wiedzieć, że dla Twojej domeny logowanie ma być przekierowane do zewnętrznego IdP. gcloud używa profilu Cloud Identity do rozpoczęcia procesu logowania w przeglądarce.
+A. SSO SAML: Niezbędny komponent IdP.
+E. Cloud Identity: To domena Google, która musi być skonfigurowana, aby przekierować proces logowania gcloud do Twojego IdP.
 
 Dlaczego inne są błędne:
-B. Identity Platform: Służy do budowania logowania wewnątrz Twoich aplikacji dla Twoich klientów, nie służy do logowania pracowników do narzędzia gcloud.
-C. OIDC: To alternatywny protokół do SAML. Jeśli pytanie precyzuje SAML IdP, OIDC nie jest tu 'konieczny'.
-D. IAP: Służy do ochrony dostępu do zasobów (np. strony WWW), nie do samego procesu logowania się administratora do CLI.
+B. Identity Platform: Dla klientów Twojej aplikacji, nie dla adminów gcloud.
+C. OIDC: Alternatywa dla SAML, ale pytanie precyzuje SAML IdP.
+D. IAP: Chroni dostęp do zasobów, nie proces logowania administratora do CLI.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na AE. To fundamenty federacji tożsamości.</pre>
+Konsensus społeczności ExamTopics: 100% na AE. Podstawy federacji tożsamości.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: AE</b></p>
-<p><b>Głęboka analiza:</b> Logowanie gcloud CLI przez SSO wykorzystuje tzw. 'local web server flow'. Przeglądarka odbiera asercję SAML od IdP i przekazuje token do lokalnego portu, na którym nasłuchuje gcloud.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Dyskusja na forach dotyczy tego, jak technicznie gcloud to robi. Odpowiedź: gcloud otwiera przeglądarkę, która idzie do Google (E), Google widzi domenę i odsyła do Twojego SAML (A), który po logowaniu odsyła token do lokalnego portu gcloud na Twoim laptopie.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/sdk/docs/authorizing#sso" target="_blank">https://cloud.google.com/sdk/docs/authorizing#sso</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -136,9 +137,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

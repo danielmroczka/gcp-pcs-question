@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 306</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 306 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Validate if keys rotated every 90 days. Effective detection strategy. What to do?
+You must ensure that the keys used for at-rest encryption of your data are compliant with your organization's security controls. One security control mandates that keys get rotated every 90 days. You must implement an effective detection strategy to validate if keys are rotated as required. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud Asset Inventory analysis.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud KMS code in Cloud Run.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud Logging metric.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Security Health Analytics detector in SCC.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Analyze the crypto key versions of the keys by using data from Cloud Asset Inventory. If an active key is older than 90 days, send an alert message through your incident notification channel.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Assess the keys in the Cloud Key Management Service by implementing code in Cloud Run. If a key is not rotated after 90 days, raise a finding in Security Command Center.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Define a metric that checks for timely key updates by using Cloud Logging. If a key is not rotated after 90 days, send an alert message through your incident notification channel.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Identify keys that have not been rotated by using Security Health Analytics. If a key is not rotated after 90 days, a finding in Security Command Center is raised.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Validate if keys rotated every 90 days. Effective detection strategy. What to do
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: D.
 
 Wyjaśnienie (Dlaczego poprawna):
 D. SCC SHA Detector: Security Health Analytics posiada gotowy, wbudowany detektor `KMS_KEY_NOT_ROTATED`. Automatycznie sprawdza on wszystkie klucze w organizacji i zgłasza błąd w dashboardzie, jeśli wiek klucza przekroczył 90 dni bez rotacji. To najbardziej 'efektywne' i najmniej pracochłonne rozwiązanie.
@@ -98,28 +99,28 @@ A. Asset Inventory: Pozwala na jednorazowe sprawdzenie, ale nie jest ciągłym s
 B. Cloud Run: Wymagałoby pisania i utrzymywania własnego kodu, co jest zbędne, gdy funkcja jest już wbudowana w chmurę.
 C. Logging metric: Rejestruje zdarzenie rotacji, ale bardzo trudno na jej podstawie wykryć BRAK zdarzenia (zaniedbanie) w określonym czasie.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla D. SCC SHA to Twój automatyczny audytor konfiguracji.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla D. SCC SHA to Twój automatyczny audytor konfiguracji.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Alerty z SCC można zintegrować z Pub/Sub i Cloud Functions, aby automatycznie powiadamiać właściciela klucza lub nawet wymusić rotację (Self-remediation).</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Alerty z SCC można zintegrować z Pub/Sub i Cloud Functions, aby automatycznie powiadamiać właściciela klucza lub nawet wymusić rotację (Self-remediation).</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/security-command-center/docs/concepts-security-health-analytics-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-security-health-analytics-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

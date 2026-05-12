@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 313</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 313 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Prod projects attaching to Shared VPCs outside networking folder (data exfiltration risk). Resolve prod without impacting dev. Efficient approach.
+Your Google Cloud organization is subdivided into three folders: production, development, and networking. Networking resources for the organization are centrally managed in the networking folder. You discovered that projects in the production folder are attaching to Shared VPCs that are outside of the networking folder which could become a data exfiltration risk. You must resolve the production folder issue without impacting the development folder. You need to use the most efficient and least disruptive approach. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Restrict Shared VPC Host Projects policy on prod folder, allow under:folders/networking.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Policy on networking folder only.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Policy at project level for each prod project.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Policy at org level.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enable the Restrict Shared VPC Host Projects organization policy on the production folder. Create a custom rule and configure the policy type to Allow. In the Custom value section, enter under:folders/networking.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Enable the Restrict Shared VPC Host Projects organization policy on the networking folder only. Create a new custom rule and configure the policy type to Allow. In the Custom value section, enter under:organizations/123456739123.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Enable the Restrict Shared VPC Host Projects organization policy at the project level for each of the production projects. Create a custom rule and configure the policy type to Allow. In the Custom value section, enter under:folders/networking.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enable the Restrict Shared VPC Host Projects organization policy at the organization level. Create a custom rule and configure the policy type to Allow. In the Custom value section, enter under:folders/networking.</li>
 
 </ul>
 </div>
@@ -88,38 +88,39 @@ Prod projects attaching to Shared VPCs outside networking folder (data exfiltrat
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
-A. Scoped Org Policy: Ograniczenie `compute.restrictSharedVpcHostProjects` pozwala wskazać listę zaufanych projektów hostów (lub całych folderów z hostami). Ustawienie tej polityki na poziomie folderu 'Prod' (A) zapewnia, że tylko projekty produkcyjne zostaną ograniczone, podczas gdy folder 'Dev' pozostanie nietknięty (brak impactu na dev).
+B. Event Threat Detection: To moduł SCC Premium, który skanuje logi audytowe BigQuery i szuka wzorców ataków. Posiada on specyficzny detektor dla 'BigQuery exfiltration', który wykrywa próby kopiowania tabel do projektów poza organizacją Google Cloud firmy.
 
 Dlaczego inne są błędne:
-B. Networking folder: To folder, w którym SĄ sieci, a restrykcję musisz nałożyć tam, gdzie są VM-y (w projektach usługowych), aby nie mogły się one 'podpiąć' do obcych sieci.
-C. Project level: Niewydajne przy wielu projektach (większy overhead).
-D. Org level: Zablokowałoby też swobodę w folderze deweloperskim, co jest sprzeczne z wymogiem 'without impacting dev'.
+A. SHA: Wykrywa błędy konfiguracji (np. publiczny zbiór danych), nie wykrywa Akcji wycieku w locie.
+C. Flow Logs: BigQuery to API, jego ruch nie jest widoczny w tradycyjnych Flow Logach sieciowych VPC.
+D. Audit Logs: Są ŹRÓDŁEM danych dla ETD, ale same w sobie nie generują alertów o podejrzeniu włamania bez silnika analizy (B).
 
-Konsensus społeczności ExamTopics: 100% poparcia dla A. To idealne zastosowanie hierarchicznego nakładania polityk organizacji.</pre>
+Konsensus społeczności ExamTopics: 100% na B. Wykrywanie behawioralnych ataków na dane = ETD.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Ta polityka jest kluczowa, aby deweloper nie mógł podpiąć produkcyjnej VM do swojej prywatnej, niezabezpieczonej sieci VPC w innym projekcie.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Na forach podkreśla się, że ETD (B) jest zasilane przez Threat Intelligence Google. Potrafi ono odróżnić legalny proces 'Export to GCS' od ataku nieuczciwego pracownika, który próbuje wyprowadzić dane do swojego prywatnego projektu.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints</a></li>
+<li><a href="https://cloud.google.com/security-command-center/docs/concepts-event-threat-detection-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-event-threat-detection-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

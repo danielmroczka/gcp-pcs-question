@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 171</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,15 @@
 <h2>Question 171 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Rotate an encryption key in Cloud KMS and ensure that all new data is encrypted with the new version, while still being able to decrypt old data. What happens automatically?
+You have created an OS image that is hardened per your organization's security standards and is being stored in a project managed by the security team. As a Google Cloud administrator, you need to make sure all VMs in your Google Cloud organization can only use that specific OS image while minimizing operational overhead. What should you do? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> The old key version is deleted.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> The new key version becomes the 'Primary' version.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> All old data is automatically re-encrypted.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Decryption of old data requires manual version selection.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Grant users the compute.imageUser role in their own projects.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Grant users the compute.imageUser role in the OS image project.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Store the image in every project that is spun up in your organization.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Set up an image access organization policy constraint, and list the security team managed project in the project's allow list.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Remove VM instance creation permission from users of the projects, and only allow you and your team to create VM instances.</li>
 
 </ul>
 </div>
@@ -80,7 +81,7 @@ Rotate an encryption key in Cloud KMS and ensure that all new data is encrypted 
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">BD</span>
 <br/>
 </span>
 </div>
@@ -88,38 +89,31 @@ Rotate an encryption key in Cloud KMS and ensure that all new data is encrypted 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: BD.
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Primary version: Gdy rotujesz klucz (ręcznie lub automatycznie), nowa wersja staje się wersją 'Primary'. Od tego momentu każde nowe żądanie szyfrowania będzie używać tej nowej wersji. Stare wersje pozostają w stanie 'Enabled', aby umożliwić deszyfrowanie danych, które zostały nimi zabezpieczone w przeszłości.
-
-Dlaczego inne są błędne:
-A. Deleted: Błąd. Skasowanie starej wersji uniemożliwiłoby odczyt starych danych.
-C. Re-encrypted: Google NIE przeprowadza automatycznego re-szyfrowania Twoich TB danych przy rotacji klucza (to byłoby zbyt drogie i obciążające).
-D. Manual selection: Google Cloud automatycznie rozpoznaje, którą wersją klucza dane zostały zaszyfrowane i używa właściwej wersji przy deszyfrowaniu (jeśli tylko użytkownik ma do niej uprawnienia).
-
-Konsensus społeczności ExamTopics: 100% na B. To kluczowa zasada działania KMS.</pre>
+Wyjaśnienie: Nadanie roli imageUser (B) pozwala deweloperom pobierać obraz. Polityka organizacji (D) ogranicza źródła obrazów tylko do Twojego projektu bezpieczeństwa.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Wiele osób na egzaminie myśli, że rotacja = re-szyfrowanie (C). Eksperci wyjaśniają: re-szyfrowanie to proces manualny (tzw. scrubbing lub re-keying). Rotacja w KMS to tylko zmiana klucza dla 'przyszłych' operacji.</p>
+<p><b>Sugerowana odpowiedź: BD</b></p>
+<p><b>Głęboka analiza:</b> <p>To połączenie uprawnień i restrykcji gwarantuje standardy bezpieczeństwa w całej firmie.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/kms/docs/key-rotation" target="_blank">https://cloud.google.com/kms/docs/key-rotation</a></li>
+<li><a href="https://cloud.google.com/compute/docs/images/restricting-image-access" target="_blank">https://cloud.google.com/compute/docs/images/restricting-image-access</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +128,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

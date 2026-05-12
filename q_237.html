@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 237</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 237 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Analyze VPC network traffic to detect data exfiltration via ICMP tunneling. Which service?
+Your organization wants full control of the keys used to encrypt data at rest in their Google Cloud environments. Keys must be generated and stored outside of Google and integrate with many Google Services including BigQuery.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud Armor</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud IDS</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> VPC Flow Logs</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> IAP</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use customer-supplied encryption keys (CSEK) with keys generated on trusted external systems. Provide the raw CSEK as part of the API call.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a KMS key that is stored on a Google managed FIPS 140-2 level 3 Hardware Security Module (HSM). Manage the Identity and Access Management (IAM) permissions settings, and set up the key rotation period.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use Cloud External Key Management (EKM) that integrates with an external Hardware Security Module (HSM) system from supported vendors.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a Cloud Key Management Service (KMS) key with imported key material. Wrap the key for protection during import. Import the key generated on a trusted system in Cloud KMS.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Analyze VPC network traffic to detect data exfiltration via ICMP tunneling. Whic
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">C</span>
 <br/>
 </span>
 </div>
@@ -88,7 +88,8 @@ Analyze VPC network traffic to detect data exfiltration via ICMP tunneling. Whic
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
 B. Cloud IDS: ICMP Tunneling to ukrywanie danych w pakietach 'ping'. Cloud IDS posiada silnik głębokiej inspekcji pakietów (DPI), który potrafi wykryć nietypową treść (payload) wewnątrz protokołu ICMP, co jest charakterystyczne dla tego typu exfiltration.
@@ -98,28 +99,28 @@ A. Cloud Armor: Dla HTTP, nie dla ICMP.
 C. Flow Logs: Widzą, że jest ruch ICMP, ale nie widzą jego treści (nie wykryją tunelu).
 D. IAP: Dla ludzi.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. Wykrywanie tuneli sieciowych to domena IDS.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla B. Wykrywanie tuneli sieciowych to domena IDS.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Eksperci na forach security podkreślają: ICMP jest często pomijany przez administratorów. Cloud IDS (B) to Twoja jedyna nadzieja na złapanie zaawansowanego hakera, który 'wyprowadza' dane bajt po bajcie w odpowiedziach na pingi.</p>
+<p><b>Sugerowana odpowiedź: C</b></p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Eksperci na forach security podkreślają: ICMP jest często pomijany przez administratorów. Cloud IDS (B) to Twoja jedyna nadzieja na złapanie zaawansowanego hakera, który 'wyprowadza' dane bajt po bajcie w odpowiedziach na pingi.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/intrusion-detection-system/docs/overview" target="_blank">https://cloud.google.com/intrusion-detection-system/docs/overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

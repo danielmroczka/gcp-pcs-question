@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 280</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 280 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Cloud Run access via IAP: only AppDev group, restricted to internal IPs. What to do?
+Your organization has an application hosted in Cloud Run. You must control access to the application by using Cloud Identity-Aware Proxy (IAP) with these requirements:<br/>• Only users from the AppDev group may have access.<br/>• Access must be restricted to internal network IP addresses.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> VPN gateway.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Access level with IP ranges and groups, apply to IAP.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Firewall rules.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> IAP MFA + NIDS.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Deploy a VPN gateway and instruct the AppDev group to connect to the company network before accessing the application.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create an access level that includes conditions for internal IP address ranges and AppDev groups. Apply this access level to the application's IAP policy.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure firewall rules to limit access to IAP based on the AppDev group and source IP addresses.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure IAP to enforce multi-factor authentication (MFA) for all users and use network intrusion detection systems (NIDS) to block unauthorized access attempts.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Cloud Run access via IAP: only AppDev group, restricted to internal IPs. What to
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
 B. Access Context Manager + IAP: To połączenie pozwala na zdefiniowanie 'Context-Aware Access' (CAA). Tworzysz Access Level, który wymaga przynależności do grupy 'AppDev' ORAZ połączenia z określonych zakresów adresów IP. Następnie przypinasz ten poziom dostępu do polityki IAP chroniącej Twój serwis Cloud Run.
@@ -98,28 +99,28 @@ A. VPN gateway: Sam VPN nie kontroluje uprawnień grupowych IAM w warstwie aplik
 C. Firewall rules: Cloud Run jest usługą serverless i nie można do niej przypisać standardowych reguł firewalla VPC w celu filtrowania IP użytkowników przeglądarkowych. Tylko IAP/WAF to potrafi.
 D. NIDS: To system detekcji włamań, nie służy do kontroli dostępu opartej na grupach i IP.
 
-Konsensus społeczności ExamTopics: 100% na B. CAA to jedyna metoda na wymuszenie IP przy dostępie do serverless przez IAP.</pre>
+Konsensus społeczności ExamTopics: 100% na B. CAA to jedyna metoda na wymuszenie IP przy dostępie do serverless przez IAP.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> IAP najpierw sprawdza 'kto' (IAM), a potem 'skąd/jak' (Context-Aware Access). Tylko pomyślne przejście obu testów pozwala na dostęp do aplikacji.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> IAP najpierw sprawdza 'kto' (IAM), a potem 'skąd/jak' (Context-Aware Access). Tylko pomyślne przejście obu testów pozwala na dostęp do aplikacji.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/iap/docs/app-engine-quickstart" target="_blank">https://cloud.google.com/iap/docs/app-engine-quickstart</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 269</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 269 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Alert on suspicious outbound traffic targeting known suspicious web domains using SCC Premium. What to do?
+Your organization is using Security Command Center Premium as a central tool to detect and alert on security threats. You also want to alert on suspicious outbound traffic that is targeting domains of known suspicious web services. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> DNS Server Policy logs.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Chronicle SIEM egress alert.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud IDS endpoint.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Egress firewall policy with Threat Intelligence.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a DNS Server Policy in Cloud DNS and turn on logs. Attach this policy to all Virtual Private Cloud networks with internet connectivity.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Forward all logs to Chronicle Security Information and Event Management. Create an alert for suspicious egress traffic to the internet.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a Cloud Intrusion Detection endpoint. Connect this endpoint to all Virtual Private Cloud networks with internet connectivity.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create an egress firewall policy with Threat Intelligence as the destination. Attach this policy to all Virtual Private Cloud networks with internet connectivity.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Alert on suspicious outbound traffic targeting known suspicious web domains usin
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: D.
 
 Wyjaśnienie (Dlaczego poprawna):
 D. Egress policy + Threat Intelligence: Google Cloud Firewall posiada wbudowane listy Threat Intelligence (np. 'malicious-ips', 'known-command-and-control'). Ustawienie reguły 'egress deny' (lub allow z logowaniem) dla tych list pozwala na automatyczne wykrywanie i blokowanie komunikacji do złośliwych domen w całym VPC.
@@ -98,28 +99,28 @@ A. DNS logs: Pozwolą zobaczyć zapytanie, ale nie zablokują ruchu ani nie dost
 B. Chronicle: To świetny SIEM, ale SCC Premium (wymóg pytania) ma natywne funkcje wewnątrz GCP (D), które działają szybciej i bliżej infrastruktury.
 C. Cloud IDS: Monitoruje ruch, ale zazwyczaj polityka firewall (D) jest bardziej bezpośrednią metodą na 'alert i blokadę' znanych złośliwych domen.
 
-Konsensus społeczności ExamTopics: 100% na D. Threat Intelligence w firewallu to potężna funkcja SCC Premium.</pre>
+Konsensus społeczności ExamTopics: 100% na D. Threat Intelligence w firewallu to potężna funkcja SCC Premium.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Listy te są stale aktualizowane przez Google na podstawie danych z całego internetu, co zapewnia ochronę przed 'Zero-day' domenami C2.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Listy te są stale aktualizowane przez Google na podstawie danych z całego internetu, co zapewnia ochronę przed 'Zero-day' domenami C2.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc/docs/firewall-policies#threat-intel" target="_blank">https://cloud.google.com/vpc/docs/firewall-policies#threat-intel</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

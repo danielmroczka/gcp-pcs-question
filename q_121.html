@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 121</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,15 +64,15 @@
 <h2>Question 121 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Explore network flows and payload to aid investigations. Which product?
+You manage your organization's Security Operations Center (SOC). You currently monitor and detect network traffic anomalies in your Google Cloud VPCs based on packet header information. However, you want the capability to explore network flows and their payload to aid investigations. Which Google Cloud product should you use?
 </p>
 <div class="question-choices-container">
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Marketplace IDS</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> VPC Flow Logs</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> VPC SC logs</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> VPC Service Controls logs</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Packet Mirroring</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Cloud Armor DPI</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Google Cloud Armor Deep Packet Inspection</li>
 
 </ul>
 </div>
@@ -89,7 +89,8 @@ Explore network flows and payload to aid investigations. Which product?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: D.
 
 Wyjaśnienie (Dlaczego poprawna):
 D. Packet Mirroring: Jest to jedyna natywna usługa w GCP, która pozwala na klonowanie PEŁNEGO ruchu sieciowego (w tym zawartości pakietów - payload) z wybranych instancji VM lub całych podsieci. Skopiowany ruch można wysłać do urządzenia trzeciego (np. IDS/IPS w Marketplace) w celu głębokiej inspekcji (Deep Packet Inspection).
@@ -100,28 +101,28 @@ B. VPC Flow Logs: Rejestrują tylko metadane (nagłówki: skąd, dokąd, ile dan
 C. VPC SC logs: Dotyczą blokad na poziomie API usług Google (np. GCS), a nie ruchu sieciowego między maszynami VM.
 E. Cloud Armor DPI: Cloud Armor zajmuje się filtrowaniem ruchu HTTP(S) na brzegu sieci, nie jest narzędziem do ogólnej eksploracji payloadu wewnątrz VPC.
 
-Konsensus społeczności ExamTopics: 100% na D. Payload = Packet Mirroring w terminologii GCP.</pre>
+Konsensus społeczności ExamTopics: 100% na D. Payload = Packet Mirroring w terminologii GCP.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Packet Mirroring jest niezbędne dla celów kryminalistyki sieciowej (Forensics) i wykrywania intruzów, którzy przesyłają złośliwe dane wewnątrz dozwolonych sesji TCP.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Packet Mirroring jest niezbędne dla celów kryminalistyki sieciowej (Forensics) i wykrywania intruzów, którzy przesyłają złośliwe dane wewnątrz dozwolonych sesji TCP.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc/docs/packet-mirroring" target="_blank">https://cloud.google.com/vpc/docs/packet-mirroring</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -136,9 +137,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 361</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 361 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-AI model in central project, isolated from internet. Expose endpoint only to defined list of projects. What to do?
+Your company has deployed an artificial intelligence model in a central project. This model has a lot of sensitive intellectual property and must be kept strictly isolated from the internet. You must expose the model endpoint only to a defined list of projects in your organization. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Internal ALB + Private Service Connect (PSC).</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Private Google Access both ends.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Shared VPC + central firewall.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> External ALB + Cloud Armor.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Within the model project, create an internal Application Load Balancer that points to the model endpoint. Expose this load balancer with Private Service Connect to a configured list of projects.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Activate Private Google Access in both the model project and in each project that needs to connect to the model. Create a firewall policy to allow connectivity to Private Google Access addresses.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a central project to host Shared VPC networks that are provided to all other projects. Centrally administer all firewall rules in this project to grant access to the model.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Within the model project, create an external Application Load Balancer that points to the model endpoint. Create a Cloud Armor policy to restrict IP addresses to Google Cloud.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ AI model in central project, isolated from internet. Expose endpoint only to def
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
 A. Private Service Connect (PSC): Jest to najnowocześniejsza metoda udostępniania usług między projektami w GCP bez potrzeby VPC Peeringu (który jest trudny w skali). Model publikuje swój endpoint przez PSC, a wybrane projekty 'konsumują' go, tworząc lokalny adres IP w swojej sieci, który prowadzi bezpiecznie do modelu przez sieć wewnętrzną Google.
@@ -98,28 +99,28 @@ B. PGA: Służy do dostępu do usług PUBLICZNYCH Google (jak GCS), a nie do Two
 C. Shared VPC: Wymagałoby, aby wszystkie projekty były w jednej sieci, co jest trudne przy dużej liczbie niezależnych zespołów i projektów. PSC (A) jest bardziej elastyczne i odizolowane.
 D. External ALB: Przeciwieństwo wymogu 'isolated from internet'.
 
-Konsensus społeczności ExamTopics: 100% na A. PSC to domyślny sposób budowania 'Service Directory' i bezpiecznego udostępniania API wewnątrz korporacji.</pre>
+Konsensus społeczności ExamTopics: 100% na A. PSC to domyślny sposób budowania 'Service Directory' i bezpiecznego udostępniania API wewnątrz korporacji.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Dzięki PSC możesz udostępnić model AI nawet zespołom z innych organizacji (np. klientom), zachowując pełną izolację sieciową obu stron.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Dzięki PSC możesz udostępnić model AI nawet zespołom z innych organizacji (np. klientom), zachowując pełną izolację sieciową obu stron.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc/docs/private-service-connect" target="_blank">https://cloud.google.com/vpc/docs/private-service-connect</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 211</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,15 @@
 <h2>Question 211 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Grant a user access to manage and view VPC flow logs, but not other network resources. Which role?
+Your organization wants to be compliant with the General Data Protection Regulation (GDPR) on Google Cloud. You must implement data residency and operational sovereignty in the EU.<br/>What should you do? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> roles/compute.networkAdmin</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> roles/logging.admin</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> roles/compute.networkViewer</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> roles/logging.configWriter</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Limit the physical location of a new resource with the Organization Policy Service "resource locations constraint."</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use Cloud IDS to get east-west and north-south traffic visibility in the EU to monitor intra-VPC and inter-VPC communication.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Limit Google personnel access based on predefined attributes such as their citizenship or geographic location by using Key Access Justifications.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use identity federation to limit access to Google Cloud resources from non-EU entities.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Use VPC Flow Logs to monitor intra-VPC and inter-VPC traffic in the EU.</li>
 
 </ul>
 </div>
@@ -80,7 +81,7 @@ Grant a user access to manage and view VPC flow logs, but not other network reso
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">AC</span>
 <br/>
 </span>
 </div>
@@ -88,38 +89,31 @@ Grant a user access to manage and view VPC flow logs, but not other network reso
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: AC.
 
-Wyjaśnienie (Dlaczego poprawna):
-B. logging.admin: Chociaż Flow Logi dotyczą sieci, ich Konfiguracja (włączanie/wyłączanie) oraz Przeglądanie odbywa się w usłudze Cloud Logging. Rola `logging.admin` pozwala na pełne zarządzanie logami w projekcie.
-
-Dlaczego inne są błędne:
-A. networkAdmin: Zbyt wysoka (pozwala zmieniać trasy i firewalle).
-C. networkViewer: Pozwala widzieć sieć, ale nie daje uprawnień do zarządzania konfiguracją Logów (sinks, retention).
-D. configWriter: Pozwala tworzyć zlewy logów, ale `logging.admin` (B) jest bardziej kompletną odpowiedzią dla 'manage and view' wszystkich aspektów logowania audytowego sieci.
-
-Konsensus społeczności ExamTopics: Zdecydowana większość na B. Zarządzanie logami to domena Logging IAM.</pre>
+Wyjaśnienie: Resource locations (A) zapewnia rezydencję danych (gdzie leżą). Key Access Justifications (C) daje kontrolę nad tym, kto i dlaczego może użyć klucza szyfrującego, co wspiera suwerenność operacyjną.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> To pytanie jest podchwytliwe. Wiele osób idzie w stronę roli 'Network' (A/C). Jednak w GCP Flow Logi to 'logi', a nie 'sieć'. Jeśli chcesz nimi zarządzać, musisz mieć uprawnienia w stosie Logging, a nie Compute.</p>
+<p><b>Sugerowana odpowiedź: AC</b></p>
+<p><b>Głęboka analiza:</b> <p>KAJ pozwala na automatyczne blokowanie dostępu do danych, jeśli uzasadnienie dostępu nie spełnia wymogów (np. dostęp spoza UE).</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/logging/docs/access-control" target="_blank">https://cloud.google.com/logging/docs/access-control</a></li>
+<li><a href="https://cloud.google.com/key-access-justifications/docs/overview" target="_blank">https://cloud.google.com/key-access-justifications/docs/overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +128,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

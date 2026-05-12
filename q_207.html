@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 207</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,15 @@
 <h2>Question 207 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-A company wants to ensure that all their GKE clusters are created with 'Alias IP' enabled for better network security. Which tool?
+Your DevOps team uses Packer to build Compute Engine images by using this process:<br/>1. Create an ephemeral Compute Engine VM.<br/>2. Copy a binary from a Cloud Storage bucket to the VM's file system.<br/>3. Update the VM's package manager.<br/>4. Install external packages from the internet onto the VM.<br/>Your security team just enabled the organizational policy, constraints/compute.vmExternalIpAccess, to restrict the usage of public IP Addresses on VMs. In response, your DevOps team updated their scripts to remove public IP addresses on the Compute Engine VMs; however, the build pipeline is failing due to connectivity issues.<br/>What should you do? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> IAM roles</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Organization Policy constraint: compute.restrictVpcPeering</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> GKE cluster configuration settings</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Organization Policy constraint: gcp.resourceLocations</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Provision an HTTP load balancer with the VM in an unmanaged instance group to allow inbound connections from the internet to your VM.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Provision a Cloud NAT instance in the same VPC and region as the Compute Engine VM.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Enable Private Google Access on the subnet that the Compute Engine VM is deployed within.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Update the VPC routes to allow traffic to and from the internet.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Provision a Cloud VPN tunnel in the same VPC and region as the Compute Engine VM.</li>
 
 </ul>
 </div>
@@ -80,7 +81,7 @@ A company wants to ensure that all their GKE clusters are created with 'Alias IP
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">C</span>
+<span class="correct-answer">BC</span>
 <br/>
 </span>
 </div>
@@ -88,37 +89,31 @@ A company wants to ensure that all their GKE clusters are created with 'Alias IP
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: BC.
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Cluster configuration: Alias IP to ustawienie sieciowe klastra GKE, które musi zostać włączone podczas jego tworzenia. Zapewnia ono, że pody mają adresy IP z zakresów podsieci VPC, co ułatwia zarządzanie firewallem i poprawia bezpieczeństwo komunikacji.
-
-Dlaczego inne są błędne:
-A. IAM: Nie wymusza specyficznych opcji konfiguracyjnych sieci.
-B, D: To polityki organizacji, ale nie istnieje (w standardowym zestawie) polityka o nazwie 'must use Alias IP'. To ustawienie kontroluje się na poziomie szablonów wdrożeniowych lub instrukcji operacyjnych (C).
-
-Konsensus społeczności ExamTopics: 100% poparcia dla C. To techniczny parametr GKE.</pre>
+Wyjaśnienie: Cloud NAT (B) umożliwia dostęp do internetu dla pakietów OS. Private Google Access (C) umożliwia dostęp do API Google (np. Cloud Storage) bez publicznego IP.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Alias IP jest obecnie domyślnie włączony w GKE Autopilot i nowoczesnych klastrach VPC-native. Debata w sieci dotyczy migracji ze starych klastrów 'routes-based'. Eksperci zaznaczają, że Alias IP jest kluczowy dla integracji z VPC Service Controls.</p>
+<p><b>Sugerowana odpowiedź: BC</b></p>
+<p><b>Głęboka analiza:</b> <p>Bez Cloud NAT maszyna nie pobierze niczego z publicznych repozytoriów Debiana/RedHata.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/alias-ips" target="_blank">https://cloud.google.com/kubernetes-engine/docs/how-to/alias-ips</a></li>
+<li><a href="https://cloud.google.com/nat/docs/overview" target="_blank">https://cloud.google.com/nat/docs/overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +128,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

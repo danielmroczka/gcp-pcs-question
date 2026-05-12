@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 274</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 274 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Detect if GCS buckets outside EU contain healthcare data (PII). What to do?
+Your EU-based organization stores both Personally Identifiable Information (PII) and non-PII data in Cloud Storage buckets across multiple Google Cloud regions. EU data privacy laws require that the PII data must not be stored outside of the EU. To help meet this compliance requirement, you want to detect if Cloud Storage buckets outside of the EU contain healthcare data. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Sensitive Data Protection job (DLP) across all buckets.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Log sink on resourceLocation.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> SCC Premium compliance monitoring.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> gcp.resourceLocations org policy with tags.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a Sensitive Data Protection job. Specify the infoType of data to be detected and run the job across all Google Cloud Storage buckets.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a log sink with a filter on resourceLocation.currentLocations. Trigger an alert if a log message appears with a non-EU country.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Activate Security Command Center Premium. Use compliance monitoring to detect resources that do not follow the applicable healthcare regulation.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enforce the gcp.resourceLocations organization policy and add "EU" in a custom rule that only applies on resources with the tag "healthcare".</li>
 
 </ul>
 </div>
@@ -88,31 +88,32 @@ Detect if GCS buckets outside EU contain healthcare data (PII). What to do?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
-A. Cloud DLP (Sensitive Data Protection): To jedyne narzędzie w GCP, które potrafi 'czytać' treść plików wewnątrz bucketów i identyfikować konkretne typy danych (np. numery ubezpieczenia zdrowotnego).</pre>
+A. Cloud DLP (Sensitive Data Protection): To jedyne narzędzie w GCP, które potrafi 'czytać' treść plików wewnątrz bucketów i identyfikować konkretne typy danych (np. numery ubezpieczenia zdrowotnego).
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> DLP może wysyłać wyniki bezpośrednio do SCC, tworząc spójny widok incydentów.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> DLP może wysyłać wyniki bezpośrednio do SCC, tworząc spójny widok incydentów.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/dlp/docs/inspecting-storage" target="_blank">https://cloud.google.com/dlp/docs/inspecting-storage</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -127,9 +128,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

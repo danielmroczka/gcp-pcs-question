@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 149</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 149 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Update VPC Service Controls perimeter with new access level without breaking existing. Least disruption. What to do?
+You want to update your existing VPC Service Controls perimeter with a new access level. You need to avoid breaking the existing perimeter with this change, and ensure the least disruptions to users while minimizing overhead. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Exact replica perimeter.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Access level that never matches.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Dry run mode on perimeter configuration.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Dry run mode on perimeter dry run configuration.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create an exact replica of your existing perimeter. Add your new access level to the replica. Update the original perimeter after the access level has been vetted.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Update your perimeter with a new access level that never matches. Update the new access level to match your desired state one condition at a time to avoid being overly permissive.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Enable the dry run mode on your perimeter. Add your new access level to the perimeter configuration. Update the perimeter configuration after the access level has been vetted.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enable the dry run mode on your perimeter. Add your new access level to the perimeter dry run configuration. Update the perimeter configuration after the access level has been vetted.</li>
 
 </ul>
 </div>
@@ -88,38 +88,39 @@ Update VPC Service Controls perimeter with new access level without breaking exi
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
-D. Dry run configuration: VPC Service Controls pozwala na posiadanie dwóch konfiguracji jednocześnie: aktywnej (Enforced) i testowej (Dry run). Możesz dodać nowy Access Level do konfiguracji Dry Run i obserwować logi audytowe. Jeśli nie widzisz niespodziewanych blokad, możesz bezpiecznie promować te zmiany do konfiguracji aktywnej.
+B. Policy Analyzer: Pozwala na zadanie pytania: 'Pokaż mi wszystkich użytkowników, którzy mają rolę X na zasobie Y'. Jest to jedyne narzędzie, które potrafi przeszukać całą hierarchię organizacji i zwrócić listę wszystkich 'Właścicieli' (Owners) projektów do celów audytu.
 
 Dlaczego inne są błędne:
-A. Replica: Bardzo trudne do utrzymania i nie daje wglądu w rzeczywisty ruch bez dublowania wszystkich systemów.
-B. Never matches: Nie pozwoli przetestować, czy nowy poziom dostępu faktycznie działa (przepuszcza ruch).
-C. Dry run on Enforced: Pytanie dotyczy zmiany KONKRETNEGO elementu (Access Level). Najmniej inwazyjne jest użycie dedykowanej warstwy testowej Dry Run dla całego perymetru.
+A. Policy Troubleshooter: Sprawdza 'dlaczego ten JEDEN użytkownik nie może wejść', nie robi masowych raportów.
+C. IAM Recommender: Sugeruje ZMNIEJSZENIE roli, ale nie jest narzędziem do inwentaryzacji aktualnych nadań.
+D. Cloud Audit Logs: Musiałbyś przejrzeć tysiące logów historycznych, aby znaleźć moment nadania roli. Policy Analyzer (B) pokazuje stan obecny w ułamku sekundy.
 
-Konsensus społeczności ExamTopics: 100% na D. Dry Run to klucz do przeżycia przy zarządzaniu VPC SC.</pre>
+Konsensus społeczności ExamTopics: 100% na B. To podstawowe zadanie dla analityka polityk IAM.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> VPC SC jest bardzo 'zero-jedynkowe'. Błąd w konfiguracji może natychmiast odciąć całą firmę od danych. Tryb Dry Run to obowiązkowy krok przed każdą zmianą.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Eksperci security na Reddit zauważają, że rola 'Owner' jest najbardziej nadużywaną rolą w GCP. Policy Analyzer (B) pozwala na szybkie wykrycie 'Shadow Admins' i jest niezbędny do regularnych Access Reviews wymaganych przez SOC2.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc-service-controls/docs/dry-run-overview" target="_blank">https://cloud.google.com/vpc-service-controls/docs/dry-run-overview</a></li>
+<li><a href="https://cloud.google.com/iam/docs/policy-analyzer-overview" target="_blank">https://cloud.google.com/iam/docs/policy-analyzer-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

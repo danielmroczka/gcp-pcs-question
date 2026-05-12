@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 308</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 308 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Publish yearly analytics reports. Ensure no PII is published, data integrity preserved. What to do?
+Your organization wants to publish yearly reports of your website usage analytics. You must ensure that no data with personally identifiable information (PII) is published by using the Cloud Data Loss Prevention (Cloud DLP) API. Data integrity must be preserved. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Delete PII from storage.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Quarantine PII.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Discover and transform PII in reports with DLP.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Encrypt PII from report with DLP.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Detect all PII in storage by using the Cloud DLP API. Create a cloud function to delete the PII.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Discover and quarantine your PII data in your storage by using the Cloud DLP API.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Discover and transform PII data in your reports by using the Cloud DLP API.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Encrypt the PII from the report by using the Cloud DLP API.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Publish yearly analytics reports. Ensure no PII is published, data integrity pre
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: C.
 
 Wyjaśnienie (Dlaczego poprawna):
 C. DLP Discovery & Transformation: DLP API potrafi przeanalizować gotowy raport i inteligentnie zamaskować tylko dane wrażliwe (np. imiona), pozostawiając resztę danych (statystyki, kwoty) nietkniętą. Pozwala to na publikację raportu bez ryzyka naruszenia prywatności, przy zachowaniu jego pełnej wartości informacyjnej.
@@ -98,28 +99,28 @@ A. Delete: Usunięcie danych źródłowych uniemożliwiłoby stworzenie raportu 
 B. Quarantine: To izolacja plików, nie jest to proces 'czyszczenia' raportu przed publikacją.
 D. Encrypt: Zaszyfrowane dane w publicznym raporcie są bezużyteczne dla czytelnika. Maskowanie (transformacja) jest lepszym wyborem dla publicznych dokumentów.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla C. To klasyczny przypadek użycia 'InfoType redaction'.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla C. To klasyczny przypadek użycia 'InfoType redaction'.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> DLP wspiera techniki takie jak 'Substitution' (zastąpienie imienia tekstem [NAZWISKO]), co pozwala zachować kontekst dokumentu dla czytelnika przy pełnym bezpieczeństwie.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> DLP wspiera techniki takie jak 'Substitution' (zastąpienie imienia tekstem [NAZWISKO]), co pozwala zachować kontekst dokumentu dla czytelnika przy pełnym bezpieczeństwie.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/dlp" target="_blank">https://cloud.google.com/dlp</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

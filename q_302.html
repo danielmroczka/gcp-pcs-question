@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 302</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 302 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-VPC SC for folder with PHI: only US-based personnel, restrict APIs to BigQuery and Cloud Storage only. What to do?
+You manage a Google Cloud organization with many projects located in various regions around the world. The projects are protected by the same Access Context Manager access policy. You created a new folder that will host two projects that process protected health information (PHI) for US-based customers. The two projects will be separately managed and require stricter protections. You are setting up the VPC Service Controls configuration for the new folder. You must ensure that only US-based personnel can access these projects and restrict Google Cloud API access to only BigQuery and Cloud Storage within these projects. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Scoped access policy, US access level, restrict to all services, VPC accessible only BQ/GCS.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> IAP + US Access level + Restrict Resource Service Usage policy.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Org-level policy, protect US projects, Geo condition US.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Interconnect + VPC firewall + Restrict Resource Service Usage.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a scoped access policy, add the new folder under "Select resources to include in the policy," and assign an administrator under "Manage principals." For the service perimeter, specify the two new projects as "Resources to protect" in the service perimeter configuration. Set "Restricted services" to "all services," set "VPC accessible services" to "Selected services," and specify only BigQuery and Cloud Storage under "Selected services."</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Enable Identity Aware Proxy in the new projects. Create an Access Context Manager access level with an "IP Subnetworks" attribute condition set to the US-based corporate IP range. Enable the "Restrict Resource Service Usage" organization policy at the new folder level with an "Allow" policy type and set both "storage.googleapis.com" and "bigquery.googleapis.com" under "Custom values."</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Edit the organization-level access policy and add the new folder under "Select resources to include in the policy." Specify the two new projects as "Resources to protect" in the service perimeter configuration. Set "Restricted services" to "all services," set "VPC accessible services" to "Selected services," and specify only BigQuery and Cloud Storage. Edit the existing access level to add a "Geographic locations" condition set to "US."</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure a Cloud Interconnect connection or a Virtual Private Network (VPN) between the on-premises environment and the Google Cloud organization. Configure the VPC firewall policies within the new projects to only allow connections from the on-premises IP address range. Enable the Restrict Resource Service Usage organization policy on the new folder with an "Allow" policy type, and set both "storage.googleapis.com" and "bigquery.googleapis.com" under "Custom values."</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ VPC SC for folder with PHI: only US-based personnel, restrict APIs to BigQuery a
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
 A. VPC SC with Accessible Services: To rozwiązanie kompleksowe. 'Scoped policy' izoluje zarządzanie. 'Access Level' wymusza geolokalizację. Funkcja 'VPC accessible services' fizycznie wycina widoczność wszystkich innych API Google (np. SQL, Pub/Sub) wewnątrz perymetru, co drastycznie zmniejsza ryzyko pomyłek i eksfiltracji danych.
@@ -96,28 +97,28 @@ A. VPC SC with Accessible Services: To rozwiązanie kompleksowe. 'Scoped policy'
 Dlaczego inne są błędne:
 B, C, D: Żadna z tych opcji nie realizuje wymogu BLOKADY API na poziomie sieciowym tak precyzyjnie jak VPC Service Controls. Org Policy (B, D) blokuje tylko WŁĄCZENIE usługi, ale nie blokuje DOSTĘPU do API, jeśli usługa jest już włączona przez kogoś innego.
 
-Konsensus społeczności ExamTopics: 100% na A. Tylko VPC SC potrafi ograniczyć listę dostępnych API wewnątrz sieci.</pre>
+Konsensus społeczności ExamTopics: 100% na A. Tylko VPC SC potrafi ograniczyć listę dostępnych API wewnątrz sieci.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> To podejście 'Zero Trust API'. Nawet jeśli haker przejmie uprawnienia administratora SQL, nie połączy się z bazą, bo API SQL jest zablokowane na poziomie perymetru sieciowego.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> To podejście 'Zero Trust API'. Nawet jeśli haker przejmie uprawnienia administratora SQL, nie połączy się z bazą, bo API SQL jest zablokowane na poziomie perymetru sieciowego.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc-service-controls/docs/vpc-accessible-services" target="_blank">https://cloud.google.com/vpc-service-controls/docs/vpc-accessible-services</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -132,9 +133,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 336</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 336 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-regulated data GCS: update existing GMEK encrypted to use CMEK. What to do?
+Your organization is storing regulated data in Cloud Storage. Data in Cloud Storage buckets is encrypted by Google-managed encryption keys. To meet compliance requirements, you need to update the existing data to use customer-managed encryption keys instead. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Change encryption type in bucket config.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Org policy restrictNonCmekServices.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create key, perform write action on objects.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create key, change bucket config, perform write action on all existing objects.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a new key ring and key in the Cloud Key Management Service. In each Cloud Storage bucket configuration, change the encryption type to customer-managed encryption key.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Identify which projects contain Cloud Storage buckets with regulated data. Apply the restrictNonCmekServices organization policy constraint to the identified projects or parent folder.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a new key ring and key in the Cloud Key Management Service. Identify which projects contain Cloud Storage buckets with regulated data. Perform a write action on all existing objects in the buckets.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a customer-managed encryption key. Change the encryption type in each Cloud Storage bucket configuration to the newly created key. Perform a write action on all existing objects in the buckets.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ regulated data GCS: update existing GMEK encrypted to use CMEK. What to do?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: D.
 
 Wyjaśnienie (Dlaczego poprawna):
 D. Config change + Rewrite: Aby w pełni przejść na CMEK, musisz: 1. Stworzyć klucz w KMS. 2. Ustawić go jako domyślny dla bucketu (to chroni nowe pliki). 3. Wykonać operację 'rewrite' (np. `gsutil rewrite -k`) na wszystkich starych plikach, co wymusi ich przeszyfrowanie nowym kluczem CMEK.
@@ -98,28 +99,28 @@ A. Bucket config only: Nie zmienia szyfrowania plików, które już tam są. Poz
 B. Org policy: Zablokuje tworzenie nowych niezaszyfrowanych plików, ale nie naprawi tych istniejących.
 C. Write action only: Bez zmiany konfiguracji domyślnej bucketu (D), operacja zapisu mogłaby nadal używać starego typu szyfrowania.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla D. To kompletna procedura migracji szyfrowania.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla D. To kompletna procedura migracji szyfrowania.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Operacja 'rewrite' w GCS jest bardzo wydajna, ponieważ odbywa się w całości wewnątrz infrastruktury Google (nie pobierasz i nie wysyłasz danych ponownie).</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Operacja 'rewrite' w GCS jest bardzo wydajna, ponieważ odbywa się w całości wewnątrz infrastruktury Google (nie pobierasz i nie wysyłasz danych ponownie).</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/storage/docs/using-customer-managed-encryption-keys#rewrite" target="_blank">https://cloud.google.com/storage/docs/using-customer-managed-encryption-keys#rewrite</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

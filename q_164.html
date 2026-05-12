@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 164</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 164 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Which service provides a centralized way to manage and enforce access control policies for web applications without using a VPN?
+You are creating a new infrastructure CI/CD pipeline to deploy hundreds of ephemeral projects in your Google Cloud organization to enable your users to interact with Google Cloud. You want to restrict the use of the default networks in your organization while following Google-recommended best practices. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud VPN</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Identity-Aware Proxy (IAP)</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud Armor</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Shared VPC</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enable the constraints/compute.skipDefaultNetworkCreation organization policy constraint at the organization level.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a cron job to trigger a daily Cloud Function to automatically delete all default networks for each project.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Grant your users the IAM Owner role at the organization level. Create a VPC Service Controls perimeter around the project that restricts the compute.googleapis.com API.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Only allow your users to use your CI/CD pipeline with a predefined set of infrastructure templates they can deploy to skip the creation of the default networks.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Which service provides a centralized way to manage and enforce access control po
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">A</span>
 <br/>
 </span>
 </div>
@@ -88,38 +88,31 @@ Which service provides a centralized way to manage and enforce access control po
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: A.
 
-Wyjaśnienie (Dlaczego poprawna):
-B. IAP: Pozwala na udostępnienie wewnętrznych aplikacji (np. Jira, Wiki) bezpośrednio w internecie, ale pod warunkiem przejścia silnej autoryzacji Google. Zastępuje VPN, dając użytkownikom łatwiejszy dostęp (przez przeglądarkę) przy zachowaniu wyższego bezpieczeństwa (Zero Trust).
-
-Dlaczego inne są błędne:
-A. Cloud VPN: Wymóg pytania to 'WITHOUT using a VPN'.
-C. Cloud Armor: To firewall (WAF), nie zarządza tożsamością i sesjami użytkowników tak jak IAP.
-D. Shared VPC: To tylko topologia sieciowa.
-
-Konsensus społeczności ExamTopics: 100% na B. IAP to definicja modelu 'BeyondCorp'.</pre>
+Wyjaśnienie: Ograniczenie polityki organizacji 'compute.skipDefaultNetworkCreation' zapobiega automatycznemu tworzeniu sieci 'default' w każdym nowym projekcie.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Główna korzyść z IAP (B) podnoszona w sieci to 'Context-Aware Access'. Możesz np. zezwolić na dostęp bez VPN, ale tylko jeśli użytkownik ma służbowego laptopa z zaszyfrowanym dyskiem i łączy się z terytorium Polski.</p>
+<p><b>Sugerowana odpowiedź: A</b></p>
+<p><b>Głęboka analiza:</b> <p>To standardowy krok przy zabezpieczaniu nowej organizacji w GCP.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/iap" target="_blank">https://cloud.google.com/iap</a></li>
+<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

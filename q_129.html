@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 129</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 129 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Domain restricted sharing policy active. External partner cannot access resources. How to make an exception following best practices?
+You are a security administrator at your company. Per Google-recommended best practices, you implemented the domain restricted sharing organization policy to allow only required domains to access your projects. An engineering team is now reporting that users at an external partner outside your organization domain cannot be granted access to the resources in a project. How should you make an exception for your partner's domain while following the stated best practices?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Set policy to Allow All.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Turn off policy and use IAM.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Add partner ID to Google group and use as exception.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Set policy to Custom, add partner customer ID as exception.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Turn off the domain restriction sharing organization policy. Set the policy value to "Allow All."</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Turn off the domain restricted sharing organization policy. Provide the external partners with the required permissions using Google's Identity and Access Management (IAM) service.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Turn off the domain restricted sharing organization policy. Add each partner's Google Workspace customer ID to a Google group, add the Google group as an exception under the organization policy, and then turn the policy back on.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Turn off the domain restricted sharing organization policy. Set the policy value to "Custom." Add each external partner's Cloud Identity or Google Workspace customer ID as an exception under the organization policy, and then turn the policy back on.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Domain restricted sharing policy active. External partner cannot access resource
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: D.
 
 Wyjaśnienie (Dlaczego poprawna):
 D. Custom Policy with Customer ID: Polityka 'Domain Restricted Sharing' pozwala na zdefiniowanie wyjątków dla konkretnych identyfikatorów klientów Google Cloud (Customer ID). Jest to najbezpieczniejsza metoda, ponieważ dopuszczasz TYLKO wybraną firmę partnerską, zachowując blokadę dla całego reszty świata.
@@ -97,28 +98,28 @@ Dlaczego inne są błędne:
 A, B. Turn off / Allow All: Całkowicie niweluje sens posiadania polityki bezpieczeństwa i naraża firmę na wyciek danych do prywatnych kont pracowników.
 C. Google Group: Grupy służą do IAM, ale 'Domain Restricted Sharing' to polityka organizacji, która blokuje nadanie uprawnienia IAM komukolwiek spoza listy dozwolonych domen, nawet jeśli jest w Twojej grupie. Musisz dodać domenę/ID partnera do samej polityki (D).
 
-Konsensus społeczności ExamTopics: 100% na D. To standardowy sposób współpracy B2B w GCP.</pre>
+Konsensus społeczności ExamTopics: 100% na D. To standardowy sposób współpracy B2B w GCP.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Customer ID partnera znajdziesz w ich konsoli Admin lub otrzymasz od ich administratora. Wygląda on zazwyczaj jak `C01234567`.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Customer ID partnera znajdziesz w ich konsoli Admin lub otrzymasz od ich administratora. Wygląda on zazwyczaj jak `C01234567`.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

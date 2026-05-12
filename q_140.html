@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 140</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 140 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Regulated industry. Data stored for specific time and deleted after. Minimize costs. What to do?
+You work for an organization in a regulated industry that has strict data protection requirements. The organization backs up their data in the cloud. To comply with data privacy regulations, this data can only be stored for a specific length of time and must be deleted after this specific period.<br/>You want to automate the compliance with this regulation while minimizing storage costs. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Persistent disk deletion.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Bigtable column expiration.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> BigQuery table expiration.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Storage Object Lifecycle Management.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Store the data in a persistent disk, and delete the disk at expiration time.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Store the data in a Cloud Bigtable table, and set an expiration time on the column families.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Store the data in a BigQuery table, and set the table's expiration time.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Store the data in a Cloud Storage bucket, and configure the bucket's Object Lifecycle Management feature.</li>
 
 </ul>
 </div>
@@ -88,37 +88,39 @@ Regulated industry. Data stored for specific time and deleted after. Minimize co
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
-D. Cloud Storage Lifecycle Management: To najtańsza (bucket GCS jest znacznie tańszy niż dyski czy bazy) i najbardziej zautomatyzowana metoda. Możesz ustawić regułę 'Delete' dla obiektów starszych niż np. 7 lat. System Google sam dba o usunięcie, a Ty płacisz tylko za storage.
+B. Automatic rotation schedule: Cloud KMS posiada natywną funkcję automatycznej rotacji. Możesz ustawić okres rotacji (np. co 30 dni), a Google samo wygeneruje nową wersję klucza i ustawi ją jako wersję podstawową (Primary) dla nowych operacji szyfrowania.
 
 Dlaczego inne są błędne:
-A. Persistent disks: Są najdroższą formą przechowywania danych archiwalnych.
-B, C: Bazy danych (BigQuery/Bigtable) są świetne do analizy, ale jako czyste archiwum 'long-term' są droższe w utrzymaniu niż klasy Coldline/Archive w Cloud Storage.
+A. Manually: Niezgodne z wymogiem 'most efficient' (najbardziej efektywne).
+C. Script: Zbyteczne skomplikowanie, gdy funkcja jest już wbudowana w usługę.
+D. Fałsz. KMS wspiera rotację od 24 godzin do wielu lat.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla D. GCS Lifecycle to 'best practice' dla retencji danych.</pre>
+Konsensus społeczności ExamTopics: 100% na B. Wykorzystaj wbudowane automaty platformy.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> W branżach regulowanych warto połączyć to z funkcją 'Bucket Lock', aby mieć pewność, że nikt nie usunie danych przed upływem wymaganego czasu, ale system usunie je punktualnie po jego upływie.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Ważny detal techniczny: po rotacji klucza, stare wersje nadal istnieją i są używane do DESZYFROWANIA starych danych. Nowa wersja (Primary) służy tylko do SZYFROWANIA nowych danych. To zapewnia ciągłość dostępu bez konieczności re-szyfrowania wszystkiego co 30 dni.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/storage/docs/lifecycle" target="_blank">https://cloud.google.com/storage/docs/lifecycle</a></li>
+<li><a href="https://cloud.google.com/kms/docs/key-rotation" target="_blank">https://cloud.google.com/kms/docs/key-rotation</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

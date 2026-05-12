@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 141</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,15 +64,15 @@
 <h2>Question 141 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-SCC configuration. Alerts for crypto mining and misconfigurations. Which two features?
+You have been tasked with configuring Security Command Center for your organization's Google Cloud environment. Your security team needs to receive alerts of potential crypto mining in the organization's compute environment and alerts for common Google Cloud misconfigurations that impact security. Which Security Command Center features should you use to configure these alerts? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Event Threat Detection</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Container Threat Detection</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Security Health Analytics</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud DLP</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Cloud Armor</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Data Loss Prevention</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Google Cloud Armor</li>
 
 </ul>
 </div>
@@ -89,39 +89,39 @@ SCC configuration. Alerts for crypto mining and misconfigurations. Which two fea
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: AC.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
-A. Event Threat Detection: Analizuje logi (np. Cloud Audit Logs, VPC Flow Logs) w czasie rzeczywistym i wykrywa wzorce charakterystyczne dla zagrożeń takich jak właśnie crypto mining, brute force czy wycieki danych.
-C. Security Health Analytics: Skupia się na wykrywaniu błędnych konfiguracji infrastruktury (misconfigurations), np. otwartych portów SSH na cały świat czy braku wersjonowania bucketów.
+B. Cloud Armor: Jest to usługa zaprojektowana do walki z atakami DDoS (zarówno wolumetrycznymi, jak i aplikacyjnymi L7). Wykorzystuje infrastrukturę Google (Anycast) do rozpraszania i odrzucania ogromnych ilości szkodliwego ruchu zanim dotrze on do Twojej sieci.
 
 Dlaczego inne są błędne:
-B. Container Threat Detection: Monitoruje wnętrze działającego kontenera (np. próba odczytu pamięci przez obcy proces). Jest to Premium, ale A i C pokrywają szerszy zakres 'misconfigurations' i 'threats' wymienionych w pytaniu.
-D. Cloud DLP: Szuka danych wrażliwych, nie wykrywa ataków typu mining.
-E. Cloud Armor: Chroni aplikacje webowe przed atakami z zewnątrz.
+A. VPC Firewall: Twoja sieć VPC ma ograniczone 'rury' wejściowe. Atak wolumetryczny zapcha je, zanim firewall zdąży odrzucić pakiety.
+C. IAP: Służy do uwierzytelniania, nie do filtrowania milionów złośliwych pakietów na sekundę.
+D. Cloud DNS: Chroni przed atakami na samą nazwę domeny, ale nie chroni serwera przed potopem pakietów pod adres IP.
 
-Konsensus społeczności ExamTopics: Silne poparcie dla AC. To dwa fundamentalne filary SCC Premium.</pre>
+Konsensus społeczności ExamTopics: 100% na B. DDoS = Cloud Armor.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: AC</b></p>
-<p><b>Głęboka analiza:</b> SHA to Twoje 'Compliance', a ETD to Twoje 'SOC'. Razem dają pełny obraz stanu bezpieczeństwa i aktywnych prób włamań.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Dyskusja na Reddit przypomina: Cloud Armor Standard jest darmowy i chroni przed standardowymi atakami L3/L4. To wystarcza na 'volumetric DDoS'. Wersja Premium dodaje ochronę przed inteligentnymi botami i atakami L7.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/security-command-center/docs/concepts-security-command-center-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-security-command-center-overview</a></li>
+<li><a href="https://cloud.google.com/armor/docs/managed-protection-overview" target="_blank">https://cloud.google.com/armor/docs/managed-protection-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -136,9 +136,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

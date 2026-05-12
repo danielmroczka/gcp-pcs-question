@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 94</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 94 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Protect highly sensitive data in BigQuery. Operations team cannot read email addresses and names. These should only be available to HR. What should you do?
+You are responsible for protecting highly sensitive data in BigQuery. Your operations teams need access to this data, but given privacy regulations, you want to ensure that they cannot read the sensitive fields such as email addresses and first names. These specific sensitive fields should only be available on a need-to-know basis to the Human Resources team. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Data masking with DLP.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Data redaction with DLP.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Data inspection with DLP.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Tokenization for Pseudonymization with DLP.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Perform data masking with the Cloud Data Loss Prevention API, and store that data in BigQuery for later use.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Perform data redaction with the Cloud Data Loss Prevention API, and store that data in BigQuery for later use.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Perform data inspection with the Cloud Data Loss Prevention API, and store that data in BigQuery for later use.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Perform tokenization for Pseudonymization with the Cloud Data Loss Prevention API, and store that data in BigQuery for later use.</li>
 
 </ul>
 </div>
@@ -88,38 +88,39 @@ Protect highly sensitive data in BigQuery. Operations team cannot read email add
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: D.
 
 Wyjaśnienie (Dlaczego poprawna):
-D. Tokenization/Pseudonymization: Pozwala na zastąpienie danych wrażliwych (np. imienia) unikalnym tokenem. Zespół Ops może pracować na tabeli, widząc tylko tokeny (co pozwala im np. na zliczanie unikalnych użytkowników), a HR posiada klucz pozwalający na odwrócenie procesu (re-identification) i zobaczenie prawdziwych danych.
+D. Tokenization/Pseudonymization: Pozwala na zastąpienie danych wrażliwych (np. imienia) unikalnym tokenem. Zespół Ops może pracować na tabeli, widząc tylko tokeny, a HR posiada klucz pozwalający na odwrócenie procesu (re-identification) i zobaczenie prawdziwych danych.
 
 Dlaczego inne są błędne:
-A. Data masking: To technika BigQuery (nie DLP API w tym sensie), która ukrywa dane, ale często nie jest tak elastyczna w scenariuszach 'odwracalności' dla wybranych grup jak pełna tokenizacja DLP. (Uwaga: Obecnie BQ ma natywne maskowanie, ale DLP Tokenization jest potężniejszym, systemowym rozwiązaniem).
+A. Data masking: To technika BigQuery, która ukrywa dane, ale zazwyczaj nie jest tak elastyczna w scenariuszach 'odwracalności' dla wybranych grup jak pełna tokenizacja DLP. (Uwaga: BQ ma teraz natywne maskowanie, ale DLP Tokenization jest potężniejszym, systemowym rozwiązaniem).
 B. Redaction: Usuwa dane bezpowrotnie. HR też by ich nie zobaczyło.
 C. Inspection: To tylko znalezienie danych, nie chroni ich przed odczytem.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na D. Tokenizacja to złoty środek między bezpieczeństwem a użytecznością danych.</pre>
+Konsensus społeczności ExamTopics: Zdecydowana większość na D. Tokenizacja to złoty środek między bezpieczeństwem a użytecznością danych.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Tokenizacja z DLP zazwyczaj wykorzystuje klucze Cloud KMS do ochrony procesu kodowania, co zapewnia pełny ślad audytowy każdego przypadku odszyfrowania danych przez HR.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Na forach podkreśla się różnicę między maskowaniem a tokenizacją. Maskowanie (A) zazwyczaj niszczy unikalność danych (wszystkie nazwiska to `XXXX`), co uniemożliwia analitykę. Tokenizacja (D) zachowuje unikalność (Jan i Adam mają różne tokeny), co pozwala na zliczanie unikalnych rekordów bez znajomości tożsamości.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/dlp/docs/pseudonymization" target="_blank">https://cloud.google.com/dlp/docs/pseudonymization</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

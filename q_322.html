@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 322</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 322 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Prevent employees from creating unmanaged Google accounts using corporate domain. Efficient solution. What to do?
+You are responsible for managing identities in your company's Google Cloud organization. Employees are frequently using your organization's corporate domain name to create unmanaged Google accounts. You want to implement a practical and efficient solution to prevent employees from completing this action in the future. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create Google Cloud identity for all users automatically.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Automated scan and disable.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> New domain for GCP.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Switch corporate email domain.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a Google Cloud identity for all users in your organization. Ensure that new users are added automatically.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Implement an automated process that scans all identities in your organization and disables any unmanaged accounts.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Register a new domain for your Google Cloud resources. Move all existing identities and resources to this domain.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Switch your corporate email system to another domain to avoid using the same domain for Google Cloud identities and corporate emails.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Prevent employees from creating unmanaged Google accounts using corporate domain
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
 A. Provision all identities: Jeśli stworzysz (sprovisionujesz) konta dla wszystkich pracowników w Cloud Identity (np. przez synchronizację z AD), to gdy użytkownik spróbuje założyć konto 'osobiste' na swój firmowy adres, system mu to uniemożliwi (bo adres jest już zajęty przez konto zarządzane). To najbardziej 'efficient' metoda zapobiegająca powstawaniu 'Shadow IT'.
@@ -97,28 +98,28 @@ Dlaczego inne są błędne:
 B. Scan and disable: Google nie pozwala administratorowi firmy na 'wyłączenie' prywatnego konta użytkownika, dopóki ten nie przejdzie przez proces Transfer Tool.
 C, D: To unikanie problemu poprzez uciążliwą zmianę domeny, co nie jest rozwiązaniem merytorycznym.
 
-Konsensus społeczności ExamTopics: 100% na A. Rezerwacja tożsamości to standard higieny domeny.</pre>
+Konsensus społeczności ExamTopics: 100% na A. Rezerwacja tożsamości to standard higieny domeny.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Najlepiej połączyć to z włączeniem SSO. Wtedy użytkownik nawet nie zna swojego hasła Google i nie ma jak 'założyć' konta poza Twoją kontrolą.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Najlepiej połączyć to z włączeniem SSO. Wtedy użytkownik nawet nie zna swojego hasła Google i nie ma jak 'założyć' konta poza Twoją kontrolą.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://support.google.com/cloudidentity/answer/175367" target="_blank">https://support.google.com/cloudidentity/answer/175367</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

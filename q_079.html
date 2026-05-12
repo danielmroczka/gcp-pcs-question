@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 79</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 79 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-When using App Engine, which area in the technology stack should the organization focus on as their primary responsibility?
+An organization's security and risk management teams are concerned about where their responsibility lies for certain production workloads they are running in Google Cloud and where Google's responsibility lies. They are mostly running workloads using Google Cloud's platform-as-a-Service (PaaS) offerings, including App Engine primarily.<br/>Which area in the technology stack should they focus on as their primary responsibility when using App Engine?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> VPC Flow Logs</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configuring and monitoring VPC Flow Logs</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Defending against XSS and SQLi attacks</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Managing Guest OS patches</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Encrypting stored data</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Managing the latest updates and security patches for the Guest OS</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Encrypting all stored data</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ When using App Engine, which area in the technology stack should the organizatio
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
 B. Application-level attacks: App Engine to usługa PaaS. Google zarządza serwerami, systemem operacyjnym i środowiskiem uruchomieniowym. Odpowiedzialność klienta skupia się na KODZIE aplikacji. Ochrona przed błędami logicznymi, takimi jak XSS czy SQL Injection, leży w 100% po stronie programistów klienta.
@@ -98,28 +99,28 @@ A. VPC Flow Logs: W App Engine Standard nie masz nawet dostępu do tradycyjnej s
 C. Guest OS patches: To całkowita odpowiedzialność Google w modelu PaaS.
 D. Encrypting data: Google szyfruje dane domyślnie 'at rest'. Choć możesz dodać własne klucze, 'obrona przed atakami' w kodzie jest bardziej unikalną i krytyczną odpowiedzialnością klienta w tym modelu.
 
-Konsensus społeczności ExamTopics: 100% na B. Klasyka modelu PaaS.</pre>
+Konsensus społeczności ExamTopics: 100% na B. Klasyka modelu PaaS.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Wiele osób myśli, że chmura załatwia wszystko. Jednak luka w kodzie (np. brak sanitizacji inputu) pozwoli hakerowi wykraść dane niezależnie od tego, jak bezpieczna jest infrastruktura Google.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Wiele osób myśli, że chmura załatwia wszystko. Jednak luka w kodzie (np. brak sanitizacji inputu) pozwoli hakerowi wykraść dane niezależnie od tego, jak bezpieczna jest infrastruktura Google.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/security/shared-responsibility-model" target="_blank">https://cloud.google.com/security/shared-responsibility-model</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

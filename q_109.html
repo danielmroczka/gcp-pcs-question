@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 109</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 109 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Authenticate responses to domain name lookups due to DDoS attacks. Which service?
+Your organization has had a few recent DDoS attacks. You need to authenticate responses to domain name lookups. Which Google Cloud service should you use?
 </p>
 <div class="question-choices-container">
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud DNS with DNSSEC</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud NAT</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> HTTP(S) Load Balancing</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Armor</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Google Cloud Armor</li>
 
 </ul>
 </div>
@@ -88,38 +88,37 @@ Authenticate responses to domain name lookups due to DDoS attacks. Which service
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
-A. Cloud DNS z DNSSEC: Słowo 'authenticate responses' w kontekście DNS to definicja DNSSEC. Mechanizm ten dodaje podpisy cyfrowe do rekordów DNS, co pozwala klientowi sprawdzić, czy odpowiedź nie została podrobiona przez atakującego (np. podczas ataku DNS Poisoning).
+A. DNSSEC: Cyfrowo podpisuje rekordy DNS, gwarantując ich autentyczność (wymóg 'authenticate responses'). Chroni to przed przekierowaniem użytkowników na złośliwe serwery przez podrobione odpowiedzi DNS.
 
 Dlaczego inne są błędne:
-B. Cloud NAT: Służy do translacji adresów dla wyjścia do internetu, nie ma nic wspólnego z autentykacją zapytań domenowych.
-C. HTTP(S) LB: Rozdziela ruch webowy, ale nie chroni protokołu DNS.
-D. Cloud Armor: Chroni przed DDoS na poziomie aplikacji i sieci, ale nie zapewnia autentyczności (integralności) rekordów DNS.
+D. Cloud Armor: Chroni przed DDoS na poziomie sieci/aplikacji, ale nie zapewnia autentyczności rekordów w bazie DNS.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla A. Autentykacja DNS = DNSSEC.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla A. Autentykacja odpowiedzi DNS to definicja DNSSEC.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> DNSSEC zapobiega atakom typu 'Man-in-the-Middle' w warstwie DNS, gwarantując użytkownikowi, że trafi na Twój prawdziwy adres IP, a nie na stronę podstawioną przez hakera.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Pułapką w tym pytaniu jest wzmianka o 'DDoS'. Wiele osób odruchowo wybiera Cloud Armor (D). Jednak kluczowym wymogiem technicznym jest 'authenticate responses' (autentykacja odpowiedzi). Cloud Armor nie ma nic wspólnego z podpisami cyfrowymi w protokole DNS.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/dns/docs/dnssec-configs" target="_blank">https://cloud.google.com/dns/docs/dnssec-configs</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +133,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

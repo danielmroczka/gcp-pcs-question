@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 212</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 212 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Ensure that all data in a project is encrypted using Customer-Managed Encryption Keys (CMEK) by default. Which tool?
+Your company is moving to Google Cloud. You plan to sync your users first by using Google Cloud Directory Sync (GCDS). Some employees have already created Google Cloud accounts by using their company email addresses that were created outside of GCDS. You must create your users on Cloud Identity.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> IAM roles</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Organization Policy constraint: storage.restrictDatasetEncryption</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Organization Policy constraint: gcp.restrictCmekCryptoKeyProjects</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Organization Policy constraint: gcp.restrictNonCmekServices</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure GCDS and use GCDS search rules to sync these users.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use the transfer tool to migrate unmanaged users.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Write a custom script to identify existing Google Cloud users and call the Admin SDK: Directory API to transfer their account.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure GCDS and use GCDS exclusion rules to ensure users are not suspended.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Ensure that all data in a project is encrypted using Customer-Managed Encryption
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">C</span>
+<span class="correct-answer">B</span>
 <br/>
 </span>
 </div>
@@ -88,36 +88,31 @@ Ensure that all data in a project is encrypted using Customer-Managed Encryption
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: B.
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Organization Policy (CMEK restriction): Istnieje zestaw polityk organizacji (np. `gcp.restrictCmekCryptoKeyProjects`), który pozwala wymusić użycie CMEK dla wszystkich wspieranych usług w projekcie. To 'wymusza' na użytkownikach podanie klucza KMS przy tworzeniu dysków, bucketów czy baz danych.
-
-Dlaczego inne są błędne:
-A. IAM: Nie wymusza technologii szyfrowania.
-B. restrictDatasetEncryption: Ogranicza się tylko do BigQuery.
-D. restrictNonCmekServices: Brzmi podobnie, ale to polityka C jest standardowym mechanizmem kontroli 'kluczy zaufanych projektów' w Enterprise.</pre>
+Wyjaśnienie: Transfer Tool to dedykowane narzędzie do rozwiązywania konfliktów nazw kont i przenoszenia ich pod zarząd organizacji.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Eksperci na Reddit podkreślają, że samo 'wymuszenie CMEK' to połowa sukcesu. Musisz też wskazać, z których projektów KMS te klucze mogą pochodzić (C), aby uniemożliwić deweloperom używanie kluczy z ich prywatnych, niekontrolowanych projektów.</p>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p><b>Głęboka analiza:</b> <p>Użytkownik dostaje maila z prośbą o przekazanie konta firmie.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints#cmek" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints#cmek</a></li>
+<li><a href="https://support.google.com/cloudidentity/answer/7062710" target="_blank">https://support.google.com/cloudidentity/answer/7062710</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -132,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

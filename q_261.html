@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 261</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 261 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Cloud Run services under non-prod folder. Grant external access to approved FQDNs only for designated VPCs. Block others. Overriding. How?
+Your organization utilizes Cloud Run services within multiple projects underneath the non-production folder which requires primarily internal communication. Some services need external access to approved fully qualified domain names (FQDN) while other external traffic must be blocked. Internal applications must not be exposed. You must achieve this granular control with allowlists overriding broader restrictions only for designated VPCs. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Global allowlist hierarchical policy.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Folder-level deny outbound + FQDN allowlist in separate policies for designated VPCs + Cloud NAT.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Project-level deny + VPC allowlist override.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud NAT IP filtering.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Implement a global-level allowlist rule for the necessary FQDNs within a hierarchical firewall policy. Apply this policy across all VPCs in the organization and configure Cloud NAT without any additional filtering.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a folder-level deny-all rule for outbound traffic within a hierarchical firewall policy. Define FQDN allowlist rules in separate policies and associate them with the necessary VPCs. Configure Cloud NAT for these VPCs.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a project-level deny-all rule within a hierarchical structure and apply it broadly. Override this rule with separate FQDN allowlists defined in VPC-level firewall policies associated with the relevant VPCs.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure Cloud NAT with IP-based filtering to permit outbound traffic only to the allowlisted FQDNs' IP ranges. Apply Cloud NAT uniformly to all VPCs within the organization's folder structure.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Cloud Run services under non-prod folder. Grant external access to approved FQDN
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
 B. Hierarchical Firewall Policies: Ustawienie blokady wyjścia (deny outbound) na poziomie foldera zapewnia bezpieczeństwo domyślne. Następnie tworzysz polityki przypisane do konkretnych sieci VPC (polityki per-VPC), które dopuszczają ruch tylko do wybranych nazw domenowych (FQDN). To najbardziej granularny model kontroli egress.
@@ -98,28 +99,28 @@ A. Global allowlist: Nie pozwala na rozróżnienie między różnymi sieciami VP
 C. Project-level: Niezarządzalne przy dużej skali projektów serverless.
 D. Cloud NAT: Ma ograniczone funkcje filtrowania FQDN w porównaniu do dedykowanych polityk firewall klasy Enterprise.
 
-Konsensus społeczności ExamTopics: 100% na B. Polityki per-VPC to zaawansowana technika zarządzania bezpieczeństwem sieciowym.</pre>
+Konsensus społeczności ExamTopics: 100% na B. Polityki per-VPC to zaawansowana technika zarządzania bezpieczeństwem sieciowym.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> To rozwiązanie wymaga usługi Cloud Firewall Enterprise, aby móc korzystać z filtrów opartych na nazwach domenowych (FQDN) zamiast samych IP.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> To rozwiązanie wymaga usługi Cloud Firewall Enterprise, aby móc korzystać z filtrów opartych na nazwach domenowych (FQDN) zamiast samych IP.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc/docs/firewall-policies" target="_blank">https://cloud.google.com/vpc/docs/firewall-policies</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

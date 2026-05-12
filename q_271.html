@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 271</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 271 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Near real-time log export to on-prem SIEM. Fault tolerance, auto scaling, retry on failure. What to do?
+You work for a multinational organization that has systems deployed across multiple cloud providers, including Google Cloud. Your organization maintains an extensive on-premises security information and event management (SIEM) system. New security compliance regulations require that relevant Google Cloud logs be integrated seamlessly with the existing SIEM to provide a unified view of security events. You need to implement a solution that exports Google Cloud logs to your on-premises SIEM by using a push-based, near real-time approach. You must prioritize fault tolerance, security, and auto scaling capabilities. In particular, you must ensure that if a log delivery fails, logs are re-sent. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Pub/Sub + Cloud Function pull.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Aggregated log sink + Pub/Sub + Dataflow (primary/secondary).</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Log sink to syslog CE.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Firewall query + Cloud Function.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a Pub/Sub topic for log aggregation. Write a custom Python script on a Cloud Function Leverage the Cloud Logging API to periodically pull logs from Google Cloud and forward the logs to the SIEM. Schedule the Cloud Function to run twice per day.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Collect all logs into an organization-level aggregated log sink and send the logs to a Pub/Sub topic. Implement a primary Dataflow pipeline that consumes logs from this Pub/Sub topic and delivers the logs to the SIEM. Implement a secondary Dataflow pipeline that replays failed messages.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Deploy a Cloud Logging sink with a filter that routes all logs directly to a syslog endpoint. The endpoint is based on a single Compute Engine hosted on Google Cloud that routes all logs to the on-premises SIEM. Implement a Cloud Function that triggers a retry action in case of failure.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Utilize custom firewall rules to allow your SIEM to directly query Google Cloud logs. Implement a Cloud Function that notifies the SIEM of a failed delivery and triggers a retry action.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Near real-time log export to on-prem SIEM. Fault tolerance, auto scaling, retry 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
 B. Dataflow pipeline: Dataflow jest jedyną usługą w tym zestawieniu, która jest w 100% zarządzana, skaluje się automatycznie (auto scaling) i posiada wbudowane mechanizmy obsługi błędów i ponowień (fault tolerance, retry) dla strumieni danych z Pub/Sub. Model primary/secondary zapewnia wysoką dostępność.
@@ -98,28 +99,28 @@ A. Cloud Function: Przy ogromnej liczbie logów (near real-time) funkcje te są 
 C. Syslog CE: VM z syslogiem to 'single point of failure' i brak automatycznego skalowania.
 D. Firewall query: Bardzo wolne i nie jest to metoda 'near real-time log export'.
 
-Konsensus społeczności ExamTopics: 100% na B. Dataflow to król potoków danych w GCP.</pre>
+Konsensus społeczności ExamTopics: 100% na B. Dataflow to król potoków danych w GCP.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Google udostępnia gotowe szablony Dataflow (Pub/Sub to Splunk, Pub/Sub to Elasticsearch), które wystarczy skonfigurować, co minimalizuje czas wdrożenia.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Google udostępnia gotowe szablony Dataflow (Pub/Sub to Splunk, Pub/Sub to Elasticsearch), które wystarczy skonfigurować, co minimalizuje czas wdrożenia.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/architecture/exporting-stackdriver-logs-to-splunk" target="_blank">https://cloud.google.com/architecture/exporting-stackdriver-logs-to-splunk</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 244</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 244 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Ensure that all GKE clusters are created with 'Network Policy' enabled by default across the organization. Which tool?
+Your company's users access data in a BigQuery table. You want to ensure they can only access the data during working hours.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> IAM roles</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Organization Policy constraint: compute.restrictVpcPeering</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Organization Policy constraint: gcp.resourceLocations</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Organization Policy (Note: Direct GKE constraints exist in modern Org Policy sets)</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Assign a BigQuery Data Viewer role along with an IAM condition that limits the access to specified working hours.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Run a gsutil script that assigns a BigQuery Data Viewer role, and remove it only during the specified working hours.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Assign a BigQuery Data Viewer role to a service account that adds and removes the users daily during the specified working hours.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure Cloud Scheduler so that it triggers a Cloud Functions instance that modifies the organizational policy constraint for BigQuery during the specified working hours.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Ensure that all GKE clusters are created with 'Network Policy' enabled by defaul
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">D</span>
+<span class="correct-answer">A</span>
 <br/>
 </span>
 </div>
@@ -88,36 +88,31 @@ Ensure that all GKE clusters are created with 'Network Policy' enabled by defaul
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D (lub podobna polityka GKE).
+<pre>
+Odpowiedź: A.
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Organization Policy: (Podobnie jak w 224). Wymuszanie cech technicznych klastrów GKE (jak włączony wewnątrzklastrowy firewall - Network Policy) to zadanie dla 'Organization Policy Service'. Pozwala to na nałożenie twardego wymogu na wszystkich administratorów klastrów w firmie.
-
-Dlaczego inne są błędne:
-A, B, C: Jak w analogicznych pytaniach o wymuszanie standardów.
-
-Konsensus społeczności ExamTopics: Zdecydowana większość na D. Org Policy to król Guardrails.</pre>
+Wyjaśnienie: IAM Conditions pozwalają na nadawanie uprawnień czasowych (np. na podstawie pory dnia lub daty) bezpośrednio w polityce IAM.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> W dyskusjach o GKE Hardening eksperci radzą: 'Nie pozwól nikomu stworzyć klastra bez Network Policy'. Polityka organizacji (D) to jedyny sposób, by to wymusić technicznie, uniemożliwiając powstawanie niezabezpieczonych 'silosów' kontenerowych.</p>
+<p><b>Sugerowana odpowiedź: A</b></p>
+<p><b>Głęboka analiza:</b> <p>Jest to rozwiązanie automatyczne i natywne, nie wymagające pisania skryptów do dodawania/usuwania użytkowników.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/overview" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/overview</a></li>
+<li><a href="https://cloud.google.com/iam/docs/conditions-overview" target="_blank">https://cloud.google.com/iam/docs/conditions-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -132,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 83</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 83 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You need to optimize Cloud DLP usage to reduce cost. Data is in GCS and BigQuery. Which options should you recommend?
+As adoption of the Cloud Data Loss Prevention (Cloud DLP) API grows within your company, you need to optimize usage to reduce cost. Cloud DLP target data is stored in Cloud Storage and BigQuery. The location and region are identified as a suffix in the resource name.<br/>Which cost reduction options should you recommend?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Set rowsLimit on BQ outside US, bytesLimitPerFile on multiregional GCS.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Set rowsLimit on BQ outside US, minimize transformation units.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use rowsLimit and bytesLimitPerFile to sample data and use CloudStorageRegexFileSet.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use FindingLimits and TimespanConfig.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Set appropriate rowsLimit value on BigQuery data hosted outside the US and set appropriate bytesLimitPerFile value on multiregional Cloud Storage buckets.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Set appropriate rowsLimit value on BigQuery data hosted outside the US, and minimize transformation units on multiregional Cloud Storage buckets.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use rowsLimit and bytesLimitPerFile to sample data and use CloudStorageRegexFileSet to limit scans.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use FindingLimits and TimespanContfig to sample data and minimize transformation units.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ You need to optimize Cloud DLP usage to reduce cost. Data is in GCS and BigQuery
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: C.
 
 Wyjaśnienie (Dlaczego poprawna):
 C. Sampling and Filtering: Największy wpływ na koszt DLP ma ilość skanowanych danych. Użycie `rowsLimit` (dla BigQuery) i `bytesLimitPerFile` (dla GCS) pozwala na przeskanowanie reprezentatywnej PRÓBKI danych zamiast całości. `CloudStorageRegexFileSet` dodatkowo ogranicza skanowanie tylko do konkretnych typów plików (np. tylko logi .txt).
@@ -97,28 +98,28 @@ Dlaczego inne są błędne:
 A, B. Regiony (outside US) nie mają bezpośredniego wpływu na optymalizację kosztów skanowania jako taką (cennik jest zazwyczaj spójny lub różnice są minimalne w porównaniu do redukcji wolumenu danych).
 D. FindingLimits: Ogranicza liczbę raportowanych znalezisk, ale DLP i tak musi przeskanować cały plik, aby je znaleźć, więc nie redukuje to kosztów operacji skanowania.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na C. Próbkowanie (sampling) to kluczowa technika optymalizacji kosztów w Big Data.</pre>
+Konsensus społeczności ExamTopics: Zdecydowana większość na C. Próbkowanie (sampling) to kluczowa technika optymalizacji kosztów w Big Data.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Jeśli masz 1TB logów, skanowanie 100MB z każdego pliku (sampling) zazwyczaj wystarczy, aby wykryć, czy dany proces zaczął omyłkowo zapisywać PII, a kosztuje ułamek ceny pełnego skanu.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Jeśli masz 1TB logów, skanowanie 100MB z każdego pliku (sampling) zazwyczaj wystarczy, aby wykryć, czy dany proces zaczął omyłkowo zapisywać PII, a kosztuje ułamek ceny pełnego skanu.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/dlp/docs/cost-control" target="_blank">https://cloud.google.com/dlp/docs/cost-control</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

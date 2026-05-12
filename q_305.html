@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 305</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 305 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Vertex AI Workbench Instances: automatically up-to-date, users cannot alter OS settings. What to do?
+Your organization is using Vertex AI Workbench Instances. You must ensure that newly deployed Instances are automatically kept up-to-date and that users cannot accidentally alter settings in the operating system. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> disableRootAccess and requireAutoUpgradeSchedule org policies.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> VM Manager.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Firewall rule prevent SSH.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> AI Notebooks roles.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enforce the disableRootAccesa and requireAutoUpgradeSchedule organization policies for newly deployed Instances.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Enable the VM Manager and ensure the corresponding Google Compute Engine instances are added.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Implement a firewall rule that prevents Secure Shell access to the corresponding Google Compute Engine instances by using tags.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Assign the AI Notebooks Runner and AI Notebooks Viewer roles to the users of the AI Workbench Instances.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Vertex AI Workbench Instances: automatically up-to-date, users cannot alter OS s
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
 A. Workbench Specific Org Policies: Workbench posiada dedykowane polityki organizacji, które uniemożliwiają użytkownikom (nawet z uprawnieniami dewelopera) uzyskanie dostępu 'root' do systemu operacyjnego instancji analitycznej. Dodatkowo wymuszają one automatyczny harmonogram aktualizacji, co gwarantuje spójność i bezpieczeństwo całego zespołu.
@@ -98,28 +99,28 @@ B. VM Manager: Świetny dla zwykłych VM, ale Workbench jest usługą 'zarządza
 C. Prevent SSH: Uniemożliwiłoby pracę wielu analitykom potrzebującym terminala do zadań niskopoziomowych.
 D. IAM Roles: Ograniczają co użytkownik może kliknąć w UI, ale nie blokują działań wewnątrz systemu operacyjnego, jeśli deweloper ma tam dostęp (co robi polityka A).
 
-Konsensus społeczności ExamTopics: 100% na A. To specyficzna wiedza o zarządzaniu środowiskami AI w Enterprise.</pre>
+Konsensus społeczności ExamTopics: 100% na A. To specyficzna wiedza o zarządzaniu środowiskami AI w Enterprise.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Te polityki są kluczowe w bankowości, gdzie musisz mieć 100% pewności, że środowisko analityczne jest niezmienne (immutable) i wolne od nieautoryzowanego oprogramowania.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Te polityki są kluczowe w bankowości, gdzie musisz mieć 100% pewności, że środowisko analityczne jest niezmienne (immutable) i wolne od nieautoryzowanego oprogramowania.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vertex-ai/docs/workbench/instances/introduction" target="_blank">https://cloud.google.com/vertex-ai/docs/workbench/instances/introduction</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 204</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 204 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Audit which users have the permission to modify firewall rules in a specific VPC. Which tool?
+You are using Security Command Center (SCC) to protect your workloads and receive alerts for suspected security breaches at your company. You need to detect cryptocurrency mining software.<br/>Which SCC service should you use?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Policy Analyzer</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Policy Troubleshooter</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> IAM Recommender</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Audit Logs</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Virtual Machine Threat Detection</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Container Threat Detection</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Rapid Vulnerability Detection</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Web Security Scanner</li>
 
 </ul>
 </div>
@@ -88,38 +88,31 @@ Audit which users have the permission to modify firewall rules in a specific VPC
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Policy Analyzer: Pozwala zadać precyzyjne pytanie: 'Pokaż mi wszystkich użytkowników i grupy, które posiadają uprawnienie compute.firewalls.update na tym zasobie sieciowym'. Narzędzie to przeszukuje wszystkie poziomy hierarchii IAM i zwraca ujednoliconą listę osób.
-
-Dlaczego inne są błędne:
-B. Policy Troubleshooter: Tylko dla scenariuszy 'dlaczego nie mogę'.
-C. IAM Recommender: Sugeruje usuwanie nieużywanych ról.
-D. Audit Logs: Powie Ci kto ZMIENIŁ regułę w przeszłości, ale nie pokaże listy osób, które MAJĄ prawo to zrobić TERAZ.
-
-Konsensus społeczności ExamTopics: 100% na A. To główne narzędzie do 'Access Inwentaryzacji'.</pre>
+Wyjaśnienie: VM Threat Detection skanuje pamięć instancji Compute Engine w poszukiwaniu śladów złośliwego oprogramowania, w tym koparek kryptowalut.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Na Reddit specjaliści ostrzegają: uprawnienia do firewalla często 'ukryte' są w rolach Editor lub Owner nadanych na poziomie folderu. Tylko Policy Analyzer (A) potrafi je 'wyłowić' i pokazać w jednym raporcie audytowym.</p>
+<p><b>Głęboka analiza:</b> <p>Jest to funkcja SCC Premium działająca bez agentów wewnątrz systemu operacyjnego.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/iam/docs/policy-analyzer-overview" target="_blank">https://cloud.google.com/iam/docs/policy-analyzer-overview</a></li>
+<li><a href="https://cloud.google.com/security-command-center/docs/concepts-vm-threat-detection-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-vm-threat-detection-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 265</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,12 @@
 <h2>Question 265 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-PCI DSS preparation. Detect deviations on IaaS level in landing zone. What to do?
+Your organization must follow the Payment Card Industry Data Security Standard (PCI DSS). To prepare for an audit, you must detect deviations on an infrastructure-as-a-service level in your Google Cloud landing zone. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Security Command Center Premium - Compliance features.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Manual audit.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> VPC Flow Logs analysis.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Audit Logs search.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a data profile covering all payment relevant data types. Configure Data Discovery and a risk analysis job in Google Cloud Sensitive Data Protection to analyze findings.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use the Google Cloud Compliance Reports Manage</li>
 
 </ul>
 </div>
@@ -80,7 +78,7 @@ PCI DSS preparation. Detect deviations on IaaS level in landing zone. What to do
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer"></span>
 <br/>
 </span>
 </div>
@@ -88,7 +86,8 @@ PCI DSS preparation. Detect deviations on IaaS level in landing zone. What to do
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
 A. SCC Premium Compliance: Posiada wbudowany moduł, który automatycznie mapuje stan Twojej chmury na konkretne punkty normy PCI DSS. Zgłasza znaleziska (findings), jeśli np. dyski nie są zaszyfrowane kluczem CMEK lub porty baz danych są publicznie dostępne. To jedyna zautomatyzowana metoda detekcji 'deviations'.
@@ -97,28 +96,28 @@ Dlaczego inne są błędne:
 B. Manual audit: Wolny i błędotwórczy.
 C, D: To surowe dane. Musiałbyś sam wiedzieć jakiego dokładnie wpisu szukać pod dany punkt normy PCI. SCC robi to mapowanie za Ciebie.
 
-Konsensus społeczności ExamTopics: 100% na A. SCC to Twój automatyczny audytor PCI.</pre>
+Konsensus społeczności ExamTopics: 100% na A. SCC to Twój automatyczny audytor PCI.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> SCC dostarcza raporty zgodności, które możesz pobrać w formacie PDF i pokazać audytorowi jako dowód ciągłego monitorowania bezpieczeństwa.</p>
+<p><b>Sugerowana odpowiedź: </b></p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> SCC dostarcza raporty zgodności, które możesz pobrać w formacie PDF i pokazać audytorowi jako dowód ciągłego monitorowania bezpieczeństwa.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/security-command-center/docs/concepts-compliance-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-compliance-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +132,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

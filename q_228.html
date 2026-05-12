@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 228</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,15 @@
 <h2>Question 228 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Audit which users have been granted the 'Editor' role via Google Groups in a specific project. Which tool?
+You manage a mission-critical workload for your organization, which is in a highly regulated industry. The workload uses Compute Engine VMs to analyze and process the sensitive data after it is uploaded to Cloud Storage from the endpoint computers. Your compliance team has detected that this workload does not meet the data protection requirements for sensitive data. You need to meet these requirements:<br/>- Manage the data encryption key (DEK) outside the Google Cloud boundary.<br/>- Maintain full control of encryption keys through a third-party provider.<br/>- Encrypt the sensitive data before uploading it to Cloud Storage.<br/>- Decrypt the sensitive data during processing in the Compute Engine VMs.<br/>- Encrypt the sensitive data in memory while in use in the Compute Engine VMs.<br/>What should you do? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Policy Analyzer</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Policy Troubleshooter</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> IAM Recommender</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Audit Logs</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure Customer Managed Encryption Keys to encrypt the sensitive data before it is uploaded to Cloud Storage, and decrypt the sensitive data after it is downloaded into your VMs.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure Cloud External Key Manager to encrypt the sensitive data before it is uploaded to Cloud Storage, and decrypt the sensitive data after it is downloaded into your VMs.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create Confidential VMs to access the sensitive data.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Migrate the Compute Engine VMs to Confidential VMs to access the sensitive data.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Create a VPC Service Controls service perimeter across your existing Compute Engine VMs and Cloud Storage buckets.</li>
 
 </ul>
 </div>
@@ -80,7 +81,7 @@ Audit which users have been granted the 'Editor' role via Google Groups in a spe
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">BC</span>
 <br/>
 </span>
 </div>
@@ -88,7 +89,8 @@ Audit which users have been granted the 'Editor' role via Google Groups in a spe
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
 A. Policy Analyzer: Potrafi on 'rozbić' grupy na pojedynczych członków i pokazać ich uprawnienia. Dzięki temu zobaczysz, że użytkownik Jan ma rolę Editor, bo należy do grupy 'Marketing', która ma tę rolę w projekcie.
@@ -96,28 +98,28 @@ A. Policy Analyzer: Potrafi on 'rozbić' grupy na pojedynczych członków i poka
 Dlaczego inne są błędne:
 B, C, D: Nie mają funkcji analizy struktury grup w odniesieniu do ról zasobów.
 
-Konsensus społeczności ExamTopics: 100% na A. Policy Analyzer to 'szwajcarski scyzoryk' audytu IAM.</pre>
+Konsensus społeczności ExamTopics: 100% na A. Policy Analyzer to 'szwajcarski scyzoryk' audytu IAM.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Dyskusja w sieci skupia się na tzw. 'Group Expansion'. Standardowy widok IAM w konsoli GCP pokaże Ci tylko nazwę grupy. Policy Analyzer (A) to jedyny sposób na poznanie PRAWDZIWEJ listy osób kryjących się pod tą nazwą.</p>
+<p><b>Sugerowana odpowiedź: BC</b></p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Dyskusja w sieci skupia się na tzw. 'Group Expansion'. Standardowy widok IAM w konsoli GCP pokaże Ci tylko nazwę grupy. Policy Analyzer (A) to jedyny sposób na poznanie PRAWDZIWEJ listy osób kryjących się pod tą nazwą.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/iam/docs/policy-analyzer-overview" target="_blank">https://cloud.google.com/iam/docs/policy-analyzer-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -132,9 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

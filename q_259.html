@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 259</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 259 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Share 1PB BigQuery dataset with another team while protecting PII. What to do?
+Your team maintains 1PB of sensitive data within BigQuery that contains personally identifiable information (PII). You need to provide access to this dataset to another team within your organization for analysis purposes. You must share the BigQuery dataset with the other team while protecting the PII. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Row-level access policies mask PII based on identity.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Export to GCS, VPC SC.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Data pseudonymization techniques.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Filtered copy in separate project.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Utilize BigQuery's row-level access policies to mask PII columns based on the other team's user identities.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Export the BigQuery dataset to Cloud Storage. Create a VPC Service Control perimeter and allow only their team's project access to the bucket.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Implement data pseudonymization techniques to replace the PII fields with non-identifiable values. Grant the other team access to the pseudonymized dataset.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a filtered copy of the dataset and replace the sensitive data with hash values in a separate project. Grant the other team access to this new project.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Share 1PB BigQuery dataset with another team while protecting PII. What to do?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
 A. Dynamic Data Masking / Row-level security: Pozwala na udostępnienie tej samej, wielkiej (1PB) tabeli różnym zespołom. System automatycznie ukrywa (maskuje) kolumny z PII dla zespołu zewnętrznego, podczas gdy Twój zespół widzi pełne dane. Odbywa się to bez kopiowania danych, co oszczędza ogromne koszty i czas.
@@ -97,28 +98,28 @@ Dlaczego inne są błędne:
 B, D: Kopiowanie 1PB danych jest skrajnie nieefektywne i kosztowne.
 C. Pseudonymization: Dobra technika, ale zazwyczaj wymaga stworzenia nowej kopii danych, podczas gdy A robi to dynamicznie w locie.
 
-Konsensus społeczności ExamTopics: 100% na A. BigQuery dynamiczne maskowanie to król analityki na dużą skalę.</pre>
+Konsensus społeczności ExamTopics: 100% na A. BigQuery dynamiczne maskowanie to król analityki na dużą skalę.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Możesz przypisać tag `pii_masked` do kolumny 'nazwisko'. Użytkownik bez uprawnień do tego tagu zobaczy w tej kolumnie gwiazdki, mimo że zapytanie SQL wykona się poprawnie.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Możesz przypisać tag `pii_masked` do kolumny 'nazwisko'. Użytkownik bez uprawnień do tego tagu zobaczy w tej kolumnie gwiazdki, mimo że zapytanie SQL wykona się poprawnie.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/bigquery/docs/column-data-masking-intro" target="_blank">https://cloud.google.com/bigquery/docs/column-data-masking-intro</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 102</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,7 +64,7 @@
 <h2>Question 102 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Small startup office manager needs to match payments to invoices and create billing alerts. Minimal permissions. Which two IAM roles?
+An office manager at your small startup company is responsible for matching payments to invoices and creating billing alerts. For compliance reasons, the office manager is only permitted to have the Identity and Access Management (IAM) permissions necessary for these tasks. Which two IAM roles should the office manager have? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,39 +89,40 @@ Small startup office manager needs to match payments to invoices and create bill
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: CD.
+<pre>
+Odpowiedź: CD.
 
 Wyjaśnienie (Dlaczego poprawna):
-C. Billing Account Viewer: Pozwala na przeglądanie faktur, historii płatności i dopasowywanie ich do wydatków (wymóg 'match payments to invoices').
-D. Billing Account Costs Manager: Pozwala na zarządzanie budżetami i tworzenie alertów budżetowych (wymóg 'create billing alerts').
+C. Billing Account Viewer: Pozwala widzieć faktury i płatności.
+D. Billing Account Costs Manager: Pozwala zarządzać alertami budżetowymi.
 
 Dlaczego inne są błędne:
-A. Organization Administrator: Zbyt szerokie uprawnienia, pozwalające na zarządzanie całą firmą.
-B. Project Creator: Pozwala na wydawanie pieniędzy poprzez tworzenie nowych projektów, co nie jest potrzebne do zarządzania fakturami.
-E. Billing Account User: Pozwala na przypisywanie konta rozliczeniowego do projektów, co wykracza poza rolę office managera zajmującego się fakturami.
+A. Org Admin: Zdecydowanie zbyt wysokie uprawnienia.
+B. Project Creator: Pozwala wydawać pieniądze poprzez tworzenie nowych zasobów, nie jest potrzebne do audytu faktur.
+E. Billing Account User: Pozwala 'podpinać' projekty do płatności, co wykracza poza rolę managera od faktur.
 
-Konsensus społeczności ExamTopics: 100% na CD. To klasyczny podział ról finansowych wg zasady najniższych uprawnień.</pre>
+Konsensus społeczności ExamTopics: 100% na CD. To podręcznikowy podział ról finansowych.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: CD</b></p>
-<p><b>Głęboka analiza:</b> Wiele osób myli rolę Viewer z Costs Manager. Viewer widzi CO się stało, ale tylko Costs Manager może ustawić progi powiadomień (alerts).</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Dyskusja na forach zwraca uwagę na pułapkę: wiele osób wybiera Viewer (C) i User (E). Jednak rola User pozwala deweloperom wydawać Twoje pieniądze. Tylko Costs Manager (D) daje prawo do ustawiania alertów, które ratują startupy przed bankructwem po zostawieniu włączonej maszyny GPU na weekend.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/billing/docs/how-to/billing-access" target="_blank">https://cloud.google.com/billing/docs/how-to/billing-access</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -136,9 +137,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

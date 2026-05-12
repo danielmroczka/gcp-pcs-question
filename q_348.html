@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 348</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 348 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-regulated business unit needs temporary exception to external IPs policy. comply with least privilege, minimize drift. What to do?
+Your organization enforces a custom organization policy that disables the use of Compute Engine VM instances with external IP addresses. However, a regulated business unit requires an exception to temporarily use external IPs for a third-party audit process. The regulated business workload must comply with least privilege principles and minimize policy drift. You need to ensure secure policy management and proper handling. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Folder for non-regulated, move others.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Org level policy, custom role bypass.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Org level policy, move regulated to separate folder, override at folder level.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Allow for all, restrict via firewall.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a folder. Apply the restrictive organization policy for non-regulated business workloads in the folder. Place the regulated business workload in that folder.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Apply the restrictive organization policy at the organization level. Create an IAM custom role with permissions to bypass organization policies. Assign the custom role to the regulated business team for the specific project.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Apply the custom organization policy at the organization level to restrict external IPs. Move the regulated business workload to a separate folder. Override the policy at that folder level.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Modify the custom organization policy at the organization level to allow external IPs for all projects. Configure VPC firewall rules to restrict egress traffic except for the regulated business workload.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ regulated business unit needs temporary exception to external IPs policy. comply
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: C.
 
 Wyjaśnienie (Dlaczego poprawna):
 C. Folder-level Override: Najlepszym sposobem na zarządzanie wyjątkami w GCP jest hierarchia. Utrzymujesz silną polityka na poziomie Organizacji, a dla 'wyjątkowego' działu tworzysz osobny folder, w którym nadpisujesz tę jedną politykę (Override). To zapewnia izolację wyjątku i łatwy audyt (drift jest ograniczony do jednego folderu).
@@ -98,28 +99,28 @@ A. Move others: Niepotrzebne skomplikowanie struktury dla większości, która n
 B. Custom role bypass: Nie istnieje rola IAM pozwalająca na 'zignorowanie' polityki organizacji (Org Policy działa na poziomie API, niezależnie od IAM).
 D. Allow for all: Katastrofa bezpieczeństwa.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla C. To złoty standard zarządzania wyjątkami compliance.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla C. To złoty standard zarządzania wyjątkami compliance.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Po zakończeniu projektu regulowanego, wystarczy skasować politykę na folderze, a projekty automatycznie odziedziczą bezpieczne ustawienia z góry (Organizacji).</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Po zakończeniu projektu regulowanego, wystarczy skasować politykę na folderze, a projekty automatycznie odziedziczą bezpieczne ustawienia z góry (Organizacji).</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/understanding-hierarchy" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/understanding-hierarchy</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

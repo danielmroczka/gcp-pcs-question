@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 342</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 342 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-regulated industry, low overhead encryption using private connectivity from on-prem to Google Cloud. High availability multiple regions. What to do?
+Your company is in a regulated industry that requires low overhead encryption using private connectivity from on-premises data centers to Google Cloud. You need to establish connectivity and ensure high availability across multiple regions. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Two pairs of HA VPNs.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Pairs of Cloud Interconnect + MACsec encryption.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> L2TP over Interconnect.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> IPSec over Partner Interconnect.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Set up two pairs of HA VPNs using IPSec from the data centers in multiple regions.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Set up pairs of Cloud Interconnect connections to your data centers in multiple regions, and employ MACSec encryption.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Set up L2TP encryption over pairs of dedicated Cloud Interconnect connections from the data centers in multiple regions.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Set up IPSec encryption over Partner Interconnect connections from your data centers in multiple regions.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ regulated industry, low overhead encryption using private connectivity from on-p
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
 B. Interconnect + MACsec: MACsec (szyfrowanie warstwy 2) oferuje najniższy narzut (low overhead), ponieważ odbywa się na poziomie sprzętowym portu sieciowego. Cloud Interconnect zapewnia wysoką dostępność i przepustowość wymaganą w branży finansowej/regulowanej.
@@ -97,28 +98,28 @@ Dlaczego inne są błędne:
 A, D. IPsec (VPN): Szyfrowanie warstwy 3 (IPsec) wprowadza znacznie większy narzut procesora i nagłówków (overhead) oraz mniejszą przepustowość niż MACsec.
 C. L2TP: Nie zapewnia nowoczesnego, silnego szyfrowania wymaganego przez regulacje i nie jest natywną usługą bezpieczeństwa Google dla Interconnecta.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. MACsec to standard dla 'high-speed low-latency encryption'.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla B. MACsec to standard dla 'high-speed low-latency encryption'.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> MACsec chroni dane na całym odcinku światłowodu między Twoim routerem a routerem brzegowym Google, co spełnia wymogi ochrony danych w transmisji bez wpływu na wydajność aplikacji.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> MACsec chroni dane na całym odcinku światłowodu między Twoim routerem a routerem brzegowym Google, co spełnia wymogi ochrony danych w transmisji bez wpływu na wydajność aplikacji.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/network-connectivity/docs/interconnect/concepts/macsec-overview" target="_blank">https://cloud.google.com/network-connectivity/docs/interconnect/concepts/macsec-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 138</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,7 +64,7 @@
 <h2>Question 138 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Cloud SQL malicious activity. Monitor API calls that read configuration or metadata. Which logs?
+A database administrator notices malicious activities within their Cloud SQL instance. The database administrator wants to monitor the API calls that read the configuration or metadata of resources. Which logs should the database administrator review?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -88,38 +88,39 @@ Cloud SQL malicious activity. Monitor API calls that read configuration or metad
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
-D. Data Access Logs: W terminologii Cloud Audit Logs, operacje typu 'read' na konfiguracji usługi (np. `gcloud sql instances describe`) lub na samych danych są klasyfikowane jako logi 'Data Access'. Są one domyślnie wyłączone (poza BigQuery), więc ich włączenie jest kluczowe do wykrywania zwiadu (reconnaissance) wykonywanego przez hakera.
+B. Master Authorized Networks: Pozwala na stworzenie białej listy adresów IP, które mogą komunikować się z serwerem API Kubernetes (Master). Jest to jedyny sposób na zabezpieczenie punktu styku z Twoim klastrem GKE przed niepowołanym dostępem z internetu.
 
 Dlaczego inne są błędne:
-A. Admin Activity: Rejestrują tylko operacje 'write' (np. zmiana hasła, usunięcie bazy). Nie zobaczysz w nich, że ktoś tylko 'podglądał' konfigurację.
-B. System Event: Dotyczą problemów technicznych platformy Google.
-C. Access Transparency: Dotyczą pracowników Google, a nie Twoich użytkowników (lub hakerów używających ich kont).
+A. VPC Firewall: Master GKE jest zarządzany przez Google i nie znajduje się w Twoim VPC, więc Twoje firewalle go 'nie widzą'.
+C. Network Policies: Kontrolują ruch Między Podami wewnątrz klastra, nie dostęp do samego API Kubernetes.
+D. Private Cluster: Sprawia, że węzły nie mają publicznych IP, ale Master nadal może mieć publiczny endpoint, który wymaga ochrony przez (B).
 
-Konsensus społeczności ExamTopics: 100% poparcia dla D. Monitoring 'podglądania' to zawsze Data Access logs.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla B. Standard bezpieczeństwa GKE Mastera.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Logi Data Access dzielą się na: ADMIN_READ, DATA_READ i DATA_WRITE. Do śledzenia odczytu metadanych potrzebujesz ADMIN_READ.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Eksperci na GitHubie radzą: zawsze używaj Master Authorized Networks nawet w klastrach prywatnych. Zmniejsza to powierzchnię ataku do niezbędnego minimum (np. tylko IP Twojego biura i Twojego CI/CD).</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/logging/docs/audit#data-access" target="_blank">https://cloud.google.com/logging/docs/audit#data-access</a></li>
+<li><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/authorized-networks" target="_blank">https://cloud.google.com/kubernetes-engine/docs/how-to/authorized-networks</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

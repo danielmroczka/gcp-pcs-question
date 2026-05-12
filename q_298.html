@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 298</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 298 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Inconsistencies in IAM. visibility into changes to IAM policies, user activity, SA behavior. What to do?
+A security audit uncovered several inconsistencies in your project's Identity and Access Management (IAM) configuration. Some service accounts have overly permissive roles, and a few external collaborators have more access than necessary. You need to gain detailed visibility into changes to IAM policies, user activity, service account behavior, and access to sensitive projects. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud Functions + policy simulator.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Metrics explorer service account events.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud Audit Logs + SIEM export.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> OS Config Management agent.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure Google Cloud Functions to be triggered by changes to IAM policies. Analyze changes by using the policy simulator, send alerts upon risky modifications, and store event details.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Enable the metrics explorer in Cloud Monitoring to follow the service account authentication events and build alerts linked on it.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use Cloud Audit Logs. Create log export sinks to send these logs to a security information and event management (SIEM) solution for correlation with other event sources.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Deploy the OS Config Management agent to your VMs. Use OS Config Management to create patch management jobs and monitor system modifications.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Inconsistencies in IAM. visibility into changes to IAM policies, user activity, 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: C.
 
 Wyjaśnienie (Dlaczego poprawna):
 C. Audit Logs + SIEM: Logi audytowe (Admin Activity i Data Access) to jedyne źródło prawdy o tym, kto zmienił uprawnienia i kto ich użył. Eksport do SIEM (np. Splunk, Chronicle) pozwala na detekcję anomalii w czasie rzeczywistym i długoterminowy audyt zgodności.
@@ -98,28 +99,28 @@ A. Simulator: Służy do planowania zmian, nie widzi historii działań użytkow
 B. Metrics: Pokazują ile, ale nie KTO i CO zrobił (brak szczegółów zdarzeń).
 D. OS Config: Dotyczy wnętrza maszyny VM, nie widzi chmurowego systemu IAM.
 
-Konsensus społeczności ExamTopics: 100% na C. Logi audytowe to podstawa audytowalności IAM.</pre>
+Konsensus społeczności ExamTopics: 100% na C. Logi audytowe to podstawa audytowalności IAM.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Logi Admin Activity są darmowe i niezmywalne (tamper-proof), co czyni je idealnym materiałem dowodowym.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Logi Admin Activity są darmowe i niezmywalne (tamper-proof), co czyni je idealnym materiałem dowodowym.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/logging/docs/audit" target="_blank">https://cloud.google.com/logging/docs/audit</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

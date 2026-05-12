@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 168</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 168 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Protect a web application from 'Zero-day' vulnerabilities in the application code. Which service is best for virtual patching?
+Your security team wants to implement a defense-in-depth approach to protect sensitive data stored in a Cloud Storage bucket. Your team has the following requirements:<br/>- The Cloud Storage bucket in Project A can only be readable from Project B.<br/>- The Cloud Storage bucket in Project A cannot be accessed from outside the network.<br/>- Data in the Cloud Storage bucket cannot be copied to an external Cloud Storage bucket.<br/>What should the security team do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> VPC Firewall</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud Armor</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud IDS</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Identity-Aware Proxy</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enable domain restricted sharing in an organization policy, and enable uniform bucket-level access on the Cloud Storage bucket.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Enable VPC Service Controls, create a perimeter around Projects A and B, and include the Cloud Storage API in the Service Perimeter configuration.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Enable Private Access in both Project A and B's networks with strict firewall rules that allow communication between the networks.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enable VPC Peering between Project A and B's networks with strict firewall rules that allow communication between the networks.</li>
 
 </ul>
 </div>
@@ -88,38 +88,31 @@ Protect a web application from 'Zero-day' vulnerabilities in the application cod
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Cloud Armor: Poprzez swoje reguły WAF, Cloud Armor umożliwia tzw. 'Virtual Patching'. Jeśli zostanie odkryta nowa podatność (Zero-day), możesz włączyć odpowiednią regułę na brzegu sieci, która zablokuje próby jej wykorzystania, ZANIM programiści zdążą poprawić kod aplikacji.
-
-Dlaczego inne są błędne:
-A. VPC Firewall: Nie ma pojęcia o lukach w kodzie aplikacyjnym (SQLi, XSS).
-C. Cloud IDS: Wykryje atak (log), ale go nie zablokuje w czasie rzeczywistym tak skutecznie jak WAF.
-D. IAP: Chroni przed wejściem osób nieuprawnionych, ale nie chroni przed atakiem na kod ze strony zalogowanego (ale złośliwego) użytkownika.
-
-Konsensus społeczności ExamTopics: 100% na B. Virtual patching to termin nierozerwalnie związany z WAF.</pre>
+Wyjaśnienie: VPC Service Controls (perymetr) to jedyne rozwiązanie chroniące przed nieautoryzowanym kopiowaniem danych POZA granice chmury (data exfiltration).
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> W dyskusjach o Log4j eksperci pokazywali, jak Cloud Armor uratował tysiące firm. Google wydało gotową regułę WAF w ciągu kilku godzin, dając klientom czas na spokojne patchowanie serwerów przez kolejne dni.</p>
+<p><b>Głęboka analiza:</b> <p>IAM i UBLA chronią przed nieuprawnionymi użytkownikami, ale VPC SC chroni przed uprawnionymi użytkownikami robiącymi coś niedozwolonego (np. kopiowanie do innego projektu).</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/armor/docs/security-policy-concepts#preconfigured-rules" target="_blank">https://cloud.google.com/armor/docs/security-policy-concepts#preconfigured-rules</a></li>
+<li><a href="https://cloud.google.com/vpc-service-controls/docs/overview" target="_blank">https://cloud.google.com/vpc-service-controls/docs/overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

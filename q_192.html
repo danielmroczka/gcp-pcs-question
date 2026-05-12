@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 192</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 192 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Grant a user access to only view billing reports for a specific project. Where should you apply the IAM role?
+Your organization is rolling out a new continuous integration and delivery (CI/CD) process to deploy infrastructure and applications in Google Cloud. Many teams will use their own instances of the CI/CD workflow. It will run on Google Kubernetes Engine (GKE). The CI/CD pipelines must be designed to securely access Google Cloud APIs.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Organization level</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Billing Account level</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Project level</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Resource level</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> 1. Create two service accounts, one for the infrastructure and one for the application deployment. 2. Use workload identities to let the pods run the two pipelines and authenticate with the service accounts. 3. Run the infrastructure and application pipelines in separate namespaces.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> 1. Create a dedicated service account for the CI/CD pipelines. 2. Run the deployment pipelines in a dedicated nodes pool in the GKE cluster. 3. Use the service account that you created as identity for the nodes in the pool to authenticate to the Google Cloud APIs.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> 1. Create individual service accounts for each deployment pipeline. 2. Add an identifier for the pipeline in the service account naming convention. 3. Ensure each pipeline runs on dedicated pods. 4. Use workload identity to map a deployment pipeline pod with a service account.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> 1. Create service accounts for each deployment pipeline. 2. Generate private keys for the service accounts. 3. Securely store the private keys as Kubernetes secrets accessible only by the pods that run the specific deploy pipeline.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Grant a user access to only view billing reports for a specific project. Where s
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">C</span>
+<span class="correct-answer">A</span>
 <br/>
 </span>
 </div>
@@ -88,37 +88,29 @@ Grant a user access to only view billing reports for a specific project. Where s
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
-
-Wyjaśnienie (Dlaczego poprawna):
-C. Project level: Chociaż system billingowy jest oddzielny, możesz nadać uprawnienia do widzenia kosztów powiązanych z konkretnym projektem bezpośrednio w jego polityce IAM. Dzięki temu użytkownik widzi wydatki 'swojego' zespołu, nie znając budżetu całej firmy.
-
-Dlaczego inne są błędne:
-A, B: Dałoby to dostęp do danych finansowych innych projektów (naruszenie poufności).
-D: Nie ma raportów billingu na poziomie 'pojedynczego dysku' w systemie IAM.
-
-Konsensus społeczności ExamTopics: 100% na C. Najlepsza praktyka dla autonomii zespołów deweloperskich.</pre>
+<pre>
+Odpowiedź: A. (Uwaga: C również jest poprawne architektonicznie, ale A jest częstszą odpowiedzią egzaminacyjną dla separacji Infra/App). Wyjaśnienie: Workload Identity to najbezpieczniejsza metoda nadawania tożsamości podom w GKE.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Pamiętaj o różnicy między 'Billing Account Viewer' (widzi wszystko) a rolami projektowymi. Eksperci na forach podkreślają, że nadawanie uprawnień finansowych na poziomie projektu (C) jest kluczowe dla modelu 'You build it, you run it, you pay for it'.</p>
+<p><b>Sugerowana odpowiedź: A</b></p>
+<p><b>Głęboka analiza:</b> <p>Eliminuje to potrzebę zarządzania kluczami JSON wewnątrz klastra.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/billing/docs/how-to/billing-access" target="_blank">https://cloud.google.com/billing/docs/how-to/billing-access</a></li>
+<li><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity" target="_blank">https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +125,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

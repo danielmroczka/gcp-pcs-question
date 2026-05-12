@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 275</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 275 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Grant project access to support engineers from two partner organizations using their own IdP credentials. What to do?
+Your organization is migrating business critical applications to Google Cloud across multiple projects. You only have the required IAM permission at the Google Cloud organization level. You want to grant project access to support engineers from two partner organizations using their existing identity provider (IdP) credentials. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Two SSO profiles Cloud Identity.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Manual users in groups.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Two workforce identity pools.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> GCDS sync.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create two single sign-on (SSO) profiles for the internal and partner IdPs by using SSO for Cloud Identity.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create users manually by using the Google Cloud console. Assign the users to groups.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create two workforce identity pools for the partner IdPs.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Sync user identities from their existing IdPs to Cloud Identity by using Google Cloud Directory Sync (GCDS).</li>
 
 </ul>
 </div>
@@ -88,31 +88,32 @@ Grant project access to support engineers from two partner organizations using t
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: C.
 
 Wyjaśnienie (Dlaczego poprawna):
-C. Workforce Identity Federation: To nowoczesna usługa pozwalająca na bezpośrednią federację zewnętrznych IdP z Twoją organizacją bez potrzeby tworzenia kont użytkowników w Twoim katalogu.</pre>
+C. Workforce Identity Federation: To nowoczesna usługa pozwalająca na bezpośrednią federację zewnętrznych IdP z Twoją organizacją bez potrzeby tworzenia kont użytkowników w Twoim katalogu.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Dzięki WIF, jeśli pracownik partnera zostanie zwolniony, natychmiast traci dostęp do Twojego GCP.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Dzięki WIF, jeśli pracownik partnera zostanie zwolniony, natychmiast traci dostęp do Twojego GCP.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/iam/docs/workforce-identity-federation" target="_blank">https://cloud.google.com/iam/docs/workforce-identity-federation</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -127,9 +128,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

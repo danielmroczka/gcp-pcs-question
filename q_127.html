@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 127</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,7 +64,7 @@
 <h2>Question 127 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Prevent accidental deletion of Shared VPC host project. Which policy constraint?
+You want to prevent users from accidentally deleting a Shared VPC host project. Which organization-level policy constraint should you enable?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -88,7 +88,8 @@ Prevent accidental deletion of Shared VPC host project. Which policy constraint?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
 B. compute.restrictXpnProjectLienRemoval: GCP automatycznie nakłada 'Lien' (zastaw) na projekt hosta Shared VPC, co uniemożliwia jego usunięcie. To konkretne ograniczenie polityki organizacji blokuje użytkownikom możliwość usunięcia tego zastawu, co jest jedynym sposobem na 'skuteczną' obronę przed skasowaniem hosta sieci.
@@ -98,28 +99,28 @@ A. restrictSharedVpcHostProjects: Służy do ograniczenia listy projektów, któ
 C. restrictSharedVpcSubnetworks: Kontroluje, które podsieci są udostępniane projektom usługowym.
 D. sharedReservations: Dotyczy rezerwacji zasobów (compute reservations), a nie ochrony sieci Shared VPC.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. Słowo 'Lien' jest kluczem do ochrony przed usunięciem w GCP.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla B. Słowo 'Lien' jest kluczem do ochrony przed usunięciem w GCP.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Zastawy (Liens) to potężny mechanizm bezpieczeństwa. Jeśli spróbujesz usunąć projekt z aktywnym lienem, operacja zostanie odrzucona przez API z błędem 400.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Zastawy (Liens) to potężny mechanizm bezpieczeństwa. Jeśli spróbujesz usunąć projekt z aktywnym lienem, operacja zostanie odrzucona przez API z błędem 400.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/resource-manager/docs/project-liens" target="_blank">https://cloud.google.com/resource-manager/docs/project-liens</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

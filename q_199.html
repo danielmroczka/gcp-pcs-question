@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 199</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 199 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Identify which Google Cloud service accounts have been granted the 'Editor' role at the organization level. Which tool?
+As part of your organization's zero trust strategy, you use Identity-Aware Proxy (IAP) to protect multiple applications. You need to ingest logs into a Security Information and Event Management (SIEM) system so that you are alerted to possible intrusions.<br/>Which logs should you analyze?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Policy Analyzer</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Policy Troubleshooter</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> IAM Recommender</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Audit Logs</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Data Access audit logs</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Policy Denied audit logs</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud Identity user log events</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Admin Activity audit logs</li>
 
 </ul>
 </div>
@@ -88,38 +88,31 @@ Identify which Google Cloud service accounts have been granted the 'Editor' role
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Policy Analyzer: Pozwala na stworzenie zapytania: 'Pokaż wszystkich członków typu Service Account, którzy mają przypisaną rolę Editor na poziomie Organizacji'. Jest to najszybszy sposób na wykrycie krytycznych nadużyć uprawnień w całej firmie.
-
-Dlaczego inne są błędne:
-B. Policy Troubleshooter: Tylko dla pojedynczych przypadków 'nie działa'.
-C. IAM Recommender: Podpowie Ci, że te konta nie używają wszystkich praw, ale nie zrobi inwentaryzacji 'wszystkich Editorów'.
-D. Audit Logs: Musiałbyś przeszukać logi z całego roku, aby znaleźć momenty nadań.
-
-Konsensus społeczności ExamTopics: 100% poparcia dla A. To klasyczny przypadek użycia 'Compliance Audit'.</pre>
+Wyjaśnienie: IAP loguje każde udane i nieudane żądanie dostępu do logów 'Data Access'. Zawierają one informacje o tożsamości użytkownika i wyniku autoryzacji.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Na forach podkreśla się, że rola Editor na poziomie organizacji to 'bomba z opóźnionym zapłonem'. Każdy proces z takim kontem może skasować całą sieć firmową. Policy Analyzer (A) jest niezbędny do regularnego 'sprzątania' takich uprawnień.</p>
+<p><b>Głęboka analiza:</b> <p>Logi te muszą być explicite włączone w sekcji IAM & Admin -> Audit Logs.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/iam/docs/policy-analyzer-overview" target="_blank">https://cloud.google.com/iam/docs/policy-analyzer-overview</a></li>
+<li><a href="https://cloud.google.com/iap/docs/audit-logging" target="_blank">https://cloud.google.com/iap/docs/audit-logging</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 333</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 333 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Zero Trust Chrome Enterprise Premium governing access to GCS. authorized users on managed devices (OS patches, AV) regardless of location. What to do?
+Your organization is implementing a Zero Trust security model and using Chrome Enterprise Premium. The company is interested in governing access to sensitive data stored in Cloud Storage. You need to configure access controls that ensure only authorized users on managed devices can access this data, regardless of their network location. Access should be restricted based on the device's security posture. This requires up-to-date operating system patches and antivirus software. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> IAP + VPC SC.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> IAM conditions + VPN + endpoint verification.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> ACM access level with device policy + Context-Aware Access policy + VPC SC.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Firewall + MFA.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Grant access to specific users to the VPC Service Controls to create a perimeter to access the Cloud Storage buckets. Configure Identity-Aware Proxy (IAP) to authenticate users before they can access the data.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure IAM conditions based on IP address ranges. Require users to connect through a VPN. Implement endpoint verification software on user devices to check for basic compliance.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create an access level in Access Context Manager that requires a device policy. Create a Context-Aware Access policy using this access level. Apply the policy to the VPC Service Controls perimeter that includes the Cloud Storage buckets.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use Cloud Firewall rules to restrict access to the Cloud Storage buckets based on the source IP addresses. Require users to authenticate with a multi-factor authentication method.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Zero Trust Chrome Enterprise Premium governing access to GCS. authorized users o
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: C.
 
 Wyjaśnienie (Dlaczego poprawna):
 C. Context-Aware Access (CAA): To serce modelu Zero Trust w Google Cloud. Pozwala na zdefiniowanie 'Access Level' w ACM, który wymaga określonego stanu urządzenia (managed, patches, AV). Przypisanie tego poziomu do VPC SC (dla Cloud Storage) gwarantuje, że użytkownik nie pobierze danych nawet z poprawnym hasłem, jeśli jego laptop nie jest 'zdrowy' (managed device).
@@ -98,28 +99,28 @@ A. IAP + VPC SC: IAP chroni aplikacje webowe/SSH, ale dostęp do natywnego API C
 B. VPN: Zaprzeczenie idei Zero Trust 'regardless of location'. VPN opiera się na lokalizacji sieciowej, a nie na tożsamości i stanie urządzenia.
 D. Cloud Firewall: Nie ma wglądu w to, czy system operacyjny laptopa użytkownika ma zainstalowane poprawki.
 
-Konsensus społeczności ExamTopics: 100% na C. To najbardziej zaawansowany i zalecany model izolacji danych wrażliwych.</pre>
+Konsensus społeczności ExamTopics: 100% na C. To najbardziej zaawansowany i zalecany model izolacji danych wrażliwych.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Ten model (Chrome Enterprise Premium + ACM) eliminuje potrzebę VPN. Pracownik może być w kawiarni, ale jego laptop musi być zaszyfrowany i zarządzany przez firmę, aby system 'otworzył' dostęp do danych.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Ten model (Chrome Enterprise Premium + ACM) eliminuje potrzebę VPN. Pracownik może być w kawiarni, ale jego laptop musi być zaszyfrowany i zarządzany przez firmę, aby system 'otworzył' dostęp do danych.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc-service-controls/docs/access-level-usage" target="_blank">https://cloud.google.com/vpc-service-controls/docs/access-level-usage</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

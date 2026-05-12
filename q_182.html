@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 182</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 182 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Protect your web application against 'Slowloris' DDoS attacks. Which service?
+For compliance reporting purposes, the internal audit department needs you to provide the list of virtual machines (VMs) that have critical operating system (OS) security updates available, but not installed. You must provide this list every six months, and you want to perform this task quickly.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> VPC Firewall</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud Armor</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud IAP</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud DNS</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Run a Security Command Center security scan on all VMs to extract a list of VMs with critical OS vulnerabilities every six months.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Run a gcloud CLI command from the Command Line Interface (CLI) to extract the VM's OS version information every six months.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Ensure that the Cloud Logging agent is installed on all VMs, and extract the OS last update log date every six months.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Ensure the OS Config agent is installed on all VMs and extract the patch status dashboard every six months.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Protect your web application against 'Slowloris' DDoS attacks. Which service?
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">D</span>
 <br/>
 </span>
 </div>
@@ -88,7 +88,8 @@ Protect your web application against 'Slowloris' DDoS attacks. Which service?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
 B. Cloud Armor: Jako system WAF i ochrony DDoS, Cloud Armor potrafi analizować behawior połączeń HTTP. Slowloris to atak polegający na utrzymywaniu wielu otwartych połączeń przez długi czas. Cloud Armor (zintegrowany z GCLB) posiada mechanizmy timeoutów i limitów połączeń, które skutecznie neutralizują takie próby.
@@ -98,28 +99,28 @@ A. Firewall: Nie 'rozumie' protokołu HTTP na tyle głęboko, by odróżnić wol
 C. IAP: Służy do logowania, nie do filtrowania ataków na protokół.
 D. DNS: Nie widzi sesji HTTP.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. Cloud Armor to jedyna ochrona L7 DDoS w GCP.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla B. Cloud Armor to jedyna ochrona L7 DDoS w GCP.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Eksperci przypominają: Google Cloud Load Balancer (GCLB) sam w sobie jest 'odporny' na wiele ataków tego typu, bo działa jako proxy. Cloud Armor (B) dodaje jednak granularną kontrolę (np. progi dropowania połączeń), co jest niezbędne w profesjonalnej architekturze.</p>
+<p><b>Sugerowana odpowiedź: D</b></p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Eksperci przypominają: Google Cloud Load Balancer (GCLB) sam w sobie jest 'odporny' na wiele ataków tego typu, bo działa jako proxy. Cloud Armor (B) dodaje jednak granularną kontrolę (np. progi dropowania połączeń), co jest niezbędne w profesjonalnej architekturze.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/armor/docs/managed-protection-overview" target="_blank">https://cloud.google.com/armor/docs/managed-protection-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

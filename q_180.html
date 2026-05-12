@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 180</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 180 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Grant a user permission to create and manage security policies in Cloud Armor across the organization. Which role?
+Your organization develops software involved in many open source projects and is concerned about software supply chain threats. You need to deliver provenance for the build to demonstrate the software is untampered. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> roles/compute.networkAdmin</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> roles/compute.securityAdmin</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> roles/compute.admin</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> roles/iam.securityAdmin</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> 1. Hire an external auditor to review and provide provenance. 2. Define the scope and conditions. 3. Get support from the Security department or representative. 4. Publish the attestation to your public web page.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> 1. Review the software process. 2. Generate private and public key pairs and use Pretty Good Privacy (PGP) protocols to sign the output software artifacts together with a file containing the address of your enterprise and point of contact. 3. Publish the PGP signed attestation to your public web page.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> 1. Publish the software code on GitHub as open source. 2. Establish a bug bounty program, and encourage the open source community to review, report, and fix the vulnerabilities.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> 1. Generate Supply Chain Levels for Software Artifacts (SLSA) level 3 assurance by using Cloud Build. 2. View the build provenance in the Security insights side panel within the Google Cloud console.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Grant a user permission to create and manage security policies in Cloud Armor ac
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">D</span>
 <br/>
 </span>
 </div>
@@ -88,38 +88,31 @@ Grant a user permission to create and manage security policies in Cloud Armor ac
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: D.
 
-Wyjaśnienie (Dlaczego poprawna):
-B. compute.securityAdmin: Ta rola daje pełne uprawnienia do zarządzania zasobami bezpieczeństwa sieciowego, takimi jak reguły firewalla, certyfikaty SSL oraz właśnie polityki Cloud Armor.
-
-Dlaczego inne są błędne:
-A. networkAdmin: Skupia się na routingu, podsieciach i VPN, nie ma pełnych praw do edycji polityk bezpieczeństwa (Cloud Armor).
-C. compute.admin: Daje te uprawnienia, ale jest ZBYT szeroka (pozwala też kasować wszystkie maszyny VM), co narusza zasadę Least Privilege.
-D. iam.securityAdmin: Zarządza uprawnieniami LUDZI (IAM), a nie politykami TECHNICZNYMI sieci (Cloud Armor).
-
-Konsensus społeczności ExamTopics: 100% na B. To standardowa rola dla 'Security Engineer' w GCP.</pre>
+Wyjaśnienie: SLSA (Supply-chain Levels for Software Artifacts) to standard bezpieczeństwa budowania oprogramowania. Cloud Build natywnie generuje dane o pochodzeniu (provenance) obrazów.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Wiele osób myli role 'Security Admin' (D) i 'Compute Security Admin' (B). Zapamiętaj: Rola D jest od IAM (ludzie). Rola B jest od Firewalla/Armora (sieć). To najczęstsza pułapka na egzaminie Professional Cloud Security Engineer.</p>
+<p><b>Sugerowana odpowiedź: D</b></p>
+<p><b>Głęboka analiza:</b> <p>Pozwala to udowodnić, że dany obraz kontenera powstał dokładnie z określonego kodu źródłowego w zaufanym środowisku budowania.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/compute/docs/access/iam#compute.securityAdmin" target="_blank">https://cloud.google.com/compute/docs/access/iam#compute.securityAdmin</a></li>
+<li><a href="https://cloud.google.com/build/docs/securing-builds/generate-build-provenance" target="_blank">https://cloud.google.com/build/docs/securing-builds/generate-build-provenance</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

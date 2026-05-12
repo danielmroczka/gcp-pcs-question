@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 112</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 112 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Integrate GCDS with LDAP. Replicate user/group lifecycle, disable manually created users in Cloud Identity. Next steps?
+Your company has been creating users manually in Cloud Identity to provide access to Google Cloud resources. Due to continued growth of the environment, you want to authorize the Google Cloud Directory Sync (GCDS) instance and integrate it with your on-premises LDAP server to onboard hundreds of users. You are required to:<br/>* Replicate user and group lifecycle changes from the on-premises LDAP server in Cloud Identity.<br/>* Disable any manually created users in Cloud Identity.<br/>You have already configured the LDAP search attributes to include the users and security groups in scope for Google Cloud. What should you do next to complete this solution?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Suspend domain users not found in LDAP, set recurring GCDS task.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Delete domain users not found in LDAP, run manually.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Exclude manually created users, set recurring task.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Exclude manually created users, run manually.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> 1. Configure the option to suspend domain users not found in LDAP. 2. Set up a recurring GCDS task.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> 1. Configure the option to delete domain users not found in LDAP. 2. Run GCDS after user and group lifecycle changes.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> 1. Configure the LDAP search attributes to exclude manually created Cloud Identity users not found in LDAP. 2. Set up a recurring GCDS task.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> 1. Configure the LDAP search attributes to exclude manually created Cloud Identity users not found in LDAP. 2. Run GCDS after user and group lifecycle changes.</li>
 
 </ul>
 </div>
@@ -88,37 +88,37 @@ Integrate GCDS with LDAP. Replicate user/group lifecycle, disable manually creat
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
-A. Suspend + Recurring task: Aby zachować AD/LDAP jako źródło prawdy, GCDS musi działać regularnie (recurring). Wybranie opcji 'Suspend' (zawieszenie) zamiast 'Delete' jest bezpieczniejsze - konta osób nieobecnych w LDAP zostaną zablokowane, co uniemożliwi im logowanie, ale pozwoli na odzyskanie danych w razie pomyłki. To skutecznie eliminuje ręcznie stworzone konta, których nie ma w LDAP.
+A. Suspend + Recurring: Aby AD/LDAP było jedynym źródłem prawdy, GCDS musi działać w pętli (recurring). Opcja 'Suspend' (zawieszenie konta) jest bezpieczniejsza niż usuwanie (Delete) – pozwala na odzyskanie danych, jeśli ktoś został omyłkowo usunięty z LDAP, jednocześnie blokując dostęp nieuprawnionym (tym, których nie ma w LDAP).
 
 Dlaczego inne są błędne:
-B. Delete: Jest zbyt drastyczne na początek integracji. Można niechcący usunąć ważne konta systemowe. Manualne uruchamianie nie zapewnia ciągłości bezpieczeństwa.
-C, D. Exclude: Jeśli wykluczysz ręcznie stworzone konta, to one nadal będą aktywne i będą stanowić lukę w polityce 'jedynego źródła prawdy'. Celem jest ich wyeliminowanie (disabling).
+C, D. Exclude: Jeśli wykluczysz ręcznie stworzone konta, to one nadal będą aktywne i będą stanowić lukę w polityce 'jedynego źródła prawdy'. Celem jest ich wyeliminowanie.
 
-Konsensus społeczności ExamTopics: Silne poparcie dla A. 'Suspend' to złoty standard przy pierwszej fazie wdrożenia GCDS.</pre>
+Konsensus społeczności ExamTopics: 100% na A. 'Suspend' to złoty standard wdrożeń Enterprise.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> GCDS posiada funkcję 'Sync non-existent users'. Jeśli konto istnieje w chmurze, a nie ma go w pliku/LDAP, GCDS może je zawiesić, co gwarantuje pełną replikację stanu z AD.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Na forach administratorzy IT podkreślają: 'Nigdy nie wybieraj opcji Delete w GCDS na początku integracji'. Opcja A (Suspend) pozwala zachować zgodność z polityką bezpieczeństwa (nikt niepowołany nie wejdzie), dając jednocześnie czas na wyjaśnienie ewentualnych pomyłek bez niszczenia plików użytkownika na Google Drive.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://support.google.com/a/answer/612003" target="_blank">https://support.google.com/a/answer/612003</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +133,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

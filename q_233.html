@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 233</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,15 @@
 <h2>Question 233 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Ensure that all Compute Engine instances are created with 'Confidential Computing' enabled across the organization. Which tool?
+You manage a fleet of virtual machines (VMs) in your organization. You have encountered issues with lack of patching in many VMs. You need to automate regular patching in your VMs and view the patch management data across multiple projects.<br/>What should you do? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> IAM roles</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Organization Policy: compute.restrictConfidentialComputing</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Instance Templates</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> VPC Service Controls</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> View patch management data in VM Manager by using OS patch management.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> View patch management data in Artifact Registry.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> View patch management data in a Security Command Center dashboard.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Deploy patches with Security Command Center by using Rapid Vulnerability Detection.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Deploy patches with VM Manager by using OS patch management.</li>
 
 </ul>
 </div>
@@ -80,7 +81,7 @@ Ensure that all Compute Engine instances are created with 'Confidential Computin
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">AE</span>
 <br/>
 </span>
 </div>
@@ -88,7 +89,8 @@ Ensure that all Compute Engine instances are created with 'Confidential Computin
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B. (Technicznie: Wymuszanie przez Org Policy).
+<pre>
+Odpowiedź: B. (Technicznie: Wymuszanie przez Org Policy).
 
 Wyjaśnienie (Dlaczego poprawna):
 B. Organization Policy: Google Cloud oferuje polityki organizacji pozwalające na wymuszenie użycia specyficznych technologii. Chociaż nazwa polityki może brzmieć `constraints/compute.requireConfidentialComputing`, to mechanizm 'Organization Policy' (B) jest jedynym w opcjach, który potrafi technicznie WYMUSIĆ tę cechę dla całej floty.
@@ -98,28 +100,28 @@ A. IAM: Nie steruje parametrami technicznymi VM.
 C. Templates: Deweloper może je pominąć.
 D. VPC SC: Dla API, nie dla RAM-u maszyny VM.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na B. Org Policy to standard dla 'Corporate Guardrails'.</pre>
+Konsensus społeczności ExamTopics: Zdecydowana większość na B. Org Policy to standard dla 'Corporate Guardrails'.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Na Reddit specjaliści przypominają: Confidential Computing wymaga specyficznego sprzętu (AMD EPYC). Jeśli wymusisz to polityką (B), deweloperzy nie będą mogli tworzyć tańszych instancji typu N1 czy E2. To ważna decyzja biznesowo-techniczna.</p>
+<p><b>Sugerowana odpowiedź: AE</b></p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Na Reddit specjaliści przypominają: Confidential Computing wymaga specyficznego sprzętu (AMD EPYC). Jeśli wymusisz to polityką (B), deweloperzy nie będą mogli tworzyć tańszych instancji typu N1 czy E2. To ważna decyzja biznesowo-techniczna.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/overview" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +136,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 128</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 128 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Public-facing application outage. Suspect firewall rules. Test if rules are working properly. What to do?
+Users are reporting an outage on your public-facing application that is hosted on Compute Engine. You suspect that a recent change to your firewall rules is responsible. You need to test whether your firewall rules are working properly. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enable Firewall Rules Logging and use Logs Explorer.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Network traffic analyzer on bastion host.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Disable rules individually in pre-prod.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enable VPC Flow Logs.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enable Firewall Rules Logging on the latest rules that were changed. Use Logs Explorer to analyze whether the rules are working correctly.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Connect to a bastion host in your VPC. Use a network traffic analyzer to determine at which point your requests are being blocked.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> In a pre-production environment, disable all firewall rules individually to determine which one is blocking user traffic.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enable VPC Flow Logs in your VPC. Use Logs Explorer to analyze whether the rules are working correctly.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Public-facing application outage. Suspect firewall rules. Test if rules are work
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
 A. Firewall Rules Logging: To najszybsza i najdokładniejsza metoda diagnozy. Rejestruje ona każdy pakiet, który został dopuszczony lub odrzucony przez konkretną regułę. W Logs Explorerze zobaczysz dokładnie nazwę reguły, która 'zabiła' ruch aplikacji.
@@ -98,28 +99,28 @@ B. Bastion host: Analiza z poziomu bastionu nie powie Ci, co dzieje się na inte
 C. Disable rules: Bardzo ryzykowne i czasochłonne. Może pogorszyć sytuację bezpieczeństwa na produkcji.
 D. VPC Flow Logs: Rejestrują przepływy, ale nie zawsze precyzują nazwę reguły firewalla, która spowodowała blokadę tak czytelnie jak dedykowane logi firewalla.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na A. To standardowe narzędzie do debugowania sieci w GCP.</pre>
+Konsensus społeczności ExamTopics: Zdecydowana większość na A. To standardowe narzędzie do debugowania sieci w GCP.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Firewall Logging pozwala również na audytowanie reguł, które nie są używane (brak trafień w logach), co pomaga w optymalizacji polityk.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Firewall Logging pozwala również na audytowanie reguł, które nie są używane (brak trafień w logach), co pomaga w optymalizacji polityk.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc/docs/firewall-rules-logging" target="_blank">https://cloud.google.com/vpc/docs/firewall-rules-logging</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

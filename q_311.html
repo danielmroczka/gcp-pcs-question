@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 311</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 311 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-automatically scan deployment pipeline for vulnerabilities and ensure only scanned/verified containers run. What to do?
+Your organization is worried about recent news headlines regarding application vulnerabilities in production applications that have led to security breaches. You want to automatically scan your deployment pipeline for vulnerabilities and ensure only scanned and verified containers can run in the environment. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> K8s RBAC source of truth.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> gcloud describe vulnerability in CI/CD.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud Code feedback.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Binary Authorization + attestations of scans.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use Kubernetes role-based access control (RBAC) as the source of truth for cluster access by granting "container.clusters.get" to limited users. Restrict deployment access by allowing these users to generate a kubeconfig file containing the configuration access to the GKE cluster.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use gcloud artifacts docker images describe LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE_ID@sha256:HASH --show-package-vulnerability in your CI/CD pipeline, and trigger a pipeline failure for critical vulnerabilities.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Enforce the use of Cloud Code for development so users receive real-time security feedback on vulnerable libraries and dependencies before they check in their code.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enable Binary Authorization and create attestations of scans.</li>
 
 </ul>
 </div>
@@ -88,38 +88,39 @@ automatically scan deployment pipeline for vulnerabilities and ensure only scann
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
-D. Binary Authorization + Attestations: Jest to kompletne, natywne rozwiązanie GCP. Proces polega na tym, że skaner (Container Analysis) po znalezieniu braku krytycznych podatności tworzy cyfrowy podpis (atestację). Binary Authorization w klastrze GKE sprawdza ten podpis przed uruchomieniem kontenera. Jeśli atestacji brak, wdrożenie jest automatycznie blokowane.
+A. Workload Identity + Secret Manager: To duet idealny. Workload Identity (WI) łączy tożsamość poda z tożsamością Google IAM, co eliminuje potrzebę używania statycznych kluczy JSON. Secret Manager (SM) bezpiecznie przechowuje dane wrażliwe. WI pozwala podowi na pobranie sekretu bezpośrednio z API SM bez żadnych haseł w konfiguracji.
 
 Dlaczego inne są błędne:
-A. K8s RBAC: Zarządza tym, co użytkownik może zrobić wewnątrz klastra, nie weryfikuje 'bezpieczeństwa' obrazu kontenera przed uruchomieniem.
-B. gcloud describe: Dostarcza informacji, ale sam w sobie nie stanowi mechanizmu blokady (enforcement). Musiałbyś sam dopisać całą logikę blokowania.
-C. Cloud Code: To wtyczka do IDE pomagająca programiście pisać kod, nie jest elementem wymuszania standardów w pipeline produkcyjnym.
+B, C: Wymagają zarządzania statycznymi kluczami (JSON), co generuje narzut operacyjny i ryzyko wycieku.
+D. CMEK: To szyfrowanie dysku, a nie system zarządzania sekretami aplikacji.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla D. To standardowa architektura 'Secure Software Supply Chain'.</pre>
+Konsensus społeczności ExamTopics: 100% na A. WI + SM to 'złoty standard' bezpieczeństwa mikroserwisów w GCP.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Binary Authorization pozwala na zdefiniowanie polityki 'Require Attestations' od zaufanych skanerów, co gwarantuje, że nieprzebadany kod nigdy nie trafi na produkcję.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Eksperci na GitHubie sugerują użycie 'Secret Manager CSI Driver', który mapuje sekrety bezpośrednio na wolumeny wewnątrz kontenerów. Jest to rozwinięcie opcji A, które jeszcze bardziej upraszcza kod aplikacji.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/binary-authorization" target="_blank">https://cloud.google.com/binary-authorization</a></li>
+<li><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity" target="_blank">https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity</a></li>
+<li><a href="https://cloud.google.com/secret-manager/docs/overview" target="_blank">https://cloud.google.com/secret-manager/docs/overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 319</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 319 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Enforce Binary Authorization for all new Cloud Run jobs/services in production. What to do?
+The InfoSec team has mandated that all new Cloud Run jobs and services in production must have Binary Authorization enabled. You need to enforce this requirement. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Org policy to require BinAuth enforcement.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> SHA custom rule.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Remove Cloud Run admin role.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> BinAuth custom policy not editable by devs.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure an organization policy to require Binary Authorization enforcement on images deployed to Cloud Run.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure a Security Health Analytics (SHA) custom rule that prevents the execution of Cloud Run jobs and services without Binary Authorization.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Ensure the Cloud Run admin role is not assigned to developers.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure a Binary Authorization custom policy that is not editable by developers and auto-attaches to all Cloud Run jobs and services.</li>
 
 </ul>
 </div>
@@ -88,38 +88,39 @@ Enforce Binary Authorization for all new Cloud Run jobs/services in production. 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
-A. Org Policy Enforcement: Istnieje polityka organizacji `run.allowedBinaryAuthorizationPolicies`, która pozwala administratorowi wymusić stosowanie Binary Authorization dla wszystkich usług Cloud Run w danym folderze lub projekcie. To jedyny sposób na systemowe i centralne wyegzekwowanie tego wymogu.
+B. Event Threat Detection (ETD): Jest to silnik analityczny SCC Premium, który wykorzystuje modele Machine Learning Google oraz bazy Threat Intelligence do wykrywania wycieków danych (Data Exfiltration) na podstawie śladów w logach Flow i logach audytowych.
 
 Dlaczego inne są błędne:
-B. SHA rule: Powie Ci, że ktoś nie używa BinAuth (detekcja), ale mu nie przeszkodzi (brak enforcementu).
-C. Remove roles: Deweloperzy nie mogliby w ogóle pracować. Celem jest pozwolenie im na pracę, ale przy zachowaniu standardu.
-D. Custom policy: Sama polityka BinAuth nie zadziała, jeśli nie zostanie jawnie 'włączona' (enforced) na poziomie usługi, co robi polityka organizacji (A).
+A. BigQuery: Narzędzie do analizy ręcznej, nie jest 'automatycznym systemem detekcji ML' w czasie rzeczywistym.
+C. Flow Logs: To surowe dane wejściowe dla ETD (B).
+D. Packet Mirroring: Przechwytuje dane, ale do ich analizy ML potrzebowałbyś własnego, drogiego rozwiązania.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla A. To standardowy mechanizm zarządzania standardami serverless.</pre>
+Konsensus społeczności ExamTopics: 100% na B. SCC Premium to mózg detekcji zagrożeń w GCP.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Polityka ta jest dziedziczona. Jeśli ustawisz ją na folderze 'Production', każdy nowy mikroserwis Cloud Run tam stworzony będzie automatycznie wymagał atestacji obrazu.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Inżynierowie na Reddit podkreślają, że ETD (B) jest 'bezobsługowy'. Google stale uczy modele wykrywania nowych metod wycieku danych, co czyni to rozwiązanie znacznie skuteczniejszym od statycznych reguł w systemach on-premises.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/binary-authorization/docs/run/overview" target="_blank">https://cloud.google.com/binary-authorization/docs/run/overview</a></li>
+<li><a href="https://cloud.google.com/security-command-center/docs/concepts-event-threat-detection-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-event-threat-detection-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

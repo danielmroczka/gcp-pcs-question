@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 326</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 326 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Node auto-updates missed notification issues in GKE. Scalable cloud-first process. What to do?
+Your organization deploys a large number of containerized applications on Google Kubernetes Engine (GKE). Node updates are currently applied manually. Audit findings show that a critical patch has not been installed due to a missed notification. You need to design a more reliable, cloud-first, and scalable process for node updates. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Node auto-upgrades in maintenance windows.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Custom script.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Self-managed Kubernetes.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Daily reboot.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure node auto-upgrades for node pools in the maintenance windows.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Develop a custom script to continuously check for patch availability, download patches, and apply the patches across all components of the cluster.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Migrate the cluster infrastructure to a self-managed Kubernetes environment for greater control over the patching process.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Schedule a daily reboot for all nodes to automatically upgrade.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Node auto-updates missed notification issues in GKE. Scalable cloud-first proces
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
 A. GKE Node Auto-upgrades: Jest to usługa zarządzana, która automatycznie dba o to, by węzły miały najnowsze poprawki bezpieczeństwa. Skaluje się ona automatycznie dla dowolnej liczby klastrów. Użycie 'Maintenance Windows' pozwala kontrolować, kiedy te aktualizacje mogą się odbywać, aby nie zakłócać pracy aplikacji.
@@ -98,28 +99,28 @@ B. Custom script: Rozwiązanie trudne w utrzymaniu i nieskalowalne.
 C. Self-managed: Zwiększa narzut operacyjny i ryzyko błędów (musisz sam dbać o wszystko). GKE jest właśnie po to, by Google robiło to za Ciebie.
 D. Daily reboot: Nie instaluje poprawek, po prostu restartuje potencjalnie dziurawy system.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla A. To fundament bezpieczeństwa platformy GKE.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla A. To fundament bezpieczeństwa platformy GKE.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Node auto-upgrades są powiązane z wersją Mastera klastra. Google najpierw aktualizuje Mastera, a potem stopniowo, w sposób bezpieczny, wymienia węzły robocze.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Node auto-upgrades są powiązane z wersją Mastera klastra. Google najpierw aktualizuje Mastera, a potem stopniowo, w sposób bezpieczny, wymienia węzły robocze.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/node-auto-upgrades" target="_blank">https://cloud.google.com/kubernetes-engine/docs/how-to/node-auto-upgrades</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 223</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 223 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Analyze VPC network traffic to detect data exfiltration via DNS tunneling. Which service?
+After completing a security vulnerability assessment, you learned that cloud administrators leave Google Cloud CLI sessions open for days. You need to reduce the risk of attackers who might exploit these open sessions by setting these sessions to the minimum duration.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> BigQuery via Log Sink</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Event Threat Detection (ETD) with Cloud DNS logs</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud Trace</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Packet Mirroring</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Set the session duration for the Google session control to one hour.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Set the reauthentication frequency for the Google Cloud Session Control to one hour.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Set the organization policy constraint constraints/iam.allowServiceAccountCredentialLifetimeExtension to one hour.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Set the organization policy constraint constraints/iam.serviceAccountKeyExpiryHours to one hour and inheritFromParent to false.</li>
 
 </ul>
 </div>
@@ -88,38 +88,31 @@ Analyze VPC network traffic to detect data exfiltration via DNS tunneling. Which
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
-Wyjaśnienie (Dlaczego poprawna):
-B. ETD + DNS Logs: DNS Tunneling to metoda ukrywania danych w zapytaniach DNS. ETD posiada dedykowany detektor, który analizuje logi z Cloud DNS i szuka nietypowo długich lub licznych zapytań o dziwne subdomeny, co jest sygnaturą tego ataku.
-
-Dlaczego inne są błędne:
-A. BigQuery: Wymagałoby ręcznego pisania bardzo trudnych algorytmów analitycznych.
-C. Cloud Trace: Nie widzi ruchu sieciowego DNS.
-D. Packet Mirroring: Zadziałałoby, ale analiza surowego ruchu UDP/53 jest znacznie trudniejsza i droższa niż analiza logów przez gotowy silnik ETD (B).
-
-Konsensus społeczności ExamTopics: 100% na B. DNS Tunneling detection to mocna strona ETD.</pre>
+Wyjaśnienie: Reauthentication frequency w Google Cloud Session Control wymusza na użytkowniku ponowne podanie hasła/MFA co określony czas, aby gcloud mógł dalej działać.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Eksperci na forach zauważają, że hakerzy uwielbiają DNS, bo jest on zazwyczaj otwarty na każdym firewallu. ETD (B) to jedyny automat w GCP, który potrafi to 'wyłowić' bez zapychania sieci kopiami pakietów.</p>
+<p><b>Głęboka analiza:</b> <p>To bezpośrednio adresuje problem 'porzuconych' sesji w terminalu.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/security-command-center/docs/concepts-event-threat-detection-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-event-threat-detection-overview</a></li>
+<li><a href="https://support.google.com/cloudidentity/answer/9366694" target="_blank">https://support.google.com/cloudidentity/answer/9366694</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

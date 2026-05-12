@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 130</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,15 +64,15 @@
 <h2>Question 130 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Google Cloud Armor requirements to prevent XSS/SQLi. Which two?
+You plan to use a Google Cloud Armor policy to prevent common attacks such as cross-site scripting (XSS) and SQL injection (SQLi) from reaching your web application's backend. What are two requirements for using Google Cloud Armor security policies? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> External SSL proxy LB.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Match only on L7 attributes.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Premium Network Tier.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Backend service scheme EXTERNAL.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> External HTTP(S) load balancer.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> The load balancer must be an external SSL proxy load balancer.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Google Cloud Armor Policy rules can only match on Layer 7 (L7) attributes.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> The load balancer must use the Premium Network Service Tier.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> The backend service's load balancing scheme must be EXTERNAL.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> The load balancer must be an external HTTP(S) load balancer.</li>
 
 </ul>
 </div>
@@ -89,7 +89,8 @@ Google Cloud Armor requirements to prevent XSS/SQLi. Which two?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: DE.
+<pre>
+Odpowiedź: DE.
 
 Wyjaśnienie (Dlaczego poprawna):
 D. Backend scheme EXTERNAL: Cloud Armor jest usługą chroniącą zasoby wystawione na internet. Backend Load Balancera musi być skonfigurowany jako zewnętrzny.
@@ -100,28 +101,28 @@ A. SSL Proxy: To Load Balancer warstwy 4 (TCP). Cloud Armor może go chronić pr
 B. L7 attributes: Cloud Armor może filtrować również po L3/L4 (IP, porty), nie ogranicza się tylko do L7.
 C. Premium Tier: Choć zalecany, nie jest technicznym wymogiem 'koniecznym' do działania samych reguł WAF Cloud Armor (choć standard tier ma ograniczone LB).
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na DE. To fundamenty architektury WAF w Google Cloud.</pre>
+Konsensus społeczności ExamTopics: Zdecydowana większość na DE. To fundamenty architektury WAF w Google Cloud.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: DE</b></p>
-<p><b>Głęboka analiza:</b> Cloud Armor 'żyje' wewnątrz polityki bezpieczeństwa (Security Policy), którą przypinasz do Backend Service Twojego Load Balancera HTTP(S).</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Cloud Armor 'żyje' wewnątrz polityki bezpieczeństwa (Security Policy), którą przypinasz do Backend Service Twojego Load Balancera HTTP(S).</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/armor/docs/security-policy-concepts" target="_blank">https://cloud.google.com/armor/docs/security-policy-concepts</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -136,9 +137,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

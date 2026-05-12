@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 359</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 359 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Isolate GCS access for a project, allow team to manage restrictions at project level, restricted to corporate computers. What to do?
+Your company's storage team manages all product images within a specific Google Cloud project. To maintain control, you must isolate access to Cloud Storage for this project, allowing the storage team to manage restrictions at the project level. They must be restricted to using corporate computers. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> IAM roles project level.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Org-level firewall rules.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Context-Aware Access + access level + org policy at project level.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> VPC SC perimeter + ingress/egress.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use Identity and Access Management (IAM) roles at the project level within the storage team's project. Grant the storage team granular permissions on the project's Cloud Storage resources.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Employ organization-level firewall rules to block all traffic to Cloud Storage. Create exceptions for specific service accounts used by the storage team within their project.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use Context-Aware Access. Create an access level that defines the required context. Apply it as an organization policy specifically at the project level, restricting access to Cloud Storage based on that context.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Implement VPC Service Controls by establishing an organization-wide service perimeter with all projects. Configure ingress and egress rules to restrict access to Cloud Storage based on IP address ranges.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Isolate GCS access for a project, allow team to manage restrictions at project l
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: C.
 
 Wyjaśnienie (Dlaczego poprawna):
 C. Context-Aware Access (CAA) at Project Level: CAA pozwala na zdefiniowanie warunków dostępu (np. 'tylko z zarządzanych komputerów firmowych') i przypisanie ich bezpośrednio do projektu. Spełnia to wymóg izolacji dostępu i pozwala zespołowi na samodzielne zarządzanie tymi regułami na ich poziomie.
@@ -98,28 +99,28 @@ A. IAM roles: Zarządzają tylko tożsamością (kto), nie sprawdzają stanu urz
 B. Firewall: Nie ma wglądu w to, czy laptop użytkownika jest 'firmowy' i ma aktualny system operacyjny.
 D. VPC SC: Bardzo potężne, ale zazwyczaj perymetrami zarządza centralny zespół security, co narusza wymóg 'allow team to manage at project level'. CAA (C) jest bardziej elastyczne dla pojedynczych projektów.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na C. To idealny balans między bezpieczeństwem a autonomią zespołu.</pre>
+Konsensus społeczności ExamTopics: Zdecydowana większość na C. To idealny balans między bezpieczeństwem a autonomią zespołu.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> CAA wykorzystuje dane z Google Endpoint Verification, aby sprawdzić np. czy dysk laptopa jest zaszyfrowany i czy system ma hasło ekranowe.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> CAA wykorzystuje dane z Google Endpoint Verification, aby sprawdzić np. czy dysk laptopa jest zaszyfrowany i czy system ma hasło ekranowe.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/access-context-manager/docs/context-aware-access" target="_blank">https://cloud.google.com/access-context-manager/docs/context-aware-access</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

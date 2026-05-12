@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 88</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 88 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Expand application to a second region. Use a single external IP to distribute requests to both regions. What should you do?
+Your company operates an application instance group that is currently deployed behind a Google Cloud load balancer in us-central-1 and is configured to use the Standard Tier network. The infrastructure team wants to expand to a second Google Cloud region, us-east-2. You need to set up a single external IP address to distribute new requests to the instance groups in both regions.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use network endpoint groups.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use Premium Tier network for the load balancer.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use Standard Tier network in both regions.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use Cloud VPN and Private Access.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Change the load balancer backend configuration to use network endpoint groups instead of instance groups.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Change the load balancer frontend configuration to use the Premium Tier network, and add the new instance group.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a new load balancer in us-east-2 using the Standard Tier network, and assign a static external IP address.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a Cloud VPN connection between the two regions, and enable Google Private Access.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Expand application to a second region. Use a single external IP to distribute re
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
 B. Premium Tier Network: Tylko Premium Tier w Google Cloud wspiera globalne adresy IP (Anycast IP) i globalny Load Balancing. Pozwala to na użycie JEDNEGO adresu IP dla całego świata, który automatycznie kieruje ruch do najbliższego regionu (np. US lub EU) w zależności od lokalizacji klienta.
@@ -98,28 +99,28 @@ A. NEGs: Są mechanizmem backendowym (np. dla kontenerów), ale same w sobie nie
 C. Standard Tier: Działa tylko regionalnie. Musiałbyś mieć osobne adresy IP dla każdego regionu i zarządzać nimi np. przez zewnętrzny DNS, co nie spełnia wymogu 'single external IP'.
 D. Cloud VPN: Służy do łączności hybrydowej, nie do globalnego serwowania aplikacji webowych pod jednym IP.
 
-Konsensus społeczności ExamTopics: 100% na B. To kluczowa różnica między poziomami sieci w Google Cloud.</pre>
+Konsensus społeczności ExamTopics: 100% na B. To kluczowa różnica między poziomami sieci w Google Cloud.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Premium Tier przesyła ruch po światłowodach Google tak długo, jak to możliwe. Standard Tier wyrzuca ruch do publicznego internetu tak szybko, jak to możliwe. Tylko Premium pozwala na globalną magię Anycast IP.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Premium Tier przesyła ruch po światłowodach Google tak długo, jak to możliwe. Standard Tier wyrzuca ruch do publicznego internetu tak szybko, jak to możliwe. Tylko Premium pozwala na globalną magię Anycast IP.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/network-tiers/docs/overview" target="_blank">https://cloud.google.com/network-tiers/docs/overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

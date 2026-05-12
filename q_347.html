@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 347</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 347 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-runtime threat detection for containers in production folder (libs loaded, scripts executed). Findings visible in SCC. What to do?
+Your company has recently enabled Security Command Center at the organization level. You need to implement runtime threat detection for applications running in containers within projects residing in the production folder. Specifically, you need to be notified if additional libraries are loaded or malicious scripts are executed within these running containers. You need to configure Security Command Center to meet this requirement while ensuring findings are visible within Security Command Center. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Log-based metrics.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> SHA container runtime monitor.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Container-Optimized OS.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enable Container Threat Detection in SCC Premium.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create log-based metrics and alerts in Cloud Logging and Cloud Monitoring for suspicious container activity within the production folder.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure Security Health Analytics within Security Command Center to monitor container runtime vulnerabilities in the production folder.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Ensure that the containers in the production folder are running on hosts that are using Container-Optimized OS.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enable Container Threat Detection in Security Command Center Premium tier for the projects within the production folder.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ runtime threat detection for containers in production folder (libs loaded, scrip
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: D.
 
 Wyjaśnienie (Dlaczego poprawna):
 D. Container Threat Detection: Jest to specyficzna funkcja SCC Premium zaprojektowana dokładnie do monitorowania wnętrza działających kontenerów. Wykrywa ona podejrzane zdarzenia, takie jak uruchomienie nieznanego skryptu, ładowanie złośliwej biblioteki czy otwarcie reverse-shell.
@@ -98,28 +99,28 @@ A. Log-based metrics: Zliczają wystąpienia fraz w logach, ale nie mają wgląd
 B. SHA: Skupia się na błędach w konfiguracji chmury (np. 'pod jest uprzywilejowany'), a nie na tym co pod ROBI w trakcie działania (runtime).
 C. COS: To bezpieczny system operacyjny, ale sam w sobie nie raportuje zagrożeń runtime do SCC bez włączonej usługi detekcji (D).
 
-Konsensus społeczności ExamTopics: 100% na D. Runtime threat detection = CTD w Google Cloud.</pre>
+Konsensus społeczności ExamTopics: 100% na D. Runtime threat detection = CTD w Google Cloud.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> CTD działa poprzez zbieranie sygnałów z jądra systemu Linux i przesyłanie ich do silnika analitycznego SCC, co pozwala na wykrycie włamań 'zero-day'.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> CTD działa poprzez zbieranie sygnałów z jądra systemu Linux i przesyłanie ich do silnika analitycznego SCC, co pozwala na wykrycie włamań 'zero-day'.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/security-command-center/docs/concepts-container-threat-detection-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-container-threat-detection-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

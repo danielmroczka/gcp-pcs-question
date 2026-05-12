@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 254</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 254 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Applications in multiple clouds access GCP resources using short-lived credentials. What to do?
+Your organization has applications that run in multiple clouds. The applications require access to a Google Cloud resource running in your project. You must use short-lived access credentials to maintain security across the clouds. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Managed workload identity.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> SA key download.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Workload identity pool with provider for each cloud, impersonation.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> VPC firewall ingress IP allowlist.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a managed workload identity. Bind an attested identity to the Compute Engine workload.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a service account key. Download the key to each application that requires access to the Google Cloud resource.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a workload identity pool with a workload identity provider for each external cloud. Set up a service account and add an IAM binding for impersonation.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a VPC firewall rule for ingress traffic with an allowlist of the IP ranges of the external cloud applications.</li>
 
 </ul>
 </div>
@@ -88,37 +88,38 @@ Applications in multiple clouds access GCP resources using short-lived credentia
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: C.
 
 Wyjaśnienie (Dlaczego poprawna):
-C. Workload Identity Pools: To mechanizm federacji tożsamości. Tworzysz jedną pulę i dodajesz do niej dostawców (Providers) dla AWS i Azure. Aplikacje używają swoich natywnych poświadczeń (np. AWS IAM Role) do pobrania krótkotrwałych tokenów GCP poprzez impersonację.
+C. Workload Identity Pools: To mechanizm dedykowany dla scenariuszy Multi-cloud. Tworzysz dostawców (Providers) dla AWS i Azure wewnątrz jednej puli, co pozwala tym aplikacjom na wymianę ich natywnych tokenów na tymczasowe (short-lived) tokeny GCP.
 
 Dlaczego inne są błędne:
-B. SA key download: Tworzy statyczne, niebezpieczne klucze JSON - przeciwieństwo wymogu 'short-lived'.
-D. Firewall ingress: Kontroluje sieć, a nie tożsamość i uprawnienia aplikacji multi-cloud.
+B. SA key download: Tworzy statyczne, niebezpieczne klucze - przeciwieństwo wymogu 'short-lived'.
+D. Firewall ingress: Kontroluje sieć, nie zarządza tożsamością i poświadczeniami.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla C. WIF to jedyne skalowalne rozwiązanie multi-cloud w GCP.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla C. To standardowa architektura multi-cloud w GCP.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> To rozwiązanie eliminuje 'Secret Management overhead' - nie musisz już rotować kluczy GCP na serwerach w AWS.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Federacja tożsamości jest bezpieczniejsza, ponieważ nie wymaga przesyłania ani przechowywania żadnych sekretów GCP poza samą chmurą Google.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/iam/docs/workload-identity-federation" target="_blank">https://cloud.google.com/iam/docs/workload-identity-federation</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 270</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 270 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Healthcare provider: data residency, administrative approval required, auditable. What to do?
+You work for a healthcare provider that is expanding into the cloud to store and process sensitive patient data. You must ensure the chosen Google Cloud configuration meets these strict regulatory requirements:<br/>• Data must reside within specific geographic regions.<br/>• Certain administrative actions on patient data require explicit approval from designated compliance officers.<br/>• Access to patient data must be auditable.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Standard region, CAA, logging, Access Transparency.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Assured Workloads, Access Approval, logging, Access Transparency.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Assured Workloads multiple regions, custom roles, VPC SC.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Multiple standard regions, ACLs, logging.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Select a standard Google Cloud region. Restrict access to patient data based on user location and job function by using Access Context Manager. Enable both Cloud Audit Logging and Access Transparency.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Deploy an Assured Workloads environment in an approved region. Configure Access Approval for sensitive operations on patient data. Enable both Cloud Audit Logs and Access Transparency.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Deploy an Assured Workloads environment in multiple regions for redundancy. Utilize custom IAM roles with granular permissions. Isolate network-level data by using VPC Service Controls.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Select multiple standard Google Cloud regions for high availability. Implement Access Control Lists (ACLs) on individual storage objects containing patient data. Enable Cloud Audit Logs.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Healthcare provider: data residency, administrative approval required, auditable
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
 B. Assured Workloads + Access Approval: Ten zestaw idealnie pasuje do wymogów: 1. Data residency (Assured Workloads wymusza regiony). 2. Administrative approval (Access Approval wymusza Twoją zgodę dla Google). 3. Auditable (Logging + Access Transparency dokumentują wszystko).
@@ -98,28 +99,28 @@ A. Standard region: Nie 'wymusza' rezydencji tak twardo i automatycznie jak Assu
 C. VPC SC: Chroni przed wyciekiem, ale nie jest mechanizmem 'zatwierdzania dostępu personelu Google' (Access Approval).
 D. ACLs: Przeżytek, nie spełniają nowoczesnych wymogów compliance dla dużych organizacji medycznych.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. Assured Workloads to 'healthcare compliance' w jednym pakiecie.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla B. Assured Workloads to 'healthcare compliance' w jednym pakiecie.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Assured Workloads tworzy 'bezpieczną bańkę', w której wszystkie nowo tworzone zasoby muszą być zgodne z wybranym standardem (np. HIPAA dla zdrowia).</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Assured Workloads tworzy 'bezpieczną bańkę', w której wszystkie nowo tworzone zasoby muszą być zgodne z wybranym standardem (np. HIPAA dla zdrowia).</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/assured-workloads/docs/overview" target="_blank">https://cloud.google.com/assured-workloads/docs/overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

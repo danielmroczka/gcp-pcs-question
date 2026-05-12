@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 81</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 81 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-A customer is running an analytics workload where Compute Engine instances access data in Cloud Storage. You want to ensure this workload cannot access, or be accessed from, the internet. Which two strategies should you use? (Choose two.)
+A customer is running an analytics workload on Google Cloud Platform (GCP) where Compute Engine instances are accessing data stored on Cloud Storage.<br/>Your team wants to make sure that this workload will not be able to access, or be accessed from, the internet.<br/>Which two strategies should your team use to meet these requirements? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure Private Google Access on the subnet.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Avoid assigning public IP addresses to the instances.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Run the cluster on a separate subnet.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Turn off IP forwarding.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure Private Google Access on the Compute Engine subnet</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Avoid assigning public IP addresses to the Compute Engine cluster.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Make sure that the Compute Engine cluster is running on a separate subnet.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Turn off IP forwarding on the Compute Engine instances in the cluster.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Configure a Cloud NAT gateway.</li>
 
 </ul>
@@ -89,7 +89,8 @@ A customer is running an analytics workload where Compute Engine instances acces
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: AB.
+<pre>
+Odpowiedź: AB.
 
 Wyjaśnienie (Dlaczego poprawna):
 A. Private Google Access: Pozwala instancjom w podsieci, które nie posiadają publicznych adresów IP, na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage). Jest to niezbędne, aby maszyny odizolowane od internetu mogły nadal pracować z danymi w GCS.
@@ -100,28 +101,28 @@ C. Separate subnet: Sam podział na podsieci nie blokuje dostępu do internetu, 
 D. IP forwarding: Dotyczy przekazywania pakietów przez maszynę (router programowy), nie kontroluje dostępu do API Google.
 E. Cloud NAT: Służy właśnie do umożliwienia maszynom bez publicznego IP dostępu DO internetu (np. po updejty), co jest sprzeczne z wymogiem 'cannot access the internet'.
 
-Konsensus społeczności ExamTopics: 100% na AB. Standardowa metoda izolacji obciążeń korzystających z usług Google.</pre>
+Konsensus społeczności ExamTopics: 100% na AB. Standardowa metoda izolacji obciążeń korzystających z usług Google.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: AB</b></p>
-<p><b>Głęboka analiza:</b> To klasyczne pytanie sprawdzające zrozumienie 'Private Google Access'. Kluczem jest zrozumienie, że API Google mają publiczne adresy IP, więc maszyna bez Public IP potrzebuje specjalnego 'mostu' (PGA), aby z nich korzystać bez wychodzenia do internetu.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> To klasyczne pytanie sprawdzające zrozumienie 'Private Google Access'. Kluczem jest zrozumienie, że API Google mają publiczne adresy IP, więc maszyna bez Public IP potrzebuje specjalnego 'mostu' (PGA), aby z nich korzystać bez wychodzenia do internetu.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">https://cloud.google.com/vpc/docs/private-google-access</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -136,9 +137,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

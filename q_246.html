@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 246</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 246 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-What is the primary benefit of using Google Cloud Certificate Manager?
+Your organization relies heavily on Cloud Run for its containerized applications. You utilize Cloud Build for image creation, Artifact Registry for image storage, and Cloud Run for deployment. You must ensure that containers with vulnerabilities rated above a common vulnerability scoring system (CVSS) score of "medium" are not deployed to production. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> To automate the build of container images.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> To provide a centralized way to manage and deploy SSL/TLS certificates for Google Cloud Load Balancers.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> To manage Kubernetes namespaces.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> To provide a container registry.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Implement vulnerability scanning as part of the Cloud Build process. If any medium or higher vulnerabilities are detected, manually rebuild the image with updated components.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Perform manual vulnerability checks post-build, but before Cloud Run deployment. Implement a manual security-engineer-driven remediation process.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure Binary Authorization on Cloud Run to enforce image signatures. Create policies to allow deployment only for images passing a defined vulnerability threshold.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Utilize a vulnerability scanner during the Cloud Build stage and set Artifact Registry permissions to block images containing vulnerabilities above "medium."</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ What is the primary benefit of using Google Cloud Certificate Manager?
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">C</span>
 <br/>
 </span>
 </div>
@@ -88,36 +88,31 @@ What is the primary benefit of using Google Cloud Certificate Manager?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: C.
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Certificate Manager: To centralny punkt kontroli nad certyfikatami SSL/TLS. Pozwala na automatyczne wystawianie, odnawianie (przez Let's Encrypt lub Google CA) i wdrażanie certyfikatów na Load Balancerach bez manualnej pracy administratora przy każdej domenie.
-
-Dlaczego inne są błędne:
-A, C, D: To funkcje innych usług.
-
-Konsensus społeczności ExamTopics: 100% poparcia dla B. Zarządzanie SSL = Certificate Manager.</pre>
+Wyjaśnienie: Binary Authorization potrafi integrować się z wynikami skanowania podatności i blokować wdrożenia, które nie spełniają określonych reguł (np. brak wysokich CVE).
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> W dyskusjach o Certificate Managerze podkreśla się wsparcie dla 'Wildcard certificates' i certyfikatów 'Publicly trusted'. Eksperci zauważają, że automatyzacja odnawiania certyfikatów (B) eliminuje jedną z najczęstszych przyczyn awarii systemów IT – wygaśnięcie certyfikatu SSL.</p>
+<p><b>Sugerowana odpowiedź: C</b></p>
+<p><b>Głęboka analiza:</b> <p>Tworzysz regułę: 'nie dopuszczaj obrazu, jeśli skaner znalazł coś powyżej Medium'.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/certificate-manager/docs/overview" target="_blank">https://cloud.google.com/certificate-manager/docs/overview</a></li>
+<li><a href="https://cloud.google.com/binary-authorization/docs/vulnerability-checks" target="_blank">https://cloud.google.com/binary-authorization/docs/vulnerability-checks</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -132,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

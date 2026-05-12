@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 158</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 158 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Protect your VPC from data exfiltration where an authorized user tries to copy data from your Cloud Storage to a bucket in their personal GCP project. Which service?
+You are deploying a web application hosted on Compute Engine. A business requirement mandates that application logs are preserved for 12 years and data is kept within European boundaries. You want to implement a storage solution that minimizes overhead and is cost-effective. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud IAM</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> VPC Service Controls</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> VPC Firewall rules</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Armor</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a Cloud Storage bucket to store your logs in the EUROPE-WEST1 region. Modify your application code to ship logs directly to your bucket for increased efficiency.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure your Compute Engine instances to use the Google Cloud's operations suite Cloud Logging agent to send application logs to a custom log bucket in the EUROPE-WEST1 region with a custom retention of 12 years.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use a Pub/Sub topic to forward your application logs to a Cloud Storage bucket in the EUROPE-WEST1 region.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure a custom retention policy of 12 years on your Google Cloud's operations suite log bucket in the EUROPE-WEST1 region.</li>
 
 </ul>
 </div>
@@ -88,38 +88,31 @@ Protect your VPC from data exfiltration where an authorized user tries to copy d
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
-Wyjaśnienie (Dlaczego poprawna):
-B. VPC Service Controls: Jest to jedyna usługa, która potrafi zapobiec kopiowaniu danych Między projektami na poziomie API Google. Tworzy perymetr, który blokuje dostęp do danych z zewnątrz oraz uniemożliwia wysyłanie danych do zasobów (bucketów) niebędących częścią tego perymetru.
-
-Dlaczego inne są błędne:
-A. IAM: Uprawniony użytkownik MOŻE czytać dane. IAM nie zabroni mu wysłać tych danych do innego bucketu, do którego też ma uprawnienia (np. prywatnego).
-C. Firewall: Chroni sieć, nie 'rozumie' operacji kopiowania między API Google.
-D. Cloud Armor: Chroni aplikacje webowe przed atakami typu SQLi/DDoS.
-
-Konsensus społeczności ExamTopics: 100% na B. VPC SC to definicja ochrony przed eksfiltracją.</pre>
+Wyjaśnienie: Cloud Logging pozwala na tworzenie własnych 'log buckets' z definiowalnym czasem retencji (nawet do lat). Wybór regionu zapewnia rezydencję danych.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> To pytanie jest kluczowe dla zrozumienia różnicy między Autoryzacją (IAM) a Granicą Sieciową (VPC SC). Na forach inżynierowie nazywają VPC SC 'zaporą ogniową dla API', która chroni dane przed 'zaufanymi, ale nieuczciwymi' użytkownikami.</p>
+<p><b>Głęboka analiza:</b> <p>Opcja D jest bliska, ale B precyzuje użycie agenta dla aplikacji na Compute Engine.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc-service-controls" target="_blank">https://cloud.google.com/vpc-service-controls</a></li>
+<li><a href="https://cloud.google.com/logging/docs/routing/overview#buckets" target="_blank">https://cloud.google.com/logging/docs/routing/overview#buckets</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

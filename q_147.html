@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 147</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 147 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-User lost second factor for 2SV. Minimize risk to reset access. What to do?
+You are responsible for managing your company's identities in Google Cloud. Your company enforces 2-Step Verification (2SV) for all users. You need to reset a user's access, but the user lost their second factor for 2SV. You want to minimize risk. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Generate backup code in Admin console.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Temporarily disable 2SV for all users.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Temporarily disable 2SV for this account.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Super admin reset credentials.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> On the Google Admin console, select the appropriate user account, and generate a backup code to allow the user to sign in. Ask the user to update their second factor.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> On the Google Admin console, temporarily disable the 2SV requirements for all users. Ask the user to log in and add their new second factor to their account. Re-enable the 2SV requirement for all users.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> On the Google Admin console, select the appropriate user account, and temporarily disable 2SV for this account. Ask the user to update their second factor, and then re-enable 2SV for this account.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> On the Google Admin console, use a super administrator account to reset the user account's credentials. Ask the user to update their credentials after their first login.</li>
 
 </ul>
 </div>
@@ -88,38 +88,39 @@ User lost second factor for 2SV. Minimize risk to reset access. What to do?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: C.
 
 Wyjaśnienie (Dlaczego poprawna):
-A. Backup codes: Administrator domeny Google Workspace / Cloud Identity może wygenerować zestaw jednorazowych kodów zapasowych dla danego użytkownika. Pozwala to użytkownikowi na bezpieczne zalogowanie się JEDEN RAZ, aby mógł on dodać nowy klucz fizyczny lub aplikację Authenticator, bez konieczności osłabiania ochrony całego konta.
+C. Cloud EKM (External Key Manager): Pozwala Google Cloud na korzystanie z kluczy, które fizycznie nigdy nie opuszczają Twojej lokalnej infrastruktury (on-premises HSM). Google wysyła prośbę o szyfrowanie/deszyfrowanie do Twojego systemu przez bezpieczne połączenie.
 
 Dlaczego inne są błędne:
-B. Disable for all: Absurdalne ryzyko bezpieczeństwa dla całej firmy.
-C. Disable for account: Mniej ryzykowne niż B, ale nadal pozostawia konto bez ochrony MFA przez pewien czas. Backup kody są lepszą praktyką.
-D. Reset credentials: Reset hasła nie rozwiązuje problemu zgubionego drugiego składnika (MFA nadal będzie wymagane).
+A. Cloud KMS: Klucze są zarządzane przez Google w oprogramowaniu.
+B. Cloud HSM: Klucze są w sprzęcie Google, a nie w TWOIM lokalnym HSM.
+D. Secret Manager: Służy do haseł, nie do operacji kryptograficznych na wolumenach danych.
 
-Konsensus społeczności ExamTopics: 100% na A. To oficjalna procedura odzyskiwania dostępu w Google.</pre>
+Konsensus społeczności ExamTopics: 100% na C. To jedyna odpowiedź na wymóg 'klucze u klienta'.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Zawsze zachęcaj użytkowników do pobrania własnych kodów zapasowych wcześniej i trzymania ich w bezpiecznym, fizycznym miejscu (np. w sejfie).</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Cloud EKM często łączy się z **Key Access Justifications (KAJ)**. Dzięki temu nie tylko trzymasz klucz u siebie, ale możesz odrzucić każdą próbę jego użycia, jeśli Google nie poda poprawnego uzasadnienia (np. 'obsługa zgłoszenia serwisowego nr 123').</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://support.google.com/a/answer/1035070" target="_blank">https://support.google.com/a/answer/1035070</a></li>
+<li><a href="https://cloud.google.com/kms/docs/ekm" target="_blank">https://cloud.google.com/kms/docs/ekm</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

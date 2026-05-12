@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 137</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,7 +64,7 @@
 <h2>Question 137 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Granular data residency control. Folder structure multiple locations, projects aligned to specific locations. At which level set constraint?
+Your company's chief information security officer (CISO) is requiring business data to be stored in specific locations due to regulatory requirements that affect the company's global expansion plans. After working on a plan to implement this requirement, you determine the following:<br/>- The services in scope are included in the Google Cloud data residency requirements.<br/>- The business data remains within specific locations under the same organization.<br/>- The folder structure can contain multiple data residency locations.<br/>- The projects are aligned to specific locations.<br/>You plan to use the Resource Location Restriction organization policy constraint with very granular control. At which level in the hierarchy should you set the constraint?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -88,37 +88,39 @@ Granular data residency control. Folder structure multiple locations, projects a
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
-C. Project Level: Podobnie jak w pytaniu 133, poziom projektu pozwala na precyzyjne dopasowanie restrykcji lokalizacji do konkretnego zastosowania bez 'psucia' globalnych planów innych działów firmy. W architekturze, gdzie projekty są już 'aligned to specific locations', ustawienie polityki właśnie tam jest najbardziej logiczne i bezpieczne.
+A. Folder Admin: Rola `roles/resourcemanager.folderAdmin` daje pełną władzę nad folderem, w tym możliwość edycji jego polityki IAM (kto ma do niego dostęp).
 
 Dlaczego inne są błędne:
-A, D: Zbyt szerokie. Jeśli jeden folder ma projekty w US i EU, polityka na poziomie folderu uniemożliwiłaby działanie jednej z tych grup.
-B. Resource: Polityki organizacji nie wspierają przypisania do pojedynczych zasobów technicznych.
+B. Folder Editor: Pozwala tworzyć projekty wewnątrz, ale celowo NIE pozwala na zmianę polityk IAM (uprawnień) dla tego foldera.
+C. Security Admin: Pozwala na zarządzanie rolami w całym projekcie/organizacji, ale `folderAdmin` (A) jest bardziej specyficzną i kompletną rolą dla zarządzania folderami.
+D. Project IAM Admin: Jak sama nazwa wskazuje, ogranicza się do poziomu Projektu, nie Foldera.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na C. Granularność wymusza stosowanie polityk jak najbliżej zasobu (w dół hierarchii).</pre>
+Konsensus społeczności ExamTopics: 100% na A. To rola 'wszechwładna' na poziomie foldera.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Najlepszą praktyką jest ustawienie szerokiej, bezpiecznej polityki na górze (np. 'tylko regiony demokratyczne') i doprecyzowanie jej (np. 'tylko Polska') na poziomie projektu.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Na forach podkreśla się zasadę dziedziczenia. Folder Admin (A) może nadać uprawnienia na folderze, które automatycznie 'spłyną' na wszystkie projekty pod nim. To potężna rola, którą należy nadawać rzadko.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations</a></li>
+<li><a href="https://cloud.google.com/resource-manager/docs/access-control-folders" target="_blank">https://cloud.google.com/resource-manager/docs/access-control-folders</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 132</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,15 +64,15 @@
 <h2>Question 132 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Export logs for login activity and API calls modifying resources for all projects to SIEM in near real-time. Which two?
+You are tasked with exporting and auditing security logs for login activity events for Google Cloud console and API calls that modify configurations to Google Cloud resources. Your export must meet the following requirements: Export related logs for all projects in the Google Cloud organization. Export logs in near real-time to an external SIEM. What should you do? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Log Sink at org level, destination Pub/Sub.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Log Sink at org level with includeChildren, destination Pub/Sub.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Enable Data Access audit logs at org level.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enable Google Workspace audit logs in Admin Console.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> SIEM processes AuthenticationInfo field.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a Log Sink at the organization level with a Pub/Sub destination.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a Log Sink at the organization level with the includeChildren parameter, and set the destination to a Pub/Sub topic.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Enable Data Access audit logs at the organization level to apply to all projects.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enable Google Workspace audit logs to be shared with Google Cloud in the Admin Console.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Ensure that the SIEM processes the AuthenticationInfo field in the audit log entry to gather identity information.</li>
 
 </ul>
 </div>
@@ -89,39 +89,39 @@ Export logs for login activity and API calls modifying resources for all project
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: BC.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
-B. Aggregated Log Sink (includeChildren): Pozwala na centralne zbieranie logów z całej hierarchii (wszystkich projektów) do jednego tematu Pub/Sub w celu przekazania do SIEM.
-C. Data Access Audit Logs: Logi o modyfikacjach (Admin Activity) są włączone domyślnie, ale logi o 'login activity' (logowaniu) i odczycie danych wymagają ręcznego włączenia w sekcji Audit Logs na poziomie organizacji.
+A. Enable Data Access logs: Logi Data Access (kto czytał/pobrał plik) są domyślnie wyłączone ze względu na ich dużą objętość i koszt. Jeśli chcesz audytować dostęp do obiektów, musisz je najpierw jawnie włączyć w polityce IAM projektu lub organizacji.
 
 Dlaczego inne są błędne:
-A. Log Sink at org level: Bez flagi `includeChildren` sink zbierałby tylko logi dotyczące samej Organizacji jako zasobu, a nie logi z projektów pod nią.
-D. Workspace logs: Dotyczą Gmaila/Drive, nie dotyczą bezpośrednio logowania do konsoli GCP czy wywołań API chmurowych (które są w Data Access logs).
-E. SIEM processing: To krok po stronie odbiorcy, a nie konfiguracja po stronie GCP wymagana do 'eksportu'.
+B. Admin Activity: Rejestrują tylko zmiany konfiguracji (np. zmianę nazwy bucketu), nie widzą operacji na samych plikach.
+C. VPC Flow Logs: Widzą ruch sieciowy, ale nie powiedzą Ci który konkretnie plik został pobrany przez API.
+D. Cloud Asset Inventory: Pokazuje stan zasobów, nie jest dziennikiem zdarzeń dostępu użytkowników.
 
-Konsensus społeczności ExamTopics: 100% na BC. Włączenie logów i agregacja to podstawa audytu globalnego.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla A. Nie da się audytować czegoś, co nie jest logowane.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: BC</b></p>
-<p><b>Głęboka analiza:</b> Pamiętaj, że logi Data Access mogą generować ogromne ilości danych (i kosztów). Na produkcji warto filtrować je tylko do tych usług, które są krytyczne.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Pytanie to testuje świadomość kosztów i retencji. Logi Data Access są płatne, dlatego Google wymaga ich świadomego włączenia. Pamiętaj: włączenie logów TERAZ nie pokaże Ci kto wchodził do bucketu WCZORAJ.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/logging/docs/export/aggregated_sinks" target="_blank">https://cloud.google.com/logging/docs/export/aggregated_sinks</a></li>
+<li><a href="https://cloud.google.com/logging/docs/audit/configure-data-access" target="_blank">https://cloud.google.com/logging/docs/audit/configure-data-access</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -136,9 +136,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

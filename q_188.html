@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 188</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 188 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Rotate encryption keys in Cloud KMS while ensuring that the rotation itself is logged for audit purposes. Which log source?
+A company is using Google Kubernetes Engine (GKE) with container images of a mission-critical application. The company wants to scan the images for known security issues and securely share the report with the security team without exposing them outside Google Cloud.<br/>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Admin Activity logs</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Data Access logs</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> System Event logs</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Access Transparency logs</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> 1. Enable Container Threat Detection in the Security Command Center Premium tier. 2. Upgrade all clusters that are not on a supported version of GKE to the latest possible GKE version. 3. View and share the results from the Security Command Center.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> 1. Use an open source tool in Cloud Build to scan the images. 2. Upload reports to publicly accessible buckets in Cloud Storage by using gsutil. 3. Share the scan report link with your security department.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> 1. Enable vulnerability scanning in the Artifact Registry settings. 2. Use Cloud Build to build the images. 3. Push the images to the Artifact Registry for automatic scanning. 4. View the reports in the Artifact Registry.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> 1. Get a GitHub subscription. 2. Build the images in Cloud Build and store them in GitHub for automatic scanning. 3. Download the report from GitHub and share with the Security Team.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Rotate encryption keys in Cloud KMS while ensuring that the rotation itself is l
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">C</span>
 <br/>
 </span>
 </div>
@@ -88,38 +88,31 @@ Rotate encryption keys in Cloud KMS while ensuring that the rotation itself is l
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: C.
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Admin Activity logs: Operacja rotacji klucza (zarówno ręczna, jak i automatyczna) modyfikuje metadane klucza w Cloud KMS. Jako operacja typu 'Write' na konfiguracji zasobu, jest ona zawsze i bezpłatnie rejestrowana w dzienniku Admin Activity.
-
-Dlaczego inne są błędne:
-B. Data Access: Rejestrują użycie klucza (szyfrowanie), a nie zmianę jego wersji (rotację).
-C. System Event: Dotyczą błędów sprzętowych.
-D. Access Transparency: Dotyczą działań inżynierów Google.
-
-Konsensus społeczności ExamTopics: 100% na A. Rotacja to akcja administracyjna.</pre>
+Wyjaśnienie: Artifact Registry posiada wbudowaną funkcję skanowania obrazów pod kątem podatności (Vulnerability Scanning). Jest to rozwiązanie natywne, bezpieczne i zintegrowane z GCP.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Eksperci na Reddit zauważają, że logi Admin Activity są kluczowe dla udowodnienia audytorowi, że firma rzeczywiście rotuje klucze zgodnie z polityką (np. co 90 dni). Logi te są 'tamper-proof', co czyni je wiarygodnym dowodem.</p>
+<p><b>Sugerowana odpowiedź: C</b></p>
+<p><b>Głęboka analiza:</b> <p>Skanowanie odbywa się automatycznie przy każdym 'push' obrazu, a raporty są dostępne w konsoli dla uprawnionych osób.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/kms/docs/audit-logging" target="_blank">https://cloud.google.com/kms/docs/audit-logging</a></li>
+<li><a href="https://cloud.google.com/artifact-registry/docs/analysis/vulnerability-scanning" target="_blank">https://cloud.google.com/artifact-registry/docs/analysis/vulnerability-scanning</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 135</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 135 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Encryption strategy: sensitive data rotation, control region for keys, minimize latency for both. What to do?
+You need to implement an encryption-at-rest strategy that protects sensitive data and reduces key management complexity for non-sensitive data. Your solution has the following requirements: Schedule key rotation for sensitive data. Control which region the encryption keys for sensitive data are stored in. Minimize the latency to access encryption keys for both sensitive and non-sensitive data. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> EKM for both.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud KMS for both.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Google default for non-sensitive, EKM for sensitive.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Google default for non-sensitive, Cloud KMS for sensitive.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Encrypt non-sensitive data and sensitive data with Cloud External Key Manager.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Encrypt non-sensitive data and sensitive data with Cloud Key Management Service.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Encrypt non-sensitive data with Google default encryption, and encrypt sensitive data with Cloud External Key Manager.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Encrypt non-sensitive data with Google default encryption, and encrypt sensitive data with Cloud Key Management Service.</li>
 
 </ul>
 </div>
@@ -88,37 +88,39 @@ Encryption strategy: sensitive data rotation, control region for keys, minimize 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
-D. Default + Cloud KMS (CMEK): Domyślne szyfrowanie (Google-managed) zapewnia najniższe opóźnienia i zerowy narzut konfiguracyjny (idealne dla 'non-sensitive'). Użycie Cloud KMS (CMEK) dla danych wrażliwych pozwala na pełną kontrolę nad lokalizacją klucza (Control region) oraz harmonogramem rotacji (Sensitive data rotation).
+B. ETD (Event Threat Detection): To moduł SCC Premium, który automatycznie analizuje logi (w tym Flow Logi) i porównuje je z bazą zagrożeń Google (Threat Intelligence). Potrafi wykryć komunikację z serwerami C2 (Command & Control).
 
 Dlaczego inne są błędne:
-A, B: Niepotrzebnie komplikują zarządzanie i mogą zwiększać opóźnienia dla danych, które nie wymagają specjalnej ochrony.
-C. EKM: External Key Manager wprowadza największe opóźnienia (klucz jest poza Google), co narusza wymóg 'minimize latency'.
+A. Cloud Armor: Chroni ruch PRZYCHODZĄCY do Load Balancera, nie monitoruje ruchu WYCHODZĄCEGO z maszyn VM do internetu.
+C. Packet Mirroring: Przechwytuje pakiety, ale samo w sobie nie 'wie', który serwer jest złośliwy – potrzebuje silnika analizy takiego jak ETD lub IDS.
+D. Cloud IDS: Jest to poprawna alternatywa, ale ETD (B) jest częściej wskazywane jako rozwiązanie natywne SCC do detekcji 'known malicious' na podstawie metadanych logów.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na D. To najbardziej pragmatyczne i efektywne podejście.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla B. ETD to mózg detekcji zagrożeń w GCP.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Cloud KMS pozwala na tworzenie kluczy regionalnych. Wybierając region `europe-west1`, masz pewność, że materiał klucza nigdy nie opuści tej lokalizacji.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Dyskusja na Reddit często porównuje ETD i Cloud IDS. ETD jest 'log-based' (analizuje ślady), Cloud IDS jest 'traffic-based' (analizuje pakiety w locie). Do wykrywania znanych adresów C2, ETD jest bardziej efektywne kosztowo i prostsze w konfiguracji.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/kms/docs/locations" target="_blank">https://cloud.google.com/kms/docs/locations</a></li>
+<li><a href="https://cloud.google.com/security-command-center/docs/concepts-event-threat-detection-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-event-threat-detection-overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

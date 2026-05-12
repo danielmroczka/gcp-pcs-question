@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 360</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 360 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-improve password security for Google Workspace users (initially user-created). What to do?
+Your organization uses Google Workspace as the primary identity provider for Google Cloud. Users in your organization initially created their passwords. You need to improve password security due to a recent security event. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Security awareness training.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Check 'Enforce strong password' and 'Enforce password policy at next sign-in'.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Enforce strong password + frequent expiration.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Audit user activity.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Conduct a security awareness training session, and set the password expiration settings to require more frequent updates.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Check the Enforce strong password box, and check Enforce password policy at the next sign-in.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Check the Enforce strong password box, and set the password expiration to occur more frequently.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Audit user activity for suspicious logins by using the audit and investigation tool.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ improve password security for Google Workspace users (initially user-created). W
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Odpowiedź: B.
 
 Wyjaśnienie (Dlaczego poprawna):
 B. Strong password + Enforce at next sign-in: To najbardziej skuteczna kombinacja techniczna. 'Strong password' wymusza użycie złożonych znaków. 'Enforce at next sign-in' gwarantuje, że wszyscy użytkownicy (nawet ci ze starymi, słabymi hasłami) zostaną natychmiast zmuszeni do poprawy swojego bezpieczeństwa.
@@ -98,28 +99,28 @@ A. Training: Bardzo ważne, ale nie stanowi technicznego wymuszenia (enforcement
 C. Frequent expiration: Obecnie odradzane przez standardy (NIST), ponieważ zmusza użytkowników do tworzenia przewidywalnych haseł (np. Haslo1, Haslo2). Lepiej mieć jedno bardzo silne hasło i 2FA.
 D. Audit: Powie Ci o problemie, ale go nie naprawi.
 
-Konsensus społeczności ExamTopics: 100% na B. Standardowa procedura podnoszenia poziomu bezpieczeństwa tożsamości.</pre>
+Konsensus społeczności ExamTopics: 100% na B. Standardowa procedura podnoszenia poziomu bezpieczeństwa tożsamości.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Wymuszenie zmiany hasła to najlepszy sposób na 'wyczyszczenie' starych grzechów z okresu, gdy domena nie była jeszcze profesjonalnie zarządzana.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Wymuszenie zmiany hasła to najlepszy sposób na 'wyczyszczenie' starych grzechów z okresu, gdy domena nie była jeszcze profesjonalnie zarządzana.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://support.google.com/a/answer/139399" target="_blank">https://support.google.com/a/answer/139399</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

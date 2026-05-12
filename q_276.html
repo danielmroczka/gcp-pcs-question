@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 276</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 276 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Fully isolate Dev and Prod. One central entry point from on-prem. Secure network architecture.
+You are creating a secure network architecture. You must fully isolate development and production environments, and prevent any network traffic between the two environments. The network team requires that there is only one central entry point to the cloud network from the on-premises environment. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> VPC per env, peer VPCs + firewall.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Shared VPC, separate subnets + firewall.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> VPC per env, VPC SC perimeter per env.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> VPC per env + Transit VPC (entry point) peered with both.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create one Virtual Private Cloud (VPC) network per environment. Add the on-premises entry point to the production VPC. Peer the VPCs with each other and create firewall rules to prevent traffic.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create one shared Virtual Private Cloud (VPC) network and use it as the entry point to the cloud network. Create separate subnets per environment. Create firewall rules to prevent traffic.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create one Virtual Private Cloud (VPC) network per environment. Create a VPC Service Controls perimeter per environment and add one environment VPC to each.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create one Virtual Private Cloud (VPC) network per environment. Create one additional VPC for the entry point to the cloud network. Peer the entry point VPC with the environment VPCs.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ Fully isolate Dev and Prod. One central entry point from on-prem. Secure network
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: D.
 
 Wyjaśnienie (Dlaczego poprawna):
 D. Hub-and-Spoke (Transit VPC): To najbardziej bezpieczna architektura Enterprise. Masz centralną sieć 'Hub' (Transit VPC), która łączy się z on-premises. Sieci środowiskowe (Dev i Prod) są podłączone (peered) do Hub-a, ale NIE są połączone ze sobą. Ponieważ VPC Peering nie jest tranzytywny, ruch z Dev nigdy nie trafi do Prod, a oba mają jeden punkt kontroli wejścia.
@@ -98,28 +99,28 @@ A. Peer VPCs: Jeśli połączysz Dev z Prod peeringiem, to naruszasz zasadę 'fu
 B. Shared VPC: Wszystkie środowiska współdzielą te same tablice routingu i routery wewnątrz jednej sieci VPC, co jest słabszą izolacją niż osobne sieci VPC (D).
 C. VPC SC: Służy do izolacji API (Storage, SQL), nie do budowania topologii warstwy 3 (routingu IP) między VM-ami.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na D. To wzorcowa topologia sieciowa dla dużych organizacji.</pre>
+Konsensus społeczności ExamTopics: Zdecydowana większość na D. To wzorcowa topologia sieciowa dla dużych organizacji.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> W Hubie możesz postawić centralne urządzenie NGFW (np. Fortinet, Palo Alto), które będzie skanować cały ruch przechodzący z on-premises do wszystkich Twoich chmurowych Spokes.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> W Hubie możesz postawić centralne urządzenie NGFW (np. Fortinet, Palo Alto), które będzie skanować cały ruch przechodzący z on-premises do wszystkich Twoich chmurowych Spokes.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/architecture/best-practices-vpc-design#hub-and-spoke" target="_blank">https://cloud.google.com/architecture/best-practices-vpc-design#hub-and-spoke</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

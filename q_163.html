@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 163</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,15 @@
 <h2>Question 163 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Analyze application traffic to detect anomalies and potential malware communication without modifying the application code. Which GCP service?
+You need to audit the network segmentation for your Google Cloud footprint. You currently operate Production and Non-Production infrastructure-as-a-service (IaaS) environments. All your VM instances are deployed without any service account customization.<br/>After observing the traffic in your custom network, you notice that all instances can communicate freely - despite tag-based VPC firewall rules in place to segment traffic properly - with a priority of 1000. What are the most likely reasons for this behavior?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud IDS</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud Armor</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> VPC Firewall</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Trace</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> All VM instances are missing the respective network tags.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> All VM instances are residing in the same network subnet.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> All VM instances are configured with the same network route.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> A VPC firewall rule is allowing traffic between source/targets based on the same service account with priority 999.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> A VPC firewall rule is allowing traffic between source/targets based on the same service account with priority 1001.</li>
 
 </ul>
 </div>
@@ -80,7 +81,7 @@ Analyze application traffic to detect anomalies and potential malware communicat
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">AD</span>
 <br/>
 </span>
 </div>
@@ -88,38 +89,31 @@ Analyze application traffic to detect anomalies and potential malware communicat
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: AD.
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Cloud IDS (Intrusion Detection System): Jest to usługa zarządzana, która bazuje na silniku Palo Alto Networks. Mirroruje ona ruch sieciowy i szuka w nim sygnatur ataków, malware'u i anomalii (np. exfiltration). Nie wymaga żadnych zmian w kodzie aplikacji (działa w warstwie sieci).
-
-Dlaczego inne są błędne:
-B. Cloud Armor: Chroni tylko ruch HTTP(S) przychodzący z zewnątrz. Nie widzi malware'u przesyłanego np. przez SSH czy ruch wewnętrzny (East-West).
-C. VPC Firewall: Blokuje porty/IP, ale nie 'rozumie' czy przesyłane pakiety to legalny ruch czy komunikacja trojana.
-D. Cloud Trace: Tylko dla wydajności.
-
-Konsensus społeczności ExamTopics: 100% na A. Cloud IDS to nowa jakość wglądu w bezpieczeństwo sieciowe GCP.</pre>
+Wyjaśnienie: Jeśli tagi są brakujące (A), reguły tag-based nie zadziałają. Jeśli istnieje reguła o wyższym priorytecie (np. 999) oparta na SA (D), to ona pozwoli na ruch mimo blokad na tagach.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Inżynierowie na forach zauważają, że Cloud IDS jest znacznie łatwiejszy we wdrożeniu niż Packet Mirroring (144) z własnym IDS-em, ponieważ Google dba o aktualizację bazy sygnatur zagrożeń i skalowanie infrastruktury analizującej.</p>
+<p><b>Sugerowana odpowiedź: AD</b></p>
+<p><b>Głęboka analiza:</b> <p>W GCP reguły oparte na Service Accountach są często silniejsze i bardziej polecane niż te na tagach.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/intrusion-detection-system/docs/overview" target="_blank">https://cloud.google.com/intrusion-detection-system/docs/overview</a></li>
+<li><a href="https://cloud.google.com/vpc/docs/firewalls#service-accounts" target="_blank">https://cloud.google.com/vpc/docs/firewalls#service-accounts</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +128,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

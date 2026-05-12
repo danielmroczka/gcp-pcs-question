@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 114</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,7 +64,7 @@
 <h2>Question 114 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Detect firewall rules overlapped by higher/equal priority rules. Which product?
+You recently joined the networking team supporting your company's Google Cloud implementation. You are tasked with familiarizing yourself with the firewall rules configuration and providing recommendations based on your networking and Google Cloud experience. What product should you recommend to detect firewall rules that are overlapped by attributes from other firewall rules with higher or equal priority?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -88,38 +88,38 @@ Detect firewall rules overlapped by higher/equal priority rules. Which product?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Odpowiedź: D.
 
 Wyjaśnienie (Dlaczego poprawna):
-D. Firewall Insights: Jest to narzędzie analityczne stworzone specjalnie do optymalizacji reguł firewalla. Potrafi ono wskazać reguły 'shadowed' (przykryte), czyli takie, które nigdy nie zostaną wykonane, ponieważ inna reguła o wyższym priorytecie (lub takim samym, ale wyżej na liście) obsługuje ten sam ruch.
+D. Firewall Insights: Narzędzie analityczne stworzone dokładnie do tego celu. Potrafi ono wskazać reguły 'shadowed' (przykryte przez inne), reguły nieużywane oraz sugerować optymalizacje.
 
 Dlaczego inne są błędne:
-A. SCC: Może zgłosić, że reguła jest zbyt szeroka (np. 0.0.0.0/0), ale nie służy do głębokiej analizy logicznej nakładania się (overlap) wielu reguł między sobą.
-B. Firewall Logging: Powie Ci, która reguła zadziałała dla konkretnego pakietu, ale nie da Ci zbiorczego raportu o tym, które reguły są w ogóle niepotrzebne.
-C. VPC Flow Logs: Widzą ruch, ale nie znają logiki Twojego firewalla i nie potrafią ocenić redundancji reguł.
+A. SCC: Może zgłosić, że port jest otwarty, ale nie analizuje logiki 'nakładania się' reguł między sobą.
+B. Logging: Powie Ci która reguła zadziałała, ale nie powie Ci, że 10 innych reguł pod nią jest martwych.
 
-Konsensus społeczności ExamTopics: 100% na D. Firewall Insights to jedyne narzędzie do 'czyszczenia' firewalla.</pre>
+Konsensus społeczności ExamTopics: 100% poparcia dla D. To jedyne narzędzie do higieny logicznej firewalli.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Posiadanie zbyt wielu reguł firewalla (zwłaszcza przykrytych) spowalnia audyt i utrudnia zrozumienie rzeczywistego stanu bezpieczeństwa sieci.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Eksperci na forach zauważają, że Firewall Insights oszczędza tysiące godzin pracy audytorów. Pozwala na automatyczne wyczyszczenie firewalla z reguł, które powstały 5 lat temu i od tego czasu 'nic przez nie nie przeszło', bo są przykryte nowszą blokadą.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/firewall-insights/docs/overview" target="_blank">https://cloud.google.com/firewall-insights/docs/overview</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

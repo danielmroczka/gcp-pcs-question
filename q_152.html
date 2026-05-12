@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 152</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 152 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Grant a user access to manage and rotate encryption keys in Cloud KMS without allowing them to use the keys for encryption or decryption. Which role?
+You need to centralize your team's logs for production projects. You want your team to be able to search and analyze the logs using Logs Explorer. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> roles/cloudkms.admin</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> roles/cloudkms.cryptoKeyEncrypterDecrypter</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> roles/cloudkms.viewer</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> roles/cloudkms.publicKeyViewer</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enable Cloud Monitoring workspace, and add the production projects to be monitored.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use Logs Explorer at the organization level and filter for production project logs.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create an aggregate org sink at the parent folder of the production projects, and set the destination to a Cloud Storage bucket.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create an aggregate org sink at the parent folder of the production projects, and set the destination to a logs bucket.</li>
 
 </ul>
 </div>
@@ -80,7 +80,7 @@ Grant a user access to manage and rotate encryption keys in Cloud KMS without al
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">D</span>
 <br/>
 </span>
 </div>
@@ -88,38 +88,31 @@ Grant a user access to manage and rotate encryption keys in Cloud KMS without al
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: D.
 
-Wyjaśnienie (Dlaczego poprawna):
-A. cloudkms.admin: Ta rola pozwala na pełne zarządzanie cyklem życia kluczy (tworzenie, rotacja, usuwanie) oraz uprawnieniami, ale celowo NIE posiada uprawnień do wykonywania operacji kryptograficznych na danych (encrypt/decrypt).
-
-Dlaczego inne są błędne:
-B. CryptoKeyEncrypterDecrypter: To rola 'użytkowa' do szyfrowania danych, a nie do zarządzania administracyjnego kluczami.
-C. Viewer: Tylko do odczytu metadanych, nie pozwala na rotację.
-D. PublicKeyViewer: Służy tylko do pobierania klucza publicznego w scenariuszach asymetrycznych.
-
-Konsensus społeczności ExamTopics: 100% na A. Klasyczny przykład separacji obowiązków (Separation of Duties).</pre>
+Wyjaśnienie: Aby logi były przeszukiwalne w Logs Explorerze, muszą trafić do tzw. 'Log Bucket'. Agregowany sink na poziomie organizacji lub folderu to standardowa metoda zbierania logów z wielu projektów.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Dyskusja na forach zwraca uwagę na to, jak ważne jest, aby osoba zarządzająca bezpieczeństwem (Admin) nie miała wglądu w treść danych. Jeśli haker przejmie konto Admina KMS, może zniszczyć klucze (DoS), ale nie ukradnie Twoich haseł czy danych klientów w jawnym tekście.</p>
+<p><b>Sugerowana odpowiedź: D</b></p>
+<p><b>Głęboka analiza:</b> <p>Eksport do Cloud Storage (C) sprawia, że logi są archiwalne i trudniejsze do szybkiego przeszukiwania w UI.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/kms/docs/reference/iam-roles" target="_blank">https://cloud.google.com/kms/docs/reference/iam-roles</a></li>
+<li><a href="https://cloud.google.com/logging/docs/central-log-storage" target="_blank">https://cloud.google.com/logging/docs/central-log-storage</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

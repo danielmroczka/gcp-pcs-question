@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 103</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 103 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Governance model for secrets in Secret Manager. Granular access, control over rotation schedules for wrap keys, environment separation, ease of management. Which approach?
+You are designing a new governance model for your organization's secrets that are stored in Secret Manager. Currently, secrets for Production and Non-Production applications are stored and accessed using service accounts. Your proposed solution must:<br/>* Provide granular access to secrets<br/>* Give you control over the rotation schedules for the encryption keys that wrap your secrets<br/>* Maintain environment separation<br/>* Provide ease of management<br/>Which approach should you take?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Separate projects, project-level IAM, CMEK.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Single project, secret-level IAM, Google-managed keys.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Separate projects, secret-level IAM, Google-managed keys.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Single project, project-level IAM, CMEK.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> 1. Use separate Google Cloud projects to store Production and Non-Production secrets. 2. Enforce access control to secrets using project-level identity and Access Management (IAM) bindings. 3. Use customer-managed encryption keys to encrypt secrets.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> 1. Use a single Google Cloud project to store both Production and Non-Production secrets. 2. Enforce access control to secrets using secret-level Identity and Access Management (IAM) bindings. 3. Use Google-managed encryption keys to encrypt secrets.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> 1. Use separate Google Cloud projects to store Production and Non-Production secrets. 2. Enforce access control to secrets using secret-level Identity and Access Management (IAM) bindings. 3. Use Google-managed encryption keys to encrypt secrets.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> 1. Use a single Google Cloud project to store both Production and Non-Production secrets. 2. Enforce access control to secrets using project-level Identity and Access Management (IAM) bindings. 3. Use customer-managed encryption keys to encrypt secrets.</li>
 
 </ul>
 </div>
@@ -88,37 +88,38 @@ Governance model for secrets in Secret Manager. Granular access, control over ro
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Odpowiedź: A.
 
 Wyjaśnienie (Dlaczego poprawna):
-A. Separate projects + CMEK: Osobne projekty (np. jeden dla Prod, jeden dla Dev) zapewniają najsilniejszą separację środowisk. Zarządzanie na poziomie projektu jest łatwiejsze (ease of management) niż pilnowanie uprawnień dla setek pojedynczych sekretów. Użycie CMEK daje pełną kontrolę nad rotacją kluczy szyfrujących te sekrety.
+A. Separate projects + CMEK: Osobne projekty dają najsilniejszą izolację środowisk (Prod/Dev). Zarządzanie na poziomie projektu jest łatwiejsze niż na poziomie pojedynczych sekretów. CMEK daje pełną kontrolę nad kluczem nadrzędnym (wrap key) i jego rotacją.
 
 Dlaczego inne są błędne:
-B, D. Single project: To 'jeden koszyk' dla wszystkich sekretów. Błąd ludzki w IAM może wystawić sekrety produkcyjne deweloperom.
-C. Secret-level IAM: Bardzo trudne w utrzymaniu przy dużej liczbie sekretów (brak 'ease of management'). Google-managed keys nie dają kontroli nad harmonogramem rotacji klucza nadrzędnego.
+B, D. Single project: To 'jeden koszyk' dla wszystkich sekretów - błąd administratora może wystawić wszystko wszystkim.
+C. Secret-level IAM: Bardzo trudne w utrzymaniu przy setkach sekretów (brak 'ease of management').
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na A. Izolacja projektowa to fundament architektury GCP Enterprise.</pre>
+Konsensus społeczności ExamTopics: 100% na A. Izolacja na poziomie projektu to fundament bezpieczeństwa w GCP.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Projekt jest w GCP jednostką rozliczeniową, sieciową i uprawnieniową. Separacja projektowa sekretów to standard zapobiegający lateralnemu poruszaniu się atakujących.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Eksperci na Reddit podkreślają, że zarządzanie IAM na poziomie pojedynczego sekretu (C) to 'piekło operacyjne'. Jeśli masz 500 sekretów, nie chcesz klikać 500 razy. Lepiej nadać uprawnienia do całego projektu 'Secrets-Prod' wybranym procesom.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/secret-manager/docs/best-practices" target="_blank">https://cloud.google.com/secret-manager/docs/best-practices</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

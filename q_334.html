@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 334</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,14 +64,14 @@
 <h2>Question 334 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-prevent and detect information leakages using Gemini in Vertex AI. What to do?
+Your organization is using AI to improve products through innovation. The developers want to use Gemini in Vertex AI on a project. You need to provide a secure Google Cloud environment to prevent and detect information leakages. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> VPC Service Controls + DLP.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Vertex AI User role + Cloud Logging.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Model Armor + SCC findings.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Firewall rule.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Set up VPC Service Controls perimeters around the Vertex AI project. Enable Data Loss Prevention API for content inspection.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Grant the developers and AI engineers the Vertex AI User role. Monitor the audit trails with Cloud Logging.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Deploy Model Armor to protect the Vertex AI endpoint. Review Security Command Center findings to detect information leakages.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Implement a firewall rule that allows all traffic to and from the Vertex AI API endpoint.</li>
 
 </ul>
 </div>
@@ -88,7 +88,8 @@ prevent and detect information leakages using Gemini in Vertex AI. What to do?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>
+Odpowiedź: C.
 
 Wyjaśnienie (Dlaczego poprawna):
 C. Model Armor: Jest to nowa, dedykowana usługa Google Cloud zaprojektowana specjalnie do ochrony interakcji z modelami LLM (AI). Potrafi ona w czasie rzeczywistym blokować przesyłanie danych wrażliwych (leakage) w promptach oraz wykrywać ataki typu jailbreak. Integracja z SCC zapewnia detekcję incydentów.
@@ -98,28 +99,28 @@ A. VPC SC + DLP: VPC SC chroni granice API, a DLP skanuje storage. Model Armor (
 B. Logging: Pozwala na audyt po fakcie (detect), ale nie zapobiega wyciekowi w momencie wysyłania pytania do AI (prevent).
 D. Firewall: Nie ma żadnego wglądu w treść zapytań przesyłanych protokołem HTTPS do usługi Vertex AI.
 
-Konsensus społeczności ExamTopics: 100% na C. Model Armor lo nowość w programie egzaminacyjnym skupiona na AI Security.</pre>
+Konsensus społeczności ExamTopics: 100% na C. Model Armor lo nowość w programie egzaminacyjnym skupiona na AI Security.
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Model Armor działa jako filtr przed modelem AI. Może np. automatycznie zamienić nazwisko klienta na gwiazdki ZANIM model je przetworzy, co chroni prywatność danych.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Model Armor działa jako filtr przed modelem AI. Może np. automatycznie zamienić nazwisko klienta na gwiazdki ZANIM model je przetworzy, co chroni prywatność danych.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/security/products" target="_blank">https://cloud.google.com/security/products</a></li>
+
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>
