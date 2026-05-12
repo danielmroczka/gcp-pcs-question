@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 76</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,15 +64,14 @@
 <h2>Question 76 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You want a key generated on-premises to be used in the encryption process for Cloud Storage. What should you do?
+Your company is storing sensitive data in Cloud Storage. You want a key generated on-premises to be used in the encryption process. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use Cloud KMS to manage DEK.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use Cloud KMS to manage KEK.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use customer-supplied encryption keys (CSEK) to manage DEK.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use customer-supplied encryption keys (CSEK) to manage KEK.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use the Cloud Key Management Service to manage a data encryption key (DEK).</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use the Cloud Key Management Service to manage a key encryption key (KEK).</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use customer-supplied encryption keys to manage the data encryption key (DEK).</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use customer-supplied encryption keys to manage the key encryption key (KEK).</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -88,35 +87,44 @@ You want a key generated on-premises to be used in the encryption process for Cl
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>Poprawna odpowiedź: C
 
-Wyjaśnienie (Dlaczego poprawna):
-C. CSEK to manage DEK: Customer-Supplied Encryption Keys pozwalają klientowi na wygenerowanie własnego klucza (który w tym modelu jest kluczem DEK) i dostarczanie go do Google Cloud tylko w momencie wykonywania operacji na danych. Google używa tego klucza do zaszyfrowania danych i natychmiast wyrzuca go z pamięci.
+Analiza poprawności:
+Google Cloud umożliwia korzystanie z kluczy generowanych i zarządzanych przez klienta poza platformą (on-premises).
+1. CSEK (Customer-Supplied Encryption Keys): To właśnie mechanizm pozwalający na użycie własnego klucza (dostarczonego przez klienta) do szyfrowania danych w usłudze Cloud Storage. 
+2. Mechanizm działania: Klient dostarcza klucz szyfrujący (DEK) w każdym żądaniu wysyłanym do Cloud Storage. Google używa tego klucza do zaszyfrowania danych, po czym klucz ten jest usuwany z pamięci Google – Google go nie przechowuje.
 
-Dlaczego inne są błędne:
-A, B. Cloud KMS: To usługa Google. Nawet jeśli zaimportujesz tam klucz, jest on zarządzany PRZEZ usłudze Google (CMEK), a nie dostarczany przez Ciebie przy każdej operacji z zewnątrz.
-D. CSEK KEK: W modelu CSEK nie ma podziału na KEK/DEK zarządzany przez Google; dostarczasz bezpośredni materiał klucza używany do operacji.</pre>
+Dlaczego pozostałe są błędne:
+A. Cloud KMS DEK: Cloud KMS służy do zarządzania kluczami wewnątrz GCP. W pytaniu mowa jest o kluczu generowanym na miejscu (on-premises), co wyklucza KMS jako zarządcę klucza (KMS nie przechowuje kluczy dostarczanych przez CSEK).
+B. Cloud KMS KEK: KEK to klucz szyfrujący inne klucze (w KMS). Użycie KMS wyklucza "customer-supplied encryption key" w kontekście tego konkretnego pytania.
+D. CSEK dla KEK: Terminologia CSEK w GCP odnosi się do szyfrowania danych (DEK), a nie do zarządzania KEK w KMS.
+
+Wskazówki egzaminacyjne:
+- "Key generated on-premises" = prawie zawsze CSEK.
+- "Manage key in Google Cloud" = KMS.
+- Pamiętaj: W modelu CSEK to klient odpowiada za przechowywanie klucza. Jeśli go zgubisz – dane są nieodwracalnie stracone.
+
+Dokumentacja:
+<a href="https://cloud.google.com/storage/docs/encryption/customer-supplied-encryption-keys" target="_blank">https://cloud.google.com/storage/docs/encryption/customer-supplied-encryption-keys</a></pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> CSEK to najwyższy poziom kontroli, ale też największa odpowiedzialność. Jeśli Twoja aplikacja on-prem zgubi ten klucz, nikt (nawet Google) nie odzyska Twoich danych z GCS.</p>
+<p><b>Głęboka analiza:</b> CSEK to rozwiązanie dla organizacji o najwyższych wymogach bezpieczeństwa, które nie ufają (lub nie mogą ufać) dostawcy chmury w zakresie przechowywania kluczy głównych.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/storage/docs/encryption/customer-supplied-keys" target="_blank">https://cloud.google.com/storage/docs/encryption/customer-supplied-keys</a></li>
+<li><a href="https://cloud.google.com/storage/docs/encryption/customer-supplied-encryption-keys" target="_blank">https://cloud.google.com/storage/docs/encryption/customer-supplied-encryption-keys</a></li>
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -125,15 +133,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (aiSection) aiSection.style.display = 'none';
                 this.textContent = 'Show Suggested Answer';
             } else {
-                if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
+                if (answerSection) {
+                    answerSection.style.display = 'block';
+                }
+                if (aiSection) {
+                    aiSection.style.display = 'block';
+                }
                 this.textContent = 'Hide Suggested Answer';
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

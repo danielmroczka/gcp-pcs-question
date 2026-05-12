@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 74</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -68,11 +68,10 @@ What are the steps to encrypt data using envelope encryption?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Generate DEK locally, wrap with KEK, encrypt data with KEK.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Generate KEK locally, use KEK to generate DEK.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Generate DEK locally, encrypt data with DEK, wrap DEK with KEK.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Generate KEK locally, encrypt data with KEK.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Generate a data encryption key (DEK) locally. Use a key encryption key (KEK) to wrap the DEK. Encrypt data with the KEK. Store the encrypted data and the wrapped DEK.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Generate a key encryption key (KEK) locally. Use the KEK to generate a data encryption key (DEK). Encrypt data with the DEK. Store the encrypted data and the wrapped DEK.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Generate a data encryption key (DEK) locally. Encrypt data with the DEK. Use a key encryption key (KEK) to wrap the DEK. Store the encrypted data and the wrapped DEK.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Generate a key encryption key (KEK) locally. Generate a data encryption key (DEK) locally. Encrypt data with the KEK. Store the encrypted data and the wrapped DEK.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -88,37 +87,44 @@ What are the steps to encrypt data using envelope encryption?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: C.
+<pre>Poprawna odpowiedź: C
 
-Wyjaśnienie (Dlaczego poprawna):
-C. DEK -> Data -> KEK: To standardowy przepływ: 1. Aplikacja generuje klucz danych (DEK). 2. Używa go do zaszyfrowania dużego zbioru danych. 3. Wysyła mały klucz DEK do KMS, aby został zaszyfrowany (opakowany - wrapped) kluczem nadrzędnym (KEK).
+Analiza poprawności:
+Envelope encryption (szyfrowanie kopertowe) to technika, w której dane są szyfrowane kluczem danych (DEK), a następnie sam klucz danych jest szyfrowany (owijany) kluczem szyfrowania kluczy (KEK).
+1. Generowanie DEK: Generujesz unikalny, efemeryczny klucz danych (DEK) lokalnie w aplikacji.
+2. Szyfrowanie danych: Używasz DEK do zaszyfrowania faktycznych danych (szyfrowanie jest szybkie, DEK jest wydajny).
+3. Owijanie DEK: Wysyłasz DEK do Cloud KMS, aby został "owinięty" (zaszyfrowany) przez klucz KEK, który bezpiecznie spoczywa w KMS.
+4. Przechowywanie: Zapisujesz zaszyfrowane dane oraz "owinięty" DEK (nie sam KEK).
 
-Dlaczego inne są błędne:
-A. Encrypt data with KEK: Błąd. Dane szyfruje się DEKiem. KEK służy tylko do szyfrowania DEKa. Przesyłanie dużych danych do KMS w celu szyfrowania KEKiem byłoby bardzo wolne i nieefektywne.
-B, D: KEK nie jest generowany 'lokalnie' w aplikacji, lecz rezyduje bezpiecznie w usłudze Cloud KMS.
+Dlaczego pozostałe są błędne:
+A, B, D: Mieszają kolejność operacji lub błędnie określają przeznaczenie KEK (KEK służy do ochrony DEK, nie bezpośrednio do szyfrowania danych użytkownika w tym modelu).
 
-Konsensus społeczności ExamTopics: 100% na C. Zrozumienie mechanizmu wrap/unwrap jest kluczowe dla inżyniera security.</pre>
+Wskazówki egzaminacyjne:
+- Zapamiętaj sekwencję: DEK (lokalnie) -> Szyfruj dane -> KEK (w KMS) owija DEK.
+- Pytania o envelope encryption zawsze testują znajomość tego cyklu.
+- KEK nigdy nie opuszcza Cloud KMS w postaci jawnej.
+
+Dokumentacja:
+<a href="https://cloud.google.com/kms/docs/envelope-encryption" target="_blank">https://cloud.google.com/kms/docs/envelope-encryption</a></pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Szyfrowanie kopertowe pozwala na zmianę klucza nadrzędnego (re-keying) poprzez odszyfrowanie i ponowne zaszyfrowanie tylko małego klucza DEK, bez konieczności deszyfrowania całego terabajta danych.</p>
+<p><b>Głęboka analiza:</b> Envelope encryption to standardowa procedura dla bezpiecznego zarządzania kluczami w chmurze. Kluczem jest ochrona DEK za pomocą KEK-a wewnątrz KMS, co pozwala na bezpieczną rotację kluczy (KEK) bez konieczności ponownego szyfrowania całych wolumenów danych.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/kms/docs/envelope-encryption" target="_blank">https://cloud.google.com/kms/docs/envelope-encryption</a></li>
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -127,15 +133,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (aiSection) aiSection.style.display = 'none';
                 this.textContent = 'Show Suggested Answer';
             } else {
-                if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
+                if (answerSection) {
+                    answerSection.style.display = 'block';
+                }
+                if (aiSection) {
+                    aiSection.style.display = 'block';
+                }
                 this.textContent = 'Hide Suggested Answer';
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

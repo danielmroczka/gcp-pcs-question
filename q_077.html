@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 77</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,15 +64,14 @@
 <h2>Question 77 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You need to validate that all data written to BigQuery was done using the App Engine Default Service Account. What should you do?
+Last week, a company deployed a new App Engine application that writes logs to BigQuery. No other workloads are running in the project. You need to validate that all data written to BigQuery was done using the App Engine Default Service Account. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Filter Cloud Logging by SA and authentication field, then click Hide Matching and ensure empty.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Filter Cloud Logging and click Show Matching and ensure empty.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Check BigQuery dataset permissions.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Check IAM project roles.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> 1. Use Cloud Logging and filter on BigQuery Insert Jobs. 2. Click on the email address in line with the App Engine Default Service Account in the authentication field. 3. Click Hide Matching Entries. 4. Make sure the resulting list is empty.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> 1. Use Cloud Logging and filter on BigQuery Insert Jobs. 2. Click on the email address in line with the App Engine Default Service Account in the authentication field. 3. Click Show Matching Entries. 4. Make sure the resulting list is empty.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> 1. In BigQuery, select the related dataset. 2. Make sure that the App Engine Default Service Account is the only account that can write to the dataset.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> 1. Go to the Identity and Access Management (IAM) section of the project. 2. Validate that the App Engine Default Service Account is the only account that has a role that can write to BigQuery.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -88,37 +87,43 @@ You need to validate that all data written to BigQuery was done using the App En
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>Poprawna odpowiedź: A
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Filter + Hide Matching: To sprytna metoda audytu. Filtrujesz logi BigQuery pod kątem operacji zapisu, a następnie UKRYWASZ (Hide Matching) wpisy pochodzące od poprawnego konta serwisowego. Jeśli wynikowa lista jest PUSTA, oznacza to, że nikt inny nie pisał do bazy. Jeśli coś zostało, masz dowód na użycie innego konta.
+Analiza poprawności:
+To zadanie audytowe wymaga sprawdzenia historii działań (kto wykonał operację zapisu), a nie bieżących uprawnień.
+1. Filter + Hide Matching: W Logs Explorerze to potężne narzędzie. Filtrujesz operacje zapisu do BigQuery (`protoPayload.methodName:"bigquery.tables.insert"`), a następnie filtrujesz wpisy poprawnego konta serwisowego ("Click on email"), po czym klikasz "Hide Matching".
+2. Wynik: Jeśli po ukryciu poprawnych logów lista jest pusta, masz pewność, że wszystkie operacje zostały wykonane przez to konto.
 
-Dlaczego inne są błędne:
-B. Show Matching + empty: Jeśli pokażesz tylko poprawne konto i lista będzie pusta, to znaczy, że ono NIC nie napisało - to odwrotność tego, co chcesz sprawdzić.
-C, D: Sprawdzenie uprawnień powie Ci, kto MOŻE pisać, ale nie potwierdzi, kto FAKTYCZNIE pisał w przeszłości (audyt historyczny wymaga logów).
+Dlaczego pozostałe są błędne:
+B. Show Matching + empty: Jeśli lista jest pusta po wybraniu poprawnego konta, oznaczałoby to, że konto nie wykonało żadnych operacji, co jest zaprzeczeniem zadania.
+C/D. IAM review: Sprawdzenie uprawnień IAM mówi tylko o tym, kto MOŻE pisać, ale nie potwierdza faktów (kto FAKTYCZNIE pisał do bazy w przeszłości). Audyt musi opierać się na logach (Data Access Logs).
 
-Konsensus społeczności ExamTopics: Zdecydowane poparcie dla A. To praktyczna umiejętność korzystania z Logs Explorera.</pre>
+Wskazówki egzaminacyjne:
+- "History record" / "Who did what" = Cloud Audit Logs (Logs Explorer).
+- "Audit permissions" = IAM.
+- "Filter + Hide Matching" to technika, którą warto znać do szybkiego sprawdzania anomalii.
+
+Dokumentacja:
+<a href="https://cloud.google.com/logging/docs/view/logs-explorer-queries" target="_blank">https://cloud.google.com/logging/docs/view/logs-explorer-queries</a></pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Ten wzorzec audytowy pozwala na szybkie wykrycie 'szumu' lub nieautoryzowanych działań bez konieczności przeglądania milionów poprawnych wpisów.</p>
+<p><b>Głęboka analiza:</b> Audyt w GCP opiera się na logach. Najczęstszym błędem na egzaminie jest wybieranie odpowiedzi związanych z IAM (sprawdzenie uprawnień) zamiast odpowiedzi związanych z Cloud Logging (sprawdzenie rzeczywistych działań).</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/logging/docs/view/logs-explorer-queries" target="_blank">https://cloud.google.com/logging/docs/view/logs-explorer-queries</a></li>
+<li><a href="https://cloud.google.com/logging/docs/audit" target="_blank">https://cloud.google.com/logging/docs/audit</a></li>
 </ul>
 </div>
 </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +138,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>
