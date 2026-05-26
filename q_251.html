@@ -72,7 +72,6 @@ Your organization has a centralized identity provider that is used to manage hum
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Enable Workforce Identity Federation. Create a workforce identity pool and specify the on-premises identity provider as a workforce identity pool provider. Create an attribute mapping to map the on-premises identity provider token to a Google STS token. Create an IAM binding that binds the required role(s) to the external identity by specifying the project ID, workload identity pool, and attribute that should be matched.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Enable Identity-Aware Proxy (IAP). Configure IAP by specifying the groups and service accounts that should have access to the application. Grant these identities the IAP-secured web app user role.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enable Workload Identity Federation. Create a workload identity pool and specify the on-premises identity provider as a workload identity pool provider. Create an attribute mapping to map the on-premises identity provider token to a Google STS token. Create a service account with the necessary permissions for the workload. Grant the external identity the Workload Identity user role on the service account.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,37 @@ Your organization has a centralized identity provider that is used to manage hum
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (Enable Workload Identity Federation. Create a workload identity pool and specify the on-premises identity provider as a workload identity pool provider. Create an attribute mapping to map the on-premises identity provider token to a Google STS token. Create a service account with the necessary permissions for the workload. Grant the external identity the Workload Identity user role on the service account.)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Workload Identity Federation (WIF): Pozwala aplikacjom działającym poza Google Cloud (on-premises, AWS, Azure) na używanie ich własnych tożsamości do bezpiecznego pobierania krótkotrwałych tokenów GCP. Eliminuje to potrzebę przechowywania statycznych i niebezpiecznych kluczy JSON (hard coded credentials).
+Dlaczego ta odpowiedź jest poprawna:
+- Workload Identity Federation (WIF): Pozwala aplikacjom działającym poza Google Cloud (np. on-premises) na bezpieczne uwierzytelnianie się w Google Cloud bez potrzeby zarządzania statycznymi kluczami JSON (Service Account Keys).
+- WIF vs WIF dla pracowników: WIF (Workload Identity Federation) jest przeznaczone dla "obciążeń" (workloads) – czyli aplikacji, skryptów, usług. Workforce Identity Federation służy do logowania ludzi (pracowników). Pytanie dotyczy "on-premises applications", więc poprawnym wyborem jest Workload Identity Federation.
+- Mechanizm działania: Aplikacja zewnętrzna używa swojego tokena (np. OIDC/SAML), aby wymienić go na krótkotrwały token dostępu GCP przez WIF.
 
-Dlaczego inne są błędne:
-A. Secure Web Proxy: Służy do filtrowania ruchu wychodzącego Z chmury, nie zarządza tożsamością maszyn on-prem.
-B. Workforce Identity Federation: Służy do logowania pracowników (ludzi), a nie aplikacji (workloads).
-C. Identity-Aware Proxy (IAP): Zarządza dostępem do aplikacji webowych, nie służy do uwierzytelniania procesów on-prem w API Google.
+Analiza niepoprawnych odpowiedzi:
+- A. Secure Web Proxy: Służy do filtrowania ruchu wychodzącego z chmury do internetu, nie służy do zarządzania tożsamością maszyn.
+- B. Workforce Identity Federation: Ta opcja służy do federowania tożsamości PRACOWNIKÓW (ludzi), a nie aplikacji.
+- C. Identity-Aware Proxy (IAP): IAP służy do kontroli dostępu do aplikacji webowych, a nie do "bezkluczowej" autentykacji API przez aplikacje.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla D. WIF to obecnie jedyny zalecany sposób na 'keyless' dostęp spoza chmury.
+Wskazówki i triki (Tips & Tricks):
+- "External applications" / "Keyless authentication" = Workload Identity Federation.
+- "Workers" / "Humans" = Workforce Identity Federation.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: WIF to "Keyless Authentication".
+- Zawsze wybieraj opcje, które sugerują użycie WIF do federacji tożsamości dla automatów i aplikacji.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iam/docs/workload-identity-federation" target="_blank">Workload Identity Federation overview</a>
+- <a href="https://cloud.google.com/blog/products/identity-security/enabling-keyless-authentication-from-github-actions" target="_blank">Keyless authentication introduction</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> WIF wspiera standardy OIDC i SAML, co pozwala na integrację z niemal każdym nowoczesnym systemem tożsamości on-premises.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/iam/docs/workload-identity-federation" target="_blank">https://cloud.google.com/iam/docs/workload-identity-federation</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją wiedzę o nowoczesnych standardach "keyless authentication". Wyciek kluczy JSON jest jednym z najczęstszych powodów włamań do GCP. WIF pozwala całkowicie wyeliminować ten problem, przekazując ciężar uwierzytelnienia na zaufanego dostawcę tożsamości (IdP), którego Twoja firma już używa.</p>
 </div>
 </div>
 <script>

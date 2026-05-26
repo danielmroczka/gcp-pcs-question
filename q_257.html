@@ -72,7 +72,6 @@ You are running code in Google Kubernetes Engine (GKE) containers in Google Clou
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a service account with keys. Store the keys in Secret Manager with a 30-day rotation schedule. Reference the keys in the Pods.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a service account with keys. Store the keys as a Kubernetes secret. Reference the keys in the Pods.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a service account with keys. Store the keys in Secret Manager. Reference the keys in the Pods.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,28 +88,34 @@ You are running code in Google Kubernetes Engine (GKE) containers in Google Clou
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Create a service account. Grant bucket access to the Pods by using Workload Identity Federation for GKE.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Workload Identity: To natywny sposób GKE na nadawanie uprawnień podom bez używania kluczy JSON. Łączy on konto K8s z kontem GCP. Jest to rozwiązanie o najmniejszym narzucie (minimal overhead), ponieważ Google samo dba o rotację tokenów i ich bezpieczeństwo.
+Dlaczego ta odpowiedź jest poprawna:
+- Workload Identity: To najbezpieczniejszy i zalecany przez Google sposób uwierzytelniania aplikacji działających w GKE (w tym pipeline'ów CI/CD) do usług Google Cloud. Eliminuje potrzebę generowania, pobierania i przechowywania statycznych kluczy JSON kont serwisowych (Service Account Keys), które są częstym źródłem wycieków danych.
+- Mapowanie Tożsamości: Workload Identity wiąże konto serwisowe Kubernetes (KSA) z kontem serwisowym Google Cloud (GSA). Dzięki temu pod działający w klastrze automatycznie otrzymuje tokeny tożsamości GSA z serwera metadanych.
 
-Dlaczego inne są błędne:
-B, C, D: Wszystkie te opcje wymagają tworzenia i zarządzania statycznymi kluczami JSON, co generuje ogromny narzut (overhead) związany z ich rotacją i bezpiecznym przechowywaniem.
+Analiza niepoprawnych odpowiedzi:
+- B, C, D: Wszystkie te opcje sugerują użycie ręcznie zarządzanych kluczy JSON (service account keys), co jest praktyką niebezpieczną i niezgodną z modelem "keyless" promowanym przez Workload Identity.
 
-Konsensus społeczności ExamTopics: 100% na A. Słowo 'minimal overhead' w GKE to synonim Workload Identity.
+Wskazówki i triki (Tips & Tricks):
+- "GKE" + "Access Google Cloud APIs" + "Secure" = Workload Identity.
+- Jeśli widzisz "Service Account Keys" lub "JSON keys" w opcjach dla GKE, zazwyczaj jest to błędna odpowiedź.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Workload Identity wymaga włączenia na poziomie klastra ORAZ na poziomie puli węzłów.
+- Pamiętaj o strukturze wiązania: `serviceAccount:[PROJECT_ID].svc.id.goog[[NAMESPACE]/[KSA_NAME]]`.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity" target="_blank">Workload Identity overview</a>
+- <a href="https://cloud.google.com/kubernetes-engine/docs/concepts/workload-identity" target="_blank">How Workload Identity works</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Workload Identity sprawia, że pod 'staje się' kontem serwisowym Google w oczach chmury, bez żadnych dodatkowych haseł w plikach konfiguracyjnych.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity" target="_blank">https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje znajomość nowoczesnych standardów bezpieczeństwa kontenerów. Przejście od uprawnień "maszyny" (Node SA) do uprawnień "procesu" (Workload Identity) jest fundamentalną zmianą w architekturze chmurowej, która radykalnie podnosi poziom zabezpieczeń klastra GKE.</p>
 </div>
 </div>
 <script>

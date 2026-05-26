@@ -72,7 +72,6 @@ Your organization has two VPC Service Controls service perimeters, Perimeter-A a
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure a perimeter bridge between the projects hosting the Cloud Storage buckets in Perimeter-A and Perimeter-B.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure an egress rule for the Cloud Storage bucket in Perimeter-A and a corresponding ingress rule in Perimeter-B.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure a bidirectional egress/ingress rule for the Cloud Storage buckets in Perimeter-A and Perimeter-B.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,29 +88,37 @@ Your organization has two VPC Service Controls service perimeters, Perimeter-A a
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Configure an egress rule for the Cloud Storage bucket in Perimeter-A and a corresponding ingress rule in Perimeter-B)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Ingress/Egress Rules: Są bardziej precyzyjne niż mosty (bridges). Pozwalają na zezwolenie na konkretną operację (np. tylko `objects.get`) tylko dla konkretnej tożsamości między perymetrami, co realizuje zasadę najniższych uprawnień lepiej niż otwarcie całego projektu mostem.
+Dlaczego ta odpowiedź jest poprawna:
+- VPC Service Controls (VPC SC): Chroni zasoby (jak bucket w Projekcie A) przed eksfiltracją i nieautoryzowanym dostępem. Perymetr domyślnie blokuje dostęp z zewnątrz.
+- Egress Rule (Reguła wyjściowa): Aby umożliwić kopiowanie danych Z perymetru A DO perymetru B, musisz skonfigurować regułę Egress w Projekcie A, która wskazuje projekt docelowy (Perimeter-B) jako dozwolony cel komunikacji.
+- Ingress Rule (Reguła wejściowa): W Projekcie B musisz skonfigurować regułę Ingress, która pozwala na przyjmowanie zapytań pochodzących z Projektu A.
+- Bezpieczeństwo: VPC SC chroni przed eksfiltracją danych, a reguły Ingress/Egress pozwalają precyzyjnie kontrolować komunikację między perymetrami, realizując zasadę najniższych uprawnień.
 
-Dlaczego inne są błędne:
-A, B. Perimeter bridge: Jest to metoda 'stara' lub mniej granularna. Bridge łączy wszystkie usługi w perymetrach, co zwiększa powierzchnię ataku.
-D. Bidirectional: Jeśli potrzebujemy kopiować tylko w jedną stronę, dwukierunkowe zaufanie jest niepotrzebnym ryzykiem.
+Analiza niepoprawnych odpowiedzi:
+- A, B. Perimeter bridge: Most (bridge) łączy dwa perymetry w jeden, co znosi izolację między nimi (wszystkie zasoby w obu perymetrach mogą się komunikować). To rozwiązanie jest zbyt szerokie i narusza zasadę najmniejszych uprawnień, jeśli potrzebujemy tylko specyficznego połączenia.
+- D. Bidirectional: Jeśli potrzebujemy kopiować tylko w jedną stronę, dwukierunkowe zezwolenie jest niepotrzebnym ryzykiem.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na C. Nowoczesne VPC SC opiera się na granularnych regułach wejścia/wyjścia.
+Wskazówki i triki (Tips & Tricks):
+- "Cross-perimeter access" / "Access from outside perimeter" = Ingress/Egress Rule.
+- "Connect perimeters" + "Isolation required" = Ingress/Egress (nie Bridge).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Reguły Ingress/Egress działają na poziomie API Google Cloud, a nie na poziomie IP (to nie jest firewall sieciowy VPC).
+- Zawsze weryfikuj `serviceName` (np. `storage.googleapis.com`) w konfiguracji reguły.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules" target="_blank">Ingress and egress rules overview</a>
+- <a href="https://cloud.google.com/vpc-service-controls/docs/service-perimeters" target="_blank">Service perimeters guide</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Reguły Ingress/Egress pozwalają na filtrowanie nawet po poziomach dostępu (Access Levels), co daje dodatkową kontrolę kontekstową.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules" target="_blank">https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje zrozumienie architektury "VPC Service Controls". W nowoczesnych, wieloprojektowych środowiskach, izolacja usług jest kluczowa. Reguły Ingress/Egress są "bezpiecznymi furtkami" w tej izolacji, pozwalającymi na precyzyjne sterowanie przepływem danych bez niszczenia bariery ochronnej.</p>
 </div>
 </div>
 <script>

@@ -72,7 +72,6 @@ Your team maintains 1PB of sensitive data within BigQuery that contains personal
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Export the BigQuery dataset to Cloud Storage. Create a VPC Service Control perimeter and allow only their team's project access to the bucket.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Implement data pseudonymization techniques to replace the PII fields with non-identifiable values. Grant the other team access to the pseudonymized dataset.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a filtered copy of the dataset and replace the sensitive data with hash values in a separate project. Grant the other team access to this new project.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,29 +88,35 @@ Your team maintains 1PB of sensitive data within BigQuery that contains personal
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Utilize BigQuery's row-level access policies and/or column-level data masking to mask PII columns based on the other team's user identities)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Dynamic Data Masking / Row-level security: Pozwala na udostępnienie tej samej, wielkiej (1PB) tabeli różnym zespołom. System automatycznie ukrywa (maskuje) kolumny z PII dla zespołu zewnętrznego, podczas gdy Twój zespół widzi pełne dane. Odbywa się to bez kopiowania danych, co oszczędza ogromne koszty i czas.
+Dlaczego ta odpowiedź jest poprawna:
+- Dynamic Data Masking (DDM) / Row-level security (RLS): Pozwala na udostępnienie tej samej, wielkiej (1PB) tabeli różnym zespołom. System automatycznie ukrywa (maskuje) lub filtruje kolumny/wiersze z PII dla zespołu zewnętrznego, podczas gdy Twój zespół widzi pełne dane. Odbywa się to bez kopiowania danych, co oszczędza ogromne koszty i czas (operacja wewnątrz bazy).
 
-Dlaczego inne są błędne:
-B, D: Kopiowanie 1PB danych jest skrajnie nieefektywne i kosztowne.
-C. Pseudonymization: Dobra technika, ale zazwyczaj wymaga stworzenia nowej kopii danych, podczas gdy A robi to dynamicznie w locie.
+Analiza niepoprawnych odpowiedzi:
+- B. Eksport do CSV: Kopiowanie 1PB danych jest skrajnie nieefektywne, kosztowne i niebezpieczne (dane opuszczają środowisko BigQuery).
+- C. Pseudonimizacja (jako kopia): Wymaga stworzenia nowej kopii danych, co dla 1PB jest nieakceptowalne kosztowo i operacyjnie.
+- D. Hashowanie w osobnej tabeli: Podobnie jak C, wymaga utrzymywania duplikatu danych, co jest nieefektywne przy skali 1PB.
 
-Konsensus społeczności ExamTopics: 100% na A. BigQuery dynamiczne maskowanie to król analityki na dużą skalę.
+Wskazówki i triki (Tips & Tricks):
+- "1PB dataset" + "Protect PII" + "Efficiently" = Dynamiczne Maskowanie / RLS w BigQuery (brak kopiowania danych).
+- Zapamiętaj: W GCP staramy się NIE kopiować danych dla celów bezpieczeństwa, jeśli możemy użyć funkcji wbudowanych w silnik bazy danych.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: RLS filtruje wiersze, a CLS (Data Masking) ukrywa zawartość kolumn. Opcja A (w ujęciu egzaminacyjnym) obejmuje te mechanizmy.
+- Data Masking działa w oparciu o "Policy Tags" w Data Catalog.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/bigquery/docs/column-data-masking-intro" target="_blank">Introduction to column-level data masking</a>
+- <a href="https://cloud.google.com/bigquery/docs/row-level-security-intro" target="_blank">Introduction to row-level security</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Możesz przypisać tag `pii_masked` do kolumny 'nazwisko'. Użytkownik bez uprawnień do tego tagu zobaczy w tej kolumnie gwiazdki, mimo że zapytanie SQL wykona się poprawnie.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/bigquery/docs/column-data-masking-intro" target="_blank">https://cloud.google.com/bigquery/docs/column-data-masking-intro</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość nowoczesnego Data Warehousingu. Kluczem jest unikanie kopiowania danych (Data Duplication). RLS/CLS to mechanizmy "in-place", które pozwalają na bezpieczną analitykę na tej samej tabeli dla wielu zespołów o różnych uprawnieniach.</p>
 </div>
 </div>
 <script>

@@ -64,15 +64,14 @@
 <h2>Question 247 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You run a web application on top of Cloud Run that is exposed to the internet with an Application Load Balancer. You want to ensure that only privileged users from your organization can access the application. The proposed solution must support browser access with single sign-on. What should you do?
+Your organization is migrating a complex application to Google Cloud. The application has multiple internal components that interact with each other across several Google Cloud projects. Security is a major concern, and you must design an authorization scheme for administrators that aligns with the principles of least privilege and separation of duties. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Change Cloud Run configuration to require authentication. Assign the role of Cloud Run Invoker to the group of privileged users.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a group of privileged users in Cloud Identity. Assign the role of Cloud Run User to the group directly on the Cloud Run service.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Change the Ingress Control configuration of Cloud Run to internal and create firewall rules to allow only access from known IP addresses.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Activate Identity-Aware Proxy (IAP) on the Application Load Balancer backend. Assign the role of IAP-secured Web App User to the group of privileged users.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Identify the users who will migrate the application, revoke the default user roles and assign the users with purposely created custom roles.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use multiple external identity providers (IdP) configured to use different SAML profiles and federate the IdPs for each application component.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure multi-factor authentication (MFA) to enforce the use of physical tokens for all users who will migrate the application.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> No action needed. When a Google Cloud organization is created, the appropriate permissions are automatically assigned to all users in the domain.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +79,7 @@ You run a web application on top of Cloud Run that is exposed to the internet wi
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">D</span>
+<span class="correct-answer">A</span>
 <br/>
 </span>
 </div>
@@ -89,37 +88,36 @@ You run a web application on top of Cloud Run that is exposed to the internet wi
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (Activate Identity-Aware Proxy (IAP) on the Application Load Balancer backend. Assign the role of IAP-secured Web App User to the group of privileged users.)
+Poprawna odpowiedź: A (Identify the users who will migrate the application, revoke the default user roles and assign the users with purposely created custom roles)
 
 Dlaczego ta odpowiedź jest poprawna:
-- Identity-Aware Proxy (IAP): Pozwala na kontrolowanie dostępu do aplikacji HTTP(S) w oparciu o tożsamość użytkownika, bez konieczności używania VPN.
-- IAP-Secured Web App User: Jest to specyficzna rola IAM wymagana do uzyskania dostępu do zasobów HTTPS chronionych przez IAP (np. usług Cloud Run za Load Balancerem). Bez tej roli, nawet jeśli użytkownik przejdzie pomyślnie autentykację Google, IAP odrzuci jego żądanie dostępu (autoryzacja).
-- SSO: IAP natywnie wspiera Single Sign-On, korzystając z kont Google (Cloud Identity / Workspace).
+- Zasada najniższych uprawnień (Least Privilege): Role podstawowe (Basic Roles: Owner, Editor, Viewer) są zbyt szerokie. W środowisku produkcyjnym i skomplikowanych migracjach należy używać ról predefiniowanych lub niestandardowych (Custom Roles), które dają dokładnie takie uprawnienia, jakich użytkownik potrzebuje do konkretnych zadań.
+- Separacja obowiązków (Separation of Duties): Pozwala na podział zadań między administratorów, deweloperów i operatorów security, tak aby żadna osoba nie miała pełnej kontroli nad wszystkim ("God mode").
+- Custom Roles: Pozwalają na stworzenie precyzyjnego zestawu uprawnień, który ogranicza ryzyko błędów ludzkich podczas migracji.
 
 Analiza niepoprawnych odpowiedzi:
-- A. Cloud Run Invoker: Ta rola pozwala na wywołanie API Cloud Run. Choć technicznie zapewnia kontrolę dostępu, nie wspiera SSO w sposób przeglądarkowy i jest przeznaczona raczej do wywołań systemowych (np. z klastra GKE lub Cloud Scheduler), a nie dla użytkowników przeglądających stronę.
-- B. Cloud Run User: Ta rola nadaje dostęp do zarządzania usługą Cloud Run (np. deployment), a nie dostęp do samej aplikacji webowej dla użytkownika końcowego.
-- C. Ingress Control: Ingress Control pozwala na ograniczenie dostępu do aplikacji wewnątrz sieci VPC, ale nie zapewnia autentykacji użytkowników przeglądarkowych przez SSO.
+- B. Multiple IdPs: To skomplikowanie zarządzania tożsamością, nie ma nic wspólnego z "authorization scheme" (uprawnieniami).
+- C. MFA: To mechanizm uwierzytelniania (Authentication), a nie autoryzacji (Authorization).
+- D. No action needed: To skrajnie niebezpieczne założenie. Domyślne uprawnienia w nowej organizacji nie spełniają wymogów "least privilege".
 
 Wskazówki i triki (Tips & Tricks):
-- "HTTPS resources" + "SSO/Browser access" + "Privileged users" = IAP (Web App User) + Load Balancer.
-- Zapamiętaj: IAP sprawdza tożsamość (Kim jesteś?) i rolę (Czy masz uprawnienie Web App User?).
+- "Least privilege" + "Separation of duties" = Zawsze Custom Roles lub Predefined Roles (nigdy Basic Roles).
+- Jeśli widzisz "No action needed" / "Automatic" w kontekście uprawnień -> odrzuć to w 99% przypadków.
 
 Praktyczne informacje na egzamin:
-- IAP jest fundamentem strategii "BeyondCorp" (Zero Trust) w Google Cloud.
-- Aby IAP działał dla aplikacji webowej, musi ona znajdować się za External HTTP(S) Load Balancerem lub być częścią App Engine.
+- Zapamiętaj: Rola Owner posiada uprawnienia do zarządzania IAM, co jest naruszeniem zasady separacji obowiązków w większości scenariuszy audytowych.
 
 Dokumentacja i linki:
-- <a href="https://cloud.google.com/iap/docs/access-control" target="_blank">IAP Access Control overview</a>
-- <a href="https://cloud.google.com/iap/docs/enabling-cloud-run" target="_blank">Enabling IAP for Cloud Run</a>
+- <a href="https://cloud.google.com/iam/docs/understanding-roles" target="_blank">Understanding IAM roles</a>
+- <a href="https://cloud.google.com/iam/docs/creating-custom-roles" target="_blank">Creating custom roles</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
 <h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie sprawdza znajomość specyficznych ról IAP, co jest częstym elementem egzaminu. Najważniejszym rozróżnieniem jest Web App User vs Tunnel User. IAP jest fundamentem strategii "BeyondCorp" (Zero Trust) w Google Cloud, dlatego zrozumienie jego uprawnień jest kluczowe dla inżyniera bezpieczeństwa.</p>
+<p><b>Sugerowana odpowiedź: A</b></p>
+<p><b>Analiza strategiczna:</b> To pytanie sprawdza Twoją zdolność do projektowania bezpiecznych procesów administracyjnych. W chmurze uprawnienia są "wszędobylskie". Twoim zadaniem jako inżyniera bezpieczeństwa jest ich "przycinanie" (pruning), aby każda osoba miała tylko tyle uprawnień, ile jest jej niezbędne do wykonania pracy – ani mniej, ani więcej.</p>
 </div>
 </div>
 <script>
