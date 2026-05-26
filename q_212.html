@@ -89,21 +89,46 @@ Your company is moving to Google Cloud. You plan to sync your users first by usi
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Use the transfer tool to migrate unmanaged users)
 
-Wyjaśnienie: Transfer Tool to dedykowane narzędzie do rozwiązywania konfliktów nazw kont i przenoszenia ich pod zarząd organizacji.
+Dlaczego ta odpowiedź jest poprawna:
+- Konta niezarządzane (Unmanaged Users): To konta osobiste Google, które pracownicy założyli samodzielnie przy użyciu służbowych adresów e-mail (np. przed wdrożeniem Cloud Identity w firmie). Gdy firma zaczyna zarządzać swoją domeną w Google, konta te stają się tzw. "kontami konfliktowymi".
+- Transfer Tool for Unmanaged Users (TTUU): Jest to dedykowane narzędzie w konsoli administracyjnej Google, stworzone dokładnie po to, aby:
+  1. Odkryć wszystkich pracowników, którzy posiadają takie konta osobiste w domenie firmy.
+  2. Wysłanie im oficjalnej prośby (zaproszenia) o przeniesienie konta pod zarząd organizacji.
+  3. Po zaakceptowaniu przez użytkownika, konto staje się kontem zarządzanym, a administrator zyskuje nad nim pełną kontrolę (hasło, MFA, audyt).
+- Skuteczność: Jest to jedyny zautomatyzowany sposób na migrację istniejących kont osobistych do Cloud Identity przy jednoczesnym zachowaniu danych użytkownika (np. plików na Google Drive).
+
+Analiza niepoprawnych odpowiedzi:
+- A. GCDS search rules: Google Cloud Directory Sync (GCDS) służy do tworzenia NOWYCH kont w Google na podstawie danych z Twojego lokalnego katalogu (np. Active Directory). Jeśli GCDS spróbuje stworzyć konto dla adresu, który już istnieje jako konto osobiste, wystąpi błąd konfliktu. GCDS nie potrafi samodzielnie migrować typów kont.
+- C. Custom script and Admin SDK: Choć Admin SDK pozwala na wiele operacji, transfer konta wymaga interakcji z użytkownikiem (zgodna na transfer) ze względów prawnych i prywatności. Pisanie własnego skryptu do tego procesu jest niepotrzebnie skomplikowane i ryzykowne, skoro istnieje gotowe narzędzie (TTUU).
+- D. GCDS exclusion rules: Reguły wykluczenia (exclusion rules) służą jedynie do pomijania pewnych użytkowników podczas synchronizacji (np. aby GCDS ich nie usunął lub nie zawiesił). Nie pomagają w żaden sposób w migracji kont niezarządzanych.
+
+Wskazówki i triki (Tips & Tricks):
+- "Unmanaged users" / "Corporate email used for personal accounts" = Transfer Tool.
+- "Sync users from AD" = GCDS.
+- Pamiętaj o procesie: Najpierw używasz Transfer Tool, aby "przejąć" istniejące konta, a potem GCDS, aby utrzymać synchronizację danych (np. nazwisko, przynależność do grup).
+
+Praktyczne informacje na egzamin:
+- Zrozum konsekwencje: Jeśli użytkownik odmówi transferu, administrator może wymusić na nim zmianę adresu e-mail konta osobistego na inny (np. @gmail.com), co "uwalnia" adres służbowy dla nowego konta zarządzanego.
+- Transfer Tool pozwala na monitorowanie postępu migracji w czasie rzeczywistym.
+
+Dokumentacja i linki:
+- <a href="https://support.google.com/cloudidentity/answer/7062710" target="_blank">Transfer tool for unmanaged users overview</a>
+- <a href="https://support.google.com/a/answer/6178640" target="_blank">Migrate unmanaged users - invitation process</a>
+- <a href="https://support.google.com/a/answer/181126" target="_blank">About conflicting accounts</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p>Użytkownik dostaje maila z prośbą o przekazanie konta firmie.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To klasyczne pytanie o proces "Onboarding" organizacji do Google Cloud. Największym wyzwaniem nie jest technologia, ale ludzie i ich przyzwyczajenia. Transfer Tool jest eleganckim rozwiązaniem, które balansuje potrzeby bezpieczeństwa korporacyjnego z prawami użytkowników do ich danych. Pamiętaj, że w GCP tożsamość użytkownika jest nadrzędna nad wszystkim innym.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://support.google.com/cloudidentity/answer/7062710" target="_blank">https://support.google.com/cloudidentity/answer/7062710</a></li>
-
+<li>Warto wiedzieć, że po transferze użytkownik może otrzymać rolę "Conflicting Account User", co ułatwia administratorowi ich identyfikację w systemie.</li>
+<li>Narzędzie to jest darmowe i dostępne w konsoli administracyjnej pod adresem: Menu > Katalog > Użytkownicy > Narzędzie do przenoszenia użytkowników niezarządzanych.</li>
 </ul>
 </div>
 </div>

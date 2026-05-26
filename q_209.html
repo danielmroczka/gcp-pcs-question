@@ -90,21 +90,42 @@ Your organization is transitioning to Google Cloud. You want to ensure that only
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: CE.
+Poprawna odpowiedź: CE (C: Enforce Binary Authorization via organization policy, E: Configure Binary Authorization policy with attestations)
 
-Wyjaśnienie: Binary Authorization (E) to usługa sprawdzająca podpisy (atesty). Polityka organizacji (C) może wymuszać włączenie tej usługi na wszystkich klastrach GKE.
+Dlaczego te odpowiedzi są poprawne:
+- Binary Authorization (BinAuthz - E): Jest to kluczowa usługa bezpieczeństwa dla GKE, która pozwala na zdefiniowanie polityki "kto i co może zostać uruchomione". Wymóg "signed by a trusted authority" realizuje się właśnie w BinAuthz poprzez tzw. atestacje (attestations). Atestacja to cyfrowy podpis potwierdzający, że dany obraz kontenera przeszedł pomyślnie przez określony etap (np. skanowanie podatności lub testy QA).
+- Polityka Organizacji (C): Aby zapewnić, że zabezpieczenie to nie jest opcjonalne, można użyć polityki organizacji, która wymusza włączenie Binary Authorization na wszystkich klastrach GKE w projekcie lub folderze. Uniemożliwia to deweloperom tworzenie klastrów omijających mechanizm weryfikacji podpisów.
+
+Analiza niepoprawnych odpowiedzi:
+- A. Container Threat Detection: Służy do wykrywania zagrożeń w CZASIE RZECZYWISTYM (runtime) na już działających kontenerach (np. wykrywanie reverse shells). Nie służy do zapobiegania wdrożeniu niezaufanych obrazów (to zadanie dla BinAuthz).
+- B. trustedImageProjects: Ta polityka organizacji dotyczy obrazów maszyn wirtualnych (Compute Engine), a nie obrazów kontenerów dla GKE.
+- D. PodSecurity standards: Standardy te kontrolują uprawnienia kontenera wewnątrz klastra (np. czy może działać jako root, czy ma dostęp do sieci hosta). Nie kontrolują one pochodzenia obrazu ani jego autentyczności.
+
+Wskazówki i triki (Tips & Tricks):
+- "Only trusted images" + "GKE" = Binary Authorization.
+- "Signed by authority" = Attestations (wewnątrz Binary Authorization).
+- Pamiętaj: BinAuthz sprawdza obraz w momencie wywołania API `kubectl apply` lub `helm install`.
+
+Praktyczne informacje na egzamin:
+- Zrozum role: **Attestor** (tworzy podpis), **Evaluator** (sprawdza podpis przed deploymentem).
+- Binary Authorization jest fundamentem "Software Supply Chain Security" w Google Cloud.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/binary-authorization/docs/overview" target="_blank">Binary Authorization overview</a>
+- <a href="https://cloud.google.com/binary-authorization/docs/how-it-works" target="_blank">How Binary Authorization works</a>
+- <a href="https://cloud.google.com/kubernetes-engine/docs/how-to/binary-authorization" target="_blank">Enabling Binary Authorization on GKE</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: CE</b></p>
-<p><b>Głęboka analiza:</b> <p>Atestacja to dowód, że obraz przeszedł pomyślnie przez określony etap (np. testy lub skan security).</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do budowania wielowarstwowej obrony (Defense in Depth) dla kontenerów. Sama technologia (BinAuthz) to połowa sukcesu – druga połowa to zarządzanie (Organization Policy), które gwarantuje, że technologia ta jest faktycznie używana wszędzie tam, gdzie jest potrzebna.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/binary-authorization/docs/overview" target="_blank">https://cloud.google.com/binary-authorization/docs/overview</a></li>
-
+<li>Możesz użyć Cloud Build do automatycznego tworzenia atestacji po pomyślnym zakończeniu skanowania obrazu w Artifact Registry.</li>
+<li>Pamiętaj o opcji "Dry run" w Binary Authorization, która pozwala na audytowanie naruszeń bez blokowania wdrożeń na etapie testów.</li>
 </ul>
 </div>
 </div>

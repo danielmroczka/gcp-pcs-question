@@ -90,21 +90,43 @@ You manage a BigQuery analytical data warehouse in your organization. You want t
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: CE.
+Poprawna odpowiedź: CE (C: Create row-level access policies, E: Create column-level policy tags)
 
-Wyjaśnienie: Row-level security (C) pozwala na filtrowanie wierszy dla konkretnych użytkowników. Column-level policy tags (E) ograniczają dostęp do całych kolumn.
+Dlaczego te odpowiedzi są poprawne:
+- Row-Level Security (RLS - C): BigQuery pozwala na ograniczanie dostępu do danych na poziomie poszczególnych wierszy w tabeli. Robi się to za pomocą tzw. "Row-level access policies". Każda polityka zawiera wyrażenie filtrujące (np. `customer_id = 'ABC'`). Gdy użytkownik objęty taką polityką wykonuje zapytanie, BigQuery automatycznie odfiltrowuje (ukrywa) wiersze, dla których wyrażenie to jest FAŁSZYWE (FALSE). Dzięki temu w jednej tabeli możesz trzymać dane wielu klientów, a każdy z nich zobaczy tylko swoje rekordy.
+- Column-Level Security (CLS - E): Do ograniczania dostępu do całych kolumn (np. PII, dane finansowe) służą "Policy Tags" zarządzane w usłudze Data Catalog. Możesz oznaczyć konkretne kolumny tagami (np. "Sensitive") i nadać uprawnienia do odczytu tych tagów tylko wybranym osobom. Użytkownik bez odpowiedniej roli IAM nie będzie mógł wybrać tych kolumn w zapytaniu SELECT, nawet jeśli ma dostęp do reszty tabeli.
+
+Analiza niepoprawnych odpowiedzi:
+- A. Filter expression set to TRUE: Gdybyś stworzył politykę z filtrem ustawionym na `TRUE`, użytkownik widziałby WSZYSTKIE wiersze (ponieważ dla każdego wiersza warunek byłby spełniony). Nie stanowiłoby to żadnej restrykcji, o którą prosi pytanie.
+- B. AEAD Encryption: Szyfrowanie AEAD z użyciem KMS jest potężną techniką ochrony danych "at rest" i pozwala na granularną kontrolę, ale jest znacznie trudniejsze w implementacji i zarządzaniu niż natywne funkcje RLS/CLS BigQuery. Wymagałoby modyfikacji zapytań SQL przez użytkowników (użycie funkcji deszyfrujących).
+- D. Dynamic data masking: Służy do ukrywania części danych (np. pokazanie tylko ostatnich 4 cyfr karty) dla osób bez uprawnień, ale dane wciąż są widoczne w sformatowanej formie. CLS (opcja E) jest silniejszym mechanizmem, ponieważ całkowicie blokuje dostęp do kolumny na poziomie metadanych.
+
+Wskazówki i triki (Tips & Tricks):
+- "Restrict access based on rows" = Row-level access policies.
+- "Restrict access based on columns" = Policy tags (Data Catalog).
+- Pamiętaj: RLS jest addytywne. Jeśli należysz do dwóch polityk, widzisz sumę wierszy z obu.
+- Pamiętaj: Jeśli do tabeli zostanie przypisana chociaż jedna polityka RLS, wszyscy użytkownicy NIE ujęci w żadnej polityce tracą dostęp do WSZYSTKICH wierszy (bezpieczne domyślne zachowanie).
+
+Praktyczne informacje na egzamin:
+- Zrozum hierarchię: Dostęp do tabeli (Dataset/Table IAM) -> CLS (Policy Tags) -> RLS (Filter expressions).
+- Aby używać CLS, musisz mieć włączone API Data Catalog i odpowiednie uprawnienia `Data Catalog Fine-Grained Reader`.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/bigquery/docs/row-level-security-intro" target="_blank">BigQuery Row-level security overview</a>
+- <a href="https://cloud.google.com/bigquery/docs/column-level-security-intro" target="_blank">BigQuery Column-level security overview</a>
+- <a href="https://cloud.google.com/bigquery/docs/best-practices-security" target="_blank">BigQuery security best practices</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: CE</b></p>
-<p><b>Głęboka analiza:</b> <p>To połączenie zapewnia pełną kontrolę nad widocznością danych wewnątrz tabeli BigQuery.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie dotyczy budowy nowoczesnych platform analitycznych w architekturze "Multi-tenant". Najważniejszym trendem w GCP jest odchodzenie od fizycznej separacji danych (osobne tabele/datasety) na rzecz separacji logicznej (RLS/CLS). Pozwala to na znacznie łatwiejsze zarządzanie jednym, centralnym "Data Lake" przy zachowaniu rygorystycznych wymogów prywatności.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/bigquery/docs/column-level-security-intro" target="_blank">https://cloud.google.com/bigquery/docs/column-level-security-intro</a></li>
-
+<li>Zwróć uwagę na wymóg "Non-query operations should not be supported". Oznacza to, że użytkownicy powinni mieć rolę `BigQuery Data Viewer`, a nie `Data Editor`.</li>
+<li>RLS może wpłynąć na wydajność zapytań (Query performance) przy bardzo skomplikowanych filtrach, ponieważ filtry te są dołączane do każdego zapytania "pod maską".</li>
 </ul>
 </div>
 </div>

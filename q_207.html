@@ -90,21 +90,43 @@ Your DevOps team uses Packer to build Compute Engine images by using this proces
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: BC.
+Poprawna odpowiedź: BC (B: Provision a Cloud NAT instance, C: Enable Private Google Access)
 
-Wyjaśnienie: Cloud NAT (B) umożliwia dostęp do internetu dla pakietów OS. Private Google Access (C) umożliwia dostęp do API Google (np. Cloud Storage) bez publicznego IP.
+Dlaczego te odpowiedzi są poprawne:
+- Kontekst: Maszyna wirtualna nie posiada publicznego adresu IP ze względu na politykę organizacji, co uniemożliwia jej domyślną komunikację z internetem oraz usługami Google.
+- Cloud NAT (B): Jest niezbędny, aby maszyna mogła pobrać aktualizacje systemu (krok 3) oraz pakiety zewnętrzne z internetu (krok 4). Cloud NAT pozwala instancjom z samym prywatnym adresem IP na inicjowanie połączeń wychodzących (outbound) do internetu, przy jednoczesnym blokowaniu ruchu przychodzącego (inbound).
+- Private Google Access (PGA - C): Pozwala maszynom bez publicznego adresu IP na łączenie się z publicznymi adresami IP usług Google Cloud (np. `storage.googleapis.com` w celu skopiowania binariów w kroku 2). PGA jest włączane na poziomie podsieci (subnet).
+
+Analiza niepoprawnych odpowiedzi:
+- A. HTTP Load Balancer: Służy do obsługi ruchu PRZYCHODZĄCEGO (inbound) od użytkowników do aplikacji. Nie pomaga maszynie w wyjściu do internetu po paczki ani w połączeniu z Cloud Storage.
+- D. Update VPC routes: Same trasy (routes) nie wystarczą, jeśli maszyna nie ma adresu IP, który jest "rozumiany" w internecie. Bez mechanizmu translacji (NAT), pakiety z prywatnym IP zostaną odrzucone przez routery brzegowe.
+- E. Cloud VPN: Służy do łączenia sieci VPC z siecią lokalną (on-premises). Nie zapewnia on dostępu do publicznego internetu (w celu pobrania paczek) ani nie jest standardową metodą dostępu do GCS z wewnątrz tej samej chmury.
+
+Wskazówki i triki (Tips & Tricks):
+- "VM without public IP" + "Access internet (apt-get/yum)" = Cloud NAT.
+- "VM without public IP" + "Access Google APIs (GCS/BigQuery)" = Private Google Access.
+- Pamiętaj: PGA jest darmowe i włączane na podsieci. Cloud NAT jest usługą płatną i wymaga Cloud Routera.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj workflow Packer w GCP: często wymaga on tymczasowych uprawnień sieciowych. Jeśli masz "No External IP" policy, musisz mieć przygotowaną infrastrukturę (NAT + PGA).
+- Zawsze sprawdzaj, czy maszyna musi się łączyć "na zewnątrz" (NAT) czy "do usług Google" (PGA). Często potrzebne są oba.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/nat/docs/overview" target="_blank">Cloud NAT overview</a>
+- <a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">Private Google Access overview</a>
+- <a href="https://cloud.google.com/compute/docs/images/create-delete-deprecate-private-images" target="_blank">Managing private images in Compute Engine</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: BC</b></p>
-<p><b>Głęboka analiza:</b> <p>Bez Cloud NAT maszyna nie pobierze niczego z publicznych repozytoriów Debiana/RedHata.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość "hygieny sieciowej". Google promuje architekturę bez publicznych adresów IP dla wszystkich maszyn (nawet tych budujących obrazy). Zrozumienie, że internet to co innego niż API Google, jest kluczowe. Rozwiązanie BC to standardowy "blueprint" dla bezpiecznego środowiska CI/CD w Google Cloud.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/nat/docs/overview" target="_blank">https://cloud.google.com/nat/docs/overview</a></li>
-
+<li>Warto wiedzieć, że Private Google Access nie wymaga Cloud Routera – to prosta flaga na podsieci.</li>
+<li>Cloud NAT może być skonfigurowany tak, aby obsługiwał tylko wybrane zakresy podsieci, co zwiększa bezpieczeństwo.</li>
 </ul>
 </div>
 </div>

@@ -89,21 +89,42 @@ Your organization processes sensitive health information. You want to ensure tha
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Implement an organization policy that ensures all VM resources created across your organization are Confidential VM instances)
 
-Wyjaśnienie: Confidential VMs to technologia Google Cloud (oparta na AMD SEV), która szyfruje pamięć RAM podczas pracy maszyny.
+Dlaczego ta odpowiedź jest poprawna:
+- Szyfrowanie "In Use" (podczas przetwarzania): Tradycyjne metody szyfrowania chronią dane na dysku (at rest) lub w sieci (in transit). Confidential VMs (Instancje Poufne) to technologia Google Cloud, która chroni dane w momencie ich przetwarzania w procesorze i pamięci RAM.
+- Mechanizm sprzętowy: Confidential VMs wykorzystują funkcje procesorów (takie jak AMD SEV), aby szyfrować zawartość pamięci RAM kluczem generowanym sprzętowo dla każdej instancji. Dzięki temu dane są nieczytelne dla innych VM-ów, a nawet dla systemu operacyjnego hosta (hypervisora) zarządzanego przez Google.
+- Polityka Organizacji (Enforcement): Aby wymusić ten standard w całej firmie, należy zastosować politykę organizacji `constraints/compute.requireConfidentialComputing`. Po jej włączeniu, każda próba stworzenia "zwykłej" instancji VM, która nie posiada włączonej funkcji poufnego przetwarzania, zostanie zablokowana.
+
+Analiza niepoprawnych odpowiedzi:
+- A i C. CMEK / EKM: Te rozwiązania służą do zarządzania kluczami szyfrującymi dane "at rest" (na dyskach persistent disk, w Cloud Storage itp.). Choć dają kontrolę nad kluczem, nie chronią danych w pamięci RAM podczas pracy maszyny.
+- D. No action necessary: To nieprawda. Choć Google domyślnie szyfruje dane "at rest" i "in transit", dane "in use" w pamięci RAM standardowych instancji technicznie mogą być odczytane przez hypervisor w sytuacjach takich jak zrzuty pamięci (memory dumps). Confidential Computing jest dodatkową, wymaganą w tym scenariuszu warstwą ochrony.
+
+Wskazówki i triki (Tips & Tricks):
+- "Data in use" / "Encrypt memory" = Confidential VMs.
+- "Enforce across organization" = Organization Policy.
+- Zapamiętaj: Confidential VMs wymagają specyficznych typów maszyn (np. N2D, C3).
+
+Praktyczne informacje na egzamin:
+- Zrozum termin TEE (Trusted Execution Environment) – to ogólna nazwa środowiska, które tworzą Confidential VMs.
+- Confidential VMs są kluczowe w branżach takich jak bankowość (dane transakcyjne) czy medycyna (dane pacjentów), gdzie suwerenność danych w każdym stanie jest wymogiem prawnym.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/confidential-computing/confidential-vm/docs/introduction" target="_blank">Confidential VM introduction</a>
+- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">Organization Policy constraints list</a>
+- <a href="https://cloud.google.com/compute/confidential-vm/docs/enforce-confidential-vm" target="_blank">Enforcing Confidential VMs</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p>CMEK/EKM chronią dane 'at rest' (na dysku), a Confidential VM chroni dane 'in use'.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość "poufności obliczeniowej" (Confidential Computing). Przez lata był to brakujący element w bezpieczeństwie chmurowym. Google jako lider w tej dziedzinie pozwala na całkowite odizolowanie danych klienta od infrastruktury dostawcy. Na egzaminie zawsze łącz "Data in use" z "Confidential VMs".</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/confidential-computing/confidential-vm/docs/introduction" target="_blank">https://cloud.google.com/confidential-computing/confidential-vm/docs/introduction</a></li>
-
+<li>Włączenie Confidential VMs wiąże się z niewielkim narzutem wydajnościowym (kilka procent), co wynika z procesu szyfrowania/deszyfrowania "w locie" przez procesor.</li>
+<li>Pamiętaj, że do działania tej funkcji system operacyjny wewnątrz VM musi być nowoczesny i wspierać odpowiednie sterowniki (np. obrazy Shielded VM).</li>
 </ul>
 </div>
 </div>

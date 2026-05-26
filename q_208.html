@@ -89,19 +89,43 @@ Your organization recently activated the Security Command Center (SCC) standard 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C. (Uwaga: D również jest rozsądne, ale C kładzie nacisk na zapobieganie regresji przez politykę organizacji). Wyjaśnienie: publicAccessPrevention to najsilniejszy mechanizm ochronny przed ponownym upublicznieniem.
+Poprawna odpowiedź: C (1. Change the bucket permissions to limit access. 2. Query the bucket's usage logs to report on unauthorized access to the data. 3. Enforce the organization policy storage.publicAccessPrevention to avoid regressions)
+
+Dlaczego ta odpowiedź jest poprawna:
+- Krok 1: Naprawa (Remediation) - Zmiana uprawnień na buckecie (usunięcie `allUsers` lub `allAuthenticatedUsers`) jest pierwszym i natychmiastowym krokiem w celu zatrzymania wycieku danych.
+- Krok 2: Dochodzenie (Investigation) - Przeszukanie logów użycia bucketu (GCS Usage Logs) lub logów audytowych Data Access pozwala odpowiedzieć na pytanie: "Czy ktoś niepowołany odczytał te dane, kiedy były publiczne?". Jest to kluczowe dla oceny skutków incydentu.
+- Krok 3: Prewencja (Prevention) - Włączenie polityki organizacji `storage.publicAccessPrevention` gwarantuje, że nikt w przyszłości nie będzie mógł ponownie udostępnić tego (lub innego) bucketu publicznie. Jest to najlepszy sposób na uniknięcie regresji (powrotu błędu).
+
+Analiza niepoprawnych odpowiedzi:
+- A. storage.uniformBucketLevelAccess: UBLA jest bardzo ważne (wyłącza ACL), ale samo w sobie nie zabrania administratorowi nadania publicznego dostępu przez IAM. Tylko `publicAccessPrevention` (PAP) twardo blokuje taką możliwość.
+- B. VPC Service Controls: VPC SC służy do ochrony przed eksfiltracją (wynoszeniem danych poza perymetr), a nie do naprawiania błędnie skonfigurowanych publicznych uprawnień IAM na bucketach. Jest to rozwiązanie zbyt skomplikowane i nieadekwatne do tego konkretnego problemu.
+- D. Mute the finding: Wyciszenie (mutowanie) znaleziska w SCC jest czynnością administracyjną w samym narzędziu, ale nie stanowi technicznego zabezpieczenia przed ponownym wystąpieniem błędu (regresją) tak jak polityka organizacji w opcji C.
+
+Wskazówki i triki (Tips & Tricks):
+- Incydent Response Workflow: Stop the leak (Fix) -> Understand the damage (Investigate) -> Stop it from happening again (Prevent).
+- "Prevent regressions" w kontekście GCS = `publicAccessPrevention`.
+- Pamiętaj: Logi "Data Access" w Cloud Logging muszą być wcześniej włączone, aby móc z nich skorzystać w dochodzeniu. Jeśli nie były włączone, "GCS Usage Logs" mogą być jedynym źródłem (jeśli były skonfigurowane).
+
+Praktyczne informacje na egzamin:
+- Zrozum różnicę między **Standard Tier** a **Premium Tier** w SCC. Standard oferuje podstawowe wykrywanie błędów konfiguracji, ale Premium dodaje zaawansowaną detekcję zagrożeń w czasie rzeczywistym.
+- PAP to obecnie "Gold Standard" dla zabezpieczania bucketów w dużych organizacjach.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/storage/docs/public-access-prevention" target="_blank">Public Access Prevention overview</a>
+- <a href="https://cloud.google.com/storage/docs/access-logs" target="_blank">Cloud Storage usage logs and storage logs</a>
+- <a href="https://cloud.google.com/security-command-center/docs/how-to-remediate-vulnerabilities" target="_blank">Remediating vulnerabilities in SCC</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p>Bucket usage logs lub Data Access logs pozwalają sprawdzić, czy ktoś faktycznie pobrał dane, gdy były publiczne.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie testuje procesowy aspekt bezpieczeństwa. Sama naprawa błędu to tylko połowa sukcesu. Prawdziwy inżynier bezpieczeństwa musi wiedzieć "kto wchodził" (logs) i "jak zablokować to na zawsze" (org policy). Opcja C jako jedyna domyka pełny cykl życia incydentu.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/storage/docs/public-access-prevention" target="_blank">https://cloud.google.com/storage/docs/public-access-prevention</a></li>
-
+<li>Warto wiedzieć, że GCS Usage Logs to starszy mechanizm (zapisujący CSV co godzinę), ale wciąż wspierany. Obecnie zaleca się używanie Cloud Audit Logs (Data Access).</li>
+<li>Mocną stroną opcji C jest użycie PAP, które stało się domyślne dla nowych bucketów w Google Cloud.</li>
 </ul>
 </div>
 </div>

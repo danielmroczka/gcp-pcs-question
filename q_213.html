@@ -89,21 +89,43 @@ Your organization is using GitHub Actions as a continuous integration and delive
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (Configure workload identity federation to use GitHub as an identity pool provider)
 
-Wyjaśnienie: Workload Identity Federation pozwala GitHubowi na pobranie tymczasowych tokenów GCP na podstawie własnego tokena OIDC, bez potrzeby używania statycznych kluczy JSON.
+Dlaczego ta odpowiedź jest poprawna:
+- Workload Identity Federation (WIF): Jest to najbezpieczniejszy i obecnie rekomendowany sposób uwierzytelniania zewnętrznych obciążeń (takich jak GitHub Actions) do Google Cloud. 
+- Eliminacja kluczy: WIF całkowicie eliminuje potrzebę tworzenia, pobierania i rotowania statycznych kluczy JSON kont serwisowych (Service Account Keys). Klucze te są najczęstszą przyczyną wycieków danych (np. poprzez przypadkowe wypchnięcie ich do repozytorium).
+- Mechanizm działania: GitHub Actions generuje krótkotrwały token OIDC (OpenID Connect). Google Cloud weryfikuje ten token i na jego podstawie wydaje krótkotrwały, bezpieczny token dostępu do GCP. Po zakończeniu pipeline'u token wygasa automatycznie.
+- Audytowalność: Każde użycie WIF jest logowane, a dostęp może być precyzyjnie ograniczony do konkretnego repozytorium, a nawet konkretnej gałęzi (branch) lub środowiska w GitHubie.
+
+Analiza niepoprawnych odpowiedzi:
+- A i B. Service account keys: Przechowywanie kluczy JSON w plikach konfiguracyjnych lub w repozytorium (nawet jako GitHub Secrets) wiąże się z ryzykiem ich kradzieży. Są to poświadczenia długotrwałe, które wymagają ręcznego zarządzania i rotacji. WIF (D) jest metodą "keyless", czyli bezkluczową.
+- C. GKE cluster with Workload Identity: Choć Workload Identity wewnątrz GKE jest świetnym rozwiązaniem dla podów działających W CHMURZE, nie służy ono do dostarczania poświadczeń dla zewnętrznych systemów takich jak GitHub. To GitHub potrzebuje tożsamości, aby "pukać" do Google Cloud, a nie odwrotnie.
+
+Wskazówki i triki (Tips & Tricks):
+- "GitHub Actions" / "External CI/CD" + "Securely" = Workload Identity Federation.
+- Pamiętaj: WIF jest zawsze lepsze niż Service Account Keys.
+- Zapamiętaj frazę: "Keyless authentication".
+
+Praktyczne informacje na egzamin:
+- Zrozum terminologię: **Identity Pool** (grupa zewnętrznych tożsamości), **Provider** (konkretny system, np. GitHub).
+- WIF wspiera standardy OIDC i SAML 2.0.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/blog/products/identity-security/enabling-keyless-authentication-from-github-actions" target="_blank">Keyless authentication from GitHub Actions</a>
+- <a href="https://github.com/google-github-actions/auth" target="_blank">Official Google GitHub Action for Auth</a>
+- <a href="https://cloud.google.com/iam/docs/workload-identity-federation" target="_blank">Workload Identity Federation documentation</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p>Jest to obecnie złoty standard bezpieczeństwa dla zewnętrznych systemów CI/CD.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie uderza w kluczowy trend "modern security" – odejście od haseł i kluczy na rzecz federacji tożsamości. W nowoczesnym DevSecOps klucze JSON są traktowane jako dług techniczny i zagrożenie. WIF przekształca zaufanie z "pliku na dysku" w "relację między systemami", co jest znacznie bezpieczniejsze i łatwiejsze w audytowaniu.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/iam/docs/workload-identity-federation" target="_blank">https://cloud.google.com/iam/docs/workload-identity-federation</a></li>
-
+<li>Możesz użyć warunków (conditions), aby upewnić się, że tylko konkretne repozytorium GitHub (np. <code>my-org/my-repo</code>) może pobrać token GCP.</li>
+<li>Google udostępnia gotową akcję <code>google-github-actions/auth</code>, która automatyzuje proces wymiany tokenów WIF.</li>
 </ul>
 </div>
 </div>

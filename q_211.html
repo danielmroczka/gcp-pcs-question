@@ -90,21 +90,42 @@ Your organization wants to be compliant with the General Data Protection Regulat
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: AC.
+Poprawna odpowiedź: AC (A: Organization Policy "resource locations", C: Key Access Justifications)
 
-Wyjaśnienie: Resource locations (A) zapewnia rezydencję danych (gdzie leżą). Key Access Justifications (C) daje kontrolę nad tym, kto i dlaczego może użyć klucza szyfrującego, co wspiera suwerenność operacyjną.
+Dlaczego te odpowiedzi są poprawne:
+- Rezydencja Danych (A): Wymóg składowania danych wewnątrz UE (Data Residency) realizuje się najskuteczniej za pomocą polityki organizacji `constraints/gcp.resourceLocations`. Pozwala ona na zdefiniowanie listy dozwolonych regionów (np. `europe-west3`, `europe-west4`), co uniemożliwia użytkownikom tworzenie zasobów (bucketów, dysków, baz danych) poza granicami Europy.
+- Suwerenność Operacyjna (C): Wymóg kontroli nad dostępem personelu Google (Operational Sovereignty) realizuje się za pomocą usługi Key Access Justifications (KAJ). KAJ dostarcza uzasadnienie dla każdego żądania użycia klucza kryptograficznego przez Google (np. w celach wsparcia technicznego). W połączeniu z Cloud EKM, KAJ pozwala na automatyczne odrzucenie żądania, jeśli personel Google nie spełnia określonych kryteriów (np. nie znajduje się fizycznie w UE lub nie ma odpowiedniego obywatelstwa), co jest kluczowe dla pełnej zgodności z GDPR.
+
+Analiza niepoprawnych odpowiedzi:
+- B. Cloud IDS: Służy do wykrywania zagrożeń w ruchu sieciowym (L3-L7). Choć pomaga w ogólnym bezpieczeństwie, nie jest narzędziem do wymuszania rezydencji danych ani suwerenności operacyjnej wymaganej przez GDPR.
+- D. Identity Federation: Służy do łączenia zewnętrznych systemów tożsamości z GCP. Choć pozwala na kontrolę dostępu, samo w sobie nie zapewnia rezydencji danych ani suwerenności nad kluczami szyfrującymi.
+- E. VPC Flow Logs: Rejestrują metadane o ruchu sieciowym. Są użyteczne do audytu, ale podobnie jak Cloud IDS, nie stanowią mechanizmu wymuszania lokalizacji zasobów czy suwerenności operacyjnej.
+
+Wskazówki i triki (Tips & Tricks):
+- "Data Residency" (gdzie dane leżą) = Organization Policy (Resource Locations).
+- "Operational Sovereignty" (kto nimi zarządza) = Key Access Justifications (KAJ).
+- GDPR w Google Cloud opiera się na trzech filarach: Data Residency, Data Encryption (CMEK/EKM) oraz Operational Sovereignty (KAJ/Access Approval).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj termin "Sovereign Cloud". To zestaw usług (w tym KAJ), które dają klientom w UE najwyższy stopień kontroli.
+- Key Access Justifications działa tylko wtedy, gdy używasz Cloud EKM lub Cloud HSM.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">Restricting resource locations</a>
+- <a href="https://cloud.google.com/key-access-justifications/docs/overview" target="_blank">Key Access Justifications overview</a>
+- <a href="https://cloud.google.com/security/sovereign-cloud" target="_blank">Google Cloud Sovereign Solutions</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: AC</b></p>
-<p><b>Głęboka analiza:</b> <p>KAJ pozwala na automatyczne blokowanie dostępu do danych, jeśli uzasadnienie dostępu nie spełnia wymogów (np. dostęp spoza UE).</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie uderza w najbardziej rygorystyczne wymagania prawne w Europie. Różnica między "bezpieczeństwem" a "suwerennością" jest kluczowa: bezpieczeństwo chroni przed hakerami, suwerenność chroni przed nieautoryzowanym dostępem dostawcy chmury i obcych rządów. KAJ jest unikalnym mechanizmem Google, który technicznie (nie tylko prawnie) wymusza tę suwerenność.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/key-access-justifications/docs/overview" target="_blank">https://cloud.google.com/key-access-justifications/docs/overview</a></li>
-
+<li>Możesz połączyć KAJ z Access Approval, aby ręcznie zatwierdzać każde wejście personelu Google do Twoich danych.</li>
+<li>Pamiętaj, że polityka Resource Locations może być nałożona na całą organizację, ale pozwala na robienie wyjątków na niższych szczeblach hierarchii.</li>
 </ul>
 </div>
 </div>

@@ -89,21 +89,43 @@ Your company uses Google Cloud and has publicly exposed network assets. You want
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Identify all external assets by using Cloud Asset Inventory, and then run a network security scanner against them)
 
-Wyjaśnienie: Cloud Asset Inventory pozwala na błyskawiczne wyliczenie wszystkich zasobów z publicznymi IP. Następnie skaner (jak Web Security Scanner lub Nessus) może je przetestować.
+Dlaczego ta odpowiedź jest poprawna:
+- Cloud Asset Inventory (CAI): Jest to usługa Google Cloud, która utrzymuje pełną, historyczną bazę danych wszystkich zasobów w Twojej organizacji. Pozwala na błyskawiczne (w czasie niemal rzeczywistym) wyszukiwanie zasobów na podstawie ich metadanych (np. "znajdź wszystkie instancje z przypisanym zewnętrznym adresem IP"). Jest to najszybsza metoda odkrywania (Discovery) rozproszonych zasobów.
+- Network Security Scanner: Po zidentyfikowaniu celów (zewnętrznych IP), użycie automatycznego skanera bezpieczeństwa (np. Google Cloud Web Security Scanner lub narzędzi zewnętrznych typu Nessus/Qualys) pozwala na szybkie przeprowadzenie audytu podatności bez konieczności ręcznego sprawdzania każdej maszyny.
+- Minimalizacja czasu: Połączenie CAI (automatyczne odkrywanie) i skanera (automatyczny audyt) jest najbardziej efektywnym czasowo podejściem w dużej skali.
+
+Analiza niepoprawnych odpowiedzi:
+- A. Platform security scanner on all instances: Skanowanie WSZYSTKICH instancji (w tym tych wewnętrznych) może być bardzo czasochłonne i niepotrzebne, jeśli celem jest audyt aktywów WYSTAWIONYCH na zewnątrz. Ponadto "platform security scanner" to termin mało precyzyjny w porównaniu do dedykowanego CAI.
+- C. Contact a Google approved vendor: Zaangażowanie zewnętrznej firmy audytorskiej wiąże się z procesami biurokratycznymi, negocjacjami i wysokimi kosztami. Z pewnością nie jest to metoda pozwalająca na wykonanie zadania "w najkrótszym możliwym czasie" (least amount of time) w porównaniu do narzędzi zautomatyzowanych.
+- D. Notify Google and wait: Zgodnie z zasadami Google Cloud, klienci mogą przeprowadzać własne skany bezpieczeństwa (vulnerability scans) na swoich zasobach bez konieczności uprzedniego powiadamiania Google. Czekanie na potwierdzenie byłoby stratą czasu.
+
+Wskazówki i triki (Tips & Tricks):
+- "Discover assets" / "Visibility" + "Least time" = Cloud Asset Inventory.
+- "Audit vulnerabilities" + "Network level" = Network Security Scanner.
+- Pamiętaj: Cloud Asset Inventory pozwala na zapytania typu SQL (Search All Resources), co daje wynik w sekundach dla całej organizacji.
+
+Praktyczne informacje na egzamin:
+- Zrozum różnicę: **Discovery** (Wiem, co mam) vs **Auditing** (Wiem, czy to co mam jest bezpieczne).
+- Cloud Asset Inventory wspiera nie tylko aktualny stan, ale pozwala też sprawdzić konfigurację z przeszłości (Time travel).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/asset-inventory/docs/overview" target="_blank">Cloud Asset Inventory overview</a>
+- <a href="https://cloud.google.com/security-command-center/docs/concepts-web-security-scanner-overview" target="_blank">Web Security Scanner overview</a>
+- <a href="https://cloud.google.com/security/vulnerability-scans" target="_blank">Vulnerability scanning in Google Cloud</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p>Automatyzacja odkrywania zasobów jest kluczowa w dynamicznych środowiskach chmurowych.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją sprawność operacyjną w chmurze. W dynamicznym środowisku aktywa pojawiają się i znikają w minutach. Tradycyjne metody (arkusze Excel, ręczne inwentaryzacje) zawodzą. Cloud Asset Inventory to "szkielet" widoczności w GCP, a automatyczne skanery to "mięśnie" audytu. Ta synergia jest podstawą nowoczesnego Security Operations.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/asset-inventory/docs/overview" target="_blank">https://cloud.google.com/asset-inventory/docs/overview</a></li>
-
+<li>Warto wiedzieć, że Cloud Asset Inventory może eksportować dane do BigQuery, co ułatwia budowanie niestandardowych raportów zgodności.</li>
+<li>Pamiętaj o uprawnieniach: do przeszukiwania zasobów potrzebujesz roli `cloudasset.viewer` na poziomie organizacji.</li>
 </ul>
 </div>
 </div>
