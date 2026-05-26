@@ -72,7 +72,6 @@ Your organization is migrating business critical applications to Google Cloud ac
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create users manually by using the Google Cloud console. Assign the users to groups.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create two workforce identity pools for the partner IdPs.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Sync user identities from their existing IdPs to Cloud Identity by using Google Cloud Directory Sync (GCDS).</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,23 +88,32 @@ Your organization is migrating business critical applications to Google Cloud ac
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Create two workforce identity pools for the partner IdPs.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Workforce Identity Federation: To nowoczesna usługa pozwalająca na bezpośrednią federację zewnętrznych IdP z Twoją organizacją bez potrzeby tworzenia kont użytkowników w Twoim katalogu.
+Dlaczego ta odpowiedź jest poprawna:
+- Workforce Identity Federation: To nowoczesna usługa pozwalająca na bezpośrednią federację zewnętrznych IdP z Twoją organizacją bez potrzeby tworzenia kont użytkowników (takich jak `partner-user@your-company.com`) w Twoim katalogu. Jest to idealne rozwiązanie dla zewnętrznych partnerów, którzy mają własne systemy tożsamości.
+
+Analiza niepoprawnych odpowiedzi:
+- A, D: Wymagają one zarządzania tożsamościami wewnątrz Twojego katalogu (Cloud Identity), co jest nieefektywne i wprowadza problemy z "lifecycle management" kont zewnętrznych.
+- B. Manual creation: Skrajnie nieefektywne i niebezpieczne (brak automatyzacji off-boardingu).
+
+Wskazówki i triki (Tips & Tricks):
+- "External partners" / "Existing IdPs" + "Grant access" = Workforce Identity Federation.
+- Pamiętaj: WIF (Workload) dla maszyn, WIF (Workforce) dla ludzi.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Dzięki WIF, jeśli pracownik partnera zostanie zwolniony (usunięty w ICH IdP), natychmiast traci dostęp do Twojego GCP. To jest "Zero Trust" w praktyce.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iam/docs/workforce-identity-federation" target="_blank">Workforce Identity Federation overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Dzięki WIF, jeśli pracownik partnera zostanie zwolniony, natychmiast traci dostęp do Twojego GCP.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/iam/docs/workforce-identity-federation" target="_blank">https://cloud.google.com/iam/docs/workforce-identity-federation</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość nowoczesnych standardów federacji tożsamości. W nowoczesnych ekosystemach "nie twórz kont dla zewnętrznych użytkowników". Federacja (WIF) pozwala zachować kontrolę nad tym, KTO wchodzi do Twojej chmury, bez konieczności utrzymywania ich tożsamości w Twoim katalogu.</p>
 </div>
 </div>
 <script>

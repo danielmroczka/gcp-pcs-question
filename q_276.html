@@ -72,7 +72,6 @@ You are creating a secure network architecture. You must fully isolate developme
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create one shared Virtual Private Cloud (VPC) network and use it as the entry point to the cloud network. Create separate subnets per environment. Create firewall rules to prevent traffic.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create one Virtual Private Cloud (VPC) network per environment. Create a VPC Service Controls perimeter per environment and add one environment VPC to each.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create one Virtual Private Cloud (VPC) network per environment. Create one additional VPC for the entry point to the cloud network. Peer the entry point VPC with the environment VPCs.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,33 @@ You are creating a secure network architecture. You must fully isolate developme
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (Create one Virtual Private Cloud (VPC) network per environment. Create one additional VPC for the entry point to the cloud network. Peer the entry point VPC with the environment VPCs.)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Hub-and-Spoke (Transit VPC): To najbardziej bezpieczna architektura Enterprise. Masz centralną sieć 'Hub' (Transit VPC), która łączy się z on-premises. Sieci środowiskowe (Dev i Prod) są podłączone (peered) do Hub-a, ale NIE są połączone ze sobą. Ponieważ VPC Peering nie jest tranzytywny, ruch z Dev nigdy nie trafi do Prod, a oba mają jeden punkt kontroli wejścia.
+Dlaczego ta odpowiedź jest poprawna:
+- Hub-and-Spoke (Transit VPC): To najbardziej bezpieczna architektura Enterprise. Masz centralną sieć 'Hub' (Transit VPC), która łączy się z on-premises. Sieci środowiskowe (Dev i Prod) są podłączone (peered) do Hub-a, ale NIE są połączone ze sobą. Ponieważ VPC Peering nie jest tranzytywny, ruch z Dev nigdy nie trafi do Prod, a oba mają jeden punkt kontroli wejścia.
 
-Dlaczego inne są błędne:
-A. Peer VPCs: Jeśli połączysz Dev z Prod peeringiem, to naruszasz zasadę 'fully isolate'.
-B. Shared VPC: Wszystkie środowiska współdzielą te same tablice routingu i routery wewnątrz jednej sieci VPC, co jest słabszą izolacją niż osobne sieci VPC (D).
-C. VPC SC: Służy do izolacji API (Storage, SQL), nie do budowania topologii warstwy 3 (routingu IP) między VM-ami.
+Analiza niepoprawnych odpowiedzi:
+- A. Peer VPCs: Jeśli połączysz Dev z Prod peeringiem, to naruszasz zasadę "fully isolate".
+- B. Shared VPC: Wszystkie środowiska współdzielą te same tablice routingu i routery wewnątrz jednej sieci VPC, co jest słabszą izolacją niż osobne sieci VPC (D).
+- C. VPC SC: Służy do izolacji API (Storage, SQL), nie do budowania topologii warstwy 3 (routingu IP) między VM-ami.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na D. To wzorcowa topologia sieciowa dla dużych organizacji.
+Wskazówki i triki (Tips & Tricks):
+- "Fully isolate environments" + "Central entry point" = Hub-and-Spoke (Transit VPC).
+- Zapamiętaj: VPC Peering nie jest tranzytywny (z A do B, z B do C nie oznacza A do C).
+
+Praktyczne informacje na egzamin:
+- W Hubie możesz postawić centralne urządzenie NGFW (np. Fortinet, Palo Alto), które będzie skanować cały ruch przechodzący z on-premises do wszystkich Twoich chmurowych Spokes.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/architecture/best-practices-vpc-design#hub-and-spoke" target="_blank">Hub-and-Spoke design best practices</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> W Hubie możesz postawić centralne urządzenie NGFW (np. Fortinet, Palo Alto), które będzie skanować cały ruch przechodzący z on-premises do wszystkich Twoich chmurowych Spokes.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/architecture/best-practices-vpc-design#hub-and-spoke" target="_blank">https://cloud.google.com/architecture/best-practices-vpc-design#hub-and-spoke</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość architektury sieciowej w GCP. Topologia Hub-and-Spoke z wykorzystaniem Transit VPC to "złoty standard" bezpieczeństwa dla organizacji, które muszą łączyć on-premises z chmurą przy zachowaniu ścisłej izolacji segmentów sieciowych.</p>
 </div>
 </div>
 <script>

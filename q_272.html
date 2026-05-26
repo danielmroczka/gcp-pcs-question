@@ -72,7 +72,6 @@ You work for a global company. Due to compliance requirements, certain Compute E
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Deploy a Security Command Center source to detect Compute Engine instances created outside the EU. Use a custom remediation function to automatically relocate the instances, run the function once a day.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use organization policy constraints in Resource Manager to enforce allowed regions for Compute Engine instance creation within specific projects.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Set an organization policy that denies the creation of Compute Engine instances outside the EU. Apply the policy to the appropriate projects. Identify existing non-compliant instances and migrate the instances to compliant EU regions.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,33 @@ You work for a global company. Due to compliance requirements, certain Compute E
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (Set an organization policy that denies the creation of Compute Engine instances outside the EU. Apply the policy to the appropriate projects. Identify existing non-compliant instances and migrate the instances to compliant EU regions.)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Prevent & Remediate: Polityka organizacji (`compute.allowedLocations`) prewencyjnie zablokuje stworzenie KAŻDEJ nowej maszyny poza EU. Jednak polityka nie usuwa maszyn już działających - musisz je jawnie zidentyfikować i przenieść (migrate), aby osiągnąć stan 100% zgodności.
+Dlaczego ta odpowiedź jest poprawna:
+- Prevent & Remediate: Polityka organizacji (`compute.allowedLocations`) prewencyjnie zablokuje stworzenie KAŻDEJ nowej maszyny poza EU. Jednak polityka nie usuwa maszyn już działających - musisz je jawnie zidentyfikować i przenieść (migrate), aby osiągnąć stan 100% zgodności.
 
-Dlaczego inne są błędne:
-A. Third-party: Lepiej użyć natywnych narzędzi (Org Policy), jeśli są dostępne.
-B. SCC + Function: To świetne rozwiązanie reaktywne, ale opcja D (Org Policy) jest lepsza, bo działa PREWENCYJNIE (nie pozwala popełnić błędu).
-C. Resource Manager: To tylko nazwa usługi, a D precyzuje akcję (deny + migrate).
+Analiza niepoprawnych odpowiedzi:
+- A. Third-party: Lepiej użyć natywnych narzędzi (Org Policy), jeśli są dostępne.
+- B. SCC + Function: To świetne rozwiązanie reaktywne, ale opcja D (Org Policy) jest lepsza, bo działa PREWENCYJNIE (nie pozwala popełnić błędu).
+- C. Resource Manager: To tylko nazwa usługi, a D precyzuje akcję (deny + migrate).
 
-Konsensus społeczności ExamTopics: 100% na D. Zawsze najpierw blokuj (policy), potem sprzątaj (migrate).
+Wskazówki i triki (Tips & Tricks):
+- "Data residency" / "Compliance" = Org Policy (constraints/gcp.resourceLocations).
+- Na egzaminie zawsze szukaj odpowiedzi, która łączy 'prevent' (polityka) z 'remediate' (akcja na istniejących zasobach).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Org Policy to potężne narzędzie do wymuszania zgodności na dużą skalę.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">Organization policy resource locations</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Na egzaminie zawsze szukaj odpowiedzi, która łączy 'prevent' (polityka) z 'remediate' (akcja na istniejących zasobach).</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją wiedzę o utrzymywaniu zgodności (Compliance) w skali. Prewencja (Org Policy) jest zawsze lepsza niż reakcja (skrypty/SCC), ale w rzeczywistych scenariuszach migracji musisz uwzględnić proces usuwania długu technicznego – czyli migrację już istniejących, niekompatybilnych zasobów.</p>
 </div>
 </div>
 <script>

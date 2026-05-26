@@ -72,7 +72,6 @@ Your organization has an application hosted in Cloud Run. You must control acces
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create an access level that includes conditions for internal IP address ranges and AppDev groups. Apply this access level to the application's IAP policy.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure firewall rules to limit access to IAP based on the AppDev group and source IP addresses.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure IAP to enforce multi-factor authentication (MFA) for all users and use network intrusion detection systems (NIDS) to block unauthorized access attempts.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,32 @@ Your organization has an application hosted in Cloud Run. You must control acces
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Create an access level that includes conditions for internal IP address ranges and AppDev groups. Apply this access level to the application's IAP policy.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Access Context Manager + IAP: To połączenie pozwala na zdefiniowanie 'Context-Aware Access' (CAA). Tworzysz Access Level, który wymaga przynależności do grupy 'AppDev' ORAZ połączenia z określonych zakresów adresów IP. Następnie przypinasz ten poziom dostępu do polityki IAP chroniącej Twój serwis Cloud Run.
+Dlaczego ta odpowiedź jest poprawna:
+- Access Context Manager + IAP: To połączenie pozwala na zdefiniowanie 'Context-Aware Access' (CAA). Tworzysz Access Level, który wymaga przynależności do grupy 'AppDev' ORAZ połączenia z określonych zakresów adresów IP. Następnie przypinasz ten poziom dostępu do polityki IAP chroniącej Twój serwis Cloud Run.
 
-Dlaczego inne są błędne:
-A. VPN gateway: Sam VPN nie kontroluje uprawnień grupowych IAM w warstwie aplikacji Cloud Run.
-C. Firewall rules: Cloud Run jest usługą serverless i nie można do niej przypisać standardowych reguł firewalla VPC w celu filtrowania IP użytkowników przeglądarkowych. Tylko IAP/WAF to potrafi.
-D. NIDS: To system detekcji włamań, nie służy do kontroli dostępu opartej na grupach i IP.
+Analiza niepoprawnych odpowiedzi:
+- A. VPN gateway: Sam VPN nie kontroluje uprawnień grupowych IAM w warstwie aplikacji Cloud Run.
+- C. Firewall rules: Cloud Run jest usługą serverless i nie można do niej przypisać standardowych reguł firewalla VPC w celu filtrowania IP użytkowników przeglądarkowych. Tylko IAP/WAF to potrafi.
+- D. NIDS: To system detekcji włamań, nie służy do kontroli dostępu opartej na grupach i IP.
 
-Konsensus społeczności ExamTopics: 100% na B. CAA to jedyna metoda na wymuszenie IP przy dostępie do serverless przez IAP.
+Wskazówki i triki (Tips & Tricks):
+- "IAP" + "IP Restriction" + "Group Membership" = Access Level (Access Context Manager).
+
+Praktyczne informacje na egzamin:
+- IAP najpierw sprawdza 'kto' (IAM), a potem 'skąd/jak' (Context-Aware Access). Tylko pomyślne przejście obu testów pozwala na dostęp do aplikacji.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iap/docs/access-control-context-aware" target="_blank">Access Context Manager with IAP</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> IAP najpierw sprawdza 'kto' (IAM), a potem 'skąd/jak' (Context-Aware Access). Tylko pomyślne przejście obu testów pozwala na dostęp do aplikacji.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/iap/docs/app-engine-quickstart" target="_blank">https://cloud.google.com/iap/docs/app-engine-quickstart</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość modelu "Context-Aware Access" (CAA), który jest kluczowy w architekturze Zero Trust w GCP. Pozwala on na dynamiczne podejmowanie decyzji o dostępie w oparciu o kontekst (tożsamość + sieć + urządzenie).</p>
 </div>
 </div>
 <script>

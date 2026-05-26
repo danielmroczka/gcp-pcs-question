@@ -72,7 +72,6 @@ Your organization operates a hybrid cloud environment and has recently deployed 
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Developers must be granted the artifactregistry.writer IAM role. Grant the relevant developer group this role.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Private Google Access is not enabled for the subnet hosting the Artifact Registry. Enable Private Google Access for the appropriate subnet.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Artifact Registry requires external HTTP/HTTPS access. Create a new firewall rule allowing ingress traffic on ports 80 and 443 from the developer's IP ranges.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,32 @@ Your organization operates a hybrid cloud environment and has recently deployed 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (On-premises DNS servers lack the necessary records to resolve private Google API domains. Create DNS records for restricted.googleapis.com or private.googleapis.com pointing to Google's published IP ranges.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. DNS for restricted/private domains: Artifact Registry używa publicznych nazw FQDN (`*.pkg.dev`). Jeśli Twoja sieć on-prem nie ma internetu, jej standardowy DNS nie rozwiąże tych nazw. Musisz stworzyć lokalną strefę DNS, która skieruje zapytania o Artifact Registry do adresów IP Private Google Access (zakresy `private.googleapis.com` lub `restricted.googleapis.com`).
+Dlaczego ta odpowiedź jest poprawna:
+- DNS for restricted/private domains: Artifact Registry używa publicznych nazw FQDN (`*.pkg.dev`). Jeśli Twoja sieć on-prem nie ma internetu, jej standardowy DNS nie rozwiąże tych nazw. Musisz stworzyć lokalną strefę DNS, która skieruje zapytania o Artifact Registry do adresów IP Private Google Access (zakresy `private.googleapis.com` lub `restricted.googleapis.com`).
 
-Dlaczego inne są błędne:
-B. IAM role: Nie pomoże, jeśli serwer w ogóle nie może 'znaleźć' adresu IP rejestru obrazów.
-C. PGA on subnet: Dotyczy ruchu Z CHMURY, nie rozwiązuje problemu DNS po stronie on-premises.
-D. Firewall: Może być otwarty, ale bez poprawnego DNS-a pakiet nigdy nie zostanie wysłany pod właściwy adres.
+Analiza niepoprawnych odpowiedzi:
+- B. IAM role: Nie pomoże, jeśli serwer w ogóle nie może 'znaleźć' adresu IP rejestru obrazów.
+- C. PGA on subnet: Dotyczy ruchu Z CHMURY, nie rozwiązuje problemu DNS po stronie on-premises.
+- D. Firewall: Może być otwarty, ale bez poprawnego DNS-a pakiet nigdy nie zostanie wysłany pod właściwy adres.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla A. To standardowy problem łączności hybrydowej 'DNS split-horizon'.
+Wskazówki i triki (Tips & Tricks):
+- "Artifact Registry" / "Private Google Access" + "No Internet" + "Hostname resolve issue" = DNS Split-Horizon (A).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Aby to zadziałało, musisz skonfigurować swój lokalny DNS tak, aby dla domeny `pkg.dev` zwracał adresy CNAME kierujące do `restricted.googleapis.com`.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/vpc/docs/configure-private-google-access-settings#dns-on-prem" target="_blank">Configure DNS for Private Google Access</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Aby to zadziałało, musisz skonfigurować swój lokalny DNS tak, aby dla domeny `pkg.dev` zwracał adresy CNAME kierujące do `restricted.googleapis.com`.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/vpc/docs/configure-private-google-access-settings#dns-on-prem" target="_blank">https://cloud.google.com/vpc/docs/configure-private-google-access-settings#dns-on-prem</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją wiedzę o łączeniu on-premises z chmurą (Hybrid Connectivity). Najczęstszym błędem jest myślenie, że "połączenie sieciowe" wystarczy. W rzeczywistości usługi GCP (jak Artifact Registry) wymagają poprawnej resolucji DNS, która w sieciach prywatnych musi być skonfigurowana ręcznie (Split-Horizon DNS).</p>
 </div>
 </div>
 <script>

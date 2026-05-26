@@ -72,7 +72,6 @@ Your EU-based organization stores both Personally Identifiable Information (PII)
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a log sink with a filter on resourceLocation.currentLocations. Trigger an alert if a log message appears with a non-EU country.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Activate Security Command Center Premium. Use compliance monitoring to detect resources that do not follow the applicable healthcare regulation.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enforce the gcp.resourceLocations organization policy and add "EU" in a custom rule that only applies on resources with the tag "healthcare".</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,23 +88,33 @@ Your EU-based organization stores both Personally Identifiable Information (PII)
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Create a Sensitive Data Protection job. Specify the infoType of data to be detected and run the job across all Google Cloud Storage buckets.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Cloud DLP (Sensitive Data Protection): To jedyne narzędzie w GCP, które potrafi 'czytać' treść plików wewnątrz bucketów i identyfikować konkretne typy danych (np. numery ubezpieczenia zdrowotnego).
+Dlaczego ta odpowiedź jest poprawna:
+- Cloud DLP (Sensitive Data Protection): To jedyne narzędzie w GCP, które potrafi "czytać" treść plików wewnątrz bucketów i identyfikować konkretne typy danych (np. numery ubezpieczenia zdrowotnego). Pytanie dotyczy wykrycia danych wrażliwych (PII/healthcare) w konkretnej lokalizacji (spoza EU).
+
+Analiza niepoprawnych odpowiedzi:
+- B. Log sink: Logi pokazują dostęp do bucketa, ale nie powiedzą Ci, CO jest wewnątrz pliku (jaki typ danych).
+- C. SCC Compliance: SCC monitoruje KONFIGURACJĘ (np. czy bucket jest publiczny), ale nie analizuje zawartości plików w poszukiwaniu PII.
+- D. Org Policy: Org Policy zapobiega tworzeniu zasobów w złym regionie, ale nie skanuje istniejących danych w poszukiwaniu "healthcare data".
+
+Wskazówki i triki (Tips & Tricks):
+- "Detect PII/Sensitive data inside storage" = Sensitive Data Protection (DLP).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: DLP to Twój detektor "treści", a Org Policy to Twój detektor "konfiguracji".
+- Jeśli musisz znaleźć konkretny typ danych w pliku -> DLP.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/dlp/docs/inspecting-storage" target="_blank">Inspecting storage for sensitive data</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> DLP może wysyłać wyniki bezpośrednio do SCC, tworząc spójny widok incydentów.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/dlp/docs/inspecting-storage" target="_blank">https://cloud.google.com/dlp/docs/inspecting-storage</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie sprawdza umiejętność odróżnienia detekcji "konfiguracyjnej" (gdzie jest zasób?) od detekcji "treściowej" (co jest w zasobie?). Sensitive Data Protection (DLP) jest jedynym narzędziem, które głęboko skanuje pliki w poszukiwaniu wzorców danych.</p>
 </div>
 </div>
 <script>

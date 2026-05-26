@@ -72,7 +72,6 @@ You have just created a new log bucket to replace the _Default log bucket. You w
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Disable the _Default sink. Create a user-defined sink and select the new log bucket as the sink destination.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a user-defined sink with inclusion filters copied from the _Default sink. Select the new log bucket as the sink destination.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Edit the _Default sink, and select the new log bucket as the sink destination.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,28 +88,30 @@ You have just created a new log bucket to replace the _Default log bucket. You w
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (Edit the _Default sink, and select the new log bucket as the sink destination.)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Edit _Default sink: To najprostsza metoda (least effort). Sink `_Default` jest systemowym mechanizmem zbierania logów. Edytując jego cel (destination) i wskazując nowy Log Bucket, zmieniasz kierunek całego domyślnego potoku danych bez potrzeby tworzenia nowych, skomplikowanych reguł.
+Dlaczego ta odpowiedź jest poprawna:
+- Edit _Default sink: To najprostsza metoda ("least effort"). Sink `_Default` jest systemowym mechanizmem zbierania logów. Edytując jego cel (destination) i wskazując nowy Log Bucket, zmieniasz kierunek całego domyślnego potoku danych bez potrzeby tworzenia nowych, skomplikowanych reguł.
 
-Dlaczego inne są błędne:
-A, B, C: Wymagają więcej kroków (tworzenie nowych zasobów, zarządzanie filtrami wykluczeń), co jest mniej efektywne i trudniejsze w utrzymaniu.
+Analiza niepoprawnych odpowiedzi:
+- A, B, C: Wymagają więcej kroków (tworzenie nowych zasobów, zarządzanie filtrami wykluczeń), co jest mniej efektywne i trudniejsze w utrzymaniu.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla D. Zawsze edytuj istniejące systemowe zlewy logów, jeśli to możliwe.
+Wskazówki i triki (Tips & Tricks):
+- "Replace default log bucket" = Zawsze edytuj istniejący systemowy sink (`_Default`).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Log Buckets pozwalają na ustawienie retencji niezależnie od projektu, co jest kluczowe dla optymalizacji kosztów.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/logging/docs/routing/overview#sinks" target="_blank">Logging sinks overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Log Buckets pozwalają na ustawienie retencji niezależnie od projektu, co jest kluczowe dla optymalizacji kosztów.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/logging/docs/routing/overview#sinks" target="_blank">https://cloud.google.com/logging/docs/routing/overview#sinks</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość zarządzania logami w skali organizacji. W chmurze zawsze preferujemy "najprostsze, natywne rozwiązanie", które minimalizuje dług techniczny i skomplikowanie konfiguracji.</p>
 </div>
 </div>
 <script>

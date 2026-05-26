@@ -72,7 +72,6 @@ You just implemented a Secure Web Proxy instance on Google Cloud for your organi
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Ensure that the developers have restarted their instance and HTTP service is enabled.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Ensure that the developers have explicitly configured the proxy address on their instance.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure a firewall rule to allow HTTP/S from the developer instance.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,32 @@ You just implemented a Secure Web Proxy instance on Google Cloud for your organi
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Ensure that the developers have explicitly configured the proxy address on their instance.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Proxy configuration: Secure Web Proxy (SWP) działa zazwyczaj jako proxy jawne (explicit). System operacyjny Linux nie kieruje automatycznie ruchu do proxy - musi zostać o tym 'poinformowany' przez zmienne środowiskowe (np. `export http_proxy=...`). Bez tej konfiguracji pakiety próbują iść bezpośrednio do internetu, co kończy się błędem.
+Dlaczego ta odpowiedź jest poprawna:
+- Proxy configuration: Secure Web Proxy (SWP) działa zazwyczaj jako proxy jawne (explicit). System operacyjny Linux nie kieruje automatycznie ruchu do proxy - musi zostać o tym "poinformowany" przez zmienne środowiskowe (np. `export http_proxy=...`). Bez tej konfiguracji pakiety próbują iść bezpośrednio do internetu, co kończy się błędem.
 
-Dlaczego inne są błędne:
-A. Cloud NAT: Służy do omijania proxy, co jest sprzeczne z celem wdrożenia SWP (kontrolą ruchu).
-B. Restart: Nie zmieni konfiguracji sieciowej aplikacji.
-D. Firewall rule: SWP ma własne mechanizmy dopuszczania ruchu; problemem jest tu brak 'styku' klienta z proxy, a nie blokada na poziomie portów IP.
+Analiza niepoprawnych odpowiedzi:
+- A. Cloud NAT: Służy do omijania proxy, co jest sprzeczne z celem wdrożenia SWP (kontrolą ruchu).
+- B. Restart: Nie zmieni konfiguracji sieciowej aplikacji.
+- D. Firewall rule: SWP ma własne mechanizmy dopuszczania ruchu; problemem jest tu brak "styku" klienta z proxy, a nie blokada na poziomie portów IP.
 
-Konsensus społeczności ExamTopics: 100% na C. Jawne proxy wymaga konfiguracji zmiennych środowiskowych.
+Wskazówki i triki (Tips & Tricks):
+- "Secure Web Proxy" + "Not accessing" + "Explicit proxy" = Skonfiguruj zmienne środowiskowe proxy na kliencie.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: SWP to potężne narzędzie do inspekcji TLS i filtrowania URL. Upewnij się, że znasz różnicę między proxy jawnym (explicit) a przezroczystym (transparent).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/secure-web-proxy/docs/overview" target="_blank">Secure Web Proxy overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> SWP pozwala na inspekcję TLS i filtrowanie URL, co czyni go znacznie potężniejszym narzędziem niż zwykły firewall.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/secure-web-proxy/docs/overview" target="_blank">https://cloud.google.com/secure-web-proxy/docs/overview</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje zrozumienie architektury pracy proxy. SWP to usługa zarządzana, ale klient musi wiedzieć, jak do niej trafić. W przypadku proxy jawnego konfiguracja na poziomie OS/aplikacji jest niezbędna, aby ruch został poprawnie skierowany przez bramkę SWP.</p>
 </div>
 </div>
 <script>

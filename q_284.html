@@ -72,7 +72,6 @@ You are responsible for a set of Cloud Functions running on your organization's 
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Implement a Cloud Function that scans the environment variables multiple times a day, and creates a finding in Security Command Center if secrets are discovered.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use Sensitive Data Protection to scan the environment variables multiple times per day, and create a finding in Security Command Center if secrets are discovered.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Integrate dynamic application security testing into the CI/CD pipeline that scans the application code for the Cloud Functions. Fail the build process if secrets are discovered.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,33 @@ You are responsible for a set of Cloud Functions running on your organization's 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Use Sensitive Data Protection to scan the environment variables multiple times per day, and create a finding in Security Command Center if secrets are discovered.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. DLP Scan: Cloud DLP (Sensitive Data Protection) posiada funkcję skanowania konfiguracji usług Google Cloud. Można zaplanować codzienny skan metadanych Cloud Functions, który wykryje wzorce haseł czy kluczy API w zmiennych środowiskowych i zaraportuje to do SCC.
+Dlaczego ta odpowiedź jest poprawna:
+- Sensitive Data Protection (DLP): Posiada funkcję skanowania konfiguracji usług Google Cloud. Można zaplanować automatyczny skan (np. codzienny) metadanych Cloud Functions, który wykryje wzorce haseł czy kluczy API w zmiennych środowiskowych i zaraportuje to bezpośrednio do Security Command Center (SCC).
 
-Dlaczego inne są błędne:
-A. Peer reviews: Metoda manualna, nie gwarantuje detekcji wszystkich błędów w czasie rzeczywistym.
-B. Custom scan: Wymaga pisania kodu, DLP (C) jest gotową usługą 'managed'.
-D. DAST: Testuje aplikację 'z zewnątrz' (HTTP), nie widzi zmiennych środowiskowych serwera.
+Analiza niepoprawnych odpowiedzi:
+- A. Peer reviews: Metoda manualna, nie gwarantuje detekcji wszystkich błędów w czasie rzeczywistym, uciążliwa w dużej skali.
+- B. Custom scan: Wymaga pisania kodu (dodatkowy dług techniczny), podczas gdy DLP (C) jest gotową usługą typu "managed".
+- D. DAST: Testuje aplikację "z zewnątrz" (przez HTTP), zazwyczaj nie ma wglądu w zmienne środowiskowe serwera.
 
-Konsensus społeczności ExamTopics: 100% na C. DLP to standard dla 'Secret Scanning' w GCP.
+Wskazówki i triki (Tips & Tricks):
+- "Cloud Function" + "Secrets in Env Vars" + "Detection" = Sensitive Data Protection (DLP).
+- Pamiętaj: DLP API działa na strumieniach tekstowych i konfiguracjach.
+
+Praktyczne informacje na egzamin:
+- Prawidłowym miejscem na przechowywanie sekretów w GCP jest **Secret Manager**. DLP służy tylko do wykrywania, gdzie ich tam zabrakło (gdzie wyciekły do środowiska).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/dlp/docs/inspecting-storage" target="_blank">Inspecting storage and configuration for sensitive data</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Prawidłowym miejscem na sekrety jest Secret Manager, ale DLP jest jedynym narzędziem do DETEKCJI pomyłek polegających na ich wpisaniu w env vars.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/dlp/docs/inspecting-storage" target="_blank">https://cloud.google.com/dlp/docs/inspecting-storage</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do projektowania systemów detekcji błędów. Użycie natywnych usług zarządzanych (DLP + SCC) jest zawsze preferowane względem własnych skryptów (Dług Techniczny), ponieważ zapewnia lepszą skalowalność, utrzymanie i integrację z ekosystemem bezpieczeństwa GCP.</p>
 </div>
 </div>
 <script>

@@ -72,7 +72,6 @@ You are working with developers to secure custom training jobs running on Vertex
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Encrypt the code, training data, metadata, and exported trained models with customer-managed encryption keys (CMEK).</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Encrypt the code, training data, and exported trained models with customer-managed encryption keys (CMEK).</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Encrypt the code, training data, and metadata with Google default encryption. Implement an organization policy that enforces a constraint to restrict the Cloud KMS location to the Europe region.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +79,7 @@ You are working with developers to secure custom training jobs running on Vertex
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">C</span>
+<span class="correct-answer">B</span>
 <br/>
 </span>
 </div>
@@ -89,23 +88,31 @@ You are working with developers to secure custom training jobs running on Vertex
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: B (Encrypt the code, training data, metadata, and exported trained models with customer-managed encryption keys (CMEK).)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Comprehensive CMEK: Aby spełnić wymóg pełnej kontroli ('controlled by organization') nad całym cyklem AI, należy użyć kluczy CMEK dla wszystkich kluczowych elementów procesu ML.
+Dlaczego ta odpowiedź jest poprawna:
+- Comprehensive CMEK: Aby spełnić wymóg pełnej kontroli ("controlled by organization") nad całym cyklem AI, należy użyć kluczy CMEK dla wszystkich kluczowych elementów procesu ML: kodu (w Cloud Storage), danych treningowych, metadanych oraz wyeksportowanych modeli.
+
+Analiza niepoprawnych odpowiedzi:
+- A, C, D: Nie zapewniają pełnego szyfrowania wszystkich elementów składowych ("metadata" lub "code" często są pomijane), co narusza wymóg zgodności.
+
+Wskazówki i triki (Tips & Tricks):
+- "Controlled by organization" + "Compliance" = Pełne szyfrowanie (CMEK) wszystkiego (dane + modele + metadane).
+- Zapamiętaj: Vertex AI wspiera CMEK dla zbiorów danych, treningu i modeli.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj, że CMEK w Vertex AI to "best practice" w branżach regulowanych.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/vertex-ai/docs/general/cmek" target="_blank">Vertex AI CMEK overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Vertex AI wspiera CMEK dla zbiorów danych, treningu i modeli.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/vertex-ai/docs/general/cmek" target="_blank">https://cloud.google.com/vertex-ai/docs/general/cmek</a></li>
-
-</ul>
+<h3>Kluczowe zagadnienia</h3>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość "bezpieczeństwa end-to-end" w procesach ML. W środowiskach regulowanych szyfrowanie tylko "bazy danych" to za mało – każdy artefakt (kod, meta, model) musi być chroniony własnym kluczem zarządzanym przez klienta.</p>
 </div>
 </div>
 <script>

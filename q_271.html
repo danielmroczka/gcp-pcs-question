@@ -72,7 +72,6 @@ You work for a multinational organization that has systems deployed across multi
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Collect all logs into an organization-level aggregated log sink and send the logs to a Pub/Sub topic. Implement a primary Dataflow pipeline that consumes logs from this Pub/Sub topic and delivers the logs to the SIEM. Implement a secondary Dataflow pipeline that replays failed messages.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Deploy a Cloud Logging sink with a filter that routes all logs directly to a syslog endpoint. The endpoint is based on a single Compute Engine hosted on Google Cloud that routes all logs to the on-premises SIEM. Implement a Cloud Function that triggers a retry action in case of failure.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Utilize custom firewall rules to allow your SIEM to directly query Google Cloud logs. Implement a Cloud Function that notifies the SIEM of a failed delivery and triggers a retry action.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,33 @@ You work for a multinational organization that has systems deployed across multi
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Collect all logs into an organization-level aggregated log sink and send the logs to a Pub/Sub topic. Implement a primary Dataflow pipeline that consumes logs from this Pub/Sub topic and delivers the logs to the SIEM. Implement a secondary Dataflow pipeline that replays failed messages.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Dataflow pipeline: Dataflow jest jedyną usługą w tym zestawieniu, która jest w 100% zarządzana, skaluje się automatycznie (auto scaling) i posiada wbudowane mechanizmy obsługi błędów i ponowień (fault tolerance, retry) dla strumieni danych z Pub/Sub. Model primary/secondary zapewnia wysoką dostępność.
+Dlaczego ta odpowiedź jest poprawna:
+- Dataflow pipeline: Dataflow jest jedyną usługą w tym zestawieniu, która jest w 100% zarządzana, skaluje się automatycznie (auto scaling) i posiada wbudowane mechanizmy obsługi błędów i ponowień (fault tolerance, retry) dla strumieni danych z Pub/Sub. Model primary/secondary zapewnia wysoką dostępność.
 
-Dlaczego inne są błędne:
-A. Cloud Function: Przy ogromnej liczbie logów (near real-time) funkcje te są mniej efektywne kosztowo i trudniejsze w zarządzaniu niż dedykowany rurociąg Dataflow.
-C. Syslog CE: VM z syslogiem to 'single point of failure' i brak automatycznego skalowania.
-D. Firewall query: Bardzo wolne i nie jest to metoda 'near real-time log export'.
+Analiza niepoprawnych odpowiedzi:
+- A. Cloud Function: Przy ogromnej liczbie logów (near real-time) funkcje te są mniej efektywne kosztowo i trudniejsze w zarządzaniu niż dedykowany rurociąg Dataflow.
+- C. Syslog CE: VM z syslogiem to "single point of failure" i brak automatycznego skalowania.
+- D. Firewall query: Bardzo wolne i nie jest to metoda "near real-time log export".
 
-Konsensus społeczności ExamTopics: 100% na B. Dataflow to król potoków danych w GCP.
+Wskazówki i triki (Tips & Tricks):
+- "Near real-time log export" + "Fault tolerance" + "Auto scaling" = Pub/Sub + Dataflow.
+- Zapamiętaj: Dataflow to standard przemysłowy dla potoków danych w GCP (zmiennych w czasie i objętości).
+
+Praktyczne informacje na egzamin:
+- Google udostępnia gotowe szablony Dataflow (np. Pub/Sub to Splunk, Pub/Sub to Elasticsearch), co jest najbardziej preferowanym rozwiązaniem w architekturze GCP.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/architecture/exporting-stackdriver-logs-to-splunk" target="_blank">Exporting logs to SIEM</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Google udostępnia gotowe szablony Dataflow (Pub/Sub to Splunk, Pub/Sub to Elasticsearch), które wystarczy skonfigurować, co minimalizuje czas wdrożenia.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/architecture/exporting-stackdriver-logs-to-splunk" target="_blank">https://cloud.google.com/architecture/exporting-stackdriver-logs-to-splunk</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość architektury danych w GCP. W rozwiązaniach klasy Enterprise (SIEM integration) kluczowa jest niezawodność i skalowalność. Dataflow jako usługa "serverless streaming" eliminuje problemy z zarządzaniem infrastrukturą i zapewnia mechanizmy "exactly-once" lub "at-least-once" przetwarzania, co jest krytyczne dla logów bezpieczeństwa.</p>
 </div>
 </div>
 <script>
