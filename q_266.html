@@ -89,30 +89,36 @@ Your organization is migrating a complex application to Google Cloud. The applic
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Identify the users who will migrate the application, revoke the default user roles and assign the users with purposely created custom roles)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Custom Roles + Audit: To jedyna droga do prawdziwego 'Least Privilege'. Standardowe role (Editor/Owner) są zbyt szerokie. Stworzenie ról dopasowanych dokładnie do czynności wykonywanych przez aplikację i jej administratorów realizuje wymogi bezpieczeństwa.
+Dlaczego ta odpowiedź jest poprawna:
+- Zasada najniższych uprawnień (Least Privilege): Role podstawowe (Basic Roles: Owner, Editor, Viewer) są zbyt szerokie. W środowisku produkcyjnym i skomplikowanych migracjach należy używać ról predefiniowanych lub niestandardowych (Custom Roles), które dają dokładnie takie uprawnienia, jakich użytkownik potrzebuje do konkretnych zadań.
+- Separacja obowiązków (Separation of Duties): Pozwala na podział zadań między administratorów, deweloperów i operatorów security, tak aby żadna osoba nie miała pełnej kontroli nad wszystkim ("God mode").
+- Custom Roles: Pozwalają na stworzenie precyzyjnego zestawu uprawnień, który ogranicza ryzyko błędów ludzkich podczas migracji.
 
-Dlaczego inne są błędne:
-B. Multiple IdPs: Komplikuje architekturę, nie rozwiązuje problemu nadmiarowych uprawnień Wewnątrz GCP.
-C. MFA: Zabezpiecza logowanie, ale nie ogranicza tego, co użytkownik może zrobić po zalogowaniu (autoryzacja).
-D. No action: Prowadzi do wycieków danych i naruszeń zgodności.
+Analiza niepoprawnych odpowiedzi:
+- B. Multiple IdPs: To skomplikowanie zarządzania tożsamością, nie ma nic wspólnego z "authorization scheme" (uprawnieniami).
+- C. MFA: To mechanizm uwierzytelniania (Authentication), a nie autoryzacji (Authorization).
+- D. No action needed: To skrajnie niebezpieczne założenie. Domyślne uprawnienia w nowej organizacji nie spełniają wymogów "least privilege".
 
-Konsensus społeczności ExamTopics: 100% na A. Custom Roles to fundament dojrzałego IAM.
+Wskazówki i triki (Tips & Tricks):
+- "Least privilege" + "Separation of duties" = Zawsze Custom Roles lub Predefined Roles (nigdy Basic Roles).
+- Jeśli widzisz "No action needed" / "Automatic" w kontekście uprawnień -> odrzuć to w 99% przypadków.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Rola Owner posiada uprawnienia do zarządzania IAM, co jest naruszeniem zasady separacji obowiązków w większości scenariuszy audytowych.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iam/docs/understanding-roles" target="_blank">Understanding IAM roles</a>
+- <a href="https://cloud.google.com/iam/docs/creating-custom-roles" target="_blank">Creating custom roles</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Przy migracji warto użyć <b>IAM Policy Analyzer</b>, aby zobaczyć, które z obecnych uprawnień są faktycznie używane, a które można bezpiecznie usunąć.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/iam/docs/creating-custom-roles" target="_blank">https://cloud.google.com/iam/docs/creating-custom-roles</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do projektowania bezpiecznych procesów administracyjnych. W chmurze uprawnienia są "wszędobylskie". Twoim zadaniem jako inżyniera bezpieczeństwa jest ich "przycinanie" (pruning), aby każda osoba miała tylko tyle uprawnień, ile jest jej niezbędne do wykonania pracy – ani mniej, ani więcej.</p>
 </div>
 </div>
 <script>

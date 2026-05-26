@@ -87,29 +87,34 @@ Your organization must follow the Payment Card Industry Data Security Standard (
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Activate Security Command Center (SCC) Premium. Use the compliance dashboard to view the status against the PCI DSS standard)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. SCC Premium Compliance: Posiada wbudowany moduł, który automatycznie mapuje stan Twojej chmury na konkretne punkty normy PCI DSS. Zgłasza znaleziska (findings), jeśli np. dyski nie są zaszyfrowane kluczem CMEK lub porty baz danych są publicznie dostępne. To jedyna zautomatyzowana metoda detekcji 'deviations'.
+Dlaczego ta odpowiedź jest poprawna:
+- SCC Premium Compliance: Posiada wbudowany moduł, który automatycznie mapuje stan Twojej chmury na konkretne punkty normy PCI DSS. Zgłasza znaleziska (findings), jeśli np. dyski nie są zaszyfrowane kluczem CMEK lub porty baz danych są publicznie dostępne. To jedyna zautomatyzowana metoda detekcji "odchyleń" (deviations).
+- Automatyzacja: Zamiast ręcznie przeglądać każdy zasób, SCC Premium daje gotowy raport zgodności, który jest na bieżąco aktualizowany.
 
-Dlaczego inne są błędne:
-B. Manual audit: Wolny i błędotwórczy.
-C, D: To surowe dane. Musiałbyś sam wiedzieć jakiego dokładnie wpisu szukać pod dany punkt normy PCI. SCC robi to mapowanie za Ciebie.
+Analiza niepoprawnych odpowiedzi:
+- B. Manual audit: Wolny i błędotwórczy. W chmurze, gdzie zasoby zmieniają się dynamicznie, ręczny audyt jest bezużyteczny.
+- C, D: To surowe dane. Musiałbyś sam wiedzieć, jakiego dokładnie wpisu szukać pod dany punkt normy PCI. SCC robi to mapowanie za Ciebie.
 
-Konsensus społeczności ExamTopics: 100% na A. SCC to Twój automatyczny audytor PCI.
+Wskazówki i triki (Tips & Tricks):
+- "PCI DSS" / "Compliance" + "Detect deviations" = SCC Premium (Compliance Dashboard).
+- SCC = Automatyczny audytor zgodności.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: SCC dostarcza raporty zgodności, które możesz pobrać w formacie PDF i pokazać audytorowi jako dowód ciągłego monitorowania bezpieczeństwa.
+- SCC Premium oferuje również skanowanie pod kątem "Security Health Analytics" (SHA), które jest fundamentem dla zgodności PCI.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/security-command-center/docs/concepts-compliance-overview" target="_blank">Security Command Center Compliance overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: </b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> SCC dostarcza raporty zgodności, które możesz pobrać w formacie PDF i pokazać audytorowi jako dowód ciągłego monitorowania bezpieczeństwa.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/security-command-center/docs/concepts-compliance-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-compliance-overview</a></li>
-
-</ul>
+<h3>Kluczowe zagadnienia</h3>
+<p><b>Sugerowana odpowiedź: A</b></p>
+<p><b>Analiza strategiczna:</b> To pytanie sprawdza znajomość natywnych narzędzi Google do zarządzania zgodnością (Compliance). W środowiskach PCI DSS nie wystarczy być bezpiecznym – trzeba udowodnić (i monitorować) ten stan w sposób ciągły. SCC Premium jest jedynym narzędziem w GCP, które oferuje wbudowaną inteligencję do mapowania konfiguracji chmury na wymagania audytowe PCI.</p>
 </div>
 </div>
 <script>

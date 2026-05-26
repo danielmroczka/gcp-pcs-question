@@ -72,7 +72,6 @@ Your organization utilizes Cloud Run services within multiple projects underneat
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a folder-level deny-all rule for outbound traffic within a hierarchical firewall policy. Define FQDN allowlist rules in separate policies and associate them with the necessary VPCs. Configure Cloud NAT for these VPCs.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a project-level deny-all rule within a hierarchical structure and apply it broadly. Override this rule with separate FQDN allowlists defined in VPC-level firewall policies associated with the relevant VPCs.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure Cloud NAT with IP-based filtering to permit outbound traffic only to the allowlisted FQDNs' IP ranges. Apply Cloud NAT uniformly to all VPCs within the organization's folder structure.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,37 @@ Your organization utilizes Cloud Run services within multiple projects underneat
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Create a folder-level deny-all rule for outbound traffic within a hierarchical firewall policy. Define FQDN allowlist rules in separate policies and associate them with the necessary VPCs. Configure Cloud NAT for these VPCs.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Hierarchical Firewall Policies: Ustawienie blokady wyjścia (deny outbound) na poziomie foldera zapewnia bezpieczeństwo domyślne. Następnie tworzysz polityki przypisane do konkretnych sieci VPC (polityki per-VPC), które dopuszczają ruch tylko do wybranych nazw domenowych (FQDN). To najbardziej granularny model kontroli egress.
+Dlaczego ta odpowiedź jest poprawna:
+- Hierarchiczne polityki firewalla (Hierarchical Firewall Policies): Pozwalają na definiowanie i wymuszanie reguł na poziomie całej organizacji lub folderów. Są one sprawdzane PRZED tradycyjnymi regułami firewalla VPC w poszczególnych projektach, co czyni je doskonałymi "barierami ochronnymi" (guardrails).
+- Kontrola na poziomie folderu: Zastosowanie polityki na poziomie folderu pozwala objąć nią wszystkie projekty wewnątrz folderu, co zapewnia spójność bez ręcznej konfiguracji w każdym projekcie osobno.
+- FQDN Allowlists: Cloud Firewall Enterprise pozwala na filtrowanie ruchu wychodzącego (egress) na podstawie nazw domenowych (FQDN), co jest bezpieczniejsze i łatwiejsze w utrzymaniu niż zarządzanie listami IP.
 
-Dlaczego inne są błędne:
-A. Global allowlist: Nie pozwala na rozróżnienie między różnymi sieciami VPC.
-C. Project-level: Niezarządzalne przy dużej skali projektów serverless.
-D. Cloud NAT: Ma ograniczone funkcje filtrowania FQDN w porównaniu do dedykowanych polityk firewall klasy Enterprise.
+Analiza niepoprawnych odpowiedzi:
+- A. Global-level allowlist: Nie pozwala na rozróżnienie między różnymi sieciami VPC, co jest wymagane w scenariuszu.
+- C. Project-level: Niezarządzalne przy dużej skali projektów serverless.
+- D. Cloud NAT: Ma ograniczone funkcje filtrowania FQDN w porównaniu do dedykowanych polityk firewall klasy Enterprise.
 
-Konsensus społeczności ExamTopics: 100% na B. Polityki per-VPC to zaawansowana technika zarządzania bezpieczeństwem sieciowym.
+Wskazówki i triki (Tips & Tricks):
+- "Manage/Enforce on folder level" + "Limited egress" = Hierarchical Firewall Policies.
+- "Minimize effort" = Zawsze polityki hierarchiczne (Folder/Org) zamiast ręcznego konfigurowania w projektach.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Reguły hierarchiczne "wygrywają" z regułami projektowymi.
+- Zrozum akcje: `allow`, `deny`, `goto_next`.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/vpc/docs/firewall-policies" target="_blank">Hierarchical firewall policies overview</a>
+- <a href="https://cloud.google.com/vpc/docs/firewall-policies-concepts" target="_blank">Firewall policies concepts</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> To rozwiązanie wymaga usługi Cloud Firewall Enterprise, aby móc korzystać z filtrów opartych na nazwach domenowych (FQDN) zamiast samych IP.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/vpc/docs/firewall-policies" target="_blank">https://cloud.google.com/vpc/docs/firewall-policies</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość centralizacji bezpieczeństwa. W dużych organizacjach musisz narzucać standardy, których zespoły nie mogą ominąć. Hierarchiczne polityki firewalla to narzędzie, które pozwala administratorowi bezpieczeństwa (na poziomie folderu) zablokować "wyjście" całego środowiska, jednocześnie pozwalając na konkretne, dozwolone wyjątki.</p>
 </div>
 </div>
 <script>

@@ -64,14 +64,14 @@
 <h2>Question 258 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization is adopting Google Cloud and wants to ensure sensitive resources are only accessible from devices within the internal on-premises corporate network. You must configure Access Context Manager to enforce this requirement. These considerations apply:<br/>• The internal network uses IP ranges 10.100.0.0/16 and 192.168.0.0/16.<br/>• Some employees work remotely but connect securely through a company-managed virtual private network (VPN). The VPN dynamically allocates IP addresses from the pool 172.16.0.0/20.<br/>• Access should be restricted to a specific Google Cloud project that is contained within an existing service perimeter.<br/>What should you do?
+Your organization is migrating a complex application to Google Cloud. The application has multiple internal components that interact with each other across several Google Cloud projects. Security is a major concern, and you must design an authorization scheme for administrators that aligns with the principles of least privilege and separation of duties. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create an access level named "Authorized Devices." Utilize the Device Policy attribute to require corporate-managed devices. Apply the access level to the Google Cloud project and instruct all employees to enroll their devices in the organization's management system.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create an access level titled "Internal Network Only." Add a condition with these attributes: IP Subnetworks: 10.100.0.0/16, 192.168.0.0/16. Device Policy: Require OS as Windows or macOS. Apply this access level to the sensitive Google Cloud project.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create an access level titled "Corporate Access." Add a condition with the IP Subnetworks attribute, including the ranges: 10.100.0.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Identify the users who will migrate the application, revoke the default user roles and assign the users with purposely created custom roles.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use multiple external identity providers (IdP) configured to use different SAML profiles and federate the IdPs for each application component.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure multi-factor authentication (MFA) to enforce the use of physical tokens for all users who will migrate the application.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> No action needed. When a Google Cloud organization is created, the appropriate permissions are automatically assigned to all users in the domain.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -79,7 +79,7 @@ Your organization is adopting Google Cloud and wants to ensure sensitive resourc
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer"></span>
+<span class="correct-answer">A</span>
 <br/>
 </span>
 </div>
@@ -88,29 +88,36 @@ Your organization is adopting Google Cloud and wants to ensure sensitive resourc
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: A (Identify the users who will migrate the application, revoke the default user roles and assign the users with purposely created custom roles)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Access Level with IP ranges: Najbardziej bezpośrednim sposobem na zdefiniowanie 'sieci korporacyjnej' w polityce dostępu jest podanie zakresów publicznych adresów IP Twoich biur i bramek VPN.
+Dlaczego ta odpowiedź jest poprawna:
+- Zasada najniższych uprawnień (Least Privilege): Role podstawowe (Basic Roles: Owner, Editor, Viewer) są zbyt szerokie. W środowisku produkcyjnym i skomplikowanych migracjach należy używać ról predefiniowanych lub niestandardowych (Custom Roles), które dają dokładnie takie uprawnienia, jakich użytkownik potrzebuje do konkretnych zadań.
+- Separacja obowiązków (Separation of Duties): Pozwala na podział zadań między administratorów, deweloperów i operatorów security, tak aby żadna osoba nie miała pełnej kontroli nad wszystkim ("God mode").
+- Custom Roles: Pozwalają na stworzenie precyzyjnego zestawu uprawnień, który ogranicza ryzyko błędów ludzkich podczas migracji.
 
-Dlaczego inne są błędne:
-A. Authorized Devices: Skupia się na sprzęcie, a wymóg mówi o lokalizacji sieciowej.
-B. IPs + OS: Dodanie wymogu OS niepotrzebnie komplikuje politykę, jeśli celem jest tylko filtracja po IP biurowym.
+Analiza niepoprawnych odpowiedzi:
+- B. Multiple IdPs: To skomplikowanie zarządzania tożsamością, nie ma nic wspólnego z "authorization scheme" (uprawnieniami).
+- C. MFA: To mechanizm uwierzytelniania (Authentication), a nie autoryzacji (Authorization).
+- D. No action needed: To skrajnie niebezpieczne założenie. Domyślne uprawnienia w nowej organizacji nie spełniają wymogów "least privilege".
 
-Konsensus społeczności ExamTopics: 100% na C. IP allowlisting to fundament polityk ACM.
+Wskazówki i triki (Tips & Tricks):
+- "Least privilege" + "Separation of duties" = Zawsze Custom Roles lub Predefined Roles (nigdy Basic Roles).
+- Jeśli widzisz "No action needed" / "Automatic" w kontekście uprawnień -> odrzuć to w 99% przypadków.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Rola Owner posiada uprawnienia do zarządzania IAM, co jest naruszeniem zasady separacji obowiązków w większości scenariuszy audytowych.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iam/docs/understanding-roles" target="_blank">Understanding IAM roles</a>
+- <a href="https://cloud.google.com/iam/docs/creating-custom-roles" target="_blank">Creating custom roles</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: </b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Pamiętaj, że adresy te muszą być adresami PUBLICZNYMI (po NAT), pod którymi Twoi pracownicy są widoczni w internecie.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/access-context-manager/docs/create-access-level" target="_blank">https://cloud.google.com/access-context-manager/docs/create-access-level</a></li>
-
-</ul>
+<h3>Kluczowe zagadnienia</h3>
+<p><b>Sugerowana odpowiedź: A</b></p>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do projektowania bezpiecznych procesów administracyjnych. W chmurze uprawnienia są "wszędobylskie". Twoim zadaniem jako inżyniera bezpieczeństwa jest ich "przycinanie" (pruning), aby każda osoba miała tylko tyle uprawnień, ile jest jej niezbędne do wykonania pracy – ani mniej, ani więcej.</p>
 </div>
 </div>
 <script>

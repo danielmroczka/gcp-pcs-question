@@ -72,7 +72,6 @@ Your organization hosts a sensitive web application in Google Cloud. To protect 
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure Google Cloud Armor to allow incoming connections, configure DNS Security Extensions (DNSSEC) on Cloud DNS to secure against common web attacks, and deploy Cloud Intrusion Detection System (Cloud IDS) to detect internal traffic anomalies.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure Cloud Intrusion Detection System (Cloud IDS) to monitor incoming connections, deploy Identity-Aware Proxy (IAP) to block common web attacks, and deploy Google Cloud Armor to detect internal traffic anomalies.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure Cloud DNS to secure incoming traffic, deploy Cloud Intrusion Detection System (Cloud IDS) to detect common web attacks, and deploy Google Cloud Armor to detect internal traffic anomalies.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,29 +88,40 @@ Your organization hosts a sensitive web application in Google Cloud. To protect 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Configure Cloud Firewall to permit allow-listed traffic only, deploy Google Cloud Armor with predefined rules for blocking common web attacks, and deploy Cloud Intrusion Detection System (IDS) to detect internal traffic anomalies.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Firewall + Armor + IDS: Ten zestaw adresuje 3 filary bezpieczeństwa: 1. Firewall (blokuje porty/IP). 2. Cloud Armor (blokuje ataki L7 jak SQLi). 3. Cloud IDS (monitoruje ruch wewnątrz sieci w poszukiwaniu anomalii i malware). To kompletna ochrona 'Defense in depth'.
+Dlaczego ta odpowiedź jest poprawna:
+- Firewall + Armor + IDS: Ten zestaw adresuje 3 filary bezpieczeństwa: 
+    1. Cloud Firewall (blokuje nieautoryzowane porty/IP).
+    2. Cloud Armor (blokuje ataki warstwy 7, np. SQL Injection, XSS, DDoS).
+    3. Cloud IDS (monitoruje ruch wewnątrz sieci w poszukiwaniu anomalii i malware typu "east-west"). 
+- Defense in Depth: To kompletna ochrona warstwowa, obejmująca infrastrukturę sieciową, brzeg aplikacji webowej oraz wnętrze sieci.
 
-Dlaczego inne są błędne:
-B, D. DNS: Chroni domenę, ale nie jest mechanizmem filtrowania ruchu przychodzącego do serwerów (Firewall).
-C. IAP: Służy do autoryzacji OSÓB, ale samo w sobie nie chroni przed złośliwymi botami atakującymi luki w kodzie aplikacji tak jak Cloud Armor.
+Analiza niepoprawnych odpowiedzi:
+- B, D. DNSSEC: Chroni integralność wpisów DNS (zapobiega cache poisoning), ale NIE jest mechanizmem filtrowania ruchu przychodzącego do serwerów (od tego jest Firewall).
+- C. IAP: Służy do autoryzacji OSÓB, ale samo w sobie nie chroni przed złośliwymi botami atakującymi luki w kodzie aplikacji tak jak Cloud Armor. Cloud Armor nie służy do detekcji anomalii ruchu wewnątrz sieci.
 
-Konsensus społeczności ExamTopics: 100% na A. To wzorcowy stos zabezpieczeń w GCP.
+Wskazówki i triki (Tips & Tricks):
+- "Restrict incoming" = Cloud Firewall (L3/L4) + Cloud Armor (L7).
+- "Monitor internal traffic anomalies" = Cloud IDS.
+- Zapamiętaj: Cloud IDS to system DETEKCJI (IDS), a nie prewencji (IPS). Nie blokuje on automatycznie, a jedynie alertuje.
+
+Praktyczne informacje na egzamin:
+- Cloud IDS widzi ruch "wschód-zachód" (między Twoimi VM), czego Cloud Armor (działający na brzegu – Load Balancer) nie widzi.
+- Cloud Armor to "WAF" (Web Application Firewall) dla usług HTTP/S.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/armor/docs/overview" target="_blank">Cloud Armor overview</a>
+- <a href="https://cloud.google.com/ids/docs/overview" target="_blank">Cloud IDS overview</a>
+- <a href="https://cloud.google.com/vpc/docs/firewalls" target="_blank">Cloud Firewall overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Cloud IDS jest unikalny, bo widzi ruch 'wschód-zachód' (między Twoimi VM), którego Cloud Armor na Load Balancerze nigdy nie zobaczy.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/security/products" target="_blank">https://cloud.google.com/security/products</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją wiedzę o "Defense in Depth" (obronie warstwowej). W chmurze nie istnieje jedna "magiczna" usługa bezpieczeństwa. Musisz umiejętnie łączyć narzędzia ochrony brzegu (Cloud Armor), sieci (Firewall) i wnętrza (Cloud IDS), aby zbudować odporne środowisko.</p>
 </div>
 </div>
 <script>

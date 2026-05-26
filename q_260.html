@@ -70,8 +70,8 @@ Your organization uses Google Cloud to process large amounts of location data fo
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enable location restrictions on Compute Engine instances and virtual disk resources where the data is handled. Apply labels to tag geographic metadata for all stored data.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use the Cloud Data Loss Prevention (Cloud DLP) API to scan for sensitive location data before any storage or processing. Create Cloud Storage buckets with global availability for optimal performance, relying on Cloud DLP results to filter and control data access.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create regional Cloud Storage buckets with Object</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create regional Cloud Storage buckets with Object Lifecycle Management to automatically manage storage classes and ensure data residency in compliant regions.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Encrypt data at rest using customer-managed encryption keys (CMEK) and restrict project access to specific regions using IAM policies.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -79,7 +79,7 @@ Your organization uses Google Cloud to process large amounts of location data fo
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer"></span>
+<span class="correct-answer">C</span>
 <br/>
 </span>
 </div>
@@ -88,29 +88,34 @@ Your organization uses Google Cloud to process large amounts of location data fo
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Create regional Cloud Storage buckets with Object Lifecycle Management to automatically manage storage classes and ensure data residency in compliant regions.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Regional buckets: Zapewniają, że dane fizycznie nie opuszczą wybranego regionu (np. Warszawy), co jest twardym wymogiem rezydencji danych. Object Lifecycle pozwala na automatyczne sprzątanie danych po ich przetworzeniu.
+Dlaczego ta odpowiedź jest poprawna:
+- Regional buckets: Zapewniają, że dane fizycznie nie opuszczą wybranego regionu (np. Warszawy), co jest twardym wymogiem rezydencji danych. Object Lifecycle pozwala na automatyczne sprzątanie lub zmiany klas storage po określonym czasie, co optymalizuje koszty i zmniejsza powierzchnię ataku (mniej niepotrzebnych danych).
 
-Dlaczego inne są błędne:
-A. Labels: To tylko opisy, nie gwarantują lokalizacji danych na dysku.
-B. Global buckets: Rozrzucają dane po całym świecie/kontynencie, co narusza wymogi rezydencji.
+Analiza niepoprawnych odpowiedzi:
+- A. Labels: To tylko opisy, nie gwarantują lokalizacji danych na dysku.
+- B. Global buckets: Rozrzucają dane po całym świecie/kontynencie, co narusza wymogi rezydencji.
+- D. IAM policies for regional restriction: IAM zarządza tym, kto może uzyskać dostęp do zasobu, ale nie ogranicza miejsca (regionu), w którym zasób jest fizycznie tworzony. Do tego służy Organization Policy (`constraints/gcp.resourceLocations`).
 
-Konsensus społeczności ExamTopics: 100% na C. Rezydencja danych = Regional resources.
+Wskazówki i triki (Tips & Tricks):
+- "Data residency" = Regionalne zasoby (Regional buckets/VMs).
+- Automatyzacja czyszczenia danych = Object Lifecycle Management.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Regionalność zasobów w GCP to najprostszy sposób na spełnienie wymogów rezydencji danych.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/storage/docs/locations" target="_blank">Cloud Storage locations</a>
+- <a href="https://cloud.google.com/storage/docs/lifecycle" target="_blank">Object Lifecycle Management</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: </b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Przy rezydencji danych kluczowe jest również monitorowanie logów audytowych, aby upewnić się, że żadna operacja administracyjna nie spowodowała wycieku danych do innego regionu.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/storage/docs/locations" target="_blank">https://cloud.google.com/storage/docs/locations</a></li>
-
-</ul>
+<h3>Kluczowe zagadnienia</h3>
+<p><b>Sugerowana odpowiedź: C</b></p>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją wiedzę o fizycznej lokalizacji danych w chmurze. Rezydencja danych nie jest cechą logiczną (IAM), lecz fizyczną (region, w którym tworzysz zasób). Wybór regionalnych bucketów jest jedynym sposobem, aby zagwarantować, że dane nie zostaną zreplikowane poza wybraną jurysdykcję.</p>
 </div>
 </div>
 <script>

@@ -64,15 +64,14 @@
 <h2>Question 254 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization has applications that run in multiple clouds. The applications require access to a Google Cloud resource running in your project. You must use short-lived access credentials to maintain security across the clouds. What should you do?
+Administrators need to manage Compute Engine instances using SSH and RDP. These instances do not have public IP addresses and cannot be accessed from the internet. You must implement a secure, cost-effective way to allow administrators to manage these instances. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a managed workload identity. Bind an attested identity to the Compute Engine workload.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a service account key. Download the key to each application that requires access to the Google Cloud resource.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a workload identity pool with a workload identity provider for each external cloud. Set up a service account and add an IAM binding for impersonation.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a VPC firewall rule for ingress traffic with an allowlist of the IP ranges of the external cloud applications.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Deploy a Site-to-Site VPN to connect the administrator's network to the Google Cloud VPC.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Assign static public IP addresses to the instances and use firewall rules to allow access only from authorized IP ranges.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a firewall rule to allow access from the Identity-Aware Proxy (IAP) IP range. Grant the role of an IAP-secured Tunnel User to the administrators.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Set up a jump host in a public subnet to act as a bastion for SSH/RDP connections.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,29 +88,37 @@ Your organization has applications that run in multiple clouds. The applications
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Create a firewall rule to allow access from the Identity-Aware Proxy (IAP) IP range. Grant the role of an IAP-secured Tunnel User to the administrators)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Workload Identity Pools: To mechanizm dedykowany dla scenariuszy Multi-cloud. Tworzysz dostawców (Providers) dla AWS i Azure wewnątrz jednej puli, co pozwala tym aplikacjom na wymianę ich natywnych tokenów na tymczasowe (short-lived) tokeny GCP.
+Dlaczego ta odpowiedź jest poprawna:
+- IAP for TCP Forwarding: Jest to mechanizm, który pozwala na bezpieczne tunelowanie ruchu TCP (SSH/RDP) do maszyn wirtualnych bez konieczności nadawania im publicznych adresów IP lub konfigurowania VPN.
+- Bezpieczeństwo: IAP uwierzytelnia użytkownika przez Google Cloud IAM. Ruch jest przesyłany przez infrastrukturę Google, co eliminuje konieczność otwierania portów SSH (22) lub RDP (3389) dla całego internetu.
+- IAP IP Range: Aby IAP mógł komunikować się z Twoimi instancjami, musisz pozwolić na ruch z zakresu IP: `35.235.240.0/20` w regułach firewalla VPC.
 
-Dlaczego inne są błędne:
-B. SA key download: Tworzy statyczne, niebezpieczne klucze - przeciwieństwo wymogu 'short-lived'.
-D. Firewall ingress: Kontroluje sieć, nie zarządza tożsamością i poświadczeniami.
+Analiza niepoprawnych odpowiedzi:
+- A. Site-to-site VPN: Jest to rozwiązanie do łączenia sieci, a nie do zarządzania konkretnymi maszynami. VPN jest znacznie droższy i trudniejszy w utrzymaniu niż IAP, jeśli potrzebujesz tylko dostępu SSH/RDP.
+- B. Public IP + Firewall: Nadawanie publicznych IP maszynom wirtualnym (nawet z restrykcją firewall) jest przeciwieństwem "optymalizacji bezpieczeństwa" (zwiększa powierzchnię ataku).
+- D. Jump host: Jump host (bramka) z publicznym IP sam w sobie jest punktem, który musisz dodatkowo zabezpieczać, łatać i monitorować. IAP (C) jest usługą zarządzaną przez Google, więc nie musisz dbać o jej infrastrukturę.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla C. To standardowa architektura multi-cloud w GCP.
+Wskazówki i triki (Tips & Tricks):
+- "Manage VMs via SSH/RDP" + "No public IP" + "Secure & Cost efficient" = IAP-secured Tunnel User.
+- Zakres IP IAP: `35.235.240.0/20` (konieczne zapamiętanie na egzamin!).
+
+Praktyczne informacje na egzamin:
+- Aby użyć IAP TCP forwarding, musisz mieć zainstalowany `gcloud` i skonfigurowany dostęp do tunelu (np. `gcloud compute ssh ... --tunnel-through-iap`).
+- Użytkownik musi mieć rolę `IAP-Secured Tunnel User`.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iap/docs/tcp-forwarding-overview" target="_blank">IAP for TCP forwarding overview</a>
+- <a href="https://cloud.google.com/iap/docs/using-tcp-forwarding" target="_blank">How to set up IAP TCP forwarding</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Federacja tożsamości jest bezpieczniejsza, ponieważ nie wymaga przesyłania ani przechowywania żadnych sekretów GCP poza samą chmurą Google.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/iam/docs/workload-identity-federation" target="_blank">https://cloud.google.com/iam/docs/workload-identity-federation</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> IAP to fundament modelu "Zero Trust" w GCP. Zastąpienie starych, niebezpiecznych metod (Jump Hosts) usługą zarządzaną (IAP) jest kluczowym elementem modernizacji bezpieczeństwa. Dla egzaminu ważne jest zrozumienie, że IAP eliminuje potrzebę ekspozycji SSH na świat i upraszcza architekturę.</p>
 </div>
 </div>
 <script>

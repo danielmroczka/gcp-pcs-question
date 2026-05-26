@@ -72,7 +72,6 @@ Your organization relies heavily on virtual machines (VMs) in Compute Engine. Du
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure the sole-tenancy feature in Compute Engine for all projects. Set up custom organization policies in Policy Controller to restrict the operating systems and image sources that teams are allowed to use.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a Cloud Build trigger to build a pipeline that generates hardened VM images. Run vulnerability scans in the pipeline, and store images with passing scans in a registry. Use instance templates pointing to this registry.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Activate Security Command Center Enterprise. Use VM discovery and posture management features to monitor hardening state and trigger automatic responses upon detection of issues.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,37 @@ Your organization relies heavily on virtual machines (VMs) in Compute Engine. Du
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Use VM Manager to automatically distribute and apply patches to VMs across your projects. Integrate VM Manager with hardened, organization-standard VM images stored in a central repository.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. VM Manager + Central Registry: VM Manager to jedyna natywna usługa Google do automatyzacji aktualizacji systemów (patching). Centralny projekt z obrazami ('Golden Images') zapewnia, że każda nowa maszyna startuje z bezpiecznego fundamentu.
+Dlaczego ta odpowiedź jest poprawna:
+- VM Manager (OS Patch Management): Jest to natywna, w pełni zarządzana usługa Google Cloud służąca do automatyzacji procesu instalowania poprawek (patchowania) na instancjach Compute Engine.
+- Skala: VM Manager jest zaprojektowany do działania na poziomie całej floty maszyn (fleet patching), niezależnie od liczby projektów. Pozwala na tworzenie zadań patchowania (patch jobs) z harmonogramem, selekcją poprawek oraz raportowaniem.
+- Raportowanie: VM Manager udostępnia gotowe pulpity nawigacyjne, które pozwalają na przeglądanie stanu patchowania ("patch management data") dla wszystkich maszyn w organizacji w jednym miejscu.
 
-Dlaczego inne są błędne:
-B. Sole-tenancy: Dotyczy izolacji sprzętowej, nie ma nic wspólnego z patchowaniem OS.
-C. Cloud Build: Buduje obrazy, ale nie potrafi 'naprawić' (zaktualizować) maszyny, która już działa od miesiąca. Robi to VM Manager.
-D. Posture management: Raportuje błędy, ale samo 'patchowanie' to techniczna domena VM Managera.
+Analiza niepoprawnych odpowiedzi:
+- B. Sole-tenancy: Dotyczy izolacji sprzętowej, nie ma nic wspólnego z patchowaniem OS.
+- C. Cloud Build: Buduje obrazy, ale nie potrafi 'naprawić' (zaktualizować) maszyny, która już działa od miesiąca. Robi to VM Manager.
+- D. Posture management: Raportuje błędy, ale samo 'patchowanie' to techniczna domena VM Managera.
 
-Konsensus społeczności ExamTopics: 100% na A. To jedyne kompletne rozwiązanie cyklu życia OS VM.
+Wskazówki i triki (Tips & Tricks):
+- "Automate patching" + "Large scale/Fleet" + "Report data" = VM Manager (OS Patch Management).
+- Słowo klucz "at scale" w GCP niemal zawsze eliminuje rozwiązania manualne.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: OS Patch Management obsługuje zarówno maszyny z systemami Linux, jak i Windows.
+- Agent OS Config musi być włączony na maszynach docelowych.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/compute/docs/os-patch-management" target="_blank">OS patch management overview</a>
+- <a href="https://cloud.google.com/compute/docs/vm-manager" target="_blank">VM Manager documentation</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Dzięki VM Manager możesz jednym kliknięciem sprawdzić, ile maszyn w całej firmie wymaga krytycznej poprawki bezpieczeństwa wydanej dzisiaj rano.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/compute/docs/os-patch-management" target="_blank">https://cloud.google.com/compute/docs/os-patch-management</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją wiedzę o "Operacyjnej doskonałości" (Operational Excellence). Ręczne patchowanie maszyn to "dług techniczny" i zagrożenie bezpieczeństwa. Google promuje użycie natywnego VM Managera, który integruje się z systemem operacyjnym, monitoruje stan i zapewnia spójne raportowanie dla audytorów (Compliance).</p>
 </div>
 </div>
 <script>

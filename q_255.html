@@ -64,15 +64,14 @@
 <h2>Question 255 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization's financial modeling application is already deployed on Google Cloud. The application processes large amounts of sensitive customer financial data. Application code is old and poorly understood by your current software engineers. Recent threat modeling exercises have highlighted the potential risk of sophisticated side-channel attacks against the application while the application is running. You need to further harden the Google Cloud solution to mitigate the risk of these side-channel attacks, ensuring maximum protection for the confidentiality of financial data during processing, while minimizing application problems. What should you do?
+Your organization operates in a highly regulated industry and needs to implement strict controls around the data being processed in your virtual machines. You must encrypt the sensitive data while it is in memory during processing. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enforce stricter access controls for Compute Engine instances by using service accounts, least privilege IAM policies, and limit network access.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Implement a runtime library designed to introduce noise and timing variations into the application's execution which will disrupt side-channel attack.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Migrate the application to Confidential VMs to provide hardware-level encryption of memory and protect sensitive data during processing.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Utilize customer-managed encryption keys (CMEK) to ensure complete control over the encryption process.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enable the use of customer-supplied encryption keys (CSEK) keys in the Google Compute Engine VMs.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Establish a trusted execution environment with a Confidential VM.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use a Shielded VM to ensure a secure boot with integrity monitoring for the application environment.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use customer-managed encryption keys (CMEK) and Cloud KMS to enable encryption for data in Cloud SQL.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +79,7 @@ Your organization's financial modeling application is already deployed on Google
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">C</span>
+<span class="correct-answer">B</span>
 <br/>
 </span>
 </div>
@@ -89,29 +88,35 @@ Your organization's financial modeling application is already deployed on Google
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: B (Establish a trusted execution environment with a Confidential VM)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Confidential VMs: Technologia ta wykorzystuje sprzętowe szyfrowanie pamięci RAM (AMD SEV). Dane są deszyfrowane dopiero wewnątrz procesora, co chroni je przed odczytem przez złośliwy kod próbujący wykorzystać luki typu side-channel w architekturze hosta.
+Dlaczego ta odpowiedź jest poprawna:
+- Szyfrowanie "In Use" (podczas przetwarzania): Tradycyjne metody szyfrowania chronią dane na dysku (at rest) lub w sieci (in transit). Confidential VMs (Instancje Poufne) to technologia Google Cloud, która chroni dane w momencie ich przetwarzania w procesorze i pamięci RAM.
+- Mechanizm sprzętowy: Confidential VMs wykorzystują funkcje procesorów (takie jak AMD SEV), aby szyfrować zawartość pamięci RAM kluczem generowanym sprzętowo dla każdej instancji. Dzięki temu dane są nieczytelne dla innych VM-ów, a nawet dla systemu operacyjnego hosta (hypervisora) zarządzanego przez Google.
 
-Dlaczego inne są błędne:
-A. Access control: Nie chroni przed atakami na poziomie sprzętowym procesora.
-D. CMEK: Szyfruje dane na dysku, dane w RAM są jawne bez technologii Confidential VM.
+Analiza niepoprawnych odpowiedzi:
+- A. Customer-supplied encryption keys (CSEK): Te rozwiązania służą do zarządzania kluczami szyfrującymi dane "at rest" (na dyskach). Choć dają kontrolę nad kluczem, nie chronią danych w pamięci RAM podczas pracy maszyny.
+- C. Shielded VM: Shielded VMs zapewniają ochronę przed atakami na etapie uruchamiania systemu (boot-level) oraz wewnątrz jądra (kernel-level). Używa technologii takich jak Secure Boot, ale nie zapewnia szyfrowania danych "in use" w pamięci RAM.
+- D. CMEK and Cloud KMS: CMEK chroni dane "at rest" (na dyskach) w usługach Google Cloud. Nie chroni danych w pamięci RAM instancji w trakcie ich przetwarzania.
 
-Konsensus społeczności ExamTopics: 100% na C. Słowo 'in memory' zawsze wskazuje na Confidential Computing.
+Wskazówki i triki (Tips & Tricks):
+- "Data in use" / "Encrypt memory" = Confidential VMs.
+- "Boot-level/kernel-level malware protection" = Shielded VM.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Confidential VMs wymagają specyficznych typów maszyn (np. N2D, C3).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/confidential-computing/confidential-vm/docs/introduction" target="_blank">Confidential VM introduction</a>
+- <a href="https://cloud.google.com/security/shielded-cloud/shielded-vm" target="_blank">Shielded VM overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Confidential VMs są szczególnie ważne w sektorze finansowym (PCI DSS) i medycznym (HIPAA), gdzie ochrona danych musi być zachowana w każdym stanie: at rest, in transit i in use.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/confidential-computing/confidential-vm/docs/introduction" target="_blank">https://cloud.google.com/confidential-computing/confidential-vm/docs/introduction</a></li>
-
-</ul>
+<h3>Kluczowe zagadnienia</h3>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość "poufności obliczeniowej" (Confidential Computing). Przez lata był to brakujący element w bezpieczeństwie chmurowym. Google jako lider w tej dziedzinie pozwala na całkowite odizolowanie danych klienta od infrastruktury dostawcy. Na egzaminie zawsze łącz "Data in use" z "Confidential VMs".</p>
 </div>
 </div>
 <script>

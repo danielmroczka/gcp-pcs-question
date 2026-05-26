@@ -89,30 +89,34 @@ Customers complain about error messages when they access your organization's web
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Enable logging in the Application Load Balancer backend and set the log level to VERBOSE in the Cloud Armor policy)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. ALB Request Logging: Logi Cloud Armor są dołączane do logów żądań Load Balancera. Jeśli nie włączysz logowania na 'Backend Service' Load Balancera, nie zobaczysz dlaczego użytkownicy są blokowani. Poziom VERBOSE (lub po prostu 'enabled') ujawni identyfikator reguły Armor, która odrzuciła żądanie.
+Dlaczego ta odpowiedź jest poprawna:
+- ALB Request Logging: Logi Cloud Armor są dołączane do logów żądań Load Balancera (GCLB). Jeśli nie włączysz logowania na 'Backend Service' Load Balancera, nie zobaczysz dlaczego użytkownicy są blokowani. 
+- Poziom logowania: Włączenie pełnego logowania (VERBOSE) dla polityki Cloud Armor pozwala na zarejestrowanie szczegółów żądania, w tym identyfikatora reguły (Security Policy Rule ID), która doprowadziła do odrzucenia (DENY) połączenia. Bez tego wglądu, debugowanie "zbyt restrykcyjnych" reguł jest niemożliwe.
 
-Dlaczego inne są błędne:
-A. Sample rate: Pomoże, jeśli logowanie jest już włączone, ale tu problemem jest samo 'zbieranie' szczegółowych danych.
-C. Preview mode: Służy do sprawdzania NOWYCH reguł, a tu badamy błędy w regułach już DZIAŁAJĄCYCH.
-D. Log sink: To metoda eksportu logów, a nie ich generowania u źródła.
+Analiza niepoprawnych odpowiedzi:
+- A. Log sample rate: Zwiększenie częstotliwości próbkowania logów pomoże tylko wtedy, gdy logowanie jest już włączone. Sam parametr próbkowania nie aktywuje logowania szczegółów reguł Armor.
+- C. Preview mode: Służy do testowania NOWYCH reguł (czy czegoś nie zablokują), a nie do badania przyczyn blokowania ruchu przez reguły JUŻ DZIAŁAJĄCE (aktywne).
+- D. Log sink: Log sink służy do eksportu logów (np. do BigQuery/PubSub), ale nie generuje samych logów w źródle (Load Balancer/Cloud Armor). Jeśli nie włączysz logowania na poziomie backendu, nie będzie czego eksportować.
 
-Konsensus społeczności ExamTopics: 100% na B. Bez logów na LB, Cloud Armor jest 'niewidoczny' dla analityka.
+Wskazówki i triki (Tips & Tricks):
+- "Troubleshoot blocked traffic" + "Cloud Armor" = Włącz logowanie na Backend Service (Load Balancer).
+- "Why was it blocked?" = Szukaj pola `enforcedSecurityPolicy` w logach Load Balancera.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Logi Cloud Armor są ściśle powiązane z logami Load Balancera. Nie analizujesz ich oddzielnie.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/armor/docs/request-logging" target="_blank">Cloud Armor request logging</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> W logach szukaj pola `enforcedSecurityPolicy` – tam znajdziesz nazwę reguły, która 'zabiła' połączenie klienta.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/armor/docs/request-logging" target="_blank">https://cloud.google.com/armor/docs/request-logging</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do diagnozowania problemów bezpieczeństwa w usługach zarządzanych. Cloud Armor to potężne narzędzie, ale bez odpowiedniego wglądu w logi (visibility) staje się "czarną skrzynką". Kluczem dla inżyniera bezpieczeństwa jest poprawne skonfigurowanie logowania w momencie wdrożenia, aby w razie awarii szybko zidentyfikować przyczynę blokady.</p>
 </div>
 </div>
 <script>
