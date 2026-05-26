@@ -89,21 +89,41 @@ You are a Cloud Identity administrator for your organization. In your Google Clo
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Change the configuration of the relevant groups in the Google Workspace Admin console to prevent external users from being added to the group)
 
-Wyjaśnienie: W konsoli administracyjnej Google Workspace można ustawić dla grup restrykcję 'Allow members outside your organization', którą należy wyłączyć.
+Dlaczego ta odpowiedź jest poprawna:
+- Google Workspace Admin Console (Google Workspace Admin): To centralne miejsce zarządzania tożsamościami i grupami w organizacji. Dla każdej grupy utworzonej w Google Cloud / Cloud Identity istnieje ustawienie określające, czy grupa może przyjmować członków spoza organizacji.
+- Kontrola dostępu do grup: Wyłączenie opcji "Allow members outside your organization" (Zezwalaj na członków spoza organizacji) dla konkretnych grup aplikacyjnych gwarantuje, że członkowie mogą pochodzić tylko z Twojego katalogu firmowego. Jest to natywny i najprostszy sposób zarządzania tym wymaganiem.
+
+Analiza niepoprawnych odpowiedzi:
+- B. IAM policy with condition: IAM Conditions służą do ograniczania dostępu do ZASOBÓW (np. GCS, BigQuery) w oparciu o pewne atrybuty. Nie służą one do ograniczania tego, KTO może stać się członkiem GRUPY w Cloud Identity.
+- C. IAM deny policy: Deny Policies w IAM pozwalają na blokowanie określonych ról lub działań dla konkretnych użytkowników/grup, ale nie służą do zarządzania "członkostwem" w grupach Cloud Identity.
+- D. Cloud Identity logs + Cloud Function: Jest to rozwiązanie reaktywne (naprawianie problemu po czasie). Jeśli użytkownik z zewnątrz zostanie dodany, przez pewien czas (do momentu zadziałania funkcji) będzie posiadał uprawnienia, co narusza zasady bezpieczeństwa (tzw. "window of exposure").
+
+Wskazówki i triki (Tips & Tricks):
+- "Group membership" / "Only organization users" = Workspace Admin Console (Group settings).
+- IAM = Dostęp do zasobów (Resource Access).
+- Cloud Identity/Workspace Admin = Zarządzanie tożsamością i grupami (Identity & Group Management).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj, że Cloud Identity to "lekka" wersja Google Workspace, używająca tej samej konsoli Admina.
+- Zarządzanie członkami grupy może być delegowane do właścicieli grupy (Group Owners), ale uprawnienia grupy do przyjmowania osób z zewnątrz zawsze kontroluje administrator.
+
+Dokumentacja i linki:
+- <a href="https://support.google.com/a/answer/167094" target="_blank">Control who can join groups</a>
+- <a href="https://support.google.com/a/answer/31365" target="_blank">About groups in your organization</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p>Jest to najprostsza metoda kontroli składu grup tożsamości.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość różnic między usługami GCP. Częstym błędem jest próba rozwiązania problemów "tożsamościowych" za pomocą IAM. IAM zarządza tym, co użytkownik może zrobić, natomiast konsola Admina (Cloud Identity) zarządza tym, kim użytkownik jest i w jakich grupach się znajduje.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://support.google.com/a/answer/167094" target="_blank">https://support.google.com/a/answer/167094</a></li>
-
+<li>Zasada Least Privilege powinna być stosowana również przy zarządzaniu członkami grup – nie każda grupa musi pozwalać na dodawanie osób z zewnątrz.</li>
+<li>Jeśli Twoja organizacja musi współpracować z zewnętrznymi firmami, zamiast dodawać ich do grup, rozważ użycie "Cloud Identity External Identities" lub dedykowanych kont typu "Guest".</li>
 </ul>
 </div>
 </div>

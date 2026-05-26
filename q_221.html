@@ -89,21 +89,41 @@ You define central security controls in your Google Cloud environment. For one o
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (A project level, the organizational policy control has been overwritten with an "allow" value)
 
-Wyjaśnienie: W hierarchii GCP polityki organizacji mogą być nadpisywane na niższych poziomach, jeśli flaga 'inheritFromParent' zostanie wyłączona, a nowa wartość ustawiona na 'allow'.
+Dlaczego ta odpowiedź jest poprawna:
+- Hierarchia polityk (Inheritance): Polityki organizacji w Google Cloud dziedziczą się od poziomu Organizacji w dół (przez foldery do projektów).
+- Nadpisywanie (Override): Jeśli na poziomie projektu zostanie ustawiona polityka z wartością "allow" (jawne zezwolenie), a flaga dziedziczenia (`inheritFromParent`) zostanie wyłączona, to lokalna polityka projektu staje się "Effective Policy". W tym scenariuszu deweloperzy projektu nadpisali restrykcję folderu, co pozwoliło im na stworzenie VM z publicznym IP.
+- Bezpieczeństwo: To jest klasyczny przykład tzw. "policy drift" lub nieautoryzowanego obejścia zabezpieczeń przez użytkowników posiadających uprawnienia `resourcemanager.organizationPolicyAdmin` na poziomie projektu.
+
+Analiza niepoprawnych odpowiedzi:
+- A. Static external IP: Zarezerwowanie statycznego adresu IP w projekcie nie pozwala na jego automatyczne przypisanie do nowej VM, jeśli polityka organizacji zabrania używania zewnętrznych IP. Sama VM nie mogłaby wystartować z tym IP.
+- B. Dry run mode: Polityki organizacji nie działają w trybie "dry run" w taki sposób, że "znikają". Jeśli polityka jest ustawiona, to albo jest egzekwowana, albo nie.
+- D. "Allow" value at org level: Gdyby wartość "allow" była ustawiona na poziomie Organizacji (górze), to nie byłoby problemu – wszystkie projekty miałyby domyślnie zezwolenie. Pytanie wskazuje na sytuację, w której folder blokował, a VM mimo to powstała, co sugeruje lokalne nadpisanie (override).
+
+Wskazówki i triki (Tips & Tricks):
+- "Organization policy constraint ignored" = Sprawdź, czy nie zostało wykonane lokalne nadpisanie (override) na niższym szczeblu.
+- "Effective Policy" = Wynik końcowy po uwzględnieniu hierarchii.
+
+Praktyczne informacje na egzamin:
+- Pamiętaj, że uprawnienia do edycji polityk organizacji są bardzo silne. Monitoruj logi audytowe (Admin Activity) pod kątem zmian w `setOrgPolicy`.
+- Używaj `Policy Analyzer`, aby sprawdzić, jaka polityka faktycznie obowiązuje dla danego zasobu (Effective Policy).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/understanding-hierarchy" target="_blank">Organization policy hierarchy</a>
+- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/creating-managing-policies" target="_blank">Creating and managing organization policies</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p>Administrator projektu może obejść restrykcje foldera, jeśli posiada uprawnienia do edycji polityk na swoim poziomie.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie sprawdza znajomość architektury "Governance" i "Hierarchy" w GCP. W dużej organizacji administratorzy na górze (Org) budują standardy, ale lokalni właściciele projektów często mają uprawnienia do zarządzania swoimi politykami. Zrozumienie, jak lokalne ustawienie może "wyciszyć" globalne standardy, jest kluczowe dla audytowania bezpieczeństwa.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/understanding-hierarchy" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/understanding-hierarchy</a></li>
-
+<li>Możesz zablokować możliwość nadpisywania polityk, nadając zespołom deweloperskim rolę `Org Policy Viewer` zamiast `Org Policy Admin`.</li>
+<li>Logi audytowe dla polityk organizacji (Org Policy) są kluczowe w wykrywaniu takich incydentów.</li>
 </ul>
 </div>
 </div>

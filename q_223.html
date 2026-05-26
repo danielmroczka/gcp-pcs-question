@@ -89,21 +89,41 @@ After completing a security vulnerability assessment, you learned that cloud adm
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Set the reauthentication frequency for the Google Cloud Session Control to one hour)
 
-Wyjaśnienie: Reauthentication frequency w Google Cloud Session Control wymusza na użytkowniku ponowne podanie hasła/MFA co określony czas, aby gcloud mógł dalej działać.
+Dlaczego ta odpowiedź jest poprawna:
+- Google Cloud Session Control: Jest to funkcja w Cloud Identity / Google Workspace, która pozwala administratorom definiować zasady sesji dla konsoli Google Cloud oraz narzędzi CLI (jak `gcloud`).
+- Reauthentication frequency (częstotliwość ponownego uwierzytelniania): Ustawienie tego parametru wymusza na użytkowniku ponowne podanie poświadczeń (i MFA) po upływie określonego czasu (np. 1 godziny). Nawet jeśli atakujący przejmie sesję (np. token sesji), po godzinie sesja wygaśnie i wymagane będzie ponowne logowanie, co zablokuje dalszy dostęp.
+- Minimalizacja ryzyka: To podejście "twarde" w odpowiedzi na zagrożenie eksploatacji sesji (np. przez kradzież plików cookie).
+
+Analiza niepoprawnych odpowiedzi:
+- A. Session duration: Określa całkowity czas życia sesji. Reauthentication frequency jest bardziej precyzyjnym mechanizmem, ponieważ wymusza na użytkowniku potwierdzenie tożsamości (MFA) w trakcie trwania sesji, co jest bezpieczniejsze.
+- C. AllowServiceAccountCredentialLifetimeExtension: To zaawansowane ustawienie dotyczy kont serwisowych i możliwości wydłużenia życia ich tokenów. Nie ma związku z czasem sesji logowania administratorów (użytkowników ludzkich).
+- D. serviceAccountKeyExpiryHours: Ta polityka dotyczy wyłącznie kluczy JSON (statycznych poświadczeń). Pytanie dotyczy sesji "logowania" (użytkownicy w CLI/konsoli), a nie kluczy JSON.
+
+Wskazówki i triki (Tips & Tricks):
+- "Reduce risk of open sessions" / "Session hijacking" + "Session control" = Reauthentication frequency.
+- Pamiętaj: Reauthentication (MFA) jest zawsze bezpieczniejsze niż zwykły timeout sesji.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Session Control chroni zarówno użytkowników przeglądarkowych (konsola), jak i użytkowników narzędzi wiersza poleceń (gcloud SDK).
+- Skrócenie sesji to podstawowy element "Security Hygiene" w organizacjach wysokiego ryzyka.
+
+Dokumentacja i linki:
+- <a href="https://support.google.com/cloudidentity/answer/9366694" target="_blank">Google Cloud session control overview</a>
+- <a href="https://support.google.com/a/answer/9128526" target="_blank">Set session duration/frequency for Google services</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p>To bezpośrednio adresuje problem 'porzuconych' sesji w terminalu.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie testuje umiejętność zarządzania sesjami w środowiskach pracy zdalnej. Sesje są słabym punktem nowoczesnych aplikacji webowych. Wymuszenie reautentykacji (MFA) po pewnym czasie to najskuteczniejsza metoda ochrony przed skutkami kradzieży ciasteczek sesyjnych (session hijacking).</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://support.google.com/cloudidentity/answer/9366694" target="_blank">https://support.google.com/cloudidentity/answer/9366694</a></li>
-
+<li>Możesz konfigurować różne czasy dla różnych grup użytkowników (np. krótszy dla Super Administratorów, dłuższy dla Deweloperów).</li>
+<li>Zawsze monitoruj "Suspicious Activity" w panelu bezpieczeństwa Google Workspace jako uzupełnienie Session Control.</li>
 </ul>
 </div>
 </div>

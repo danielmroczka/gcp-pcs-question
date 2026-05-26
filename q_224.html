@@ -89,21 +89,41 @@ You have numerous private virtual machines on Google Cloud. You occasionally nee
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Create a firewall rule to allow access from the Identity-Aware Proxy (IAP) IP range. Grant the role of an IAP-secured Tunnel User to the administrators)
 
-Wyjaśnienie: IAP TCP forwarding jest darmowy i nie wymaga publicznych adresów IP na maszynach docelowych. Jest bezpieczniejszy niż jump host (bastion).
+Dlaczego ta odpowiedź jest poprawna:
+- IAP for TCP Forwarding: Jest to mechanizm, który pozwala na bezpieczne tunelowanie ruchu TCP (SSH/RDP) do maszyn wirtualnych bez konieczności nadawania im publicznych adresów IP lub konfigurowania VPN.
+- Bezpieczeństwo: IAP uwierzytelnia użytkownika przez Google Cloud IAM. Ruch jest przesyłany przez infrastrukturę Google, co eliminuje konieczność otwierania portów SSH (22) lub RDP (3389) dla całego internetu.
+- IAP IP Range: Aby IAP mógł komunikować się z Twoimi instancjami, musisz pozwolić na ruch z zakresu IP: `35.235.240.0/20` w regułach firewalla VPC.
+
+Analiza niepoprawnych odpowiedzi:
+- A. Site-to-site VPN: Jest to rozwiązanie do łączenia sieci, a nie do zarządzania konkretnymi maszynami. VPN jest znacznie droższy i trudniejszy w utrzymaniu niż IAP, jeśli potrzebujesz tylko dostępu SSH/RDP.
+- B. Public IP + Firewall: Nadawanie publicznych IP maszynom wirtualnym (nawet z restrykcją firewall) jest przeciwieństwem "optymalizacji bezpieczeństwa" (zwiększa powierzchnię ataku).
+- D. Jump host: Jump host (bramka) z publicznym IP sam w sobie jest punktem, który musisz dodatkowo zabezpieczać, łatać i monitorować. IAP (C) jest usługą zarządzaną przez Google, więc nie musisz dbać o jej infrastrukturę.
+
+Wskazówki i triki (Tips & Tricks):
+- "Manage VMs via SSH/RDP" + "No public IP" + "Secure & Cost efficient" = IAP-secured Tunnel User.
+- Zakres IP IAP: `35.235.240.0/20` (konieczne zapamiętanie na egzamin!).
+
+Praktyczne informacje na egzamin:
+- Aby użyć IAP TCP forwarding, musisz mieć zainstalowany `gcloud` i skonfigurowany dostęp do tunelu (np. `gcloud compute ssh ... --tunnel-through-iap`).
+- Użytkownik musi mieć rolę `IAP-Secured Tunnel User` (nie `Web App User`!).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iap/docs/tcp-forwarding-overview" target="_blank">IAP for TCP forwarding overview</a>
+- <a href="https://cloud.google.com/iap/docs/using-tcp-forwarding" target="_blank">How to set up IAP TCP forwarding</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p>Ruch SSH jest tunelowany przez infrastrukturę Google i weryfikowany przez IAM.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> IAP to fundament modelu "Zero Trust" w GCP. Zastąpienie starych, niebezpiecznych metod (Jump Hosts) usługą zarządzaną (IAP) jest kluczowym elementem modernizacji bezpieczeństwa. Dla egzaminu ważne jest zrozumienie, że IAP eliminuje potrzebę ekspozycji SSH na świat i upraszcza architekturę.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/iap/docs/using-tcp-forwarding" target="_blank">https://cloud.google.com/iap/docs/using-tcp-forwarding</a></li>
-
+<li>Możesz połączyć IAP z IAM Conditions, aby ograniczyć dostęp do SSH tylko w godzinach pracy (np. 9:00-17:00).</li>
+<li>Pamiętaj o audycie: każde użycie tunelu IAP jest rejestrowane w logach audytowych (Data Access).</li>
 </ul>
 </div>
 </div>

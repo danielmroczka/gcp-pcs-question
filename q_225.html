@@ -89,22 +89,42 @@ Your organization's record data exists in Cloud Storage. You must retain all rec
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (1. Identify buckets with record data. 2. Apply a retention policy and set it to retain for seven years. 3. Enable bucket lock)
 
-Wyjaśnienie: Bucket Lock (zablokowanie polityki) sprawia, że czas retencji nie może zostać skrócony ani usunięty, nawet przez administratora projektu.
+Dlaczego ta odpowiedź jest poprawna:
+- Retention Policy (Polityka retencji): Pozwala określić, jak długo obiekty w buckecie muszą być przechowywane, zanim będzie można je usunąć (np. 7 lat).
+- Bucket Lock (Blokada bucketu): Jest to kluczowy mechanizm, który sprawia, że polityka retencji staje się PERMANENTNA. Po zablokowaniu (Lock) polityki, nikt – nawet administrator organizacji – nie może usunąć ani zmodyfikować tej polityki na krótszy czas trwania. Jest to wymóg konieczny dla wielu regulacji prawnych (np. SEC w finansach), aby zapobiec usuwaniu dowodów przez administratorów.
+
+Analiza niepoprawnych odpowiedzi:
+- A. Log-based alerts: Alerty oparte na logach (np. gdy ktoś próbuje zmienić politykę) są dobrą praktyką monitorowania, ale nie stanowią "twardego" mechanizmu wymuszającego retencję. Jeśli administrator zmieni politykę, alert może przyjść za późno, aby zapobiec usunięciu danych.
+- B. Remove IAM roles: Usunięcie uprawnień do zmiany polityki jest dobrym dodatkowym zabezpieczeniem, ale nie daje takiej gwarancji jak "Bucket Lock", który działa bezpośrednio na poziomie serwisu GCS i jest "nieodwracalny" w sensie administracyjnym.
+- C. Bucket policy only: Sam bucket policy (bez operacji "Lock") można łatwo zmienić. Samo włączenie polityki retencji bez jej zablokowania nie spełnia wymogu "permanentności".
+
+Wskazówki i triki (Tips & Tricks):
+- "Permanent retention" + "Regulatory compliance" = Retention Policy + Bucket Lock.
+- Zawsze szukaj połączenia: "Retention Policy" (czas) + "Bucket Lock" (blokada zmiany czasu).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Zablokowana polityka retencji (Bucket Lock) jest nieodwracalna. Nie można jej wyłączyć ani skrócić.
+- Retencja w GCS działa na poziomie całego bucketu.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/storage/docs/bucket-lock" target="_blank">Bucket Lock overview</a>
+- <a href="https://cloud.google.com/storage/docs/bucket-lock#retention-policies" target="_blank">Retention policies guide</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p>Jest to kluczowe dla spełnienia wymogów regulacyjnych dotyczących niezmienności danych (WORM).</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją wiedzę o "WORM" (Write Once, Read Many). W branżach regulowanych musisz udowodnić audytorom, że żadna osoba (nawet z pełnymi uprawnieniami) nie może usunąć danych przed wyznaczonym terminem. Bucket Lock jest techniczną gwarancją, że dane zostaną bezpiecznie przechowane przez wymagany okres.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/storage/docs/bucket-lock" target="_blank">https://cloud.google.com/storage/docs/bucket-lock</a></li>
-
+<li>Zawsze testuj Bucket Lock w dedykowanym, testowym buckecie przed zastosowaniem na produkcji, ponieważ nie będziesz mógł cofnąć tej decyzji.</li>
+<li>Pamiętaj, że Bucket Lock chroni obiekty przed usunięciem lub modyfikacją przez cały okres retencji, nawet jeśli są to wersje obiektów.</li>
 </ul>
+</div>
 </div>
 </div>
 <script>

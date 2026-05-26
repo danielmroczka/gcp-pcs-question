@@ -89,21 +89,43 @@ You manage one of your organization's Google Cloud projects (Project A). A VPC S
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Configure an ingress policy for the perimeter in Project A, and allow access for the service account in Project B to collect messages)
 
-Wyjaśnienie: Ingress rules w VPC SC pozwalają na precyzyjne dopuszczenie ruchu z konkretnych projektów lub tożsamości spoza perymetru do środka.
+Dlaczego ta odpowiedź jest poprawna:
+- VPC Service Controls (VPC SC): Chroni zasoby (jak temat Pub/Sub w Projekcie A) przed eksfiltracją i nieautoryzowanym dostępem. Perymetr domyślnie blokuje dostęp z zewnątrz.
+- Ingress Rule (Reguła przychodząca): Aby umożliwić dostęp z Projeku B (który jest poza perymetrem) do zasobu w Projekcie A (wewnątrz perymetru), należy skonfigurować regułę Ingress dla perymetru w Projekcie A.
+- Zasada najniższych uprawnień: Reguła Ingress pozwala precyzyjnie wskazać "kto" (konto serwisowe z Projektu B) i "jaki zasób" (temat Pub/Sub w Projekcie A) mogą się komunikować, co jest zgodne z zasadą najniższych uprawnień.
+
+Analiza niepoprawnych odpowiedzi:
+- B. Access level: Poziomy dostępu (Access Levels) definiują kontekst (np. IP, certyfikat), ale same w sobie nie dają uprawnień do przełamania blokady perymetru. Muszą być powiązane z regułą Ingress, aby zadziałały w tym kontekście.
+- C. Perimeter bridge: Most (bridge) łączy dwa perymetry. W tym przypadku Projekt B NIE jest w perymetrze, więc bridge nie ma zastosowania (nie ma czego łączyć).
+- D. Remove Pub/Sub API: To podejście "wszystko albo nic". Usunięcie usługi z listy restricted wyłącza ochronę dla tej usługi w całym projekcie, co narusza zasady bezpieczeństwa (otwierasz dostęp dla każdego, zamiast precyzyjnie dla konta serwisowego).
+
+Wskazówki i triki (Tips & Tricks):
+- "Cross-perimeter access" / "Access from outside perimeter" = Ingress Rule.
+- "Project B is outside" = Ingress rule on A's perimeter.
+- Pamiętaj: Ingress rule definiuje, kto z zewnątrz może pukać do wnętrza perymetru.
+
+Praktyczne informacje na egzamin:
+- Reguły Ingress działają na poziomie API. Musisz podać `serviceName` (np. `pubsub.googleapis.com`) i konkretną metodę (jeśli potrzeba).
+- Zawsze weryfikuj, czy konto serwisowe w Projekcie B ma też nadane uprawnienia IAM (np. `roles/pubsub.subscriber`), ponieważ VPC SC tylko "pozwala" na żądanie API, ale IAM wciąż decyduje, czy użytkownik ma uprawnienia do wykonania operacji.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules" target="_blank">Ingress and egress rules overview</a>
+- <a href="https://cloud.google.com/vpc-service-controls/docs/service-perimeters" target="_blank">Service perimeters guide</a>
+- <a href="https://cloud.google.com/vpc-service-controls/docs/troubleshoot-security-policies" target="_blank">Troubleshooting VPC SC policies</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p>Bridge (C) zadziałałby tylko, gdyby oba projekty były w perymetrach. Ingress policy jest bardziej elastyczna dla projektów nieobjętych restrykcjami.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> VPC Service Controls to narzędzie typu "Zero Trust" dla usług Google Cloud. Ingress rules są "bezpiecznymi furtkami" w tym perymetrze. Zrozumienie, że musisz dopuścić tożsamość z zewnątrz (Ingress) do wnętrza, jest kluczową umiejętnością dla inżyniera bezpieczeństwa zarządzającego wieloma projektami.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules" target="_blank">https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules</a></li>
-
+<li>Możesz testować reguły za pomocą trybu "Dry-run", aby nie zepsuć komunikacji produkcyjnej.</li>
+<li>Pamiętaj: jeśli konto serwisowe w Projekcie B zmienia się, musisz zaktualizować regułę Ingress w Projekcie A.</li>
 </ul>
 </div>
 </div>

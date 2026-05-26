@@ -89,29 +89,42 @@ Your organization wants to protect all workloads that run on Compute Engine VM t
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: C (1. Use Google Shielded VM including secure boot, Virtual Trusted Platform Module (vTPM), and integrity monitoring. 2. Activate Confidential Computing. 3. Enforce these actions by using organization policies)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. compute.securityAdmin: Ta rola jest zaprojektowana specjalnie dla administratorów bezpieczeństwa sieciowego. Daje uprawnienia do tworzenia, usuwania i modyfikowania reguł firewalla, certyfikatów SSL i polityk Cloud Armor, bez konieczności nadawania uprawnień do zarządzania samymi maszynami VM czy trasami.
+Dlaczego ta odpowiedź jest poprawna:
+- Shielded VM: Zapewnia ochronę przed atakami na etapie uruchamiania systemu (boot-level) oraz wewnątrz jądra (kernel-level). Używa technologii takich jak Secure Boot (sprawdza podpisy cyfrowe bootloadera) oraz vTPM (bezpieczne przechowywanie kluczy/poświadczeń).
+- Confidential Computing: Używa technologii sprzętowej (np. AMD SEV) do szyfrowania danych w pamięci RAM ("data in use"), co chroni przed odczytem pamięci przez hosta/hypervisor.
+- Organizacja polityk (Enforcement): Wymuszenie tych ustawień przez politykę organizacji (np. `constraints/compute.requireConfidentialComputing`) gwarantuje, że każda nowa VM w firmie będzie miała te zabezpieczenia.
 
-Dlaczego inne są błędne:
-A. networkAdmin: Pozwala na zarządzanie całą siecią (trasy, podsieci), co jest zbyt szerokie, jeśli celem jest tylko firewall.
-C. compute.admin: Zdecydowanie za wysokie uprawnienia (może kasować VM).
-D. iam.securityAdmin: Zarządza uprawnieniami LUDZI, nie regułami SIECI.
+Analiza niepoprawnych odpowiedzi:
+- A. Cloud Run function: Cloud Run służy do obsługi żądań HTTP/zdarzeń, nie posiada żadnych uprawnień ani możliwości kontrolowania ustawień bezpieczeństwa VM. To błędna ścieżka.
+- B. VM Threat Detection (SCC): VMTD wykrywa zagrożenia w pamięci RAM, ale NIE zapewnia sprzętowego szyfrowania pamięci ani ochrony procesu bootowania (to robią Shielded VM i Confidential Computing).
+- D. Hardened images: Skanowanie obrazów jest dobrą praktyką (część procesu budowania), ale użycie "zwykłego" twardego obrazu (bez Shielded VM/Confidential Computing) nie daje ochrony sprzętowej na poziomie bootowania czy szyfrowania RAM-u.
 
-Konsensus społeczności ExamTopics: 100% na B. To standardowa rola dla 'Network Security'.
+Wskazówki i triki (Tips & Tricks):
+- "Boot-level/kernel-level malware protection" = Shielded VM.
+- "Data in use encryption" / "Hardware-based RAM encryption" = Confidential Computing.
+- "Enforce across organization" = Organization Policy.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Shielded VM chroni integralność (Boot), a Confidential VM chroni poufność (RAM). Najwyższy poziom bezpieczeństwa to połączenie obu tych technologii.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/security/shielded-cloud/shielded-vm" target="_blank">Shielded VM overview</a>
+- <a href="https://cloud.google.com/confidential-computing" target="_blank">Confidential Computing overview</a>
+- <a href="https://cloud.google.com/compute/confidential-vm/docs/enforce-confidential-vm" target="_blank">Enforcing Confidential VM with Org Policy</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Na forach często pada pytanie o różnicę między A i B. Eksperci wyjaśniają: jeśli Twoim zadaniem jest 'bezpieczeństwo' (firewall), wybierz Security Admin (B). Jeśli zadaniem jest 'budowanie sieci' (IP, subnets), wybierz Network Admin (A).</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość "poufności obliczeniowej" (Confidential Computing). Przez lata był to brakujący element w bezpieczeństwie chmurowym. Google jako lider w tej dziedzinie pozwala na całkowite odizolowanie danych klienta od infrastruktury dostawcy. Na egzaminie zawsze łącz "Data in use" z "Confidential VMs".</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/compute/docs/access/iam#compute.securityAdmin" target="_blank">https://cloud.google.com/compute/docs/access/iam#compute.securityAdmin</a></li>
-
+<li>Włączenie Confidential VMs wiąże się z niewielkim narzutem wydajnościowym (kilka procent), co wynika z procesu szyfrowania/deszyfrowania "w locie" przez procesor.</li>
+<li>Pamiętaj, że do działania tej funkcji system operacyjny wewnątrz VM musi być nowoczesny i wspierać odpowiednie sterowniki (np. obrazy Shielded VM).</li>
 </ul>
 </div>
 </div>

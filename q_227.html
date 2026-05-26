@@ -90,29 +90,40 @@ You are migrating your users to Google Cloud. There are cookie replay attacks wi
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: AE (A: Configure Google session control to a shorter duration, E: Enforce Security Key Authentication with 2SV)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Organization Policy (PAP): Polityka `storage.publicAccessPrevention` jest najskuteczniejszym sposobem na globalne zablokowanie publicznych bucketów. Gdy jest włączona na poziomie organizacji lub projektu, Google Cloud automatycznie blokuje każdą próbę nadania uprawnień `allUsers` lub `allAuthenticatedUsers`.
+Dlaczego te odpowiedzi są poprawne:
+- Session duration (A): Skrócenie czasu trwania sesji (Session duration) oznacza, że sesja wygasa szybciej. Wymusza to na użytkowniku ponowne logowanie, co unieważnia skradzione pliki cookie sesji po upływie czasu.
+- Security Key Authentication (2SV) (E): Klucze bezpieczeństwa (np. FIDO2/WebAuthn) są jedyną metodą MFA całkowicie odporną na ataki typu "man-in-the-middle" (MITM) oraz "cookie replay". Nawet jeśli atakujący zdobędzie sesję, nie będzie mógł "odtworzyć" (replay) procesu logowania z kluczem fizycznym, ponieważ klucz jest przypisany do konkretnego originu (domeny).
 
-Dlaczego inne są błędne:
-A. IAM: Nie zapobiega pomyłkom administratorów przy nadawaniu ról.
-C. Console settings: To akcja manualna na pojedynczym zasobie, nie zapewnia 'default across org'.
-D. VPC Service Controls: Blokuje exfiltration przez API, ale nie zarządza 'publiczną dostępnością' plików w internecie w tak bezpośredni sposób jak PAP.
+Analiza niepoprawnych odpowiedzi:
+- B. OAuth 2.0 access token: To ustawienie dotyczy technicznych tokenów dostępu używanych przez aplikacje (np. z gcloud), a nie sesji użytkownika w przeglądarce. Nie chroni przed przejęciem sesji webowych.
+- C. Reauthentication policy: (Opcja zamienna z A). Choć "reauthentication frequency" jest również bardzo dobrą metodą, "session control duration" w połączeniu z Security Keys (E) jest klasyczną odpowiedzią egzaminacyjną na problem cookie replay.
+- D. Third-party identity provider: Federacja z zewnętrznym IdP sama w sobie nie chroni przed przejęciem sesji Google, jeśli po zalogowaniu do IdP nie zostaną wdrożone odpowiednie mechanizmy po stronie Google (session management).
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. To fundament ochrony danych w GCS.
+Wskazówki i triki (Tips & Tricks):
+- "Cookie replay" / "Session hijacking" = Zawsze Security Key (E) + skrócenie czasu sesji (A lub C).
+- Pamiętaj: Security Key (MFA) to najlepsza ochrona przed phishingiem i przejęciem sesji.
+
+Praktyczne informacje na egzamin:
+- Zrozum: Skrócenie czasu sesji to podstawowy element "Security Hygiene" w organizacjach wysokiego ryzyka.
+- Współczesne ataki na sesje często wykorzystują "session proxy" (np. Evilginx), co sprawia, że Security Keys są absolutnie niezbędne dla ochrony sesji.
+
+Dokumentacja i linki:
+- <a href="https://support.google.com/cloudidentity/answer/9366694" target="_blank">Google Cloud session control overview</a>
+- <a href="https://cloud.google.com/security/phishing-resistant-mfa" target="_blank">Why Security Keys are phish-proof</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: AE</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Eksperci na Reddit podkreślają, że PAP (B) to 'must-have' dla firm regulowanych. Chroni ona przed najczęstszym błędem ludzkim – przypadkowym upublicznieniem danych firmowych przez jednego dewelopera.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie uderza w fundamenty ochrony tożsamości. Kradzież ciasteczek sesyjnych to obecnie jeden z najpopularniejszych sposobów omijania nawet silnego MFA (typu SMS/Google Prompt). Tylko klucze sprzętowe (FIDO) eliminują ten wektor ataku, a Session Control ogranicza "okno czasowe" dla atakującego.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/storage/docs/public-access-prevention" target="_blank">https://cloud.google.com/storage/docs/public-access-prevention</a></li>
-
+<li>Skracanie czasu trwania sesji zwiększa obciążenie dla użytkownika (częstsze logowanie), więc stosuj to z umiarem.</li>
+<li>Współczesne ataki na sesje często wykorzystują "session proxy", co sprawia, że Security Keys są absolutnie niezbędne.</li>
 </ul>
 </div>
 </div>

@@ -89,21 +89,42 @@ Your organization wants to be continuously evaluated against CIS Google Cloud Co
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Activate Security Command Center (SCC) Premium. Create a rule to mute the security findings in SCC so they are not evaluated)
 
-Wyjaśnienie: SCC Premium oferuje wbudowaną zgodność z CIS. Funkcja 'Mute rules' pozwala na automatyczne ukrywanie znalezisk, które są zaakceptowane jako ryzyko lub nieistotne.
+Dlaczego ta odpowiedź jest poprawna:
+- SCC Premium: Jest to kluczowa usługa Google Cloud do ciągłej oceny bezpieczeństwa, która automatycznie sprawdza konfigurację Twojego środowiska pod kątem standardów takich jak CIS Benchmark (w tym CIS v1.3).
+- Mute Rules (Reguły wyciszania): To funkcjonalność SCC, która pozwala na automatyczne ukrywanie (wyciszanie) znalezisk, które zostały uznane przez zespół bezpieczeństwa za "nieistotne" lub "zaakceptowane ryzyko". Dzięki regułom (muting rules), proces ten jest w pełni zautomatyzowany – gdy SCC ponownie wykryje dany błąd, reguła automatycznie go wyciszy, więc nie wpłynie on na końcowy wynik zgodności (Compliance score).
+- CIS Benchmark: SCC Premium automatycznie mapuje znaleziska na konkretne kontrolki CIS, co pozwala na bieżący monitoring zgodności.
+
+Analiza niepoprawnych odpowiedzi:
+- A. Manual muting: Ręczne wyciszanie (muting) każdego znaleziska z osobna jest niemożliwe do utrzymania w dużej skali. Ponadto, wyciszanie "zawsze, gdy się pojawią" wymaga automatyzacji (reguł), a nie ręcznej pracy.
+- C. CSV Export: Pobieranie danych do pliku CSV jest procesem statycznym i ręcznym. Nie zapewnia ciągłej oceny (continuous evaluation) ani automatyzacji – audytorzy nie będą analizować plików CSV w czasie rzeczywistym.
+- D. External audit: Zewnętrzne audyty są ważne, ale nie rozwiązują problemu "ciągłej oceny" (continuous evaluation) wewnątrz Google Cloud. Pytanie wymaga "automatycznego systemu lub procesu".
+
+Wskazówki i triki (Tips & Tricks):
+- "Continuous evaluation" + "CIS Benchmark" + "Ignore irrelevant controls" = SCC Premium + Mute Rules.
+- "Automated" = Mute Rules (nie ręczne klikanie).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Wyciszenie znaleziska w SCC usuwa je z dashboardów zgodności (Compliance dashboards), co wpływa na statystyki, ale nie usuwa faktycznego zagrożenia z platformy.
+- Reguły wyciszania można tworzyć przy użyciu filtrów (np. wycisz wszystkie znaleziska typu X w projekcie Y).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/security-command-center/docs/how-to-mute-findings" target="_blank">Muting security findings in SCC</a>
+- <a href="https://cloud.google.com/security-command-center/docs/concepts-cis-benchmarks" target="_blank">CIS benchmarks in SCC</a>
+- <a href="https://cloud.google.com/security-command-center/docs/concepts-security-command-center-overview" target="_blank">Security Command Center overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p>Wyciszone (muted) znaleziska nie wpływają na wynik ogólny zgodności w dashboardzie.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie testuje umiejętność zarządzania "Compliance Fatigue" (zmęczeniem audytowym). W dużych firmach SCC Premium generuje tysiące alertów. Kluczem do sukcesu jest "odszumianie" (noise reduction) poprzez automatyczne wyciszanie tego, co biznesowo zaakceptowano jako bezpieczne, aby zespół security mógł skupić się na prawdziwych problemach.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/security-command-center/docs/how-to-mute-findings" target="_blank">https://cloud.google.com/security-command-center/docs/how-to-mute-findings</a></li>
-
+<li>Możesz wyciszyć znalezisko na poziomie organizacji, folderu lub projektu.</li>
+<li>Każda reguła wyciszania musi zawierać wyjaśnienie (np. "Akceptowane ryzyko zgodnie z polityką firmy X"), co jest ważne dla celów audytowych.</li>
 </ul>
 </div>
 </div>

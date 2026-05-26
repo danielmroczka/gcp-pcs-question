@@ -89,21 +89,40 @@ Your company recently published a security policy to minimize the usage of servi
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Set up a workload identity pool with your corporate Active Directory Federation Service (ADFS). Configure a rule to let principals in the pool impersonate the Google Cloud service account)
 
-Wyjaśnienie: WIF wspiera SAML (ADFS). Najbezpieczniej jest użyć reguł (A), które ograniczają, którzy użytkownicy AD mogą przejmować daną tożsamość w GCP.
+Dlaczego ta odpowiedź jest poprawna:
+- Workload Identity Federation (WIF): Pozwala aplikacjom działającym poza GCP (np. on-premises z Windows) na bezpieczne uwierzytelnianie się w Google Cloud bez potrzeby zarządzania długotrwałymi kluczami (JSON).
+- Integracja z ADFS: ADFS (Active Directory Federation Services) może działać jako Identity Provider (IdP) korzystający z protokołu OIDC/SAML, co jest wspierane przez WIF.
+- Zasada najniższych uprawnień: Opcja A jest lepsza niż B, ponieważ nakazuje "skonfigurowanie reguły" (rule) ograniczającej dostęp, zamiast "pozwolić wszystkim" (let all principals). W bezpieczeństwie chmurowym zawsze dążymy do precyzyjnego ograniczenia dostępu – im mniej podmiotów może przejąć tożsamość konta serwisowego, tym bezpieczniej.
+
+Analiza niepoprawnych odpowiedzi:
+- B. Let all principals in the pool impersonate: Jest to ryzykowne podejście, naruszające zasadę najniższych uprawnień. Każdy użytkownik lub aplikacja w zdefiniowanej puli otrzymałaby dostęp do konta serwisowego, co jest nieakceptowalne w bezpiecznym środowisku.
+- C i D. OIDC service on the same machine: To rozwiązanie jest technicznie niepoprawne w kontekście federacji z korporacyjnym AD/ADFS. WIF wymaga, aby IdP (tutaj ADFS) był zaufanym dostawcą tożsamości. OIDC "na tej samej maszynie" nie rozwiązuje problemu federacji tożsamości z Active Directory.
+
+Wskazówki i triki (Tips & Tricks):
+- "Least privilege" + "Workload Identity Federation" = Ograniczona reguła (konkretne principal) zamiast "All principals".
+- WIF + ADFS = Bezpieczna tożsamość hybrydowa bez kluczy.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: WIF to "Keyless Authentication".
+- Zawsze wybieraj opcje, które sugerują granulację i ograniczenia, zamiast "wszyscy mają dostęp".
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iam/docs/workload-identity-federation" target="_blank">Workload Identity Federation overview</a>
+- <a href="https://cloud.google.com/iam/docs/best-practices-for-using-workload-identity-federation" target="_blank">Best practices for WIF</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p>Nie należy pozwalać wszystkim (B) na impersonację konta serwisowego.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> Pytanie sprawdza nie tylko znajomość technologii (WIF), ale też dojrzałość w zarządzaniu uprawnieniami (Least Privilege). W świecie enterprise automatyzacja nie może odbywać się kosztem bezpieczeństwa – każda konfiguracja WIF musi być precyzyjnie przycięta do potrzeb danej aplikacji.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/iam/docs/workload-identity-federation" target="_blank">https://cloud.google.com/iam/docs/workload-identity-federation</a></li>
-
+<li>WIF wspiera mapowanie atrybutów tokena (np. grupy AD -> rola GCP).</li>
+<li>Pamiętaj o monitorowaniu logów audytowych pod kątem podejrzanych prób impersonacji kont serwisowych.</li>
 </ul>
 </div>
 </div>

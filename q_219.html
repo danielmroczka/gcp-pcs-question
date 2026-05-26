@@ -90,21 +90,41 @@ You are migrating an on-premises data warehouse to BigQuery, Cloud SQL, and Clou
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: CE.
+Poprawna odpowiedź: CE (C: Key Access Justifications, E: Cloud External Key Manager)
 
-Wyjaśnienie: EKM (E) zapewnia separację dostawcy kluczy od chmury. KAJ (C) zapewnia widoczność i kontrolę nad każdym żądaniem użycia klucza.
+Dlaczego te odpowiedzi są poprawne:
+- Cloud External Key Manager (EKM): Pozwala na przechowywanie kluczy szyfrujących w systemie zewnętrznym (poza infrastrukturą Google). Spełnia to wymóg "implement a separate key management provider from data management".
+- Key Access Justifications (KAJ): Każde użycie klucza przez Google (np. w celu wsparcia technicznego lub backupu) generuje żądanie, które jest logowane i może wymagać Twojej "uzasadnionej zgody" (Justification). Spełnia to wymóg "visibility into all encryption key requests" oraz "maintain control over access".
+
+Analiza niepoprawnych odpowiedzi:
+- A. Customer-managed encryption keys (CMEK): Choć daje kontrolę nad cyklem życia klucza, klucz fizycznie znajduje się wewnątrz Cloud KMS (infrastruktura Google). Nie spełnia wymogu separacji dostawcy kluczy.
+- B. Customer-Supplied Encryption Keys (CSEK): CSEK to sposób "dostarczenia" klucza tymczasowo, a nie pełnoprawny model "key management provider". Nie wspiera on pełnej widoczności (visibility) do każdego użycia klucza przez Google w taki sposób jak KAJ.
+- D. Access Transparency and Approval: Ta funkcja zapewnia logi z działań administratorów Google (np. "dostępu do Twoich danych"), ale nie jest bezpośrednio powiązana z "encryption key requests" i zarządzaniem zewnętrznym dostawcą kluczy (EKM).
+
+Wskazówki i triki (Tips & Tricks):
+- "External key management provider" + "Visibility into encryption requests" = EKM + KAJ.
+- Pamiętaj: KAJ to "strażnik" Twoich kluczy, który pozwala Ci powiedzieć "TAK" lub "NIE" na prośbę Google o dostęp do klucza EKM.
+
+Praktyczne informacje na egzamin:
+- KAJ jest krytycznym elementem dla organizacji wymagających tzw. "Sovereign Cloud".
+- KAJ działa tylko z EKM i wybranymi usługami Cloud HSM.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/kms/docs/ekm" target="_blank">Cloud EKM overview</a>
+- <a href="https://cloud.google.com/key-access-justifications/docs/overview" target="_blank">Key Access Justifications overview</a>
+- <a href="https://cloud.google.com/security/sovereign-cloud" target="_blank">Google Cloud Sovereign Solutions</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: CE</b></p>
-<p><b>Głęboka analiza:</b> <p>To połączenie jest wymagane dla najwyższych standardów suwerenności danych.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie jest testem zrozumienia najwyższych standardów "Sovereignty" (suwerenności) w chmurze. EKM fizycznie oddziela "skarb" (klucz) od "domu skarbu" (Google Cloud), a KAJ daje właścicielowi "klucza do drzwi" pełny wgląd w to, kto i dlaczego chce do niego zajrzeć. To idealna konfiguracja dla najbardziej wrażliwych danych.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/kms/docs/ekm" target="_blank">https://cloud.google.com/kms/docs/ekm</a></li>
-
+<li>Wdróż KAJ w trybie "Log-only", aby najpierw zobaczyć, jakie żądania zgłasza Google, zanim przełączysz się na tryb wymuszania zgód.</li>
+<li>EKM i KAJ są dostępne tylko dla organizacji w wybranych regionach i dla wybranych usług.</li>
 </ul>
 </div>
 </div>

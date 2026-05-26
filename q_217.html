@@ -89,21 +89,43 @@ You are routing all your internet facing traffic from Google Cloud through your 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (Configure Cloud Interconnect and route traffic through an on-premises firewall)
 
-Wyjaśnienie: Cloud Interconnect oferuje największą przepustowość. Kierowanie ruchu 0.0.0.0/0 przez on-premises to tzw. 'forced tunneling'.
+Dlaczego ta odpowiedź jest poprawnie:
+- Cloud Interconnect: Jest to rozwiązanie dedykowane dla scenariuszy wymagających "najwyższej przepustowości" (highest bandwidth), znacznie przewyższającej możliwości tuneli VPN (które są ograniczane przez przepustowość internetu i limity tunelu).
+- Forced Tunneling: Kierowanie całego ruchu internetowego (0.0.0.0/0) przez on-premises wymaga bezpiecznego i wydajnego kanału (Interconnect) oraz centralnego punktu inspekcji (Firewall on-premises), gdzie ruch może zostać przefiltrowany przez korporacyjne systemy bezpieczeństwa.
+- Bezpieczeństwo: Przekierowanie ruchu przez on-premises firewall pozwala na stosowanie korporacyjnych standardów bezpieczeństwa (np. DLP, IDS/IPS, WAF) dla całego ruchu wychodzącego z chmury.
+
+Analiza niepoprawnych odpowiedzi:
+- A. HA VPN: VPN jest świetnym rozwiązaniem dla średnich wymagań, ale nie zapewnia najwyższej dostępnej przepustowości (Interconnect jest szybszy i bardziej przewidywalny).
+- B. Routing VM: Używanie maszyny wirtualnej (NAT/Gateway VM) jako routera dla całego ruchu w organizacji jest wąskim gardłem, trudne w skalowaniu i nieefektywne kosztowo. W GCP należy używać natywnych usług sieciowych (Cloud NAT/Interconnect).
+- C. Cloud Interconnect with HA VPN: Choć można łączyć te technologie, samo "replacing the default route to an on-premises destination" nie opisuje pełnego procesu kontroli ruchu. Opcja D jest bardziej kompletna, wspominając o Firewallu jako punkcie decyzyjnym.
+
+Wskazówki i triki (Tips & Tricks):
+- "Highest bandwidth" + "Secure" = Cloud Interconnect.
+- "Forced tunneling" / "Internet traffic through on-prem" = Interconnect + Central Firewall.
+- Pamiętaj: Jeśli routing internetowy jest przekierowany, musisz zadbać o poprawną konfigurację tras (routes) oraz Cloud Routera.
+
+Praktyczne informacje na egzamin:
+- Zrozum: **Interconnect** (fizyczne połączenie) vs **VPN** (tunel przez internet).
+- Cloud Interconnect zapewnia SLA (Service Level Agreement) dotyczące dostępności, co jest krytyczne dla usług biznesowych.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/network-connectivity/docs/interconnect/concepts/overview" target="_blank">Cloud Interconnect overview</a>
+- <a href="https://cloud.google.com/architecture/best-practices-vpc-design#forced-tunneling" target="_blank">Forced tunneling best practices</a>
+- <a href="https://cloud.google.com/network-connectivity/docs/router/concepts/overview" target="_blank">Cloud Router overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p>Pozwala to na wykorzystanie lokalnych systemów IDS/IPS/DLP dla całego ruchu z chmury.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie testuje architekturę sieciową "Enterprise". Duże organizacje często wymuszają tzw. "Forced Tunneling", aby cały ruch internetowy był analizowany przez korporacyjny stos bezpieczeństwa (np. proxy, firewalle) przed wyjściem w świat. Cloud Interconnect jest "autostradą" niezbędną dla takiej skali.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/network-connectivity/docs/interconnect/concepts/overview" target="_blank">https://cloud.google.com/network-connectivity/docs/interconnect/concepts/overview</a></li>
-
+<li>Przy forced tunneling musisz uważać na routing – jeśli zablokujesz drogę powrotną, zepsujesz komunikację z aplikacjami.</li>
+<li>Natywne usługi Google (jak Cloud NAT) są często wybierane jako prostsza alternatywa dla on-premise firewalli, jeśli wymagania bezpieczeństwa na to pozwalają.</li>
 </ul>
 </div>
 </div>
