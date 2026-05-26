@@ -89,21 +89,43 @@ Which Identity-Aware Proxy role should you grant to an Identity and Access Manag
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (IAP-Secured Web App User)
 
-Wyjaśnienie: Rola 'IAP-Secured Web App User' jest niezbędna, aby IAP wpuścił użytkownika do chronionej aplikacji HTTP(S).
+Dlaczego ta odpowiedź jest poprawna:
+- Identity-Aware Proxy (IAP): Pozwala na kontrolowanie dostępu do aplikacji HTTP(S) oraz zasobów TCP (jak SSH/RDP) w oparciu o tożsamość użytkownika, bez konieczności używania VPN.
+- IAP-Secured Web App User: Jest to specyficzna rola IAM wymagana do uzyskania dostępu do zasobów HTTPS chronionych przez IAP (np. aplikacji App Engine, usług Cloud Run lub backendów Load Balancera). Bez tej roli, nawet jeśli użytkownik przejdzie pomyślnie autentykację Google, IAP odrzuci jego żądanie dostępu (autoryzacja).
+
+Analiza niepoprawnych odpowiedzi:
+- A. Security Reviewer: Jest to rola ogólna, która pozwala na przeglądanie konfiguracji zabezpieczeń w GCP, ale nie nadaje uprawnień do korzystania z konkretnych aplikacji chronionych przez IAP.
+- B. IAP-Secured Tunnel User: Ta rola służy do korzystania z funkcji "TCP Forwarding" w IAP. Pozwala ona na tunelowanie ruchu (np. SSH lub RDP) do instancji VM, które nie mają publicznych adresów IP. Nie nadaje ona uprawnień do bezpośredniego dostępu do aplikacji webowych HTTPS.
+- D. Service Broker Operator: Jest to rola związana z zarządzaniem Service Brokerami w środowiskach takich jak Anthos lub Kubernetes, nie ma bezpośredniego związku z dostępem użytkowników do aplikacji przez IAP.
+
+Wskazówki i triki (Tips & Tricks):
+- "HTTPS resources" + "IAP" = Web App User.
+- "SSH/RDP" / "TCP Tunneling" + "IAP" = Tunnel User.
+- Zapamiętaj: IAP sprawdza tożsamość (Kim jesteś?) i rolę (Czy masz uprawnienie Web App User?).
+
+Praktyczne informacje na egzamin:
+- IAP działa na warstwie 7 (HTTP/S) i warstwie 4 (TCP).
+- Aby IAP działał dla aplikacji webowej, musi ona znajdować się za External HTTP(S) Load Balancerem lub być częścią App Engine.
+- Rola 'IAP-Secured Web App User' może być nadana na poziomie projektu, ale dobrą praktyką jest nadawanie jej na poziomie konkretnego zasobu (backendu).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iap/docs/access-control" target="_blank">IAP Access Control overview</a>
+- <a href="https://cloud.google.com/iap/docs/concepts-overview" target="_blank">How IAP works</a>
+- <a href="https://cloud.google.com/iap/docs/using-tcp-forwarding" target="_blank">IAP for TCP forwarding</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p>Rola Tunnel User (B) dotyczy dostępu SSH/RDP, a nie stron webowych.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie sprawdza znajomość specyficznych ról IAP, co jest częstym elementem egzaminu. Najważniejszym rozróżnieniem jest Web App User vs Tunnel User. IAP jest fundamentem strategii "BeyondCorp" (Zero Trust) w Google Cloud, dlatego zrozumienie jego uprawnień jest kluczowe dla inżyniera bezpieczeństwa.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/iap/docs/access-control" target="_blank">https://cloud.google.com/iap/docs/access-control</a></li>
-
+<li>Przy włączaniu IAP dla aplikacji webowej, musisz również skonfigurować ekran zgody OAuth (OAuth consent screen).</li>
+<li>Pamiętaj, że IAP nie zastępuje firewalla na poziomie VPC, ale działa przed nim w łańcuchu żądania dla aplikacji webowych.</li>
 </ul>
 </div>
 </div>

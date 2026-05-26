@@ -89,21 +89,42 @@ You need to use Cloud External Key Manager to create an encryption key to encryp
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (1. Create or use an existing key with a unique URI in a supported external key management partner system. 2. In the external key management partner system, grant access for this key to use your Google Cloud project)
 
-Wyjaśnienie: Przy EKM klucz fizycznie znajduje się poza Google (u partnera jak Equinix, Thales, Fortanix). Najpierw tworzysz klucz tam, a potem łączysz go z Cloud KMS podając URI partnera.
+Dlaczego ta odpowiedź jest poprawna:
+- Cloud External Key Manager (EKM): Pozwala na szyfrowanie danych w Google Cloud za pomocą kluczy, które są przechowywane i zarządzane poza infrastrukturą Google (u zewnętrznych partnerów, takich jak Equinix, Thales, Fortanix).
+- Workflow: Aby zacząć korzystać z EKM, klucz musi najpierw fizycznie istnieć w systemie zewnętrznym. Musisz mieć unikalny identyfikator URI tego klucza. 
+- Uprawnienia: Musisz również skonfigurować system zewnętrzny tak, aby "ufał" Twojemu projektowi Google Cloud i pozwalał mu na wysyłanie żądań o użycie tego klucza (wrap/unwrap).
+
+Analiza niepoprawnych odpowiedzi:
+- A. Grant access to external system in GCP: To drugi krok. Najpierw musisz stworzyć klucz i nadać uprawnienia "od strony" systemu zewnętrznego.
+- B. Create key in Cloud KMS: EKM polega na tym, że klucz NIE jest tworzony w Cloud KMS. W KMS tworzysz tylko "wskaźnik" (EKM key version), który odsyła do zewnętrznego URI.
+- D. Create external key in Cloud KMS: Choć w KMS tworzy się zasób typu "External Key", nie jest to pierwszy krok procesu. Bez istniejącego klucza u partnera i nadanych tam uprawnień, próba stworzenia klucza w KMS zakończy się błędem walidacji URI.
+
+Wskazówki i triki (Tips & Tricks):
+- Pamiętaj o kolejności: Zewnętrzny Partner (Klucz + URI + ACL) -> Google Cloud (EKM Key + URI).
+- EKM to jedyne rozwiązanie w GCP, które daje tzw. "Data Sovereignty" (suwerenność danych) - Google nie może odszyfrować danych bez Twojej zgody w systemie zewnętrznym.
+
+Praktyczne informacje na egzamin:
+- Zwróć uwagę na "Key Access Justifications" (KAJ). Jest to funkcja często łączona z EKM, która pozwala Ci zobaczyć powód, dla którego Google chce użyć klucza, i automatycznie odrzucić żądanie, jeśli powód jest nieuzasadniony.
+- EKM jest znacznie droższy i trudniejszy w utrzymaniu niż CMEK. Wybieraj go tylko, gdy wymagają tego specyficzne regulacje prawne.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/kms/docs/ekm" target="_blank">Cloud EKM overview</a>
+- <a href="https://cloud.google.com/kms/docs/create-ekm-key" target="_blank">Creating EKM keys</a>
+- <a href="https://cloud.google.com/kms/docs/external-partners" target="_blank">Supported EKM partners</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p>EKM pozwala na zachowanie fizycznej separacji kluczy od chmury, w której znajdują się dane.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie sprawdza proces "Onboarding" dla EKM. Najważniejsze jest zrozumienie, że Google Cloud w tym modelu jest "klientem" dla zewnętrznego dostawcy kluczy. Dlatego najpierw musimy przygotować "serwer" (system partnera), a dopiero potem konfigurować "klienta" (GCP).</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/kms/docs/ekm" target="_blank">https://cloud.google.com/kms/docs/ekm</a></li>
-
+<li>URI klucza EKM wygląda zazwyczaj tak: <code>https://[PARTNER_URL]/[KEY_ID]</code>.</li>
+<li>Pamiętaj, że jeśli połączenie między Google Cloud a partnerem EKM zostanie przerwane, Twoje dane (np. w BigQuery) staną się natychmiast niedostępne.</li>
 </ul>
 </div>
 </div>

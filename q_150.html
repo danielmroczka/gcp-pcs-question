@@ -89,29 +89,42 @@ Your organization's Google Cloud VMs are deployed via an instance template that 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: C (Deploy an external HTTP(S) load balancer in the service project with the MIG as a backend)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Advanced Security: Wersja Premium SCC to pełnoprawny system CNAPP (Cloud Native Application Protection Platform). Oferuje wykrywanie ataków w czasie rzeczywistym (ETD), ciągłe monitorowanie zgodności z normami (Compliance) oraz automatyczne skanowanie podatności maszyn i kontenerów.
+Dlaczego ta odpowiedź jest poprawna:
+- Cel: Ograniczenie wystawienia VM na internet ("reduce exposure") przy zachowaniu dostępności dla użytkowników zewnętrznych.
+- Rozwiązanie: Usunięcie publicznych adresów IP z maszyn wirtualnych i umieszczenie ich za zewnętrznym Load Balancerem (HTTP(S) LB). Load Balancer posiada publiczny adres IP i przyjmuje ruch, a następnie przekazuje go do maszyn wirtualnych w sieci wewnętrznej (VPC).
+- Shared VPC: W architekturze Shared VPC, Load Balancer dla aplikacji zazwyczaj wdraża się w projekcie serwisowym (Service Project), w którym znajduje się grupa instancji (MIG). Choć sieć jest współdzielona z projektu hosta, zasoby aplikacji (takie jak LB) powinny być zarządzane w projekcie aplikacji.
 
-Dlaczego inne są błędne:
-A. Basic logs: To zadanie dla Cloud Logging (dostępne w wersji Standard).
-C. IAM management: Tym zajmuje się usługa IAM.
-D. VPN: To usługa sieciowa.
+Analiza niepoprawnych odpowiedzi:
+- A i B. Cloud NAT: Bramka NAT służy do umożliwienia maszynom bez publicznego adresu IP wyjścia na zewnątrz (ruch wychodzący - outbound), np. w celu pobrania aktualizacji. NIE służy ona do przyjmowania ruchu od użytkowników zewnętrznych (ruch przychodzący - inbound).
+- D. LB w projekcie hosta: Choć technicznie możliwe, narusza to zasadę separacji obowiązków (separation of duties). Projekt hosta powinien zarządzać infrastrukturą sieciową (VPC, subnets, firewall), a projekty serwisowe powinny zarządzać swoimi aplikacjami, w tym ich Load Balancerami.
 
-Konsensus społeczności ExamTopics: 100% na B. SCC Premium to mózg operacyjny bezpieczeństwa w chmurze.
+Wskazówki i triki (Tips & Tricks):
+- Jeśli widzisz "Reduce exposure" + "Service external users" -> szukaj Load Balancera.
+- Jeśli widzisz "VMs without public IP" + "Access internet for updates" -> szukaj Cloud NAT.
+- W Shared VPC: Zasoby "network-level" (IP, subnets) są w Host Project. Zasoby "application-level" (VMs, LB, MIG) są w Service Project.
+
+Praktyczne informacje na egzamin:
+- Zewnętrzny HTTP(S) LB to tzw. proxy load balancer. Klient łączy się z LB, a LB otwiera nowe połączenie do VM. Dzięki temu VM nigdy nie "widzi" bezpośrednio adresu IP klienta (chyba że sprawdzisz nagłówek X-Forwarded-For).
+- Pamiętaj o regułach Firewall: Musisz pozwolić na ruch z zakresów IP Load Balancera (Google health check ranges: 130.211.0.0/22 i 35.191.0.0/16) do Twoich VM.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/load-balancing/docs/https" target="_blank">External HTTP(S) Load Balancing overview</a>
+- <a href="https://cloud.google.com/vpc/docs/shared-vpc" target="_blank">Shared VPC overview</a>
+- <a href="https://cloud.google.com/nat/docs/overview" target="_blank">Cloud NAT overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Głównym punktem debaty w sieci jest cena. SCC Premium jest drogie, ale inżynierowie Enterprise podkreślają, że automatyzacja Compliance (B) oszczędza setki godzin pracy ręcznej przy przygotowywaniu audytów PCI, HIPAA czy ISO.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To klasyczne pytanie o architekturę bezpiecznej aplikacji webowej. Największą pułapką jest Cloud NAT (opcje A i B), który często myli się początkującym z Load Balancerem. Pamiętaj: NAT = Outbound, LB = Inbound.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/security-command-center/docs/concepts-security-command-center-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-security-command-center-overview</a></li>
-
+<li>MIG (Managed Instance Group) bez publicznych IP to "best practice" dla bezpieczeństwa.</li>
+<li>Dzięki HTTP(S) LB możesz również łatwo włączyć Cloud Armor, aby chronić się przed atakami DDoS i WAF (np. SQL Injection).</li>
 </ul>
 </div>
 </div>

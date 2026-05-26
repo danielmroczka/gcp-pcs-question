@@ -89,21 +89,43 @@ You are deploying a web application hosted on Compute Engine. A business require
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Configure your Compute Engine instances to use the Google Cloud's operations suite Cloud Logging agent to send application logs to a custom log bucket in the EUROPE-WEST1 region with a custom retention of 12 years)
 
-Wyjaśnienie: Cloud Logging pozwala na tworzenie własnych 'log buckets' z definiowalnym czasem retencji (nawet do lat). Wybór regionu zapewnia rezydencję danych.
+Dlaczego ta odpowiedź jest poprawna:
+- Cloud Logging Agent: Jest to standardowe, niskonarzutowe (low overhead) rozwiązanie do zbierania logów z instancji Compute Engine. Agent automatycznie przesyła logi systemowe i aplikacyjne do Cloud Logging.
+- Custom Log Bucket: Cloud Logging pozwala na tworzenie własnych kubłów na logi (Log Buckets). Jest to rozwiązanie natywne, które nie wymaga pisania dodatkowego kodu ani skomplikowanej infrastruktury.
+- Regionality: Wybór konkretnego regionu (EUROPE-WEST1) zapewnia, że dane nie opuszczą granic europejskich, spełniając wymogi compliance.
+- Retention: Log Buckety pozwalają na ustawienie własnego czasu retencji (custom retention).
+
+Analiza niepoprawnych odpowiedzi:
+- A. Modify application code: Pisanie własnego mechanizmu przesyłania logów bezpośrednio do GCS z poziomu kodu aplikacji wiąże się z bardzo wysokim narzutem operacyjnym (utrzymanie kodu, obsługa błędów, zarządzanie poświadczeniami w aplikacji).
+- C. Pub/Sub forward to GCS: To rozwiązanie jest technicznie poprawne dla długiej retencji, ale wprowadza dodatkową warstwę skomplikowania (Logging -> Sink -> Pub/Sub -> Dataflow/Function -> GCS) i generuje dodatkowe koszty, co przeczy zasadzie minimalizacji narzutu i kosztów.
+- D. Custom retention on *your* log bucket: Zmiana retencji na domyślnym buckecie (_Default) wpłynęłaby na wszystkie logi w projekcie, co może nie być pożądane i mniej precyzyjne niż dedykowany kubeł dla konkretnej aplikacji.
+
+Wskazówki i triki (Tips & Tricks):
+- "Minimize overhead" w pytaniach o logi niemal zawsze wskazuje na użycie Cloud Logging Agenta i natywnych funkcji platformy.
+- Pamiętaj: Cloud Logging Ingestion to koszt ok. $0.50/GiB. Jeśli logów jest bardzo dużo, GCS (Archive class) może być tańszy, ale wymaga konfiguracji Sinka.
+
+Praktyczne informacje na egzamin:
+- Uwaga techniczna: W rzeczywistości natywna retencja w Log Bucketach Google Cloud jest obecnie ograniczona do 3650 dni (10 lat). Dla okresu 12 lat standardowym rozwiązaniem inżynierskim jest "Log Sink" do Cloud Storage. Jednak w kontekście tego konkretnego pytania egzaminacyjnego, odpowiedź B jest uznawana za poprawną, gdyż promuje natywne narzędzia Logging Suite.
+- Zwracaj uwagę na regiony. Jeśli w pytaniu jest wymóg "European boundaries", każda odpowiedź z regionem spoza UE (np. US-CENTRAL1) jest błędna.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/logging/docs/routing/overview#buckets" target="_blank">Cloud Logging buckets overview</a>
+- <a href="https://cloud.google.com/logging/docs/agent" target="_blank">Cloud Logging agent overview</a>
+- <a href="https://cloud.google.com/logging/docs/storage" target="_blank">Log storage and retention</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p>Opcja D jest bliska, ale B precyzuje użycie agenta dla aplikacji na Compute Engine.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie testuje umiejętność balansu między wymaganiami biznesowymi (12 lat, rezydencja danych) a operacyjnymi (koszt, narzut). Choć istnieje techniczne ograniczenie 10 lat dla Log Bucketów, odpowiedź B jest "najlepsza" wśród dostępnych, ponieważ promuje agenta (niskie overhead) i natywne zarządzanie retencją wewnątrz Logging Suite.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/logging/docs/routing/overview#buckets" target="_blank">https://cloud.google.com/logging/docs/routing/overview#buckets</a></li>
-
+<li>Log Buckety są teraz częścią "Log Analytics", co pozwala na zapytania SQL na zebranych logach.</li>
+<li>Jeśli faktycznie potrzebujesz 12 lat, najlepszym (nieobecnym tutaj jako prosty sink) rozwiązaniem jest: Log Sink -> GCS Bucket (Archive Class) z Retention Policy.</li>
 </ul>
 </div>
 </div>

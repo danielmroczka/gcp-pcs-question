@@ -90,21 +90,43 @@ You are working with a client that is concerned about control of their encryptio
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: AD.
+Poprawna odpowiedź: AD (A: Customer-supplied encryption keys, D: Cloud External Key Manager)
 
-Wyjaśnienie: CSEK (A) - klucz dostarczany przez klienta 'w locie'. Cloud EKM (D) - klucz przechowywany u zewnętrznego dostawcy HSM.
+Dlaczego te odpowiedzi są poprawne:
+- Kluczowe wymaganie: Klient nie chce przechowywać kluczy szyfrujących u tego samego dostawcy chmury (Google), u którego znajdują się dane.
+- A. Customer-supplied encryption keys (CSEK): W tym modelu klient tworzy i zarządza własnymi kluczami poza Google Cloud. Klucz jest przesyłany do Google tylko w momencie wykonywania operacji (np. startu VM lub zapisu do GCS) i jest przechowywany tylko w pamięci ulotnej (RAM) na czas operacji. Google nie przechowuje tego klucza na dysku ("at rest").
+- D. Cloud External Key Manager (EKM): EKM pozwala na przechowywanie kluczy w zewnętrznym systemie zarządzania kluczami (KMS partnera, np. Equinix, Thales, Fortanix), który znajduje się poza infrastrukturą Google. Google Cloud KMS wysyła żądanie do zewnętrznego systemu o użycie klucza, ale sam klucz nigdy nie opuszcza zewnętrznego HSM (Hardware Security Module).
+
+Analiza niepoprawnych odpowiedzi:
+- B. Google default encryption: Wszystko (klucze i dane) jest zarządzane przez Google w ich infrastrukturze.
+- C. Secret Manager: Jest to usługa Google Cloud do przechowywania sekretów. Klucze w Secret Manager są przechowywane "at rest" w infrastrukturze Google, co narusza wymaganie klienta.
+- E. Customer-managed encryption keys (CMEK): Choć klient ma kontrolę nad cyklem życia klucza w Cloud KMS, sam klucz fizycznie znajduje się w infrastrukturze Google (w ich HSM-ach). Nie spełnia to warunku przechowywania kluczy poza dostawcą danych.
+
+Wskazówki i triki (Tips & Tricks):
+- "Keys NOT in the same CSP" = CSEK lub EKM.
+- Pamiętaj: CMEK (Customer-Managed) to klucze W CHMURZE Google. CSEK (Customer-Supplied) to klucze DOSTARCZANE z zewnątrz. EKM (External) to klucze U PARTNERA.
+
+Praktyczne informacje na egzamin:
+- CSEK ma bardzo ograniczone wsparcie (tylko Compute Engine i Cloud Storage).
+- EKM jest rozwiązaniem dla przedsiębiorstw wymagających najwyższego poziomu "data sovereignty".
+- Google Cloud KMS to "wskaźnik" w przypadku EKM, a nie samo miejsce przechowywania klucza.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/kms/docs/ekm" target="_blank">Cloud EKM overview</a>
+- <a href="https://cloud.google.com/storage/docs/encryption/customer-supplied-keys" target="_blank">Customer-supplied encryption keys (CSEK)</a>
+- <a href="https://cloud.google.com/kms/docs/key-management-service" target="_blank">Cloud KMS vs CSEK vs CMEK</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: AD</b></p>
-<p><b>Głęboka analiza:</b> <p>W obu przypadkach fizyczny klucz 'at rest' nie znajduje się na dyskach Google zarządzanych przez ich systemy KMS.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie dotyczy "Cloud Sovereignty" (suwerenności chmurowej). Niektórzy klienci (szczególnie w sektorze finansowym i rządowym) mają rygorystyczne przepisy zabraniające powierzania kluczy szyfrujących temu samemu podmiotowi, który trzyma dane. CSEK i EKM to jedyne dwa mechanizmy w GCP, które pozwalają na taką separację.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/kms/docs/ekm" target="_blank">https://cloud.google.com/kms/docs/ekm</a></li>
-
+<li>Przy CSEK, jeśli zgubisz klucz, Twoje dane są bezpowrotnie stracone. Google nie może ich odzyskać.</li>
+<li>EKM wymaga stabilnego połączenia sieciowego między Google Cloud a dostawcą zewnętrznym. Przerwa w łączności = brak możliwości deszyfrowania danych.</li>
 </ul>
 </div>
 </div>

@@ -90,21 +90,44 @@ You discovered that sensitive personally identifiable information (PII) is being
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: BE.
+Poprawna odpowiedź: BE (B: Cloud Key Management Service, E: Cloud Data Loss Prevention with deterministic encryption using AES-SIV)
 
-Wyjaśnienie: DLP deterministic encryption (E) pozwala na odwracalną transformację. Klucze do tego procesu są przechowywane i chronione w Cloud KMS (B).
+Dlaczego te odpowiedzi są poprawne:
+- Cloud Data Loss Prevention (DLP) - De-identification: DLP oferuje zaawansowane techniki de-identyfikacji danych, w tym pseudonimizację.
+- Deterministic encryption (AES-SIV): Jest to metoda szyfrowania, która dla tej samej wartości wejściowej zawsze generuje tę samą wartość zaszyfrowaną (przy użyciu tego samego klucza). Dzięki temu analitycy mogą np. łączyć tabele (JOIN) po zaszyfrowanym identyfikatorze użytkownika, nie znając jego prawdziwej tożsamości. Co najważniejsze, proces ten jest odwracalny (re-identification), co pozwala na przywrócenie oryginalnych danych, jeśli zajdzie taka potrzeba.
+- Cloud Key Management Service (KMS): DLP wymaga klucza do wykonania szyfrowania deterministycznego. Najlepszą praktyką bezpieczeństwa w GCP jest przechowywanie i zarządzanie tymi kluczami w Cloud KMS. DLP używa klucza z KMS do "owinięcia" (wrap) klucza kryptograficznego używanego w procesie transformacji.
+
+Analiza niepoprawnych odpowiedzi:
+- A. Secret Manager: Służy do przechowywania haseł, kluczy API i certyfikatów, ale nie jest natywnie zintegrowany z procesami transformacji de-identyfikacyjnej DLP tak jak KMS.
+- C. Cryptographic hashing: Hashing (skrót kryptograficzny) jest z reguły procesem jednostronnym. Choć DLP go oferuje, re-identyfikacja (odwrócenie procesu) jest bardzo trudna lub niemożliwa bez posiadania oryginalnych danych, co nie spełnia wymogu "need to re-identify it".
+- D. Automatic text redaction: Polega na trwałym usunięciu tekstu (np. zastąpienie go znakiem [REDACTED]). Jest to proces nieodwracalny, więc uniemożliwia re-identyfikację.
+
+Wskazówki i triki (Tips & Tricks):
+- "Re-identify" / "Reversible" + "DLP" = Deterministic Encryption (AES-SIV).
+- "Join data without knowing PII" = Deterministic Encryption.
+- Jeśli DLP potrzebuje klucza do operacji kryptograficznych -> KMS.
+
+Praktyczne informacje na egzamin:
+- Zrozum różnicę między de-identyfikacją (usuwanie PII) a pseudonimizacją (zastępowanie PII tokenem).
+- AES-SIV (Synthetic Initialization Vector) jest specyficznym trybem AES, który zapewnia determinizm przy jednoczesnym zachowaniu wysokiego bezpieczeństwa.
+- Pamiętaj, że do re-identyfikacji potrzebujesz tych samych ustawień DLP oraz dostępu do tego samego klucza w KMS.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/dlp/docs/pseudonymization" target="_blank">Pseudonymization in Cloud DLP</a>
+- <a href="https://cloud.google.com/dlp/docs/concepts-deidentification" target="_blank">De-identification techniques</a>
+- <a href="https://cloud.google.com/dlp/docs/reidentify-content" target="_blank">Re-identifying de-identified content</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: BE</b></p>
-<p><b>Głęboka analiza:</b> <p>Deterministyczne szyfrowanie pozwala analitykom na złączanie danych (np. po zakodowanym ID użytkownika) bez poznania jego tożsamości.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie łączy dwa potężne narzędzia bezpieczeństwa: DLP do inteligentnego rozpoznawania i przekształcania danych oraz KMS do bezpiecznego zarządzania fundamentem kryptograficznym. W scenariuszach Big Data / Analytics w chmurze, szyfrowanie deterministyczne jest standardem de facto pozwalającym na "bezpieczną analitykę".</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/dlp/docs/pseudonymization" target="_blank">https://cloud.google.com/dlp/docs/pseudonymization</a></li>
-
+<li>Możesz użyć DLP do de-identyfikacji danych w locie (podczas ETL w Dataflow) lub bezpośrednio na danych w BigQuery.</li>
+<li>DLP oferuje również "Format-preserving encryption" (FPE), które zachowuje format danych (np. zaszyfrowany numer karty kredytowej wciąż wygląda jak numer karty), co jest przydatne dla starszych systemów.</li>
 </ul>
 </div>
 </div>

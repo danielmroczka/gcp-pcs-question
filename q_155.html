@@ -89,21 +89,42 @@ You want to make sure that your organization's Cloud Storage buckets cannot have
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Configure uniform bucket-level access, and enforce domain restricted sharing in an organization policy)
 
-Wyjaśnienie: Uniform bucket-level access (UBLA) wymusza użycie IAM, a polityka 'Domain Restricted Sharing' uniemożliwia nadawanie uprawnień użytkownikom spoza Twojej domeny (np. allUsers).
+Dlaczego ta odpowiedź jest poprawna:
+- Domain Restricted Sharing (DRS): Jest to polityka organizacji (Organization Policy), która ogranicza listę tożsamości, którym można nadawać uprawnienia w politykach IAM. Włączenie DRS uniemożliwia dodanie specjalnych identyfikatorów 'allUsers' oraz 'allAuthenticatedUsers', co jest najczęstszą przyczyną publicznego udostępnienia danych.
+- Uniform bucket-level access (UBLA): Ta funkcja wyłącza listy kontroli dostępu (ACL) na poziomie poszczególnych obiektów w buckecie. Dzięki temu dostęp jest zarządzany wyłącznie przez IAM. Jest to kluczowe, ponieważ ACL mogą być używane do udostępniania obiektów publicznie nawet wtedy, gdy polityka IAM projektu na to nie pozwala.
+- Synergia: Połączenie tych dwóch mechanizmów gwarantuje, że (1) nikt nie przypisze publicznego dostępu przez IAM (dzięki DRS) oraz (2) nikt nie obejdzie IAM za pomocą ACL (dzięki UBLA).
+
+Analiza niepoprawnych odpowiedzi:
+- A. Cloud DLP: Służy do skanowania danych w poszukiwaniu wrażliwych informacji (np. PESEL, karty kredytowe) i ich maskowania, ale nie służy do blokowania publicznego dostępu do samych bucketów.
+- B. Remove Owner roles: Odebranie roli Właściciela jest dobrą praktyką (zasada Least Privilege), ale samo w sobie nie uniemożliwia użytkownikom z innymi rolami (np. Storage Admin) na upublicznienie bucketu.
+- D. Remove *.setIamPolicy permissions: To podejście jest zbyt drastyczne i uniemożliwiłoby administratorom jakąkolwiek zmianę uprawnień, co paraliżuje pracę, a i tak nie rozwiązałoby problemu ACL-i, które mogą udostępniać dane bez dotykania polityki IAM.
+
+Wskazówki i triki (Tips & Tricks):
+- "Public access prevention" + "Across organization" = Organization Policy.
+- Zawsze wybieraj Uniform bucket-level access (UBLA) zamiast Fine-grained access, jeśli chcesz mieć spójne i łatwe do audytowania uprawnienia.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj, że obecnie Google oferuje również konkretną politykę organizacji o nazwie "Public Access Prevention" (PAP), ale w starszych pytaniach (lub bardziej ogólnych) to "Domain Restricted Sharing" jest kluczem.
+- UBLA jest wymagane przez wiele standardów bezpieczeństwa i compliance.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/storage/docs/uniform-bucket-level-access" target="_blank">Uniform bucket-level access</a>
+- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains" target="_blank">Domain restricted sharing</a>
+- <a href="https://cloud.google.com/storage/docs/public-access-prevention" target="_blank">Public access prevention</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p>To połączenie jest najsilniejszą bronią przeciwko przypadkowemu upublicznieniu danych w bucketach.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie uderza w jeden z najczęstszych problemów bezpieczeństwa w chmurze - "wycieki z bucketów". Google promuje podejście warstwowe (Defense in Depth). UBLA zamyka lukę w postaci ACL-i, a DRS zamyka lukę w postaci błędnego przypisania roli w IAM. To najskuteczniejsza metoda prewencji w skali całego przedsiębiorstwa.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/storage/docs/org-policy-constraints#domain-restricted-sharing" target="_blank">https://cloud.google.com/storage/docs/org-policy-constraints#domain-restricted-sharing</a></li>
-
+<li>Włączenie UBLA na istniejącym buckecie może zablokować dostęp użytkownikom, którzy polegali na ACL. Masz 90 dni na cofnięcie tej zmiany, jeśli coś pójdzie nie tak.</li>
+<li>DRS dotyczy tylko NOWYCH przypisań ról. Nie usuwa automatycznie już istniejącego publicznego dostępu.</li>
 </ul>
 </div>
 </div>

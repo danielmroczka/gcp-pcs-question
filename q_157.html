@@ -90,21 +90,41 @@ You are in charge of creating a new Google Cloud organization for your company. 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: CE.
+Poprawna odpowiedź: CE (C: Use a physical token, E: Provide non-privileged identities)
 
-Wyjaśnienie: Super Admin powinien używać sprzętowego MFA (C) i posiadać osobne, zwykłe konto do codziennej pracy (E), aby minimalizować ryzyko przypadkowych błędów.
+Dlaczego te odpowiedzi są poprawne:
+- Fizyczny token (Security Key): Klucze sprzętowe (np. Titan Security Key, YubiKey) zapewniają najwyższy poziom bezpieczeństwa MFA (FIDO/WebAuthn), chroniąc konta superadministratorów przed phishingiem i przejęciem sesji.
+- Oddzielenie kont (Separation of Accounts): Osoby posiadające uprawnienia superadministratora powinny mieć drugie, "zwykłe" konto bez wysokich uprawnień do codziennej pracy (e-mail, dokumenty, standardowa praca w chmurze). Używanie konta superadmina powinno być ograniczone tylko do zadań, które tego absolutnie wymagają. Zmniejsza to ryzyko przypadkowego uszkodzenia infrastruktury lub wycieku danych podczas rutynowych czynności.
+
+Analiza niepoprawnych odpowiedzi:
+- A. Prevent super admin from logging in to Google Cloud: Superadministrator musi mieć możliwość zalogowania się do konsoli, aby zarządzać organizacją w sytuacjach krytycznych lub przy zmianach wysokiego szczebla. Blokada logowania pozbawiłaby go tej funkcji.
+- B. Disable IAM roles at org level: Superadmin z definicji ma najwyższe uprawnienia. Wyłączenie mu ról IAM w konsoli Cloud utrudniłoby zarządzanie projektami i zasobami bez wpływu na jego uprawnienia w konsoli Admin Google Workspace, co wprowadziłoby niepotrzebny chaos.
+- D. Private connection: Tworzenie kont przez "prywatne połączenie" (np. VPN/Interconnect) nie jest standardowym wymogiem bezpieczeństwa dla samego procesu tworzenia konta. Kluczowe jest zabezpieczenie samych poświadczeń (MFA), a nie tunelu, przez który są przesyłane (który i tak jest szyfrowany przez TLS/HTTPS).
+
+Wskazówki i triki (Tips & Tricks):
+- "Super Admin" + "Security" = Physical MFA (Security Keys).
+- Zawsze szukaj odpowiedzi promujących zasadę Least Privilege i rozdzielanie kont służbowych od administracyjnych.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj, że w Google Cloud zaleca się posiadanie co najmniej dwóch (ale nie zbyt wielu) superadministratorów, aby uniknąć sytuacji "lockoutu", gdy jedna osoba straci dostęp.
+- Pamiętaj, że superadministrator to rola w Google Workspace / Cloud Identity, która automatycznie daje ogromne uprawnienia w całej organizacji Google Cloud.
+
+Dokumentacja i linki:
+- <a href="https://support.google.com/a/answer/9011374" target="_blank">Super admin security best practices</a>
+- <a href="https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#admin-accounts" target="_blank">Best practices for admin accounts</a>
+- <a href="https://cloud.google.com/security/fido-security-keys" target="_blank">FIDO security keys in GCP</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: CE</b></p>
-<p><b>Głęboka analiza:</b> <p>To fundament higieny bezpieczeństwa w zarządzaniu tożsamością uprzywilejowaną.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> Pytanie to dotyczy fundamentów bezpieczeństwa tożsamości uprzywilejowanej (Privileged Identity Management). Na egzaminie Google często kładzie nacisk na klucze fizyczne jako jedyną metodę MFA odporną na phishing. Rozdzielenie kont (konto "do pracy" vs konto "do adminowania") to kolejna złota zasada architektury bezpieczeństwa.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://support.google.com/a/answer/9011374" target="_blank">https://support.google.com/a/answer/9011374</a></li>
-
+<li>Warto wspomnieć o koncie "Break-glass" (Emergency account), które jest specjalnym typem superadmina używanym tylko w sytuacjach awaryjnych, gdy inne metody logowania (np. SSO) zawiodą.</li>
+<li>Unikaj używania numerów telefonów (SMS) jako MFA dla superadminów ze względu na ryzyko SIM-swappingu.</li>
 </ul>
 </div>
 </div>

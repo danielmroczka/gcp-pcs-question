@@ -89,21 +89,43 @@ Your company's cloud security policy dictates that VM instances should not have 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Cloud NAT)
 
-Wyjaśnienie: Cloud NAT pozwala instancjom prywatnym na bezpieczne pobieranie poprawek i aktualizacji z internetu.
+Dlaczego ta odpowiedź jest poprawna:
+- Cloud NAT (Network Address Translation): Pozwala instancjom Google Cloud, które nie mają publicznych (zewnętrznych) adresów IP, na łączenie się z internetem. Jest to niezbędne w scenariuszach, gdzie maszyny muszą pobrać aktualizacje systemu, pakiety oprogramowania lub komunikować się z zewnętrznymi API, ale ze względów bezpieczeństwa nie powinny być bezpośrednio dostępne z internetu.
+- Managed Service: Cloud NAT jest usługą w pełni zarządzaną, co oznacza, że jest skalowalna i nie wymaga zarządzania osobnymi instancjami bram NAT (NAT Gateways).
+
+Analiza niepoprawnych odpowiedzi:
+- A. Identity-Aware Proxy (IAP): IAP służy głównie do bezpiecznego dostępu PRZYCHODZĄCEGO (inbound) do maszyn (np. przez SSH lub RDP) bez potrzeby posiadania publicznego IP lub VPN. Nie zapewnia on maszynom możliwości inicjowania połączeń WYCHODZĄCYCH do internetu.
+- C. TCP/UDP Load Balancing: Load Balancery służą do rozkładania ruchu PRZYCHODZĄCEGO od użytkowników do grupy maszyn. Nie pomagają maszynom w łączeniu się z internetem w celu pobrania aktualizacji.
+- D. Cloud DNS: Służy do rozwiązywania nazw domenowych na adresy IP. Choć jest potrzebny do działania internetu, sam w sobie nie zapewnia łączności (routingu) dla maszyn bez publicznego IP.
+
+Wskazówki i triki (Tips & Tricks):
+- "VM without external IP" + "Connect TO internet" = Cloud NAT.
+- "VM without external IP" + "Access FROM internet (SSH/RDP)" = IAP.
+- Pamiętaj: Cloud NAT działa na poziomie Routera Cloud (Cloud Router). Musisz mieć skonfigurowany Cloud Router, aby włączyć Cloud NAT.
+
+Praktyczne informacje na egzamin:
+- Cloud NAT obsługuje tylko ruch TCP i UDP (oraz ICMP). 
+- Możesz skonfigurować Cloud NAT tak, aby używał konkretnych, statycznych adresów IP, co jest przydatne, gdy zewnętrzne systemy (np. repozytoria klienta) wymagają białej listy adresów IP (IP whitelisting).
+- Cloud NAT nie zapewnia "Ingress" (ruchu przychodzącego). Jeśli ktoś próbuje połączyć się z publicznym IP NAT-a, połączenie zostanie odrzucone.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/nat/docs/overview" target="_blank">Cloud NAT overview</a>
+- <a href="https://cloud.google.com/iap/docs/using-tcp-forwarding" target="_blank">IAP TCP forwarding</a>
+- <a href="https://cloud.google.com/router/docs/overview" target="_blank">Cloud Router overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p>Jest to standardowe rozwiązanie dla zabezpieczonych środowisk produkcyjnych.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie jest fundamentalne dla zrozumienia bezpieczeństwa sieciowego w GCP. Standardem "Security-First" jest nieprzypisywanie publicznych adresów IP maszynom produkcyjnym. Cloud NAT jest kluczowym elementem tej strategii, pozwalającym na zachowanie higieny bezpieczeństwa przy jednoczesnym zachowaniu funkcjonalności (aktualizacje).</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/nat/docs/overview" target="_blank">https://cloud.google.com/nat/docs/overview</a></li>
-
+<li>Cloud NAT jest odporny na awarie (high availability) w obrębie regionu.</li>
+<li>Pamiętaj, że Cloud NAT jest płatny za każdą godzinę działania bramki oraz za ilość przetworzonych danych.</li>
 </ul>
 </div>
 </div>

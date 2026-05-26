@@ -89,21 +89,43 @@ Your privacy team uses crypto-shredding (deleting encryption keys) as a strategy
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Customer-managed encryption keys - CMEK)
 
-Wyjaśnienie: CMEK (Cloud KMS) pozwala użytkownikowi na trwałe usunięcie klucza szyfrującego dane w usługach takich jak GCS, BigQuery czy CE. Bez klucza dane stają się nieczytelne (crypto-shredding).
+Dlaczego ta odpowiedź jest poprawna:
+- Crypto-shredding to technika polegająca na usuwaniu kluczy szyfrujących zamiast samych danych, co czyni dane nieczytelnymi i technicznie niemożliwymi do odzyskania. 
+- Customer-Managed Encryption Keys (CMEK) w Google Cloud KMS pozwalają na pełną kontrolę nad cyklem życia klucza (tworzenie, rotacja, usuwanie). 
+- Usunięcie klucza CMEK (lub jego wersji) powoduje natychmiastowe "poszatkowanie" danych (crypto-shredding) w usługach zintegrowanych z CMEK (np. GCS, BigQuery, Compute Engine).
+- CMEK minimalizuje narzut operacyjny (operational overhead), ponieważ jest natywnie zintegrowany z większością usług Google Cloud, w przeciwieństwie do rozwiązań zewnętrznych lub po stronie klienta.
+
+Analiza niepoprawnych odpowiedzi:
+- A. Client-side encryption: To podejście wiąże się z bardzo wysokim narzutem operacyjnym. Musisz zarządzać kluczami poza GCP, szyfrować dane przed wysłaniem i deszyfrować po pobraniu. Utrudniasz też korzystanie z wielu usług platformy (np. BigQuery nie będzie mogło przeszukiwać zaszyfrowanych danych).
+- B. Cloud External Key Manager (EKM): EKM pozwala na przechowywanie kluczy w zewnętrznym systemie (poza Google Cloud). Choć pozwala na crypto-shredding, wiąże się z dużym narzutem operacyjnym (konfiguracja połączenia, zarządzanie zewnętrznym KMS, ryzyko niedostępności połączenia). Jest to rozwiązanie stosowane przy skrajnych wymaganiach dotyczących suwerenności danych.
+- D. Google default encryption: Klucze te są zarządzane przez Google. Użytkownik nie ma możliwości ich usunięcia w celu wykonania crypto-shreddingu. Dane są bezpieczne, ale nie masz nad nimi kontroli wymaganej w tym scenariuszu.
+
+Wskazówki i triki (Tips & Tricks):
+- Jeśli w pytaniu pojawia się "Crypto-shredding" + "Google Cloud" + "Minimize operational overhead", niemal zawsze odpowiedzią będzie CMEK.
+- Pamiętaj o różnicy między "Destroying" a "Disabling" klucza. Zniszczenie klucza w Cloud KMS jest nieodwracalne po upływie okresu oczekiwania (domyślnie 24h lub więcej).
+
+Praktyczne informacje na egzamin:
+- Zwracaj uwagę na frazę "minimizing operational overhead". Google promuje swoje natywne rozwiązania (KMS/CMEK) jako te o najniższym narzucie w porównaniu do EKM czy Client-side encryption.
+- Zrozum hierarchię kluczy: DEK (Data Encryption Key) szyfruje dane, a KEK (Key Encryption Key) szyfruje DEK. CMEK to Twój KEK zarządzany w KMS.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/kms/docs/cmek" target="_blank">https://cloud.google.com/kms/docs/cmek</a>
+- <a href="https://cloud.google.com/kms/docs/crypto-shredding" target="_blank">https://cloud.google.com/kms/docs/crypto-shredding</a>
+- <a href="https://cloud.google.com/architecture/customer-managed-encryption-keys-best-practices" target="_blank">CMEK Best Practices</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p>CMEK zapewnia najlepszy balans między kontrolą nad cyklem życia klucza a łatwością integracji z natywnymi usługami GCP.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> Najważniejszym aspektem tego pytania jest balans między kontrolą a wygodą. Google Cloud stawia na CMEK jako złoty środek dla firm, które muszą zarządzać kluczami ze względów prawnych (PII/RODO), ale nie chcą budować własnej infrastruktury kryptograficznej (co byłoby konieczne przy opcji A lub B).</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/kms/docs/cmek" target="_blank">https://cloud.google.com/kms/docs/cmek</a></li>
-
+<li>W Cloud KMS usunięcie klucza (Schedule key destruction) trwa zazwyczaj minimum 24 godziny. Jest to zabezpieczenie przed przypadkowym usunięciem.</li>
+<li>CMEK jest darmowy jako funkcja, ale płacisz za przechowywanie kluczy ($0.06/miesiąc za wersję klucza) i operacje kryptograficzne.</li>
 </ul>
 </div>
 </div>
