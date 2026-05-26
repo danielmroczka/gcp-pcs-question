@@ -90,21 +90,42 @@ You are a security administrator at your company and are responsible for managin
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: DE.
+Poprawna odpowiedź: DE (D: Use SSO/SAML integration, E: Provide granular access with predefined roles)
 
-Wyjaśnienie: Federacja tożsamości (SSO - D) zapewnia spójne uwierzytelnianie, a używanie ról predefiniowanych lub custom (E) zamiast ról podstawowych (Owner/Editor) realizuje zasadę najniższych uprawnień.
+Dlaczego te odpowiedzi są poprawne:
+- Federacja tożsamości (D): Użycie SSO/SAML z Cloud Identity pozwala na połączenie istniejącego dostawcy tożsamości firmy (np. AD, Okta) z Google Cloud. Zapewnia to spójne uwierzytelnianie i automatyczne zarządzanie cyklem życia użytkownika (user lifecycle management). Jeśli pracownik odejdzie z firmy i jego konto zostanie zablokowane w AD, automatycznie straci on dostęp do Google Cloud.
+- Zasada najniższych uprawnień (Least Privilege - E): Predefiniowane role (np. Storage Object Viewer zamiast Storage Admin) pozwalają na nadawanie dokładnie takich uprawnień, jakie są potrzebne do wykonania zadania. Jest to znacznie bezpieczniejsze niż używanie szerokich ról podstawowych.
+
+Analiza niepoprawnych odpowiedzi:
+- A. Google default encryption: To pytanie dotyczy kontroli dostępu (identyfikacji, autentykacji i autoryzacji), a nie szyfrowania danych "at rest".
+- B. Manually add users: Ręczne dodawanie użytkowników jest nieefektywne, podatne na błędy i nie skaluje się w dużych organizacjach. Utrudnia też zarządzanie usuwaniem dostępów (deprovisioning).
+- C. Basic roles: Role podstawowe (Owner, Editor, Viewer) są zbyt szerokie i niebezpieczne. Google stanowczo odradza ich używanie w środowiskach produkcyjnych (z wyjątkiem bardzo specyficznych przypadków), promując w ich miejsce role predefiniowane lub własne (custom).
+
+Wskazówki i triki (Tips & Tricks):
+- "Best practices" + "Authentication" = SSO / Federation.
+- "Best practices" + "Authorization" = Least Privilege / Predefined Roles.
+- Unikaj wszystkiego, co zawiera "Basic roles" (Owner/Editor/Viewer) lub "Manual".
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj hierarchię ról: Basic (szerokie) -> Predefined (zalecane) -> Custom (bardzo specyficzne).
+- Cloud Identity to produkt Google, który pozwala na zarządzanie tożsamościami bez konieczności kupowania pełnych licencji Google Workspace.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iam/docs/best-practices" target="_blank">IAM best practices guide</a>
+- <a href="https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction" target="_blank">Federating GCP with Active Directory</a>
+- <a href="https://cloud.google.com/iam/docs/understanding-roles" target="_blank">Understanding IAM roles</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: DE</b></p>
-<p><b>Głęboka analiza:</b> <p>Nigdy nie używaj roli Editor/Owner w środowisku produkcyjnym dla zwykłych użytkowników.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie uderza w samo serce filozofii bezpieczeństwa Google Cloud. Większość naruszeń bezpieczeństwa wynika ze zbyt szerokich uprawnień lub nieodpowiednio zarządzanych kont. SSO rozwiązuje problem "uśpionych kont" (pracowników, którzy odeszli, ale wciąż mają dostęp), a granularne role ograniczają "promień rażenia" (blast radius) w przypadku przejęcia pojedynczego konta.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/iam/docs/best-practices" target="_blank">https://cloud.google.com/iam/docs/best-practices</a></li>
-
+<li>Warto wspomnieć o roli "IAM Recommender", która automatycznie sugeruje odebranie nieużywanych uprawnień w celu osiągnięcia stanu Least Privilege.</li>
+<li>Pamiętaj, że MFA (Multi-Factor Authentication) powinno być zawsze włączone w dostawcy tożsamości (IdP) używanym przez SSO.</li>
 </ul>
 </div>
 </div>

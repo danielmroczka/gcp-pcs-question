@@ -89,21 +89,43 @@ You are working with a client who plans to migrate their data to Google Cloud. Y
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Customer-managed encryption keys with Cloud HSM)
 
-Wyjaśnienie: Cloud HSM to usługa sprzętowa Google Cloud, która posiada certyfikację FIPS 140-2 Level 3. Wspiera automatyczną rotację i replikację regionalną.
+Dlaczego ta odpowiedź jest poprawna:
+- FIPS 140-2 Level 3: To kluczowe wymaganie techniczne. Standardowy, programowy Cloud KMS posiada certyfikację FIPS 140-2 Level 1. Aby uzyskać wyższy poziom bezpieczeństwa (Level 3 - ochrona przed fizyczną ingerencją), musisz użyć Cloud HSM (Hardware Security Module), czyli sprzętowego modułu bezpieczeństwa zarządzanego przez Google.
+- Rotacja: Cloud HSM jest zintegrowany z Cloud KMS i w pełni wspiera automatyczną rotację kluczy (np. co 45 dni), co spełnia pierwsze wymaganie.
+- Redundancja (Multi-region): Cloud HSM pozwala na tworzenie kluczy w lokalizacjach typu "multi-region" (np. 'us'), co zapewnia replikację klucza w wielu centrach danych w obrębie danego obszaru geograficznego, spełniając wymóg wysokiej dostępności.
+
+Analiza niepoprawnych odpowiedzi:
+- A. Cloud Key Management Service (Software): Programowy KMS spełnia wymogi rotacji i redundancji, ale posiada tylko certyfikację FIPS 140-2 Level 1, co dyskwalifikuje go w tym scenariuszu.
+- C. Customer-supplied encryption keys (CSEK): CSEK wymagają od klienta zarządzania kluczami poza GCP. Google nie może zagwarantować rotacji co 45 dni (to odpowiedzialność klienta) ani nie przechowuje tych kluczy w swoim HSM.
+- D. Google-managed encryption keys: Te klucze są w pełni zarządzane przez Google. Klient nie ma kontroli nad ich rotacją ani nie może wymusić konkretnego poziomu FIPS dla swoich potrzeb regulacyjnych w taki sposób jak przy CMEK/HSM.
+
+Wskazówki i triki (Tips & Tricks):
+- "FIPS 140-2 Level 3" = Zawsze wybieraj Cloud HSM.
+- "FIPS 140-2 Level 1" = Standardowy Cloud KMS.
+- Pamiętaj: Cloud HSM to w rzeczywistości "warstwa sprzętowa" dla usługi Cloud KMS. Używasz tego samego API.
+
+Praktyczne informacje na egzamin:
+- Cloud HSM jest droższy niż programowy KMS (płacisz dodatkowo za każdą wersję klucza przechowywaną w HSM).
+- Cloud HSM jest niezbędny w branżach o wysokim rygorze bezpieczeństwa, takich jak bankowość (PCI DSS) czy administracja publiczna.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/hsm/docs/overview" target="_blank">Cloud HSM overview</a>
+- <a href="https://cloud.google.com/kms/docs/fips-140-2" target="_blank">Cloud KMS & HSM FIPS compliance</a>
+- <a href="https://cloud.google.com/kms/docs/key-rotation" target="_blank">Key rotation guide</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p>Standardowy Cloud KMS (programowy) to poziom Level 1. Dla Level 3 wymagany jest Cloud HSM.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> Pytanie to sprawdza znajomość specyficznych standardów bezpieczeństwa fizycznego kluczy. Rozróżnienie między Level 1 a Level 3 normy FIPS jest klasycznym elementem egzaminu Professional Security Engineer. Google Cloud HSM jest odpowiedzią na najbardziej rygorystyczne wymogi compliance dotyczące przechowywania kluczy w chmurze.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/hsm/docs/fips-140-2-level-3-compliance" target="_blank">https://cloud.google.com/hsm/docs/fips-140-2-level-3-compliance</a></li>
-
+<li>Klucze Cloud HSM są chronione w taki sposób, że nawet pracownicy Google z najwyższymi uprawnieniami fizycznymi nie mogą ich odczytać ani wyeksportować.</li>
+<li>Możesz sprawdzić status FIPS swoich kluczy bezpośrednio w metadanych klucza w Cloud KMS.</li>
 </ul>
 </div>
 </div>

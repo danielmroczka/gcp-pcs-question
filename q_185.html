@@ -89,29 +89,42 @@ Your organization is moving virtual machines (VMs) to Google Cloud. You must ens
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Implement an organization policy to enforce that boot disks can only be created from images that come from the trusted image project)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Security Health Analytics (SHA): To moduł SCC, który automatycznie skanuje konfigurację Twoich zasobów (Posture Management). Wykrywa on setki błędów, w tym publicznie dostępne buckety, i zgłasza je jako 'findings'.
+Dlaczego ta odpowiedź jest poprawna:
+- compute.trustedImageProjects: Jest to specyficzny constraint polityki organizacji (Organization Policy), który pozwala administratorowi na zdefiniowanie listy projektów, z których można pobierać obrazy systemowe (images) do tworzenia dysków rozruchowych (boot disks).
+- Wymuszenie (Enforcement): Włączenie tej polityki sprawia, że każda próba stworzenia VM na podstawie obrazu spoza dozwolonej listy (np. z obrazów publicznych Google, jeśli nie zostały dodane do białej listy) zostanie zablokowana przez API Google Cloud.
+- Skuteczność: Jest to najbardziej bezpośrednia i skuteczna metoda zapewnienia, że wszystkie VM w organizacji korzystają wyłącznie z obrazów zatwierdzonych przez zespół bezpieczeństwa (tzw. "Golden Images").
 
-Dlaczego inne są błędne:
-B. ETD: Szuka śladów ataków (np. mining, brute force) w logach, a nie błędów w Statycznej Konfiguracji.
-C. Flow Logs: Pokazują ruch, ale nie wiedzą czy bucket jest publiczny (ruch do bucketu to API, nie Flow Logi).
-D. Audit Logs: Powie Ci kto udostępnił bucket, ale nie daje zbiorczego dashboardu 'co jest źle teraz'.
+Analiza niepoprawnych odpowiedzi:
+- B. Shielded VM service: Shielded VMs to funkcja zapewniająca integralność procesu startu systemu (Secure Boot, vTPM). Choć zwiększają bezpieczeństwo, same w sobie nie ograniczają listy projektów, z których można pobierać obrazy. Możesz uruchomić "Shielded VM" z niezaufanego obrazu.
+- C. Cloud Function trigger: To rozwiązanie reaktywne. Funkcja uruchomiłaby się PO stworzeniu VM. Nawet jeśli usunęłaby maszynę natychmiast, przez kilka sekund niebezpieczny system byłby uruchomiony. Rozwiązanie to jest skomplikowane w utrzymaniu w porównaniu do natywnej polityki organizacji.
+- D. Automated security scanner (CVE): Skanowanie obrazów pod kątem podatności (CVE) jest bardzo dobrą praktyką (część procesu budowania obrazu), ale samo w sobie nie uniemożliwia użytkownikom użycia innego, nieprzeskanowanego obrazu do stworzenia VM.
 
-Konsensus społeczności ExamTopics: 100% na A. SHA to fundament widoczności bezpieczeństwa.
+Wskazówki i triki (Tips & Tricks):
+- "Trusted OS images" + "Across projects" = Organization Policy (Trusted Image Projects).
+- Zapamiętaj: Ta polityka dotyczy tylko dysków rozruchowych (boot disks).
+- Pamiętaj, aby dodać projekt `projects/debian-cloud` itp., jeśli chcesz pozwolić również na standardowe obrazy publiczne obok swoich własnych.
+
+Praktyczne informacje na egzamin:
+- Zrozum hierarchię: Najpierw tworzysz bezpieczny obraz w centralnym projekcie, potem nadajesz uprawnienia `imageUser`, a na końcu włączasz Org Policy `trustedImageProjects`, aby zablokować inne źródła.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/compute/docs/images/restricting-image-access" target="_blank">Restricting image access with organization policies</a>
+- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">Organization Policy constraints reference</a>
+- <a href="https://cloud.google.com/compute/docs/images/sharing-images-across-projects" target="_blank">Sharing images across projects</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Wiele osób pyta: 'A co z Forseti?'. Wyjaśnienie: Forseti było prekursorem, ale obecnie SHA (A) jest wbudowanym, natywnym i wspieranym przez Google rozwiązaniem klasy Enterprise dostępnym w konsoli SCC.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie sprawdza znajomość mechanizmów kontroli nad cyklem życia zasobów obliczeniowych. W dużej firmie nie możesz polegać na dobrej woli deweloperów. Musisz technicznie uniemożliwić uruchamianie systemów, które nie przeszły przez Twój proces utwardzania (hardeningu). `trustedImageProjects` to standardowe narzędzie do tego celu w GCP.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/security-command-center/docs/concepts-security-health-analytics-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-security-health-analytics-overview</a></li>
-
+<li>Polityka ta może być nakładana na poziomie całej organizacji lub konkretnych folderów (np. bardziej restrykcyjna dla folderu PROD).</li>
+<li>Uważaj, aby nie zablokować sobie możliwości odzyskiwania systemu (Recovery) poprzez zbyt rygorystyczne listy projektów.</li>
 </ul>
 </div>
 </div>

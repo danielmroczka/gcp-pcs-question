@@ -89,21 +89,45 @@ You need to create a VPC that enables your security team to control network reso
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (Set up a Shared VPC where the security team manages the firewall rules, and share the network with developers via service projects)
 
-Wyjaśnienie: Shared VPC to natywny model separacji obowiązków w GCP. Zespół sieciowy/security zarządza projektem hosta (siecią), a deweloperzy projektami usługowymi (aplikacjami).
+Dlaczego ta odpowiedź jest poprawna:
+- Shared VPC (Współdzielone VPC): Jest to kluczowa architektura w Google Cloud dla organizacji typu Enterprise. Pozwala ona na oddzielenie zarządzania siecią od zarządzania aplikacjami.
+- Host Project: Zespół bezpieczeństwa lub sieciowy zarządza jednym centralnym projektem (Host Project), w którym zdefiniowana jest sieć VPC, podsieci i reguły firewall.
+- Service Projects: Deweloperzy posiadają własne projekty (Service Projects), które są "podpięte" do projektu hosta. Mogą oni tworzyć tam swoje zasoby (np. VM, GKE), korzystając z bezpiecznej sieci z projektu hosta, ale NIE mają uprawnień do modyfikowania samej sieci ani jej reguł firewall.
+- Separation of Duties (Separacja obowiązków): Ten model idealnie realizuje wymóg pytania. Zespół security ma pełną kontrolę nad infrastrukturą sieciową, a deweloperzy mogą swobodnie wdrażać aplikacje w wyznaczonych granicach.
+
+Analiza niepoprawnych odpowiedzi:
+- A. Multiple VPCs + Multi-NIC appliances: Jest to rozwiązanie bardzo skomplikowane i trudne w utrzymaniu. Wymaga zarządzania wieloma sieciami i wirtualnymi urządzeniami, co zwiększa narzut operacyjny i koszty, zamiast wykorzystać natywne funkcje platformy.
+- B. VPC Peering with Shared VPC: Peering służy do łączenia niezależnych sieci. Choć pozwala na komunikację, nie zapewnia natywnej separacji obowiązków w taki sposób jak Shared VPC. W modelu peeringu deweloperzy wciąż mieliby pełną kontrolę nad firewallem w swojej sieci.
+- C. Compute Network Admin role in a single project: W jednym projekcie bardzo trudno jest zapewnić czystą separację. Użytkownik z rolą Compute Admin wciąż mógłby mieć zbyt szerokie uprawnienia, a zarządzanie setkami deweloperów w jednym projekcie sieciowym jest błędem architektury (brak izolacji zasobów).
+
+Wskazówki i triki (Tips & Tricks):
+- "Separation of duties" + "Network resources" = Shared VPC.
+- Host Project = Network/Security Team.
+- Service Project = Application/Dev Team.
+- Pamiętaj: Tylko JEDEN projekt może być Hostem dla danej sieci VPC.
+
+Praktyczne informacje na egzamin:
+- Aby skonfigurować Shared VPC, musisz posiadać uprawnienie "Shared VPC Admin" na poziomie organizacji.
+- Deweloperzy w projektach serwisowych potrzebują roli "Compute Network User" na konkretnych podsieciach w projekcie hosta, aby móc z nich korzystać.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/vpc/docs/shared-vpc" target="_blank">Shared VPC overview</a>
+- <a href="https://cloud.google.com/vpc/docs/provisioning-shared-vpc" target="_blank">Provisioning Shared VPC</a>
+- <a href="https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#networking" target="_blank">Best practices for Enterprise Networking</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p>W tym modelu deweloperzy mogą tworzyć VM, ale nie mogą zmieniać reguł firewalla w sieci, do której te VM są przypięte.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie dotyczy fundamentalnego wzorca projektowego w Google Cloud. Shared VPC rozwiązuje problem "rozproszonego chaosu sieciowego". W dużej firmie nie chcesz, aby każdy deweloper decydował o regułach firewall. Chcesz mieć jeden "złoty obraz" sieci zarządzany przez ekspertów od bezpieczeństwa, do którego inni się po prostu podpinają.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc/docs/shared-vpc" target="_blank">https://cloud.google.com/vpc/docs/shared-vpc</a></li>
-
+<li>Shared VPC pozwala na współdzielenie nie tylko podsieci, ale także adresów IP i stref DNS.</li>
+<li>Pamiętaj o ograniczeniach: VPC Peering i Shared VPC mają limity dotyczące liczby projektów i sieci.</li>
 </ul>
 </div>
 </div>

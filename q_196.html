@@ -89,21 +89,44 @@ Your organization previously stored files in Cloud Storage by using Google Manag
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (Change the encryption type on the bucket to CMEK, and rewrite the objects)
 
-Wyjaśnienie: Operacja 'rewrite' w GCS pozwala na zmianę parametrów obiektu (np. klucza szyfrującego) bez przesyłania danych poza chmurę.
+Dlaczego ta odpowiedź jest poprawna:
+- Zmiana domyślnego klucza (Default Key): Pierwszym krokiem jest zmiana ustawień bucketu, aby wszystkie NOWE obiekty były automatycznie szyfrowane kluczem CMEK.
+- Operacja Rewrite (Przepisanie): Zmiana domyślnego klucza na buckecie NIE wpływa automatycznie na obiekty, które już w nim są (one pozostają zaszyfrowane starym kluczem GMEK). Aby zmienić ich szyfrowanie "w miejscu", należy użyć operacji `rewrite`.
+- Wydajność i Koszt: Operacja `rewrite` odbywa się w całości wewnątrz infrastruktury Google Cloud. Nie wymaga pobierania danych na lokalny dysk i ich ponownego wysyłania, co oszczędza czas, przepustowość sieci oraz eliminuje koszty transferu (egress fees), spełniając wymóg "minimal cost".
+
+Analiza niepoprawnych odpowiedzi:
+- A. Reupload with gsutil: Wymaga pobrania wszystkich plików i ich ponownego wysłania. Jest to bardzo wolne przy dużych zbiorach danych i generuje koszty transferu sieciowego, jeśli robisz to spoza sieci Google.
+- B. Encrypt locally: Szyfrowanie lokalne (Customer-Supplied Encryption Keys - CSEK) to inny model niż CMEK. Ponadto, podobnie jak opcja A, generuje ogromny narzut operacyjny i sieciowy.
+- C. Copy to new bucket in secondary region: Kopiowanie między regionami jest kosztowne (opłaty za transfer międzyregionalny) i niepotrzebne, jeśli celem jest jedynie zmiana klucza szyfrującego w tym samym miejscu.
+
+Wskazówki i triki (Tips & Tricks):
+- "Re-encrypt existing objects" + "GCS" = Rewrite.
+- "Minimize cost" w GCS zazwyczaj oznacza unikanie transferu danych poza region lub poza chmurę.
+- Komenda CLI to: `gsutil rewrite -k gs://bucket-name/**` (używa domyślnego klucza bucketu).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj, że `rewrite` to operacja atomowa dla pojedynczego obiektu.
+- Podczas `rewrite` metadane obiektu (np. ACL, etykiety) są zachowywane, chyba że jawnie zażądasz ich zmiany.
+- W nowym interfejsie konsoli Google Cloud operacja ta jest czasami nazywana "Data encryption update".
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/storage/docs/using-customer-managed-encryption-keys#rewrite" target="_blank">Re-encrypting objects with CMEK</a>
+- <a href="https://cloud.google.com/storage/docs/encryption/customer-managed-keys" target="_blank">CMEK in Cloud Storage overview</a>
+- <a href="https://cloud.google.com/storage/docs/gsutil/commands/rewrite" target="_blank">gsutil rewrite command reference</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p>Można to zrobić za pomocą polecenia 'gsutil rewrite' lub przez konsolę po zmianie domyślnego klucza bucketu.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie sprawdza znajomość operacyjnych aspektów zarządzania danymi w skali petabajtów. W chmurze "przemieszczanie danych" jest najdroższą i najwolniejszą czynnością. Umiejętność wykorzystania natywnych operacji typu "server-side" (jak rewrite) jest kluczowa dla inżyniera bezpieczeństwa, który musi wdrażać nowe polityki bez paraliżowania budżetu i wydajności systemów.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/storage/docs/using-customer-managed-encryption-keys#rewrite" target="_blank">https://cloud.google.com/storage/docs/using-customer-managed-encryption-keys#rewrite</a></li>
-
+<li>Możesz użyć Storage Transfer Service do masowej migracji/rewritingu danych, jeśli zbiór jest skrajnie duży i wymaga monitorowania postępu.</li>
+<li>Pamiętaj, że podczas operacji rewrite, obie wersje obiektu (stara i nowa) mogą chwilowo istnieć, co wpływa na zajętość miejsca (jeśli masz włączone wersjonowanie).</li>
 </ul>
 </div>
 </div>

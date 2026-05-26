@@ -90,21 +90,43 @@ You manage your organization's Security Operations Center (SOC). You currently m
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Cloud IDS)
 
-Wyjaśnienie: Cloud IDS (Intrusion Detection System) to zarządzana usługa, która automatycznie analizuje ruch (payload) pod kątem zagrożeń, wykorzystując pod spodem mechanizmy Packet Mirroring.
+Dlaczego ta odpowiedź jest poprawna:
+- Cloud IDS (Intrusion Detection System): Jest to w pełni zarządzana usługa bezpieczeństwa sieciowego w Google Cloud, która umożliwia wykrywanie zagrożeń, takich jak malware, spyware, command-and-control (C2) oraz ataki typu exploit.
+- Analiza Payload i Headerów: W przeciwieństwie do logów przepływu (Flow Logs), Cloud IDS wykonuje głęboką inspekcję pakietów (Deep Packet Inspection), analizując nie tylko nagłówki, ale i samą zawartość (payload) ruchu sieciowego. Wykorzystuje do tego zaawansowane silniki analizy zagrożeń (partnerstwo z Palo Alto Networks).
+- Scenariusz SOC: Dla Security Operations Center (SOC), Cloud IDS dostarcza wysokiej jakości alerty o konkretnych zagrożeniach, co pozwala na znacznie skuteczniejszą "eksplorację środowiska" pod kątem bezpieczeństwa niż analiza surowych metadanych.
+
+Analiza niepoprawnych odpowiedzi:
+- B. VPC Service Controls logs: Logi te informują jedynie o naruszeniach perymetru (kto próbował dostać się do API Google poza dozwoloną regułą). Nie zawierają one payloadu ruchu IP między maszynami wewnątrz VPC.
+- C. VPC Flow Logs: Zawierają tylko metadane połączeń (IP, porty, protokół). Nie pozwalają na analizę zawartości pakietów (payload), o którą pyta scenariusz.
+- D. Google Cloud Armor: Chroni głównie przed atakami na warstwę aplikacji (WAF/DDoS) dla ruchu HTTP/S przychodzącego przez Load Balancer. Nie służy do inspekcji ogólnego ruchu wewnątrz sieci VPC (ruch East-West).
+- E. Packet Mirroring: Jest to technologia "podkładowa", która dostarcza ruch do systemu analizującego. Choć pozwala na dostęp do payloadu, samo w sobie nie jest "produktem do eksploracji" ani systemem detekcji – wymagałoby wdrożenia własnego oprogramowania (np. Zeek, Suricata). Cloud IDS (A) jest gotowym, zarządzanym rozwiązaniem spełniającym ten wymóg.
+
+Wskazówki i triki (Tips & Tricks):
+- "Explore environment using network payloads" + "Google Cloud product" = Cloud IDS.
+- "Threat detection" + "Managed service" = Cloud IDS.
+
+Praktyczne informacje na egzamin:
+- Cloud IDS jest zintegrowany z konsolą Google Cloud i wysyła alerty bezpośrednio do Cloud Logging oraz Security Command Center.
+- Pamiętaj: Cloud IDS to system DETEKCJI (IDS), a nie prewencji (IPS). Nie blokuje on automatycznie ruchu, a jedynie o nim informuje.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/ids/docs/overview" target="_blank">Cloud IDS overview</a>
+- <a href="https://cloud.google.com/ids/docs/threat-categories" target="_blank">Cloud IDS threat categories</a>
+- <a href="https://cloud.google.com/ids/docs/how-cloud-ids-works" target="_blank">How Cloud IDS works</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p>Cloud IDS jest łatwiejszy w obsłudze niż ręczne Packet Mirroring z własnym oprogramowaniem analitycznym.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość narzędzi do "Network Security Monitoring" (NSM). W ekosystemie GCP Cloud IDS jest pozycjonowany jako rozwiązanie premium dla firm, które potrzebują profesjonalnej ochrony sieciowej bez konieczności zarządzania własną flotą maszyn inspekcyjnych. Kluczowe jest zrozumienie, że IDS "widzi" to, czego nie "widzą" standardowe logi.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/ids/docs/overview" target="_blank">https://cloud.google.com/ids/docs/overview</a></li>
-
+<li>Cloud IDS tworzy tzw. "endpoint" w Twojej sieci VPC, do którego ruch jest przekierowywany za pomocą automatycznie konfigurowanych reguł Packet Mirroring.</li>
+<li>Alerty z Cloud IDS zawierają szczegółowe informacje o zagrożeniu, w tym linki do baz wiedzy o malware (np. CVE, silnik Unit 42).</li>
 </ul>
 </div>
 </div>

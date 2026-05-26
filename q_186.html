@@ -89,28 +89,45 @@ You have stored company approved compute images in a single Google Cloud project
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (1. Update the perimeter. 2. Configure the egressTo field to include the external Google Cloud project number as an allowed resource and the serviceName to compute.googleapis.com. 3. Configure the egressFrom field to set identityType to ANY_IDENTITY)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Organization Policy: (Uwaga techniczna: Prawidłowa nazwa polityki to `constraints/storage.publicAccessPrevention` lub inne specyficzne dla storage, ale w kontekście limitowania parametrów czasowych 'retencji' lub 'dostępu', polityki organizacji są jedynym miejscem na takie wymuszenia centralne. Uwaga: Standardowo Signed URLs limituje się w KODZIE, ale wymuszenie globalne to domena Org Policy).
+Dlaczego ta odpowiedź jest poprawna:
+- Kierunek ruchu (Egress): Żądanie o pobranie obrazu wychodzi z Twojego perymetru do zewnętrznego projektu Google Cloud. W terminologii VPC SC jest to ruch typu "Egress" (wyjście).
+- egressTo: To pole definiuje CEL wyjścia. Musisz określić projekt zewnętrzny (jako zasób) oraz konkretną usługę Google Cloud, z której chcesz skorzystać (w tym przypadku `compute.googleapis.com` dla obrazów dysków).
+- egressFrom: To pole definiuje ŹRÓDŁO (tożsamość) żądania. Ustawienie `identityType: ANY_IDENTITY` pozwala każdemu uwierzytelnionemu użytkownikowi/kontu serwisowemu wewnątrz perymetru na próbę połączenia z tym zewnętrznym celem (o ile posiadają odpowiednie uprawnienia IAM).
+- VPC Service Controls: Standardowo perymetr blokuje wszelką komunikację z usługami Google Cloud poza perymetrem. Reguły Egress są jedynym bezpiecznym sposobem na "wycięcie dziury" w perymetrze dla konkretnych, zaufanych celów zewnętrznych.
 
-Dlaczego inne są błędne:
-A. IAM: Nie ma parametru czasu trwania Signed URL.
-C. Console: Nie pozwala na globalne wymuszenie dla całej firmy.
+Analiza niepoprawnych odpowiedzi:
+- A. Organization policy (trustedImageProjects): Ta polityka ogranicza to, co MOŻNA zrobić w Twoim projekcie, ale nie znosi blokady sieciowej narzuconej przez VPC Service Controls. Nawet jeśli polityka pozwoli na obraz, VPC SC zablokuje samo wywołanie API do zewnętrznego projektu.
+- C. Ingress rule: Reguły Ingress służą do wpuszczania ruchu Z ZEWNĄTRZ perymetru do Twoich chronionych zasobów. Tutaj sytuacja jest odwrotna – to Ty chcesz sięgnąć "na zewnątrz".
+- D. Egress swap: Ta opcja błędnie przypisuje parametry. `egressTo` powinno zawierać cel (projekt/usługa), a `egressFrom` tożsamość.
 
-Konsensus społeczności ExamTopics: Przewaga na B. Choć technicznie polityki te stale ewoluują, Org Policy jest jedyną odpowiedzią pasującą do 'across the organization'.
+Wskazówki i triki (Tips & Tricks):
+- "External project" + "Inside perimeter" = VPC SC Egress/Ingress Rule.
+- Egress = Wychodzimy z perymetru do zewnętrznego API Google.
+- Ingress = Ktoś z zewnątrz perymetru puka do naszego API Google.
+- Pamiętaj: Reguły VPC SC działają na poziomie API, a nie na poziomie IP (to nie jest firewall VPC).
+
+Praktyczne informacje na egzamin:
+- Zrozum strukturę reguły: FROM (kto pyta?) -> TO (o co pyta?).
+- Egress rules są kluczowe w scenariuszach B2B i współpracy między różnymi organizacjami GCP.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules" target="_blank">Ingress and egress rules overview</a>
+- <a href="https://cloud.google.com/vpc-service-controls/docs/secure-image-deployment" target="_blank">Secure image deployment with VPC SC</a>
+- <a href="https://cloud.google.com/vpc-service-controls/docs/service-perimeters" target="_blank">Service perimeters guide</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> To pytanie jest uznawane za podchwytliwe. W rzeczywistości Signed URLs mogą trwać do 7 dni. Wiele firm chce to ograniczyć ze względów bezpieczeństwa. Eksperci na forach wskazują, że Organization Policy (B) jest jedynym miejscem, gdzie Google planuje lub wdraża takie ograniczenia systemowe.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość zaawansowanych konfiguracji "Data Exfiltration Protection". VPC SC to nie tylko blokowanie, ale precyzyjne sterowanie przepływem danych między organizacjami. Zrozumienie, że pobranie zasobu z zewnątrz to "Egress" żądania API, jest kluczowe dla inżyniera bezpieczeństwa.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints</a></li>
-
+<li>Możesz używać "Perimeter Bridges" zamiast reguł Egress, jeśli oba projekty są w tej samej organizacji, ale Egress/Ingress jest bardziej elastyczny dla współpracy międzyorganizacyjnej.</li>
+<li>Pamiętaj o audycie: Blokady VPC SC są logowane w Cloud Audit Logs (policy denied), co pomaga w debugowaniu tych reguł.</li>
 </ul>
 </div>
 </div>

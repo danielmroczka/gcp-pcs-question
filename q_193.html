@@ -88,21 +88,43 @@ Your organization's Customers must scan and upload the contract and their driver
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Create a Cloud Data loss Prevention (DLP) inspection job that de-identifies PII in files created more than 12 months ago and archives them to another Cloud Storage bucket. Delete the original files)
 
-Wyjaśnienie: DLP API posiada natywne funkcje skanowania bucketów GCS i tworzenia zanonimizowanych kopii danych.
+Dlaczego ta odpowiedź jest poprawna:
+- Cloud Data Loss Prevention (DLP): Jest to dedykowana usługa Google Cloud do odkrywania, klasyfikowania i ochrony danych wrażliwych (PII). 
+- Modyfikacja zawartości: Wymóg "remove all PII" oznacza konieczność edycji zawartości plików (np. zamazywanie danych na skanach dokumentów). DLP jest jedynym narzędziem w GCP, które potrafi "zajrzeć" do plików w Cloud Storage, rozpoznać PII i wykonać ich de-identyfikację (redakcję).
+- Automatyzacja i Archiwizacja: Zadanie inspekcji DLP (Inspection Job) można skonfigurować tak, aby przetworzone pliki trafiały do innego bucketu (archiwum), co spełnia wymóg retencji danych zanonimizowanych.
+- Usuwanie oryginałów: Po stworzeniu bezpiecznej kopii, usunięcie oryginałów zawierających pełne PII jest kluczowym krokiem dla zachowania zgodności (Compliance).
+
+Analiza niepoprawnych odpowiedzi:
+- A. Lifecycle Policy (TTL): Polityki cyklu życia (Object Lifecycle Management) działają na metadanych obiektu. Potrafią automatycznie usunąć plik (Delete) lub zmienić jego klasę (np. na Archive) po określonym czasie, ale NIE potrafią modyfikować zawartości pliku (usuwać PII).
+- C. Autoclass: Ta funkcja służy do automatycznego optymalizowania kosztów poprzez przenoszenie rzadziej używanych plików do tańszych klas storage. Nie ma ona nic wspólnego z bezpieczeństwem danych ani usuwaniem PII.
+
+Wskazówki i triki (Tips & Tricks):
+- "Remove PII from files" / "Anonymize files" + "Cloud Storage" = Cloud DLP.
+- Lifecycle Policy = Tylko "Delete" lub "Change Storage Class". Nigdy nie modyfikuje zawartości.
+- Pamiętaj: DLP obsługuje skanowanie obrazów (skany dowodów) za pomocą wbudowanego OCR.
+
+Praktyczne informacje na egzamin:
+- Zrozum terminologię: **De-identification** to proces usuwania lub maskowania PII. **Inspection** to proces szukania PII.
+- Cloud DLP jest płatny za ilość przetworzonych danych, co jest ważne przy planowaniu budżetu dla dużych archiwów.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/dlp/docs/inspecting-storage" target="_blank">Inspecting Cloud Storage with Cloud DLP</a>
+- <a href="https://cloud.google.com/dlp/docs/concepts-deidentification" target="_blank">DLP de-identification overview</a>
+- <a href="https://cloud.google.com/storage/docs/lifecycle" target="_blank">Cloud Storage Object Lifecycle Management</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: </b></p>
-<p><b>Głęboka analiza:</b> <p>Lifecycle policy (A) potrafi tylko usuwać lub zmieniać klasę storage, nie potrafi modyfikować zawartości plików.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<h3>Kluczowe zagadnienia</h3>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do odróżnienia zarządzania "kontenerem" (bucketem) od zarządzania "zawartością". Wiele osób mylnie uważa, że Lifecycle Policy wystarczy do compliance, ale polityka ta jest "ślepa" na to, co jest w środku pliku. Cloud DLP to "inteligentne oko" bezpieczeństwa w GCP, niezbędne do realizacji wymogów takich jak RODO (right to be forgotten / minimization).</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/dlp/docs/inspecting-storage" target="_blank">https://cloud.google.com/dlp/docs/inspecting-storage</a></li>
-
+<li>Możesz użyć szablonów DLP (DLP Templates), aby reużywać te same reguły rozpoznawania PII w różnych projektach.</li>
+<li>Pamiętaj o uprawnieniach: konto serwisowe DLP musi mieć dostęp `Storage Object Viewer` do źródła i `Storage Object Admin` do celu (archiwum).</li>
 </ul>
 </div>
 </div>

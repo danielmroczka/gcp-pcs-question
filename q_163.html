@@ -90,21 +90,43 @@ You need to audit the network segmentation for your Google Cloud footprint. You 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: AD.
+Poprawna odpowiedź: AD (A: VM instances missing tags, D: Firewall rule based on SA with priority 999)
 
-Wyjaśnienie: Jeśli tagi są brakujące (A), reguły tag-based nie zadziałają. Jeśli istnieje reguła o wyższym priorytecie (np. 999) oparta na SA (D), to ona pozwoli na ruch mimo blokad na tagach.
+Dlaczego te odpowiedzi są poprawne:
+- Kontekst: Maszyny komunikują się swobodnie mimo istnienia reguł opartych na tagach (priorytet 1000). Szukamy przyczyn braku segmentacji.
+- A. Missing network tags: Reguły firewall oparte na tagach sieciowych działają TYLKO wtedy, gdy maszyna posiada dany tag. Jeśli zapomniano o nadaniu tagów instancjom, reguły "segmentujące" (blokujące lub zezwalające na podstawie tagów) po prostu ich nie obejmą, co może prowadzić do działania innych, mniej restrykcyjnych reguł.
+- D. Priority 999 rule based on SA: W Google Cloud firewallach, niższa liczba priorytetu oznacza WYŻSZY priorytet (precedencję). Jeśli istnieje reguła o priorytecie 999, która zezwala na ruch między instancjami o tym samym Service Account, zostanie ona zastosowana przed Twoją regułą o priorytecie 1000. Ponieważ pytanie wspomina, że instancje nie mają "customization" kont serwisowych, wszystkie używają domyślnego konta Compute Engine. Jeśli istnieje reguła zezwalająca na ruch "self" dla tego konta, segmentacja tagami zostanie zignorowana.
+
+Analiza niepoprawnych odpowiedzi:
+- B. Same network subnet: Podsieci w GCP nie są barierą dla ruchu wewnątrz VPC. Firewall w GCP jest stanowy i działa na poziomie interfejsu VM, a nie podsieci. Sama obecność w jednej podsieci nie sprawia, że reguły firewall są ignorowane.
+- C. Same network route: Trasy (routes) decydują o tym, GDZIE wysłać pakiet, ale to firewall decyduje, CZY pakiet może przejść. Nawet przy identycznych trasach, poprawny firewall powinien zablokować ruch.
+- E. Priority 1001 rule: Reguła o priorytecie 1001 ma NIŻSZY priorytet niż Twoja reguła 1000. Zostałaby ona sprawdzona dopiero wtedy, gdyby reguła 1000 nie pasowała do ruchu. Nie może więc być przyczyną "nadpisania" Twojej segmentacji.
+
+Wskazówki i triki (Tips & Tricks):
+- Priorytety firewall: 0 to najwyższy, 65535 to najniższy.
+- Service Accounts vs Tags: Google zaleca używanie SA w regułach firewall, ponieważ są one bardziej bezpieczne (wymagają uprawnień IAM do przypisania, w przeciwieństwie do tagów, które są zwykłymi metadanymi).
+- Domyślny Service Account: Pamiętaj, że domyślnie każda VM dostaje to samo konto serwisowe, co jest częstą luką w segmentacji.
+
+Praktyczne informacje na egzamin:
+- Zawsze sprawdzaj priorytety. Jeśli coś "nie działa", szukaj reguły z niższym numerem, która "psuje" zamierzenie.
+- Segmentacja środowisk (Prod/Non-Prod) powinna odbywać się na poziomie osobnych projektów lub sieci VPC, a nie tylko tagami wewnątrz jednej sieci.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/vpc/docs/firewalls#priority" target="_blank">Firewall rule priority</a>
+- <a href="https://cloud.google.com/vpc/docs/firewalls#service-accounts" target="_blank">Firewall rules and Service Accounts</a>
+- <a href="https://cloud.google.com/vpc/docs/firewalls#tags" target="_blank">Firewall rules and Network Tags</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: AD</b></p>
-<p><b>Głęboka analiza:</b> <p>W GCP reguły oparte na Service Accountach są często silniejsze i bardziej polecane niż te na tagach.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie uczy nas dwóch rzeczy: (1) ludzkiego błędu zapomnienia metadanych (A) oraz (2) technicznego aspektu precedencji reguł (D). W dużych organizacjach reguły oparte na Service Accountach są standardem, ponieważ dają pewność, że uprawnienia sieciowe "podążają" za tożsamością maszyny, a nie tylko za jej etykietą.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc/docs/firewalls#service-accounts" target="_blank">https://cloud.google.com/vpc/docs/firewalls#service-accounts</a></li>
-
+<li>W GCP istnieją domyślne reguły (implied rules): Allow Egress i Deny Ingress o priorytecie 65535.</li>
+<li>Jeśli włączasz VPC Flow Logs, możesz dokładnie zobaczyć, która reguła firewall pozwoliła na dany ruch lub go zablokowała.</li>
 </ul>
 </div>
 </div>

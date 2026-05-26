@@ -90,21 +90,46 @@ You are consulting with a client that requires end-to-end encryption of applicat
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: DE.
+Poprawna odpowiedź: DE (D: Confidential Computing and Istio, E: Client-side encryption)
 
-Wyjaśnienie: Confidential Computing chroni dane 'in use' (w pamięci RAM). Istio szyfruje ruch 'in transit' między mikroserwisami (mTLS). Client-side encryption (E) to inna metoda na pełną kontrolę od nadawcy do odbiorcy.
+Dlaczego te odpowiedzi są poprawne:
+- Kluczowe wymaganie: Szyfrowanie danych w trzech stanach: "in transit" (w ruchu), "in use" (podczas przetwarzania) oraz "at rest" (podczas przechowywania).
+- D. Confidential Computing i Istio:
+    - Confidential Computing: Rozwiązuje problem szyfrowania danych "in use". Dzięki technologii TEE (Trusted Execution Environment) dane są szyfrowane bezpośrednio w pamięci RAM, co chroni je nawet przed administratorem hosta lub samym Google.
+    - Istio: Jest to service mesh, który automatycznie zapewnia szyfrowanie "in transit" między mikroserwisami za pomocą Mutual TLS (mTLS). Szyfrowanie "at rest" w GCP jest domyślne dla wszystkich usług.
+- E. Client-side encryption: Jest to alternatywne podejście, w którym dane są szyfrowane jeszcze zanim trafią do Google Cloud. Dzięki temu są one zaszyfrowane "at rest" (na dyskach Google), "in transit" (podczas przesyłania) oraz "in use" (z punktu widzenia Google, ponieważ platforma widzi tylko zaszyfrowane bloki danych i nie może ich przetworzyć bez klucza klienta).
+
+Analiza niepoprawnych odpowiedzi:
+- A. External Key Manager (EKM): EKM pomaga zarządzać kluczami do szyfrowania danych "at rest" poza infrastrukturą Google, ale sam w sobie nie zapewnia szyfrowania danych "in use".
+- B. Customer-supplied encryption keys (CSEK): Podobnie jak EKM i CMEK, CSEK służy głównie do ochrony danych "at rest". Dane muszą zostać odszyfrowane w pamięci RAM, aby procesor mógł na nich operować, więc nie chroni to stanu "in use".
+- C. Hardware Security Module (HSM): HSM to urządzenie sprzętowe do bezpiecznego przechowywania kluczy i wykonywania operacji kryptograficznych. Nie jest to technologia służąca do szyfrowania danych aplikacyjnych "in use" czy "in transit" w skali całej platformy.
+
+Wskazówki i triki (Tips & Tricks):
+- "Data in use" = Confidential Computing (AMD SEV / Intel TDX).
+- "Data in transit" (Internal) = Istio / Anthos Service Mesh.
+- "Data at rest" = CMEK / CSEK / Default encryption.
+- Jeśli widzisz "End-to-end" i masz opcję Client-side encryption – zazwyczaj jest ona poprawna, bo daje największą kontrolę.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj, że domyślnie Google szyfruje dane "at rest" (AES-256) oraz "in transit" (TLS) na swoich łączach, ale klient może chcieć dodatkowych warstw kontroli.
+- Confidential Computing jest dostępne na instancjach N2D oraz C3 (z AMD SEV).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/confidential-computing" target="_blank">Confidential Computing overview</a>
+- <a href="https://cloud.google.com/security/encryption-in-transit" target="_blank">Encryption in transit in Google Cloud</a>
+- <a href="https://istio.io/latest/docs/concepts/security/" target="_blank">Istio security and mTLS</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: DE</b></p>
-<p><b>Głęboka analiza:</b> <p>Standardowe szyfrowanie GCP chroni tylko dane 'at rest'. Pełne E2E wymaga dodatkowych technologii.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie sprawdza holistyczne podejście do bezpieczeństwa danych. Tradycyjne chmury skupiały się na ochronie dysków i transmisji. Google Cloud idzie krok dalej z "Confidential Computing", eliminując ostatnią lukę - dane w pamięci RAM procesora. Połączenie tego z mTLS (Istio) daje pełny stos ochrony "Zero Trust" wewnątrz chmury.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/confidential-computing" target="_blank">https://cloud.google.com/confidential-computing</a></li>
-
+<li>Szyfrowanie po stronie klienta (Client-side) jest najbezpieczniejsze, ale uniemożliwia korzystanie z wielu funkcji chmurowych (np. przeszukiwanie danych w BigQuery, transkodowanie wideo).</li>
+<li>Confidential GKE nodes pozwalają na uruchamianie całych klastrów Kubernetes w trybie poufnym.</li>
 </ul>
 </div>
 </div>

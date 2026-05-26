@@ -89,27 +89,44 @@ Your organization operates Virtual Machines (VMs) with only private IPs in the V
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: D (Ensure that VM Manager is installed and running on the VMs. In the OS patch management service, configure the patch jobs to update with critical patches daily)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Super Admin: W kontekście Google Workspace i Cloud Identity, konto Super Admina jest kontem o najwyższych uprawnieniach systemowych (zarządzanie domeną, resetowanie haseł innych adminów). Google kategorycznie zaleca wymuszenie MFA (2SV) przede wszystkim dla tych kont jako fundament bezpieczeństwa.
+Dlaczego ta odpowiedź jest poprawna:
+- VM Manager: Jest to pakiet narzędzi w Google Cloud służący do zarządzania systemami operacyjnymi na instancjach Compute Engine. Jego częścią jest usługa OS Patch Management.
+- OS Patch Management: Pozwala na automatyzację procesu patchowania całych grup maszyn (fleet patching). Możesz zdefiniować harmonogram (np. codziennie), zakres (tylko poprawki krytyczne) oraz sposób postępowania po instalacji (np. restart).
+- Raportowanie: VM Manager natywnie zbiera dane o stanie maszyn i pozwala na generowanie raportów z podsumowaniem, które maszyny są "zgodne" (compliant), a które wymagają uwagi, co spełnia wymóg pytania o "summary reports".
+- Skala i Prywatność: Rozwiązanie to działa doskonale z instancjami posiadającymi tylko prywatne IP (wymaga jedynie zainstalowanego agenta OS Config i dostępu do API Google, np. przez Cloud NAT lub Private Google Access).
 
-Dlaczego inne są błędne:
-A, B, D: Choć role Owner i Editor są 'uprzywilejowane' w chmurze (GCP IAM), to Super Admin (C) jest rolą nadrzędną nad całą tożsamością firmy. W wielu firmach polityka MFA jest wdrażana etapami, zaczynając od Super Adminów.
+Analiza niepoprawnych odpowiedzi:
+- A. Manual log-in + Cloud Scheduler: Logowanie się ręczne na każdą maszynę ("log in to each VM") jest niemożliwe do wykonania w dużej skali i skrajnie nieefektywne. Cloud Scheduler sam w sobie nie potrafi wykonywać komend wewnątrz systemów operacyjnych VM.
+- B. Copy patches to Cloud Storage: To podejście "zrób to sam" (DIY) wprowadza ogromny narzut operacyjny. Musiałbyś sam zarządzać wersjami patchy, ich bezpieczeństwem i skryptami instalacyjnymi.
+- C. Assign public IPs: Przypisywanie publicznych adresów IP tylko po to, by pobrać aktualizacje, jest rażącym błędem bezpieczeństwa (zwiększa "attack surface"). Od tego służy Cloud NAT (który już jest w tym scenariuszu) lub Private Google Access.
 
-Konsensus społeczności ExamTopics: 100% na C. Super Admin to 'klucze do królestwa'.
+Wskazówki i triki (Tips & Tricks):
+- "Patch all VMs" + "Summary reports" = VM Manager (OS Patch Management).
+- Słowo klucz "at scale" (w skali) w GCP niemal zawsze eliminuje odpowiedzi typu "log in to each VM".
+- Pamiętaj: Aby VM Manager działał, agent `OS Config` musi być włączony w metadanych projektu lub instancji.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj trzy główne funkcje VM Manager: OS Patch Management, OS Inventory Management (lista zainstalowanych paczek) oraz OS Policy Management (wymuszanie konfiguracji).
+- VM Manager jest darmowy dla pierwszych 100 maszyn (w momencie tworzenia tego pytania), co czyni go atrakcyjnym kosztowo.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/compute/docs/os-patch-management" target="_blank">OS patch management overview</a>
+- <a href="https://cloud.google.com/compute/docs/vm-manager" target="_blank">VM Manager overview</a>
+- <a href="https://cloud.google.com/compute/docs/os-config/setup-vm-manager" target="_blank">Setting up VM Manager</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Debata na forach dotyczy tego, dlaczego nie wszyscy admini GCP muszą mieć MFA. Odpowiedź: powinni, ale Super Admin jest jedyną rolą, która może wyłączyć MFA innym lub przejąć całą domenę. Dlatego w pytaniach o 'priorytetowe wymuszenie' lub 'definicję uprzywilejowania domeny', Super Admin jest kluczowy.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją wiedzę o nowoczesnych narzędziach do zarządzania flotą maszyn (Fleet Management). Google Cloud stawia na automatyzację i natywne usługi. VM Manager zastępuje stare, manualne skrypty czy zewnętrzne narzędzia (jak Ansible/Chef) w podstawowych zadaniach związanych z bezpieczeństwem systemu operacyjnego.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://support.google.com/a/answer/9050643" target="_blank">https://support.google.com/a/answer/9050643</a></li>
-
+<li>VM Manager integruje się z Cloud Monitoring, więc możesz ustawić alerty, jeśli patchowanie się nie powiedzie.</li>
+<li>Pamiętaj o uprawnieniach IAM: musisz mieć rolę `Compute OS Config Service Agent` przypisaną do konta serwisowego usługi.</li>
 </ul>
 </div>
 </div>

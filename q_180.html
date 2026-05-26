@@ -89,21 +89,44 @@ Your organization develops software involved in many open source projects and is
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (1. Generate Supply Chain Levels for Software Artifacts (SLSA) level 3 assurance by using Cloud Build. 2. View the build provenance in the Security insights side panel within the Google Cloud console)
 
-Wyjaśnienie: SLSA (Supply-chain Levels for Software Artifacts) to standard bezpieczeństwa budowania oprogramowania. Cloud Build natywnie generuje dane o pochodzeniu (provenance) obrazów.
+Dlaczego ta odpowiedź jest poprawna:
+- SLSA (Supply-chain Levels for Software Artifacts): Jest to standard branżowy (framework) stworzony m.in. przez Google, który definiuje poziomy bezpieczeństwa łańcucha dostaw oprogramowania. Poziom 3 (SLSA Level 3) gwarantuje, że proces budowania jest odporny na próby manipulacji i dostarcza wiarygodnych danych o pochodzeniu artefaktu (provenance).
+- Cloud Build Provenance: Cloud Build natywnie generuje dane o pochodzeniu dla obrazów kontenerów. Są to podpisane cyfrowo metadane, które opisują: skąd pochodzi kod źródłowy, jakie kroki zostały wykonane podczas budowania i jakie artefakty powstały. Ponieważ metadane te są generowane automatycznie przez usługę Google, są one trudne do sfałszowania (untampered).
+- Security Insights: Google Cloud Console posiada dedykowany panel "Security insights", który pozwala na łatwą weryfikację poziomu SLSA i danych provenance dla poszczególnych obrazów, co spełnia wymóg "demonstrate the software is untampered".
+
+Analiza niepoprawnych odpowiedzi:
+- A. External auditor: Audyt zewnętrzny jest kosztowny, powolny i nie zapewnia technicznej ciągłości provenance dla każdego pojedynczego buildu w dynamicznym środowisku CI/CD.
+- B. Manual PGP signing: Ręczne podpisywanie artefaktów kluczami PGP jest trudne do skalowania i nie gwarantuje nienaruszalności samego *procesu* budowania (ktoś mógł podmienić kod przed podpisaniem). SLSA Level 3 skupia się na bezpieczeństwie całego procesu, a nie tylko finalnego pliku.
+- C. GitHub open source + bug bounty: To dobre praktyki dla bezpieczeństwa kodu, ale nie dostarczają one technicznych dowodów na to, że konkretny binarny plik lub obraz kontenera został zbudowany dokładnie z tego konkretnego kodu bez modyfikacji "w locie".
+
+Wskazówki i triki (Tips & Tricks):
+- "Software supply chain" + "Provenance" = SLSA (Supply-chain Levels for Software Artifacts).
+- "Untampered build" = Cloud Build SLSA Level 3.
+- Szukaj odpowiedzi wykorzystujących natywne, zautomatyzowane narzędzia Google (Cloud Build, Binary Authorization, Artifact Registry).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj, że SLSA skupia się na trzech filarach: Source (kod), Build (proces) i Provenance (dowód).
+- Cloud Build jest jednym z pierwszych systemów CI/CD na świecie, który natywnie wspiera SLSA Level 3.
+- Dane provenance są przechowywane w formacie In-toto.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/build/docs/securing-builds/generate-build-provenance" target="_blank">Generating build provenance in Cloud Build</a>
+- <a href="https://slsa.dev/" target="_blank">SLSA Official Website</a>
+- <a href="https://cloud.google.com/security/binary-authorization" target="_blank">Binary Authorization and SLSA</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p>Pozwala to udowodnić, że dany obraz kontenera powstał dokładnie z określonego kodu źródłowego w zaufanym środowisku budowania.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie dotyczy jednego z najbardziej aktualnych tematów w bezpieczeństwie IT - ataków na łańcuch dostaw (jak np. ataki na SolarWinds czy Log4j). Google Cloud promuje tutaj standard SLSA jako nowoczesną odpowiedź na te zagrożenia. Automatyzacja dowodów (provenance) wewnątrz usługi Cloud Build eliminuje ryzyko błędu ludzkiego i zapewnia skalowalny dowód autentyczności oprogramowania.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/build/docs/securing-builds/generate-build-provenance" target="_blank">https://cloud.google.com/build/docs/securing-builds/generate-build-provenance</a></li>
-
+<li>W połączeniu z Binary Authorization, możesz zablokować uruchamianie w GKE obrazów, które nie posiadają dowodu provenance SLSA Level 3.</li>
+<li>Panel Security insights pokazuje również skany podatności (vulnerability scans) oraz listę pakietów (SBOM - Software Bill of Materials).</li>
 </ul>
 </div>
 </div>

@@ -89,21 +89,43 @@ Your company requires the security and network engineering teams to identify all
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Configure packet mirroring policies)
 
-Wyjaśnienie: Tylko Packet Mirroring pozwala na przechwytywanie 'payloads' (zawartości pakietów) dla celów inspekcji.
+Dlaczego ta odpowiedź jest poprawna:
+- Packet Mirroring: Jest to usługa Google Cloud, która umożliwia klonowanie ruchu sieciowego (zarówno przychodzącego, jak i wychodzącego) z wybranych instancji VM, podsieci lub tagów i przesyłanie go do wybranego celu w celu analizy.
+- Przechwytywanie Payloadu: W przeciwieństwie do logów przepływu (Flow Logs), Packet Mirroring klonuje całe pakiety IP, w tym ich zawartość (payload). Jest to niezbędne do wykrywania zaawansowanych anomalii sieciowych, które nie są widoczne w samych metadanych (np. sygnatury malware wewnątrz ruchu HTTP).
+- Wymaganie: Pytanie jawnie wspomina o potrzebie "identyfikacji anomalii" ORAZ "przechwytywania payloadu" (capture payloads), co bezpośrednio wskazuje na Packet Mirroring.
+
+Analiza niepoprawnych odpowiedzi:
+- A. Organization policy constraint: Polityki organizacji służą do narzucania ograniczeń konfiguracyjnych (np. "nie twórz zewnętrznych IP"), ale nie służą do monitorowania ruchu sieciowego ani przechwytywania danych.
+- C. VPC Flow Logs: Logi przepływu są bardzo użyteczne, ale zawierają jedynie metadane o połączeniach (IP źródłowe/docelowe, porty, protokół, bajty, czas). NIE zawierają one payloadu pakietów, więc nie spełniają wymogu pytania.
+- D. Cloud Audit Logs: Logi audytowe rejestrują działania administracyjne (kto stworzył VM, kto zmienił firewall) oraz dostęp do danych przez API. Nie monitorują one surowego ruchu sieciowego między maszynami wewnątrz sieci VPC.
+
+Wskazówki i triki (Tips & Tricks):
+- "Capture payloads" / "Inspect packet content" = Packet Mirroring.
+- "Metadata" / "Connection statistics" = VPC Flow Logs.
+- Pamiętaj: Packet Mirroring przesyła ruch do Load Balancera (ILB), za którym musi stać oprogramowanie analizujące (np. Cloud IDS lub własne maszyny z IDS).
+
+Praktyczne informacje na egzamin:
+- Packet Mirroring nie wprowadza opóźnień (latency) do oryginalnego ruchu, ponieważ klonowanie odbywa się na poziomie wirtualnego przełącznika infrastruktury Google.
+- Możesz mirrorować tylko ruch TCP, UDP i ICMP.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/vpc/docs/packet-mirroring" target="_blank">Packet Mirroring overview</a>
+- <a href="https://cloud.google.com/vpc/docs/using-packet-mirroring" target="_blank">Using Packet Mirroring</a>
+- <a href="https://cloud.google.com/blog/products/networking/using-packet-mirroring-for-security-and-network-analysis" target="_blank">Security analysis with Packet Mirroring</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p>VPC Flow Logs (C) zawierają tylko metadane o połączeniach (kto, gdzie, kiedy, ile danych).</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie jest niemal identyczne z pytaniem 166, co podkreśla wagę tematu Packet Mirroring na egzaminie. Kluczowym słowem-kluczem (trigger word) jest "Payload". Za każdym razem, gdy wymagana jest analiza zawartości pakietu, a nie tylko fakt połączenia, Packet Mirroring jest jedyną poprawną odpowiedzią technologiczną w GCP.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc/docs/packet-mirroring" target="_blank">https://cloud.google.com/vpc/docs/packet-mirroring</a></li>
-
+<li>Zwróć uwagę na koszty: Packet Mirroring generuje dodatkowe koszty za każdy GB przetworzonych danych oraz koszty instancji analizujących.</li>
+<li>Możesz używać filtrów (np. mirroruj tylko ruch na port 80), aby ograniczyć ilość danych przesyłanych do analizy i zminimalizować koszty.</li>
 </ul>
 </div>
 </div>

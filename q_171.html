@@ -90,21 +90,42 @@ You have created an OS image that is hardened per your organization's security s
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: BD.
+Poprawna odpowiedź: BD (B: Grant users the compute.imageUser role in the OS image project, D: Set up an image access organization policy constraint)
 
-Wyjaśnienie: Nadanie roli imageUser (B) pozwala deweloperom pobierać obraz. Polityka organizacji (D) ogranicza źródła obrazów tylko do Twojego projektu bezpieczeństwa.
+Dlaczego te odpowiedzi są poprawne:
+- Centralizacja obrazów: Zapisanie utwardzonego (hardened) obrazu w jednym, dedykowanym projekcie zarządzanym przez zespół security jest najlepszą praktyką (Single Source of Truth).
+- B. Rola compute.imageUser: Aby użytkownicy w innych projektach mogli stworzyć VM na podstawie obrazu z Twojego projektu, muszą posiadać rolę `compute.imageUser` nadaną im w projekcie, w którym znajduje się obraz. Pozwala to na "wykorzystanie" obrazu bez dawania dostępu do innych zasobów projektu security.
+- D. Trusted Image Organization Policy: Sama dostępność obrazu nie zmusza użytkowników do jego użycia (mogliby wybrać obrazy publiczne Google). Aby WYMUSIĆ użycie tylko Twojego obrazu, musisz zastosować politykę organizacji `constraints/compute.trustedImageProjects`. Pozwala ona na zdefiniowanie białej listy projektów, z których można pobierać obrazy. Jeśli lista zawiera tylko Twój projekt security, użytkownicy nie będą mogli uruchomić VM z żadnego innego źródła.
+
+Analiza niepoprawnych odpowiedzi:
+- A. imageUser in their own projects: Nadanie tej roli w ich własnych projektach nie da im uprawnień do obrazów znajdujących się w Twoim projekcie security. Uprawnienie musi być nadane tam, gdzie znajduje się zasób (obraz).
+- C. Store image in every project: To generuje ogromny narzut operacyjny (aktualizacje obrazu musiałyby być kopiowane do setek projektów) i zwiększa koszy przechowywania. Przeczy to wymogowi "minimizing operational overhead".
+- E. Remove VM creation permission: To podejście paraliżuje pracę deweloperów. Administratorzy staliby się wąskim gardłem (bottleneck), co jest zaprzeczeniem idei chmury (self-service).
+
+Wskazówki i triki (Tips & Tricks):
+- "Hardened OS image" + "Enforce" = Organization Policy (Trusted Image Projects).
+- Pamiętaj o kierunku uprawnień: imageUser nadajesz W PROJEKCIE ŹRÓDŁOWYM (tam gdzie jest obraz).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj nazwę constraintu: `compute.trustedImageProjects`.
+- Utwardzanie (Hardening) obrazu zazwyczaj polega na usuwaniu zbędnych pakietów, wyłączaniu niepotrzebnych usług i stosowaniu standardów takich jak CIS Benchmark.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/compute/docs/images/restricting-image-access" target="_blank">Restricting image access with organization policies</a>
+- <a href="https://cloud.google.com/compute/docs/images/sharing-images-across-projects" target="_blank">Sharing images across projects</a>
+- <a href="https://cloud.google.com/compute/docs/images/create-delete-deprecate-private-images" target="_blank">Managing private images</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: BD</b></p>
-<p><b>Głęboka analiza:</b> <p>To połączenie uprawnień i restrykcji gwarantuje standardy bezpieczeństwa w całej firmie.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie dotyczy zachowania "Compliance" w warstwie systemowej. Zespół security przygotowuje bezpieczny fundament (Golden Image), a administratorzy za pomocą polityk organizacji dbają o to, by nikt nie budował infrastruktury na "piasku" (niezabezpieczonych obrazach). To modelowy przykład automatyzacji bezpieczeństwa w GCP.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/compute/docs/images/restricting-image-access" target="_blank">https://cloud.google.com/compute/docs/images/restricting-image-access</a></li>
-
+<li>Warto wspomnieć o narzędziach takich jak "Image Bakery" (np. użycie Packera w Cloud Build), które automatyzują proces tworzenia i aktualizacji takich obrazów.</li>
+<li>Obrazy można oznaczać jako "Deprecated", aby zachęcić użytkowników do migracji na nowsze, bezpieczniejsze wersje.</li>
 </ul>
 </div>
 </div>

@@ -90,21 +90,42 @@ You plan to synchronize identities to Cloud Identity from a third-party identity
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: BE.
+Poprawna odpowiedź: BE (B: Reconcile accounts that exist in Cloud Identity but not in the third-party IdP, E: Use the transfer tool to invite those corporate employees to transfer their unmanaged consumer accounts to the corporate domain)
 
-Wyjaśnienie: Uzgodnienie kont (Reconciliation - B) i użycie narzędzia transferu (Transfer Tool - E) to standardowe kroki przejmowania kontroli nad kontami użytkowników.
+Dlaczego te odpowiedzi są poprawne:
+- B. Uzgadnianie kont (Reconciliation): Pierwszym krokiem w zarządzaniu tożsamością jest identyfikacja "luk". Uzgadnianie pozwala na znalezienie kont, które istnieją w Google (Cloud Identity), ale nie mają swojego odpowiednika w zewnętrznym dostawcy tożsamości (IdP). To pozwala wyłapać konta stworzone "na boku".
+- E. Transfer Tool for Unmanaged Users: Jest to oficjalne narzędzie Google służące do rozwiązywania problemu kont "niezarządzanych" (unmanaged). Pozwala ono na wysłanie zaproszenia do pracowników, aby przenieśli swoje prywatne konta stworzone na adresach służbowych pod kontrolę organizacji. Jest to proces bezpieczny, pozwalający na zachowanie danych użytkownika przy jednoczesnym przejęciu kontroli nad bezpieczeństwem konta przez firmę.
+
+Analiza niepoprawnych odpowiedzi:
+- A. Mandate deletion: Nakazanie usunięcia kont jest niepraktyczne i może prowadzić do utraty ważnych danych służbowych, które pracownicy mogli zapisać na tych kontach (np. na Dysku Google). Nie rozwiązuje to też problemu w sposób zautomatyzowany.
+- C. Evict accounts in third-party IdP: Eksmisja (usunięcie) kont w IdP przed synchronizacją nie ma sensu, ponieważ te konta osobiste właśnie NIE ISTNIEJĄ w IdP (dlatego są unmanaged). Synchronizacja GCDS nie nadpisuje kont osobistych, lecz powoduje konflikt nazw.
+- D. Use GCDS for aliases: GCDS służy do synchronizacji, a nie do migracji typów kont. Ustawienie maili jako aliasów nie daje kontroli nad pierwotnym kontem osobistym użytkownika.
+
+Wskazówki i triki (Tips & Tricks):
+- "Unmanaged accounts" / "Consumer accounts with corporate email" = Transfer Tool.
+- "Control lifecycle and security" = Przejęcie konta pod zarząd Cloud Identity.
+- Pamiętaj: Po transferze, konto staje się pełnoprawnym kontem zarządzanym, podlegającym politykom SSO, MFA i audytowi firmy.
+
+Praktyczne informacje na egzamin:
+- Zrozum proces transferu: Zaproszenie wysłane przez Admina -> Akceptacja przez użytkownika -> Konwersja konta.
+- Jeśli użytkownik odrzuci prośbę, konto osobiste musi zmienić nazwę na adres nie-firmowy (np. @gmail.com), a firma może wtedy stworzyć nowe, czyste konto zarządzane na adresie służbowym.
+
+Dokumentacja i linki:
+- <a href="https://support.google.com/cloudidentity/answer/7062710" target="_blank">Transfer tool for unmanaged users overview</a>
+- <a href="https://cloud.google.com/architecture/identity/migrating-consumer-accounts" target="_blank">Migrating consumer accounts to Cloud Identity</a>
+- <a href="https://support.google.com/a/answer/181126" target="_blank">Handling conflicting accounts</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: BE</b></p>
-<p><b>Głęboka analiza:</b> <p>Transfer Tool wysyła prośbę do użytkownika o zmianę konta osobistego na konto zarządzane przez firmę.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie testuje proces "Governance" w zarządzaniu tożsamością. Wiele firm zaczyna przygodę z chmurą Google, gdy ich pracownicy już dawno z niej korzystają prywatnie do celów służbowych. Rozwiązanie tego "cienia IT" (Shadow IT) wymaga delikatnego podejścia (Transfer Tool), które łączy interesy firmy (bezpieczeństwo) z wygodą pracownika (zachowanie danych).</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://support.google.com/cloudidentity/answer/7062710" target="_blank">https://support.google.com/cloudidentity/answer/7062710</a></li>
-
+<li>Możesz użyć raportów "Unmanaged users" w konsoli Admin, aby zobaczyć pełną listę takich kont przed rozpoczęciem migracji.</li>
+<li>Pamiętaj, że synchronizacja GCDS powinna odbyć się PO procesie transferu lub równolegle, z uwzględnieniem obsługi konfliktów.</li>
 </ul>
 </div>
 </div>

@@ -89,21 +89,43 @@ You need to enforce a security policy in your Google Cloud organization that pre
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Enable the constraints/storage.publicAccessPrevention constraint at the organization level)
 
-Wyjaśnienie: Ograniczenie 'publicAccessPrevention' na poziomie organizacji to najprostszy sposób na zablokowanie możliwości tworzenia publicznych bucketów i obiektów.
+Dlaczego ta odpowiedź jest poprawna:
+- Proaktywność i Skala: Włączenie polityki organizacji (Organization Policy) na najwyższym poziomie hierarchii (Organization) zapewnia, że wszystkie obecne i przyszłe projekty oraz buckety będą automatycznie chronione.
+- Public Access Prevention (PAP): Jest to konkretny mechanizm Google Cloud zaprojektowany dokładnie do tego celu – uniemożliwienia publicznego udostępniania danych w Cloud Storage. PAP blokuje możliwość nadawania ról IAM oraz uprawnień ACL specjalnym tożsamościom `allUsers` (każdy w internecie) oraz `allAuthenticatedUsers` (każdy zalogowany do konta Google).
+- Minimalizacja narzutu: Raz włączona polityka nie wymaga monitorowania ani dodatkowego kodu. Jest to rozwiązanie natywne i bezpłatne.
+
+Analiza niepoprawnych odpowiedzi:
+- A. Hourly cron job: Jest to rozwiązanie reaktywne (naprawia błąd po czasie). Przez okres do jednej godziny dane mogłyby być publicznie dostępne, co narusza zasady bezpieczeństwa. Generuje też dodatkowy koszt i narzut operacyjny (utrzymanie kodu funkcji).
+- C. Uniform Bucket-Level Access (UBLA): UBLA jest bardzo ważną funkcją bezpieczeństwa (wyłącza ACL-e na rzecz IAM), ale samo w sobie NIE zabrania administratorowi nadania publicznego dostępu przez IAM (np. roli Storage Object Viewer dla `allUsers`). UBLA ułatwia zarządzanie, ale PAP (B) jest tym, co faktycznie blokuje dostęp zewnętrzny.
+- D. VPC Service Controls: VPC SC jest potężnym narzędziem chroniącym przed eksfiltracją danych, ale w tym przypadku jest zbyt skomplikowane ("overkill"). Wymagałoby ręcznego dodawania każdego nowego projektu do perymetru, co generuje duży narzut operacyjny, o którego minimalizację prosi pytanie.
+
+Wskazówki i triki (Tips & Tricks):
+- "Prevent public exposure" + "Cloud Storage" = Public Access Prevention (PAP).
+- PAP + UBLA = "Gold Standard" dla bezpiecznych bucketów.
+- Zawsze wybieraj politykę organizacji (Organization Policy) nad rozwiązaniami opartymi na skryptach czy funkcjach, jeśli celem jest wymuszenie standardu.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj, że PAP można włączyć na poziomie konkretnego bucketu LUB na poziomie projektu/organizacji przez politykę organizacji. Ta druga opcja jest zawsze preferowana w pytaniach o "całą firmę".
+- PAP nie usuwa publicznego dostępu do obiektów, które JUŻ były publiczne przed włączeniem polityki (choć uniemożliwia dostęp do nich przez URL).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/storage/docs/public-access-prevention" target="_blank">Public Access Prevention overview</a>
+- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">Organization Policy constraints list</a>
+- <a href="https://cloud.google.com/storage/docs/uniform-bucket-level-access" target="_blank">Uniform bucket-level access overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p>Działa ono prewencyjnie i nie pozwala nawet administratorowi projektu na udostępnienie danych całemu internetowi.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją wiedzę o nowoczesnych mechanizmach "Governance" w Google Cloud. Przez lata problem "otwartych bucketów" był zmorą bezpieczeństwa chmurowego. Google odpowiedziało na to dedykowanym mechanizmem PAP. Na egzaminie ważne jest odróżnienie narzędzi do zarządzania (UBLA) od narzędzi do blokowania (PAP) oraz unikanie rozwiązań reaktywnych (A).</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/storage/docs/public-access-prevention" target="_blank">https://cloud.google.com/storage/docs/public-access-prevention</a></li>
-
+<li>Jeśli Twoja firma hostuje publiczne pliki (np. obrazy na stronę www), musisz wyłączyć PAP dla tych konkretnych bucketów (wyjątek w polityce).</li>
+<li>VPC Service Controls (opcja D) chroni "boki" (eksfiltracja), a PAP chroni "przód" (dostęp z internetu).</li>
 </ul>
 </div>
 </div>

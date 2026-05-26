@@ -89,21 +89,42 @@ You're developing the incident response plan for your company. You need to defin
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (Create a service account, and grant it limited list/view permissions. Give the Service Account User Role on this service account to the DevOps team)
 
-Wyjaśnienie: Użycie konta serwisowego jako 'identyfikatora' dla konkretnego zadania pozwala na precyzyjne ograniczenie uprawnień. DevOps loguje się na SA tylko wtedy, gdy jest to potrzebne.
+Dlaczego ta odpowiedź jest poprawna:
+- Zasada najniższych uprawnień (Least Privilege): Zamiast nadawać uprawnienia bezpośrednio użytkownikom (co często kończy się ich "pozostawieniem" na stałe), tworzymy dedykowane konto serwisowe (Service Account) z minimalnym zestawem uprawnień potrzebnych do dochodzenia (list/view).
+- Podszywanie się pod konto serwisowe (Service Account Impersonation): Nadając zespołowi DevOps rolę `iam.serviceAccountUser` na tym konkretnym koncie, pozwalamy im na tymczasowe "użycie" uprawnień tego konta. Jest to bezpieczniejsze i łatwiejsze do audytowania (widać, kto i kiedy użył konta serwisowego).
+- Kontrola czasowa: Choć samo konto serwisowe istnieje, zespół DevOps może z niego korzystać tylko w ramach procedury incident response. Po rozwiązaniu problemu, uprawnienie `serviceAccountUser` może zostać odebrane, co jest prostsze niż audytowanie i usuwanie wielu pojedynczych uprawnień z kont użytkowników.
+
+Analiza niepoprawnych odpowiedzi:
+- A. Project Viewer role: Jest to rola podstawowa (basic role), która daje dostęp do przeglądania WSZYSTKICH zasobów w projekcie. Jest to zbyt szerokie uprawnienie i narusza zasadę Least Privilege.
+- B. Custom IAM role assigned to DevOps: Choć role niestandardowe są dobre, nadanie ich bezpośrednio grupie użytkowników na stałe narusza wymóg "only during the deployment issue". Wymagałoby to ręcznego dodawania i usuwania uprawnień przy każdym incydencie.
+- C. Service account with Project Owner role: To skrajnie niebezpieczne. Rola Owner daje pełną kontrolę, w tym możliwość usuwania zasobów i zarządzania uprawnieniami, co jest całkowicie zbędne i ryzykowane podczas zwykłego dochodzenia incydentu.
+
+Wskazówki i triki (Tips & Tricks):
+- "Least privilege" + "Temporary access" = Service Account Impersonation lub IAM Conditions (choć SA jest bardziej klasyczną odpowiedzią w tym kontekście).
+- Pamiętaj: `serviceAccountUser` to kluczowa rola do "używania" tożsamości innego konta.
+
+Praktyczne informacje na egzamin:
+- Zrozum mechanizm "Break-glass" (dostęp awaryjny). Często polega on na posiadaniu wysoko uprawnionych kont, których użycie generuje natychmiastowe alerty w SOC.
+- W nowoczesnym GCP zaleca się używanie "IAM Conditions" do ograniczania ważności uprawnień w czasie (np. wygasają po 4 godzinach).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iam/docs/service-account-impersonation" target="_blank">Service account impersonation overview</a>
+- <a href="https://cloud.google.com/iam/docs/best-practices" target="_blank">IAM best practices</a>
+- <a href="https://cloud.google.com/iam/docs/conditions-overview" target="_blank">IAM Conditions overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p>Nowoczesną metodą dla tego scenariusza jest również 'IAM Conditions' z limitem czasowym.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do projektowania procesów operacyjnych zgodnych z bezpieczeństwem. Najważniejszym elementem jest tutaj uniknięcie "Permissive Access" na kontach ludzkich. Użycie konta serwisowego jako "proxy" dla uprawnień dochodzeniowych to świetny sposób na izolację i precyzyjną kontrolę audytową.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/iam/docs/best-practices" target="_blank">https://cloud.google.com/iam/docs/best-practices</a></li>
-
+<li>Pamiętaj o audycie: Cloud Audit Logs zarejestrują każde działanie wykonane "przez konto serwisowe w imieniu użytkownika X".</li>
+<li>Warto rozważyć automatyzację nadawania tych uprawnień przez system typu ITSM (np. ServiceNow/Jira) po zatwierdzeniu zgłoszenia awarii.</li>
 </ul>
 </div>
 </div>

@@ -89,21 +89,43 @@ You have been tasked with inspecting IP packet data for invalid or malicious con
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Use Packet Mirroring to mirror traffic to and from particular VM instances)
 
-Wyjaśnienie: Pełna inspekcja zawartości pakietów (L3-L7) wymaga narzędzia IDS/IPS, któremu dostarcza się dane za pomocą usługi Packet Mirroring.
+Dlaczego ta odpowiedź jest poprawna:
+- Packet Mirroring: Jest to usługa Google Cloud, która klonuje ruch sieciowy (zarówno przychodzący, jak i wychodzący) z konkretnych instancji VM, podsieci lub tagów i przesyła go do wybranego celu (zazwyczaj Load Balancera przed grupą instancji inspekcyjnych).
+- Deep Packet Inspection (DPI): Aby wykryć "złośliwą zawartość" (malicious content) wewnątrz pakietów IP, potrzebujesz dostępu do całej treści pakietu (payload), a nie tylko do nagłówków. Rozwiązania klasy IDS (Intrusion Detection System) lub IPS (Intrusion Prevention System) wymagają właśnie pełnych pakietów dostarczanych przez Packet Mirroring, aby móc przeanalizować je pod kątem sygnatur ataków lub anomalii.
+
+Analiza niepoprawnych odpowiedzi:
+- B. VPC Flow Logs: Logi przepływu zawierają metadane o połączeniach (IP źródłowe/docelowe, porty, protokół, liczba bajtów, czas), ale NIE zawierają samej treści pakietów. Nie pozwalają więc na inspekcję zawartości pod kątem malware czy exploitów.
+- C. Fluentd agent: Jest to agent zbierający logi systemowe i aplikacyjne (pliki tekstowe). Nie służy on do przechwytywania i analizowania surowych pakietów sieciowych na poziomie warstwy IP.
+- D. Cloud Armor access logs: Cloud Armor działa na poziomie warstwy 7 (HTTP/S) dla Load Balancera. Jego logi pokazują szczegóły żądań webowych, ale nie dają wglądu w surowe pakiety IP dla całego ruchu sieciowego wewnątrz VPC.
+
+Wskazówki i triki (Tips & Tricks):
+- "Inspect packet data" / "Malicious content" + "Network level" = Packet Mirroring.
+- "Metadata" / "Connection info" = VPC Flow Logs.
+- "L7 protection" / "WAF" = Cloud Armor.
+
+Praktyczne informacje na egzamin:
+- Packet Mirroring nie wpływa na wydajność mirrorowanych maszyn, ponieważ odbywa się na poziomie infrastruktury sieciowej Google (SDN).
+- Pamiętaj, że ruch mirrorowany jest płatny (koszt za GB przetworzonych danych).
+- Mirrorowanie odbywa się w obrębie tego samego VPC (lub przez VPC Peering).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/vpc/docs/packet-mirroring" target="_blank">Packet Mirroring overview</a>
+- <a href="https://cloud.google.com/vpc/docs/using-packet-mirroring" target="_blank">Using Packet Mirroring</a>
+- <a href="https://cloud.google.com/blog/products/networking/using-packet-mirroring-for-security-and-network-analysis" target="_blank">Packet Mirroring for security analysis</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p>Inne logi (Flow Logs, Cloud Armor) dają tylko metadane lub logi HTTP, a nie pełną treść pakietu IP.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie sprawdza różnicę między monitorowaniem "gdzie idzie ruch" (Flow Logs) a analizowaniem "co jest w środku ruchu" (Packet Mirroring). W nowoczesnych architekturach bezpieczeństwa w GCP, Packet Mirroring jest kluczowym elementem integracji z zewnętrznymi systemami IDS/IPS (np. Palo Alto, Check Point, Suricata).</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc/docs/packet-mirroring" target="_blank">https://cloud.google.com/vpc/docs/packet-mirroring</a></li>
-
+<li>Warto wiedzieć, że Cloud IDS to natywna usługa Google, która "pod spodem" wykorzystuje Packet Mirroring i silnik Palo Alto Networks do automatycznego wykrywania zagrożeń.</li>
+<li>Packet Mirroring może mirrorować zarówno ruch wewnątrz VPC (East-West), jak i ruch wychodzący/przychodzący do internetu (North-South).</li>
 </ul>
 </div>
 </div>

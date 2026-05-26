@@ -89,21 +89,43 @@ Your organization is using Active Directory and wants to configure Security Asse
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (1. Create a new SAML profile. 2. Populate the sign-in and sign-out page URLs. 3. Upload the X.509 certificate. 4. Configure Entity ID and ACS URL in your IdP)
 
-Wyjaśnienie: Poprawna konfiguracja SAML SSO wymaga wymiany certyfikatów i URL-i między Google (SP) a Active Directory (IdP).
+Dlaczego ta odpowiedź jest poprawna:
+- SAML SSO (Single Sign-On): Jest to standard federacji tożsamości, w którym Google Cloud pełni rolę Service Provider (SP), a Twoja firma (np. Active Directory z ADFS) pełni rolę Identity Provider (IdP).
+- Konfiguracja w Google (SP): Aby Google wiedziało, dokąd wysłać użytkownika w celu zalogowania, musisz stworzyć profil SAML i podać adresy URL strony logowania (Sign-in) i wylogowania (Sign-out) Twojego IdP.
+- Certyfikat X.509: Jest kluczowy dla bezpieczeństwa. IdP podpisuje asercje SAML swoim kluczem prywatnym, a Google weryfikuje ten podpis za pomocą klucza publicznego zawartego w przesłanym certyfikacie X.509.
+- Konfiguracja w IdP: Aby Twoje Active Directory wiedziało, że ma wysłać poświadczenia do Google, musisz w nim skonfigurować Entity ID (identyfikator Google jako SP) oraz ACS URL (Assertion Consumer Service URL – adres, pod który Google przyjmuje potwierdzenia zalogowania).
+
+Analiza niepoprawnych odpowiedzi:
+- B i D. OpenID Connect (OIDC): Choć OIDC jest nowocześniejszym protokołem (opartym na OAuth 2.0), pytanie wyraźnie prosi o konfigurację SAML. OIDC i SAML to dwa różne światy techniczne i nie konfiguruje się ich tymi samymi krokami.
+- C. SAML profile without URLs: Opcja ta pomija kluczowy krok podania adresów URL (sign-in/sign-out), bez których użytkownik nie zostanie przekierowany do strony logowania firmy. "Change password URL" jest opcjonalny i nie jest fundamentem działania SSO.
+
+Wskazówki i triki (Tips & Tricks):
+- "SAML" + "AD" = SSO (Federacja).
+- Zapamiętaj "Czwórkę SAML": Sign-in URL, X.509 Cert (w SP) + Entity ID, ACS URL (w IdP).
+- Jeśli widzisz "Entity ID" i "ACS URL", niemal na pewno chodzi o konfigurację SAML.
+
+Praktyczne informacje na egzamin:
+- Zrozum kierunek zaufania: Google ufa Twojemu IdP, ponieważ posiada jego certyfikat publiczny.
+- Pamiętaj, że SSO nie tworzy użytkowników w Google Cloud – do tego potrzebujesz GCDS (Google Cloud Directory Sync) lub Just-in-Time provisioning.
+
+Dokumentacja i linki:
+- <a href="https://support.google.com/cloudidentity/answer/60224" target="_blank">Set up SSO via SAML</a>
+- <a href="https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction" target="_blank">Federating GCP with Active Directory</a>
+- <a href="https://support.google.com/a/answer/6330801" target="_blank">SAML SSO technical overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p>Kluczowe elementy to Entity ID i ACS URL, które IdP musi znać, aby poprawnie wysyłać asercje SAML.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie sprawdza fundamentalną wiedzę o tym, jak połączyć tożsamość korporacyjną z chmurą. SAML jest standardem "Enterprise", który pozwala na zachowanie jednego hasła (tego z AD) do wszystkich usług. Najważniejszym elementem dla inżyniera jest zrozumienie mechanizmu "handshake'u" – wymiany metadanych między dwiema stronami procesu.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://support.google.com/cloudidentity/answer/60224" target="_blank">https://support.google.com/cloudidentity/answer/60224</a></li>
-
+<li>W Cloud Identity możesz przypisać różne profile SAML do różnych jednostek organizacyjnych (OU), co pozwala np. na użycie Okty dla deweloperów i AD dla reszty firmy.</li>
+<li>Pamiętaj o ważności certyfikatu X.509 – jeśli wygaśnie, nikt nie będzie mógł się zalogować do Google Cloud.</li>
 </ul>
 </div>
 </div>

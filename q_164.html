@@ -89,21 +89,42 @@ You are creating a new infrastructure CI/CD pipeline to deploy hundreds of ephem
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Enable the constraints/compute.skipDefaultNetworkCreation organization policy constraint at the organization level)
 
-Wyjaśnienie: Ograniczenie polityki organizacji 'compute.skipDefaultNetworkCreation' zapobiega automatycznemu tworzeniu sieci 'default' w każdym nowym projekcie.
+Dlaczego ta odpowiedź jest poprawna:
+- Organization Policy: Jest to mechanizm, który pozwala na narzucenie ograniczeń na poziomie całej organizacji, folderu lub projektu. Jest to "source of truth" dla konfiguracji bezpieczeństwa w GCP.
+- compute.skipDefaultNetworkCreation: Ta konkretna reguła (constraint) zapobiega automatycznemu tworzeniu sieci VPC o nazwie 'default' podczas tworzenia nowego projektu. Sieć 'default' jest uważana za niebezpieczną w środowiskach korporacyjnych, ponieważ posiada domyślne reguły firewall typu "allow-all" dla ruchu wewnętrznego oraz przypisuje adresy IP z szerokich zakresów, co utrudnia zarządzanie adresacją i routingiem.
+- Skalowalność: Włączenie tej reguły na poziomie organizacji (Organization level) automatycznie obejmie wszystkie przyszłe projekty (w tym setki projektów efemerycznych wspomnianych w pytaniu), co jest zgodne z najlepszymi praktykami Google.
+
+Analiza niepoprawnych odpowiedzi:
+- B. Cron job with Cloud Function: Jest to rozwiązanie reaktywne (naprawianie problemu po jego wystąpieniu) i nieefektywne. Wprowadza niepotrzebny narzut operacyjny i kosztowy. Przez pewien czas (do uruchomienia funkcji) sieć 'default' i tak by istniała.
+- C. IAM Owner at org level + VPC Service Controls: Nadawanie roli Owner na poziomie organizacji jest skrajnie niebezpieczne i narusza zasadę Least Privilege. VPC Service Controls służy do zapobiegania eksfiltracji danych, a nie do kontrolowania tworzenia sieci VPC.
+- D. Predefined templates in CI/CD: Choć szablony są dobrą praktyką, nie dają one gwarancji, że ktoś nie stworzy projektu ręcznie (poza pipeline-em). Polityka organizacji (A) działa na poziomie API Google Cloud, więc blokuje tworzenie sieci niezależnie od metody stworzenia projektu.
+
+Wskazówki i triki (Tips & Tricks):
+- "Restrict default networks" + "Best practices" = Organization Policy (skipDefaultNetworkCreation).
+- Zawsze wybieraj rozwiązania prewencyjne (Organization Policies) nad reaktywnymi (skrypty/funkcje).
+
+Praktyczne informacje na egzamin:
+- Sieć 'default' jest tworzona automatycznie w każdym nowym projekcie, chyba że zostanie to zablokowane polityką organizacji.
+- Zapamiętaj inne ważne polityki: 'constraints/compute.restrictPublicIp', 'constraints/iam.allowedPolicyMemberDomains'.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">Organization Policy constraints overview</a>
+- <a href="https://cloud.google.com/vpc/docs/using-default-network" target="_blank">Understanding the default network</a>
+- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/creating-managing-policies" target="_blank">Creating and managing organization policies</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p>To standardowy krok przy zabezpieczaniu nowej organizacji w GCP.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie testuje znajomość zarządzania "Governance" w dużej skali. W Google Cloud Organization Policy jest najsilniejszym narzędziem w rękach administratora bezpieczeństwa, pozwalającym na "wyłączenie" niebezpiecznych domyślnych zachowań platformy jeszcze zanim jakikolwiek użytkownik zacznie z niej korzystać.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints</a></li>
-
+<li>Włączenie tej polityki nie usuwa sieci 'default' z już istniejących projektów – działa tylko na nowe.</li>
+<li>Dobrą praktyką jest również usuwanie domyślnych reguł firewall, jeśli sieć 'default' musi jednak pozostać w projekcie.</li>
 </ul>
 </div>
 </div>

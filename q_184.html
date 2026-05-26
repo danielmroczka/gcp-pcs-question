@@ -89,29 +89,44 @@ You have a highly sensitive BigQuery workload that contains personally identifia
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: A (Use service perimeter and create an access level based on the authorized source IP address as the condition)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Instance Service Account: Najbezpieczniejszą metodą komunikacji między usługami w GCP (np. z VM do BigQuery) jest przypisanie konta serwisowego do maszyny. Aplikacja pobiera wtedy tymczasowe tokeny z serwera metadanych. Brak statycznych kluczy = brak ryzyka ich kradzieży.
+Dlaczego ta odpowiedź jest poprawna:
+- VPC Service Controls (VPC SC): Jest to najsilniejszy mechanizm ochrony przed eksfiltracją danych w Google Cloud. Pozwala on na stworzenie perymetru wokół usług takich jak BigQuery.
+- Service Perimeter (Perymetr serwisowy): Gdy BigQuery zostanie dodane do perymetru, dostęp do jego API jest domyślnie blokowany dla wszystkich żądań spoza perymetru (w tym z internetu).
+- Access Level (Poziom dostępu): Aby pozwolić na dostęp z konkretnych, autoryzowanych adresów IP, należy stworzyć Poziom Dostępu w Access Context Manager. Warunkiem w tym poziomie dostępu będzie lista dozwolonych adresów IP.
+- Wynik: Połączenie perymetru z poziomem dostępu sprawia, że BigQuery jest "niewidoczne" dla całego internetu, z wyjątkiem ruchu pochodzącego z dokładnie zdefiniowanych przez Ciebie adresów IP, co idealnie spełnia wymagania bezpieczeństwa.
 
-Dlaczego inne są błędne:
-A. Environmental variables: Złe. Logi lub zrzuty pamięci mogą ujawnić klucz.
-C. Username/Password: Przestarzałe i trudne w rotacji w porównaniu do natywnego IAM.
-D. API keys: Są słabe, nie identyfikują 'kto' woła, a jedynie 'jaki projekt'. Służą głównie do publicznych API (np. Maps).
+Analiza niepoprawnych odpowiedzi:
+- B. Google Cloud Armor: Cloud Armor służy do ochrony aplikacji webowych znajdujących się za External HTTP(S) Load Balancerem. Nie służy on do bezpośredniego filtrowania ruchu do natywnego API BigQuery. Cloud Armor nie zapobiega eksfiltracji danych z BigQuery w taki sposób jak VPC SC.
+- C. Restrict Resource Service Usage policy: Ta polityka organizacji pozwala na zablokowanie użycia konkretnych usług w projekcie (np. "nikt nie może używać Cloud SQL"), ale nie oferuje filtrowania dostępu na podstawie adresów IP dla dozwolonej już usługi BigQuery.
+- D. Restrict allowed Google Cloud APIs: Podobnie jak w opcji C, ta polityka ogranicza listę API, które mogą być włączone/używane, ale nie zapewnia granularnej kontroli dostępu opartej na sieciowej tożsamości klienta (IP).
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. To 'złoty standard' bezpieczeństwa chmurowego.
+Wskazówki i triki (Tips & Tricks):
+- "Prevent data exfiltration" + "BigQuery" = VPC Service Controls.
+- "Context-aware access" / "IP-based restriction for Google APIs" = VPC SC + Access Levels.
+- Pamiętaj: IAM mówi "kto", VPC SC mówi "skąd" i "dokąd" mogą płynąć dane.
+
+Praktyczne informacje na egzamin:
+- VPC SC chroni przed sytuacją, w której pracownik (nawet z uprawnieniami Admina) próbuje skopiować dane do prywatnego projektu spoza firmy.
+- Access Levels są częścią "BeyondCorp Enterprise" i pozwalają na weryfikację nie tylko IP, ale także stanu urządzenia (np. czy ma włączone szyfrowanie dysku).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/vpc-service-controls/docs/overview" target="_blank">VPC Service Controls overview</a>
+- <a href="https://cloud.google.com/access-context-manager/docs/overview" target="_blank">Access Context Manager overview</a>
+- <a href="https://cloud.google.com/vpc-service-controls/docs/access-level-usage" target="_blank">Using access levels with VPC SC</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Na GitHubie specjaliści od DevSecOps podkreślają: 'Klucze JSON to dług techniczny'. Użycie tożsamości instancji (B) eliminuje 90% problemów związanych z wyciekiem poświadczeń w chmurze.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie testuje zrozumienie architektury bezpieczeństwa API Google Cloud. Większość usług Google jest dostępna pod publicznymi adresami URL (np. bigquery.googleapis.com). Same uprawnienia IAM to za mało dla danych wrażliwych. VPC SC to "ściana", która zamyka te publiczne endpointy i wpuszcza tylko autoryzowany ruch z zaufanych lokalizacji (Access Levels).</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances" target="_blank">https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances</a></li>
-
+<li>VPC SC wymaga włączenia Private Google Access w sieciach VPC, które mają komunikować się z BigQuery wewnątrz perymetru.</li>
+<li>Pamiętaj o trybie "Dry-run", który pozwala testować perymetr bez ryzyka przerwania działania aplikacji produkcyjnych.</li>
 </ul>
 </div>
 </div>

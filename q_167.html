@@ -89,21 +89,40 @@ You have the following resource hierarchy. There is an organization policy at ea
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (All load balancer types are denied in accordance with the global node's policy)
 
-Wyjaśnienie: Polityki organizacji w GCP działają według zasady 'deny wins' lub dziedziczenia restrykcji. Jeśli na poziomie organizacji zablokowano wszystkie typy LB, ta blokada obowiązuje w dół hierarchii, chyba że explicite dodano wyjątek (którego tu nie ma).
+Dlaczego ta odpowiedź jest poprawna:
+- Hierarchia zasobów: Google Cloud posiada strukturę drzewiastą (Organizacja -> Foldery -> Projekty -> Zasoby).
+- Dziedziczenie polityk: Polityki organizacji (Organization Policies) są domyślnie dziedziczone w dół hierarchii. Jeśli na samym szczycie (Global node / Organization) ustawiono restrykcję typu "Deny All" dla typów Load Balancerów, to ta restrykcja obowiązuje we wszystkich podległych projektach i sieciach VPC.
+- Precedencja: Aby "odblokować" coś na niższym poziomie, co zostało zablokowane wyżej, polityka na niższym poziomie musiałaby zostać jawnie nadpisana (Override). W tym pytaniu, choć foldery i projekty mają własne dodatkowe restrykcje, żadna z nich nie znosi blokady nadrzędnej (Deny All). W efekcie, najbardziej restrykcyjna polityka z góry ("Deny All") staje się "Effective Policy" dla VPC A.
+
+Analiza niepoprawnych odpowiedzi:
+- B, C, D: Te opcje sugerują, że tylko wybrane typy są zablokowane na podstawie lokalnych polityk projektu lub folderu. Błąd polega na ignorowaniu faktu, że polityka organizacji (najwyższa w hierarchii) już zablokowała WSZYSTKIE typy, więc lokalne, węższe restrykcje są w tym przypadku nieistotne – blokada całkowita już trwa.
+
+Wskazówki i triki (Tips & Tricks):
+- Jeśli widzisz "Deny All" na poziomie Organizacji i brak instrukcji o "Override" niżej -> odpowiedź zawsze brzmi: "Wszystko jest zablokowane".
+- Effective Policy: To wynikowa polityka po uwzględnieniu wszystkich poziomów hierarchii.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj, że dla list (List constraints) możesz wybrać "Inherit from parent" lub "Override". Jeśli nadpiszesz (Override), stara lista z góry przestaje obowiązywać dla tego węzła i jego dzieci.
+- W przypadku polityk typu Boolean (Prawda/Fałsz), jeśli polityka jest wymuszona (Enforced) wyżej, zazwyczaj nie można jej poluzować niżej (chyba że użyjesz 'restore default', ale to zależy od konkretnego constraintu).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/understanding-hierarchy" target="_blank">Hierarchy and inheritance of organization policies</a>
+- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/effective-policy" target="_blank">Understanding the effective policy</a>
+- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">List of organization policy constraints</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p>Hierarchia: Org -> Folder -> Project. Restrykcje z góry są domyślnie wiążące.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie sprawdza fundamentalną wiedzę o tym, jak Google Cloud zarządza bezpieczeństwem w skali przedsiębiorstwa. "Centralized Control" oznacza, że administratorzy na poziomie organizacji mogą narzucić standardy, których zespoły projektowe nie mogą samodzielnie poluzować. Zrozumienie, że "najsilniejsza restrykcja z góry wygrywa", jest kluczowe dla inżyniera bezpieczeństwa.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/understanding-hierarchy" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/understanding-hierarchy</a></li>
-
+<li>W konsoli Google Cloud możesz sprawdzić "Effective Policy" dla każdego zasobu, co pozwala szybko zdiagnozować, dlaczego dana operacja (np. stworzenie LB) jest odrzucana.</li>
+<li>Pamiętaj, że zmiany w polityce organizacji mogą zająć do kilkunastu minut, zanim zaczną obowiązywać w całej strukturze.</li>
 </ul>
 </div>
 </div>

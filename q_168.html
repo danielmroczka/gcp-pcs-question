@@ -89,21 +89,47 @@ Your security team wants to implement a defense-in-depth approach to protect sen
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Enable VPC Service Controls, create a perimeter around Projects A and B, and include the Cloud Storage API in the Service Perimeter configuration)
 
-Wyjaśnienie: VPC Service Controls (perymetr) to jedyne rozwiązanie chroniące przed nieautoryzowanym kopiowaniem danych POZA granice chmury (data exfiltration).
+Dlaczego ta odpowiedź jest poprawna:
+- VPC Service Controls (VPC SC): Jest to mechanizm bezpieczeństwa Google Cloud, który pozwala na stworzenie logicznego obwodu (perimetru) wokół zasobów w różnych projektach.
+- Zapobieganie eksfiltracji danych (Data Exfiltration): VPC SC chroni przed kopiowaniem danych z chronionego zasobu (np. Bucket w Projekcie A) do niechronionego zasobu poza perymetrem (np. prywatny bucket pracownika), nawet jeśli użytkownik posiada odpowiednie role IAM w obu projektach.
+- Spełnienie wymagań: 
+  1. "Readable from Project B" - Projekty A i B są w tym samym perymetrze, więc mogą się swobodnie komunikować.
+  2. "Cannot be accessed from outside the network" - VPC SC domyślnie blokuje dostęp do usług Google Cloud z internetu, chyba że skonfigurujesz poziomy dostępu (Access Levels).
+  3. "Cannot be copied to external bucket" - To kluczowa funkcja perymetru VPC SC.
+
+Analiza niepoprawnych odpowiedzi:
+- A. Domain restricted sharing + UBLA: Te mechanizmy chronią przed przypadkowym udostępnieniem danych osobom postronnym (IAM). Nie zapobiegają jednak sytuacji, w której uprawniony użytkownik (mający dostęp do obu projektów) kopiuje dane z projektu firmowego do swojego prywatnego projektu.
+- C. Private Access + Firewalls: Private Google Access pozwala maszynom bez publicznego IP łączyć się z API Google, a firewalle kontrolują ruch na poziomie IP między VM. Żadne z tych narzędzi nie kontroluje operacji na poziomie API (np. 'gsutil cp'), czyli nie widzi, dokąd dane są przesyłane wewnątrz usług Google.
+- D. VPC Peering + Firewalls: Podobnie jak w punkcie C, peering dotyczy warstwy sieciowej (IP). Nie ma wpływu na bezpieczeństwo usług PaaS takich jak Cloud Storage na poziomie logicznym/API.
+
+Wskazówki i triki (Tips & Tricks):
+- Jeśli w pytaniu pojawia się "Prevent copy to external project/bucket" -> szukaj VPC Service Controls (Perymetr).
+- IAM to "Kto ma dostęp?", VPC SC to "Skąd i dokąd dane mogą płynąć?".
+- VPC SC działa na poziomie API (Warstwa 7), a nie na poziomie IP (Warstwa 3).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj termin "Data Exfiltration Protection". To główne zadanie VPC SC.
+- Perymetr może obejmować wiele projektów z różnych organizacji (poprzez tzw. Bridge).
+- Uważaj na "Dry-run mode" – to funkcja VPC SC pozwalająca testować restrykcje bez faktycznego blokowania ruchu (często pojawia się w pytaniach o wdrażanie).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/vpc-service-controls/docs/overview" target="_blank">VPC Service Controls overview</a>
+- <a href="https://cloud.google.com/vpc-service-controls/docs/service-perimeters" target="_blank">Service perimeters guide</a>
+- <a href="https://cloud.google.com/blog/products/identity-security/announcing-vpc-service-controls-general-availability" target="_blank">Introduction to VPC Service Controls</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p>IAM i UBLA chronią przed nieuprawnionymi użytkownikami, ale VPC SC chroni przed uprawnionymi użytkownikami robiącymi coś niedozwolonego (np. kopiowanie do innego projektu).</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie testuje zrozumienie różnicy między autoryzacją tożsamości (IAM) a kontrolą przepływu danych między usługami (VPC SC). W scenariuszach o wysokim rygorze bezpieczeństwa (np. dane finansowe, medyczne), sama kontrola "kto" nie wystarczy. Musimy mieć pewność, że nawet administrator nie wyniesie danych poza firmowy perymetr. VPC SC jest jedynym narzędziem, które to gwarantuje.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc-service-controls/docs/overview" target="_blank">https://cloud.google.com/vpc-service-controls/docs/overview</a></li>
-
+<li>Włączenie VPC SC jest procesem ryzykownym (może zablokować produkcję), dlatego zawsze zaleca się najpierw tryb "Dry-run".</li>
+<li>VPC SC wymaga użycia Private Google Access (lub Private Service Connect), aby VM-y mogły komunikować się z API usług wewnątrz perymetru.</li>
 </ul>
 </div>
 </div>
