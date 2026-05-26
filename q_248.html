@@ -89,22 +89,38 @@ During a routine security review, your team discovered a suspicious login attemp
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (Check Event Threat Detection in Security Command Center for any related alerts. Cross-reference your findings with Cloud Audit Logs.)
 
-Wyjaśnienie: Event Threat Detection (część SCC) automatycznie wykrywa podejrzane wzorce w logach (np. anomalie w impersonacji). Połączenie tego z ręczną analizą logów audytowych daje najpełniejszy obraz.
+Dlaczego ta odpowiedź jest poprawna:
+- Event Threat Detection (ETD): Jest to zaawansowana usługa w ramach Security Command Center (SCC) Premium, która automatycznie monitoruje logi (głównie logi audytowe i logi przepływu VPC) w poszukiwaniu wzorców świadczących o zagrożeniach w czasie rzeczywistym. ETD specjalizuje się w wykrywaniu anomalii, takich jak podejrzane próby logowania (impersonacja), ataki typu brute-force czy komunikacja z złośliwymi adresami IP.
+- Cloud Audit Logs: Są niezbędne do "dochodzenia" (forensics). Po otrzymaniu alertu z ETD, to właśnie w logach audytowych (Data Access / Admin Activity) znajdziesz szczegółowe dowody: kto, kiedy i przy użyciu jakich uprawnień próbował dokonać podejrzanej akcji.
+- Synergia: SCC dostarcza "alert" (sygnał o problemie), a Cloud Audit Logs dostarczają "dowód" (szczegóły zdarzenia).
+
+Analiza niepoprawnych odpowiedzi:
+- A. Cloud Audit Logs: Choć logi są ważne, przeglądanie ich bez alertu z systemu detekcji (jak ETD) jest nieefektywne ("szukanie igły w stogu siana").
+- B. Security scan: Skaner podatności służy do wykrywania luk konfiguracyjnych lub nieaktualnego oprogramowania, a nie do analizy podejrzanych prób logowania w czasie rzeczywistym.
+- C. Vulnerability scan: Podobnie jak B, skaner podatności nie wykrywa aktywnych prób włamania (impersonacji).
+
+Wskazówki i triki (Tips & Tricks):
+- "Suspicious login attempt" / "Impersonation" + "Threat Detection" = Event Threat Detection (ETD).
+- "Investigate" / "Evidence" = Cloud Audit Logs.
+- Pamiętaj: ETD wymaga włączonego SCC Premium i odpowiednich logów w logach audytowych.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: ETD wykrywa zagrożenia na podstawie analizy logów, nie wymaga instalacji żadnych agentów.
+- Kiedy widzisz "Suspicious pattern in logs", myśl o ETD.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/security-command-center/docs/concepts-event-threat-detection-overview" target="_blank">Event Threat Detection overview</a>
+- <a href="https://cloud.google.com/logging/docs/audit" target="_blank">Cloud Audit Logs overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p>SCC dostarcza gotowy alert, a Logs Explorer pozwala na szczegółowe dochodzenie (Forensics).</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/security-command-center/docs/concepts-event-threat-detection-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-event-threat-detection-overview</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją reakcję na incydent bezpieczeństwa w środowisku chmurowym. W GCP SCC Premium jest "mózgiem" operacyjnym. Zrozumienie, że najpierw otrzymujesz sygnał (ETD), a następnie wykonujesz dochodzenie (Audit Logs), jest standardowym, najlepszym podejściem operacyjnym dla każdego inżyniera bezpieczeństwa.</p>
 </div>
 </div>
 <script>

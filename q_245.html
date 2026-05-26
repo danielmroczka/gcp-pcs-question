@@ -89,22 +89,38 @@ You have placed several Compute Engine instances in a private subnet. You want t
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Enable Private Google Access for the private subnet)
 
-Wyjaśnienie: Private Google Access to funkcja podsieci umożliwiająca komunikację z publicznymi API Google przez sieć wewnętrzną dla VM-ów bez publicznych IP.
+Dlaczego ta odpowiedź jest poprawna:
+- Private Google Access (PGA): Pozwala instancjom Compute Engine, które nie posiadają publicznych adresów IP (są w prywatnej podsieci), na bezpieczne łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery) poprzez sieć wewnętrzną Google.
+- Wymaganie: Instancje w prywatnej podsieci muszą mieć włączoną opcję PGA na poziomie podsieci, aby mogły wysyłać zapytania do API Google.
+- Zaletą jest to, że dane nigdy nie wychodzą do publicznego internetu.
+
+Analiza niepoprawnych odpowiedzi:
+- B. Private Service Connect (PSC): PSC służy do uzyskiwania dostępu do konkretnych usług zarządzanych przez Google lub partnerów (np. konkretnego instancji bazy danych) poprzez dedykowany endpoint w VPC. Jest zbyt specyficzne dla tego ogólnego przypadku.
+- C. Static external IP: Wymuszenie nadania publicznego adresu IP łamie zasady bezpieczeństwa (dostęp do internetu) i jest sprzeczne z wymaganiem użycia prywatnej podsieci.
+- D. Cloud NAT: Cloud NAT pozwala instancjom na dostęp do INTERNETU (np. pobranie aktualizacji), ale nie służy do bezpośredniego dostępu do usług Google Cloud przez ich wewnętrzne adresy – od tego jest PGA.
+
+Wskazówki i triki (Tips & Tricks):
+- "Private Subnet" + "Access Cloud Storage/GCP Services" = Private Google Access (PGA).
+- "Private Subnet" + "Access Internet" = Cloud NAT.
+- Zapamiętaj: PGA to prosta flaga do włączenia na poziomie podsieci.
+
+Praktyczne informacje na egzamin:
+- PGA jest bezpłatne i łatwe w konfiguracji.
+- PGA jest niezbędne w architekturach, gdzie instancje nie mogą mieć dostępu do internetu, ale muszą używać narzędzi takich jak `gsutil`, `bq` czy klientów API Google.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">Private Google Access overview</a>
+- <a href="https://cloud.google.com/vpc/docs/configure-private-google-access" target="_blank">Configuring Private Google Access</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p>Jest to najprostsza metoda dostępu do GCS z prywatnych sieci VPC.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">https://cloud.google.com/vpc/docs/private-google-access</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie sprawdza znajomość podstawowego mechanizmu "Prywatności wewnątrz VPC". W GCP, każda maszyna bez publicznego IP jest z definicji odcięta od usług Google, chyba że włączysz PGA. Jest to jedno z najczęstszych zadań inżynierskich w GCP, dlatego pojawia się w różnych wariantach na egzaminie.</p>
 </div>
 </div>
 <script>

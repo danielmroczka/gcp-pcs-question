@@ -72,7 +72,6 @@ You are managing data in your organization's Cloud Storage buckets and are requi
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Set up a CloudRun Job with Cloud Scheduler to execute a script that searches for and removes files older than 365 days from your Cloud Storage.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Enable the Autoclass feature to manage all aspects of bucket storage classes.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Define a lifecycle policy JSON with an action on SetStorageClass to COLDLINE with an age condition of 365 and matchStorageClass STANDARD.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,22 +88,34 @@ You are managing data in your organization's Cloud Storage buckets and are requi
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (Define a lifecycle policy JSON with an action on SetStorageClass to COLDLINE with an age condition of 365 and matchStorageClass STANDARD)
 
-Wyjaśnienie: Object Lifecycle Management to wbudowana funkcja GCS do automatycznej zmiany klasy storage (np. Standard -> Coldline) bez pisania kodu.
+Dlaczego ta odpowiedź jest poprawna:
+- Object Lifecycle Management: Jest to wbudowana funkcja GCS do automatycznej zmiany klasy storage (np. Standard -> Coldline) bez pisania kodu.
+- Wydajność: Jest to rozwiązanie natywne, w pełni zarządzane przez Google, które działa automatycznie w tle.
+
+Analiza niepoprawnych odpowiedzi:
+- A. Cloud Asset Inventory: Służy do inwentaryzacji (przeglądu konfiguracji), a nie do automatycznego wprowadzania zmian w klasach storage.
+- B. CloudRun Job + Script: Pisanie własnych skryptów do zarządzania cyklem życia jest nieefektywne, kosztowne i trudne w utrzymaniu. Zawsze używaj wbudowanych funkcji platformy.
+- C. Autoclass: Ta funkcja służy do automatycznego optymalizowania kosztów poprzez przenoszenie rzadziej używanych plików do tańszych klas storage na podstawie wzorców dostępu (access patterns), a nie sztywnego wymogu "starsze niż 365 dni".
+
+Wskazówki i triki (Tips & Tricks):
+- "Automatically downgrade/change storage class" = Object Lifecycle Management.
+- "Age condition" = Lifecycle policy.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Lifecycle policy to "JSON" (lub YAML), które definiuje, co ma się stać z obiektami po spełnieniu warunku (wiek, utworzenie wersji itp.).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/storage/docs/lifecycle" target="_blank">Cloud Storage Object Lifecycle Management</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p>Autoclass (C) zarządza klasami dynamicznie na podstawie dostępu, ale tu mamy konkretny wymóg czasowy (365 dni).</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/storage/docs/lifecycle" target="_blank">https://cloud.google.com/storage/docs/lifecycle</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie sprawdza umiejętność wyboru odpowiedniego narzędzia do automatyzacji operacyjnej. GCS Object Lifecycle Management to kluczowa funkcja pozwalająca na ogromne oszczędności kosztowe przy zachowaniu pełnej kontroli nad danymi.</p>
 </div>
 </div>
 <script>

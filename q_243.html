@@ -89,22 +89,38 @@ An administrative application is running on a virtual machine (VM) in a managed 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (Configure an HTTP Load Balancing instance that points to the managed group with Identity-Aware Proxy (IAP) protection with Google credentials. Modify the VPC firewall to allow access from IAP network range.)
 
-Wyjaśnienie: Identity-Aware Proxy (IAP) w połączeniu z Load Balancerem to jedyna metoda na wystawienie usługi webowej z jednoczesnym wymuszeniem uwierzytelniania Google bez VPN.
+Dlaczego ta odpowiedź jest poprawna:
+- Identity-Aware Proxy (IAP): Pozwala na bezpieczne wystawienie aplikacji webowych (HTTPS) w internecie bez konieczności używania VPN. Użytkownicy logują się przy użyciu poświadczeń Google, co automatycznie zapewnia autoryzację i uwierzytelnienie.
+- Load Balancer: IAP dla aplikacji webowych (HTTP/S) działa w oparciu o zewnętrzny Load Balancer (GCLB).
+- Bezpieczeństwo: IAP pozwala na uniknięcie otwierania portu 5601 dla całego świata. Ruch przechodzi przez infrastrukturę Google, gdzie IAP weryfikuje tożsamość użytkownika przed przekazaniem zapytania do aplikacji.
+- IAP IP Range: Aby IAP mógł komunikować się z Twoimi instancjami, musisz pozwolić na ruch z zakresu IP: `35.235.240.0/20` w regułach firewalla VPC.
+
+Analiza niepoprawnych odpowiedzi:
+- A. Bastion host: To przestarzałe podejście. Wymaga od użytkowników ręcznego logowania się na serwer pośredniczący, co jest niebezpieczne, trudne w audytowaniu i niewygodne.
+- B. Internet gateway: Wystawienie aplikacji bezpośrednio na port 5601 do internetu (0.0.0.0/0) bez żadnej warstwy uwierzytelnienia to krytyczna luka bezpieczeństwa.
+- C. Bastion host (Jump host): Podobnie jak w opcji A, bastion host to dodatkowa maszyna, którą trzeba utrzymywać i patchować. IAP jest usługą zarządzaną, więc eliminuje ten narzut.
+
+Wskazówki i triki (Tips & Tricks):
+- "Expose web interface" + "Google credentials" = IAP (HTTP/S) + Load Balancer.
+- Zakres IP dla IAP TCP forwarding: `35.235.240.0/20`.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: IAP działa na warstwie 7 (HTTP/S) w połączeniu z Load Balancerem.
+- IAP jest fundamentem modelu Zero Trust (BeyondCorp) w Google Cloud.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iap/docs/load-balancer-overview" target="_blank">IAP for HTTP(S) Load Balancer overview</a>
+- <a href="https://cloud.google.com/iap/docs/concepts-overview" target="_blank">How IAP works</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p>Firewall musi pozwalać na ruch z zakresu IP Load Balancera/IAP (35.191.0.0/16 i 130.211.0.0/22).</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/iap/docs/tutorial-gce" target="_blank">https://cloud.google.com/iap/docs/tutorial-gce</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość nowoczesnych metod wystawiania usług wewnątrz VPC. Zamiast starych metod (bastion hosty), GCP promuje IAP – usługę, która przenosi punkt autoryzacji z poziomu firewalli sieciowych na poziom tożsamości użytkownika. To kluczowa koncepcja egzaminacyjna.</p>
 </div>
 </div>
 <script>

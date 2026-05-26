@@ -89,30 +89,35 @@ Your company is concerned about unauthorized parties gaining access to the Googl
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: A (Security key)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Organization Policy: Polityka `sql.restrictPublicIp` pozwala na centralne zablokowanie możliwości przypisywania publicznych adresów IP do baz danych Cloud SQL. Gwarantuje to, że bazy będą dostępne tylko przez sieć wewnętrzną (Private IP/PSC).
+Dlaczego ta odpowiedź jest poprawna:
+- Phishing-Resistant MFA: Klucze bezpieczeństwa (Security Keys, np. Titan, YubiKey) używają protokołu FIDO2/WebAuthn, który jest sprzętowo powiązany z domeną. Jeśli użytkownik wejdzie na fałszywą stronę logowania (np. g00gle.com), klucz "zorientuje się", że domena jest inna niż oczekiwana i odmówi wygenerowania podpisu.
+- Odporność na Person-in-the-middle: Atakujący, nawet jeśli przechwyci login i hasło, nie może "odtworzyć" (replay) podpisu z klucza sprzętowego, ponieważ klucz jest przypisany do konkretnego originu (domeny).
 
-Dlaczego inne są błędne:
-A. IAM: Nie wymusza cech technicznych bazy.
-C. SQL Settings: To ustawienie dla pojedynczej bazy, nie 'across organization'.
-D. VPC Service Controls: Chroni API SQL, ale nie zapobiega samemu posiadaniu Public IP przez instancję bazy.
+Analiza niepoprawnych odpowiedzi:
+- B. Google prompt: Choć wygodne, Google Prompt jest podatne na zaawansowany phishing (np. atakujący może wysłać prompt do użytkownika w nadziei, że ten go kliknie - tzw. "MFA fatigue attack"). Nie jest w pełni odporne na phishing.
+- C. Text message (SMS) or phone call: SMS-y są podatne na ataki typu SIM-swapping i intercepting. W ogóle nie zaleca się ich w nowoczesnym modelu Zero Trust.
+- D. Google Authenticator application: Kody TOTP (6 cyfr) są podatne na phishing – jeśli atakujący stworzy fałszywą stronę i poprosi użytkownika o wpisanie kodu z aplikacji, może go przechwycić i użyć w czasie rzeczywistym.
 
-Konsensus społeczności ExamTopics: 100% na B. To standardowy 'Security Guardrail' w GCP.
+Wskazówki i triki (Tips & Tricks):
+- "Phishing-resistant" / "MitM-resistant" = Zawsze wybieraj Security Key (FIDO).
+- Pamiętaj: Security Keys to najwyższy poziom MFA.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj, że dla "High-privilege" kont (jak Super Admin) klucze bezpieczeństwa są obowiązkowe w każdej profesjonalnej organizacji.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/security/phishing-resistant-mfa" target="_blank">Why Security Keys are phish-proof</a>
+- <a href="https://support.google.com/accounts/answer/185839" target="_blank">About 2-Step Verification</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> To jedna z najważniejszych polityk w firmie. Publiczne IP na bazie danych to 'prośba o kłopoty'. Eksperci na Reddit radzą: 'Włącz B na poziomie organizacji pierwszego dnia migracji do chmury'.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints#sql" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints#sql</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie uderza w fundamenty ochrony tożsamości. W nowoczesnym modelu bezpieczeństwa, hasło (nawet z MFA typu SMS/kody) to za mało. Klucz fizyczny to jedyne rozwiązanie, które daje pewność, że użytkownik jest dokładnie tam, gdzie powinien być, a nie na stronie podstawionej przez atakującego.</p>
 </div>
 </div>
 <script>

@@ -64,14 +64,14 @@
 <h2>Question 240 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your customer has an on-premises Public Key Infrastructure (PKI) with a certificate authority (CA). You need to issue certificates for many HTTP load balancer frontends. The on-premises PKI should be minimally affected due to many manual processes, and the solution needs to scale.<br/>What should you do?
+Your organization has an on-premises public key infrastructure (PKI) and you want to use it to issue certificates for Google Cloud HTTP(S) load balancers. You want to automate the certificate issuance process to avoid manual processes. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use Certificate Manager to issue Google managed public certificates and configure it at HTTP the load balancers in your infrastructure as code (IaC).</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use Certificate Manager with Google-managed public certificates.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use a subordinate CA in the Google Certificate Authority Service from the on-premises PKI system to issue certificates for the load balancers.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use Certificate Manager to import certificates issued from on-premises PKI and for the frontends. Leverage the gcloud tool for importing.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use the web applications with PKCS12 certificates issued from subordinate CA based on OpenSSL on-premises. Use the gcloud tool for importing. Use the External TCP/UDP Network load balancer instead of an external HTTP Load Balancer.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Import the certificates issued by your on-premises PKI into Certificate Manager.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use an external TCP/UDP Network Load Balancer, and import the certificates on the backend instances.</li>
 
 </ul>
 </div>
@@ -89,28 +89,36 @@ Your customer has an on-premises Public Key Infrastructure (PKI) with a certific
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Use a subordinate CA in the Google Certificate Authority Service from the on-premises PKI system to issue certificates for the load balancers)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Access Approval (KMS): Jeśli pracownik Google musi użyć Twojego klucza (np. w procesie odzyskiwania danych), musi poprosić o Twoją ZGODĘ. To najwyższy poziom kontroli operacyjnej nad kluczami szyfrującymi.
+Dlaczego ta odpowiedź jest poprawna:
+- Certificate Authority Service (CAS): Jest to w pełni zarządzana usługa Google Cloud do tworzenia i zarządzania urzędami certyfikacji (CA).
+- Subordinate CA (Podległy CA): Pozwala na stworzenie CA wewnątrz chmury, które jest technicznie "podległe" (zaufane przez) Twojemu głównemu urzędowi CA on-premises. Jest to najbardziej skalowalne i natywne rozwiązanie: certyfikaty wystawiane w chmurze są automatycznie zaufane w sieci firmowej, ponieważ główny klucz CA jest w on-premises.
+- Integracja z Load Balancerem: Certyfikaty wystawione przez podległy CA w chmurze można bezpośrednio przypisać do Load Balancera HTTP/S, co rozwiązuje problem skali i automatyzacji.
 
-Dlaczego inne są błędne:
-A, C, D: Jak w poprzednich pytaniach o Access Approval (200).
+Analiza niepoprawnych odpowiedzi:
+- A. Certificate Manager z Google managed public certificates: Te certyfikaty są wydawane przez publiczne CA Google. Nie będą zaufane przez Twoją wewnętrzną PKI, chyba że wgrasz certyfikat CA Google do każdego zaufanego systemu on-prem, co jest operacyjnie trudne.
+- C. Import certificates: Ręczne importowanie certyfikatów wystawionych przez on-prem PKI jest procesem manualnym, który trudno skalować (wymaga częstego odświeżania, importowania do Certificate Manager, etc.). Nie rozwiązuje to problemu "manual processes".
+- D. External TCP/UDP Network LB: Zmiana typu Load Balancera (z HTTP na TCP) jest nieuzasadniona i pozbawia Cię funkcji L7 (WAF, SSL termination), co jest niedopuszczalne dla aplikacji webowej.
 
-Konsensus społeczności ExamTopics: 100% na B. Kontrola nad ludźmi Google = Access Approval.
+Wskazówki i triki (Tips & Tricks):
+- "On-premises PKI integration" + "Scale" + "HTTP Load Balancer" = Subordinate CA w Cloud CAS.
+- Jeśli chcesz automatyzacji i skali wewnątrz chmury, używaj Google CAS.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Google CAS to usługa klasy Enterprise. Subordinate CA to idealny wzorzec dla architektury hybrydowej (zaufanie z on-prem -> wydawanie w chmurze).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/certificate-authority-service/docs/overview" target="_blank">Certificate Authority Service overview</a>
+- <a href="https://cloud.google.com/certificate-authority-service/docs/creating-subordinate-cas" target="_blank">Creating subordinate CAs</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Eksperci na forach podkreślają: CMEK + Access Approval (B) to duet, który sprawia, że Google staje się jedynie 'wynajętym sejfem', do którego tylko TY masz klucz otwierający dostęp dla obsługi.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/access-approval/docs/overview" target="_blank">https://cloud.google.com/access-approval/docs/overview</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie sprawdza umiejętność łączenia systemów on-premises z chmurą w sposób skalowalny. Ręczne operacje (importowanie certyfikatów) to "dług techniczny". Zbudowanie hierarchii CA (główny on-prem -> podległy w chmurze) to najlepsza praktyka inżynierska, która zapewnia pełną automatyzację i spójność zaufania.</p>
 </div>
 </div>
 <script>

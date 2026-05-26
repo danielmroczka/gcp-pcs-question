@@ -89,30 +89,38 @@ Your organization wants full control of the keys used to encrypt data at rest in
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: C (Use Cloud External Key Management (EKM) that integrates with an external Hardware Security Module (HSM) system from supported vendors)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Cloud IDS: ICMP Tunneling to ukrywanie danych w pakietach 'ping'. Cloud IDS posiada silnik głębokiej inspekcji pakietów (DPI), który potrafi wykryć nietypową treść (payload) wewnątrz protokołu ICMP, co jest charakterystyczne dla tego typu exfiltration.
+Dlaczego ta odpowiedź jest poprawna:
+- Cloud External Key Manager (EKM): Pozwala na przechowywanie klucza w systemie zewnętrznym (zewnętrzny HSM), co w pełni spełnia wymóg posiadania kontroli nad materiałem klucza ("hold the key material... fully under your control") poza infrastrukturą Google.
+- Integracja: EKM zapewnia natywną integrację z usługami Google Cloud (w tym BigQuery), co pozwala na szyfrowanie danych przy jednoczesnym zachowaniu kluczy u zewnętrznego partnera.
 
-Dlaczego inne są błędne:
-A. Cloud Armor: Dla HTTP, nie dla ICMP.
-C. Flow Logs: Widzą, że jest ruch ICMP, ale nie widzą jego treści (nie wykryją tunelu).
-D. IAP: Dla ludzi.
+Analiza niepoprawnych odpowiedzi:
+- A. Customer-supplied encryption keys (CSEK): Klucze te są dostarczane "w locie" w wywołaniach API. Nie dają one stałej kontroli w ramach zintegrowanego ekosystemu usług (jak BigQuery).
+- B. Cloud HSM (Google-managed): Klucze są przechowywane w sprzętowych modułach bezpieczeństwa Google (HSM), ale są one zarządzane przez Google. Nie spełnia to wymogu generowania i przechowywania kluczy poza Google.
+- D. Imported key material: Klucze zaimportowane do Cloud KMS są przechowywane wewnątrz Google Cloud. Nie zapewnia to wymaganego odizolowania materiału klucza ("stored outside of Google").
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. Wykrywanie tuneli sieciowych to domena IDS.
+Wskazówki i triki (Tips & Tricks):
+- "Generated and stored outside of Google" + "Integrate with services" = EKM.
+- Pamiętaj: EKM to jedyne rozwiązanie zapewniające pełną separację materiału klucza od Google.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: EKM jest wykorzystywane w scenariuszach o najwyższym rygorze bezpieczeństwa.
+- EKM wymaga partnerstwa z zewnętrznymi dostawcami HSM (np. Thales, Fortanix).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/kms/docs/ekm" target="_blank">Cloud EKM overview</a>
+- <a href="https://cloud.google.com/kms/docs/key-management-service" target="_blank">Cloud KMS concepts</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Eksperci na forach security podkreślają: ICMP jest często pomijany przez administratorów. Cloud IDS (B) to Twoja jedyna nadzieja na złapanie zaawansowanego hakera, który 'wyprowadza' dane bajt po bajcie w odpowiedziach na pingi.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/intrusion-detection-system/docs/overview" target="_blank">https://cloud.google.com/intrusion-detection-system/docs/overview</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją wiedzę o różnicy między zarządzaniem cyklem życia klucza (KMS/HSM) a posiadaniem materiału klucza (EKM). EKM jest jedyną odpowiedzią, gdy klient musi technicznie uniemożliwić Google dostęp do surowego klucza w stanie spoczynku.</p>
+</div>
+</div>
 </div>
 </div>
 <script>

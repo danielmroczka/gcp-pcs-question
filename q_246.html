@@ -89,22 +89,37 @@ Your organization relies heavily on Cloud Run for its containerized applications
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Configure Binary Authorization on Cloud Run to enforce image signatures. Create policies to allow deployment only for images passing a defined vulnerability threshold)
 
-Wyjaśnienie: Binary Authorization potrafi integrować się z wynikami skanowania podatności i blokować wdrożenia, które nie spełniają określonych reguł (np. brak wysokich CVE).
+Dlaczego ta odpowiedź jest poprawna:
+- Binary Authorization (BinAuthz): To usługa bezpieczeństwa działająca jako "strażnik" (gatekeeper) przy wdrażaniu kontenerów. Pozwala zdefiniować polityki sprawdzające, czy obraz spełnia wymogi (np. atestacje, brak podatności).
+- Automatyczne skanowanie podatności: BinAuthz integruje się z Artifact Registry. Jeśli włączysz skanowanie podatności w Artifact Registry, BinAuthz może w polityce wymusić, aby obrazy nie zawierały podatności o poziomie "medium" lub wyższym (lub spełniały inne kryteria).
+- Enforce (Wymuszenie): BinAuthz blokuje wdrożenie (deployment) na Cloud Run, jeśli obraz nie przejdzie pozytywnie testów zdefiniowanych w polityce.
+
+Analiza niepoprawnych odpowiedzi:
+- A. Manual rebuild: To proces ręczny, nieefektywny i podatny na błędy. Nie zapewnia automatycznego wymuszenia (enforcement).
+- B. Manual checks: Proces ręczny, całkowicie nieadekwatny dla systemów produkcyjnych.
+- D. Artifact Registry permissions: Skanowanie jest pasywne (informuje o lukach), ale nie blokuje wdrożenia na Cloud Run. Uprawnienia rejestru nie kontrolują tego, co Cloud Run wdraża.
+
+Wskazówki i triki (Tips & Tricks):
+- "Medium vulnerabilities" + "Not deployed" + "Production" = Binary Authorization.
+- BinAuthz sprawdza obraz w momencie wdrożenia.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Binary Authorization to kluczowy element bezpieczeństwa łańcucha dostaw (SLSA).
+- Aby to działało, musisz mieć włączone skanowanie obrazów w Artifact Registry.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/binary-authorization/docs/vulnerability-checks" target="_blank">Binary Authorization vulnerability checks</a>
+- <a href="https://cloud.google.com/artifact-registry/docs/analysis/vulnerability-scanning" target="_blank">Artifact Registry scanning</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p>Tworzysz regułę: 'nie dopuszczaj obrazu, jeśli skaner znalazł coś powyżej Medium'.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/binary-authorization/docs/vulnerability-checks" target="_blank">https://cloud.google.com/binary-authorization/docs/vulnerability-checks</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie sprawdza znajomość mechanizmów kontroli wdrożeń (Deployment Governance). W środowiskach mikroserwisowych łatwo o wdrożenie niebezpiecznego kodu. Binary Authorization w połączeniu ze skanerem Artifact Registry daje zespołowi security gwarancję, że na produkcji działają tylko te obrazy, które spełniają zdefiniowane standardy bezpieczeństwa.</p>
 </div>
 </div>
 <script>

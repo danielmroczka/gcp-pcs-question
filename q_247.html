@@ -89,22 +89,37 @@ You run a web application on top of Cloud Run that is exposed to the internet wi
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (Activate Identity-Aware Proxy (IAP) on the Application Load Balancer backend. Assign the role of IAP-secured Web App User to the group of privileged users.)
 
-Wyjaśnienie: IAP (Identity-Aware Proxy) na Load Balancerze zapewnia SSO i kontrolę dostępu na poziomie warstwy 7 dla Cloud Run.
+Dlaczego ta odpowiedź jest poprawna:
+- Identity-Aware Proxy (IAP): Pozwala na kontrolowanie dostępu do aplikacji HTTP(S) w oparciu o tożsamość użytkownika, bez konieczności używania VPN.
+- IAP-Secured Web App User: Jest to specyficzna rola IAM wymagana do uzyskania dostępu do zasobów HTTPS chronionych przez IAP (np. usług Cloud Run za Load Balancerem). Bez tej roli, nawet jeśli użytkownik przejdzie pomyślnie autentykację Google, IAP odrzuci jego żądanie dostępu (autoryzacja).
+- SSO: IAP natywnie wspiera Single Sign-On, korzystając z kont Google (Cloud Identity / Workspace).
+
+Analiza niepoprawnych odpowiedzi:
+- A. Cloud Run Invoker: Ta rola pozwala na wywołanie API Cloud Run. Choć technicznie zapewnia kontrolę dostępu, nie wspiera SSO w sposób przeglądarkowy i jest przeznaczona raczej do wywołań systemowych (np. z klastra GKE lub Cloud Scheduler), a nie dla użytkowników przeglądających stronę.
+- B. Cloud Run User: Ta rola nadaje dostęp do zarządzania usługą Cloud Run (np. deployment), a nie dostęp do samej aplikacji webowej dla użytkownika końcowego.
+- C. Ingress Control: Ingress Control pozwala na ograniczenie dostępu do aplikacji wewnątrz sieci VPC, ale nie zapewnia autentykacji użytkowników przeglądarkowych przez SSO.
+
+Wskazówki i triki (Tips & Tricks):
+- "HTTPS resources" + "SSO/Browser access" + "Privileged users" = IAP (Web App User) + Load Balancer.
+- Zapamiętaj: IAP sprawdza tożsamość (Kim jesteś?) i rolę (Czy masz uprawnienie Web App User?).
+
+Praktyczne informacje na egzamin:
+- IAP jest fundamentem strategii "BeyondCorp" (Zero Trust) w Google Cloud.
+- Aby IAP działał dla aplikacji webowej, musi ona znajdować się za External HTTP(S) Load Balancerem lub być częścią App Engine.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iap/docs/access-control" target="_blank">IAP Access Control overview</a>
+- <a href="https://cloud.google.com/iap/docs/enabling-cloud-run" target="_blank">Enabling IAP for Cloud Run</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p>Opcja A (Invoker) działa na poziomie API, ale dla użytkowników przeglądarkowych IAP oferuje lepsze User Experience i integrację z SSO.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/iap/docs/enabling-cloud-run" target="_blank">https://cloud.google.com/iap/docs/enabling-cloud-run</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie sprawdza znajomość specyficznych ról IAP, co jest częstym elementem egzaminu. Najważniejszym rozróżnieniem jest Web App User vs Tunnel User. IAP jest fundamentem strategii "BeyondCorp" (Zero Trust) w Google Cloud, dlatego zrozumienie jego uprawnień jest kluczowe dla inżyniera bezpieczeństwa.</p>
 </div>
 </div>
 <script>

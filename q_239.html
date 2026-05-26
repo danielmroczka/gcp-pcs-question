@@ -72,7 +72,6 @@ You control network traffic for a folder in your Google Cloud environment. Your 
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> 1. Leave the network configuration of the VMs in scope unchanged. 2. Enable Cloud NAT for "dev-vpc" and restrict the target range in Cloud NAT to 10.58.5.0/24.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> 1. Attach external IP addresses to the VMs in scope. 2. Define and apply a hierarchical firewall policy on folder level to deny all egress connections and to allow egress to IP range 10.58.5.0/24 from network dev-vpc.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> 1. Attach external IP addresses to the VMs in scope. 2. Configure a VPC Firewall rule in "dev-vpc" that allows egress connectivity to IP range 10.58.5.0/24 for all source addresses in this network.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,37 @@ You control network traffic for a folder in your Google Cloud environment. Your 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B. (Uwaga: Policy Analyzer skupia się na IAM).
+Poprawna odpowiedź: C (1. Attach external IP addresses to the VMs in scope. 2. Define and apply a hierarchical firewall policy on folder level to deny all egress connections and to allow egress to IP range 10.58.5.0/24 from network dev-vpc)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Metadata analysis: Stary system ACL (Access Control Lists) nie jest częścią modelu IAM, dlatego nowoczesne narzędzie Policy Analyzer (A) często go pomija. Aby audytować ACL dla tysięcy plików i bucketów, najpewniejszą metodą jest użycie skryptu (np. w Pythonie lub `gsutil`), który przeanalizuje metadane każdego zasobu.
+Dlaczego ta odpowiedź jest poprawna:
+- Hierarchiczne polityki firewalla (Hierarchical Firewall Policies): Pozwalają na definiowanie i wymuszanie reguł na poziomie całej organizacji lub folderów. Są one sprawdzane PRZED tradycyjnymi regułami firewalla VPC w poszczególnych projektach, co czyni je doskonałymi "barierami ochronnymi" (guardrails).
+- Kontrola na poziomie folderu: Zastosowanie polityki na poziomie folderu pozwala objąć nią wszystkie projekty wewnątrz folderu ("dev-vpc"), co zapewnia spójność bez ręcznej konfiguracji w każdym projekcie osobno.
+- Precedencja: Reguła "deny all" z wysokim priorytetem, nadpisana przez "allow" dla konkretnego zakresu IP, daje pewność, że żaden inny ruch wychodzący nie opuści sieci.
 
-Dlaczego inne są błędne:
-A. Policy Analyzer: Głównie dla IAM, nie dla 'legacy' ACL na poziomie pojedynczych plików.
-C. Recommender: Sugeruje przejście na IAM (UBLA), ale nie listuje wszystkich obecnych ACL.
-D. Audit Logs: Nie dają zbiorczego raportu 'kto ma dostęp teraz'.
+Analiza niepoprawnych odpowiedzi:
+- A. Network appliance: Stawianie maszyny wirtualnej z oprogramowaniem do filtrowania ruchu (np. Next-Generation Firewall) jest rozwiązaniem bardzo złożonym (wymaga routingu, obsługi awarii, wysokiej dostępności) i trudnym w skalowaniu.
+- B. Cloud NAT: Cloud NAT pozwala na dostęp do internetu, ale nie jest narzędziem do *filtrowania* ruchu do konkretnych adresów IP. Pozwala na wychodzenie w świat, ale nie służy do egzekwowania reguł bezpieczeństwa (to zadanie firewalla).
+- D. VPC Firewall rule in dev-vpc: Reguły wewnątrz VPC mogą być zmieniane przez właścicieli projektów (Owner), co czyni je niepewnymi w kontekście zarządzania na poziomie folderu/organizacji. Wymagają też ręcznej konfiguracji w każdym projekcie osobno.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na B. ACL to 'drugi, równoległy świat' uprawnień, który wymaga oddzielnego audytu.
+Wskazówki i triki (Tips & Tricks):
+- "Manage/Enforce on folder level" + "Limited egress" = Hierarchical Firewall Policies.
+- "Minimize effort" = Zawsze polityki hierarchiczne (Folder/Org) zamiast ręcznego konfigurowania w projektach.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Reguły hierarchiczne "wygrywają" z regułami projektowymi.
+- Zrozum akcje: `allow`, `deny`, `goto_next`.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/vpc/docs/firewall-policies" target="_blank">Hierarchical firewall policies overview</a>
+- <a href="https://cloud.google.com/vpc/docs/firewall-policies-concepts" target="_blank">Firewall policies concepts</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Google Cloud usilnie zachęca do wyłączania ACL na rzecz UBLA (Uniform bucket-level access). Dyskusja w sieci pokazuje, że ACL są uważane za 'niebezpieczne', bo ich audyt (B) jest znacznie trudniejszy niż audyt IAM.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/storage/docs/access-control/create-manage-lists" target="_blank">https://cloud.google.com/storage/docs/access-control/create-manage-lists</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość centralizacji bezpieczeństwa. W dużych organizacjach musisz narzucać standardy, których zespoły nie mogą ominąć. Hierarchiczne polityki firewalla to narzędzie, które pozwala administratorowi bezpieczeństwa (na poziomie folderu) zablokować "wyjście" całego środowiska, jednocześnie pozwalając na konkretne, dozwolone wyjątki.</p>
 </div>
 </div>
 <script>

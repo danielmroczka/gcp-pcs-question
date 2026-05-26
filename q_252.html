@@ -64,15 +64,14 @@
 <h2>Question 252 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization is migrating a sensitive data processing workflow from on-premises infrastructure to Google Cloud. This workflow involves the collection, storage, and analysis of customer information that includes personally identifiable information (PII). You need to design security measures to mitigate the risk of data exfiltration in this new cloud environment. What should you do?
+Your organization is migrating a complex application to Google Cloud. The application has multiple internal components that interact with each other across several Google Cloud projects. Security is a major concern, and you must design an authorization scheme for administrators that aligns with the principles of least privilege and separation of duties. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Encrypt all sensitive data in transit and at rest. Establish secure communication channels by using TLS and HTTPS protocols.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Implement a Cloud DLP solution to scan and identify sensitive information, and apply redaction or masking techniques to the PII. Integrate VPC SC with your network security controls to block potential data exfiltration attempts.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Restrict all outbound network traffic from cloud resources. Implement rigorous access controls and logging for all sensitive data and the systems that process the data.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Rely on employee expertise to prevent accidental data exfiltration incidents.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Identify the users who will migrate the application, revoke the default user roles and assign the users with purposely created custom roles.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use multiple external identity providers (IdP) configured to use different SAML profiles and federate the IdPs for each application component.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure multi-factor authentication (MFA) to enforce the use of physical tokens for all users who will migrate the application.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> No action needed. When a Google Cloud organization is created, the appropriate permissions are automatically assigned to all users in the domain.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +79,7 @@ Your organization is migrating a sensitive data processing workflow from on-prem
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">A</span>
 <br/>
 </span>
 </div>
@@ -89,30 +88,36 @@ Your organization is migrating a sensitive data processing workflow from on-prem
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: A (Identify the users who will migrate the application, revoke the default user roles and assign the users with purposely created custom roles)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Cloud DLP + VPC SC: To duet idealny. Cloud DLP (Sensitive Data Protection) znajduje i maskuje dane wrażliwe wewnątrz plików (poufność treści). VPC Service Controls tworzy perymetr sieciowy, który fizycznie uniemożliwia wyniesienie danych do nieautoryzowanych projektów (blokada exfiltration).
+Dlaczego ta odpowiedź jest poprawna:
+- Zasada najniższych uprawnień (Least Privilege): Role podstawowe (Basic Roles: Owner, Editor, Viewer) są zbyt szerokie. W środowisku produkcyjnym i skomplikowanych migracjach należy używać ról predefiniowanych lub niestandardowych (Custom Roles), które dają dokładnie takie uprawnienia, jakich użytkownik potrzebuje do konkretnych zadań.
+- Separacja obowiązków (Separation of Duties): Pozwala na podział zadań między administratorów, deweloperów i operatorów security, tak aby żadna osoba nie miała pełnej kontroli nad wszystkim ("God mode").
+- Custom Roles: Pozwalają na stworzenie precyzyjnego zestawu uprawnień, który ogranicza ryzyko błędów ludzkich podczas migracji.
 
-Dlaczego inne są błędne:
-A. Encryption: Chroni przed odczytem przez osoby trzecie, ale nie zapobiega 'wyniesieniu' danych przez uprawnionego użytkownika.
-C. Restrict all traffic: Zbyt drastyczne, uniemożliwiłoby działanie wielu usług chmurowych.
-D. Expertise: Procedury nie zastępują technicznych barier (enforcement).
+Analiza niepoprawnych odpowiedzi:
+- B. Multiple IdPs: To skomplikowanie zarządzania tożsamością, nie ma nic wspólnego z "authorization scheme" (uprawnieniami).
+- C. MFA: To mechanizm uwierzytelniania (Authentication), a nie autoryzacji (Authorization).
+- D. No action needed: To skrajnie niebezpieczne założenie. Domyślne uprawnienia w nowej organizacji nie spełniają wymogów "least privilege".
 
-Konsensus społeczności ExamTopics: 100% na B. VPC SC to standardowa odpowiedź na wymóg 'exfiltration control'.
+Wskazówki i triki (Tips & Tricks):
+- "Least privilege" + "Separation of duties" = Zawsze Custom Roles lub Predefined Roles (nigdy Basic Roles).
+- Jeśli widzisz "No action needed" / "Automatic" w kontekście uprawnień -> odrzuć to w 99% przypadków.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Rola Owner posiada uprawnienia do zarządzania IAM, co jest naruszeniem zasady separacji obowiązków w większości scenariuszy audytowych.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iam/docs/understanding-roles" target="_blank">Understanding IAM roles</a>
+- <a href="https://cloud.google.com/iam/docs/creating-custom-roles" target="_blank">Creating custom roles</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Pamiętaj, że VPC SC chroni dane przed kopiowaniem nawet między różnymi organizacjami Google Cloud.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/vpc-service-controls/docs/overview" target="_blank">https://cloud.google.com/vpc-service-controls/docs/overview</a></li>
-
-</ul>
+<h3>Kluczowe zagadnienia</h3>
+<p><b>Sugerowana odpowiedź: A</b></p>
+<p><b>Analiza strategiczna:</b> To pytanie sprawdza Twoją zdolność do projektowania bezpiecznych procesów administracyjnych. W chmurze uprawnienia są "wszędobylskie". Twoim zadaniem jako inżyniera bezpieczeństwa jest ich "przycinanie" (pruning), aby każda osoba miała tylko tyle uprawnień, ile jest jej niezbędne do wykonania pracy – ani mniej, ani więcej.</p>
 </div>
 </div>
 <script>

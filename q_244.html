@@ -89,22 +89,37 @@ Your company's users access data in a BigQuery table. You want to ensure they ca
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Assign a BigQuery Data Viewer role along with an IAM condition that limits the access to specified working hours)
 
-Wyjaśnienie: IAM Conditions pozwalają na nadawanie uprawnień czasowych (np. na podstawie pory dnia lub daty) bezpośrednio w polityce IAM.
+Dlaczego ta odpowiedź jest poprawna:
+- IAM Conditions (Warunki IAM): Pozwalają na stosowanie bardziej precyzyjnych zasad przyznawania uprawnień. Zamiast nadawać dostęp "na zawsze", możesz określić warunki, w których uprawnienie jest aktywne.
+- Time-based access: Za pomocą atrybutu `request.time` w warunkach IAM możesz określić przedział czasowy, w którym dany użytkownik może wykonywać operacje (np. tylko w godzinach pracy zespołu). Poza tym przedziałem, nawet jeśli użytkownik ma przypisaną rolę, dostęp zostanie odrzucony.
+- Bezpieczeństwo: Jest to realizacja zasady najmniejszych przywilejów (Least Privilege) w wymiarze czasowym – dostęp jest możliwy tylko wtedy, gdy jest potrzebny.
+
+Analiza niepoprawnych odpowiedzi:
+- B. Run a gsutil script: Ręczne usuwanie i dodawanie uprawnień każdego dnia jest nieefektywne, podatne na błędy i uniemożliwia automatyzację.
+- C. Service account script: Podobnie jak w przypadku skryptu manualnego (B), jest to rozwiązanie niestabilne i trudne do zarządzania.
+- D. Cloud Scheduler + Cloud Functions: To rozwiązanie jest reaktywne (naprawianie konfiguracji zasobów po czasie) i skrajnie nieadekwatne do zadania. Policy organizacji (Org Policy) służy do globalnych restrykcji, a nie do zarządzania dostępem użytkowników.
+
+Wskazówki i triki (Tips & Tricks):
+- "Access valid only during working hours" / "Temporary access" = IAM Conditions (request.time).
+- Zapamiętaj: IAM Conditions zawsze łączą się z "Warunkiem logicznym" (JEŚLI warunek spełniony, TO rola aktywna).
+
+Praktyczne informacje na egzamin:
+- IAM Conditions wspierają atrybuty takie jak: czas, nazwa zasobu, typ zasobu, czy tagi.
+- Warunki są oceniane przy każdym żądaniu do API Google.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iam/docs/conditions-overview" target="_blank">IAM Conditions overview</a>
+- <a href="https://cloud.google.com/iam/docs/conditions-attribute-reference" target="_blank">IAM conditions attribute reference</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p>Jest to rozwiązanie automatyczne i natywne, nie wymagające pisania skryptów do dodawania/usuwania użytkowników.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/iam/docs/conditions-overview" target="_blank">https://cloud.google.com/iam/docs/conditions-overview</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie uczy zarządzania "Dostępem Just-in-Time" (JIT). W nowoczesnym bezpieczeństwie czas dostępu jest tak samo ważny jak sama tożsamość. IAM Conditions pozwalają na wyeliminowanie ryzyka wynikającego z tzw. "uśpionych uprawnień" – użytkownik ma rolę, ale może jej użyć tylko wtedy, gdy faktycznie pracuje.</p>
 </div>
 </div>
 <script>
