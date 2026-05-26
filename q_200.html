@@ -89,19 +89,42 @@ Your company must follow industry specific regulations. Therefore, you need to e
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B. (Obecnie częściej używa się gcp.restrictNonCmekServices). Wyjaśnienie: Polityka 'gcp.restrictNonCmekServices' pozwala na zablokowanie tworzenia zasobów bez klucza CMEK dla wybranych usług.
+Poprawna odpowiedź: B (organization policy: constraints/gcp.restrictNonCmekServices / binding at: org1 / policy type: deny / policy value: storage.googleapis.com)
+
+Dlaczego ta odpowiedź jest poprawna:
+- Wymuszenie CMEK: Aby spełnić wymogi regulacyjne dotyczące korzystania wyłącznie z kluczy zarządzanych przez klienta (CMEK), Google Cloud udostępnia specjalną politykę organizacji: `constraints/gcp.restrictNonCmekServices`.
+- Logika DENY (Blokowanie): Ta polityka jest polityką typu "list constraint". Ustawienie typu polityki na `DENY` dla konkretnej usługi (np. `storage.googleapis.com`) oznacza: "Zablokuj możliwość korzystania z tej usługi, jeśli NIE jest używany klucz CMEK". 
+- Zakres: Skonfigurowanie tego wiązania (binding) na poziomie organizacji `org1` sprawia, że każda próba stworzenia nowego bucketu Cloud Storage bez podania klucza KMS zostanie odrzucona przez API we wszystkich podległych projektach.
+
+Analiza niepoprawnych odpowiedzi:
+- A i C. restrictStorageNonCmekServices: Taki constraint nie istnieje w standardowym zestawie polityk organizacji Google Cloud. Prawidłowa nazwa to ogólny `gcp.restrictNonCmekServices`, który przyjmuje listę usług jako wartości.
+- D. Logic ALLOW: Ustawienie `ALLOW` dla `storage.googleapis.com` w tej polityce oznaczałoby, że usługa ta MOŻE używać domyślnego szyfrowania Google (non-CMEK), co jest przeciwieństwem wymogu "enforce CMEK". Opcja `ALLOW` jest używana zazwyczaj do robienia wyjątków (np. na poziomie konkretnego projektu), gdy na poziomie organizacji obowiązuje restrykcyjny `DENY`.
+
+Wskazówki i triki (Tips & Tricks):
+- "Enforce CMEK" = `gcp.restrictNonCmekServices`.
+- "Mandate specific services" = `DENY` (zablokuj brak klucza).
+- Pamiętaj: Ta polityka dotyczy tylko NOWYCH zasobów. Nie zaszyfruje automatycznie już istniejących bucketów.
+
+Praktyczne informacje na egzamin:
+- Zwracaj uwagę na dokładne nazwy constraintów. Google często używa zmyślonych nazw (jak w opcji A/C), aby sprawdzić Twoją czujność.
+- Ta polityka jest często łączona z `constraints/gcp.restrictCmekCryptoKeyProjects`, aby upewnić się, że użytkownicy używają kluczy z zatwierdzonych projektów KMS, a nie swoich prywatnych.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">Organization Policy constraints reference</a>
+- <a href="https://cloud.google.com/storage/docs/encryption/customer-managed-keys#org-policy" target="_blank">Enforcing CMEK in Cloud Storage</a>
+- <a href="https://cloud.google.com/kms/docs/cmek" target="_blank">Customer-managed encryption keys (CMEK) overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p>Deny na 'storage.googleapis.com' w tej polityce oznacza: nie pozwól na Storage bez CMEK.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie sprawdza znajomość narzędzi do twardego wymuszania standardów bezpieczeństwa (Compliance Enforcement). W regulowanych branżach (finanse, medycyna) "dobra praktyka" to za mało – wymagane są techniczne blokady. `restrictNonCmekServices` jest najpotężniejszym mechanizmami w GCP gwarantującym, że żadne dane nie zostaną zapisane bez nadzoru kluczy zarządzanych przez firmę.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/kms/docs/customer-managed-encryption-keys#restrict-cmek-usage" target="_blank">https://cloud.google.com/kms/docs/customer-managed-encryption-keys#restrict-cmek-usage</a></li>
-
+<li>Warto wiedzieć, że ta polityka wspiera wiele usług, w tym BigQuery, Compute Engine (dyski), Cloud SQL i inne.</li>
+<li>Administratorzy powinni monitorować logi odrzuceń (Policy Denied), aby pomagać użytkownikom, którzy zapomnieli skonfigurować klucz KMS przy tworzeniu zasobów.</li>
 </ul>
 </div>
 </div>

@@ -89,21 +89,43 @@ As part of your organization's zero trust strategy, you use Identity-Aware Proxy
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Data Access audit logs)
 
-Wyjaśnienie: IAP loguje każde udane i nieudane żądanie dostępu do logów 'Data Access'. Zawierają one informacje o tożsamości użytkownika i wyniku autoryzacji.
+Dlaczego ta odpowiedź jest poprawna:
+- Identity-Aware Proxy (IAP) Audit Logs: IAP generuje logi audytowe, które rejestrują interakcje użytkowników z chronionymi zasobami.
+- Data Access Logs: Są to jedyne logi, które rejestrują każde pojedyncze żądanie dostępu (zarówno udane, jak i odrzucone) od konkretnych użytkowników. W kontekście wykrywania włamań (intrusions), informacje o tym, kto próbował się zalogować, z jakiego IP i czy mu się udało, są absolutnie kluczowe dla systemu SIEM.
+- SIEM i Intrusion Detection: Systemy SIEM potrzebują granularnych danych o "zdarzeniach dostępowych", aby móc korelować je i wykrywać wzorce ataków (np. brute-force, spray attack czy logowanie z nietypowych lokalizacji).
+
+Analiza niepoprawnych odpowiedzi:
+- B. Policy Denied audit logs: Te logi rejestrują naruszenia Polityk Organizacji (Organization Policies), a nie próby logowania poszczególnych użytkowników do aplikacji przez IAP.
+- C. Cloud Identity user log events: Logi te dotyczą zdarzeń administracyjnych w samej usłudze Cloud Identity (np. zmiana hasła, dodanie użytkownika do grupy). Choć ważne, nie dają one bezpośredniego wglądu w ruch do aplikacji chronionych przez IAP.
+- D. Admin Activity audit logs: Te logi są zawsze włączone i rejestrują ZMIANY W KONFIGURACJI (np. ktoś wyłączył IAP dla danego backendu). Nie rejestrują one jednak standardowego ruchu użytkowników (access attempts), który jest esencją monitorowania włamań.
+
+Wskazówki i triki (Tips & Tricks):
+- "User access attempts" / "SIEM intrusion detection" + "IAP" = Data Access Logs.
+- Pamiętaj: Logi Data Access są domyślnie WYŁĄCZONE (z wyjątkiem BigQuery). Musisz je jawnie włączyć dla usługi `iap.googleapis.com`.
+- Jeśli SIEM ma wykryć atak -> potrzebuje logów "Data Read" i "Data Write".
+
+Praktyczne informacje na egzamin:
+- Zrozum strukturę logu IAP: zawiera on `principalEmail` (kto), `callerIp` (skąd) oraz `status` (czy się udało).
+- Aby przesłać te logi do SIEM, musisz skonfigurować "Log Sink" (np. do Pub/Sub lub BigQuery).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iap/docs/audit-logging" target="_blank">IAP audit logging documentation</a>
+- <a href="https://cloud.google.com/logging/docs/audit/understanding-audit-logs#data-access" target="_blank">Understanding Data Access logs</a>
+- <a href="https://cloud.google.com/security/solutions/siem-on-google-cloud" target="_blank">SIEM integration on Google Cloud</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p>Logi te muszą być explicite włączone w sekcji IAM & Admin -> Audit Logs.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość "Visibility" w modelu Zero Trust. W IAP tożsamość jest nowym obwodem bezpieczeństwa. Dlatego logowanie samej tożsamości i jej prób dostępu (Data Access) jest ważniejsze dla bezpieczeństwa aplikacji niż tradycyjne logi sieciowe (Flow Logs). Inżynier bezpieczeństwa musi wiedzieć, że te logi generują koszt i wymagają ręcznej aktywacji.</p>
+<h3>Dodatkowe wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/iap/docs/audit-logging" target="_blank">https://cloud.google.com/iap/docs/audit-logging</a></li>
-
+<li>Włączenie logów Data Access dla wszystkich usług może być bardzo kosztowne. Zaleca się włączanie ich tylko dla krytycznych punktów styku, takich jak IAP.</li>
+<li>SIEM (np. Google Chronicle) potrafi automatycznie parsować te logi i nanosić je na mapę zagrożeń.</li>
 </ul>
 </div>
 </div>
