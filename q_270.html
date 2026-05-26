@@ -64,15 +64,14 @@
 <h2>Question 270 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You work for a healthcare provider that is expanding into the cloud to store and process sensitive patient data. You must ensure the chosen Google Cloud configuration meets these strict regulatory requirements:<br/>• Data must reside within specific geographic regions.<br/>• Certain administrative actions on patient data require explicit approval from designated compliance officers.<br/>• Access to patient data must be auditable.<br/>What should you do?
+Your organization operates in a highly regulated industry and needs to implement strict controls around temporary access to sensitive Google Cloud resources. You have been using Access Approval to manage this access, but your compliance team has mandated the use of a custom signing key. Additionally, they require that the key be stored in a hardware security module (HSM) located outside Google Cloud. You need to configure Access Approval to use a custom signing key that meets the compliance requirements. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Select a standard Google Cloud region. Restrict access to patient data based on user location and job function by using Access Context Manager. Enable both Cloud Audit Logging and Access Transparency.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Deploy an Assured Workloads environment in an approved region. Configure Access Approval for sensitive operations on patient data. Enable both Cloud Audit Logs and Access Transparency.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Deploy an Assured Workloads environment in multiple regions for redundancy. Utilize custom IAM roles with granular permissions. Isolate network-level data by using VPC Service Controls.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Select multiple standard Google Cloud regions for high availability. Implement Access Control Lists (ACLs) on individual storage objects containing patient data. Enable Cloud Audit Logs.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a new asymmetric signing key in Cloud Key Management System (Cloud KMS) using a supported algorithm and grant the Access Approval service account the IAM signerVerifier role on the key.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Export your existing Access Approval signing key as a PEM file. Upload the file to your external HSM and reconfigure Access Approval to use the key from the HSM.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a signing key in your external HSM. Integrate the HSM with Cloud External Key Manager (Cloud EKM) and make the key available within your project. Configure Access Approval to use this key.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a new asymmetric signing key in Cloud KMS and configure the key with a rotation period of 30 days. Add the corresponding public key to your external HSM.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +79,7 @@ You work for a healthcare provider that is expanding into the cloud to store and
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">C</span>
 <br/>
 </span>
 </div>
@@ -89,30 +88,33 @@ You work for a healthcare provider that is expanding into the cloud to store and
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: C (Create a signing key in your external HSM. Integrate the HSM with Cloud External Key Manager (Cloud EKM) and make the key available within your project. Configure Access Approval to use this key.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Assured Workloads + Access Approval: Ten zestaw idealnie pasuje do wymogów: 1. Data residency (Assured Workloads wymusza regiony). 2. Administrative approval (Access Approval wymusza Twoją zgodę dla Google). 3. Auditable (Logging + Access Transparency dokumentują wszystko).
+Dlaczego ta odpowiedź jest poprawna:
+- External HSM + Cloud EKM: To zaawansowana konfiguracja suwerenności. Klucz podpisu Twojej zgody na dostęp personelu Google nie rezyduje w chmurze. Dzięki EKM, Google prosi Twój lokalny system o podpisanie autoryzacji dostępu. Bez fizycznego działania Twojego HSM, inżynier Google nie wejdzie do projektu.
 
-Dlaczego inne są błędne:
-A. Standard region: Nie 'wymusza' rezydencji tak twardo i automatycznie jak Assured Workloads. Brak Access Approval.
-C. VPC SC: Chroni przed wyciekiem, ale nie jest mechanizmem 'zatwierdzania dostępu personelu Google' (Access Approval).
-D. ACLs: Przeżytek, nie spełniają nowoczesnych wymogów compliance dla dużych organizacji medycznych.
+Analiza niepoprawnych odpowiedzi:
+- A, D: Klucz byłby wewnątrz Google, co narusza wymóg 'outside Google Cloud'.
+- B. Export: Google Cloud KMS nie wspiera eksportu materiału klucza na zewnątrz w celu jego 'stałego' tam używania przez usługi chmurowe.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. Assured Workloads to 'healthcare compliance' w jednym pakiecie.
+Wskazówki i triki (Tips & Tricks):
+- "External HSM" + "Access Approval" = Cloud EKM (External Key Manager).
+- "Veto Power" (pełna kontrola klienta) = EKM.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: EKM to najlepszy sposób na uzyskanie pełnej kontroli nad kluczami szyfrującymi (i podpisującymi), gdy prawo wymusza trzymanie ich poza chmurą.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/kms/docs/ekm" target="_blank">Cloud External Key Manager (Cloud EKM)</a>
+- <a href="https://cloud.google.com/access-approval/docs/overview" target="_blank">Access Approval overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Assured Workloads tworzy 'bezpieczną bańkę', w której wszystkie nowo tworzone zasoby muszą być zgodne z wybranym standardem (np. HIPAA dla zdrowia).</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/assured-workloads/docs/overview" target="_blank">https://cloud.google.com/assured-workloads/docs/overview</a></li>
-
-</ul>
+<h3>Kluczowe zagadnienia</h3>
+<p><b>Sugerowana odpowiedź: C</b></p>
+<p><b>Analiza strategiczna:</b> To rozwiązanie zapewnia tzw. "Veto Power" dla klienta. Nawet nakaz sądowy wydany chmurze nie pozwoli na odczyt danych bez akcji Twojego zewnętrznego klucza.</p>
 </div>
 </div>
 <script>

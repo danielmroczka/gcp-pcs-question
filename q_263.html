@@ -64,7 +64,7 @@
 <h2>Question 263 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization relies heavily on virtual machines (VMs) in Compute Engine. Due to team growth and resource demands, VM sprawl is becoming problematic. Maintaining consistent security hardening and timely package updates poses an increasing challenge. You need to centralize VM image management and automate the enforcement of security baselines throughout the virtual machine lifecycle. What should you do?
+Your organization relies heavily on virtual machines (VMs) in Compute Engine. Due to team growth and resource demands, VM sprawl is becoming problematic. Maintaining consistent security hardening and timely package updates poses an increasing challenge. You need to centralize VM image management and automate the enforcement of security baselines throughout the virtual machine lifecycle. What should you do? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
@@ -72,6 +72,7 @@ Your organization relies heavily on virtual machines (VMs) in Compute Engine. Du
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure the sole-tenancy feature in Compute Engine for all projects. Set up custom organization policies in Policy Controller to restrict the operating systems and image sources that teams are allowed to use.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a Cloud Build trigger to build a pipeline that generates hardened VM images. Run vulnerability scans in the pipeline, and store images with passing scans in a registry. Use instance templates pointing to this registry.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Activate Security Command Center Enterprise. Use VM discovery and posture management features to monitor hardening state and trigger automatic responses upon detection of issues.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Deploy patches with VM Manager by using OS patch management.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -79,7 +80,7 @@ Your organization relies heavily on virtual machines (VMs) in Compute Engine. Du
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">AE</span>
 <br/>
 </span>
 </div>
@@ -88,7 +89,7 @@ Your organization relies heavily on virtual machines (VMs) in Compute Engine. Du
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Use VM Manager to automatically distribute and apply patches to VMs across your projects. Integrate VM Manager with hardened, organization-standard VM images stored in a central repository.)
+Poprawna odpowiedź: AE (A: Use VM Manager to automatically distribute and apply patches to VMs across your projects. Integrate VM Manager with hardened, organization-standard VM images stored in a central repository. E: Deploy patches with VM Manager by using OS patch management.)
 
 Dlaczego ta odpowiedź jest poprawna:
 - VM Manager (OS Patch Management): Jest to natywna, w pełni zarządzana usługa Google Cloud służąca do automatyzacji procesu instalowania poprawek (patchowania) na instancjach Compute Engine.
@@ -96,9 +97,9 @@ Dlaczego ta odpowiedź jest poprawna:
 - Raportowanie: VM Manager udostępnia gotowe pulpity nawigacyjne, które pozwalają na przeglądanie stanu patchowania ("patch management data") dla wszystkich maszyn w organizacji w jednym miejscu.
 
 Analiza niepoprawnych odpowiedzi:
-- B. Sole-tenancy: Dotyczy izolacji sprzętowej, nie ma nic wspólnego z patchowaniem OS.
-- C. Cloud Build: Buduje obrazy, ale nie potrafi 'naprawić' (zaktualizować) maszyny, która już działa od miesiąca. Robi to VM Manager.
-- D. Posture management: Raportuje błędy, ale samo 'patchowanie' to techniczna domena VM Managera.
+- B. Artifact Registry: Służy do przechowywania obrazów kontenerów, a nie do zarządzania patchami na maszynach wirtualnych (VM).
+- C. Security Command Center (SCC) dashboard: SCC służy do monitorowania podatności i zagrożeń, ale samo w sobie nie zarządza automatyzacją instalacji patchy.
+- D. Rapid Vulnerability Detection: Jest to moduł SCC, który służy do skanowania podatności (np. czy na maszynie jest niebezpieczne oprogramowanie), a nie do automatycznego instalowania aktualizacji (patchowania).
 
 Wskazówki i triki (Tips & Tricks):
 - "Automate patching" + "Large scale/Fleet" + "Report data" = VM Manager (OS Patch Management).
@@ -117,7 +118,7 @@ Dokumentacja i linki:
 <h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
 <h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
+<p><b>Sugerowana odpowiedź: AE</b></p>
 <p><b>Analiza strategiczna:</b> To pytanie testuje Twoją wiedzę o "Operacyjnej doskonałości" (Operational Excellence). Ręczne patchowanie maszyn to "dług techniczny" i zagrożenie bezpieczeństwa. Google promuje użycie natywnego VM Managera, który integruje się z systemem operacyjnym, monitoruje stan i zapewnia spójne raportowanie dla audytorów (Compliance).</p>
 </div>
 </div>

@@ -64,14 +64,14 @@
 <h2>Question 258 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization is migrating a complex application to Google Cloud. The application has multiple internal components that interact with each other across several Google Cloud projects. Security is a major concern, and you must design an authorization scheme for administrators that aligns with the principles of least privilege and separation of duties. What should you do?
+Your organization has adopted a "Zero Trust" security model and wants to ensure that only corporate-managed devices can access the Google Cloud console. You need to implement a solution that verifies the device's security posture before granting access. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Identify the users who will migrate the application, revoke the default user roles and assign the users with purposely created custom roles.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use multiple external identity providers (IdP) configured to use different SAML profiles and federate the IdPs for each application component.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure multi-factor authentication (MFA) to enforce the use of physical tokens for all users who will migrate the application.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> No action needed. When a Google Cloud organization is created, the appropriate permissions are automatically assigned to all users in the domain.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create an access level named "Authorized Devices." Utilize the Device Policy attribute to require corporate-managed devices. Apply the access level to the Google Cloud project and instruct all employees to enroll their devices in the organization's management system.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure VPC firewall policy to restrict traffic to the Google Cloud console IP ranges only from corporate-managed IP addresses.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Implement organization policies to restrict access to the Google Cloud console to specific regions and IP addresses.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Assign IAM conditional policies to require device-based authentication for all users accessing the Google Cloud console.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -88,28 +88,28 @@ Your organization is migrating a complex application to Google Cloud. The applic
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Identify the users who will migrate the application, revoke the default user roles and assign the users with purposely created custom roles)
+Poprawna odpowiedź: A (Create an access level named "Authorized Devices." Utilize the Device Policy attribute to require corporate-managed devices. Apply the access level to the Google Cloud project and instruct all employees to enroll their devices in the organization's management system.)
 
 Dlaczego ta odpowiedź jest poprawna:
-- Zasada najniższych uprawnień (Least Privilege): Role podstawowe (Basic Roles: Owner, Editor, Viewer) są zbyt szerokie. W środowisku produkcyjnym i skomplikowanych migracjach należy używać ról predefiniowanych lub niestandardowych (Custom Roles), które dają dokładnie takie uprawnienia, jakich użytkownik potrzebuje do konkretnych zadań.
-- Separacja obowiązków (Separation of Duties): Pozwala na podział zadań między administratorów, deweloperów i operatorów security, tak aby żadna osoba nie miała pełnej kontroli nad wszystkim ("God mode").
-- Custom Roles: Pozwalają na stworzenie precyzyjnego zestawu uprawnień, który ogranicza ryzyko błędów ludzkich podczas migracji.
+- BeyondCorp Enterprise (Context-Aware Access): Jest to rozwiązanie Google Cloud typu Zero Trust, które pozwala na kontrolowanie dostępu do aplikacji i konsoli Google Cloud w oparciu o kontekst (tożsamość, lokalizacja, stan urządzenia).
+- Weryfikacja certyfikatu/urządzenia: BeyondCorp pozwala na zdefiniowanie poziomów dostępu (Access Levels), które sprawdzają, czy urządzenie, z którego loguje się użytkownik, posiada poprawny, korporacyjny certyfikat X.509.
+- Access Policy: Stworzenie polityki dostępu (Access Policy) i powiązanie jej z konsolą Google Cloud (poprzez Access Binding) jest standardową metodą wymuszenia, aby tylko autoryzowane urządzenia miały dostęp.
 
 Analiza niepoprawnych odpowiedzi:
-- B. Multiple IdPs: To skomplikowanie zarządzania tożsamością, nie ma nic wspólnego z "authorization scheme" (uprawnieniami).
-- C. MFA: To mechanizm uwierzytelniania (Authentication), a nie autoryzacji (Authorization).
-- D. No action needed: To skrajnie niebezpieczne założenie. Domyślne uprawnienia w nowej organizacji nie spełniają wymogów "least privilege".
+- B. VPC firewall policy: Firewalle VPC działają wewnątrz sieci wirtualnej i chronią ruch między maszynami lub ruch do internetu. Nie służą do kontrolowania dostępu użytkowników do samej konsoli Google Cloud.
+- C. Organization policy: Polityki organizacji służą do narzucania ograniczeń konfiguracyjnych na zasoby (np. "zakaz tworzenia publicznych IP"), ale nie posiadają natywnej funkcji weryfikacji certyfikatów na urządzeniach końcowych użytkowników.
+- D. IAM conditional policy: Choć IAM Conditions pozwalają na pewną kontrolę kontekstową (np. IP źródłowe, czas), nie mają one bezpośredniego wglądu w certyfikaty sprzętowe urządzenia tak jak BeyondCorp.
 
 Wskazówki i triki (Tips & Tricks):
-- "Least privilege" + "Separation of duties" = Zawsze Custom Roles lub Predefined Roles (nigdy Basic Roles).
-- Jeśli widzisz "No action needed" / "Automatic" w kontekście uprawnień -> odrzuć to w 99% przypadków.
+- "Corporate-issued devices" + "Device certificate" + "Access to Console" = BeyondCorp Enterprise / Context-Aware Access.
+- Szukaj słów takich jak "Access Context Manager" lub "Access Level".
 
 Praktyczne informacje na egzamin:
-- Zapamiętaj: Rola Owner posiada uprawnienia do zarządzania IAM, co jest naruszeniem zasady separacji obowiązków w większości scenariuszy audytowych.
+- Zapamiętaj: BeyondCorp Enterprise jest usługą płatną, ale Context-Aware Access w wersji podstawowej jest dostępny w Cloud Identity Premium / Workspace.
 
 Dokumentacja i linki:
-- <a href="https://cloud.google.com/iam/docs/understanding-roles" target="_blank">Understanding IAM roles</a>
-- <a href="https://cloud.google.com/iam/docs/creating-custom-roles" target="_blank">Creating custom roles</a>
+- <a href="https://cloud.google.com/access-context-manager/docs/device-policy" target="_blank">Device policy in Access Context Manager</a>
+- <a href="https://cloud.google.com/beyondcorp-enterprise/docs/context-aware-access-overview" target="_blank">Context-Aware Access overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -117,7 +117,7 @@ Dokumentacja i linki:
 <div class="analysis-section">
 <h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do projektowania bezpiecznych procesów administracyjnych. W chmurze uprawnienia są "wszędobylskie". Twoim zadaniem jako inżyniera bezpieczeństwa jest ich "przycinanie" (pruning), aby każda osoba miała tylko tyle uprawnień, ile jest jej niezbędne do wykonania pracy – ani mniej, ani więcej.</p>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją wiedzę o przejściu od modelu obwodowego (VPN) do modelu Zero Trust. Weryfikacja "zdrowia" urządzenia, z którego loguje się użytkownik, jest kluczowa dla bezpieczeństwa konsoli GCP.</p>
 </div>
 </div>
 <script>

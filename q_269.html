@@ -72,7 +72,6 @@ Your organization is using Security Command Center Premium as a central tool to 
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Forward all logs to Chronicle Security Information and Event Management. Create an alert for suspicious egress traffic to the internet.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a Cloud Intrusion Detection endpoint. Connect this endpoint to all Virtual Private Cloud networks with internet connectivity.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create an egress firewall policy with Threat Intelligence as the destination. Attach this policy to all Virtual Private Cloud networks with internet connectivity.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,34 @@ Your organization is using Security Command Center Premium as a central tool to 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (Create an egress firewall policy with Threat Intelligence as the destination. Attach this policy to all Virtual Private Cloud networks with internet connectivity.)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Egress policy + Threat Intelligence: Google Cloud Firewall posiada wbudowane listy Threat Intelligence (np. 'malicious-ips', 'known-command-and-control'). Ustawienie reguły 'egress deny' (lub allow z logowaniem) dla tych list pozwala na automatyczne wykrywanie i blokowanie komunikacji do złośliwych domen w całym VPC.
+Dlaczego ta odpowiedź jest poprawna:
+- Egress policy + Threat Intelligence: Google Cloud Firewall (w wersji Enterprise/Cloud Armor) posiada wbudowane, stale aktualizowane listy (Threat Intelligence), które zawierają adresy IP znanych systemów Command-and-Control (C2), malware, czy serwerów wykorzystywanych w atakach.
+- Zastosowanie: Tworząc regułę typu `egress deny` (odmowa ruchu wychodzącego), w której jako cel (destination) wskazujesz obiekt `Threat Intelligence`, automatycznie blokujesz komunikację z tych znanych, złośliwych źródeł w całym VPC. Jest to najszybsza i najbardziej skalowalna metoda ochrony.
 
-Dlaczego inne są błędne:
-A. DNS logs: Pozwolą zobaczyć zapytanie, ale nie zablokują ruchu ani nie dostarczą tak inteligentnego alertu o 'znanym zagrożeniu' jak system Threat Intel.
-B. Chronicle: To świetny SIEM, ale SCC Premium (wymóg pytania) ma natywne funkcje wewnątrz GCP (D), które działają szybciej i bliżej infrastruktury.
-C. Cloud IDS: Monitoruje ruch, ale zazwyczaj polityka firewall (D) jest bardziej bezpośrednią metodą na 'alert i blokadę' znanych złośliwych domen.
+Analiza niepoprawnych odpowiedzi:
+- A. DNS Server Policy + Logs: To podejście detekcyjne, nie zapobiegawcze. DNS logs pokażą, że zapytanie wystąpiło, ale go nie zablokują.
+- B. Chronicle: To SIEM do analizy powłamaniowej i korelacji zdarzeń, a nie narzędzie do natychmiastowego blokowania komunikacji na poziomie sieci (L4 firewall).
+- C. Cloud IDS: Monitoruje ruch, ale zazwyczaj polityka firewall (D) jest bardziej bezpośrednią metodą na "alert i blokadę" znanych złośliwych domen.
 
-Konsensus społeczności ExamTopics: 100% na D. Threat Intelligence w firewallu to potężna funkcja SCC Premium.
+Wskazówki i triki (Tips & Tricks):
+- "Suspicious outbound traffic" / "Malicious IPs" + "Block" = Cloud Firewall (Threat Intelligence destination).
+- "Known suspicious web services" = Zawsze szukaj Threat Intelligence w regułach firewalla.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Listy Threat Intelligence w GCP są zarządzane przez Google i aktualizowane w czasie rzeczywistym.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/vpc/docs/firewall-policies#threat-intel" target="_blank">Cloud Firewall Threat Intelligence overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Listy te są stale aktualizowane przez Google na podstawie danych z całego internetu, co zapewnia ochronę przed 'Zero-day' domenami C2.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/vpc/docs/firewall-policies#threat-intel" target="_blank">https://cloud.google.com/vpc/docs/firewall-policies#threat-intel</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do automatyzacji obrony w chmurze. Ręczne dodawanie złośliwych IP do list firewalla to walka z wiatrakami. Google Cloud używa inteligencji całego ekosystemu do "karmienia" Twojego firewalla najnowszymi danymi o zagrożeniach, co pozwala na automatyczną reakcję bez interwencji człowieka.</p>
 </div>
 </div>
 <script>

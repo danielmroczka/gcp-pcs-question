@@ -72,7 +72,6 @@ Your organization has sensitive data stored in BigQuery and Cloud Storage. You n
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use Cloud External Key Manager (Cloud EKM) to encrypt the data in BigQuery and Cloud Storage.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Grant identity and access management (IAM) roles and permissions to principals.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enable server-side encryption on the data in BigQuery and Cloud Storage.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,27 +88,32 @@ Your organization has sensitive data stored in BigQuery and Cloud Storage. You n
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Grant identity and access management (IAM) roles and permissions to principals.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. IAM (Identity and Access Management): Jest to system stworzony dokładnie do tego celu. Oferuje granularne role (np. `bigquery.dataViewer` tylko na konkretnej tabeli lub `storage.objectViewer` na konkretnym folderze w buckecie), co daje pełną elastyczność autoryzacji.
+Dlaczego ta odpowiedź jest poprawna:
+- IAM (Identity and Access Management): Jest to system stworzony dokładnie do tego celu. Oferuje granularne role (np. `bigquery.dataViewer` tylko na konkretnej tabeli lub `storage.objectViewer` na konkretnym folderze w buckecie), co daje pełną elastyczność autoryzacji.
 
-Dlaczego inne są błędne:
-A. DLP: Służy do zmiany treści danych (maskowanie), nie jest systemem 'autoryzacji' (udzielania uprawnień).
-B, D: To mechanizmy ochrony danych (szyfrowanie), nie zajmują się logiką 'kto ma prawo czytać'.
+Analiza niepoprawnych odpowiedzi:
+- A. DLP: Służy do zmiany treści danych (maskowanie), nie jest systemem "autoryzacji" (udzielania uprawnień).
+- B, D: To mechanizmy ochrony danych (szyfrowanie), nie zajmują się logiką "kto ma prawo czytać".
+
+Wskazówki i triki (Tips & Tricks):
+- "Flexible control authorization to read" = IAM.
+- Zapamiętaj: IAM = Kto może (Who can), co robić (what), z jakim zasobem (to what resource).
+
+Praktyczne informacje na egzamin:
+- Pamiętaj, że w GCS możesz łączyć IAM z warunkami (Conditions), np. zezwalając na odczyt tylko jeśli plik ma określony prefiks lub tag.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iam/docs/overview" target="_blank">IAM overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Pamiętaj, że w GCS możesz łączyć IAM z warunkami (Conditions), np. zezwalając na odczyt tylko jeśli plik ma określony prefiks lub tag.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/iam/docs/overview" target="_blank">https://cloud.google.com/iam/docs/overview</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość podstawowego mechanizmu bezpieczeństwa w Google Cloud. IAM jest fundamentem autoryzacji. Inne narzędzia (jak szyfrowanie czy DLP) służą do ochrony danych, ale to IAM decyduje o tym, czy użytkownik w ogóle otrzyma do nich dostęp.</p>
 </div>
 </div>
 <script>

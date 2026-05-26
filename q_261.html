@@ -92,7 +92,7 @@ Poprawna odpowiedź: B (Create a folder-level deny-all rule for outbound traffic
 
 Dlaczego ta odpowiedź jest poprawna:
 - Hierarchiczne polityki firewalla (Hierarchical Firewall Policies): Pozwalają na definiowanie i wymuszanie reguł na poziomie całej organizacji lub folderów. Są one sprawdzane PRZED tradycyjnymi regułami firewalla VPC w poszczególnych projektach, co czyni je doskonałymi "barierami ochronnymi" (guardrails).
-- Kontrola na poziomie folderu: Zastosowanie polityki na poziomie folderu pozwala objąć nią wszystkie projekty wewnątrz folderu, co zapewnia spójność bez ręcznej konfiguracji w każdym projekcie osobno.
+- Kontrola na poziomie folderu: Zastosowanie polityki na poziomie folderu pozwala objąć nią wszystkie projekty wewnątrz folderu ("dev-vpc"), co zapewnia spójność bez ręcznej konfiguracji w każdym projekcie osobno.
 - FQDN Allowlists: Cloud Firewall Enterprise pozwala na filtrowanie ruchu wychodzącego (egress) na podstawie nazw domenowych (FQDN), co jest bezpieczniejsze i łatwiejsze w utrzymaniu niż zarządzanie listami IP.
 
 Analiza niepoprawnych odpowiedzi:
