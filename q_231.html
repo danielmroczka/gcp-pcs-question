@@ -89,30 +89,38 @@ You are migrating an application into the cloud. The application will need to re
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: D (Generate a key in your on-premises environment and store it in a Hardware Security Module (HSM) that is managed on-premises. Use this key as an external key in the Cloud Key Management Service (KMS). Activate Key Access Justifications (KAJ) and set the external key system to reject unauthorized accesses)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. orgpolicy.policyAdmin: Jak już ustaliliśmy (216, 222), ta rola służy do zarządzania Standardami Floty (Governance). Pozwala na nałożenie zakazu np. tworzenia publicznych IP, ale sama w sobie nie daje uprawnień do edycji sieci VPC (subnets, routes).
+Dlaczego ta odpowiedź jest poprawna:
+- Cloud External Key Manager (EKM): Pozwala na przechowywanie klucza w systemie zewnętrznym (on-premises HSM), co w pełni spełnia wymóg posiadania kontroli nad materiałem klucza ("hold the key material... fully under your control").
+- Key Access Justifications (KAJ): To usługa, która wymusza uzasadnienie dla każdego żądania użycia klucza przez Google (np. wsparcie techniczne), co spełnia wymóg "valid rationale for accessing the key material".
+- Połączenie: EKM + KAJ to standard "Sovereign Cloud" w Google Cloud.
 
-Dlaczego inne są błędne:
-A. organizationAdmin: Może wszystko, w tym zmieniać sieć.
-C. networkAdmin: Służy właśnie do modyfikacji sieci, co jest zakazane.
-D. Viewer: Tylko do odczytu.
+Analiza niepoprawnych odpowiedzi:
+- A. Customer Managed Encryption Keys (CMEK): Klucze te są zarządzane przez Google wewnątrz Cloud KMS (infrastruktura Google). Nie spełnia to wymogu trzymania materiału klucza "fully under your control" poza GCP.
+- B. Upload key to Cloud KMS: Przesłanie własnego klucza (nawet z on-prem) do Cloud KMS oznacza, że staje się on kluczem zarządzanym przez Google (importowanym). Nie spełnia to wymogu "hold the key material fully under your control".
+- C. Cloud HSM: Cloud HSM to usługa sprzętowa Google Cloud. Klucze są w niej przechowywane, ale są one pod kontrolą Google (jako dostawcy usługi).
 
-Konsensus społeczności ExamTopics: 100% na B. Podstawowa separacja obowiązków.
+Wskazówki i triki (Tips & Tricks):
+- "Hold key material fully under your control" = EKM (External Key Manager).
+- "Valid rationale for accessing key" = KAJ (Key Access Justifications).
+- Pamiętaj: KAJ jest "strażnikiem" Twoich kluczy EKM.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: KAJ nie jest tylko logiem, to mechanizm "Justification-based access", który może zablokować użycie klucza, jeśli uzasadnienie jest niewystarczające.
+- KAJ jest krytyczny dla zgodności z surowymi regulacjami prawnymi (np. w bankowości).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/kms/docs/ekm" target="_blank">Cloud EKM overview</a>
+- <a href="https://cloud.google.com/key-access-justifications/docs/overview" target="_blank">Key Access Justifications overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Pytanie to testuje precyzyjne rozróżnienie między 'Governance' (zasady) a 'Infrastructure Administration' (realizacja). Rola B to 'ustawodawca', rola C to 'wykonawca'. Compliance officer powinien mieć tylko rolę B.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/overview" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/overview</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie sprawdza najwyższy poziom dojrzałości bezpieczeństwa (Sovereignty). EKM to separacja fizyczna, a KAJ to kontrola logiczna (użytkownik podejmuje decyzję o dostępności klucza w czasie rzeczywistym). To kompletne rozwiązanie dla regulacji wymagających, by "nikt z zewnątrz nie mógł dotknąć danych bez mojej wyraźnej wiedzy i zgody".</p>
 </div>
 </div>
 <script>

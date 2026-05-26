@@ -64,16 +64,21 @@
 <h2>Question 228 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You manage a mission-critical workload for your organization, which is in a highly regulated industry. The workload uses Compute Engine VMs to analyze and process the sensitive data after it is uploaded to Cloud Storage from the endpoint computers. Your compliance team has detected that this workload does not meet the data protection requirements for sensitive data. You need to meet these requirements:<br/>- Manage the data encryption key (DEK) outside the Google Cloud boundary.<br/>- Maintain full control of encryption keys through a third-party provider.<br/>- Encrypt the sensitive data before uploading it to Cloud Storage.<br/>- Decrypt the sensitive data during processing in the Compute Engine VMs.<br/>- Encrypt the sensitive data in memory while in use in the Compute Engine VMs.<br/>What should you do? (Choose two.)
+Your organization manages a mission-critical workload in a highly regulated industry. The workload uses Compute Engine VMs to analyze and process sensitive data after it is uploaded to Cloud Storage from endpoint computers. Your compliance team has detected that this workload does not meet data protection requirements. You need to meet these requirements:<br/>
+- Manage the data encryption key (DEK) outside the Google Cloud boundary.<br/>
+- Maintain full control of encryption keys through a third-party provider.<br/>
+- Encrypt sensitive data before uploading to Cloud Storage.<br/>
+- Decrypt sensitive data during processing in Compute Engine VMs.<br/>
+- Encrypt sensitive data in memory while in use in Compute Engine VMs.<br/>
+What should you do? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure Customer Managed Encryption Keys to encrypt the sensitive data before it is uploaded to Cloud Storage, and decrypt the sensitive data after it is downloaded into your VMs.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure Cloud External Key Manager to encrypt the sensitive data before it is uploaded to Cloud Storage, and decrypt the sensitive data after it is downloaded into your VMs.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure Customer Managed Encryption Keys (CMEK) to encrypt the sensitive data before it is uploaded to Cloud Storage, and decrypt the sensitive data after it is downloaded into your VMs.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure Cloud External Key Manager (EKM) to encrypt the sensitive data before it is uploaded to Cloud Storage, and decrypt the sensitive data after it is downloaded into your VMs.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create Confidential VMs to access the sensitive data.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Migrate the Compute Engine VMs to Confidential VMs to access the sensitive data.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Create a VPC Service Controls service perimeter across your existing Compute Engine VMs and Cloud Storage buckets.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -90,28 +95,37 @@ You manage a mission-critical workload for your organization, which is in a high
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: BC (B: Configure Cloud External Key Manager, C: Create Confidential VMs)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Policy Analyzer: Potrafi on 'rozbić' grupy na pojedynczych członków i pokazać ich uprawnienia. Dzięki temu zobaczysz, że użytkownik Jan ma rolę Editor, bo należy do grupy 'Marketing', która ma tę rolę w projekcie.
+Dlaczego te odpowiedzi są poprawne:
+- Cloud External Key Manager (EKM) (B): Wymóg "Manage the data encryption key (DEK) outside the Google Cloud boundary" oraz "Maintain full control ... through a third-party provider" bezpośrednio wskazuje na usługę Cloud EKM, która integruje KMS z zewnętrznym HSM.
+- Confidential VMs (C): Wymóg "Encrypt the sensitive data in memory while in use in the Compute Engine VMs" wskazuje na Confidential Computing (Confidential VMs), które używają szyfrowania RAM w trakcie przetwarzania danych.
 
-Dlaczego inne są błędne:
-B, C, D: Nie mają funkcji analizy struktury grup w odniesieniu do ról zasobów.
+Analiza niepoprawnych odpowiedzi:
+- A. CMEK: CMEK (Customer Managed Encryption Keys) są zarządzane wewnątrz Cloud KMS (infrastruktura Google). Nie spełnia to wymogu przechowywania kluczy poza "Google Cloud boundary".
+- D. Migrate to Confidential VMs: Tożsama z odpowiedzią C, ale opcja C jest bardziej zwięzła i poprawna w kontekście wyboru usług. (Uwaga: W pytaniu 228 opcje mogą się dublować, ważne jest wskazanie EKM i Confidential VM).
+- E. VPC Service Controls: VPC Service Controls chroni przed eksfiltracją (wynoszeniem danych), ale nie jest technologią szyfrowania danych ("in memory" lub "at rest").
 
-Konsensus społeczności ExamTopics: 100% na A. Policy Analyzer to 'szwajcarski scyzoryk' audytu IAM.
+Wskazówki i triki (Tips & Tricks):
+- "External key provider" = EKM.
+- "Encrypt memory" / "Data in use" = Confidential VMs.
+- "Regulatory compliance" = EKM + KAJ + Confidential Computing.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: EKM to separacja kluczy od chmury, a Confidential Computing to separacja danych w RAM od hypervisora.
+- Razem tworzą najwyższy możliwy poziom suwerenności danych w GCP.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/kms/docs/ekm" target="_blank">Cloud EKM overview</a>
+- <a href="https://cloud.google.com/confidential-computing" target="_blank">Confidential Computing overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: BC</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Dyskusja w sieci skupia się na tzw. 'Group Expansion'. Standardowy widok IAM w konsoli GCP pokaże Ci tylko nazwę grupy. Policy Analyzer (A) to jedyny sposób na poznanie PRAWDZIWEJ listy osób kryjących się pod tą nazwą.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/iam/docs/policy-analyzer-overview" target="_blank">https://cloud.google.com/iam/docs/policy-analyzer-overview</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją wiedzę o najbardziej zaawansowanych funkcjach bezpieczeństwa w GCP (Sovereign Cloud). Kluczowym wyzwaniem jest tu separacja kluczy od platformy (EKM) oraz szyfrowanie pamięci (Confidential VM). Jeśli widzisz wymagania o suwerenności i regulacjach, to zawsze EKM i Confidential Computing.</p>
 </div>
 </div>
 <script>

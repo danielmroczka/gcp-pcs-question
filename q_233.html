@@ -64,16 +64,15 @@
 <h2>Question 233 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You manage a fleet of virtual machines (VMs) in your organization. You have encountered issues with lack of patching in many VMs. You need to automate regular patching in your VMs and view the patch management data across multiple projects.<br/>What should you do? (Choose two.)
+You are responsible for managing a fleet of Compute Engine VMs across multiple Google Cloud projects. You need to ensure that the VMs are patched regularly and that you can view a summary report of the patch compliance across all projects. What should you do? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> View patch management data in VM Manager by using OS patch management.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> View patch management data in Artifact Registry.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> View patch management data in a Security Command Center dashboard.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Deploy patches with Security Command Center by using Rapid Vulnerability Detection.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use Artifact Registry to store and deploy the necessary patch updates to the VMs.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use the Security Command Center (SCC) dashboard to view the patch management status.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use the Rapid Vulnerability Detection module in Security Command Center to automate the patch installation process.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Deploy patches with VM Manager by using OS patch management.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -90,30 +89,37 @@ You manage a fleet of virtual machines (VMs) in your organization. You have enco
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B. (Technicznie: Wymuszanie przez Org Policy).
+Poprawna odpowiedź: AE (A: View patch management data in VM Manager by using OS patch management. E: Deploy patches with VM Manager by using OS patch management)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Organization Policy: Google Cloud oferuje polityki organizacji pozwalające na wymuszenie użycia specyficznych technologii. Chociaż nazwa polityki może brzmieć `constraints/compute.requireConfidentialComputing`, to mechanizm 'Organization Policy' (B) jest jedynym w opcjach, który potrafi technicznie WYMUSIĆ tę cechę dla całej floty.
+Dlaczego te odpowiedzi są poprawne:
+- VM Manager (OS Patch Management): Jest to natywna, w pełni zarządzana usługa Google Cloud służąca do automatyzacji procesu instalowania poprawek (patchowania) na instancjach Compute Engine.
+- Skala: VM Manager jest zaprojektowany do działania na poziomie całej floty maszyn (fleet patching), niezależnie od liczby projektów. Pozwala na tworzenie zadań patchowania (patch jobs) z harmonogramem, selekcją poprawek oraz raportowaniem.
+- Raportowanie: VM Manager udostępnia gotowe pulpity nawigacyjne, które pozwalają na przeglądanie stanu patchowania ("patch management data") dla wszystkich maszyn w organizacji w jednym miejscu.
 
-Dlaczego inne są błędne:
-A. IAM: Nie steruje parametrami technicznymi VM.
-C. Templates: Deweloper może je pominąć.
-D. VPC SC: Dla API, nie dla RAM-u maszyny VM.
+Analiza niepoprawnych odpowiedzi:
+- B. Artifact Registry: Służy do przechowywania obrazów kontenerów, a nie do zarządzania patchami na maszynach wirtualnych (VM).
+- C. Security Command Center (SCC) dashboard: SCC służy do monitorowania podatności i zagrożeń, ale samo w sobie nie zarządza automatyzacją instalacji patchy.
+- D. Rapid Vulnerability Detection: Jest to moduł SCC, który służy do skanowania podatności (np. czy na maszynie jest niebezpieczne oprogramowanie), a nie do automatycznego instalowania aktualizacji (patchowania).
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na B. Org Policy to standard dla 'Corporate Guardrails'.
+Wskazówki i triki (Tips & Tricks):
+- "Automate patching" + "Large scale/Fleet" + "Report data" = VM Manager (OS Patch Management).
+- Słowo klucz "at scale" w GCP niemal zawsze eliminuje rozwiązania manualne.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: OS Patch Management obsługuje zarówno maszyny z systemami Linux, jak i Windows.
+- Agent OS Config musi być włączony na maszynach docelowych.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/compute/docs/os-patch-management" target="_blank">OS patch management overview</a>
+- <a href="https://cloud.google.com/compute/docs/vm-manager" target="_blank">VM Manager documentation</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: AE</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Na Reddit specjaliści przypominają: Confidential Computing wymaga specyficznego sprzętu (AMD EPYC). Jeśli wymusisz to polityką (B), deweloperzy nie będą mogli tworzyć tańszych instancji typu N1 czy E2. To ważna decyzja biznesowo-techniczna.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/overview" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/overview</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją wiedzę o "Operacyjnej doskonałości" (Operational Excellence). Ręczne patchowanie maszyn to "dług techniczny" i zagrożenie bezpieczeństwa. Google promuje użycie natywnego VM Managera, który integruje się z systemem operacyjnym, monitoruje stan i zapewnia spójne raportowanie dla audytorów (Compliance).</p>
 </div>
 </div>
 <script>

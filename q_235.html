@@ -64,15 +64,14 @@
 <h2>Question 235 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You are setting up a new Cloud Storage bucket in your environment that is encrypted with a customer managed encryption key (CMEK). The CMEK is stored in Cloud Key Management Service (KMS), in project "prj-a", and the Cloud Storage bucket will use project "prj-b". The key is backed by a Cloud Hardware Security Module (HSM) and resides in the region europe-west3. Your storage bucket will be located in the region europe-west1. When you create the bucket, you cannot access the key, and you need to troubleshoot why.<br/>What has caused the access issue?
+You have created a Customer-Managed Encryption Key (CMEK) to encrypt data in a Cloud Storage bucket. When you try to upload data to the bucket, you receive an error message that you do not have permission to access the key. What is the most likely cause?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> A firewall rule prevents the key from being accessible.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud HSM does not support Cloud Storage.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> The CMEK is in a different project than the Cloud Storage bucket.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> The Cloud Storage service agent lacks the 'Cloud KMS CryptoKey Encrypter/Decrypter' role on the key.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> The firewall rule is blocking access to Cloud KMS.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud HSM is not enabled for the project.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> The CMEK is in a different region than the Cloud Storage bucket.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +79,7 @@ You are setting up a new Cloud Storage bucket in your environment that is encryp
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">D</span>
+<span class="correct-answer">A</span>
 <br/>
 </span>
 </div>
@@ -89,28 +88,36 @@ You are setting up a new Cloud Storage bucket in your environment that is encryp
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: A (The Cloud Storage service agent lacks the 'Cloud KMS CryptoKey Encrypter/Decrypter' role on the key)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Attestations (BinAuth): Atestacja to cyfrowy 'stempel' (podpis). Jeśli Twój skaner podatności stwierdzi, że obraz jest czysty, tworzy atestację. BinAuth w klastrze GKE sprawdza ten stempel. Brak stempla = brak wdrożenia.
+Dlaczego ta odpowiedź jest poprawna:
+- Service Agent: Każda usługa GCP (jak Cloud Storage) działa w ramach specjalnego "Service Agent" (konta serwisowego), które działa w imieniu tej usługi.
+- Uprawnienia KMS: Aby usługa mogła zaszyfrować dane przy użyciu klucza CMEK, musisz nadać odpowiedniemu Service Agentowi uprawnienia do tego klucza w Cloud KMS.
+- Rola: Rola `roles/cloudkms.cryptoKeyEncrypterDecrypter` jest niezbędna, aby usługa mogła użyć klucza do szyfrowania (podczas zapisu) i deszyfrowania (podczas odczytu).
 
-Dlaczego inne są błędne:
-A, C, D: Jak w pytaniu 205 – to funkcje innych usług.
+Analiza niepoprawnych odpowiedzi:
+- B. Firewall: Firewalle sieciowe (VPC) służą do kontrolowania ruchu między instancjami/sieciami. Nie mają wpływu na komunikację między usługami Google wewnątrz ich infrastruktury.
+- C. Cloud HSM: To sprzętowy moduł bezpieczeństwa. Nie ma wpływu na dostępność klucza w kontekście uprawnień.
+- D. Region: Choć zgodność regionów jest ważna, najczęstszą przyczyną błędu "permission denied" przy użyciu CMEK jest brak nadania uprawnień dla Service Agenta usługi.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. Atestacja = Dowód Bezpieczeństwa Obrazu.
+Wskazówki i triki (Tips & Tricks):
+- "CMEK permission denied" = 90% przypadków to brak uprawnień dla Service Agenta.
+- "CMEK region mismatch" = Zazwyczaj powoduje błąd w konfiguracji bucketu na etapie tworzenia, niekoniecznie podczas każdej próby uploadu.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Service Agent tożsamość `service-[PROJECT_NUMBER]@gs-project-accounts.iam.gserviceaccount.com` (dla Cloud Storage).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/storage/docs/encryption/customer-managed-keys" target="_blank">CMEK for Cloud Storage</a>
+- <a href="https://cloud.google.com/iam/docs/service-agents" target="_blank">Service Agents overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Dyskusja na Reddit dotyczy 'Separation of Duties' w pipeline. Budowanie obrazu robi Cloud Build, skanowanie robi Container Analysis, a Atestację (B) podpisuje kluczem KMS dedykowany 'Attestor'. BinAuth jest tylko strażnikiem sprawdzającym ten podpis.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/binary-authorization/docs/key-concepts#attestations" target="_blank">https://cloud.google.com/binary-authorization/docs/key-concepts#attestations</a></li>
-
-</ul>
+<h3>Kluczowe zagadnienia</h3>
+<p><b>Sugerowana odpowiedź: A</b></p>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość "operacyjnych podstaw" zabezpieczeń. Wiele osób myśli o użytkowniku (o mnie), gdy widzi "permission denied", ale w chmurze to USŁUGA musi mieć uprawnienia do wykonania operacji na kluczu. Zrozumienie, że to "Cloud Storage Service Agent" wykonuje szyfrowanie w Twoim imieniu, jest kluczowe.</p>
 </div>
 </div>
 <script>

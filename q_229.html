@@ -72,7 +72,6 @@ Your organization wants to be General Data Protection Regulation (GDPR) complian
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use the org policy constraint 'Google Cloud Platform - Resource Location Restriction' on your Google Cloud organization node.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use the org policy constraint 'Restrict Resource Service Usage' on your Google Cloud organization node.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use Identity and Access Management (IAM) custom roles to ensure that your DevOps team can only create resources in the Europe regions.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,28 +88,35 @@ Your organization wants to be General Data Protection Regulation (GDPR) complian
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Use the org policy constraint 'Google Cloud Platform - Resource Location Restriction' on your Google Cloud organization node)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Key Access Justifications (KAJ): To mechanizm suwerenności. Gdy Google potrzebuje użyć Twojego klucza (nawet CMEK), musi podać kod uzasadnienia (np. `CUSTOMER_INITIATED_ACCESS`). Możesz ustawić politykę, która blokuje operację, jeśli uzasadnienie jest niewłaściwe.
+Dlaczego ta odpowiedź jest poprawna:
+- Resource Location Restriction: To dedykowana polityka organizacji (`constraints/gcp.resourceLocations`), która pozwala na zdefiniowanie geograficznego obszaru (np. tylko regiony europejskie), w którym mogą być tworzone zasoby GCP. 
+- Compliance: Wiele regulacji (np. RODO/GDPR w UE) wymaga, aby dane użytkowników nie opuszczały terytorium UE. Polityka ta blokuje API przed tworzeniem VM, dysków czy baz danych w regionach spoza zdefiniowanej listy (np. w USA), co jest jedynym "twardym" mechanizmem prewencyjnym w GCP.
 
-Dlaczego inne są błędne:
-A, C, D: Nie są to funkcje usługi KAJ.
+Analiza niepoprawnych odpowiedzi:
+- A. IAP z Access Context Manager: Służy do kontrolowania dostępu UŻYTKOWNIKÓW do aplikacji/konsoli w oparciu o ich lokalizację IP. Nie blokuje to możliwości tworzenia zasobów (VM) przez deweloperów w innych regionach.
+- C. Restrict Resource Service Usage: Służy do blokowania możliwości włączenia/używania konkretnych usług (np. wyłączenie BigQuery w organizacji), ale nie ogranicza ich lokalizacji.
+- D. IAM custom roles: Role IAM zarządzają uprawnieniami, ale nie są w stanie wymusić lokalizacji geograficznej dla nowo tworzonych zasobów w sposób, w jaki robi to polityka organizacji.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. To najwyższy poziom kontroli nad danymi.
+Wskazówki i triki (Tips & Tricks):
+- "Restrict location" / "Data residency" + "Organization-wide enforcement" = Organization Policy (Resource Location Restriction).
+- Pamiętaj: Ta polityka działa na zasadzie "Deny everything except...".
+
+Praktyczne informacje na egzamin:
+- Warto pamiętać o regionach "Multi-region" – jeśli zablokujesz jakiś region, możesz zablokować też tworzenie zasobów w "Multi-regionach" (np. EU), które korzystają z zablokowanych lokalizacji.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">Resource location restriction overview</a>
+- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">Organization Policy constraints reference</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> KAJ (B) jest odpowiedzią na wymogi suwerenności danych w UE i Azji. Pozwala on technicznie udowodnić audytorom, że firma ma kontrolę nad tym, KIEDY i DLACZEGO dostawca chmury korzysta z kluczy klienta.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/key-access-justifications/docs/overview" target="_blank">https://cloud.google.com/key-access-justifications/docs/overview</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość mechanizmów kontroli nad cyklem życia zasobów obliczeniowych. W dużej firmie nie możesz polegać na dobrej woli deweloperów. Musisz technicznie uniemożliwić uruchamianie systemów, które nie przeszły przez Twój proces utwardzania (hardeningu). `resourceLocations` to standardowe narzędzie do tego celu w GCP.</p>
 </div>
 </div>
 <script>

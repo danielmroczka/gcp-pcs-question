@@ -89,28 +89,38 @@ For data residency requirements, you want your secrets in Google Clouds Secret M
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: A (Create your secret with a user managed replication policy, and choose only compliant locations)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Workload Identity: To najbezpieczniejszy sposób nadawania uprawnień podom w GKE. Łączy on tożsamość Kubernetes (KSA) z tożsamością Google (GSA). Pod po prostu 'staje się' kontem serwisowym Google, co eliminuje potrzebę ściągania i przechowywania niebezpiecznych kluczy JSON wewnątrz klastra.
+Dlaczego ta odpowiedź jest poprawna:
+- Secret Manager Replication: Domyślnie Secret Manager używa "automatic replication", co oznacza, że sekret jest replikowany w sposób zarządzany przez Google w wielu regionach, aby zapewnić wysoką dostępność. Nie daje to klientowi pełnej kontroli nad tym, w jakich konkretnie regionach dane są składowane.
+- User-managed replication (A): Pozwala na jawne wskazanie konkretnych regionów, w których dany sekret ma być dostępny. Jeśli wymogiem jest rezydencja danych tylko w `europe-west1` i `europe-west4`, to musisz użyć replikacji zarządzanej przez użytkownika, aby wykluczyć wszystkie inne regiony.
+- Wysoka dostępność: Wybierając dwie powyższe lokalizacje, zachowujesz wymóg wysokiej dostępności przy jednoczesnym spełnieniu restrykcyjnych wymogów rezydencji danych.
 
-Dlaczego inne są błędne:
-A, C, D: To funkcje innych usług (Cloud Build, K8s core, Artifact Registry).
+Analiza niepoprawnych odpowiedzi:
+- B. Automatic replication: To ustawienie nie pozwala na "wykluczenie" niechcianych regionów. Sekret będzie dostępny w wielu regionach, co może naruszać wymagania rezydencji danych.
+- C. Two separate secrets: Zarządzanie dwoma oddzielnymi sekretami o tej samej nazwie w różnych projektach/lokalizacjach jest błędem operacyjnym. Zwiększa narzut zarządzania (musisz aktualizować obie lokalizacje osobno) i nie zapewnia spójności danych.
+- D. Automatic replication + Org Policy: Polityki organizacji nie pozwalają na "przełamanie" polityki automatycznej replikacji sekretu na poziom konkretnych, wybranych regionów. Org Policy może zablokować tworzenie sekretów w regionach, ale nie zdefiniuje precyzyjnie "gdzie dokładnie" automatyczna replikacja ma się odbyć.
 
-Konsensus społeczności ExamTopics: 100% na B. Workload Identity to 'must-have' dla bezpieczeństwa GKE.
+Wskazówki i triki (Tips & Tricks):
+- "Specific regions" / "Residency requirements" + "Secret Manager" = User-managed replication.
+- "High availability" + "Specific regions" = User-managed replication (wybierz co najmniej dwa regiony).
+- Pamiętaj: Jeśli chcesz pełnej kontroli nad lokalizacją danych (rezydencja) – zawsze wybieraj `user-managed`.
+
+Praktyczne informacje na egzamin:
+- Secret Manager to usługa globalna (w sensie dostępu przez API), ale dane (payload) są przechowywane w konkretnych regionach.
+- Zmiana polityki replikacji z automatycznej na zarządzaną przez użytkownika jest możliwa, ale wymaga ostrożności.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/secret-manager/docs/replication-policy" target="_blank">Replication policies in Secret Manager</a>
+- <a href="https://cloud.google.com/secret-manager/docs/creating-and-accessing-secrets" target="_blank">Creating and managing secrets</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Inżynierowie na GitHubie podkreślają: 'Klucze JSON to najczęstsza przyczyna włamań do GKE'. Workload Identity (B) całkowicie usuwa ten wektor ataku, co czyni go kluczowym elementem każdej bezpiecznej architektury kontenerowej.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity" target="_blank">https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do projektowania rozwiązań typu "Cloud Sovereignty". W chmurze wygoda (automatyczna replikacja) często stoi w sprzeczności z suwerennością (kontrola nad lokalizacją danych). Prawidłowa odpowiedź (A) pokazuje, że rozumiesz różnicę między rozwiązaniami "wygodnymi" a tymi, które faktycznie realizują wymogi compliance.</p>
 </div>
 </div>
 <script>

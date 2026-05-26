@@ -72,7 +72,6 @@ Your organization uses the top-tier folder to separate application environments 
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> 1. Grant logging.viewer role to the security team at the organization resource level. 2. Grant logging.admin role to the developer team at the organization resource level.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> 1. Grant logging.admin role to the security team at the organization resource level. 2. Grant logging.viewer role to the developer team at the folder resource level that contains all the dev projects.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> 1. Grant logging.admin role to the security team at the organization resource level. 2. Grant logging.admin role to the developer team at the organization resource level.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,35 @@ Your organization uses the top-tier folder to separate application environments 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: A (1. Grant logging.viewer role to the security team at the organization resource level. 2. Grant logging.viewer role to the developer team at the folder resource level that contains all the dev projects)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Cloud IDS: To jedyne narzędzie w GCP z silnikiem inspekcji behawioralnej ruchu 'East-West'. Potrafi rozpoznać wzorzec 'Port Scanning' (próby połączeń na wiele portów w krótkim czasie) i wygenerować alert bezpieczeństwa.
+Dlaczego ta odpowiedź jest poprawna:
+- Zasada najniższych uprawnień (Least Privilege): Zespół bezpieczeństwa (Security team) musi mieć wgląd w logi CAŁEJ organizacji (prod + dev), dlatego rola `logging.viewer` powinna być nadana na poziomie organizacji.
+- Separacja środowisk: Zespół deweloperski (Developer team) ma dostęp tylko do środowiska deweloperskiego. Nadanie roli `logging.viewer` na poziomie folderu "Dev" automatycznie dziedziczy dostęp do wszystkich projektów wewnątrz tego folderu, ale blokuje dostęp do folderu produkcyjnego. To idealnie realizuje wymóg "least privilege".
 
-Dlaczego inne są błędne:
-A. Cloud Armor: Chroni tylko Load Balancer.
-C. Flow Logs: Rejestrują połączenia, ale musiałbyś sam pisać algorytmy, by odróżnić skanowanie portów od zwykłego ruchu. IDS (B) robi to automatycznie.
-D. IAP: Dla ludzi, nie dla maszyn.
+Analiza niepoprawnych odpowiedzi:
+- B, C, D: Nadawanie ról admina (`logging.admin`) deweloperom na poziomie organizacji lub folderów produkcyjnych jest błędem operacyjnym – mogliby oni usuwać logi lub zmieniać konfigurację zbierania logów w całej firmie, co narusza bezpieczeństwo i wymogi audytowe.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. Skanowanie portów = Intrusion Detection.
+Wskazówki i triki (Tips & Tricks):
+- "Review logs from prod and dev" + "Need visibility" = Organization level access.
+- "Review logs ONLY from dev" + "Least privilege" = Folder level access.
+- Zawsze wybieraj najniższy możliwy poziom w hierarchii zasobów (Org -> Folder -> Project) dla deweloperów.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj hierarchię ról: Org -> Folder -> Project. Uprawnienia nadane wyżej dziedziczą się niżej.
+- Jeśli chcesz ograniczyć dostęp (least privilege), szukaj rozwiązania, które nadaje uprawnienia jak najniżej w hierarchii (np. na folderze zamiast na organizacji).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iam/docs/resource-hierarchy" target="_blank">Resource hierarchy and IAM</a>
+- <a href="https://cloud.google.com/logging/docs/access-control" target="_blank">Access control for Cloud Logging</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Dyskusja na forach zwraca uwagę na 'Lateral Movement'. Skanowanie portów jest pierwszym krokiem hakera po zainfekowaniu jednej VM w Twojej sieci. Cloud IDS (B) jest kluczowy, by złapać atak ZANIM haker dobierze się do bazy danych.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/intrusion-detection-system/docs/overview" target="_blank">https://cloud.google.com/intrusion-detection-system/docs/overview</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do projektowania struktury IAM w dużym przedsiębiorstwie. Kluczem jest "Resource Hierarchy". Zrozumienie, że uprawnienia nadane na folderze automatycznie pokrywają wszystkie projekty wewnątrz, pozwala na skalowanie zarządzania dostępem bez potrzeby ręcznego klikania w każdym projekcie.</p>
 </div>
 </div>
 <script>
