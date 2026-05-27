@@ -72,7 +72,6 @@ Your company has recently enabled Security Command Center at the organization le
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure Security Health Analytics within Security Command Center to monitor container runtime vulnerabilities in the production folder.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Ensure that the containers in the production folder are running on hosts that are using Container-Optimized OS.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enable Container Threat Detection in Security Command Center Premium tier for the projects within the production folder.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,33 @@ Your company has recently enabled Security Command Center at the organization le
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (Enable Container Threat Detection in Security Command Center Premium tier for the projects within the production folder.)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Container Threat Detection: Jest to specyficzna funkcja SCC Premium zaprojektowana dokładnie do monitorowania wnętrza działających kontenerów. Wykrywa ona podejrzane zdarzenia, takie jak uruchomienie nieznanego skryptu, ładowanie złośliwej biblioteki czy otwarcie reverse-shell.
+Dlaczego ta odpowiedź jest poprawna:
+- Container Threat Detection: Jest to dedykowana usługa w SCC Premium, która wykrywa "runtime threats" (np. uruchomienie złośliwego skryptu, ładowanie nieoczekiwanych bibliotek w kontenerach).
+- "Runtime threat detection": To bezpośrednie zadanie dla tej usługi.
 
-Dlaczego inne są błędne:
-A. Log-based metrics: Zliczają wystąpienia fraz w logach, ale nie mają wglądu w niskopoziomowe operacje systemowe kontenera (np. ładowanie modułów jądra).
-B. SHA: Skupia się na błędach w konfiguracji chmury (np. 'pod jest uprzywilejowany'), a nie na tym co pod ROBI w trakcie działania (runtime).
-C. COS: To bezpieczny system operacyjny, ale sam w sobie nie raportuje zagrożeń runtime do SCC bez włączonej usługi detekcji (D).
+Analiza niepoprawnych odpowiedzi:
+- A. Cloud Logging/Monitoring: Można stworzyć alerty, ale wymaga to manualnego definiowania reguł, a nie jest gotową, zarządzaną usługą detekcji zagrożeń w czasie rzeczywistym.
+- B. Security Health Analytics: Służy do skanowania *konfiguracji* (misconfigurations), a nie do detekcji zagrożeń w *runtime* (uruchomionym kontenerze).
+- C. Container-Optimized OS: To system operacyjny (OS), który jest bezpieczniejszy, ale samo jego użycie nie daje detekcji zagrożeń w runtime.
 
-Konsensus społeczności ExamTopics: 100% na D. Runtime threat detection = CTD w Google Cloud.
+Wskazówki i triki (Tips & Tricks):
+- "Runtime threat detection" + "Container" = Container Threat Detection (SCC Premium).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Container Threat Detection jest częścią Security Command Center Premium.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/security-command-center/docs/container-threat-detection" target="_blank">Container Threat Detection overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> CTD działa poprzez zbieranie sygnałów z jądra systemu Linux i przesyłanie ich do silnika analitycznego SCC, co pozwala na wykrycie włamań 'zero-day'.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/security-command-center/docs/concepts-container-threat-detection-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-container-threat-detection-overview</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie sprawdzające umiejętność doboru odpowiedniego narzędzia detekcji zagrożeń w GCP. Kluczowe jest rozróżnienie skanowania konfiguracji (SHA) od detekcji zagrożeń w czasie rzeczywistym w kontenerach (Container Threat Detection).</p>
 </div>
 </div>
 <script>

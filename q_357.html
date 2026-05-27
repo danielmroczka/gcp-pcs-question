@@ -72,7 +72,6 @@ Your company is developing a new application for your organization. The applicat
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create three separate service accounts. Grant one service account the permissions to execute service A. Grant the second service account the permissions to run service B. Grant the third service account the permissions to communicate between both services A and B. Require authentication for service B. Call the backend by authenticating with a service account key for the third service account.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a new service account with the permissions to run service A and service B. Require authentication for service B. Permit only the new service account to call the backend.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use the Compute Engine default service account to run service A and service B. Require authentication for service B. Permit only the default service account to call the backend.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,34 @@ Your company is developing a new application for your organization. The applicat
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Create two separate service accounts. Grant one service account the permissions to execute service A, and grant the other service account the permissions to execute service B. Require authentication for service B. Permit only the service account for service A to call the backend.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Service-to-Service Auth: Każda usługa powinna mieć własną tożsamość (SA). Usługa B powinna mieć wyłączony dostęp publiczny (allow unauthenticated = false). Następnie nadajesz kontu serwisowemu usługi A rolę `roles/run.invoker` tylko na usłudze B. To najczystsza forma Least Privilege.
+Dlaczego ta odpowiedź jest poprawna:
+- Least Privilege: Każdy serwis powinien mieć własne, odseparowane konto serwisowe (Identity per workload). To zapobiega sytuacji, w której kompromitacja jednego serwisu pozwala na nieograniczone operacje w innym.
+- "Require authentication for service B": W Cloud Run, aby zabezpieczyć backend, należy ustawić "Require authentication" (wymaga tokena ID).
+- IAM Permit: Service account dla serwisu A uzyskuje rolę `Cloud Run Invoker` dla serwisu B. Dzięki temu tylko A może wywołać B.
 
-Dlaczego inne są błędne:
-B. Keys: Nigdy nie używaj statycznych kluczy do komunikacji między usługami wewnątrz chmury.
-C. One SA for both: Narusza izolację. Jeśli jedna usługa zostanie zhakowana, haker ma uprawnienia obu.
-D. Default SA: Posiada zbyt szerokie uprawnienia (Editor).
+Analiza niepoprawnych odpowiedzi:
+- B: Zbyt skomplikowane (trzy SA), użycie kluczy (service account keys) jest ryzykowne (zła praktyka).
+- C: Łamanie Least Privilege (jedno SA dla dwóch serwisów).
+- D: Domyślne SA to zła praktyka (często zbyt szerokie uprawnienia).
 
-Konsensus społeczności ExamTopics: 100% poparcia dla A. To fundament bezpieczeństwa mikroserwisów.
+Wskazówki i triki (Tips & Tricks):
+- "Least privilege" + "Cloud Run services communication" = Dedykowane SA dla każdego serwisu + IAM Invoker role (na backendzie).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Dostęp między serwisami Cloud Run realizuje się przez IAM (rola Invoker) na serwisie docelowym.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/run/docs/authenticating/service-to-service" target="_blank">Service-to-service authentication</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Usługa A automatycznie pobiera token tożsamości (ID token) z serwera metadanych i dołącza go do nagłówka Authorization, co IAP pod spodem weryfikuje bez pisania dodatkowego kodu.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/run/docs/authenticating/service-to-service" target="_blank">https://cloud.google.com/run/docs/authenticating/service-to-service</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie o bezpieczną architekturę w środowisku serverless (Cloud Run). Kluczem jest izolacja tożsamości każdego serwisu (osobne SA) oraz restrykcyjne nadawanie uprawnień do wywoływania (Invoker role) w celu realizacji modelu "Least Privilege".</p>
 </div>
 </div>
 <script>

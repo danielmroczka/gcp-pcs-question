@@ -72,7 +72,6 @@ Your financial services company needs to process customer personally identifiabl
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Set up VPC Service Controls around the BigQuery project. Implement row-level encryption.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Implement a custom BigQuery user-defined function (UDF) by using JavaScript to hash all sensitive fields before they are loaded into the analytical tables.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure Sensitive Data Protection (SDP) to de-identify PII using format-preserving encryption (FPE).</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,34 @@ Your financial services company needs to process customer personally identifiabl
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (Configure Sensitive Data Protection (SDP) to de-identify PII using format-preserving encryption (FPE).)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. SDP (DLP) + FPE: Pytanie zawiera dwa kluczowe wymogi: 'original format' i 'avoid irreversible deletion'. Format-Preserving Encryption (FPE) zapewnia, że np. zaszyfrowany numer karty nadal ma 16 cyfr i poprawny format, a proces jest odwracalny dla uprawnionych osób (nie jest to 'irreversible deletion' jak przy haszowaniu).
+Dlaczego ta odpowiedź jest poprawna:
+- Sensitive Data Protection (wcześniej Cloud DLP): Jest to główna usługa GCP do transformacji wrażliwych danych.
+- "Format-preserving encryption" (FPE): Spełnia wymóg "retains its original format and consistency" (dane po transformacji wyglądają jak dane oryginalne, np. ciągle wyglądają jak numer karty kredytowej) oraz pozwala na operacje analityczne (analytical integrity), jednocześnie chroniąc prywatność.
+- "Avoid full irreversible deletion": FPE jest procesem *odwracalnym* (re-identifiable), jeśli posiada się klucz, w przeciwieństwie do haszowania.
 
-Dlaczego inne są błędne:
-A. Dataset encryption: Chroni bazę przed hakerem, ale analityk z dostępem do BQ i tak widziałby dane jawne.
-B. VPC SC: Chroni granice, nie zmienia treści danych wewnątrz.
-C. Hashing: Jest nieodwracalny (irreversible) i całkowicie zmienia format danych, co narusza oba wymogi pytania.
+Analiza niepoprawnych odpowiedzi:
+- A. CMEK: Szyfrowanie całego zbioru danych (at rest) nie pozwala na analitykę na poziomie poszczególnych pól bez deszyfrowania całości.
+- B. VPC SC/Row-level encryption: VPC SC chroni przed eksfiltracją (sieć), a nie transformuje danych. Row-level encryption to skomplikowany sposób implementacji tego, co DLP oferuje natywnie.
+- C. Hashing: Haszowanie jest *nieodwracalne* (wymóg mówił o "avoid full irreversible deletion", co sugeruje potrzebę odwracalności w przyszłości).
 
-Konsensus społeczności ExamTopics: 100% poparcia dla D. FPE to standard dla analityki Big Data zachowującej prywatność.
+Wskazówki i triki (Tips & Tricks):
+- "Original format and consistency" + "Analytical integrity" + "Not irreversible" = Format-Preserving Encryption (FPE).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Sensitive Data Protection (SDP/DLP) to narzędzie do anonimizacji/pseudonimizacji.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/sensitive-data-protection/docs/deidentification-techniques" target="_blank">De-identification techniques</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Dzięki FPE zachowujesz tzw. 'Referential Integrity'. Jeśli zaszyfrujesz ID klienta tym samym kluczem w dwóch różnych tabelach, nadal będziesz mógł je połączyć (JOIN), nie wiedząc kim jest klient.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/dlp/docs/pseudonymization#fpe" target="_blank">https://cloud.google.com/dlp/docs/pseudonymization#fpe</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie o techniki ochrony danych w analityce. Format-Preserving Encryption (FPE) pozwala na analitykę na danych (np. joinowanie tabel), zachowując format danych, przy jednoczesnej ochronie prywatności zgodnie z regulacjami.</p>
 </div>
 </div>
 <script>

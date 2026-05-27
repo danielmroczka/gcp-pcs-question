@@ -72,7 +72,6 @@ Your organization enforces a custom organization policy that disables the use of
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Apply the restrictive organization policy at the organization level. Create an IAM custom role with permissions to bypass organization policies. Assign the custom role to the regulated business team for the specific project.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Apply the custom organization policy at the organization level to restrict external IPs. Move the regulated business workload to a separate folder. Override the policy at that folder level.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Modify the custom organization policy at the organization level to allow external IPs for all projects. Configure VPC firewall rules to restrict egress traffic except for the regulated business workload.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,33 @@ Your organization enforces a custom organization policy that disables the use of
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Apply the custom organization policy at the organization level to restrict external IPs. Move the regulated business workload to a separate folder. Override the policy at that folder level.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Folder-level Override: Najlepszym sposobem na zarządzanie wyjątkami w GCP jest hierarchia. Utrzymujesz silną polityka na poziomie Organizacji, a dla 'wyjątkowego' działu tworzysz osobny folder, w którym nadpisujesz tę jedną politykę (Override). To zapewnia izolację wyjątku i łatwy audyt (drift jest ograniczony do jednego folderu).
+Dlaczego ta odpowiedź jest poprawna:
+- Hierarchia polityk: Polityki organizacji (Organization Policies) mogą być definiowane na poziomie organizacji, folderu lub projektu. Polityka zastosowana niżej w hierarchii (np. na folderze) nadpisuje (overrides) politykę wyższą (organizacji).
+- "Regulated business unit" + "Separate folder" + "Override policy" = Najbezpieczniejszy i najczystszy sposób na zarządzanie wyjątkami (exception handling).
 
-Dlaczego inne są błędne:
-A. Move others: Niepotrzebne skomplikowanie struktury dla większości, która nie potrzebuje zmian.
-B. Custom role bypass: Nie istnieje rola IAM pozwalająca na 'zignorowanie' polityki organizacji (Org Policy działa na poziomie API, niezależnie od IAM).
-D. Allow for all: Katastrofa bezpieczeństwa.
+Analiza niepoprawnych odpowiedzi:
+- A: Odwrotna logika (ograniczanie tam, gdzie nie trzeba, a brak ochrony tam, gdzie powinna być).
+- B: Nie można stworzyć roli IAM, która "omija" (bypasses) polityki organizacji. Polityki są nadrzędne wobec IAM.
+- D: Zbyt szerokie uprawnienia (poluzowanie polityki dla całej organizacji) – to ryzykowne ("policy drift").
 
-Konsensus społeczności ExamTopics: 100% poparcia dla C. To złoty standard zarządzania wyjątkami compliance.
+Wskazówki i triki (Tips & Tricks):
+- "Organization policy exception" + "Regulated workload" = Override at the folder level.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Hierarchia polityk (Org -> Folder -> Project) pozwala na bezpieczne zarządzanie wyjątkami.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/understanding-hierarchy" target="_blank">Organization policy hierarchy</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Po zakończeniu projektu regulowanego, wystarczy skasować politykę na folderze, a projekty automatycznie odziedziczą bezpieczne ustawienia z góry (Organizacji).</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/understanding-hierarchy" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/understanding-hierarchy</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie sprawdza zrozumienie hierarchii i sposobu nadpisywania (overriding) polityk organizacji. Zarządzanie wyjątkami poprzez hierarchię folderów to najlepsza praktyka zapewniająca separację środowisk i unikająca "policy drift".</p>
 </div>
 </div>
 <script>

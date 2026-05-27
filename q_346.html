@@ -72,7 +72,6 @@ A batch job running on Compute Engine needs temporary write access to a Cloud St
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a service account and embed a long-lived service account key file that has write permissions specified directly in the batch job script.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a service account with the storage.objectCreator role. Use service account impersonation in the batch job's code.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Grant the predefined storage.objectCreator role to the Compute Engine instance's default service account.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,33 @@ A batch job running on Compute Engine needs temporary write access to a Cloud St
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Create a service account with the storage.objectCreator role. Use service account impersonation in the batch job's code.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Least privilege + Impersonation: Rola `storage.objectCreator` pozwala tylko na WGRYWANIE nowych plików (nie pozwala na ich listowanie, czytanie czy usuwanie), co idealnie pasuje do wymogu 'write access' i zasady najniższych uprawnień. Impersonacja (generowanie tymczasowych tokenów) eliminuje ryzyko związane z kluczami statycznymi.
+Dlaczego ta odpowiedź jest poprawna:
+- Least Privilege: `storage.objectCreator` (daje uprawnienia tylko do *tworzenia* obiektów, czyli zapisywania) to mniejszy zakres uprawnień niż "full admin".
+- Service Account Impersonation: To nowoczesna i bezpieczna metoda (zamiast kluczy), pozwalająca na przejmowanie tożsamości (impersonation) konta serwisowego przez kod uruchomiony na VM.
 
-Dlaczego inne są błędne:
-A. Storage Admin: Zbyt szerokie (pozwala usuwać buckety, zmieniać uprawnienia).
-B. Embed key: Krytyczny błąd bezpieczeństwa.
-D. Default SA: Domyślne konta mają zazwyczaj zbyt duże uprawnienia (rola Editor). Zawsze twórz własne konta serwisowe.
+Analiza niepoprawnych odpowiedzi:
+- A. Administrator role: Zbyt szerokie uprawnienia (łamie zasadę Least Privilege).
+- B. Long-lived key: Klucze (JSON keys) to najgorsza praktyka – jeśli wyciekną, są ważne dopóki nie zostaną usunięte.
+- D. Default service account: Nigdy nie przypisuj ról do domyślnego konta serwisowego ("Compute Engine default service account"), ponieważ jest ono używane przez system do wielu zadań – zawsze twórz dedykowane (custom) konta dla swoich aplikacji.
 
-Konsensus społeczności ExamTopics: 100% na C. To podręcznikowy przykład bezpiecznej automatyzacji.
+Wskazówki i triki (Tips & Tricks):
+- "Minimum permissions" + "Compute Engine" = Custom Service Account + granulowana rola IAM (storage.objectCreator) + Impersonation (brak kluczy!).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: IAM Roles są lepsze niż ACLs, a Service Accounts są lepsze niż klucze (keys).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iam/docs/service-account-impersonation" target="_blank">Service account impersonation</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Impersonacja zapewnia, że nawet jeśli ktoś przejmie kontrolę nad procesem batche, nie znajdzie na dysku żadnych poświadczeń, które mógłby ukraść.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/iam/docs/service-account-impersonation" target="_blank">https://cloud.google.com/iam/docs/service-account-impersonation</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie sprawdza dwie kluczowe zasady: *Least Privilege* (granulowana rola *objectCreator*) oraz *bezpieczna autoryzacja* (impersonation zamiast kluczy).</p>
 </div>
 </div>
 <script>

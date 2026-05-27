@@ -72,7 +72,6 @@ Your global defense company is migrating top-secret classified data to BigQuery 
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use customer-supplied encryption keys (CSEKs) by providing your own encryption keys with each data operation in Cloud Storage and BigQuery.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Import existing on-premises master encryption keys into Cloud Key Management Service (Cloud KMS). Use the imported keys for BigQuery and Cloud Storage encryption.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure Cloud External Key Manager (Cloud EKM) for the BigQuery datasets and Cloud Storage buckets. Integrate EKM with your existing on-premises hardware security modules (HSMs).</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,33 @@ Your global defense company is migrating top-secret classified data to BigQuery 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (Configure Cloud External Key Manager (Cloud EKM) for the BigQuery datasets and Cloud Storage buckets. Integrate EKM with your existing on-premises hardware security modules (HSMs).)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Cloud EKM: To jedyna usługa, gdzie materiał klucza (master key) fizycznie NIGDY nie opuszcza Twojego lokalnego urządzenia HSM (D). Google tylko 'prosi' Twój HSM o wykonanie operacji. Możesz natychmiast 'odciąć' chmurę (Revoke access) poprzez wyłączenie klucza u siebie, całkowicie niezależnie od systemów Google (CSP).
+Dlaczego ta odpowiedź jest poprawna:
+- Cloud EKM (External Key Manager): To jedyna usługa, która pozwala na zarządzanie kluczami szyfrującymi *poza* chmurą (np. w Twoim własnym on-premises HSM).
+- "Master encryption key material never leaves the accredited on-premises cryptographic hardware": To bezpośredni opis działania EKM (klucze nigdy nie opuszczają Twojego HSM).
+- "Retain unilateral ability to revoke access": Odcięcie połączenia z EKM przez GCP powoduje natychmiastowe unieważnienie klucza i brak możliwości deszyfracji danych w chmurze – pełna kontrola po stronie klienta.
 
-Dlaczego inne są błędne:
-A. CMEK: Klucz jest w Google.
-B. CSEK: Klucz trafia na chwilę do pamięci RAM Google podczas operacji szyfrowania - technicznie 'opuszcza on-prem'.
-C. Imported keys: Po imporcie klucz rezyduje w chmurze Google.
+Analiza niepoprawnych odpowiedzi:
+- A, C: CMEK czy importowane klucze (imported keys) nadal przebywają wewnątrz chmury (w Cloud KMS/HSM Google), więc nie spełniają wymogu "never leaves the on-premises hardware".
+- B: CSEK to klucze dostarczane z każdą operacją (używane do szyfrowania), co nie jest metodą zarządzania "master key material" (to raczej metoda szyfrowania danych).
 
-Konsensus społeczności ExamTopics: 100% na D. EKM to fundament suwerenności kluczy w chmurze.
+Wskazówki i triki (Tips & Tricks):
+- "Master key material never leaves on-premises HSM" = Cloud External Key Manager (Cloud EKM).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: EKM = najwyższa forma suwerenności danych (data sovereignty) i kontroli nad kluczami.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/kms/docs/ekm" target="_blank">Cloud External Key Manager</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> To rozwiązanie jest wymagane przez organizacje, które mają prawny zakaz powierzania materiału klucza podmiotom trzecim (nawet w formie zaszyfrowanej).</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/kms/docs/ekm" target="_blank">https://cloud.google.com/kms/docs/ekm</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie o zaawansowane scenariusze suwerenności danych (Data Sovereignty). EKM jest kluczowy dla organizacji, które z powodów regulacyjnych muszą utrzymać fizyczną kontrolę nad "matką wszystkich kluczy" wewnątrz własnego sprzętu HSM.</p>
 </div>
 </div>
 <script>

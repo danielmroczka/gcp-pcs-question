@@ -72,7 +72,6 @@ You work at a company in a regulated industry and are responsible for ongoing se
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create custom organization policies that follow specific business requirements. Enforce the policies on the folder level.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Enable Assured Workloads on the folder level, with the specific control bundle appropriate for your industry's regulations.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use Workload Manager with custom Rego policies to continuously scan the environment for misconfigurations on the folder level.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,33 @@ You work at a company in a regulated industry and are responsible for ongoing se
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Create a Posture file by using custom and predefined SHA or organization policies. Enforce the posture on the folder level.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Security Posture Management: To najnowocześniejsze narzędzie w SCC. Pozwala zdefiniować cały zestaw reguł (polityki organizacji + detektory SHA) w jednym pliku YAML ('Posture file'). Możesz go następnie 'przypiąć' do folderu, co zapewnia zarówno blokowanie błędów (prevent), jak i stałe monitorowanie zgodności (detect).
+Dlaczego ta odpowiedź jest poprawna:
+- Security Command Center (SCC) Posture Management: To natywna usługa Google do "prevent and detect misconfigurations". Pozwala zdefiniować *Posture* (stan docelowy bezpieczeństwa) jako plik, który zawiera definicje (SHA - Security Health Analytics) oraz polityki (Org Policies).
+- "Enforce the posture on the folder level": Posture management pozwala na egzekwowanie tego stanu na poziomie folderu lub projektu.
 
-Dlaczego inne są błędne:
-B. Custom policies: To tylko połowa sukcesu (prevent), nie oferują dashboardu detekcji 'findings' tak jak SCC Posture.
-C. Assured Workloads: Świetne dla rezydencji danych, ale Posture (A) jest bardziej elastyczne dla specyficznych 'internal compliance' i reguł SHA.
-D. Workload Manager: Skupia się na aplikacjach Enterprise (SAP, SQL Server), nie jest ogólnym narzędziem 'Posture' dla folderu.
+Analiza niepoprawnych odpowiedzi:
+- B. Custom org policies: Same polityki (org policies) pozwalają tylko na prewencję, a nie na *detekcję* (a pytanie wymaga "prevent AND detect").
+- C. Assured Workloads: Służy do automatycznego wdrażania środowisk zgodnych z konkretnymi *regulacjami* (np. FedRAMP, HIPAA), ale nie jest to narzędzie do "prevent AND detect" w istniejących zasobach.
+- D. Workload Manager: Służy do weryfikacji konfiguracji (np. zgodności z ISO/NIST) i raportowania, ale to "Posture Management" w SCC jest obecnie rekomendowanym narzędziem do zarządzania "prevent and detect" w czasie rzeczywistym.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na A. Posture Management to nowy standard 'Governance as Code' w GCP.
+Wskazówki i triki (Tips & Tricks):
+- "Prevent and detect misconfigurations" + "Specific compliance policies" = Security Command Center Posture Management.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Posture Management w SCC pozwala na zdefiniowanie "jak ma wyglądać bezpieczeństwo" (pożądany stan) i automatyczne wymuszanie tego stanu.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/security-command-center/docs/concepts-security-postures-overview" target="_blank">Security Command Center postures overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Dzięki Posture Management zespół security może przygotować 'szablon bezpiecznego folderu' i mieć pewność, że każdy projekt w nim stworzony będzie od razu zgodny ze standardem firmy.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/security-command-center/docs/concepts-security-postures-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-security-postures-overview</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie o nowoczesne podejście do zarządzania "Posture Management" w GCP. SCC Postures integruje polityki (prewencja) i reguły SHA (detekcja), co jest optymalnym rozwiązaniem do utrzymania bezpieczeństwa w skali folderów/projektów.</p>
 </div>
 </div>
 <script>

@@ -72,7 +72,6 @@ You are managing a set of Google Cloud projects that are contained in a folder n
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Grant the BigQuery Data Viewer role at the Data Warehouse folder.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Grant the BigQuery Data Viewer role at the dataset level for each BigQuery dataset within each project in the Data Warehouse folder.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Grant the BigQuery Metadata Viewer role at the Data Warehouse folder.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,29 +88,33 @@ You are managing a set of Google Cloud projects that are contained in a folder n
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Grant the BigQuery Data Viewer role at the Data Warehouse folder.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Folder-level IAM: Dzięki dziedziczeniu w GCP, nadanie roli `BigQuery Data Viewer` na poziomie folderu sprawia, że zespół automatycznie zyskuje dostęp do wszystkich obecnych i przyszłych projektów oraz tabel w tym folderze. To drastycznie redukuje narzut administracyjny (minimal overhead).
+Dlaczego ta odpowiedź jest poprawna:
+- Hierarchia zasobów + IAM: Uprawnienia IAM dziedziczą się w dół hierarchii. Jeśli nadasz rolę `BigQuery Data Viewer` na poziomie folderu "Data Warehouse", wszyscy członkowie zespołu automatycznie otrzymają te uprawnienia do wszystkich projektów i zbiorów danych (datasetów) wewnątrz tego folderu.
+- "Reduce operational overhead": Jest to najwydajniejsza metoda, ponieważ nie wymaga przypisywania ról osobno dla każdego projektu czy zbioru danych.
+- Least Privilege: Rola `Data Viewer` jest rolą typu "read-only", więc spełnia wymóg "read and not modify/delete".
 
-Dlaczego inne są błędne:
-A, C: Wymagają powtarzania czynności dla każdego projektu/datasetu, co jest błędotwórcze i nieefektywne.
-D. Metadata Viewer: Pozwala widzieć nazwy tabel, ale NIE pozwala na czytanie danych (SELECT), co jest sprzeczne z celem zespołu analitycznego.
+Analiza niepoprawnych odpowiedzi:
+- A, C: Są poprawne pod kątem uprawnień, ale wymagają zarządzania wieloma przypisaniami (wysoki "operational overhead").
+- D: `Metadata Viewer` daje dostęp tylko do schematu/metadanych, nie do danych w tabelach (nie spełnia wymogu "perform data analysis").
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. Wykorzystanie hierarchii to podstawa administracji GCP.
+Wskazówki i triki (Tips & Tricks):
+- "Reduce operational overhead" + "Adhere to least privilege" + "Folder hierarchy" = Grant IAM role at the folder level.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Zawsze szukaj przypisania roli na najwyższym możliwym poziomie hierarchii (folder), aby uprościć zarządzanie, jeśli pozwala na to zasada najniższych uprawnień.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iam/docs/resource-hierarchy-access-control" target="_blank">Resource hierarchy and access control</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> To rozwiązanie promuje model 'Data Lake'. Deweloperzy wrzucają dane do nowych projektów w folderze 'Warehouse', a analitycy mają do nich dostęp od razu, bez proszenia IT o uprawnienia.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/access-control-folders" target="_blank">https://cloud.google.com/resource-manager/docs/access-control-folders</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie sprawdza zrozumienie dziedziczenia ról IAM w hierarchii zasobów GCP. Nadawanie ról na poziomie folderów to kluczowa technika zmniejszająca narzut administracyjny przy zachowaniu bezpieczeństwa.</p>
 </div>
 </div>
 <script>

@@ -72,7 +72,6 @@ Your organization is using Google Workspace, Google Cloud, and a third-party SIE
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure Google Workspace to directly send logs to the API endpoint of the third-party SIEM.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a Cloud Storage bucket as a sink for all logs. Configure the SIEM to periodically scan the bucket for new log files.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a Cloud Logging sink to export relevant authentication logs to a Pub/Sub topic for SIEM subscription.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,33 @@ Your organization is using Google Workspace, Google Cloud, and a third-party SIE
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (Create a Cloud Logging sink to export relevant authentication logs to a Pub/Sub topic for SIEM subscription.)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Pub/Sub Sink: Jest to jedyna metoda gwarantująca dostarczanie logów w czasie zbliżonym do rzeczywistego (real time). Pub/Sub działa w modelu 'push', więc sekundy po zalogowaniu użytkownika, informacja o tym trafia do SIEM.
+Dlaczego ta odpowiedź jest poprawna:
+- Log Sinks + Pub/Sub: To natywne, skalowalne i "near real-time" rozwiązanie do przesyłania logów z Google Cloud do dowolnego SIEM. Pub/Sub służy jako bufor, który SIEM może subskrybować.
+- Logi Google Workspace: Logi Workspace mogą być przesyłane do Cloud Logging, co pozwala na ich późniejszą eksportację tym samym mechanizmem (Log Sink).
 
-Dlaczego inne są błędne:
-A. Polling: Jest wolny i nieefektywny (możesz przegapić zdarzenia między odpytaniami).
-B. Workspace direct: Nie wszystkie zdarzenia logowania do GCP (zwłaszcza przez SA czy API) przechodzą przez standardowe logi Workspace. Cloud Logging (D) jest bardziej kompletny.
-C. GCS sink: Zapisuje logi w paczkach co kilka minut - nie jest to 'real time'.
+Analiza niepoprawnych odpowiedzi:
+- A. Poll gcloud: Nieefektywne, wymaga pisania własnego kodu ("management overhead") i nie zapewnia dobrej wydajności.
+- B. Send to API endpoint: Google Workspace nie ma natywnej funkcji wysyłania logów bezpośrednio do endpointów API stron trzecich.
+- C. Bucket scan: To metoda "batch" (okresowe skanowanie), nie "real-time" lub "near real-time".
 
-Konsensus społeczności ExamTopics: 100% na D. Pub/Sub to domyślny transport dla SIEM.
+Wskazówki i triki (Tips & Tricks):
+- "Logs" + "SIEM" + "Real-time" = Pub/Sub (Sink).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: W GCP logi do SIEM zawsze wysyłamy przez Pub/Sub (Log Sink -> Pub/Sub -> SIEM).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/logging/docs/export/using-exported-logs" target="_blank">Exporting logs to Pub/Sub</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Po stronie SIEM zazwyczaj uruchamia się mały proces (subscriber), który natychmiast 'wyciąga' wiadomości z Pub/Sub, co zapewnia minimalne opóźnienia (latency).</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/logging/docs/export/aggregated_sinks" target="_blank">https://cloud.google.com/logging/docs/export/aggregated_sinks</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie o architekturę logowania w skali. Wykorzystanie Pub/Sub jako pośrednika ("message bus") między GCP (Cloud Logging) a systemami SIEM jest standardem w projektach korporacyjnych.</p>
 </div>
 </div>
 <script>

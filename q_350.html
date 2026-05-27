@@ -72,7 +72,6 @@ Your company is deploying a large number of containerized applications to GKE. T
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Enable Artifact Analysis vulnerability scanning and regularly scan images in Artifact Registry. Remove any images that do not meet the vulnerability requirements before deployment.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Implement a custom script in the Cloud Build pipeline that uses a third-party vulnerability scanning tool. Fail the build if vulnerabilities are found.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure GKE to use only images from a specific, trusted Artifact Registry repository. Manually inspect all images before pushing them to this repository.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,33 @@ Your company is deploying a large number of containerized applications to GKE. T
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Configure a policy in Binary Authorization to use Artifact Analysis vulnerability scanning to only allow images that pass the scan to deploy to your GKE clusters.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. BinAuth + Artifact Analysis: To kompletny, automatyczny łańcuch zaufania. Skaner (Artifact Analysis) wykonuje brudną robotę (szukanie CVE), a strażnik (Binary Authorization) sprawdza werdykt skanera przed wpuszczeniem obrazu do klastra. Wszystko jest w pełni zintegrowane i zarządzane przez Google.
+Dlaczego ta odpowiedź jest poprawna:
+- Binary Authorization + Artifact Analysis: To standard w GKE do automatycznego sprawdzania (enforcement), czy obraz posiada atestację (attestation) z pozytywnego skanowania podatności (Artifact Analysis).
+- "Automated" + "Integrated": Binary Auth wpięte w CI/CD to natywne rozwiązanie dla tego wymagania.
 
-Dlaczego inne są błędne:
-B. Scan only: Brak mechanizmu blokady (enforcement). Obraz z krytyczną luką i tak zostanie uruchomiony.
-C. Custom script: Zwiększa narzut i jest mniej pewne niż natywna funkcja BinAuth.
-D. Manual inspection: Całkowicie nieskalowalne i sprzeczne z wymogiem automatyzacji.
+Analiza niepoprawnych odpowiedzi:
+- B. Manual removal: Nie jest to automatyczne (wymaga manualnej interwencji).
+- C. Custom script: Jest to podejście "niemanaged" (wymaga utrzymania kodu, podatne na błędy).
+- D. Manual inspection: Bardzo pracochłonne, nie skaluje się dla "large number of applications".
 
-Konsensus społeczności ExamTopics: 100% na A. Podstawowe pytanie o architekturę bezpiecznych wdrożeń GKE.
+Wskazówki i triki (Tips & Tricks):
+- "Only images that passed vulnerability scanning" + "Automated" + "GKE" = Binary Authorization + Artifact Analysis.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Binary Authorization to brama, która weryfikuje polityki bezpieczeństwa *zanim* kontener wystartuje w klastrze.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/binary-authorization/docs/overview" target="_blank">Binary Authorization overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Ten model zapobiega też 'driftowi' - jeśli w już działającym obrazie zostanie wykryta nowa luka, BinAuth może zablokować jego kolejne restarty lub nowe wdrożenia.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/binary-authorization/docs/vulnerability-checks" target="_blank">https://cloud.google.com/binary-authorization/docs/vulnerability-checks</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie o automatyzację bezpieczeństwa w procesie CI/CD i GKE. Binary Authorization jest natywnym rozwiązaniem GCP do wymuszania polityk bezpieczeństwa na poziomie obrazów kontenerowych przed ich uruchomieniem w klastrze.</p>
 </div>
 </div>
 <script>

@@ -72,7 +72,6 @@ Your company's storage team manages all product images within a specific Google 
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Employ organization-level firewall rules to block all traffic to Cloud Storage. Create exceptions for specific service accounts used by the storage team within their project.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use Context-Aware Access. Create an access level that defines the required context. Apply it as an organization policy specifically at the project level, restricting access to Cloud Storage based on that context.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Implement VPC Service Controls by establishing an organization-wide service perimeter with all projects. Configure ingress and egress rules to restrict access to Cloud Storage based on IP address ranges.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,33 @@ Your company's storage team manages all product images within a specific Google 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Use Context-Aware Access. Create an access level that defines the required context. Apply it as an organization policy specifically at the project level, restricting access to Cloud Storage based on that context.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Context-Aware Access (CAA) at Project Level: CAA pozwala na zdefiniowanie warunków dostępu (np. 'tylko z zarządzanych komputerów firmowych') i przypisanie ich bezpośrednio do projektu. Spełnia to wymóg izolacji dostępu i pozwala zespołowi na samodzielne zarządzanie tymi regułami na ich poziomie.
+Dlaczego ta odpowiedź jest poprawna:
+- Context-Aware Access: Pozwala na stworzenie "Access Level" (np. wymaganie "corporate device").
+- Application: Politykę można zastosować na poziomie projektu ("specifically at the project level"), co spełnia wymóg izolacji dostępu dla danego projektu.
 
-Dlaczego inne są błędne:
-A. IAM roles: Zarządzają tylko tożsamością (kto), nie sprawdzają stanu urządzenia ( corporate computers).
-B. Firewall: Nie ma wglądu w to, czy laptop użytkownika jest 'firmowy' i ma aktualny system operacyjny.
-D. VPC SC: Bardzo potężne, ale zazwyczaj perymetrami zarządza centralny zespół security, co narusza wymóg 'allow team to manage at project level'. CAA (C) jest bardziej elastyczne dla pojedynczych projektów.
+Analiza niepoprawnych odpowiedzi:
+- A. IAM roles: IAM zarządza tym, *co* użytkownik może zrobić, a nie *z jakiego urządzenia* (kontekst).
+- B. Organization-level firewall: Nie można blokować "wszystkiego" do GCS (GCS to usługa API, nie blokuje się jej przez tradycyjne firewall rules - do tego jest VPC SC).
+- D. VPC SC: Jest bardzo silnym narzędziem, ale w tym scenariuszu (zarządzanie *dostępem* do konkretnego projektu, a nie izolacja całej organizacji) Context-Aware Access jest bardziej bezpośrednim i adekwatnym rozwiązaniem dla wymogu "corporate computers".
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na C. To idealny balans między bezpieczeństwem a autonomią zespołu.
+Wskazówki i triki (Tips & Tricks):
+- "Corporate computers" (urządzenie) + "Restrict access" = Context-Aware Access.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Context-Aware Access to GCP-owa implementacja Zero Trust (uwierzytelnianie tożsamości + kontekst urządzenia).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/access-context-manager/docs/overview" target="_blank">Access Context Manager overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> CAA wykorzystuje dane z Google Endpoint Verification, aby sprawdzić np. czy dysk laptopa jest zaszyfrowany i czy system ma hasło ekranowe.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/access-context-manager/docs/context-aware-access" target="_blank">https://cloud.google.com/access-context-manager/docs/context-aware-access</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie o egzekwowanie kontroli dostępu opartej na urządzeniu (device-based access control). Kluczem jest Context-Aware Access, który pozwala na "wielowarstwową" weryfikację dostępu (tożsamość + urządzenie).</p>
 </div>
 </div>
 <script>

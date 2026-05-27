@@ -72,8 +72,7 @@ Your organization has established a highly sensitive project within a VPC Servic
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use the VPC Service Control Violation dashboard to identify the impact of details about access denials by service perimeters.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure a VPC Service Controls perimeter in dry run mode, and enforce strict network segmentation using firewall rules. Use multi-factor authentication (MFA) for user verification.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use Cloud Audit Logs to monitor user access to the project resources. Use post-incident analysis to identify unauthorized access attempts.</li>
-
-</ul>
+</node>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
 <a class="btn btn-primary hide-solution d-none" href="#">Hide Answer</a>
@@ -89,30 +88,34 @@ Your organization has established a highly sensitive project within a VPC Servic
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Establish a Context-Aware Access policy that specifies the required contextual attributes, and associate the policy with the VPC Service Controls perimeter in dry run mode.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. VPC SC Dry Run: Tryb ten jest stworzony dokładnie do 'ewaluacji wpływu' (evaluate impact). Gdy dodasz nową politykę dostępu (CAA) do perymetru w trybie Dry Run, system będzie logował każde żądanie, które ZOSTAŁOBY zablokowane, ale pozwoli mu przejść. Możesz wtedy przeanalizować logi i poprawić reguły przed ich włączeniem.
+Dlaczego ta odpowiedź jest poprawna:
+- Context-Aware Access (Access Context Manager): To narzędzie, które pozwala definiować polityki dostępu oparte na kontekście (np. czy urządzenie jest zarządzane, lokalizacja użytkownika, IP).
+- Association with VPC SC: Polityki kontekstowe są łączone (associating) z perimetrem VPC Service Controls, aby ograniczyć dostęp do chronionych zasobów.
+- "Evaluate the impact ... without blocking": "Dry run mode" to kluczowa funkcjonalność, która pozwala logować naruszenia bez faktycznego blokowania ruchu ("audit-only"), co pozwala na bezpieczną walidację nowych zasad przed ich egzekucją.
 
-Dlaczego inne są błędne:
-B. Dashboard: Pokazuje co się dzieje, ale nie pozwala na 'testowanie' nowych reguł bez ich włączania.
-C. Firewall/MFA: To inne warstwy, nie służą do testowania logiki perymetru VPC SC.
-D. Post-incident: Za późno. Celem jest uniknięcie incydentu (zablokowania użytkowników).
+Analiza niepoprawnych odpowiedzi:
+- B: Dashboard loguje *istniejące* naruszenia, nie służy do ewaluacji nowych polityk przed ich wdrożeniem.
+- C: Dry run mode dla perimetru nie wystarczy – trzeba jeszcze zdefiniować *polityki kontekstowe* (Access Levels), a firewall rules nie sprawdzają "company-managed device".
+- D: Cloud Audit Logs służy do reaktywnej analizy, a nie proaktywnej ewaluacji przed wdrożeniem.
 
-Konsensus społeczności ExamTopics: 100% na A. Dry Run to jedyna bezpieczna metoda zmian w VPC SC.
+Wskazówki i triki (Tips & Tricks):
+- "Specific contextual requirements" + "Evaluate impact without blocking" = Context-Aware Access (Access Policy) + Dry run mode.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Zawsze testuj restrykcyjne polityki bezpieczeństwa w trybie "dry run" przed ich pełnym wymuszeniem (enforcement).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/access-context-manager/docs/overview" target="_blank">Access Context Manager overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Logi Dry Run trafiają do Logs Explorera z flagą `dryRun: true`. Możesz je łatwo odfiltrować i sprawdzić, czy któryś z Twoich dyrektorów nie zostałby odcięty od bazy danych.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/vpc/service-controls/docs/dry-run-overview" target="_blank">https://cloud.google.com/vpc/service-controls/docs/dry-run-overview</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie o zaawansowaną implementację Zero Trust w GCP. Kluczem jest połączenie Access Context Manager (kontekst urządzenia/użytkownika) z VPC SC (sieć) oraz użycie trybu "dry run" dla bezpiecznej walidacji polityk przed ich wdrożeniem.</p>
 </div>
 </div>
 <script>

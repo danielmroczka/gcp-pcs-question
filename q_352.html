@@ -72,7 +72,6 @@ Your company hosts a critical web application on Google Cloud. The application i
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure Cloud Next Generation Firewall to block known malicious IP addresses targeting /32 addresses.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Enable Google Cloud Armor's pre-configured WAF rules for OWASP Top 10 vulnerabilities at the backend service.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure a Cloud Armor security policy with customized and pre-configured WAF rules for OWASP Top 10 vulnerabilities at the load balancer.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,36 @@ Your company hosts a critical web application on Google Cloud. The application i
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (Configure a Cloud Armor security policy with customized and pre-configured WAF rules for OWASP Top 10 vulnerabilities at the load balancer.)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Cloud Armor (Edge WAF): Ustawienie polityk bezpieczeństwa Cloud Armor na Load Balancerze (D) to najlepsza praktyka. Wykorzystuje ona globalną infrastrukturę Google do filtrowania ataków L7 (SQLi/XSS) ZANIM dotrą one do Twojej sieci. Pozwala na precyzyjne dostrojenie reguł (customized), co minimalizuje wpływ na legalny ruch.
+Dlaczego ta odpowiedź jest poprawna:
+- Cloud Armor: To usługa WAF (Web Application Firewall) w GCP.
+- "Pre-configured WAF rules for OWASP Top 10": To kluczowa funkcja Cloud Armor, która automatycznie chroni przed atakami takimi jak SQLi i XSS.
+- "At the load balancer": Polityki Cloud Armor są przypisywane do backendu load balancera (HTTP(S) LB).
+- Odpowiedź D jest precyzyjniejsza niż C, ponieważ wspomina o "customized AND pre-configured rules", co jest pełniejszym opisem zabezpieczeń Cloud Armor.
 
-Dlaczego inne są błędne:
-A. Throttling: Pomaga na DDoS, ale nie chroni przed pojedynczym, złośliwym zapytaniem SQL Injection.
-B. NGFW: Działa na warstwie sieciowej (IP), nie 'rozumie' ataków wewnątrz protokołu HTTP tak dobrze jak WAF.
-C. Backend rules: Lepiej blokować na LB (D), aby szkodliwy ruch w ogóle nie wchodził głębiej do infrastruktury.
+Analiza niepoprawnych odpowiedzi:
+- A. Adaptive Protection/throttling: Chroni przed atakami DDoS, ale nie przed XSS/SQLi (do tego trzeba reguł WAF).
+- B. Firewall: Chroni sieć (IP/port), a nie warstwę aplikacji (L7).
+- C. At the backend service: Jest technicznie poprawna, ale D jest dokładniejsza, bo Cloud Armor definiuje politykę ("security policy"), która jest przypisana do LB.
 
-Konsensus społeczności ExamTopics: 100% na D. Cloud Armor na LB to definicja ochrony L7 w GCP.
+Wskazówki i triki (Tips & Tricks):
+- "Web attacks" + "XSS/SQLi" + "Robust perimeter" = Cloud Armor WAF rules (OWASP Top 10).
+- Pamiętaj: WAF = WAF rules, nie Firewall Rules.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Google Cloud Armor chroni aplikacje webowe przed atakami na poziomie aplikacji.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/armor/docs/waf-rules" target="_blank">Cloud Armor WAF rules</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Cloud Armor posiada gotowe zestawy reguł (np. `sqli-v33-stable`), które są regularnie aktualizowane, chroniąc Cię przed najnowszymi wariantami ataków bez Twojej ingerencji.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/armor/docs/waf-rules" target="_blank">https://cloud.google.com/armor/docs/waf-rules</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie techniczne o WAF. Kluczem jest wybór Cloud Armor z gotowymi regułami OWASP dla ataków warstwy siódmej (L7).</p>
 </div>
 </div>
 <script>
