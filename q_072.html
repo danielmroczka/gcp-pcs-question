@@ -89,25 +89,28 @@ In a shared security responsibility model for IaaS, which two layers does the cu
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Poprawna odpowiedź: B, D
+<pre>
+Potwierdzona odpowiedź: BD (Network Security, Access Policies)
 
-Analiza poprawności:
-W modelu wspólnej odpowiedzialności (Shared Responsibility Model) w usługach IaaS (Infrastructure as a Service), podział jest jasny: Google odpowiada za bezpieczeństwo samej infrastruktury (chmury), a klient za bezpieczeństwo zasobów (w chmurze).
-1. Network Security (B): Klient odpowiada za konfigurację reguł firewall, VPC, tras, VPN oraz izolację sieciową swoich maszyn wirtualnych.
-2. Access Policies (D): Zarządzanie tożsamościami (IAM), uprawnieniami oraz politykami dostępu (np. IAP) jest wyłączną odpowiedzialnością klienta.
+Wyjaśnienie: 
+W modelu IaaS (Infrastructure as a Service), Google odpowiada za bezpieczeństwo fizyczne, sprzęt i warstwę wirtualizacji. Klient (Customer) przejmuje odpowiedzialność za to, co uruchamia 'na' tej infrastrukturze: konfigurację sieci (Firewall, Subnets) oraz polityki dostępu (IAM).
 
 Dlaczego pozostałe są błędne:
-A. Hardware: Jest to w 100% odpowiedzialność Google (fizyczna ochrona serwerów i sieci globalnej).
-C. Storage Encryption: Google szyfruje dane w spoczynku domyślnie. Choć klient może zarządzać kluczami (CMEK), szyfrowanie jako usługa jest świadczone przez Google.
-E. Boot: Bezpieczeństwo procesu bootowania infrastruktury (np. Secure Boot dla firmware'u) to rola dostawcy chmury.
+A. Hardware (sprzęt) to wyłączna odpowiedzialność Google.
+C. Storage Encryption (szyfrowanie infrastruktury) jest zapewniane przez Google domyślnie, klient odpowiada jedynie za zarządzanie własnymi kluczami (jeśli wybierze CMEK/CSEK).
+E. Boot (warstwa startowa/BIOS/firmware) jest zarządzana przez Google (np. Shielded VMs).
 
-Wskazówki egzaminacyjne:
-- "Shared Responsibility" = zawsze szukaj Network (firewall/VPC) i Access (IAM/Policy).
-- Google odpowiada za bezpieczeństwo CHMURY (of the cloud), klient za bezpieczeństwo W CHMURZE (in the cloud).
-- Jeśli widzisz "Hardware", "Physical Security" – to zawsze Google.
+Wskazówki egzaminacyjne (Tips & Tricks):
+W IaaS klient zarządza wszystkim od systemu operacyjnego w górę + konfiguracją sieci wewnątrz chmury.
+
+Kluczowe zagadnienia do powtórzenia:
+- Shared Responsibility Model
+- IaaS vs PaaS vs SaaS security
+- Cloud Provider vs Customer duties
 
 Dokumentacja:
-<a href="https://cloud.google.com/security/shared-responsibility-model" target="_blank">https://cloud.google.com/security/shared-responsibility-model</a></pre>
+<a href="https://cloud.google.com/security/shared-responsibility-model" target="_blank">https://cloud.google.com/security/shared-responsibility-model</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

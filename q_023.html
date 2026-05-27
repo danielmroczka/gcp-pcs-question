@@ -64,15 +64,14 @@
 <h2>Question 23 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Leadership team is concerned that PII is being stored as part of the regular chat logs. You want to resolve this concern while still maintaining data utility. What should you do?
+When working with agents in the support center via online chat, your organization's customers often share pictures of their documents with personally identifiable information (PII). Your leadership team is concerned that this PII is being stored as part of the regular chat logs, which are reviewed by internal or external analysts for customer service trends. <br>You want to resolve this concern while still maintaining data utility. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use Cloud KMS to encrypt PII.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use Object Lifecycle Management to discard chat records.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use image inspection and redaction actions of the DLP API.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use generalization and bucketing of the DLP API.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use Cloud Key Management Service to encrypt PII shared by customers before storing it for analysis.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use Object Lifecycle Management to make sure that all chat records containing PII are discarded and not saved for analysis.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use the image inspection and redaction actions of the DLP API to redact PII from the images before storing them for analysis.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use the generalization and bucketing actions of the DLP API solution to redact PII from the texts before storing them for analysis.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,20 +88,24 @@ Leadership team is concerned that PII is being stored as part of the regular cha
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Use image inspection and redaction actions of the DLP API.)
+Potwierdzona odpowiedź: C (Use the image inspection and redaction actions of the DLP API to redact PII from the images before storing them for analysis.)
 
-Analiza poprawności:
-DLP (Data Loss Prevention) API to zaawansowane narzędzie GCP do identyfikacji, monitorowania i ochrony danych wrażliwych. W przypadku logów tekstowych lub obrazów (np. zrzutów ekranu z czatów), DLP API oferuje potężne mechanizmy "inspection" (wykrywanie wzorców: numery kart, adresy email, imiona) oraz "redaction" (trwałe usunięcie lub zamaskowanie tych danych). Jest to jedyny sposób, aby oczyścić dane (usunięcie PII) przy jednoczesnym zachowaniu użyteczności reszty logów (Data Utility) dla celów analitycznych.
+Wyjaśnienie: 
+Cloud Data Loss Prevention (DLP) API to usługa zaprojektowana specjalnie do wykrywania i maskowania danych wrażliwych (PII). W scenariuszu, gdzie klienci przesyłają zdjęcia dokumentów, DLP API wykorzystuje mechanizmy optycznego rozpoznawania znaków (OCR) do odnalezienia tekstu na obrazach, a następnie funkcję "redaction" (redakcja/maskowanie), która pozwala na trwałe zakrycie wykrytych wrażliwych informacji (np. numerów dowodów, nazwisk) na samym obrazie. Pozwala to na zachowanie użyteczności reszty danych (Data Utility) do analizy, jednocześnie eliminując ryzyko przechowywania PII.
 
 Dlaczego pozostałe są błędne:
-A (Cloud KMS): KMS służy do szyfrowania danych (np. danych w spoczynku). Szyfrowanie nie usuwa danych z logów – sprawia tylko, że są one nieczytelne dla osób bez klucza, ale sama informacja (PII) nadal tam jest fizycznie obecna.
-B (Object Lifecycle Management): Ta usługa automatyzuje usuwanie lub przenoszenie plików (np. "usuń logi starsze niż 30 dni"). Usunięcie całych plików/logów niszczy użyteczność danych, podczas gdy my chcemy logi zatrzymać, ale bez PII.
-D (Generalization and bucketing): Techniki te służą do anonimizacji danych STRUKTURALNYCH (np. zamiana konkretnego wieku 28 na zakres "20-30"). Dla nieustrukturyzowanych logów tekstowych lub obrazów, "Redaction" (usunięcie/zamaskowanie) jest dużo bardziej efektywne i zgodne z praktyką czyszczenia logów.
+A. Cloud KMS: Szyfrowanie przy użyciu KMS zabezpiecza dane przed niepowołanym dostępem, ale nie zmienia ich zawartości. PII nadal znajdowałoby się fizycznie w logach, co nie rozwiązuje problemu "czyszczenia" danych do celów analitycznych bez odszyfrowywania.
+B. Object Lifecycle Management: Ta funkcja służy do automatycznego usuwania lub przenoszenia całych plików (np. po 30 dniach). Usunięcie całego pliku czatu uniemożliwia jakąkolwiek późniejszą analizę trendów, co narusza wymóg "maintaining data utility".
+D. Generalization and bucketing: Są to techniki de-identyfikacji danych ustrukturyzowanych (np. zamiana wieku na zakres "20-30 lat"). Choć to funkcje DLP, nie mają one zastosowania bezpośrednio do procesowania obrazów (zrzutów dokumentów), gdzie wymagana jest redakcja wizualna (maskowanie pikseli).
 
-Wskazówki egzaminacyjne:
-- "Chat logs" / "Images" + "PII": Zawsze wybieraj DLP API.
-- "Maintain data utility": To hasło sugeruje, że chcesz usunąć tylko wrażliwe elementy, zostawiając resztę logów. To definicja "Redaction".
-- Eliminacja: Jeśli pytanie pyta o usuwanie PII z tekstów/obrazów, odrzuć KMS (szyfrowanie to nie usuwanie) i Lifecycle (usuwa wszystko).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "PII" + "Images" / "Pictures" + "Analyze": Twoją pierwszą myślą zawsze powinno być DLP API z funkcją Image Redaction.
+- "Maintain data utility" to w języku egzaminacyjnym Google sygnał, że nie wolno usuwać całych rekordów (LifeCycle), lecz trzeba je "oczyścić" (DLP).
+
+Kluczowe zagadnienia do powtórzenia:
+- Możliwości Cloud DLP API w zakresie tekstów i obrazów
+- Różnica między Redaction, Masking i De-identification
+- Integracja Cloud Storage z DLP API
 
 Dokumentacja:
 <a href="https://cloud.google.com/dlp/docs/redacting-sensitive-data-images" target="_blank">https://cloud.google.com/dlp/docs/redacting-sensitive-data-images</a>
@@ -113,7 +116,7 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> DLP API posiada ponad 150 wbudowanych detektorów (tzw. "infoTypes"), które automatycznie rozpoznają numery kart płatniczych, adresy, imiona czy daty urodzenia w strumieniach tekstowych. To sprawia, że proces redakcji jest niezwykle szybki i nie wymaga ręcznego pisania wyrażeń regularnych.</p>
+<p><b>Analiza spornych kwestii (AI):</b> DLP API posiada ponad 150 wbudowanych detektorów (tzw. "infoTypes"), które automatycznie rozpoznają numery kart płatniczych, adresy czy imiona. To sprawia, że proces redakcji jest niezwykle skuteczny i zgodny z regulacjami typu RODO/GDPR czy PCI DSS bez konieczności ręcznego definiowania skomplikowanych reguł.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/dlp/docs/redacting-sensitive-data-images" target="_blank">https://cloud.google.com/dlp/docs/redacting-sensitive-data-images</a></li>
@@ -124,10 +127,10 @@ Dokumentacja:
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -142,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
 

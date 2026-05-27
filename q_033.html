@@ -64,15 +64,14 @@
 <h2>Question 33 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Which boot disk encryption solution should you use on a MIG cluster to control the key lifecycle?
+A customer wants to move their sensitive workloads to a Compute Engine-based cluster using Managed Instance Groups (MIGs). The jobs are bursty and must be completed quickly. They have a requirement to be able to control the key lifecycle. <br>Which boot disk encryption solution should you use on the cluster to meet this customer's requirements?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> CSEK</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> CMEK using Cloud KMS</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Customer-supplied encryption keys (CSEK)</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Customer-managed encryption keys (CMEK) using Cloud Key Management Service (KMS)</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Encryption by default</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Pre-encrypting files</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Pre-encrypting files before transferring to Google Cloud Platform (GCP) for analysis</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,20 +88,25 @@ Which boot disk encryption solution should you use on a MIG cluster to control t
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (CMEK using Cloud KMS)
+Potwierdzona odpowiedź: B (Customer-managed encryption keys (CMEK) using Cloud Key Management Service (KMS))
 
-Analiza poprawności:
-CMEK (Customer-Managed Encryption Keys) to usługa w Google Cloud, która daje administratorowi pełną kontrolę nad cyklem życia klucza szyfrującego (rotacja, wyłączanie, niszczenie) poprzez Cloud KMS. Jest to rozwiązanie w pełni wspierane przez Managed Instance Groups (MIG). Podczas definiowania szablonu instancji (Instance Template), możesz wskazać klucz KMS, który zostanie użyty do zaszyfrowania dysków systemowych (boot disks) każdej nowo uruchomionej instancji w ramach grupy, co jest standardem bezpieczeństwa w architekturach Enterprise.
+Wyjaśnienie: 
+Customer-Managed Encryption Keys (CMEK) to rozwiązanie w Google Cloud, które daje administratorowi pełną kontrolę nad cyklem życia kluczy szyfrujących (tworzenie, rotacja, wyłączanie, niszczenie) za pośrednictwem usługi Cloud KMS. CMEK jest w pełni zintegrowany z Managed Instance Groups (MIG). W Instance Template (szablonie instancji) można wskazać klucz KMS, a Google automatycznie użyje go do zaszyfrowania dysków systemowych (boot disks) każdej nowo powstającej instancji w ramach grupy. Jest to kluczowe przy obciążeniach typu "bursty", gdzie skalowanie (tworzenie nowych VM) musi odbywać się całkowicie automatycznie i bez opóźnień.
 
 Dlaczego pozostałe są błędne:
-A (CSEK - Customer-Supplied Encryption Keys): Wymaga podania klucza szyfrującego jako parametru przy każdym uruchomieniu/starcie VM. Ponieważ MIG-i muszą automatycznie skalować (samodzielnie startować nowe instancje w odpowiedzi na obciążenie), Google nie mogłoby zarządzać startem VM bez Twojej manualnej interwencji przy dostarczaniu klucza przy każdym nowym dysku.
-C (Encryption by default): Google szyfruje dane "by default" (domyślnie), ale używa do tego kluczy zarządzanych przez Google (GMEK). Użytkownik nie ma kontroli nad ich cyklem życia (nie może ich ręcznie rotować ani usunąć).
-D (Pre-encrypting files): Szyfrowanie plików na poziomie systemu operacyjnego nie chroni całego dysku systemowego (boot disk) i jest bardzo trudne w zarządzaniu na poziomie skalowalnych grup instancji.
+A. Customer-supplied encryption keys (CSEK): Rozwiązanie to wymaga podania surowego klucza (raw key) w każdym żądaniu utworzenia dysku lub startu maszyny. Ponieważ MIG-i zarządzają instancjami automatycznie (Google samo tworzy VM w odpowiedzi na obciążenie), system nie miałby dostępu do Twojego klucza CSEK bez Twojej ręcznej interwencji przy każdym skalowaniu, co uniemożliwia automatyzację procesów.
+C. Encryption by default: To szyfrowanie przy użyciu kluczy zarządzanych przez Google (GMEK). W tym modelu klient nie ma żadnej kontroli nad kluczem (nie może go rotować, unieważnić ani usunąć), co bezpośrednio narusza wymóg "control the key lifecycle".
+D. Pre-encrypting files: Szyfrowanie plików przed ich wysłaniem chroni jedynie dane, a nie całe dyski systemowe maszyn wirtualnych. Nie rozwiązuje problemu bezpieczeństwa infrastruktury Compute Engine i jest trudne w zarządzaniu przy skalowaniu.
 
-Wskazówki egzaminacyjne:
-- "MIG" + "Control key lifecycle": Zawsze wybieraj CMEK.
-- "Automated scaling": Odrzuć CSEK, ponieważ wymaga ręcznej podaży klucza.
-- "Control": GMEK (Encryption by default) = brak kontroli; CMEK = pełna kontrola.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "MIG" / "Autoscaling" + "Control key lifecycle": To zawsze wskazuje na CMEK (KMS).
+- "Control" = CMEK (Twoje klucze w KMS). "Supply" = CSEK (Twoje klucze poza chmurą). "Default" = GMEK (Klucze Google).
+- Zapamiętaj: CSEK i automatyczne skalowanie (MIG/GKE) nie są ze sobą kompatybilne w pełni zautomatyzowany sposób.
+
+Kluczowe zagadnienia do powtórzenia:
+- Różnice między GMEK, CMEK i CSEK
+- Integracja Cloud KMS z zasobami Compute Engine
+- Działanie Instance Templates w grupach MIG
 
 Dokumentacja:
 <a href="https://cloud.google.com/compute/docs/disks/customer-managed-encryption" target="_blank">https://cloud.google.com/compute/docs/disks/customer-managed-encryption</a>
@@ -113,7 +117,7 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Przy użyciu CMEK w MIG, nadajesz systemowemu kontu serwisowemu (Compute Service Agent) uprawnienia do używania Twojego klucza w KMS. To pozwala Google na automatyczne tworzenie dysków w Twoim imieniu, zapewniając bezpieczne zarządzanie cyklem życia klucza.</p>
+<p><b>Analiza spornych kwestii (AI):</b> W przypadku CMEK, nadajesz specjalnemu kontu serwisowemu Google (Compute Service Agent) rolę 'CryptoKey Encrypter/Decrypter'. Dzięki temu Google może w Twoim imieniu automatycznie tworzyć zaszyfrowane dyski podczas skalowania MIG, zachowując jednocześnie Twoją władzę nad kluczem w KMS (np. możesz go w każdej chwili zniszczyć, uniemożliwiając odczyt danych).</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/compute/docs/disks/customer-managed-encryption" target="_blank">https://cloud.google.com/compute/docs/disks/customer-managed-encryption</a></li>
@@ -124,10 +128,10 @@ Dokumentacja:
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -142,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
 

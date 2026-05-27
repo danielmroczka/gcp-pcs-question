@@ -64,15 +64,14 @@
 <h2>Question 46 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-A customer wants to ensure that their data is only stored in a specific geographic region. What should they use?
+A company is deploying their application on Google Cloud Platform. Company policy requires long-term data to be stored using a solution that can automatically replicate data over at least two geographic places. Which Storage solution are they allowed to use?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud IAM</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Resource Labels</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Organization Policy: Resource Location Restriction</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Shared VPC</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud Bigtable</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud BigQuery</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Compute Engine SSD Disk</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Compute Engine Persistent Disk</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +79,7 @@ A customer wants to ensure that their data is only stored in a specific geograph
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">C</span>
+<span class="correct-answer">B</span>
 <br/>
 </span>
 </div>
@@ -89,45 +88,50 @@ A customer wants to ensure that their data is only stored in a specific geograph
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Organization Policy: Resource Location Restriction)
+Potwierdzona odpowiedź: B (Cloud BigQuery)
 
-Analiza poprawności:
-Polityka organizacji (Organization Policy) to potężne narzędzie Governance, które pozwala na nakładanie globalnych ograniczeń na poziomie całej firmy lub wybranego folderu. Ograniczenie `gcp.resourceLocations` (Constraint: `constraints/gcp.resourceLocations`) pozwala zdefiniować "listę dozwolonych regionów" dla wszystkich usług GCP. Jeśli deweloper spróbuje utworzyć zasób w regionie spoza tej listy (np. próbując utworzyć bucket w USA zamiast wymaganej UE), system GCP automatycznie odrzuci to zapytanie na poziomie API.
+Wyjaśnienie:
+Pytanie dotyczy wymogu automatycznej replikacji danych między dwoma lokalizacjami geograficznymi (geographic places), co w terminologii GCP oznacza dostępność multiregionalną.
+1. BigQuery (Multi-regional): Gdy tworzysz dataset w BigQuery, możesz wybrać lokalizację "Multi-region" (np. US lub EU). Google automatycznie i transparentnie replikuje dane między co najmniej dwoma centrami danych w różnych regionach geograficznych wewnątrz tego multi-regionu. Zapewnia to wysoką dostępność i trwałość danych w przypadku awarii całego regionu.
+2. Long-term storage: BigQuery jest idealny do długoterminowego przechowywania dużych zbiorów danych analitycznych.
 
 Dlaczego pozostałe są błędne:
-A (Cloud IAM): IAM zarządza tym, *kto* ma uprawnienia do wykonania operacji, ale nie kontroluje *geograficznej lokalizacji* zasobów, które użytkownik tworzy.
-B (Resource Labels): Etykiety służą do tagowania zasobów (np. "środowisko: prod"), co pomaga w wyszukiwaniu czy raportowaniu kosztów, ale nie nakłada żadnych restrykcji technicznych na lokalizację.
-D (Shared VPC): To architektura sieciowa służąca do współdzielenia sieci między projektami. Nie posiada funkcji wymuszania restrykcji geograficznych dla zasobów (np. Cloud Storage).
+A. Cloud Bigtable: Jest to usługa regionalna. Chociaż wspiera replikację między wieloma klastrami w różnych regionach, wymaga to ręcznej konfiguracji klastrów replikowanych. Nie jest to replikacja "automatyczna" w tym samym sensie co w natywnym multi-regionie BigQuery.
+C i D. SSD/Persistent Disks: Są to zasoby strefowe (zonal) lub co najwyżej regionalne (Regional Persistent Disk replikuje się między dwiema strefami w tym samym regionie). Żaden z nich nie oferuje automatycznej replikacji między oddalonymi geograficznie lokalizacjami (regionami).
 
-Wskazówki egzaminacyjne:
-- "Geographic region" / "Data Residency": Jeśli pytanie o tym mówi, szukaj "Organization Policy" i "Resource Location Restriction".
-- "Prevent": Jeśli słyszysz słowo "prevent" w kontekście konfiguracji infrastruktury – Org Policy jest zazwyczaj poprawną odpowiedzią.
-- Eliminacja: Jeśli opcja dotyczy sieci (VPC) lub uprawnień (IAM) – odrzuć je w kontekście rezydencji danych.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Replicate over geographic places" = szukaj "Multi-regional" services.
+- Usługi multiregionalne w GCP to: Cloud Storage (Multi-region/Dual-region), BigQuery (Multi-region), Cloud Spanner (Multi-region) oraz Firestore (Multi-region).
+- Pamiętaj, że Regional PD replikuje tylko między strefami, a nie regionami.
+
+Kluczowe zagadnienia do powtórzenia:
+- Lokalizacje zasobów w GCP (Zonal, Regional, Multi-regional).
+- Replikacja danych w BigQuery.
+- Różnica między dostępnością a trwałością (Durability vs. Availability).
 
 Dokumentacja:
-<a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations</a>
+<a href="https://cloud.google.com/bigquery/docs/locations" target="_blank">Lokalizacje BigQuery i replikacja</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Polityka ta jest dziedziczona. Jeśli ustawisz ją na poziomie organizacji, żaden deweloper w żadnym projekcie nie utworzy zasobu w niedozwolonej lokalizacji. Jest to absolutnie najlepsza metoda dla Data Residency.</p>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p><b>Analiza spornych kwestii (AI):</b> Kluczowym słowem jest "geographic places", co wyklucza replikację wewnątrzstrefową lub regionalną (która odbywa się w obrębie jednego obszaru metropolitalnego). BigQuery w trybie Multi-region jako jedyny z listy spełnia ten warunek "by design", bez konieczności skomplikowanej konfiguracji dodatkowych klastrów.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations</a></li>
+<li><a href="https://cloud.google.com/storage/docs/locations#location-mr" target="_blank">Multi-regions in Google Cloud</a></li>
 </ul>
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -142,9 +146,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -64,15 +64,14 @@
 <h2>Question 26 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-An organization is migrating to G Suite. The risk team wants to ensure that network security controls are maintained. What solution would help meet the requirements?
+An organization is migrating from their current on-premises productivity software systems to G Suite. Some network security controls were in place that were mandated by a regulatory body in their region for their previous on-premises system. The organization's risk team wants to ensure that network security controls are maintained and effective in G Suite. A security architect supporting this migration has been asked to ensure that network security controls are in place as part of the new shared responsibility model between the organization and Google Cloud. <br>What solution would help meet the requirements?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Ensure firewall rules are in place.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Set up Cloud Armor.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Network security is a built-in solution and Google's responsibility for SaaS products.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Set up VPC networks.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Ensure that firewall rules are in place to meet the required controls.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Set up Cloud Armor to ensure that network security controls can be managed for G Suite.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Network security is a built-in solution and Google's responsibility for SaaS products like G Suite.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Set up an array of Virtual Private Cloud (VPC) networks to control network security as mandated by the relevant regulation.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,18 +88,24 @@ An organization is migrating to G Suite. The risk team wants to ensure that netw
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Network security is a built-in solution and Google's responsibility for SaaS products.)
+Potwierdzona odpowiedź: C (Network security is a built-in solution and Google's responsibility for SaaS products like G Suite.)
 
-Analiza poprawności:
-Google Workspace (dawniej G Suite) to usługa typu Software-as-a-Service (SaaS). W tym modelu odpowiedzialności współdzielonej (Shared Responsibility Model), Google zarządza pełnym stosem technologicznym aplikacji: od fizycznych serwerów, przez system operacyjny, aż po warstwę sieciową i bezpieczeństwo infrastruktury (w tym ochronę przed DDoS). Klient (organizacja) ma ograniczony wpływ na konfigurację sieciową tych usług, ponieważ nie działają one wewnątrz Twojej prywatnej sieci VPC.
+Wyjaśnienie: 
+Google Workspace (dawniej G Suite) to usługa typu Software-as-a-Service (SaaS). W modelu współdzielonej odpowiedzialności (Shared Responsibility Model), Google zarządza pełnym stosem technologicznym aplikacji: od fizycznych serwerów i centrów danych, przez system operacyjny, aż po warstwę sieciową i ochronę przed zagrożeniami (np. DDoS, sniffing). Klient nie ma możliwości ani potrzeby konfigurowania tradycyjnych reguł firewall czy sieci VPC dla tych usług, ponieważ są one w całości zarządzane przez Google.
 
 Dlaczego pozostałe są błędne:
-A, B, D: Wszystkie te opcje (firewall, Cloud Armor, sieci VPC) dotyczą usług IaaS (Infrastructure as a Service - np. Compute Engine) lub PaaS (Platform as a Service - np. App Engine/GKE), gdzie klient ma bezpośrednią kontrolę nad konfiguracją sieciową (VPC) lub przynajmniej może ją w pewnym stopniu modyfikować. W SaaS te opcje są niedostępne lub nie mają zastosowania.
+A. Firewall rules: Reguły firewall w GCP służą do ochrony zasobów wewnątrz Twojej sieci VPC (np. instancji VM). Nie mają one wpływu na ruch sieciowy do usług SaaS takich jak G Suite.
+B. Cloud Armor: To usługa ochrony przed atakami L7 (WAF) dla aplikacji wystawianych przez Load Balancery w GCP. Nie służy do ochrony infrastruktury G Suite, która ma własne, wbudowane systemy ochrony.
+D. VPC networks: Sieci VPC są domenami izolacji dla zasobów IaaS/PaaS klienta. Usługi SaaS działają poza VPC klienta i nie wymagają ich tworzenia do zapewnienia bezpieczeństwa sieciowego samej usługi.
 
-Wskazówki egzaminacyjne:
-- "SaaS" / "G Suite" / "Google Workspace": Jeśli pytanie dotyczy tych produktów – szukaj opcji mówiącej, że to odpowiedzialność Google.
-- "Shared Responsibility Model": Pamiętaj, że w SaaS Twoja rola kończy się na zarządzaniu tożsamością (kto ma dostęp) i ochronie danych (co użytkownicy robią z danymi), a nie na konfiguracji sieci.
-- Eliminacja: Jeśli opcje dotyczą sieci (firewall, VPC, Armor) – prawdopodobnie są błędne dla usług SaaS.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "SaaS" / "G Suite" / "Google Workspace": Jeśli pytanie dotyczy bezpieczeństwa sieciowego tych produktów, szukaj odpowiedzi wskazującej na wbudowaną ochronę Google.
+- Pamiętaj o modelu współdzielonej odpowiedzialności: W SaaS Google odpowiada za sieć, systemy i aplikację; Ty odpowiadasz za tożsamość użytkowników i ich dane.
+
+Kluczowe zagadnienia do powtórzenia:
+- Model współdzielonej odpowiedzialności (IaaS vs PaaS vs SaaS)
+- Bezpieczeństwo usług Google Workspace
+- Zakres stosowania VPC Firewall i Cloud Armor
 
 Dokumentacja:
 <a href="https://cloud.google.com/security/shared-responsibility-model" target="_blank">https://cloud.google.com/security/shared-responsibility-model</a>
@@ -111,7 +116,7 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> W modelu SaaS sieć jest "pod maską" i zarządza nią wyłącznie dostawca. To częsty błąd egzaminacyjny – kandydaci próbują przenosić wiedzę o IaaS (VPC/Firewalls) na SaaS (Workspace), co jest technicznie niemożliwe.</p>
+<p><b>Analiza spornych kwestii (AI):</b> W modelu SaaS sieć jest "pod maską" i zarządza nią wyłącznie dostawca. To częsty błąd egzaminacyjny – kandydaci próbują przenosić wiedzę o IaaS (VPC/Firewalls) na SaaS (Workspace), co jest technicznie niemożliwe. Jedyną kontrolą sieciową, jaką możesz mieć w Workspace, są np. Context-Aware Access (dostęp uzależniony od IP), ale to poziom aplikacji, a nie klasyczna ochrona sieciowa infrastruktury.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/security/shared-responsibility-model" target="_blank">https://cloud.google.com/security/shared-responsibility-model</a></li>
@@ -122,10 +127,10 @@ Dokumentacja:
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -140,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
 

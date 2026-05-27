@@ -89,17 +89,26 @@ You are on your company's development team. You noticed that your web applicatio
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Potwierdzona odpowiedź: D (Web Security Scanner + Contextual auto-escaping)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. WSS and Auto-escaping: Opisany atak to Cross-Site Scripting (XSS). Web Security Scanner potrafi symulować takie ataki w środowisku stagingowym (identyfikacja). Naprawą systemową ('fix') jest użycie mechanizmów auto-escaping w silniku szablonów aplikacji, co uniemożliwia interpretację danych użytkownika jako kodu.
+Wyjaśnienie: 
+Problem dotyczy podatności Cross-Site Scripting (XSS). Aby go rozwiązać, należy: 1. Wykryć go automatycznie w środowisku staging za pomocą Web Security Scanner. 2. Zastosować poprawkę w kodzie używając systemu szablonów z automatycznym ucieczkowaniem kontekstowym (contextual auto-escaping), co zneutralizuje złośliwe skrypty.
 
-Dlaczego inne są błędne:
-A. IAP: Blokuje nieuprawnionych, ale nie chroni przed lukami w samym kodzie dla osób zalogowanych.
-B. Cloud Armor: Może blokować próby, ale nie 'naprawia' (fix) podatności u źródła.
-C. Outdated libraries: To tylko jeden z powodów XSS, WSS szuka błędów logicznych w wyświetlaniu danych.
+Dlaczego pozostałe są błędne:
+A. IAP służy do kontroli dostępu (uwierzytelnienia), a nie do naprawy luk typu XSS w kodzie.
+B. Cloud Armor może blokować niektóre ataki XSS na brzegu sieci, ale nie 'naprawia' luki w samej aplikacji.
+C. Problem dotyczy sposobu renderowania danych użytkownika, a niekoniecznie biblioteki (choć aktualizacja bibliotek jest ważna, D jest bardziej precyzyjne dla tego scenariusza).
 
-Konsensus społeczności ExamTopics: 100% poparcia dla D. To kompletna odpowiedź na 'identyfikację i naprawę'.
+Wskazówki egzaminacyjne (Tips & Tricks):
+XSS w kodzie = Web Security Scanner (wykrywanie) + Auto-escaping (rozwiązanie).
+
+Kluczowe zagadnienia do powtórzenia:
+- Cross-Site Scripting (XSS)
+- Web Security Scanner
+- Secure Coding practices
+
+Dokumentacja:
+<a href="https://cloud.google.com/security-command-center/docs/concepts-web-security-scanner-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-web-security-scanner-overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

@@ -90,22 +90,27 @@ Which two implied firewall rules are defined on a VPC network? (Choose two.)
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: AB (A rule that allows all outbound connections oraz A rule that denies all inbound connections)
+Potwierdzona odpowiedź: AB (A rule that allows all outbound connections oraz A rule that denies all inbound connections)
 
-Analiza poprawności: 
-W każdej sieci VPC w GCP istnieją dwie domyślne, nadrzędne reguły zapory sieciowej (implied firewall rules) o najniższym priorytecie (65535):
-1. Implied allow egress rule: Zezwala na cały ruch wychodzący z instancji do dowolnego miejsca (0.0.0.0/0).
-2. Implied deny ingress rule: Blokuje cały ruch przychodzący do instancji z dowolnego miejsca (0.0.0.0/0), chyba że zostanie nadpisana przez bardziej szczegółową regułę o wyższym priorytecie.
+Wyjaśnienie: 
+Każda sieć VPC w Google Cloud posiada dwie domyślne reguły zapory sieciowej (implied firewall rules), których nie można usunąć (można je jedynie nadpisać regułami o wyższym priorytecie). Są to:
+1. Implied allow egress rule: Reguła o priorytecie 65535, która zezwala na cały ruch wychodzący z dowolnej instancji do dowolnego miejsca docelowego (0.0.0.0/0).
+2. Implied deny ingress rule: Reguła o priorytecie 65535, która blokuje cały ruch przychodzący do wszystkich instancji z dowolnego źródła (0.0.0.0/0).
 
 Dlaczego pozostałe są błędne:
-C. A rule that blocks all inbound port 25 connections: Google blokuje port 25 dla wychodzącego ruchu SMTP w celu przeciwdziałania spamowi, ale nie jest to reguła "implied firewall rule" w ramach VPC, lecz blokada na poziomie całej infrastruktury/sieci.
-D. A rule that blocks all outbound connections: Jest to przeciwieństwo reguły zezwalającej na ruch wychodzący. GCP domyślnie zezwala na ruch wychodzący (egress).
-E. A rule that allows all inbound port 80 connections: Nie jest to reguła "implied". W nowo utworzonej sieci VPC ruch na port 80 jest domyślnie blokowany przez "Implied deny ingress rule". Reguła pozwalająca na ruch HTTP może istnieć jedynie w sieci "default" (stworzona automatycznie przez Google), ale nie jest wbudowaną regułą "implied".
+C. A rule that blocks all inbound port 25 connections: Chociaż Google Cloud blokuje port 25 (SMTP) dla ruchu wychodzącego, nie jest to część "implied firewall rules" widocznych w konfiguracji VPC. Jest to ograniczenie platformy.
+D. A rule that blocks all outbound connections: Jest to błędne stwierdzenie, ponieważ domyślna reguła "implied" zezwala na ruch wychodzący (Allow Egress).
+E. A rule that allows all inbound port 80 connections: Taka reguła nie istnieje domyślnie w mechanizmie "implied". Ruch na port 80 musi zostać jawnie zezwolony przez administratora (lub istnieje w sieci o nazwie 'default', ale nie jest to reguła 'implied').
 
-Wskazówki egzaminacyjne:
-- "Implied rules": Zawsze szukaj par: Allow Egress (cały ruch) i Deny Ingress (cały ruch).
-- Priorytet: Pamiętaj, że mają one priorytet 65535 (najniższy możliwy).
-- Sieć "default" vs "VPC": Nie myl reguł, które Google dodaje automatycznie do sieci o nazwie "default" (np. allow-ssh, allow-http), z regułami "implied", które posiada każda sieć VPC, nawet pusta.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Słowo "implied" jest kluczowe. Oznacza reguły wbudowane na stałe, z najniższym priorytetem 65535.
+- Pamiętaj: Domyślnie wszystko wychodzi (Allow Egress), nic nie wchodzi (Deny Ingress).
+- Nie myl "implied rules" z regułami w sieci "default". Sieć "default" to tylko gotowiec od Google, który ma dodane kilka zwykłych reguł (np. allow-ssh).
+
+Kluczowe zagadnienia do powtórzenia:
+- Implied firewall rules vs. Default firewall rules
+- Priorytety reguł zapory (0-65535)
+- Egress vs Ingress
 
 Dokumentacja:
 <a href="https://cloud.google.com/vpc/docs/firewalls#implied_rules" target="_blank">https://cloud.google.com/vpc/docs/firewalls#implied_rules</a>

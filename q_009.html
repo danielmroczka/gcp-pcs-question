@@ -89,23 +89,28 @@ A company has been running their application on Compute Engine. A bug in the app
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Create an Alerting Policy in Stackdriver using a Process Health condition...)
+Potwierdzona odpowiedź: A (Create an Alerting Policy in Stackdriver using a Process Health condition, checking that the number of executions of the script remains below the desired threshold. Enable notifications.)
 
-Analiza poprawności:
-Stackdriver Monitoring (obecnie Cloud Monitoring) umożliwia tworzenie polityk alertowych opartych na stanie procesów (Process Health). Jeśli haker uruchomi złośliwy skrypt, który spowoduje crash aplikacji (i w efekcie zamknięcie procesu), monitorowanie wykryje brak tego procesu i wyśle powiadomienie do zespołu operacyjnego. Jest to najszybsza i najbardziej bezpośrednia metoda reagowania na "pad" usługi.
+Wyjaśnienie: 
+Aby monitorować specyficzne zachowanie aplikacji (jak uruchomienie konkretnego skryptu) i otrzymywać powiadomienia w czasie rzeczywistym, Google Cloud Monitoring (dawniej Stackdriver) oferuje mechanizm Alerting Policies. Warunek "Process Health" pozwala monitorować liczbę instancji danego procesu lub skryptu. Jeśli liczba ta przekroczy zdefiniowany próg, system automatycznie wyśle powiadomienie (np. e-mail, SMS, PagerDuty), co pozwala na natychmiastową reakcję.
 
 Dlaczego pozostałe są błędne:
-B (CPU usage): Monitorowanie samego CPU jest niewystarczające. Aplikacja może ulec awarii przy bardzo niskim użyciu procesora (np. wyciek pamięci, błąd segmentacji), więc alert bazujący na CPU nie zadziała w tym scenariuszu.
-C (User-defined metric): Dashboardy służą do wizualizacji, a nie do aktywnego powiadamiania (alerty). Zespół musiałby stale patrzeć na monitor, co jest nierealne.
-D (BigQuery log sink): Logowanie do BQ i cykliczne sprawdzanie (scheduled query) to podejście analityczne, które działa w modelu batchowym (z dużym opóźnieniem). Nie jest to rozwiązanie "w czasie rzeczywistym" dla incydentów krytycznych.
+B. Monitorowanie ogólnego użycia CPU (np. >80%) nie jest specyficzne dla tego ataku. Wysokie użycie CPU może wynikać z normalnego wzrostu ruchu lub innych procesów tła.
+C. Dashboard (Pulpit nawigacyjny) służy do wizualizacji danych, ale sam w sobie nie wysyła powiadomień. Operator musiałby stale patrzeć na ekran, aby zauważyć atak.
+D. Eksport do BigQuery i planowane zapytania (scheduled queries) działają z opóźnieniem i służą raczej do analizy historycznej (post-mortem) niż do natychmiastowego powiadamiania o trwającym incydencie.
 
-Wskazówki egzaminacyjne:
-- "Get notified": Jeśli w pytaniu pada to hasło, szukaj "Alerting Policy".
-- "Process crash": Jeśli aplikacja przestaje działać, monitoruj stan procesu ("Process health").
-- Eliminacja: Jeśli widzisz rozwiązania typu BigQuery/Log Analytics w pytaniu o awarię systemu, zazwyczaj jest to dystraktor (zbyt wolne).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Get notified" = Alerting Policy (nie Dashboard, nie BigQuery).
+- "Specific script/process" = Process Health condition.
+- Pamiętaj: Alerting = akcja (powiadomienie), Dashboard = obserwacja (wykres).
+
+Kluczowe zagadnienia do powtórzenia:
+- Cloud Monitoring Alerting Policies
+- Process Health Monitoring
+- Cloud Logging vs Cloud Monitoring
 
 Dokumentacja:
-<a href="https://cloud.google.com/monitoring/alerts/types-of-conditions#process-health" target="_blank">https://cloud.google.com/monitoring/alerts/types-of-conditions#process-health</a>
+<a href="https://cloud.google.com/monitoring/alerts" target="_blank">https://cloud.google.com/monitoring/alerts</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -113,21 +118,20 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Niektórzy użytkownicy forów argumentują, że opcja C byłaby dobra do liczenia prób ataku. Jednak zadanie wyraźnie mówi: "get notified" (zostań powiadomiony). W ekosystemie GCP "Notification" = "Alerting Policy". Opcja A to jedyny gotowy automat do tego celu.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Główna różnica między opcją A i C polega na słowie 'notified'. Dashboardy są świetne do analizy trendów, ale egzamin GCP Security kładzie nacisk na proaktywne bezpieczeństwo, które wymaga mechanizmów alertowania. Process Health jest najbardziej precyzyjnym narzędziem do śledzenia konkretnego wykonania kodu na maszynie VM.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/monitoring/alerts/types-of-conditions#process-health" target="_blank">https://cloud.google.com/monitoring/alerts/types-of-conditions#process-health</a></li>
+<li><a href="https://cloud.google.com/monitoring/alerts" target="_blank">https://cloud.google.com/monitoring/alerts</a></li>
 </ul>
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -142,9 +146,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

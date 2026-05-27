@@ -70,7 +70,7 @@ How should a customer reliably deliver Stackdriver logs from GCP to their on-pre
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Send all logs to the SIEM system via an existing protocol such as syslog.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure every project to export all their logs to a common BigQuery DataSet, which will be queried by the SIEM system.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure Organizational Log Sinks to export logs to a Cloud Pub/Sub Topic, which will be sent to the SIEM via Dataflow.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C.</span> Configure Organizational Log Sinks to export logs to a Cloud Pub/Sub Topic, which will be sent to the SIEM via Dataflow.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Build a connector for the SIEM to query for all logs in real time from the GCP RESTful JSON APIs.</li>
 
 </ul>
@@ -89,20 +89,28 @@ How should a customer reliably deliver Stackdriver logs from GCP to their on-pre
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Configure Organizational Log Sinks to export logs to a Cloud Pub/Sub Topic, which will be sent to the SIEM via Dataflow.)
+Potwierdzona odpowiedź: C (Configure Organizational Log Sinks to export logs to a Cloud Pub/Sub Topic, which will be sent to the SIEM via Dataflow.)
 
-Analiza poprawności:
-W środowiskach korporacyjnych (Enterprise) "Reliability" (niezawodność) dostarczania logów jest kluczowa. Cloud Pub/Sub pełni rolę wysoce skalowalnego i trwałego bufora (przechowuje komunikaty do 7 dni). Jeśli SIEM lub łącze do on-premises ulegnie awarii, logi zostaną bezpiecznie zakolejkowane w Pub/Sub. Dataflow z kolei służy do zaawansowanej obróbki (transformacji/filtrowania) strumieni danych z Pub/Sub przed ich ostatecznym zapisem w SIEM, co jest zgodne z najlepszymi praktykami GCP.
+Wyjaśnienie: 
+Aby zapewnić niezawodne i skalowalne dostarczanie logów z całej organizacji GCP do zewnętrznego systemu SIEM, Google zaleca następujący model:
+1. Organizational Log Sinks: Pozwalają na centralne zbieranie logów ze wszystkich projektów w organizacji.
+2. Cloud Pub/Sub: Służy jako bufor (message bus). Zapewnia wysoką dostępność i gwarancję dostarczenia (at-least-once delivery), co jest kluczowe dla systemów bezpieczeństwa.
+3. Dataflow: Pobiera dane z Pub/Sub, może je przefiltrować lub zmienić ich format (np. na CEF lub JSON akceptowalny przez SIEM) i wypchnąć do końcówki SIEM on-premises (np. Splunk, QRadar).
 
 Dlaczego pozostałe są błędne:
-A (Syslog): Bezpośrednie przesyłanie logów przez internet (Syslog) jest narażone na utratę danych (brak buforowania przy awarii odbiorcy) i ataki (brak szyfrowania end-to-end w standardowym Syslogu).
-B (BigQuery): BigQuery jest świetne do analityki (SQL), ale nie jest systemem typu "push" do SIEM. Odpytywanie (polling) BQ przez SIEM jest wolne, drogie i nie nadaje się do wykrywania incydentów w czasie rzeczywistym.
-D (REST APIs): Odpytywanie API ma bardzo restrykcyjne limity (quotas) i nie gwarantuje niezawodności przy dużych wolumenach danych. Jest to rozwiązanie bardzo nieefektywne.
+A. Protokół syslog nie jest natywnym mechanizmem eksportu z Google Cloud Logging i nie zapewnia tak wysokiej niezawodności i skalowalności w środowisku chmurowym.
+B. BigQuery jest świetne do analizy, ale systemy SIEM zazwyczaj wymagają strumieniowego przesyłania danych w czasie rzeczywistym, a nie okresowego odpytywania bazy danych.
+D. Odpytywanie (polling) przez REST API jest nieefektywne, trudne do zarządzania przy dużej skali i podatne na limity przepustowości (rate limits) API Google Cloud.
 
-Wskazówki egzaminacyjne:
-- "Reliably" (niezawodnie): Szukaj rozwiązań z buforowaniem (Pub/Sub) lub trwałym przechowywaniem przed wysyłką.
-- "SIEM Integration": Zawsze wybieraj architekturę: Sink -> Pub/Sub -> Dataflow -> SIEM.
-- Eliminacja: Odpytywanie (API/BigQuery) w kontekście SIEM zawsze odrzucaj jako niewydajne.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Log delivery to external SIEM" = Zawsze myśl o Pub/Sub jako o buforze transportowym.
+- "Reliably" = Pub/Sub + Dataflow (to standardowa para dla niezawodnego potoku danych).
+- Organizational sinks są kluczowe dla uniknięcia ręcznej konfiguracji w setkach projektów.
+
+Kluczowe zagadnienia do powtórzenia:
+- Cloud Logging Exports
+- Cloud Pub/Sub roles in security pipelines
+- Cloud Dataflow for log transformation
 
 Dokumentacja:
 <a href="https://cloud.google.com/architecture/exporting-stackdriver-logs-to-splunk" target="_blank">https://cloud.google.com/architecture/exporting-stackdriver-logs-to-splunk</a>
@@ -113,7 +121,7 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Kluczowym słowem jest "reliably". Pub/Sub zapewnia mechanizm potwierdzeń (acknowledgments), co daje pewność, że każde zdarzenie trafiło do celu. To standardowa architektura stosowana przy integracjach z systemami typu Splunk, QRadar czy Sentinel.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Głównym punktem dyskusji jest słowo 'reliably'. Pub/Sub jest zaprojektowany do przetrwania awarii i gwarantuje, że żadna wiadomość nie zginie (at-least-once delivery). W połączeniu z Dataflow, który automatycznie skaluje się do ilości logów, tworzy to najpotężniejszy mechanizm eksportu logów w ekosystemie GCP.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/architecture/exporting-stackdriver-logs-to-splunk" target="_blank">https://cloud.google.com/architecture/exporting-stackdriver-logs-to-splunk</a></li>
@@ -121,13 +129,12 @@ Dokumentacja:
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -142,9 +149,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

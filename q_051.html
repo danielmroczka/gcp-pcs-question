@@ -64,14 +64,15 @@
 <h2>Question 51 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You want to ensure that only trusted container images are deployed to GKE. Which service should you use?
+You want to limit the images that can be used as the source for boot disks. These images will be stored in a dedicated project.
+What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Container Analysis</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Binary Authorization</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud Build</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Artifact Registry</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use the Organization Policy Service to create a compute.trustedimageProjects constraint on the organization level. List the trusted project as the whitelist in an allow operation.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use the Organization Policy Service to create a compute.trustedimageProjects constraint on the organization level. List the trusted projects as the exceptions in a deny operation.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> In Resource Manager, edit the project permissions for the trusted project. Add the organization as member with the role: Compute Image User.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> In Resource Manager, edit the organization permissions. Add the project ID as member with the role: Compute Image User.</li>
 
 </ul>
 </div>
@@ -80,7 +81,7 @@ You want to ensure that only trusted container images are deployed to GKE. Which
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">A</span>
 <br/>
 </span>
 </div>
@@ -89,34 +90,40 @@ You want to ensure that only trusted container images are deployed to GKE. Which
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Binary Authorization)
+Potwierdzona odpowiedź: A
 
-Analiza poprawności:
-Binary Authorization to usługa kontroli wdrożeń (enforcement), która działa na poziomie klastra GKE (Google Kubernetes Engine). Jej zadaniem jest fizyczne zablokowanie możliwości uruchomienia kontenera, jeśli nie posiada on odpowiedniej "atestacji" (cyfrowego podpisu) potwierdzającej, że obraz jest zaufany, przeszedł testy bezpieczeństwa (np. skanowanie podatności) i pochodzi z zaufanego źródła (np. Artifact Registry). To "ostatnia linia obrony" przed uruchomieniem niebezpiecznego kodu na produkcji.
+Wyjaśnienie:
+Ograniczenie polityki organizacji (Organization Policy) o nazwie `compute.trustedimageProjects` jest dedykowanym mechanizmem do kontrolowania, z których projektów mogą pochodzić obrazy używane jako dyski rozruchowe (boot disks) w Twojej organizacji. Konfigurując to ograniczenie na poziomie organizacji i definiując listę "allow" (whitelist), wymuszasz, aby każdy nowy dysk rozruchowy w dowolnym projekcie wewnątrz organizacji korzystał wyłącznie z obrazów przechowywanych w jawnie wskazanych, zaufanych projektach.
 
-Dlaczego pozostałe są błędne:
-A (Container Analysis): Służy do skanowania obrazów pod kątem podatności (Vulnerability Scanning) i przechowywania wyników tych skanów. Dostarcza *informacji* o stanie bezpieczeństwa, ale sama w sobie nie posiada mechanizmu *blokowania* wdrożenia w klastrze.
-C (Cloud Build): To system CI/CD. Może budować i podpisywać obrazy, ale nie pilnuje tego, co faktycznie dzieje się w klastrze GKE w momencie uruchamiania (ktoś mógłby ręcznie uruchomić niebezpieczny obraz w klastrze bez udziału Cloud Build).
-D (Artifact Registry): To repozytorium obrazów (Storage). Może przechowywać zaufane obrazy, ale nie kontroluje procesu ich uruchamiania w klastrze GKE.
+Dlaczego pozostałe opcje są niepoprawne:
+- B: Choć technicznie można używać reguł "deny", w przypadku `compute.trustedimageProjects` standardową i zalecaną praktyką jest whitelisting (lista allow). Podejście z listą wyjątków w operacji deny jest bardziej skomplikowane w utrzymaniu i mniej bezpieczne (domyślnie pozwala na wszystko, co nie jest zablokowane).
+- C: Nadanie roli `Compute Image User` (roles/compute.imageUser) na poziomie projektu pozwala użytkownikom na korzystanie z obrazów w tym projekcie, ale NIE blokuje im możliwości korzystania z obrazów z innych projektów (np. publicznych obrazów Google lub ich własnych projektów). Nie realizuje więc wymogu "ograniczenia" (limit) źródeł.
+- D: Dodanie projektu jako członka organizacji z rolą `Compute Image User` nie jest poprawnym sposobem konfiguracji dostępu do obrazów ani nie służy do ograniczania wyboru obrazów dla użytkowników w całej organizacji.
 
-Wskazówki egzaminacyjne:
-- "Trusted container images" + "deployed to GKE": Szukaj "Binary Authorization".
-- "Block" / "Prevent": Jeśli pytanie mówi o *blokowaniu* wdrożenia – tylko BinAuth posiada taką funkcję.
-- Eliminacja: Jeśli pytanie mówi o *skanowaniu* – Container Analysis. Jeśli o *blokowaniu* wdrożenia – Binary Authorization.
+Tips & Tricks:
+- Gdy widzisz "limit images" + "boot disks" + "central/organization level", Twoją pierwszą myślą powinno być `compute.trustedimageProjects`.
+- Zapamiętaj, że whitelisting (Allow) jest preferowaną metodą dla tej polityki.
+- Organization Policy służy do narzucania ograniczeń (constraints), podczas gdy IAM służy do nadawania uprawnień (permissions). Jeśli celem jest zabronienie czegoś (ograniczenie wyboru), używamy Organization Policy.
+
+Zagadnienia:
+- Organization Policy Service (Więzy/Constraints)
+- Resource Hierarchy (Hierarchia zasobów)
+- Trusted Images (Zaufane obrazy)
 
 Dokumentacja:
-<a href="https://cloud.google.com/binary-authorization" target="_blank">https://cloud.google.com/binary-authorization</a>
+<a href="https://cloud.google.com/compute/docs/images/restricting-image-access" target="_blank">https://cloud.google.com/compute/docs/images/restricting-image-access</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (Egzamin)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Binary Authorization pozwala na tworzenie zaawansowanych reguł typu: "Obraz musi być podpisany przez skaner podatności (Container Analysis) ORAZ przez zespół QA", aby mógł zostać uruchomiony na klastrze produkcyjnym.</p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<h3>Kluczowe wnioski</h3>
+<p><b>Potwierdzona odpowiedź: A</b></p>
+<p>W egzaminie Google Cloud Security Professional kluczowe jest rozróżnienie między przyznawaniem dostępu (IAM) a narzucaniem ograniczeń (Organization Policy). To pytanie testuje znajomość konkretnego ograniczenia <code>compute.trustedimageProjects</code>, które jest krytyczne dla zapewnienia, że w środowisku uruchamiane są tylko sprawdzone i bezpieczne systemy operacyjne.</p>
+<h3>Praktyczne wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/binary-authorization" target="_blank">https://cloud.google.com/binary-authorization</a></li>
+<li>Zawsze szukaj słów kluczowych takich jak "enforce", "limit", "restrict" na poziomie "Organization" lub "Folder" – to sygnały dla Organization Policy.</li>
+<li>Pamiętaj, że polityka <code>trustedimageProjects</code> może być dziedziczona, więc ustawienie jej na górze hierarchii zabezpiecza wszystkie podległe projekty.</li>
 </ul>
 </div>
 </div>

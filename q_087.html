@@ -89,16 +89,25 @@ You have an application where the frontend is deployed on a managed instance gro
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Potwierdzona odpowiedź: B (Service Account based firewall rules)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Service Account based rules: To najbardziej precyzyjna i bezpieczna metoda. Adresy IP mogą się zmieniać, a tagi mogą być omyłkowo przypisane do innych maszyn w podsieci. Reguła firewalla oparta na TOŻSAMOŚCI (Service Account) gwarantuje, że tylko konkretna aplikacja frontendu może rozmawiać z konkretną bazą, niezależnie od tego, jakie inne maszyny są w tych podsieciach.
+Wyjaśnienie: 
+Zalecaną praktyką w GCP jest stosowanie reguł firewalla opartych na kontach serwisowych (Service Accounts). Pozwala to na precyzyjne określenie, że tylko maszyny uruchomione z tożsamością 'frontend-sa' mogą łączyć się z maszynami o tożsamości 'mysql-sa'. Jest to bezpieczniejsze niż tagi sieciowe, ponieważ tożsamość konta serwisowego jest silniej kontrolowana (IAM).
 
-Dlaczego inne są błędne:
-A. Subnet IP range: Zbyt szerokie. Każda inna maszyna w podsieci A (nawet zainfekowana) mogłaby wtedy uderzyć do bazy danych.
-C, D. Tags: Tagi są lepsze niż IP, ale nadal są mniej bezpieczne niż SA, ponieważ administrator instancji (Instance Admin) może dowolnie dodawać/usuwać tagi, podczas gdy do zmiany SA wymagane są wyższe uprawnienia (ServiceAccountUser).
+Dlaczego pozostałe są błędne:
+A. Filtrowanie po IP jest trudne w utrzymaniu przy autoskalowaniu.
+C, D. Tagi sieciowe (Network Tags) są mniej bezpieczne, ponieważ każdy użytkownik z rolą Instance Admin może je zmienić na dowolnej maszynie, omijając intencję reguły firewalla.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość za B. Korzystanie z SA w regułach firewalla to 'best practice' dla mikroserwisów w GCP.
+Wskazówki egzaminacyjne (Tips & Tricks):
+Dla separacji warstw (tier separation) wewnątrz VPC: Najlepiej używać Service Accountów w regułach firewalla.
+
+Kluczowe zagadnienia do powtórzenia:
+- VPC Firewall Rules
+- SA-based filtering
+- Network Tags vs Service Accounts
+
+Dokumentacja:
+<a href="https://cloud.google.com/vpc/docs/firewalls#service-accounts" target="_blank">https://cloud.google.com/vpc/docs/firewalls#service-accounts</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

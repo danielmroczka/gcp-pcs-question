@@ -64,15 +64,14 @@
 <h2>Question 40 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You need to identify Google's inherent PCI controls. Which document should you review?
+You want to evaluate your organization's Google Cloud instance for PCI compliance. You need to identify Google's inherent controls. Which document should you review to find the information?
 </p>
 <div class="question-choices-container">
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Google Cloud Platform: Customer Responsibility Matrix</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> PCI DSS Requirements</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> PCI SSC Guidelines</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Compute Engine documentation</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> PCI DSS Requirements and Security Assessment Procedures</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> PCI SSC Cloud Computing Guidelines</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Product documentation for Compute Engine</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -88,37 +87,51 @@ You need to identify Google's inherent PCI controls. Which document should you r
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Potwierdzona odpowiedź: A (Google Cloud Platform: Customer Responsibility Matrix)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Customer Responsibility Matrix: Jest to kluczowy dokument dostarczany przez Google (często w ramach Compliance Reports Manager), który punkt po punkcie wskazuje, za które wymogi PCI DSS odpowiada Google (np. ochrona fizyczna serwerowni), a za które odpowiada klient (np. konfiguracja firewalla).
+Wyjaśnienie:
+W modelu współdzielonej odpowiedzialności (Shared Responsibility Model), dostawcy usług chmurowych tacy jak Google Cloud publikują dokumenty określające, które zabezpieczenia (kontrole) są realizowane przez dostawcę, a które przez klienta.
+1. Customer Responsibility Matrix (Macierz Odpowiedzialności Klienta): Jest to kluczowy dokument przy audytach PCI DSS. Precyzuje on, które wymagania standardu PCI są "inherentne" (zapewnione przez infrastrukturę Google, np. fizyczna ochrona centrum danych), które są współdzielone, a które leżą wyłącznie po stronie klienta (np. konfiguracja firewalli wewnątrz VPC).
+2. "Inherent controls": To te mechanizmy, które klient otrzymuje "w pakiecie" z usługą chmurową i za które odpowiada Google.
 
-Dlaczego inne są błędne:
-B, C. PCI DSS/SSC: To ogólne standardy branżowe, nie powiedzą Ci, co konkretnie Google już za Ciebie zrobiło w swojej infrastrukturze.
-D. Compute Engine docs: Zawierają instrukcje techniczne, ale nie są oficjalnym dokumentem audytowym potwierdzającym spełnienie wymogów zgodności.
+Dlaczego pozostałe są błędne:
+B. PCI DSS Requirements and Security Assessment Procedures to ogólny standard wydany przez PCI SSC, który opisuje wymagania dla wszystkich firm, ale nie zawiera specyficznych informacji o tym, co konkretnie Google robi dla swoich klientów.
+C. PCI SSC Cloud Computing Guidelines to ogólny przewodnik dobrych praktyk dotyczący chmury, nie jest to specyficzny dokument techniczny/audytowy Google Cloud.
+D. Dokumentacja produktu (np. Compute Engine) opisuje jak korzystać z usługi, ale nie jest oficjalnym dokumentem audytowym PCI mapującym odpowiedzialność w zakresie kontroli bezpieczeństwa.
 
-Konsensus społeczności ExamTopics: Zdecydowane poparcie dla A. Macierz odpowiedzialności to Biblia dla każdego inżyniera compliance.</pre>
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Słowa klucze: "PCI compliance", "Shared Responsibility", "Inherent controls" = szukaj "Customer Responsibility Matrix".
+- Pamiętaj, że Google udostępnia te raporty (np. SOC 3, PCI Attestation of Compliance) przez "Compliance Reports Manager".
+
+Kluczowe zagadnienia do powtórzenia:
+- Shared Responsibility Model (Model Współdzielonej Odpowiedzialności).
+- PCI DSS w chmurze.
+- Inherent vs. Shared vs. Customer controls.
+
+Dokumentacja:
+<a href="https://cloud.google.com/architecture/framework/security/shared-responsibility-google-cloud" target="_blank">Współdzielona odpowiedzialność w Google Cloud</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Zgodnie z modelem współdzielonej odpowiedzialności, Google posiada certyfikację PCI dla swojej infrastruktury, ale to Ty musisz zapewnić zgodność swojej aplikacji i jej konfiguracji.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Pytanie dotyczy konkretnego artefaktu audytowego. Podczas audytu PCI, auditor zapyta: "Jakie macie dowody na to, że warstwa fizyczna jest zabezpieczona?". Odpowiedzią nie jest "Standard PCI", lecz właśnie Macierz Odpowiedzialności dostarczona przez Google, która wskazuje na odpowiednie certyfikacje infrastruktury bazowej.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/security/compliance/pci-dss" target="_blank">https://cloud.google.com/security/compliance/pci-dss</a></li>
+<li><a href="https://cloud.google.com/security/compliance/pci-dss" target="_blank">Google Cloud PCI DSS Compliance</a></li>
 </ul>
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -133,9 +146,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

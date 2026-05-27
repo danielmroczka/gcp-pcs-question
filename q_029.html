@@ -64,15 +64,14 @@
 <h2>Question 29 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your team sets up a Shared VPC. They need to enable Engineering Group A to attach a Compute Engine instance to only the 10.1.1.0/24 subnet. What should your team grant?
+Your team sets up a Shared VPC Network where project co-vpc-prod is the host project. Your team has configured the firewall rules, subnets, and VPN gateway on the host project. They need to enable Engineering Group A to attach a Compute Engine instance to only the 10.1.1.0/24 subnet. <br>What should your team grant to Engineering Group A to meet this requirement?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Compute Network User at the host project level.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Compute Network User at the subnet level.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Compute Shared VPC Admin at the host project level.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Compute Shared VPC Admin at the service project level.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Compute Network User Role at the host project level.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Compute Network User Role at the subnet level.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Compute Shared VPC Admin Role at the host project level.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Compute Shared VPC Admin Role at the service project level.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,19 +88,24 @@ Your team sets up a Shared VPC. They need to enable Engineering Group A to attac
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Compute Network User at the subnet level.)
+Potwierdzona odpowiedź: B (Compute Network User Role at the subnet level.)
 
-Analiza poprawności:
-Shared VPC to usługa pozwalająca na centralizację zarządzania siecią. W tym modelu "Właściciel Sieci" (Host Project) udostępnia podsieci projektom "Usługowym" (Service Projects). Aby inżynier mógł użyć konkretnej podsieci, musisz przyznać mu rolę `Compute Network User` (użytkownik sieci). Najważniejszą praktyką bezpieczeństwa (zasada najmniejszych uprawnień) jest nadanie tej roli **bezpośrednio na poziomie konkretnej podsieci**, a nie na poziomie całego projektu hosta. Dzięki temu inżynierowie z grupy A mają dostęp tylko do tej jednej, konkretnej podsieci, o którą prosił zespół.
+Wyjaśnienie: 
+Shared VPC (Współdzielone VPC) to model, w którym jeden projekt (Host Project) udostępnia swoje zasoby sieciowe innym projektom (Service Projects). Aby użytkownik lub grupa mogła korzystać z konkretnej podsieci (subnet) w Host Project do przyłączania maszyn wirtualnych, musi posiadać rolę `Compute Network User` (roles/compute.networkUser). Najważniejszą zasadą bezpieczeństwa w GCP jest zasada najmniejszych uprawnień (Least Privilege). Aby ograniczyć dostęp inżynierów do "tylko jednej" podsieci, rolę tę należy nadać bezpośrednio na poziomie konkretnego zasobu (podsieci), a nie na poziomie całego projektu.
 
 Dlaczego pozostałe są błędne:
-A (Host project level): Nadanie tej roli na poziomie projektu (hosta) dałoby inżynierom uprawnienia do używania WSZYSTKICH podsieci w tym projekcie. Jest to naruszenie zasady najmniejszych uprawnień (Least Privilege).
-C, D (Compute Shared VPC Admin): To rola o znacznie szerszych uprawnieniach – pozwala ona na *administrowanie* całą infrastrukturą Shared VPC (tworzenie/usuwanie podsieci, zarządzanie trasami), a nie tylko na "używanie" podsieci do przyłączenia maszyny.
+A. Compute Network User at the host project level: Nadanie tej roli na poziomie projektu Host dałoby inżynierom uprawnienia do używania WSZYSTKICH podsieci znajdujących się w tym projekcie, co narusza wymóg ścisłego ograniczenia dostępu do jednej, konkretnej podsieci.
+C, D. Compute Shared VPC Admin Role: Jest to rola o znacznie szerszych uprawnieniach administracyjnych. Pozwala ona na zarządzanie całym mechanizmem Shared VPC (kojarzenie projektów usługowych, tworzenie/usuwanie podsieci, zarządzanie trasami). Nadanie tej roli inżynierom chcącym jedynie tworzyć maszyny VM byłoby rażącym naruszeniem zasad bezpieczeństwa.
 
-Wskazówki egzaminacyjne:
-- "Only the... subnet": Jeśli pytanie mówi o "tylko jednej" podsieci, zawsze szukaj odpowiedzi z "subnet level".
-- "Shared VPC" + "IAM": Zawsze szukaj "Compute Network User". Jeśli widzisz "Admin" – zazwyczaj jest to zbyt szerokie uprawnienie.
-- Eliminacja: Odrzucaj "Host project level" w pytaniach wymagających precyzyjnego ograniczenia dostępu do zasobu.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Only the... subnet": To słowo-klucz. Jeśli masz ograniczyć dostęp do konkretnego zasobu, uprawnienie IAM musi być nadane na poziomie tego zasobu ("Resource-level IAM").
+- "Shared VPC" + "Use/Attach": Prawie zawsze szukaj roli `Compute Network User`.
+- Zapamiętaj: W GCP uprawnienia są dziedziczone w dół. Nadanie roli na poziomie projektu = dostęp do wszystkich podsieci; nadanie na poziomie podsieci = dostęp tylko do tej jednej.
+
+Kluczowe zagadnienia do powtórzenia:
+- IAM w Shared VPC (Network User vs Shared VPC Admin)
+- Resource Hierarchy i dziedziczenie uprawnień
+- Zarządzanie podsieciami w Host Project
 
 Dokumentacja:
 <a href="https://cloud.google.com/vpc/docs/shared-vpc#iam_in_shared_vpc" target="_blank">https://cloud.google.com/vpc/docs/shared-vpc#iam_in_shared_vpc</a>
@@ -112,7 +116,7 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> W Shared VPC projekt hosta "wypożycza" podsieci projektom usługowym. Zarządzanie tym "wypożyczaniem" na poziomie pojedynczych podsieci to absolutna podstawa zarządzania dostępem (Access Management) w GCP.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Zarządzanie Shared VPC na poziomie pojedynczych podsieci to fundament bezpieczeństwa sieciowego (Network Security) w Google Cloud. Pozwala to na pełną izolację zespołów (np. Zespół A nie może 'podpiąć' się pod podsieć Zespołu B), mimo że technicznie korzystają z tej samej sieci VPC.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc/docs/shared-vpc#iam_in_shared_vpc" target="_blank">https://cloud.google.com/vpc/docs/shared-vpc#iam_in_shared_vpc</a></li>
@@ -123,10 +127,10 @@ Dokumentacja:
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -141,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
 

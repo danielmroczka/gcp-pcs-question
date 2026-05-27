@@ -89,16 +89,25 @@ You need to implement an encryption at-rest strategy that reduces key management
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Potwierdzona odpowiedź: D (Default encryption + Cloud KMS)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Default + Cloud KMS (CMEK): Domyślne szyfrowanie Google (Google-managed keys) spełnia wymogi FIPS 140-2 L1 i nie wymaga konfiguracji (redukcja złożoności). Dla danych wrażliwych użycie Cloud KMS (CMEK) pozwala na własne harmonogramy rotacji (flexibility), co spełnia oba wymogi.
+Wyjaśnienie: 
+Strategia zbalansowana: 1. Dane zwykłe szyfrujemy domyślnie (Google default), co nie wymaga zarządzania kluczami (zero complexity). 2. Dane wrażliwe szyfrujemy za pomocą Cloud KMS (CMEK), co daje kontrolę nad rotacją i rezydencją. Oba rozwiązania spełniają wymóg FIPS 140-2 L1.
 
-Dlaczego inne są błędne:
-A, B: Zwiększają niepotrzebnie złożoność dla danych, które nie są krytyczne.
-C. External KM: Najbardziej skomplikowana forma (wymaga dostawcy zewnętrznego), narusza wymóg 'reduce complexity'.
+Dlaczego pozostałe są błędne:
+A, B. Używanie KMS/EKM dla wszystkich danych (nawet tych nieistotnych) zwiększa niepotrzebnie złożoność i koszty.
+C. External Key Manager (EKM) jest najbardziej złożonym rozwiązaniem i zazwyczaj stosuje się go tylko dla najbardziej rygorystycznych wymogów compliance, gdzie klucz musi być poza Google.
 
-Konsensus społeczności ExamTopics: 100% na D. Najbardziej zrównoważone podejście.
+Wskazówki egzaminacyjne (Tips & Tricks):
+Mieszaj poziomy szyfrowania, aby zoptymalizować 'operational overhead' (złożoność).
+
+Kluczowe zagadnienia do powtórzenia:
+- Encryption at rest strategy
+- Default vs CMEK vs CSEK vs EKM
+- Compliance (FIPS 140-2)
+
+Dokumentacja:
+<a href="https://cloud.google.com/security/encryption-at-rest" target="_blank">https://cloud.google.com/security/encryption-at-rest</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

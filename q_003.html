@@ -89,23 +89,29 @@ A customer needs an alternative to storing their plain text secrets in their sou
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Encrypt the secrets with a Customer-Managed Encryption Key (CMEK), and store them in Cloud Storage.)
+Potwierdzona odpowiedź: B (Encrypt the secrets with a Customer-Managed Encryption Key (CMEK), and store them in Cloud Storage.)
 
-Analiza poprawności:
-W kontekście starszych pytań egzaminacyjnych, użycie Customer-Managed Encryption Key (CMEK) w połączeniu z Cloud Storage było uznawane za najlepszą dostępną praktykę do przechowywania sekretów poza kodem źródłowym. Szyfrowanie kluczem zarządzanym przez klienta zapewnia kontrolę nad dostępem i bezpieczeństwem danych, nawet jeśli dostęp do bucketa GCS zostanie uzyskany przez niepowołane osoby.
+Wyjaśnienie: 
+Przechowywanie haseł i kluczy w formie jawnej (plain text) w systemach kontroli wersji (SCM) jest poważnym błędem bezpieczeństwa. Rekomendowanym podejściem w Google Cloud jest użycie dedykowanego rozwiązania. W kontekście dostępnych opcji (gdzie nie wymieniono Secret Manager):
+- Szyfrowanie sekretów za pomocą CMEK (Customer-Managed Encryption Keys) zarządzanych w Cloud KMS i przechowywanie ich w Cloud Storage zapewnia kontrolę nad cyklem życia klucza oraz bezpieczne miejsce składowania. Dostęp do sekretu wymaga wtedy uprawnień zarówno do obiektu w Storage, jak i do klucza deszyfrującego w KMS.
 
 Dlaczego pozostałe są błędne:
-A. Cloud Source Repositories + Cloud SQL: Przechowywanie haseł w bazie danych bez dodatkowych zabezpieczeń (jak aplikacyjne szyfrowanie) nie rozwiązuje problemu bezpieczeństwa – jedynie przenosi sekrety z systemu SCM do bazy danych.
-C. Cloud Data Loss Prevention (DLP) API: To narzędzie służy do identyfikacji i maskowania wrażliwych danych w już istniejących zbiorach. Nie jest przeznaczone do zarządzania cyklem życia sekretów.
-D. SCM na Compute Engine z lokalnym SSD: To podejście czysto infrastrukturalne, które w żaden sposób nie adresuje problemu bezpiecznego przechowywania sekretów (hasła nadal byłyby w plikach konfiguracyjnych wewnątrz SCM).
+A. Use Cloud Source Repositories, and store secrets in Cloud SQL: Cloud SQL nie jest usługą przeznaczoną do bezpiecznego przechowywania sekretów aplikacji. Chociaż dane są tam szyfrowane w spoczynku, nie rozwiązuje to problemu zarządzania dostępem do pojedynczych sekretów tak skutecznie jak KMS/Secret Manager.
+C. Run the Cloud Data Loss Prevention API to scan the secrets, and store them in Cloud SQL: DLP służy do wykrywania i maskowania danych wrażliwych (np. numerów kart kredytowych) w dokumentach lub bazach, a nie do bezpiecznego przechowywania haseł systemowych.
+D. Deploy the SCM to a Compute Engine VM with local SSDs, and enable preemptible VMs: Ta opcja jest całkowicie błędna pod kątem bezpieczeństwa i dostępności. Local SSD są efemeryczne (dane znikają po zatrzymaniu instancji), a instancje Preemptible mogą zostać wyłączone w dowolnym momencie przez Google.
 
-Wskazówki egzaminacyjne:
-- "Secret Manager": Jeśli w pytaniu pojawia się nowsza usługa GCP (jak Secret Manager), zawsze wybieraj ją jako rozwiązanie dedykowane.
-- "Best practice (historyczne)": Jeśli pytanie jest stare i nie ma opcji Secret Manager, szukaj wzorca: Szyfrowanie (CMEK/KMS) + Izolacja w bezpiecznym storage'u (Cloud Storage).
-- Eliminacja: Odpowiedzi sugerujące bazy danych (Cloud SQL) bez wspomnienia o szyfrowaniu zazwyczaj są błędne.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli w opcjach pojawia się "Secret Manager", zazwyczaj jest to najlepsza odpowiedź dla sekretów aplikacji.
+- Jeśli Secret Managera nie ma, szukaj kombinacji KMS (szyfrowanie) + Storage (składowanie).
+- Nigdy nie wybieraj opcji sugerujących przechowywanie sekretów w kodzie lub "zwykłych" bazach danych bez dodatkowego szyfrowania warstwy aplikacji.
+
+Kluczowe zagadnienia do powtórzenia:
+- Cloud KMS (Key Management Service) i CMEK
+- Secret Manager vs. Cloud KMS
+- Bezpieczeństwo w procesach CI/CD
 
 Dokumentacja:
-<a href="https://cloud.google.com/kms/docs/cmek" target="_blank">https://cloud.google.com/kms/docs/cmek</a>
+<a href="https://cloud.google.com/kms/docs/envelope-encryption" target="_blank">https://cloud.google.com/kms/docs/envelope-encryption</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

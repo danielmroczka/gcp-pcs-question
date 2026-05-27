@@ -89,17 +89,25 @@ You are the Security Admin in your company. You want to synchronize all security
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Potwierdzona odpowiedź: A (GCDS (one-way sync) with email attribute)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. GCDS search rules: Google Cloud Directory Sync pozwala na precyzyjne określenie, które grupy z LDAP mają zostać przeniesione do chmury. Filtrowanie po atrybucie adresu e-mail zapewnia, że zsynchronizowane zostaną tylko grupy, które mogą funkcjonować w ekosystemie Google (gdzie tożsamość oparta jest na e-mailu).
+Wyjaśnienie: 
+Google Cloud Directory Sync (GCDS) synchronizuje dane w jedną stronę: z LDAP do chmury. Filtrowanie po atrybucie e-mail jest poprawne, ponieważ w Google Cloud grupy muszą posiadać unikalny adres e-mail, aby mogły być używane w politykach IAM.
 
-Dlaczego inne są błędne:
-B. Bidirectional sync: GCDS wspiera tylko synchronizację JEDNOSTRONNĄ (LDAP -> Google). Google nie pozwala na wypychanie zmian z chmury z powrotem do Twojego AD/LDAP tym narzędziem.
-C. Subset sync tool: Brzmi jak ogólnik, podczas gdy A precyzuje jak to zrobić w oficjalnym narzędziu GCDS.
-D. Object class attribute: Sama klasa obiektu (np. groupOfNames) nie gwarantuje, że grupa ma przypisany adres e-mail, co jest wymagane do jej poprawnego działania w IAM.
+Dlaczego pozostałe są błędne:
+B. GCDS nie wspiera synchronizacji dwukierunkowej (bidirectional).
+C, D. Te opcje wspominają o 'automatycznym posiadaniu ról IAM' przez grupy stworzone w Google, co nie jest prawdą – role trzeba nadać ręcznie lub przez skrypt.
 
-Konsensus społeczności ExamTopics: Zdecydowane A. Skuteczna synchronizacja wymaga dobrze zdefiniowanych reguł wyszukiwania (Search Rules).
+Wskazówki egzaminacyjne (Tips & Tricks):
+GCDS = One-way sync (Source of truth is on-prem).
+
+Kluczowe zagadnienia do powtórzenia:
+- GCDS (Google Cloud Directory Sync)
+- LDAP to Cloud Identity mapping
+- IAM Group best practices
+
+Dokumentacja:
+<a href="https://support.google.com/a/answer/612003" target="_blank">https://support.google.com/a/answer/612003</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

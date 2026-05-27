@@ -88,25 +88,28 @@ A workforce needs to access a CRM hosted on GCP. It requires an authentication l
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Poprawna odpowiedź: A
+<pre>
+Potwierdzona odpowiedź: A (Cloud Identity-Aware Proxy (IAP))
 
-Analiza poprawności:
-Identity-Aware Proxy (IAP) to usługa GCP, która umożliwia dostęp do aplikacji webowych z dowolnego miejsca (przez Internet) w oparciu o tożsamość użytkownika, a nie sieć (VPN).
-1. Zero Trust: IAP weryfikuje tożsamość użytkownika i jego uprawnienia (IAM) przed dopuszczeniem do aplikacji, co czyni ją idealnym rozwiązaniem dla pracowników mobilnych.
-2. Wsparcie 2FA: IAP natywnie integruje się z mechanizmami bezpieczeństwa Cloud Identity, w tym z wymuszeniem uwierzytelniania dwuskładnikowego (2FA).
+Wyjaśnienie: 
+IAP pozwala na kontrolowanie dostępu do aplikacji webowych hostowanych na GCP bez potrzeby korzystania z VPN. Działa na warstwie aplikacji, integruje się z Cloud Identity (wspierając 2FA) i pozwala na dostęp z dowolnego miejsca w internecie, weryfikując tożsamość użytkownika przy każdym żądaniu.
 
 Dlaczego pozostałe są błędne:
-B. Cloud Armor: To WAF i ochrona przeciwko DDoS. Nie zarządza tożsamością ani dostępem użytkowników.
-C. Cloud Endpoints: Służy do zarządzania i zabezpieczania interfejsów API, nie jest produktem dostępu zdalnego dla użytkowników końcowych.
-D. Cloud VPN: Wymaga połączenia z siecią korporacyjną, co jest niewygodne dla pracowników mobilnych i nie zapewnia automatycznego uwierzytelniania na poziomie aplikacji.
+B. Cloud Armor chroni przed atakami DDoS i WAF, ale nie jest systemem uwierzytelniania użytkowników końcowych.
+C. Cloud Endpoints służy do zarządzania API, a nie do zabezpieczania dostępu do interfejsów webowych dla pracowników.
+D. Cloud VPN wymaga zainstalowania klienta VPN i połączenia tunelowego, co jest mniej wygodne dla pracowników mobilnych i nie oferuje natywnej warstwy auth dla samej aplikacji w taki sposób jak IAP.
 
-Wskazówki egzaminacyjne:
-- "Access application from Internet" + "No VPN" + "2FA" = IAP.
-- Pamiętaj o modelu BeyondCorp (Zero Trust) – IAP jest głównym narzędziem GCP do jego implementacji.
-- Jeśli pytanie wspomina o IAP w kontekście bezpieczeństwa, zawsze szukaj wzorców związanych z "Identity-based access".
+Wskazówki egzaminacyjne (Tips & Tricks):
+Dostęp do WWW + 2FA + brak VPN = IAP.
+
+Kluczowe zagadnienia do powtórzenia:
+- Cloud Identity-Aware Proxy (IAP)
+- Context-aware access
+- BeyondCorp model
 
 Dokumentacja:
-<a href="https://cloud.google.com/iap/docs/concepts-overview" target="_blank">https://cloud.google.com/iap/docs/concepts-overview</a></pre>
+<a href="https://cloud.google.com/iap/docs/concepts-overview" target="_blank">https://cloud.google.com/iap/docs/concepts-overview</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

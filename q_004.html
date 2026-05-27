@@ -89,19 +89,28 @@ Your team wants to centrally manage GCP IAM permissions from their on-premises A
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Set up Cloud Directory Sync to sync groups, and set IAM permissions on the groups.)
+Potwierdzona odpowiedź: A (Set up Cloud Directory Sync to sync groups, and set IAM permissions on the groups.)
 
-Analiza poprawności:
-Google Cloud Directory Sync (GCDS) jest kluczowym narzędziem do zapewnienia spójności tożsamości między lokalnym Active Directory (AD) a Google Cloud Identity. GCDS odczytuje grupy z AD i automatycznie synchronizuje je z Cloud Identity. Dzięki temu uprawnienia IAM mogą być przypisane do grup w GCP, a członkostwo w tych grupach jest zarządzane bezpośrednio w AD, co spełnia wymóg centralnego zarządzania.
+Wyjaśnienie: 
+Aby zarządzać uprawnieniami w Google Cloud przy użyciu lokalnego Active Directory (AD), należy zsynchronizować tożsamości (użytkowników i grupy) do usługi Cloud Identity. Narzędziem służącym do tego celu jest GCDS (Google Cloud Directory Sync). 
+- GCDS odczytuje dane z AD (używając LDAP) i tworzy ich odzwierciedlenie w Cloud Identity.
+- Synchronizacja grup pozwala na przypisanie ról IAM do tych grup w GCP.
+- Dzięki temu dodanie użytkownika do grupy w lokalnym AD automatycznie (po kolejnej synchronizacji) nadaje mu odpowiednie uprawnienia w Google Cloud, co zapewnia centralizację zarządzania.
 
 Dlaczego pozostałe są błędne:
-B. SAML 2.0 Single Sign-On (SSO): SSO odpowiada jedynie za proces logowania (uwierzytelniania). Samo w sobie nie synchronizuje informacji o przynależności do grup, więc system IAM w GCP "nie wiedziałby", do jakich grup należy użytkownik z AD.
-C, D: Użycie API (Cloud IAM API lub Admin SDK) do tworzenia grup wymagałoby budowy własnego, niestandardowego oprogramowania typu "middleware". Jest to podejście niepotrzebnie skomplikowane i nieefektywne w porównaniu do natywnego i wspieranego narzędzia GCDS.
+B. Set up SAML 2.0 Single Sign-On (SSO): SSO rozwiązuje problem uwierzytelniania (logowania się tym samym hasłem), ale samo w sobie nie synchronizuje grup. Bez synchronizacji grup przez GCDS, system IAM w Google Cloud nie wiedziałby, do jakich grup AD należy dany użytkownik w celu nadania mu uprawnień.
+C. Use the Cloud Identity and Access Management API: Jest to metoda wymagająca pisania własnych skryptów i integracji. GCDS jest gotowym, rekomendowanym przez Google narzędziem, które realizuje to zadanie bez konieczności programowania.
+D. Use the Admin SDK: Podobnie jak opcja C, jest to podejście programistyczne. Admin SDK służy do zarządzania zasobami Google Workspace/Cloud Identity, ale standardem dla synchronizacji z AD jest GCDS.
 
-Wskazówki egzaminacyjne:
-- Provisioning vs Auth: Pamiętaj o rozróżnieniu: SAML/SSO to UWIERZYTELNIANIE (jak się loguję), GCDS to PROVISIONING (jak tworzę tożsamość użytkownika/grupy w chmurze).
-- Centralne zarządzanie: Jeśli w pytaniu pada Active Directory + IAM GCP, "GCDS" jest prawie zawsze poprawną odpowiedzią.
-- Eliminacja: Jeśli widzisz rozwiązania wymagające pisania kodu przez klienta (własne skrypty korzystające z API), niemal zawsze jest to dystraktor.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Słowo klucz: "Sync" lub "Provisioning" z AD/LDAP do Google Cloud = GCDS.
+- Słowo klucz: "Authentication" lub "Single Sign-On" = SAML 2.0 / SSO.
+- Zapamiętaj: GCDS to proces jednostronny (z AD do Google Cloud).
+
+Kluczowe zagadnienia do powtórzenia:
+- Google Cloud Directory Sync (GCDS)
+- Federacja tożsamości (Federated Identity)
+- Zarządzanie grupami w IAM
 
 Dokumentacja:
 <a href="https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction" target="_blank">https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction</a>

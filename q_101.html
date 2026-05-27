@@ -89,16 +89,21 @@ Your company wants to determine what products they can build to help customers i
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Potwierdzona odpowiedź: A.
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Deterministic encryption: To metoda, która dla tej samej wartości wejściowej zawsze daje tę samą wartość zaszyfrowaną. Pozwala to na wykonywanie operacji 'JOIN' na zaszyfrowanych kolumnach, zachowując integralność referencyjną bez ujawniania danych PII.
+Wyjaśnienie:
+- A. Deterministic encryption: Metoda ta generuje ten sam tekst zaszyfrowany dla tej samej wartości wejściowej, co umożliwia wykonywanie operacji JOIN na danych bez konieczności ich deszyfrowania, zachowując jednocześnie integralność referencyjną i chroniąc poufność danych.
 
-Dlaczego inne są błędne:
-C. FPE: Zachowuje format (cyfry na cyfry), ale nie gwarantuje determinizmu w taki sposób, aby był on standardem dla operacji 'JOIN' w Big Data tak jak AES-SIV (część deterministycznego szyfrowania DLP).
-D. Hashing: Zazwyczaj jednokierunkowy i bez soli (salt) jest podatny na ataki słownikowe. Szyfrowanie deterministyczne jest bezpieczniejsze i odwracalne dla HR/Security.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- B. Secure, key-based hashes: Hashing jest procesem jednokierunkowym; choć bezpieczny, nie pozwala na odzyskanie danych (co może być potrzebne w procesach biznesowych) i trudniej nim zarządzać w kontekście JOIN niż szyfrowaniem deterministycznym.
+- C. Format-preserving encryption (FPE): FPE jest przydatne, gdy musimy zachować format danych (np. długość numeru karty płatniczej), ale w kontekście dużych zbiorów danych i operacji JOIN, szyfrowanie deterministyczne jest standardem.
+- D. Cryptographic hashing: Podobnie jak w przypadku haszowania z kluczem, jest to technika jednokierunkowa, która nie zapewnia elastyczności odwracalności wymaganej w wielu scenariuszach biznesowych, w przeciwieństwie do szyfrowania.
 
-Konsensus społeczności ExamTopics: 100% na A. Determinizm to klucz do 'secure join'.
+Wskazówki:
+- W scenariuszach wymagających wykonywania operacji JOIN na zaszyfrowanych danych, zawsze szukaj metod, które gwarantują determinizm (taki sam wynik dla tego samego wejścia), przy jednoczesnym zachowaniu bezpieczeństwa kryptograficznego (np. szyfrowanie deterministyczne AES-SIV).
+
+Dokumentacja:
+<a href="https://cloud.google.com/dlp/docs/concepts-pseudonymization#deterministic-encryption" target="_blank">Google Cloud DLP - Pseudonimizacja danych</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

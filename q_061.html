@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 61</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,15 +64,14 @@
 <h2>Question 61 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You need to ensure that specific sensitive data in a BigQuery table is only visible to authorized users. What is the most granular way to achieve this?
+A customer wants to deploy a large number of 3-tier web applications on Compute Engine. How should the customer ensure authenticated network separation between the different tiers of the application?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Dataset-level permissions</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Table-level permissions</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Row-level security</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Column-level security using policy tags</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Run each tier in its own Project, and segregate using Project labels.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Run each tier with a different Service Account (SA), and use SA-based firewall rules.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Run each tier in its own subnet, and use subnet-based firewall rules.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Run each tier with its own VM tags, and use tag-based firewall rules.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +79,7 @@ You need to ensure that specific sensitive data in a BigQuery table is only visi
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">D</span>
+<span class="correct-answer">B</span>
 <br/>
 </span>
 </div>
@@ -89,45 +88,51 @@ You need to ensure that specific sensitive data in a BigQuery table is only visi
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (Column-level security using policy tags)
+Potwierdzona odpowiedź: B (Run each tier with a different Service Account (SA), and use SA-based firewall rules.)
 
-Analiza poprawności:
-Column-level security (CLS) to najbardziej precyzyjne narzędzie kontroli dostępu do danych wewnątrz tabeli BigQuery. Dzięki integracji z Data Catalog i mechanizmowi "policy tags" (tagi polityk), administrator może przypisać określone etykiety (np. "PII-Data") do konkretnych kolumn. Następnie, stosując polityki IAM na poziomie tych tagów, możesz precyzyjnie określić, które grupy użytkowników mają prawo "odczytu" danych z tak oznaczonej kolumny. Nawet jeśli użytkownik ma uprawnienia `Data Viewer` na całej tabeli, zablokowanie dostępu do tagu uniemożliwi mu wyświetlenie zawartości danej kolumny (zwrócony zostanie błąd lub wartość NULL).
+Wyjaśnienie:
+Używanie kont serwisowych (Service Accounts) do definiowania reguł firewall jest zalecaną praktyką Google Cloud ("best practice") dla dynamicznych środowisk.
+1. Authenticated Separation: W przeciwieństwie do tagów sieciowych (network tags), które są tylko etykietami tekstowymi, konta serwisowe są tożsamościami (IAM identities). Reguły firewall oparte na SA są bezpieczniejsze, ponieważ wymagają uprawnień `iam.serviceAccounts.actAs`, aby przypisać daną tożsamość do instancji.
+2. Skalowalność: Jeśli Twoja aplikacja się skaluje (np. dodajesz nowe instancje w Managed Instance Group), automatycznie dziedziczą one konto serwisowe i powiązane z nim reguły firewall.
+3. Precyzja: Możesz pozwolić warstwie "Frontend" na komunikację z warstwą "Backend" tylko wtedy, gdy instancja Backend używa specyficznego konta serwisowego, niezależnie od jej adresu IP czy podsieci.
 
 Dlaczego pozostałe są błędne:
-A (Dataset-level): To uprawnienie do całego zbioru (wszystkich tabel w danym zbiorze). Jest zbyt szerokie i nie spełnia wymogu "most granular" (najbardziej precyzyjnego).
-B (Table-level): Ogranicza dostęp do całej tabeli, co również nie jest rozwiązaniem "na poziomie kolumny" (granularności).
-C (Row-level security): To filtrowanie wierszy (np. użytkownik widzi tylko wiersze dla swojego regionu). Choć to precyzyjna metoda, nie pozwala ukryć konkretnych *atrybutów* (kolumn) wewnątrz wiersza, które użytkownik może zobaczyć.
+A. Project labels: Etykiety projektów służą do celów organizacyjnych i bilingowych. Nie mają żadnego wpływu na filtrowanie ruchu sieciowego wewnątrz VPC.
+C. Subnet-based firewall: Ograniczanie ruchu na podstawie podsieci jest podejściem tradycyjnym. W chmurze jest ono mało elastyczne i utrudnia zarządzanie w dużych skalach, szczególnie gdy aplikacje są rozproszone.
+D. Tag-based firewall: Tagi są łatwe w użyciu, ale mniej bezpieczne niż SA. Każdy, kto ma uprawnienia do edycji instancji (Compute Instance Admin), może dodać lub usunąć tag, zmieniając tym samym profil bezpieczeństwa sieciowego maszyny bez dodatkowej weryfikacji tożsamości.
 
-Wskazówki egzaminacyjne:
-- "Granular" + "BigQuery" + "Sensitive data" / "Visible": Zawsze szukaj "Column-level security" lub "policy tags".
-- "PII": To słowo klucz, które powinno automatycznie kierować Cię w stronę zabezpieczeń na poziomie kolumn.
-- Eliminacja: Jeśli pytanie mówi o kolumnach/atrybutach – nigdy nie wybieraj Dataset lub Table level.
+Tips & Tricks:
+- Słowo "Authenticated" w pytaniu o firewall niemal zawsze wskazuje na "Service Accounts".
+- Tagi (Tags) są dobre dla prostych środowisk; Service Accounts (SA) są dla środowisk produkcyjnych i regulowanych (compliance).
+
+Zagadnienia:
+- VPC Firewall Rules - Source/Target filtering.
+- Service Account as a security identity.
+- Least Privilege in Network Design.
 
 Dokumentacja:
-<a href="https://cloud.google.com/bigquery/docs/column-level-security-intro" target="_blank">https://cloud.google.com/bigquery/docs/column-level-security-intro</a>
+<a href="https://cloud.google.com/vpc/docs/firewalls#service-accounts" target="_blank">https://cloud.google.com/vpc/docs/firewalls#service-accounts</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Wiele osób myli Row-level security z Column-level security. Row-level służy do "segregacji użytkowników" (kto widzi jakie wiersze), natomiast Column-level służy do "ochrony danych wrażliwych" (kto widzi jakie kolumny/atrybuty).</p>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p><b>Praktyczne wnioski:</b> Stosowanie SA-based firewall rules pozwala na stworzenie mikro-segmentacji sieci, która jest niezależna od fizycznej (lub logicznej w chmurze) topologii adresacji IP.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/bigquery/docs/column-level-security-intro" target="_blank">https://cloud.google.com/bigquery/docs/column-level-security-intro</a></li>
+<li><a href="https://cloud.google.com/blog/products/gcp/use-service-accounts-to-control-access-to-your-google-compute-engine-vms" target="_blank">Use service accounts to control access to VMs</a></li>
 </ul>
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -142,9 +147,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -89,17 +89,25 @@ You are part of a security team that wants to ensure that a Cloud Storage bucket
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Potwierdzona odpowiedź: A (VPC Service Controls (Perimeter))
 
-Wyjaśnienie (Dlaczego poprawna):
-A. VPC Service Controls (Perimeter): Tworzy twardą granicę na poziomie API Google. Maszyny w projekcie B mogą czytać dane z projektu A, ale żadne z nich nie może wysłać tych danych do bucketu poza perymetrem (exfiltration).
+Wyjaśnienie: 
+VPC Service Controls pozwala na zdefiniowanie perymetru bezpieczeństwa, który obejmuje zasoby w różnych projektach. Dodając Projekt A (z bucketem) i Projekt B do jednego perymetru i ograniczając dostęp do usługi Cloud Storage, gwarantujemy, że dane nie mogą 'wyciec' poza te projekty, nawet jeśli użytkownik ma wysokie uprawnienia IAM.
 
-Dlaczego inne są błędne:
-B. Domain Restricted: Chroni przed udostępnianiem osobom trzecim, ale nie chroni przed wynoszeniem danych przez pracowników na ich prywatne konta w chmurze (to potrafi tylko VPC SC).
-C. Private Access: Pozwala na dostęp bez internetu, ale nie nakłada restrykcji na logiczne granice kopiowania danych.
-D. VPC Peering: To technologia sieciowa, nie ma wpływu na bezpieczeństwo usług API Cloud Storage.
+Dlaczego pozostałe są błędne:
+B. Bucket Policy Only (Uniform bucket access) zarządza tylko IAM, nie zapobiega przesyłaniu danych między różnymi autoryzowanymi lokalizacjami.
+C, D. Prywatny dostęp (Private Access) lub Peering ułatwiają routing, ale nie nakładają blokad eksfiltracji na poziomie API Google (jak Cloud Storage).
 
-Konsensus społeczności ExamTopics: 100% na A. Słowo 'copied to buckets outside' to kluczowy indykator dla VPC SC.
+Wskazówki egzaminacyjne (Tips & Tricks):
+Izolacja danych na poziomie API (nie sieci) = VPC Service Controls.
+
+Kluczowe zagadnienia do powtórzenia:
+- VPC Service Controls
+- Service Perimeters
+- Prevention of Data Exfiltration
+
+Dokumentacja:
+<a href="https://cloud.google.com/vpc-service-controls/docs/overview" target="_blank">https://cloud.google.com/vpc-service-controls/docs/overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

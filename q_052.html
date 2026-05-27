@@ -64,14 +64,16 @@
 <h2>Question 52 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Which tool can help identify and classify sensitive information (like credit card numbers) in unstructured text?
+Your team needs to prevent users from creating projects in the organization. Only the DevOps team should be allowed to create projects on behalf of the requester.
+Which two tasks should your team perform to handle this request? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud KMS</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud DLP API</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> BigQuery</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Data Catalog</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Remove all users from the Project Creator role at the organizational level.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create an Organization Policy constraint, and apply it at the organizational level.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Grant the Project Editor role at the organizational level to a designated group of users.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Add a designated group of users to the Project Creator role at the organizational level.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Grant the billing account creator role to the designated DevOps team.</li>
 
 </ul>
 </div>
@@ -80,7 +82,7 @@ Which tool can help identify and classify sensitive information (like credit car
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">AD</span>
 <br/>
 </span>
 </div>
@@ -89,34 +91,44 @@ Which tool can help identify and classify sensitive information (like credit car
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Cloud DLP API)
+Potwierdzona odpowiedź: AD
 
-Analiza poprawności:
-Usługa Cloud DLP (obecnie Sensitive Data Protection) posiada zaawansowane silniki analizy tekstu oparte na przetwarzaniu języka naturalnego (NLP). Dzięki nim potrafi w strumieniu nieustrukturyzowanego tekstu (np. czat, komentarz, logi) automatycznie wykryć wzorce typowe dla danych wrażliwych (PII - Personally Identifiable Information), takich jak numery kart płatniczych (np. wzorzec `CREDIT_CARD_NUMBER`), numery PESEL, adresy email czy numery telefonów. Jest to dedykowane narzędzie do "identyfikacji i klasyfikacji" takich informacji.
+Wyjaśnienie:
+Domyślnie w Google Cloud każdy użytkownik w domenie posiada uprawnienie do tworzenia projektów, ponieważ rola `resourcemanager.projectCreator` jest przypisana do całej domeny na poziomie organizacji. Aby ograniczyć tę możliwość:
+1. (Krok A) Należy usunąć domyślne przypisanie roli `Project Creator` dla wszystkich użytkowników na poziomie węzła organizacji.
+2. (Krok D) Należy jawnie nadać rolę `Project Creator` (roles/resourcemanager.projectCreator) tylko wybranej grupie osób (w tym przypadku zespołowi DevOps) na poziomie organizacji.
 
-Dlaczego pozostałe są błędne:
-A (Cloud KMS): Służy wyłącznie do bezpiecznego przechowywania i zarządzania kluczami szyfrującymi. Nie posiada żadnej funkcjonalności skanowania czy analizy treści danych.
-C (BigQuery): To baza danych klasy Data Warehouse. Choć można w niej przechowywać dane, sama w sobie nie potrafi przeszukiwać tekstu w poszukiwaniu "wrażliwości" (PII) – do tego celu zazwyczaj używa się DLP API, które z BigQuery współpracuje.
-D (Data Catalog): To usługa do inwentaryzacji metadanych (opisywania, tagowania, zarządzania słownikiem danych). Pozwala na tagowanie danych jako "wrażliwe", ale nie służy do aktywnego *wykrywania* tych danych w treści plików tekstowych.
+Dzięki temu tylko osoby z zespołu DevOps będą widzieć przycisk "New Project" i będą mogły go skutecznie użyć.
 
-Wskazówki egzaminacyjne:
-- "Identify and classify" + "Sensitive information" / "PII": Szukaj "Cloud DLP API".
-- "Unstructured text": To zawsze domena narzędzi NLP/DLP.
-- Eliminacja: KMS (szyfrowanie), Data Catalog (metadane) – nigdy nie wybieraj ich jako narzędzi do "wykrywania" treści.
+Dlaczego pozostałe opcje są niepoprawne:
+- B: Chociaż polityki organizacji mogą nakładać ograniczenia na to, co można robić *wewnątrz* projektów, to uprawnienie do samego *tworzenia* projektu jest zarządzane przez IAM i rolę Project Creator.
+- C: Rola `Project Editor` (roles/editor) daje uprawnienia do zarządzania zasobami *wewnątrz* istniejącego projektu, ale nie daje uprawnień do tworzenia nowych projektów na poziomie organizacji.
+- E: Rola `Billing Account Creator` pozwala na tworzenie nowych kont rozliczeniowych (billing accounts), co jest procesem niezależnym od tworzenia projektów (choć projekty muszą być podpięte do konta rozliczeniowego, aby mogły w pełni działać).
+
+Tips & Tricks:
+- Tworzenie projektów to uprawnienie na poziomie **Organizacji**, a nie projektu.
+- Pamiętaj zasadę "Least Privilege": najpierw zabierasz szerokie uprawnienia (A), potem nadajesz wąskie (D).
+- Szukaj roli `resourcemanager.projectCreator` w pytaniach o kontrolę cyklu życia projektów.
+
+Zagadnienia:
+- IAM (Identity and Access Management)
+- Resource Hierarchy (Hierarchia zasobów - Organization node)
+- Project Lifecycle Management (Zarządzanie cyklem życia projektu)
 
 Dokumentacja:
-<a href="https://cloud.google.com/dlp/docs/inspecting-text" target="_blank">https://cloud.google.com/dlp/docs/inspecting-text</a>
+<a href="https://cloud.google.com/resource-manager/docs/creating-managing-projects#restricting_project_creation" target="_blank">https://cloud.google.com/resource-manager/docs/creating-managing-projects#restricting_project_creation</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (Egzamin)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> DLP używa kombinacji wyrażeń regularnych, sum kontrolnych (np. algorytm Luhna dla kart kredytowych) i modeli ML, aby minimalizować liczbę pomyłek (false positives) przy wykrywaniu wrażliwych danych w dużych zbiorach.</p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<h3>Kluczowe wnioski</h3>
+<p><b>Potwierdzona odpowiedź: A, D</b></p>
+<p>W dużych przedsiębiorstwach niekontrolowane tworzenie projektów (Project Sprawl) prowadzi do bałaganu w kosztach i luk w bezpieczeństwie. Centralizacja tworzenia projektów poprzez zespół DevOps to standardowa praktyka (Landing Zone pattern).</p>
+<h3>Praktyczne wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/dlp" target="_blank">https://cloud.google.com/dlp</a></li>
+<li>Na egzaminie zawsze rozważaj użycie grup Google (Google Groups) zamiast dodawania pojedynczych użytkowników do ról – to najlepsza praktyka Google.</li>
+<li>Jeśli pytanie pyta o "wyeliminowanie" domyślnego zachowania, szukaj opcji "Remove" lub "Disable" dla szerokiej grupy użytkowników.</li>
 </ul>
 </div>
 </div>

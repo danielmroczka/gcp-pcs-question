@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 60</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,15 +64,14 @@
 <h2>Question 60 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Which service allows you to centrally manage and analyze security findings across your GCP organization?
+A company is running their webshop on Google Kubernetes Engine and wants to analyze customer transactions in BigQuery. You need to ensure that no credit card numbers are stored in BigQuery. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Stackdriver Monitoring</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Security Command Center</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Forseti Security</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud IAM</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a BigQuery view with regular expressions matching credit card numbers to query and delete affected rows.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use the Cloud Data Loss Prevention API to redact related infoTypes before data is ingested into BigQuery.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">C.</span> Leverage Security Command Center to scan for the assets of type Credit Card Number in BigQuery.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">D.</span> Enable Cloud Identity-Aware Proxy to filter out credit card numbers before storing the logs in BigQuery.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,23 +88,28 @@ Which service allows you to centrally manage and analyze security findings acros
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Security Command Center)
+Potwierdzona odpowiedź: B (Use the Cloud Data Loss Prevention API to redact related infoTypes before data is ingested into BigQuery.)
 
-Analiza poprawności:
-Security Command Center (SCC) to centralna platforma bezpieczeństwa klasy "cloud-native" dla całego Google Cloud. Działa jako agregator – zbiera informacje o podatnościach, zagrożeniach (np. wykrywanie koparek kryptowalut, brute-force), błędnych konfiguracjach (np. publiczne buckety) ze wszystkich projektów w ramach organizacji. SCC pozwala inżynierom bezpieczeństwa na podgląd, priorytetyzację i zarządzanie tymi "znaleziskami" (findings) w jednym miejscu, co jest kluczowe w dużych środowiskach wieloprojektowych.
+Wyjaśnienie:
+Cloud Data Loss Prevention (DLP) API to flagowa usługa Google Cloud do wykrywania i ochrony danych wrażliwych (PII, numery kart kredytowych, adresy itp.). Najlepszą praktyką bezpieczeństwa jest "oczyszczanie" danych (redakcja/anonimizacja) ZANIM trafią one do docelowego systemu analitycznego (BigQuery). Pozwala to zminimalizować ryzyko wycieku danych oraz zmniejsza zakres audytów (np. PCI DSS). Cloud DLP posiada wbudowane "infoTypes" dla kart kredytowych (`CREDIT_CARD_NUMBER`), co pozwala na ich automatyczną identyfikację i zastąpienie (redaction) np. znakami `X`.
 
 Dlaczego pozostałe są błędne:
-A (Stackdriver/Cloud Monitoring): Skupia się wyłącznie na monitorowaniu wydajności (CPU, RAM, Uptime), a nie na wykrywaniu włamań czy audycie bezpieczeństwa konfiguracji.
-C (Forseti): To narzędzie typu open-source, które kiedyś było bardzo popularne, ale obecnie jest projektem wspieranym przez społeczność. Może przesyłać dane DO SCC, ale nie jest to *platforma zarządzania* oferowana jako standardowa, zarządzana usługa GCP.
-D (Cloud IAM): To system zarządzania dostępem i uprawnieniami (kto ma dostęp). Nie służy do analizy incydentów bezpieczeństwa czy wykrywania podatności.
+A. BigQuery view + Regex: Widoki służą do prezentacji danych, a nie do ich usuwania. Usuwanie wierszy po ich zapisaniu w BigQuery jest nieefektywne kosztowo i nie gwarantuje, że dane nie zostały już gdzieś zreplikowane lub zapisane w logach systemowych.
+C. Security Command Center: SCC może raportować, że dane wrażliwe znajdują się w BigQuery (poprzez Sensitive Data Protection), ale samo w sobie nie służy do "w locie" filtrowania danych podczas ich przesyłania.
+D. Identity-Aware Proxy: IAP służy do kontroli dostępu do aplikacji webowych (uwierzytelnianie/autoryzacja). Nie ma funkcjonalności głębokiej analizy i modyfikacji treści (payloadu) danych przesyłanych do BigQuery.
 
-Wskazówki egzaminacyjne:
-- "Centrally manage and analyze security findings": Zawsze szukaj "Security Command Center".
-- "Findings" / "Incidents": Jeśli pytanie pyta o znaleziska bezpieczeństwa – SCC jest jedyną poprawną odpowiedzią.
-- Eliminacja: Jeśli opcja dotyczy wydajności (Monitoring) lub uprawnień (IAM) – odrzuć ją.
+Tips & Tricks:
+- "Sensitive data" / "Credit Card" + "Google Cloud" = DLP API.
+- Zawsze wybieraj rozwiązanie, które blokuje/anonimizuje dane jak najbliżej źródła ("before ingestion").
+- DLP API to jedyne narzędzie Google Cloud zaprojektowane specjalnie do manipulacji treścią danych wrażliwych.
+
+Zagadnienia:
+- Cloud Data Loss Prevention (DLP) infoTypes.
+- De-identification techniques (Redaction, Masking, Tokenization).
+- PCI DSS compliance in GCP.
 
 Dokumentacja:
-<a href="https://cloud.google.com/security-command-center" target="_blank">https://cloud.google.com/security-command-center</a>
+<a href="https://cloud.google.com/dlp/docs/redacting-sensitive-data" target="_blank">https://cloud.google.com/dlp/docs/redacting-sensitive-data</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -113,21 +117,20 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> SCC Premium oferuje zaawansowane funkcje, takie jak Event Threat Detection (analiza logów w poszukiwaniu hakerów) czy Container Threat Detection (monitoring runtime kontenerów). To narzędzie typu SIEM/SOAR zintegrowane bezpośrednio z platformą.</p>
+<p><b>Praktyczne wnioski:</b> Implementacja DLP może odbywać się poprzez Cloud Functions lub Dataflow jako etap pośredni w rurociągu danych (data pipeline). Jest to podejście zgodne z zasadą "Privacy by Design".</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/security-command-center" target="_blank">https://cloud.google.com/security-command-center</a></li>
+<li><a href="https://cloud.google.com/dlp/docs/inspecting-storage" target="_blank">Inspecting storage and databases for sensitive data</a></li>
 </ul>
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -142,9 +145,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

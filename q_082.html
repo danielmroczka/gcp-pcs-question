@@ -89,17 +89,26 @@ A customer wants to run a batch processing system on VMs and store the output fi
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Potwierdzona odpowiedź: C (Enable Private Google Access)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Private Google Access: Podobnie jak w poprzednim pytaniu, PGA umożliwia maszynom bez dostępu do internetu (brak publicznego IP lub brak trasy) komunikację z usługami Google (GCS) przez sieć wewnętrzną.
+Wyjaśnienie: 
+Private Google Access pozwala instancjom w podsieciach VPC na łączenie się z API i usługami Google (takimi jak Cloud Storage) przy użyciu ich wewnętrznych adresów IP, nawet jeśli instancje nie mają dostępu do publicznego internetu.
 
-Dlaczego inne są błędne:
-A. Firewall rule: Zablokowanie portów nie rozwiąże problemu, jeśli maszyny nadal potrzebują rozmawiać z GCS, które rezyduje na publicznych zakresach IP Google.
-B. NAT Gateway: Służy do wyjścia na internet, a wymóg mówi 'no VMs may reach the public internet'.
-D. Mount GCS: Nawet jeśli zamontujesz bucket (np. przez gcsfuse), system pod spodem nadal musi wykonać wywołania API do Google, co wymaga połączenia sieciowego (które zapewnia właśnie PGA).
+Dlaczego pozostałe są błędne:
+A. Reguły firewalla mogą blokować ruch, ale nie umożliwią komunikacji z publicznymi API Google bez trasy/adresu.
+B. NAT Gateway umożliwia dostęp DO internetu, co narusza wymóg izolacji.
+D. Montowanie bucketu (gcsfuse) i tak wymaga połączenia sieciowego z API Google pod spodem.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla C. PGA to fundament prywatnej komunikacji z chmurą Google.
+Wskazówki egzaminacyjne (Tips & Tricks):
+Jeśli widzisz 'no public internet' i 'Cloud Storage/BigQuery', odpowiedzią prawie zawsze jest PGA.
+
+Kluczowe zagadnienia do powtórzenia:
+- Private Google Access
+- Service Endpoints
+- VPC Security
+
+Dokumentacja:
+<a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

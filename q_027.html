@@ -64,15 +64,14 @@
 <h2>Question 27 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your team wants visibility into all projects and wants to organize projects based on business units. Which strategy should you use?
+A customer's company has multiple business units. Each business unit operates independently, and each has their own engineering group. Your team wants visibility into all projects created within the company and wants to organize their Google Cloud Platform (GCP) projects based on different business units. Each business unit also requires separate sets of IAM permissions. <br>Which strategy should you use to meet these needs?
 </p>
 <div class="question-choices-container">
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create an organization node, and assign folders for each business unit.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Establish standalone projects with gmail.com accounts.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use labels for business units.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Assign resources in a VPC for each unit.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Establish standalone projects for each business unit, using gmail.com accounts.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Assign GCP resources in a project, with a label identifying which business unit owns the resource.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Assign GCP resources in a VPC for each business unit to separate network access.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,26 +88,30 @@ Your team wants visibility into all projects and wants to organize projects base
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Create an organization node, and assign folders for each business unit.)
+Potwierdzona odpowiedź: A (Create an organization node, and assign folders for each business unit.)
 
-Analiza poprawności:
-Hierarchia zasobów Google Cloud (Organizacja -> Foldery -> Projekty -> Zasoby) jest zaprojektowana tak, aby odzwierciedlać strukturę firmy.
-- Organization Node: Reprezentuje firmę i jest najwyższym poziomem hierarchii.
-- Foldery: Służą do grupowania projektów (np. wg jednostek biznesowych "Marketing", "HR", "IT"). Umożliwiają delegowanie polityk bezpieczeństwa (Organization Policies) i uprawnień (IAM) na całe grupy projektów naraz.
-Jest to jedyny poprawny sposób na zachowanie ładu i centralnej kontroli (Governance) w dużej organizacji.
+Wyjaśnienie: 
+Struktura zasobów w Google Cloud (Resource Hierarchy) jest zaprojektowana tak, aby odzwierciedlać strukturę organizacyjną firmy i zapewniać centralne zarządzanie (Governance).
+- Organization Node: Jest to najwyższy poziom hierarchii, powiązany z domeną Cloud Identity/Google Workspace. Zapewnia on centralnemu zespołowi IT pełną widoczność ("visibility") we wszystkie projekty tworzone wewnątrz firmy.
+- Foldery (Folders): Służą do grupowania projektów według jednostek biznesowych (np. "Marketing", "HR", "Sales"). Pozwalają na precyzyjne nadawanie uprawnień IAM na poziomie folderu, które są dziedziczone przez wszystkie projekty wewnątrz, co idealnie spełnia wymóg oddzielnych zestawów uprawnień dla każdej jednostki.
 
 Dlaczego pozostałe są błędne:
-B (gmail.com accounts): Konta prywatne są niezarządzalne w firmie. Prowadzi to do całkowitej utraty kontroli (brak centralnego nadzoru, brak możliwości wymuszenia MFA, brak logów audytowych).
-C (Labels): Etykiety służą do "metadanych" (np. do grupowania kosztów w raporcie billingowym), ale nie mają żadnej mocy w IAM (nie dziedziczą uprawnień) ani w strukturze organizacyjnej (nie grupuje projektów w foldery).
-D (VPC): Sieć VPC jest zasobem technicznym wewnątrz projektu. Budowanie sieci nie organizuje struktury projektów ani nie poprawia widoczności (Governance).
+B. gmail.com accounts: Używanie kont prywatnych oznacza brak centralnego zarządzania (no Organization Node). Projekty są "samotnymi wyspami", nad którymi firma nie ma żadnej kontroli, co jest niedopuszczalne ze względów bezpieczeństwa i audytu.
+C. Labels: Etykiety to metadane (pary klucz-wartość) służące głównie do śledzenia kosztów i filtrowania zasobów. Nie tworzą one struktury hierarchicznej i nie mają wpływu na uprawnienia IAM czy widoczność projektów.
+D. VPC: Sieć VPC to zasób techniczny służący do izolacji komunikacji sieciowej. Nie rozwiązuje problemu organizacji projektów w skali firmy ani zarządzania uprawnieniami administracyjnymi (IAM).
 
-Wskazówki egzaminacyjne:
-- "Organize projects": Szukaj w odpowiedzi słowa "Folders".
-- "Business units": Jeśli masz wiele jednostek biznesowych, zawsze grupuj je w osobne foldery wewnątrz organizacji.
-- Eliminacja: Zawsze odrzucaj konta prywatne (gmail.com) w pytaniach o Enterprise Governance.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Organize projects" + "Business units": To niemal zawsze oznacza użycie Folderów.
+- "Visibility into ALL projects": Wymaga posiadania Węzła Organizacji (Organization Node).
+- Pamiętaj hierarchię: Org -> Folders -> Projects -> Resources.
+
+Kluczowe zagadnienia do powtórzenia:
+- Google Cloud Resource Hierarchy
+- IAM Inheritance (dziedziczenie uprawnień w hierarchii)
+- Zalety posiadania Organization Node
 
 Dokumentacja:
-<a href="https://cloud.google.com/resource-manager/docs/creating-managing-folders" target="_blank">https://cloud.google.com/resource-manager/docs/creating-managing-folders</a>
+<a href="https://cloud.google.com/resource-manager/docs/creating-managing-organization" target="_blank">https://cloud.google.com/resource-manager/docs/creating-managing-organization</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -116,7 +119,7 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Posiadanie 'Organization Node' jest warunkiem koniecznym do używania folderów. Bez niego każdy projekt jest 'samotną wyspą' bez centralnego nadzoru, co w dużych firmach jest niedopuszczalne ze względów bezpieczeństwa i compliance.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Posiadanie 'Organization Node' jest warunkiem koniecznym do używania folderów i wymuszania polityk na poziomie całej firmy (Organization Policies). Bez tego każdy projekt jest zarządzany oddzielnie, co w środowiskach Enterprise prowadzi do chaosu i luk w bezpieczeństwie.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/resource-manager/docs/creating-managing-folders" target="_blank">https://cloud.google.com/resource-manager/docs/creating-managing-folders</a></li>
@@ -127,10 +130,10 @@ Dokumentacja:
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -145,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
 

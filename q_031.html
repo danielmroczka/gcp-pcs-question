@@ -64,15 +64,14 @@
 <h2>Question 31 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-An organization wants to migrate its current data backup and disaster recovery solutions to GCP. Which GCP solution should they use?
+An organization is starting to move its infrastructure from its on-premises environment to Google Cloud Platform (GCP). The first step the organization wants to take is to migrate its current data backup and disaster recovery solutions to GCP for later analysis. The organization's production environment will remain on-premises for an indefinite time. The organization wants a scalable and cost-efficient solution. <br>Which GCP solution should the organization use?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> BigQuery continuous updates.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud Storage using a scheduled task and gsutil.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Compute Engine Persistent Disks.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Datastore upload jobs.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> BigQuery using a data pipeline job with continuous updates</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud Storage using a scheduled task and gsutil</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Compute Engine Virtual Machines using Persistent Disk</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Datastore using regularly scheduled batch upload jobs</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,20 +88,24 @@ An organization wants to migrate its current data backup and disaster recovery s
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Cloud Storage using a scheduled task and gsutil.)
+Potwierdzona odpowiedź: B (Cloud Storage using a scheduled task and gsutil)
 
-Analiza poprawności:
-Cloud Storage to najbardziej skalowalna, trwała (11 dziewiątek trwałości danych) i efektywna kosztowo usługa do przechowywania backupów w chmurze. Dzięki obsłudze różnych klas przechowywania (Standard, Nearline, Coldline, Archive), można drastycznie zredukować koszty, przechowując dane rzadko odczytywane w tańszych klasach (np. Archive). Narzędzie `gsutil` (lub nowsze `gcloud storage`) pozwala na łatwą automatyzację transferu danych z lokalnych serwerów (on-premises) do chmury przy użyciu prostych skryptów wykonywanych w zaplanowanych zadaniach (np. crontab).
+Wyjaśnienie: 
+Cloud Storage (GCS) to najbardziej optymalna usługa Google Cloud do przechowywania kopii zapasowych (backups) i realizacji strategii Disaster Recovery (DR). GCS charakteryzuje się niemal nieograniczoną skalowalnością oraz ekstremalną trwałością danych (11 dziewiątek). Jest to rozwiązanie wysoce efektywne kosztowo, ponieważ oferuje różne klasy przechowywania (Archive, Coldline), które pozwalają na drastyczne obniżenie kosztów dla danych rzadko odczytywanych. Narzędzie `gsutil` (obecnie część `gcloud storage`) pozwala na łatwą automatyzację transferu danych z lokalnych serwerów za pomocą prostych skryptów (np. cron jobs), co idealnie pasuje do opisanego scenariusza.
 
 Dlaczego pozostałe są błędne:
-A (BigQuery): BigQuery to magazyn danych analitycznych (SQL), nie jest przeznaczony do przechowywania surowych kopii zapasowych (np. zrzutów systemów plików). Jest to rozwiązanie bardzo drogie w kontekście "zwykłego" przechowywania danych.
-C (Persistent Disks): Są to dyski blokowe przypisane do instancji VM. Nie nadają się jako globalne rozwiązanie DR – ich przywrócenie w innym regionie jest trudne, a koszty przechowywania dysków są znacznie wyższe niż Cloud Storage.
-D (Cloud Datastore): To baza dokumentowa NoSQL, służy do przechowywania danych aplikacji, a nie do tworzenia kopii zapasowych całej infrastruktury.
+A. BigQuery: Jest to hurtownia danych analitycznych. Choć można w niej przechowywać dane, to używanie jej jako magazynu na surowe backupy plików jest technicznie niewłaściwe i bardzo kosztowne w porównaniu do Cloud Storage.
+C. Compute Engine VM z Persistent Disk: Dyski PD są dyskami blokowymi przywiązanymi do konkretnych instancji i stref/regionów. Nie skalują się tak łatwo jak GCS i są znacznie droższe w przeliczeniu na GB przechowywanych danych backupowych.
+D. Cloud Datastore: To baza danych NoSQL typu klucz-wartość, przeznaczona dla aplikacji. Nie służy do przechowywania kopii zapasowych systemów plików, obrazów maszyn czy dużych archiwów danych.
 
-Wskazówki egzaminacyjne:
-- "Backup & DR": Jeśli widzisz to sformułowanie – Cloud Storage (GCS) jest prawie zawsze poprawną odpowiedzią.
-- "Cost-effective": Pamiętaj o klasach przechowywania (Archive/Coldline) w GCS.
-- Eliminacja: Jeśli opcja sugeruje bazę danych (BigQuery, Datastore) lub dysk VM (Persistent Disk) jako miejsce na backup – odrzuć ją.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Backup & Disaster Recovery" + "Scalable and Cost-efficient": To niemal zawsze definicja Cloud Storage w egzaminach Google Cloud.
+- Pamiętaj: Jeśli musisz przenieść surowe pliki z on-premises do chmury w celu ich składowania – wybierz GCS.
+
+Kluczowe zagadnienia do powtórzenia:
+- Klasy przechowywania w Cloud Storage (Standard, Nearline, Coldline, Archive)
+- Cykl życia obiektów (Object Lifecycle Management)
+- Narzędzia transferu danych (gsutil, Storage Transfer Service)
 
 Dokumentacja:
 <a href="https://cloud.google.com/storage/docs/storage-classes" target="_blank">https://cloud.google.com/storage/docs/storage-classes</a>
@@ -113,7 +116,7 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Choć obecnie Google promuje usługę **Backup and DR Service** (jako dedykowany, zarządzany produkt), w starszych pytaniach egzaminacyjnych Cloud Storage to jedyne, poprawne rozwiązanie. Warto wiedzieć o różnicy między prostym backupem do GCS a pełną usługą zarządzaną (DRaaS).</p>
+<p><b>Analiza spornych kwestii (AI):</b> Eksperci zwracają uwagę, że choć Google posiada dedykowaną usługę 'Backup and DR Service', to w podstawowych pytaniach egzaminacyjnych fundamentalnym elementem każdej strategii backupowej w GCP pozostaje Cloud Storage ze względu na koszt i trwałość. Użycie 'gsutil' w zaplanowanych zadaniach to klasyczny, sprawdzony sposób na synchronizację on-premises z chmurą.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/storage/docs/storage-classes" target="_blank">https://cloud.google.com/storage/docs/storage-classes</a></li>
@@ -124,10 +127,10 @@ Dokumentacja:
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -142,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
 

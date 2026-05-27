@@ -89,16 +89,25 @@ As adoption of the Cloud Data Loss Prevention (Cloud DLP) API grows within your 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Potwierdzona odpowiedź: C (Sampling (rowsLimit, bytesLimitPerFile) + Regex)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Sampling and Filtering: Największy wpływ na koszt DLP ma ilość skanowanych danych. Użycie `rowsLimit` (dla BigQuery) i `bytesLimitPerFile` (dla GCS) pozwala na przeskanowanie reprezentatywnej PRÓBKI danych zamiast całości. `CloudStorageRegexFileSet` dodatkowo ogranicza skanowanie tylko do konkretnych typów plików (np. tylko logi .txt).
+Wyjaśnienie: 
+Koszty Cloud DLP zależą głównie od ilości skanowanych danych. Optymalizacja polega na: 1. Skanowaniu tylko reprezentatywnej próbki (`rowsLimit` w BigQuery, `bytesLimitPerFile` w GCS). 2. Użyciu `CloudStorageRegexFileSet`, aby skanować tylko istotne pliki (np. *.log), zamiast całej zawartości bucketu.
 
-Dlaczego inne są błędne:
-A, B. Regiony (outside US) nie mają bezpośredniego wpływu na optymalizację kosztów skanowania jako taką (cennik jest zazwyczaj spójny lub różnice są minimalne w porównaniu do redukcji wolumenu danych).
-D. FindingLimits: Ogranicza liczbę raportowanych znalezisk, ale DLP i tak musi przeskanować cały plik, aby je znaleźć, więc nie redukuje to kosztów operacji skanowania.
+Dlaczego pozostałe są błędne:
+A, B. Lokalizacja danych (poza USA) nie jest głównym czynnikiem optymalizacji kosztów w porównaniu do wolumenu danych.
+D. FindingLimits ogranicza liczbę wyników, ale nie ilość danych, które DLP musi 'przeczytać', aby te wyniki znaleźć.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na C. Próbkowanie (sampling) to kluczowa technika optymalizacji kosztów w Big Data.
+Wskazówki egzaminacyjne (Tips & Tricks):
+DLP Cost Optimization = Sampling (Limit bytes/rows) + Scoping (Regex/Include).
+
+Kluczowe zagadnienia do powtórzenia:
+- Cloud DLP cost management
+- Data sampling techniques
+- DLP Inspection jobs
+
+Dokumentacja:
+<a href="https://cloud.google.com/dlp/docs/cost-control" target="_blank">https://cloud.google.com/dlp/docs/cost-control</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

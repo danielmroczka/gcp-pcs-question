@@ -70,7 +70,7 @@ A customer's data science group wants to use Google Cloud Platform (GCP) for the
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Contact Google Support and initiate the Domain Contestation Process to use the domain name in your new Cloud Identity domain.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Register a new domain name, and use that for the new Cloud Identity domain.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Ask Google to provision the data science manager's account as a Super Administrator in the existing domain.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C.</span> Ask Google to provision the data science manager's account as a Super Administrator in the existing domain.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Ask customer's management to discover any other uses of Google managed services, and work with the existing Super Administrator.</li>
 
 </ul>
@@ -89,23 +89,30 @@ A customer's data science group wants to use Google Cloud Platform (GCP) for the
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (Ask customer's management to discover any other uses of Google managed services, and work with the existing Super Administrator.)
+Potwierdzona odpowiedź: D (Ask customer's management to discover any other uses of Google managed services, and work with the existing Super Administrator.)
 
-Analiza poprawności:
-W ekosystemie Google Cloud istnieje ścisła relacja "jeden do jednego" między domeną (np. firma.pl) a organizacją Google Cloud. Jeśli domena jest już zarejestrowana (np. przez Workspace), to istnieje już "Organization Node". Próba rejestracji nowej organizacji na tę samą domenę zakończy się niepowodzeniem. Najbardziej profesjonalnym i jedynym skutecznym podejściem jest odnalezienie obecnego administratora (Super Administrator) i zintegrowanie nowych projektów z istniejącą organizacją. Pozwala to na centralne zarządzanie bezpieczeństwem, politykami i rozliczeniami.
+Wyjaśnienie: 
+W Google Cloud domena internetowa może być powiązana tylko z jedną organizacją (Cloud Identity lub Google Workspace). Jeśli domena jest już używana przez G Suite (obecnie Google Workspace), oznacza to, że organizacja Google już istnieje. 
+- Najmniej disruptywnym rozwiązaniem jest zidentyfikowanie obecnego administratora (Super Administratora) istniejącej organizacji i podpięcie nowych projektów pod tę samą strukturę. 
+- Pozwala to na zachowanie spójności tożsamości, użycie istniejącej konfiguracji SAML i centralne zarządzanie zasobami firmy pod jednym węzłem organizacji.
 
 Dlaczego pozostałe są błędne:
-A (Domain Contestation): Proces ten stosuje się w bardzo rzadkich przypadkach, gdy domena została przejęta bezprawnie przez podmiot trzeci, a nie przez inny dział wewnątrz tej samej korporacji.
-B (New domain): To podejście prowadzi do powstawania tzw. "silosów tożsamości". Użytkownicy musieliby posiadać dwa różne konta, co drastycznie komplikuje zarządzanie i zwiększa ryzyko bezpieczeństwa.
-C (Ask Google to provision...): Google nie ingeruje w strukturę organizacyjną klientów. To klient musi samodzielnie zarządzać swoim katalogiem użytkowników przez konsolę administracyjną.
+A. Domain Contestation Process: Służy on do sytuacji, gdy ktoś nieuprawniony przejął domenę lub straciliśmy kontakt z administratorem. Tutaj wiemy, że firma używa G Suite, więc administrator jest znany wewnątrz organizacji.
+B. Register a new domain: Tworzenie nowej domeny dla części firmy (Data Science) prowadzi do fragmentacji tożsamości ("identity silo"), co utrudnia zarządzanie, audyt i jest sprzeczne z polityką posiadania danych przez firmę.
+C. Ask Google to provision account: Google nie przypisuje uprawnień Super Administratora na życzenie bez weryfikacji. Musi to zrobić obecny Super Admin organizacji.
 
-Wskazówki egzaminacyjne:
-- "Domain conflict": Jeśli w pytaniu o GCP pojawia się konflikt domen – szukaj opcji współpracy z obecnym adminem (Super Admin).
-- Hierarchia: Pamiętaj, że GCP opiera się na hierarchii: Organizacja -> Foldery -> Projekty. Nie buduje się równoległych struktur dla jednej firmy.
-- Eliminacja: Wszystkie rozwiązania sugerujące tworzenie "nowych domen" (silosów) są błędne.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Domain already in use" = W Google Cloud może być tylko JEDEN węzeł organizacji dla danej domeny.
+- "Least disruption" = Wykorzystaj to, co już masz (istniejącą organizację i jej Super Admina).
+- Pamiętaj: Google Workspace (G Suite) i Cloud Identity korzystają z tego samego silnika tożsamości.
+
+Kluczowe zagadnienia do powtórzenia:
+- Struktura Organizacji w Google Cloud
+- Rola Super Administratora
+- Federacja tożsamości z SAML IdP
 
 Dokumentacja:
-<a href="https://support.google.com/cloudidentity/answer/7298065" target="_blank">https://support.google.com/cloudidentity/answer/7298065</a>
+<a href="https://support.google.com/cloudidentity/answer/7319251" target="_blank">https://support.google.com/cloudidentity/answer/7319251</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -113,21 +120,20 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> W GCP "Organization Node" jest nierozerwalnie związany z domeną Cloud Identity/Workspace. Posiadanie jednej organizacji ułatwia centralne zarządzanie bezpieczeństwem i kosztami (Single Organization Strategy). Zmuszenie działów IT do "rozmawiania ze sobą" jest standardową procedurą naprawczą.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Scenariusz 'shadow IT' (gdzie dział marketingu lub inny zespół założył G Suite bez wiedzy IT) jest częstym problemem w realnym świecie. Odpowiedź D uczy przyszłych inżynierów, że technologia to jedno, ale zarządzanie korporacyjne i odnalezienie 'właściciela' tożsamości jest pierwszym krokiem do poprawnej konfiguracji chmury.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://support.google.com/cloudidentity/answer/7298065" target="_blank">https://support.google.com/cloudidentity/answer/7298065</a></li>
+<li><a href="https://support.google.com/cloudidentity/answer/7319251" target="_blank">https://support.google.com/cloudidentity/answer/7319251</a></li>
 </ul>
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -142,9 +148,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

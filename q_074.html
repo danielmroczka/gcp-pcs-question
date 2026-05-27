@@ -87,25 +87,28 @@ What are the steps to encrypt data using envelope encryption?
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Poprawna odpowiedź: C
+<pre>
+Potwierdzona odpowiedź: C (DEK locally -> Data encryption -> KEK wrap DEK -> Store)
 
-Analiza poprawności:
-Envelope encryption (szyfrowanie kopertowe) to technika, w której dane są szyfrowane kluczem danych (DEK), a następnie sam klucz danych jest szyfrowany (owijany) kluczem szyfrowania kluczy (KEK).
-1. Generowanie DEK: Generujesz unikalny, efemeryczny klucz danych (DEK) lokalnie w aplikacji.
-2. Szyfrowanie danych: Używasz DEK do zaszyfrowania faktycznych danych (szyfrowanie jest szybkie, DEK jest wydajny).
-3. Owijanie DEK: Wysyłasz DEK do Cloud KMS, aby został "owinięty" (zaszyfrowany) przez klucz KEK, który bezpiecznie spoczywa w KMS.
-4. Przechowywanie: Zapisujesz zaszyfrowane dane oraz "owinięty" DEK (nie sam KEK).
+Wyjaśnienie: 
+Szyfrowanie kopertowe (Envelope Encryption) polega na: 1. Wygenerowaniu klucza DEK (Data Encryption Key) lokalnie. 2. Zaszyfrowaniu danych tym kluczem. 3. Użyciu klucza KEK (Key Encryption Key) z KMS do zaszyfrowania ('owinięcia') klucza DEK. 4. Przechowywaniu zaszyfrowanych danych razem z zaszyfrowanym kluczem DEK.
 
 Dlaczego pozostałe są błędne:
-A, B, D: Mieszają kolejność operacji lub błędnie określają przeznaczenie KEK (KEK służy do ochrony DEK, nie bezpośrednio do szyfrowania danych użytkownika w tym modelu).
+A. Dane szyfruje się kluczem DEK, a nie KEK. KEK służy tylko do ochrony DEK.
+B. KEK zazwyczaj rezyduje w KMS i nie powinien być generowany 'lokalnie' w aplikacji w sposób niebezpieczny.
+D. Kolejność działań jest nielogiczna.
 
-Wskazówki egzaminacyjne:
-- Zapamiętaj sekwencję: DEK (lokalnie) -> Szyfruj dane -> KEK (w KMS) owija DEK.
-- Pytania o envelope encryption zawsze testują znajomość tego cyklu.
-- KEK nigdy nie opuszcza Cloud KMS w postaci jawnej.
+Wskazówki egzaminacyjne (Tips & Tricks):
+DEK szyfruje Dane. KEK szyfruje DEK (koperta). Nigdy na odwrót.
+
+Kluczowe zagadnienia do powtórzenia:
+- Envelope Encryption
+- DEK (Data Encryption Key) vs KEK (Key Encryption Key)
+- Cloud KMS
 
 Dokumentacja:
-<a href="https://cloud.google.com/kms/docs/envelope-encryption" target="_blank">https://cloud.google.com/kms/docs/envelope-encryption</a></pre>
+<a href="https://cloud.google.com/kms/docs/envelope-encryption" target="_blank">https://cloud.google.com/kms/docs/envelope-encryption</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

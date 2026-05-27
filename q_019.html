@@ -89,23 +89,27 @@ You need to follow Google-recommended practices to leverage envelope encryption 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Generate a data encryption key (DEK) locally to encrypt the data, and generate a new key encryption key (KEK) in Cloud KMS to encrypt the DEK. Store both the encrypted data and the encrypted DEK.)
+Potwierdzona odpowiedź: A (Generate a data encryption key (DEK) locally to encrypt the data, and generate a new key encryption key (KEK) in Cloud KMS to encrypt the DEK. Store both the encrypted data and the encrypted DEK.)
 
-Analiza poprawności:
-Szyfrowanie kopertowe (Envelope Encryption) to standardowa praktyka dla ochrony danych na poziomie aplikacji. Proces wygląda następująco:
-1. Aplikacja generuje lokalnie unikalny "Klucz Danych" (DEK - Data Encryption Key).
-2. Aplikacja używa DEK do zaszyfrowania danych (szyfrowanie symetryczne, bardzo szybkie).
-3. Aplikacja wysyła DEK do Cloud KMS, aby został on zaszyfrowany (opakowany) za pomocą "Klucza Szyfrującego Klucz" (KEK - Key Encryption Key), który bezpiecznie spoczywa w KMS i nigdy nie opuszcza sprzętowego modułu bezpieczeństwa (HSM).
-4. Przechowujesz zaszyfrowane dane oraz "zaszyfrowany DEK" razem (jako "kopertę"). Aby odszyfrować dane, aplikacja najpierw prosi KMS o odszyfrowanie DEK, a potem używa DEK do odczytu danych.
+Wyjaśnienie: 
+Szyfrowanie kopertowe (Envelope Encryption) to proces szyfrowania danych przy użyciu klucza szyfrowania danych (DEK), a następnie zaszyfrowania samego klucza DEK przy użyciu klucza szyfrowania kluczy (KEK). 
+- DEK: Generowany lokalnie w aplikacji, używany do szyfrowania dużych zbiorów danych (symetrycznie).
+- KEK: Przechowywany bezpiecznie w Cloud KMS. Służy do zaszyfrowania ("owinięcia" - wrapping) klucza DEK.
+- Przechowywanie: Aplikacja przechowuje zaszyfrowane dane oraz zaszyfrowany klucz DEK (niejawny). Aby odszyfrować dane, aplikacja musi poprosić KMS o odszyfrowanie DEK przy użyciu KEK, a następnie użyć odzyskanego DEK lokalnie. Jest to wydajne i bezpieczne rozwiązanie warstwy aplikacji.
 
 Dlaczego pozostałe są błędne:
-B (Store KEK): Nigdy nie przechowujesz KEK obok danych. KEK musi być bezpieczny w KMS.
-C, D: DEK generowany w KMS (do szyfrowania dużych zbiorów danych lokalnie) byłby nieefektywny (opóźnienia sieciowe) i niezgodny z zasadami szyfrowania kopertowego.
+B. Przechowywanie KEK (klucza nadrzędnego) razem z danymi jest całkowicie błędne – KEK musi pozostać bezpiecznie w usłudze KMS.
+C, D. Sugerują one generowanie DEK w chmurze i KEK lokalnie, co jest odwrotnością poprawnego modelu. Klucz główny (KEK) powinien być zarządzany przez zaufaną usługę (KMS), a klucze operacyjne (DEK) używane w aplikacji.
 
-Wskazówki egzaminacyjne:
-- "Envelope Encryption": Szukaj sekwencji: Generuj DEK lokalnie -> Szyfruj dane -> Szyfruj DEK w KMS (KEK).
-- Wydajność: Zawsze wybieraj opcje, w których KMS służy do operacji na *kluczach* (mały rozmiar), a nie do szyfrowania dużych *danych* (duży rozmiar).
-- Eliminacja: Jeśli odpowiedź mówi o przechowywaniu KEK poza KMS – to jest to błąd bezpieczeństwa.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Envelope encryption" = Encrypted Data + Encrypted DEK.
+- Zapamiętaj: KEK (Key Encryption Key) nigdy nie opuszcza Cloud KMS w postaci jawnej.
+- DEK (Data Encryption Key) jest używany do faktycznego szyfrowania danych (zazwyczaj AES-256).
+
+Kluczowe zagadnienia do powtórzenia:
+- Envelope Encryption (Szyfrowanie kopertowe)
+- Cloud KMS (Key Management Service)
+- DEK vs KEK
 
 Dokumentacja:
 <a href="https://cloud.google.com/kms/docs/envelope-encryption" target="_blank">https://cloud.google.com/kms/docs/envelope-encryption</a>
@@ -116,7 +120,7 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Ta metoda łączy wydajność szyfrowania symetrycznego (lokalny DEK) z bezpieczeństwem centralnego zarządzania (KEK w KMS z pełnym audytem użycia). Jest to standard w usługach takich jak Cloud Storage (Customer-Managed Encryption Keys - CMEK).</p>
+<p><b>Analiza spornych kwestii (AI):</b> Wiele osób pyta, dlaczego nie generować DEK w KMS. Choć technicznie jest to możliwe, wzorzec 'envelope encryption' optymalizuje wydajność: aplikacja generuje DEK natychmiastowo, szyfruje dane, a KMS używa się tylko do 'zapakowania' tego klucza. To minimalizuje opóźnienia sieciowe przy szyfrowaniu dużych wolumenów danych.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/kms/docs/envelope-encryption" target="_blank">https://cloud.google.com/kms/docs/envelope-encryption</a></li>
@@ -124,13 +128,12 @@ Dokumentacja:
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -145,9 +148,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

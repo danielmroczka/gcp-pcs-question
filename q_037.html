@@ -64,14 +64,14 @@
 <h2>Question 37 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Each department has a Google Group. All members of a department should have read-only access to all new project resources. What should you do?
+A company allows every employee to use Google Cloud Platform. Each department has a Google Group, with all department members as group members. If a department member creates a new project, all members of that department should automatically have read-only access to all new project resources. Members of any other department should not have access to the project. You need to configure this behavior. <br>What should you do to meet these requirements?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a Folder per department, assign Project Viewer role to the group.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a Folder per department, assign Project Browser role to the group.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a Project per department, assign Project Viewer role.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a Project per department, assign Project Browser role.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a Folder per department under the Organization. For each department's Folder, assign the Project Viewer role to the Google Group related to that department.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a Folder per department under the Organization. For each department's Folder, assign the Project Browser role to the Google Group related to that department.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a Project per department under the Organization. For each department's Project, assign the Project Viewer role to the Google Group related to that department.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a Project per department under the Organization. For each department's Project, assign the Project Browser role to the Google Group related to that department.</li>
 
 </ul>
 </div>
@@ -89,25 +89,29 @@ Each department has a Google Group. All members of a department should have read
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Create a Folder per department, assign Project Viewer role to the group.)
+Potwierdzona odpowiedź: A (Create a Folder per department under the Organization. For each department's Folder, assign the Project Viewer role to the Google Group related to that department.)
 
-Analiza poprawności:
-Hierarchia zasobów Google Cloud (Organizacja -> Foldery -> Projekty -> Zasoby) została zaprojektowana w celu odzwierciedlenia struktury firmy.
-- Organization Node: Reprezentuje firmę i jest najwyższym poziomem hierarchii.
-- Foldery: Służą do grupowania projektów (np. wg jednostek biznesowych: "Marketing", "HR", "IT"). Umożliwiają one delegowanie polityk bezpieczeństwa (Organization Policies) oraz uprawnień (IAM) na całe grupy projektów naraz.
-Nadanie roli `Project Viewer` na poziomie folderu sprawia, że uprawnienia te są automatycznie dziedziczone przez wszystkie projekty wewnątrz tego folderu (obecne i przyszłe), co stanowi idealną automatyzację dostępu.
+Wyjaśnienie:
+Najlepszym sposobem na zarządzanie uprawnieniami w dużej organizacji z wieloma departamentami jest wykorzystanie hierarchii zasobów (Resource Hierarchy) w Google Cloud. Foldery pozwalają na logiczne grupowanie projektów. Uprawnienia IAM nadane na poziomie folderu są automatycznie dziedziczone przez wszystkie projekty znajdujące się w tym folderze (zarówno obecne, jak i nowo utworzone). Przypisanie roli `Project Viewer` odpowiedniej grupie Google na poziomie folderu departamentu zapewnia, że każdy nowy projekt stworzony w tym folderze będzie automatycznie dostępny (tylko do odczytu) dla członków tego departamentu.
 
 Dlaczego pozostałe są błędne:
-B (Project Browser): Ta rola pozwala jedynie na przeglądanie hierarchii projektów (widzenie ich nazw), ale nie daje wglądu wewnątrz tych projektów (np. nie pozwala zobaczyć listy VM czy bucketów).
-C, D (Project level): Nadawanie uprawnień na poziomie każdego projektu z osobna ("Project per department") jest sprzeczne z wymogiem obsługi "wszystkich nowych projektów". Wymagałoby to ręcznej interwencji administratora za każdym razem, gdy powstaje nowy projekt.
+B. Create a Folder per department... assign the Project Browser role: Rola `Project Browser` (roles/browser) pozwala jedynie na przeglądanie hierarchii zasobów (widzenie nazw projektów), ale nie daje uprawnień do przeglądania samych zasobów wewnątrz projektu (np. nie można zobaczyć listy instancji VM).
+C. Create a Project per department... assign the Project Viewer role: To podejście zakłada, że uprawnienia są nadawane na poziomie pojedynczego projektu. Nie spełnia to wymogu automatycznego nadawania uprawnień dla "wszystkich nowych projektów" (all new project resources), ponieważ każdy nowy projekt wymagałby ręcznej konfiguracji IAM.
+D. Create a Project per department... assign the Project Browser role: Podobnie jak w opcji C, jest to nieefektywne, a dodatkowo rola `Project Browser` jest niewystarczająca do przeglądania zasobów.
 
-Wskazówki egzaminacyjne:
-- "Organize projects" + "All new project resources": Szukaj rozwiązania z "Folderami".
-- Dziedziczenie: Uprawnienia IAM w GCP są dziedziczone w dół (z wyższego poziomu hierarchii do niższych).
-- Eliminacja: Zawsze odrzucaj nadawanie uprawnień "na poziomie projektu" w pytaniach wymagających automatyzacji dostępu dla wielu projektów.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Słowo klucz: "Automatically" + "new projects" -> prawie zawsze wskazuje na dziedziczenie uprawnień przez Foldery lub Organizację.
+- Pamiętaj o hierarchii: Organizacja > Foldery > Projekty > Zasoby.
+- Rola `Viewer` daje wgląd w zasoby, rola `Browser` daje wgląd w strukturę (nazwy projektów).
+
+Kluczowe zagadnienia do powtórzenia:
+- Google Cloud Resource Hierarchy
+- IAM Role Inheritance (Dziedziczenie ról)
+- Różnice między Project Viewer a Project Browser
 
 Dokumentacja:
-<a href="https://cloud.google.com/resource-manager/docs/access-control-folders" target="_blank">https://cloud.google.com/resource-manager/docs/access-control-folders</a>
+<a href="https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy" target="_blank">https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy</a>
+<a href="https://cloud.google.com/resource-manager/docs/creating-managing-folders" target="_blank">https://cloud.google.com/resource-manager/docs/creating-managing-folders</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

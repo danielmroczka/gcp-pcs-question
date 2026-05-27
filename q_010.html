@@ -89,20 +89,27 @@ Your team needs to obtain a unified log view of all development cloud projects i
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (1. Export logs to a Cloud Pub/Sub topic... 2. Subscribe SIEM to the topic.)
+Potwierdzona odpowiedź: A (1. Export logs to a Cloud Pub/Sub topic with folders/NONPROD parent and includeChildren property set to True in a dedicated SIEM project. 2. Subscribe SIEM to the topic.)
 
-Analiza poprawności:
-Stosowanie "Aggregated Sinks" (zagregowanych ujść logów) na poziomie folderu lub organizacji jest najlepszą praktyką w środowiskach enterprise. Ustawiając sink na poziomie folderu NONPROD z flagą `includeChildren=True`, automatycznie przechwytujesz logi ze wszystkich obecnych i przyszłych projektów w tym folderze. Cloud Pub/Sub jest standardem dla integracji z systemami SIEM, ponieważ oferuje niskie opóźnienia i wysoką skalowalność (przesyłanie w czasie rzeczywistym).
+Wyjaśnienie: 
+Najbardziej skalowalnym i rekomendowanym sposobem na zbieranie logów z wielu projektów znajdujących się w strukturze folderów jest użycie zsumowanego zlewu logów (Aggregated Sink). 
+- Tworząc zlew na poziomie folderu (folders/NONPROD) i ustawiając flagę `includeChildren` na True, automatycznie zbierasz logi ze wszystkich projektów znajdujących się w tym folderze, jak również z tych, które zostaną tam dodane w przyszłości. 
+- Eksport do Cloud Pub/Sub jest standardem przy integracji z systemami SIEM, ponieważ umożliwia przesyłanie logów w czasie rzeczywistym (streaming).
 
 Dlaczego pozostałe są błędne:
-B (Billing account parent): Logi konta rozliczeniowego zawierają dane o kosztach, a nie aktywności systemowej (audit logs) czy logi aplikacji z projektów.
-C (Each project): Jest to rozwiązanie nieefektywne i nieskalowalne. Przy setkach projektów zarządzanie sinkami w każdym z nich z osobna jest niemożliwe.
-D (Publicly shared bucket): Skrajne naruszenie zasad bezpieczeństwa. Logi systemowe, które mogą zawierać wrażliwe informacje, nigdy nie powinny być przechowywane w publicznie dostępnym bucketcie.
+B. Konto bilingowe (`billingAccounts`) zbiera logi dotyczące płatności, a nie logi operacyjne czy auditowe ze wszystkich projektów w folderze. Dodatkowo flaga `includeChildren=False` wykluczyłaby logi z projektów potomnych.
+C. Tworzenie eksportu w każdym projekcie z osobna (individual sinks) jest nieefektywne zarządczo, zwłaszcza przy setkach projektów, i podatne na błędy (np. pominięcie nowego projektu).
+D. Tworzenie publicznie współdzielonych bucketów GCS jest krytycznym błędem bezpieczeństwa, który naraża dane auditowe na wyciek.
 
-Wskazówki egzaminacyjne:
-- "Aggregated": Jeśli w pytaniu o logi pojawia się wiele projektów w jednej hierarchii (folder/org), zawsze wybieraj odpowiedź z "aggregated sink".
-- "SIEM": Zawsze szukaj Cloud Pub/Sub jako odbiorcy (standard integracji).
-- Eliminacja: Odpowiedzi sugerujące publiczne buckety zawsze odrzucaj natychmiast (Security violation).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Unified log view" + "Folders/Organization" = Aggregated Sink (Zsumowany zlew).
+- SIEM integration = Zazwyczaj Pub/Sub (dla real-time) lub Cloud Storage (dla batch).
+- Pamiętaj o hierarchii zasobów: zlew można stworzyć na poziomie projektu, folderu, organizacji lub konta bilingowego.
+
+Kluczowe zagadnienia do powtórzenia:
+- Cloud Logging Aggregated Sinks
+- Hierarchia zasobów w Google Cloud
+- Integracja z SIEM przez Pub/Sub
 
 Dokumentacja:
 <a href="https://cloud.google.com/logging/docs/export/aggregated_sinks" target="_blank">https://cloud.google.com/logging/docs/export/aggregated_sinks</a>
@@ -113,7 +120,7 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Eksperci zwracają uwagę na zalety ekonomiczne: filtrujesz logi raz na górze hierarchii, zamiast zarządzać filtrami w każdym projekcie. To rozwiązanie jest również odporne na tzw. "Shadow IT" – jeśli deweloper stworzy nowy projekt w tym folderze, logi zaczną płynąć do SIEM od pierwszej sekundy.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Kluczowym wyzwaniem w tym pytaniu jest ogromna liczba projektów ('hundreds of projects'). Ręczne ustawianie eksportu w każdym z nich (opcja C) jest technicznie poprawne, ale operacyjnie błędne. Egzaminatorzy szukają dowodu, że znasz funkcję 'Aggregated Sinks', która jest przeznaczona właśnie do takich scenariuszy korporacyjnych.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/logging/docs/export/aggregated_sinks" target="_blank">https://cloud.google.com/logging/docs/export/aggregated_sinks</a></li>
@@ -121,13 +128,12 @@ Dokumentacja:
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -142,9 +148,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -64,15 +64,14 @@
 <h2>Question 47 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You want to protect your public-facing application from DDoS attacks and SQL injection. Which service should you use?
+A large e-retailer is moving to Google Cloud Platform with its ecommerce website. The company wants to ensure payment information is encrypted between the customer's browser and GCP when the customers checkout online. What should they do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> VPC Firewall</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud Armor</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud IAP</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Endpoints</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure an SSL Certificate on an L7 Load Balancer and require encryption.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure an SSL Certificate on a Network TCP Load Balancer and require encryption.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">C.</span> Configure the firewall to allow inbound traffic on port 443, and block all other inbound traffic.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">D.</span> Configure the firewall to allow outbound traffic on port 443, and block all other outbound traffic.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +79,7 @@ You want to protect your public-facing application from DDoS attacks and SQL inj
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">A</span>
 <br/>
 </span>
 </div>
@@ -89,45 +88,50 @@ You want to protect your public-facing application from DDoS attacks and SQL inj
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Cloud Armor)
+Potwierdzona odpowiedź: A (L7 Load Balancer + SSL Certificate)
 
-Analiza poprawności:
-Cloud Armor to w pełni zarządzana usługa Google Cloud, która pełni rolę Web Application Firewall (WAF) oraz mechanizmu ochrony przed atakami DDoS (Distributed Denial of Service). Zapewnia ona wbudowane, gotowe reguły chroniące aplikacje przed najczęstszymi atakami wymienionymi w raporcie OWASP Top 10, w tym SQL Injection oraz Cross-Site Scripting (XSS). Współpracuje bezpośrednio z globalnym Load Balancerem HTTP(S), co pozwala filtrować ruch na brzegu sieci Google (Edge), zanim dotrze on do Twojej infrastruktury VPC.
+Wyjaśnienie:
+Aby zabezpieczyć dane płatnicze przesyłane przez stronę e-commerce (ruch HTTPS), konieczne jest zastosowanie szyfrowania TLS/SSL pomiędzy przeglądarką klienta a infrastrukturą GCP.
+1. L7 Load Balancer (HTTP(S) Load Balancer): Jest to load balancer warstwy aplikacji, który natywnie wspiera "SSL Termination" (zakończenie sesji SSL). Pozwala on na zainstalowanie certyfikatu SSL na samym LB, co odciąża serwery backendowe z procesu szyfrowania/deszyfrowania.
+2. Require encryption: Można skonfigurować LB tak, aby wymuszał ruch HTTPS (np. przekierowując cały ruch z HTTP na HTTPS) oraz używał nowoczesnych zestawów szyfrów (Cipher Suites). Jest to standardowe rozwiązanie dla aplikacji webowych.
 
 Dlaczego pozostałe są błędne:
-A (VPC Firewall): Działa w warstwach 3 i 4 modelu OSI (IP, porty, protokoły). Nie posiada umiejętności inspekcji treści żądania HTTP (np. szukania kodu SQL w adresie URL), dlatego nie może zatrzymać SQL Injection.
-C (Cloud IAP): Służy do kontroli dostępu do aplikacji (kto może się zalogować), a nie do filtrowania złośliwych treści w ruchu sieciowym.
-D (Cloud Endpoints): To rozwiązanie typu API Gateway, służące do zarządzania, monitorowania i zabezpieczania API. Choć może mieć pewne funkcje kontroli dostępu, nie jest dedykowanym narzędziem klasy WAF do ochrony przed DDoS i SQLi.
+B. Network TCP Load Balancer: Działa w warstwie 4 (transportowej). Choć może on przekazywać ruch SSL do backendów (SSL pass-through), to zazwyczaj nie on służy do "zarządzania certyfikatem" i terminacji sesji dla aplikacji webowych w sposób tak zintegrowany jak L7 LB. L7 oferuje dodatkowe funkcje jak Cloud Armor, które są kluczowe dla e-commerce.
+C i D. Firewall rules: Same reguły firewall otwierające port 443 pozwalają jedynie na przepływ pakietów, ale NIE zapewniają szyfrowania ani nie zarządzają certyfikatami SSL. Firewall to warstwa kontroli dostępu, a nie mechanizm szyfrowania sesji.
 
-Wskazówki egzaminacyjne:
-- "SQL injection" / "XSS" + "Public-facing application": Zawsze szukaj "Cloud Armor".
-- "WAF": Jeśli pytanie dotyczy WAF, odpowiedzią jest Cloud Armor.
-- Eliminacja: VPC Firewall nie potrafi analizować treści HTTP, więc nigdy nie zaznaczaj go w pytaniach o SQLi/XSS.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Strona internetowa + szyfrowanie = HTTP(S) Load Balancer (L7).
+- "SSL Termination" na Load Balancerze to najlepsza praktyka (best practice) pozwalająca na centralne zarządzanie certyfikatami (np. Google-managed SSL certificates).
+- Pamiętaj, że do spełnienia wymagań PCI DSS konieczne jest użycie TLS 1.2+.
+
+Kluczowe zagadnienia do powtórzenia:
+- Typy Load Balancerów w GCP (Global vs Regional, L4 vs L7).
+- SSL Termination vs SSL Pass-through.
+- Google-managed SSL certificates.
 
 Dokumentacja:
-<a href="https://cloud.google.com/armor/docs/cloud-armor-overview" target="_blank">https://cloud.google.com/armor/docs/cloud-armor-overview</a>
+<a href="https://cloud.google.com/load-balancing/docs/https" target="_blank">HTTP(S) Load Balancing overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Cloud Armor jest niezwykle skuteczny, ponieważ korzysta z tej samej technologii, którą Google używa do ochrony własnych usług (Search, YouTube, Gmail). Dzięki temu może filtrować ataki na wielką skalę, które mogłyby położyć każdą własną infrastrukturę.</p>
+<p><b>Sugerowana odpowiedź: A</b></p>
+<p><b>Analiza spornych kwestii (AI):</b> W e-commerce bezpieczeństwo warstwy aplikacji jest kluczowe. L7 Load Balancer pozwala na inspekcję nagłówków HTTP, stosowanie reguł WAF (Cloud Armor) i łatwą integrację z certyfikatami zarządzanymi przez Google, co czyni go jedynym rozsądnym wyborem w tym scenariuszu.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/armor/docs/cloud-armor-overview" target="_blank">https://cloud.google.com/armor/docs/cloud-armor-overview</a></li>
+<li><a href="https://cloud.google.com/load-balancing/docs/ssl-certificates" target="_blank">SSL certificates in GCP</a></li>
 </ul>
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -142,9 +146,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

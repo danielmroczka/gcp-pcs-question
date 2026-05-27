@@ -64,16 +64,15 @@
 <h2>Question 39 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-A company wants to manage IAM permissions between users in development and production projects. Which two steps should they take?
+A customer has 300 engineers. The company wants to grant different levels of access and efficiently manage IAM permissions between users in the development and production environment projects. Which two steps should the company take to meet these requirements? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use multiple VPCs.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a folder for each environment.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a Google Group and assign permissions at the folder level.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create an Organizational Policy constraint.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Grant rights to each user individually.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a project with multiple VPC networks for each environment.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a folder for each development and production environment.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a Google Group for the Engineering team, and assign permissions at the folder level.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create an Organizational Policy constraint for each folder environment.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Create projects for each environment, and grant IAM rights to each engineering user.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -90,22 +89,27 @@ A company wants to manage IAM permissions between users in development and produ
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: BC (Create a folder for each environment. Create a Google Group and assign permissions at the folder level.)
+Potwierdzona odpowiedź: BC (Foldery dla środowisk oraz Grupy Google)
 
-Analiza poprawności:
-Stosowanie folderów (Folders) to najlepsza praktyka ("best practice") w GCP do zarządzania zasobami w skali przedsiębiorstwa. Foldery pozwalają na logiczną separację środowisk (np. folder "Prod" i folder "Dev") oraz odzwierciedlają strukturę firmy.
-- Tworzenie folderów (B) pozwala na łatwe nakładanie polityk IAM i Organization Policies na wszystkie projekty wewnątrz danego środowiska.
-- Używanie Grup Google (C) zamiast przypisywania uprawnień każdemu użytkownikowi z osobna jest kluczowe dla "skalowalności" i bezpieczeństwa (zarządzanie członkostwem w grupie przez AD/Workspace zamiast w IAM GCP). Przypisanie uprawnień grupie na poziomie folderu powoduje ich dziedziczenie we wszystkich projektach podrzędnych.
+Wyjaśnienie:
+Efektywne zarządzanie uprawnieniami w dużej organizacji (300 inżynierów) wymaga zastosowania hierarchii zasobów oraz abstrakcji tożsamości:
+1. Foldery (Folders): Pozwalają na logiczne pogrupowanie projektów należących do tego samego środowiska (np. Dev, Prod). Uprawnienia nadane na poziomie folderu są dziedziczone przez wszystkie projekty wewnątrz niego, co eliminuje konieczność konfigurowania każdego projektu z osobna.
+2. Grupy Google (Google Groups): Zamiast nadawać uprawnienia 300 inżynierom indywidualnie, należy stworzyć grupę (np. engineers-prod@company.com), nadać jej odpowiednie role w IAM na poziomie folderu i zarządzać dostępem poprzez dodawanie/usuwanie członków grupy. Jest to zgodne z zasadą "best practice" w GCP.
 
 Dlaczego pozostałe są błędne:
-A (Multiple VPCs): VPC to technologia sieciowa, a nie narzędzie do zarządzania uprawnieniami IAM czy strukturą organizacyjną.
-D (Org Policy): Org Policy służy do nakładania ograniczeń technicznych (np. "zabroń publicznych IP"), a nie do nadawania uprawnień typu "Viewer" czy "Editor".
-E (Individual users): Zarządzanie użytkownikami jeden po jednym ("per user") to "antywzorzec" bezpieczeństwa. Jest to nieefektywne, podatne na błędy i uniemożliwia audyt w dużych organizacjach.
+A. VPC to warstwa sieciowa, a nie narzędzie do zarządzania uprawnieniami IAM. Chociaż separacja sieciowa jest ważna, nie rozwiązuje problemu zarządzania dostępem użytkowników.
+D. Organizational Policy (polityki organizacji) służą do nakładania restrykcji na zasoby (np. zakaz tworzenia zewnętrznych IP), a nie do nadawania uprawnień użytkownikom (IAM).
+E. Nadawanie uprawnień każdemu użytkownikowi z osobna ("per user") przy 300 osobach jest skrajnie nieefektywne, podatne na błędy i trudne do audytowania.
 
-Wskazówki egzaminacyjne:
-- "Manage IAM" + "Multiple projects": Szukaj rozwiązania z "Folderami" i "Grupami".
-- "Best practice": Grupy zamiast użytkowników to zawsze lepsze rozwiązanie w GCP.
-- Eliminacja: Jeśli widzisz "Individual users" w pytaniu o zarządzanie uprawnieniami w dużej organizacji – odrzuć to natychmiast.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Widząc "large number of users" i "IAM management", zawsze szukaj odpowiedzi zawierającej "Google Groups".
+- Foldery są kluczowym elementem skalowalnego zarządzania uprawnieniami w GCP.
+- "Assign permissions at the folder level" to najszybszy sposób na zapewnienie spójnego dostępu w wielu projektach.
+
+Kluczowe zagadnienia do powtórzenia:
+- Hierarchia zasobów GCP (Organization -> Folders -> Projects -> Resources).
+- IAM Best Practices (używanie grup, zasada najmniejszych uprawnień).
+- Dziedziczenie uprawnień w GCP.
 
 Dokumentacja:
 <a href="https://cloud.google.com/iam/docs/groups-in-iam" target="_blank">https://cloud.google.com/iam/docs/groups-in-iam</a>
@@ -116,21 +120,21 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: BC</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Stosowanie grup pozwala na "self-service" dla zespołu IT/Identity. Zamiast administratora GCP zmieniającego uprawnienia w konsoli cloud, administrator Active Directory/Workspace po prostu dodaje osobę do lokalnej grupy, a GCDS (Google Cloud Directory Sync) dba o resztę.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Głównym celem pytania jest wskazanie mechanizmów pozwalających na zarządzanie dostępem w skali. Kombinacja folderów (struktura) i grup (tożsamość) jest jedynym rozwiązaniem, które nie wymaga ręcznej pracy przy każdym nowym projekcie czy pracowniku. Opcja E jest klasyczną pułapką "technicznie możliwą, ale operacyjnie błędną" (anti-pattern).</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/iam/docs/groups-in-iam" target="_blank">https://cloud.google.com/iam/docs/groups-in-iam</a></li>
+<li><a href="https://cloud.google.com/resource-manager/docs/creating-managing-folders" target="_blank">Zarządzanie folderami w GCP</a></li>
 </ul>
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -145,9 +149,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

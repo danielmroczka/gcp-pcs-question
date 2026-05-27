@@ -70,7 +70,7 @@ A company is running workloads in a dedicated server room. They must only be acc
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure the project with Cloud VPN.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure the project with Shared VPC.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure the project with Cloud Interconnect.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C.</span> Configure the project with Cloud Interconnect.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure the project with VPC peering.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Configure all Compute Engine instances with Private Access.</li>
 
@@ -90,22 +90,27 @@ A company is running workloads in a dedicated server room. They must only be acc
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: AC (Configure the project with Cloud VPN oraz Configure the project with Cloud Interconnect.)
+Potwierdzona odpowiedź: AC (Configure the project with Cloud VPN oraz Configure the project with Cloud Interconnect.)
 
-Analiza poprawności:
-Aby uzyskać bezpieczną, prywatną łączność między środowiskiem on-premises (lokalną serwerownią) a zasobami w GCP, należy wykorzystać rozwiązania hybrydowe:
-1. Cloud VPN: Tworzy bezpieczny tunel IPsec przez publiczny internet. Jest to rozwiązanie szybkie i stosunkowo tanie, zapewniające prywatną komunikację.
-2. Cloud Interconnect: Zapewnia bezpośrednie, fizyczne połączenie (dedykowane lub partnera) omijające internet. Jest to rozwiązanie klasy enterprise, oferujące niższą latencję i większą stabilność przepustowości.
+Wyjaśnienie: 
+Aby połączyć sieć prywatną (on-premises) z Google Cloud VPC w sposób bezpieczny i prywatny, Google oferuje dwa główne rozwiązania łączności hybrydowej:
+1. Cloud VPN (A): Umożliwia bezpieczne połączenie sieci on-premises z siecią VPC poprzez tunel IPsec przez publiczny internet. Jest to rozwiązanie szybsze w implementacji i tańsze dla mniejszych obciążeń.
+2. Cloud Interconnect (C): Zapewnia fizyczne, bezpośrednie połączenie o dużej przepustowości i niskich opóźnieniach między siecią lokalną a siecią Google. Jest preferowane dla dużych transferów danych i rygorystycznych wymogów wydajnościowych.
 
 Dlaczego pozostałe są błędne:
-B. Shared VPC: Służy wyłącznie do udostępniania sieci między projektami wewnątrz GCP. Nie oferuje łączności z zasobami zewnętrznymi.
-D. VPC Peering: Umożliwia połączenie dwóch sieci VPC wewnątrz Google Cloud. Nie służy do łączenia sieci chmurowych z lokalną serwerownią.
-E. Private Access: Pozwala instancjom GCP na dostęp do usług Google (np. Cloud Storage) bez publicznego IP, ale nie daje łączności do infrastruktury w prywatnej serwerowni klienta.
+B. Shared VPC: Służy do współdzielenia sieci VPC i jej podsieci między wieloma projektami w ramach tej samej organizacji GCP. Nie rozwiązuje problemu łączności z siecią on-premises.
+D. VPC peering: Służy do łączenia dwóch oddzielnych sieci VPC wewnątrz chmury Google (nawet między różnymi organizacjami), ale nie służy do łączenia się z fizyczną siecią on-premises.
+E. Private Access (Private Google Access): Pozwala instancjom Compute Engine, które mają tylko prywatne adresy IP, na dostęp do publicznych usług Google (np. GCS, BigQuery). Nie zapewnia ono tunelu ani routingu do sieci lokalnej klienta.
 
-Wskazówki egzaminacyjne:
-- "Hybrid Cloud": Jeśli w pytaniu pada on-premise + GCP, szukaj tylko dwóch opcji: VPN lub Interconnect.
-- "Stability/Performance": Jeśli pytanie sugeruje duże potrzeby wydajnościowe, wybierz Interconnect; jeśli szybkość wdrożenia – VPN.
-- Eliminacja: Wszystkie opcje sieciowe typu "VPC..." (Shared, Peering) odrzuć natychmiast – dotyczą one połączeń tylko wewnątrz GCP.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Słowo klucz: "Hybrid connectivity" lub "Connect on-premises to GCP" = Cloud VPN lub Cloud Interconnect.
+- Jeśli wymagana jest wysoka przepustowość (np. >10 Gbps) – wybierz Interconnect.
+- Jeśli wymagane jest niskie opóźnienie i stabilność bez internetu publicznego – wybierz Interconnect.
+
+Kluczowe zagadnienia do powtórzenia:
+- Cloud VPN (Classic vs HA)
+- Dedicated Interconnect vs Partner Interconnect
+- Topologie sieci hybrydowych
 
 Dokumentacja:
 <a href="https://cloud.google.com/network-connectivity/docs/how-to/choose-product" target="_blank">https://cloud.google.com/network-connectivity/docs/how-to/choose-product</a>
@@ -116,7 +121,7 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: AC</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Dyskusja w sieci skupia się na wydajności. Jeśli firma ma 'dedicated server room', zazwyczaj potrzebuje stabilności. Cloud Interconnect (C) jest rozwiązaniem docelowym dla Enterprise, a Cloud VPN (A) najszybszym do wdrożenia. Obie opcje tworzą wymagany prywatny most.</p>
+<p><b>Analiza spornych kwestii (AI):</b> W tej kwestii panuje pełna zgoda. VPN i Interconnect to jedyne natywne drogi budowania mostu między prywatną serwerownią a chmurą. Wybór między nimi zależy od budżetu i wymagań co do pasma, ale oba spełniają wymóg 'prywatności' ruchu.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/network-connectivity/docs/how-to/choose-product" target="_blank">https://cloud.google.com/network-connectivity/docs/how-to/choose-product</a></li>

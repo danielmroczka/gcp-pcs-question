@@ -64,15 +64,14 @@
 <h2>Question 50 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You need to analyze VPC network traffic for anomalies without installing agents on VMs. What should you use?
+Your company has deployed an application on Compute Engine. The application is accessible by clients on port 587. You need to balance the load between the different instances running the application. The connection should be secured using TLS, and terminated by the Load Balancer. What type of Load Balancing should you use?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Stackdriver Logging</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> VPC Flow Logs</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud Trace</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Packet Mirroring</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Network Load Balancing</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> HTTP(S) Load Balancing</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> TCP Proxy Load Balancing</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> SSL Proxy Load Balancing</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +79,7 @@ You need to analyze VPC network traffic for anomalies without installing agents 
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">D</span>
 <br/>
 </span>
 </div>
@@ -89,45 +88,52 @@ You need to analyze VPC network traffic for anomalies without installing agents 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (VPC Flow Logs)
+Potwierdzona odpowiedź: D (SSL Proxy Load Balancing)
 
-Analiza poprawności:
-VPC Flow Logs rejestrują metadane o wszystkich przepływach IP (źródło, cel, porty, liczba bajtów, czy ruch był dozwolony czy zablokowany) bezpośrednio na poziomie infrastruktury sieciowej VPC. Zaletą tego rozwiązania jest to, że działa ono w sposób "agentless" – nie wymaga instalowania żadnego oprogramowania na instancjach VM, co jest kluczowe, gdy chcemy monitorować sieć bez wpływu na wydajność czy bezpieczeństwo systemów operacyjnych.
+Wyjaśnienie:
+Mamy tutaj specyficzne wymagania dotyczące równoważenia obciążenia: ruch inny niż HTTP (port 587 - SMTP/TLS), konieczność terminacji sesji SSL/TLS na Load Balancerze oraz potrzebę globalnego równoważenia ruchu.
+1. SSL Proxy Load Balancing: Jest to globalny load balancer dla ruchu TCP zabezpieczonego protokołem SSL/TLS. Pozwala on na zakończenie sesji SSL na samym LB (terminacja), co odciąża serwery backendowe. Jest idealny dla ruchu, który nie jest protokołem HTTP(S), ale wymaga szyfrowania (np. poczta e-mail, bazy danych).
+2. Port 587: Choć ten port jest standardowo kojarzony z protokołem SMTP, w kontekście GCP i wyboru Load Balancera, kluczowe jest to, że wymaga on terminacji SSL/TLS dla ruchu TCP niebędącego HTTP.
 
 Dlaczego pozostałe są błędne:
-A (Stackdriver Logging): Choć logi przepływu są przesyłane do Cloud Logging (dawniej Stackdriver), to samo Logging nie jest usługą generującą logi sieciowe. Bez włączonych Flow Logs, nie ma co logować.
-C (Cloud Trace): Służy do analizy opóźnień wewnątrz aplikacji (profilowanie wydajności mikroserwisów), a nie do monitoringu ruchu sieciowego.
-D (Packet Mirroring): Kopiuje pełną zawartość pakietów sieciowych (payload) dla zaawansowanej inspekcji (IDS/IPS). Jest to rozwiązanie znacznie droższe i bardziej skomplikowane niż Flow Logs, które w zupełności wystarczają do wykrywania anomalii (np. nagłych skoków transferu).
+A. Network Load Balancing: Działa w warstwie 4 (L4) i jest pasywny (pass-through). Nie wspiera terminacji SSL/TLS – pakiety są przesyłane bezpośrednio do instancji w niezmienionej formie.
+B. HTTP(S) Load Balancing: Jest przeznaczony wyłącznie dla ruchu HTTP i HTTPS (porty 80 i 443). Nie obsłuży ruchu na porcie 587.
+C. TCP Proxy Load Balancing: Jest bardzo podobny do SSL Proxy, ale służy do równoważenia czystego ruchu TCP bez wbudowanej funkcji terminacji SSL/TLS (choć technicznie mogą współdzielić infrastrukturę, to dla ruchu szyfrowanego z terminacją na LB poprawną odpowiedzią egzaminacyjną jest SSL Proxy).
 
-Wskazówki egzaminacyjne:
-- "Analyze VPC traffic" + "Without installing agents": To hasło-klucz dla "VPC Flow Logs".
-- "Anomalies": Flow Logs to najlepsze narzędzie do wykrywania anomalii typu "gdzieś nagle poszło dużo danych".
-- Eliminacja: Jeśli widzisz "Agentless" + "Network", nigdy nie zaznaczaj niczego innego niż Flow Logs.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Terminated by the Load Balancer" + "SSL/TLS" + "Non-HTTP port" = SSL Proxy Load Balancing.
+- Jeśli port to 80/443 = HTTP(S) LB.
+- Jeśli port to cokolwiek innego i NIE ma terminacji SSL = Network LB (regional) lub TCP Proxy (global).
+- Pamiętaj, że SSL Proxy i TCP Proxy są dostępne tylko dla określonych portów (GCP ma ich listę, 587 jest na niej wspierany przez SSL Proxy).
+
+Kluczowe zagadnienia do powtórzenia:
+- Porównanie typów Cloud Load Balancing.
+- SSL termination vs. Pass-through.
+- Wspierane porty dla Proxy Load Balancers.
 
 Dokumentacja:
-<a href="https://cloud.google.com/vpc/docs/using-flow-logs" target="_blank">https://cloud.google.com/vpc/docs/using-flow-logs</a>
+<a href="https://cloud.google.com/load-balancing/docs/ssl" target="_blank">SSL Proxy Load Balancing overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Flow Logs są próbkowane (sampled), co pozwala na monitoring ogromnego ruchu przy minimalnym wpływie na wydajność sieci i kosztach przechowywania logów. To sprawia, że są one idealne do monitoringu ciągłego.</p>
+<p><b>Sugerowana odpowiedź: D</b></p>
+<p><b>Analiza spornych kwestii (AI):</b> Pytanie precyzyjnie wskazuje na potrzebę terminacji SSL na LB dla ruchu na porcie 587. W ekosystemie Google Cloud jedynym natywnym rozwiązaniem pasującym do tego opisu jest SSL Proxy Load Balancer. Użycie Network LB wymagałoby zarządzania certyfikatami na każdej z maszyn z osobna, co jest zaprzeczeniem "terminacji przez Load Balancer".</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc/docs/using-flow-logs" target="_blank">https://cloud.google.com/vpc/docs/using-flow-logs</a></li>
+<li><a href="https://cloud.google.com/load-balancing/docs/features" target="_blank">Load balancing features comparison</a></li>
 </ul>
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -142,9 +148,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

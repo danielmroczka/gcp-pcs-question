@@ -88,24 +88,28 @@ A customer has an analytics workload running on Compute Engine. Your team create
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Poprawna odpowiedź: B
+<pre>
+Potwierdzona odpowiedź: B (Egress allow repository CIDR, priority < 1000)
 
-Analiza poprawności:
-W scenariuszu z zaostrzonymi regułami firewalla (egress deny), gdzie instancje wymagają dostępu do zewnętrznego repozytorium, kluczowe jest zrozumienie hierarchii i priorytetów reguł w GCP.
-1. Priorytety: Reguły firewalla w GCP są przetwarzane zgodnie z priorytetem (im niższa liczba, tym wyższy priorytet). Jeśli istnieje reguła deny o priorytecie 1000, stworzenie nowej reguły allow z priorytetem niższym (np. 900) nadpisze blokadę dla konkretnego ruchu.
-2. Zgodność: Jest to poprawne rozwiązanie, ponieważ pozwala na selektywne otwarcie ruchu tylko do wymaganego zasobu zewnętrznego, przy jednoczesnym zachowaniu pierwotnej blokady dla pozostałego ruchu internetowego.
+Wyjaśnienie: 
+W Google Cloud VPC Firewall, priorytety reguł są określane przez liczby od 0 do 65535, przy czym niższa liczba oznacza wyższy priorytet. Jeśli istnieje reguła 'deny' o priorytecie 1000, musimy stworzyć regułę 'allow' o priorytecie mniejszym niż 1000 (np. 900), aby została ona przetworzona jako pierwsza i zezwoliła na ruch do konkretnego zakresu CIDR repozytorium.
 
 Dlaczego pozostałe są błędne:
-A. Priorytet wyższy niż 1000: W GCP reguły o wyższym numerze mają NIŻSZY priorytet. Reguła z priorytetem 1001 zostanie przetworzona PO regule 1000, więc nigdy nie uzyska pierwszeństwa (reguła deny 1000 już zablokuje ruch).
-C/D. Hostname: Reguły firewalla VPC w GCP działają na poziomie warstwy 3 (adresy IP/CIDR), a nie warstwy 7 (nazwy domen/hostname). Firewall VPC nie potrafi "zrozumieć" nazwy hosta, dlatego reguły oparte na hostname nie zadziałają na tym poziomie sieci.
+A. Priorytet większy niż 1000 oznacza niższe pierwszeństwo, więc reguła 'deny' (1000) nadal będzie blokować ruch.
+C. Reguły firewalla VPC działają w warstwach 3 i 4 (IP/Port), nie obsługują nazw domenowych (hostname). Dodatkowo priorytet jest błędny.
+D. Firewall VPC nie obsługuje filtrowania po nazwach hostów.
 
-Wskazówki egzaminacyjne:
-- Firewall VPC = L3/L4 (IP/Port), a nie L7 (FQDN).
-- Niższy numer priorytetu = Wyższy priorytet (ważniejsze są "małe" liczby).
-- Jeśli aplikacja wymaga dostępu do domeny, rozważ Cloud NAT (dla ruchu wychodzącego) lub Cloud Armor (jeśli dotyczy to ruchu przychodzącego na poziomie HTTP), ale NIGDY firewall VPC po hostname.
+Wskazówki egzaminacyjne (Tips & Tricks):
+Zapamiętaj: Niższy numer = Wyższy priorytet (0 to najwyższy priorytet). Firewall VPC nie rozumie domen (FQDN/Hostname).
+
+Kluczowe zagadnienia do powtórzenia:
+- VPC Firewall Rules priority
+- Egress/Ingress rules
+- VPC Layer 3/4 filtering
 
 Dokumentacja:
-<a href="https://cloud.google.com/vpc/docs/firewalls" target="_blank">https://cloud.google.com/vpc/docs/firewalls</a></pre>
+<a href="https://cloud.google.com/vpc/docs/firewalls" target="_blank">https://cloud.google.com/vpc/docs/firewalls</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

@@ -64,15 +64,14 @@
 <h2>Question 44 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You want to prevent users from creating public IP addresses for their Compute Engine instances. Which tool should you use?
+Your company is using GSuite and has developed an application meant for internal usage on Google App Engine. You need to make sure that an external user cannot gain access to the application even when an employee's password has been compromised. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> VPC Firewall Rules</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Organization Policy Service</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud IAM</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Access Context Manager</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enforce 2-factor authentication in GSuite for all users.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure Cloud Identity-Aware Proxy for the App Engine Application.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Provision user passwords using GSuite Password Sync.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure Cloud VPN between your private network and GCP.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +79,7 @@ You want to prevent users from creating public IP addresses for their Compute En
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">A</span>
 <br/>
 </span>
 </div>
@@ -88,38 +87,51 @@ You want to prevent users from creating public IP addresses for their Compute En
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Potwierdzona odpowiedź: A (Enforce 2-factor authentication in GSuite)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Organization Policy Service: Pozwala na nakładanie odgórnych ograniczeń (constraints) na poziomie całej firmy lub folderu. Ograniczenie `compute.restrictPublicIp` (lub podobne) fizycznie uniemożliwia przypisanie zewnętrznego adresu IP do interfejsu sieciowego VM.
+Wyjaśnienie:
+Głównym problemem opisanym w pytaniu jest ryzyko przejęcia konta wynikające z kradzieży hasła ("password compromised").
+1. 2-Step Verification (MFA/2FA): Jest to najskuteczniejszy mechanizm obronny przed kradzieżą poświadczeń. Nawet jeśli haker pozna hasło pracownika, nie będzie w stanie zalogować się do konta GSuite (a tym samym uzyskać dostępu do aplikacji w App Engine), ponieważ nie posiada drugiego składnika (np. klucza bezpieczeństwa Titan, kodu z aplikacji czy potwierdzenia na telefonie).
+2. Ochrona tożsamości: Ponieważ aplikacja w App Engine korzysta z tożsamości GSuite/Cloud Identity, zabezpieczenie samego procesu logowania do ekosystemu Google chroni wszystkie usługi podpięte pod to konto.
 
-Dlaczego inne są błędne:
-A. VPC Firewall: Blokuje ruch na portach, ale nie uniemożliwia SAMEGO przypisania adresu IP do maszyny.
-C. Cloud IAM: Można by odebrać uprawnienia do edycji IP, ale to skomplikowane i trudne do wymuszenia globalnie przy wielu rolach. Org Policy jest bardziej precyzyjna i prewencyjna.
-D. Access Context Manager: Służy do kontroli dostępu do konsoli/API na podstawie kontekstu (np. skąd loguje się admin), a nie do ograniczania konfiguracji zasobów.
+Dlaczego pozostałe są błędne:
+B. Cloud Identity-Aware Proxy (IAP): IAP jest świetnym narzędziem do kontroli dostępu do aplikacji bez konieczności używania VPN, ale IAP polega na uwierzytelnieniu przez Google. Jeśli hasło użytkownika zostanie skradzione, a MFA nie jest wymuszone, haker przejdzie przez IAP tak samo jak legalny użytkownik. IAP "sprawdza kim jesteś", ale 2FA "potwierdza, że Ty to naprawdę Ty".
+C. Password Sync: To narzędzie do synchronizacji haseł z AD do Google, co ułatwia życie użytkownikom, ale w żaden sposób nie chroni przed skutkami kradzieży tego zsynchronizowanego hasła.
+D. Cloud VPN: VPN zabezpiecza tunel sieciowy, ale aplikacje App Engine są domyślnie dostępne przez publiczne punkty końcowe Google. Sam VPN nie uniemożliwi komuś zalogowania się do aplikacji przez przeglądarkę z dowolnego miejsca na świecie przy użyciu skradzionego hasła.
 
-Konsensus społeczności ExamTopics: Zdecydowane poparcie dla B. Słowo 'prevent' w kontekście konfiguracji infrastruktury często wskazuje na Org Policy.</pre>
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o "compromised password" lub "stolen credentials", poprawną odpowiedzią niemal zawsze jest "MFA", "2FA" lub "Security Keys".
+- Zrozum różnicę między IAP (autoryzacja na podstawie tożsamości) a MFA (wzmocnienie procesu uwierzytelniania).
+
+Kluczowe zagadnienia do powtórzenia:
+- 2-Step Verification (2SV) w Google Workspace/Cloud Identity.
+- Rola Cloud IAP w architekturze Zero Trust.
+- Ochrona przed phishingiem i przejęciem kont.
+
+Dokumentacja:
+<a href="https://support.google.com/a/answer/175197" target="_blank">Wymuszanie weryfikacji dwuetapowej w Google Workspace</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Polityki organizacji działają prewencyjnie - operacja API utworzenia VM z publicznym IP zostanie odrzucona przez system Google, zanim maszyna powstanie.</p>
+<p><b>Sugerowana odpowiedź: A</b></p>
+<p><b>Analiza spornych kwestii (AI):</b> Wiele osób skłania się ku odpowiedzi B (IAP), ponieważ jest to "nowoczesne" narzędzie GCP. Jednak IAP samo w sobie nie chroni przed skradzionym hasłem, jeśli proces logowania do konta Google jest słaby. Dopiero wymuszenie MFA (opcja A) tworzy barierę, której samo hasło nie jest w stanie pokonać. W realnych scenariuszach stosuje się oba te rozwiązania jednocześnie.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints</a></li>
+<li><a href="https://cloud.google.com/iap/docs/concepts-overview" target="_blank">Overview of Cloud IAP</a></li>
 </ul>
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +146,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

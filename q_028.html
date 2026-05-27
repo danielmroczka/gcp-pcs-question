@@ -64,15 +64,14 @@
 <h2>Question 28 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-A company has redundant mail servers in different regions and wants to route customers to the nearest server based on location. How should they accomplish this?
+A company has redundant mail servers in different Google Cloud Platform regions and wants to route customers to the nearest mail server based on location. <br>How should the company accomplish this?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure TCP Proxy Load Balancing on port 995.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a Network Load Balancer.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use Cross-Region HTTP(S) Load Balancing.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use Cloud CDN.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure TCP Proxy Load Balancing as a global load balancing service listening on port 995.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a Network Load Balancer to listen on TCP port 995 with a forwarding rule to forward traffic based on location.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use Cross-Region Load Balancing with an HTTP(S) load balancer to route traffic to the nearest region.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use Cloud CDN to route the mail traffic to the closest origin mail server based on client IP address.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,20 +88,25 @@ A company has redundant mail servers in different regions and wants to route cus
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Configure TCP Proxy Load Balancing on port 995.)
+Potwierdzona odpowiedź: A (Configure TCP Proxy Load Balancing as a global load balancing service listening on port 995.)
 
-Analiza poprawności:
-TCP Proxy Load Balancing to globalny Load Balancer GCP, który umożliwia kierowanie ruchu TCP na dowolnych portach (nie tylko 80/443). Jest to rozwiązanie typu "Anycast" (jeden globalny adres IP), co oznacza, że ruch wchodzi do sieci Google w najbliższym dla klienta punkcie (Point of Presence) i jest przesyłany światłowodami Google do najbliższego dostępnego regionu z serwerami pocztowymi. Idealnie wpisuje się to w wymóg "routingu do najbliższego serwera".
+Wyjaśnienie: 
+TCP Proxy Load Balancing to globalna usługa Load Balancingu w Google Cloud (warstwa 4), która idealnie nadaje się do obsługi ruchu TCP innego niż HTTP/HTTPS (np. bezpieczna poczta na porcie 995). Dzięki zastosowaniu globalnego adresu IP (Anycast), żądania użytkowników są automatycznie kierowane do najbliższego punktu wejścia do sieci Google (Edge), a stamtąd przesyłane do najbliższego dostępnego regionu z serwerami backendowymi. Zapewnia to najniższe możliwe opóźnienia (latency) dla klientów z całego świata.
 
 Dlaczego pozostałe są błędne:
-B (Network Load Balancer): Jest to LB regionalny. Nie potrafi on automatycznie kierować ruchu między różnymi regionami na podstawie lokalizacji klienta.
-C (HTTP(S) Load Balancing): Działa wyłącznie w warstwie 7 (dla protokołów webowych HTTP/HTTPS). Serwery pocztowe używają protokołów TCP/IP, więc ten LB nie będzie w stanie obsłużyć ruchu na porcie 995.
-D (Cloud CDN): Cloud CDN służy do cache'owania (przechowywania) treści statycznych (obrazy, wideo, skrypty), aby przyspieszyć ich ładowanie. Nie posiada funkcji routingu ruchu pocztowego (TCP).
+B. Network Load Balancer: Jest to usługa regionalna (nie globalna). Nie potrafi ona automatycznie kierować użytkowników między różnymi regionami na podstawie ich lokalizacji geograficznej. Wymagałoby to dodatkowego mechanizmu (np. Global DNS), co czyni rozwiązanie nieoptymalnym.
+C. HTTP(S) Load Balancer: Choć jest to Load Balancer globalny, operuje on wyłącznie w warstwie 7 (L7) dla protokołów HTTP/HTTPS. Nie obsługuje on surowego ruchu TCP na porcie 995.
+D. Cloud CDN: Służy do cache'owania (przechowywania kopii) treści statycznych blisko użytkownika. Nie jest to usługa routingu ani Load Balancingu dla protokołów pocztowych TCP.
 
-Wskazówki egzaminacyjne:
-- "Global" + "TCP": Jeśli musisz kierować ruch TCP (nie HTTP) globalnie -> tylko TCP Proxy LB.
-- "Location-based" / "Nearest": Szukaj rozwiązań "Anycast" (global IP).
-- Eliminacja: Jeśli pytanie dotyczy portów typu 995 (POP3S), 25 (SMTP) – odrzuć wszystko co ma "HTTP" w nazwie.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Global" + "TCP" (nie HTTP): To niemal zawsze oznacza TCP Proxy Load Balancing.
+- Porty inne niż 80/443 (np. 995, 25, 110): Wykluczają użycie HTTP(S) LB.
+- "Nearest server" / "Location-based": Szukaj globalnych usług Anycast (Proxy Load Balancers).
+
+Kluczowe zagadnienia do powtórzenia:
+- Typy Load Balancerów w GCP (Global vs Regional)
+- Warstwy OSI obsługiwane przez Load Balancery (L4 vs L7)
+- Koncepcja Anycast IP w infrastrukturie Google
 
 Dokumentacja:
 <a href="https://cloud.google.com/load-balancing/docs/tcp" target="_blank">https://cloud.google.com/load-balancing/docs/tcp</a>
@@ -113,7 +117,7 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> TCP Proxy LB jest niezwykle potężny, ponieważ pozwala na "zakończenie" sesji TCP blisko klienta (Edge), co redukuje opóźnienia w nawiązywaniu połączeń (tzw. TCP handshake time) w porównaniu do łączenia się bezpośrednio z serwerem po drugiej stronie globu.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Kluczowe jest zrozumienie przewagi Proxy Load Balancerów nad Network Load Balancerem w scenariuszach globalnych. Dzięki 'zakończeniu' sesji TCP na brzegu sieci Google (Edge), TCP Proxy LB drastycznie skraca czas potrzebny na nawiązanie połączenia (handshake), co jest kluczowe dla wydajności aplikacji pocztowych.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/load-balancing/docs/tcp" target="_blank">https://cloud.google.com/load-balancing/docs/tcp</a></li>
@@ -124,10 +128,10 @@ Dokumentacja:
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -142,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
 

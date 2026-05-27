@@ -87,25 +87,27 @@ Your company is storing sensitive data in Cloud Storage. You want a key generate
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Poprawna odpowiedź: C
+<pre>
+Potwierdzona odpowiedź: C (Customer-supplied encryption keys (CSEK))
 
-Analiza poprawności:
-Google Cloud umożliwia korzystanie z kluczy generowanych i zarządzanych przez klienta poza platformą (on-premises).
-1. CSEK (Customer-Supplied Encryption Keys): To właśnie mechanizm pozwalający na użycie własnego klucza (dostarczonego przez klienta) do szyfrowania danych w usłudze Cloud Storage. 
-2. Mechanizm działania: Klient dostarcza klucz szyfrujący (DEK) w każdym żądaniu wysyłanym do Cloud Storage. Google używa tego klucza do zaszyfrowania danych, po czym klucz ten jest usuwany z pamięci Google – Google go nie przechowuje.
+Wyjaśnienie: 
+Gdy klient chce użyć klucza wygenerowanego we własnej infrastrukturze (on-premises) i NIE chce, aby był on przechowywany w chmurze (nawet w KMS), musi skorzystać z Customer-Supplied Encryption Keys (CSEK). Klucz jest przesyłany w nagłówku żądania do Cloud Storage tylko na czas operacji.
 
 Dlaczego pozostałe są błędne:
-A. Cloud KMS DEK: Cloud KMS służy do zarządzania kluczami wewnątrz GCP. W pytaniu mowa jest o kluczu generowanym na miejscu (on-premises), co wyklucza KMS jako zarządcę klucza (KMS nie przechowuje kluczy dostarczanych przez CSEK).
-B. Cloud KMS KEK: KEK to klucz szyfrujący inne klucze (w KMS). Użycie KMS wyklucza "customer-supplied encryption key" w kontekście tego konkretnego pytania.
-D. CSEK dla KEK: Terminologia CSEK w GCP odnosi się do szyfrowania danych (DEK), a nie do zarządzania KEK w KMS.
+A, B. Cloud KMS (CMEK) przechowuje klucze w chmurze (zarządzane przez klienta, ale hostowane przez Google).
+D. CSEK służy do zarządzania kluczem szyfrującym dane (DEK). Pojęcie KEK w kontekście CSEK nie ma zastosowania w taki sposób jak w KMS.
 
-Wskazówki egzaminacyjne:
-- "Key generated on-premises" = prawie zawsze CSEK.
-- "Manage key in Google Cloud" = KMS.
-- Pamiętaj: W modelu CSEK to klient odpowiada za przechowywanie klucza. Jeśli go zgubisz – dane są nieodwracalnie stracone.
+Wskazówki egzaminacyjne (Tips & Tricks):
+Klucz on-premises (nie w chmurze) = CSEK. Klucz w chmurze (zarządzany przez Ciebie) = CMEK (KMS).
+
+Kluczowe zagadnienia do powtórzenia:
+- CSEK vs CMEK
+- Encryption at rest options
+- Cloud Storage encryption
 
 Dokumentacja:
-<a href="https://cloud.google.com/storage/docs/encryption/customer-supplied-encryption-keys" target="_blank">https://cloud.google.com/storage/docs/encryption/customer-supplied-encryption-keys</a></pre>
+<a href="https://cloud.google.com/storage/docs/encryption/customer-supplied-keys" target="_blank">https://cloud.google.com/storage/docs/encryption/customer-supplied-keys</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

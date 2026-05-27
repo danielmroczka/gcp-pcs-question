@@ -89,16 +89,25 @@ You are the security admin of your company. You have 3,000 objects in your Cloud
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Potwierdzona odpowiedź: D (Uniform bucket-level access + IAM)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Uniform bucket-level access (UBLA): Wyłącza on system ACL (Access Control Lists) dla pojedynczych obiektów i wymusza używanie wyłącznie systemu IAM na poziomie całego bucketu. Zapewnia to spójność, łatwiejszy audyt (wszystko widać w IAM) i eliminuje ryzyko, że pojedynczy plik zostanie 'zapomniany' z błędnym uprawnieniem.
+Wyjaśnienie: 
+Przy dużej liczbie obiektów (3000+) zarządzanie dostępem za pomocą ACL (Access Control Lists) dla każdego pliku staje się niemożliwe. Uniform bucket-level access wyłącza ACL i wymusza używanie wyłącznie IAM na poziomie bucketu, co zapewnia spójność, łatwość audytu i centralne zarządzanie.
 
-Dlaczego inne są błędne:
-A, B. allUsers: Udostępnia dane całemu światu - absolutny błąd bezpieczeństwa.
-C. Default bucket ACL: Nadal używa systemu ACL, który jest trudny do audytowania w skali tysięcy obiektów i nie daje centralnego wglądu tak jak IAM.
+Dlaczego pozostałe są błędne:
+A, B. Udzielanie uprawnień 'allUsers' (publicznych) jest skrajnie niebezpieczne.
+C. Default bucket ACL to nadal mechanizm ACL, który nie jest zalecany dla nowoczesnych, dużych środowisk i nie oferuje takiej przejrzystości jak IAM.
 
-Konsensus społeczności ExamTopics: 100% na D. UBLA to nowoczesny standard zarządzania dostępem do danych w GCS.
+Wskazówki egzaminacyjne (Tips & Tricks):
+Skalowalne zarządzanie GCS = Uniform bucket-level access + IAM.
+
+Kluczowe zagadnienia do powtórzenia:
+- Uniform bucket-level access
+- IAM vs ACL in Cloud Storage
+- Cloud Storage security best practices
+
+Dokumentacja:
+<a href="https://cloud.google.com/storage/docs/uniform-bucket-level-access" target="_blank">https://cloud.google.com/storage/docs/uniform-bucket-level-access</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

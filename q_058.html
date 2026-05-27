@@ -64,14 +64,15 @@
 <h2>Question 58 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-What is the purpose of the Cloud Identity-Aware Proxy (IAP)?
+Which two security characteristics are related to the use of VPC peering to connect two VPC networks? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> To provide a VPN for users.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> To protect against SQL injection.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> To control access to cloud applications based on user identity and context.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> To manage DNS records.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Central management of routes, firewalls, and VPNs for peered networks</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Non-transitive peered networks; where only directly peered networks can communicate</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Ability to peer networks that belong to different Google Cloud organizations</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Firewall rules that can be created with a tag from one peered network to another peered network</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Ability to share specific subnets across peered networks</li>
 
 </ul>
 </div>
@@ -80,7 +81,7 @@ What is the purpose of the Cloud Identity-Aware Proxy (IAP)?
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">C</span>
+<span class="correct-answer">BC</span>
 <br/>
 </span>
 </div>
@@ -89,34 +90,42 @@ What is the purpose of the Cloud Identity-Aware Proxy (IAP)?
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (To control access to cloud applications based on user identity and context.)
+Potwierdzona odpowiedź: BC
 
-Analiza poprawności:
-Identity-Aware Proxy (IAP) to kluczowe narzędzie Google w architekturze "Zero Trust" (BeyondCorp). Pozwala ono na zabezpieczenie aplikacji webowych (np. na App Engine, GKE, Compute Engine) bez konieczności wystawiania ich bezpośrednio do publicznego internetu (brak publicznego IP) lub wymuszania użycia VPN. IAP weryfikuje tożsamość użytkownika (przez Cloud Identity) oraz kontekst (np. czy urządzenie jest zarządzane, lokalizacja) przed przyznaniem dostępu. Dla pracowników jest to najbardziej wygodne rozwiązanie – dostęp odbywa się przez zwykłą przeglądarkę, z dowolnego miejsca.
+Wyjaśnienie:
+VPC Network Peering posiada dwie kluczowe cechy istotne z punktu widzenia bezpieczeństwa i architektury sieciowej:
+1. (B) Nietranzytywność (Non-transitivity): Połączenie typu peering jest ograniczone tylko do dwóch bezpośrednio połączonych sieci. Jeśli sieć A jest połączona z B, a sieć B z C, to zasoby w sieci A NIE mogą komunikować się z zasobami w sieci C przez sieć B. Zwiększa to bezpieczeństwo, zapobiegając niekontrolowanemu przepływowi ruchu przez sieci pośredniczące.
+2. (C) Wsparcie dla wielu organizacji (Cross-organization): Możesz utworzyć peering między sieciami VPC, które należą do różnych organizacji Google Cloud (np. Twoja firma i zewnętrzny dostawca usług). Cały ruch odbywa się wewnątrz sieci Google, przy użyciu prywatnych adresów IP.
 
-Dlaczego pozostałe są błędne:
-A (VPN): IAP to nowoczesna alternatywa dla VPN (model BeyondCorp), nie jest to tunel VPN.
-B (SQL injection): To zadanie dla WAF (Cloud Armor). IAP nie sprawdza treści zapytań HTTP pod kątem ataków hakerskich typu SQLi.
-D (DNS): Zarządzaniem rekordami DNS zajmuje się usługa Cloud DNS.
+Dlaczego pozostałe opcje są niepoprawne:
+- A: VPC Peering jest rozwiązaniem zdecentralizowanym. Każda sieć zarządza własnymi regułami firewall i trasami. Jeśli szukasz centralnego zarządzania, poprawną odpowiedzią byłoby `Shared VPC`.
+- D: Reguły firewall oparte na tagach sieciowych (network tags) działają tylko w obrębie jednej sieci VPC. W Peeringu nie można użyć tagu z sieci A jako źródła (source) w regule firewall sieci B. (Można natomiast używać Service Accounts lub zakresów IP).
+- E: VPC Peering łączy całe sieci. Do współdzielenia konkretnych podsieci między projektami służy mechanizm `Shared VPC`.
 
-Wskazówki egzaminacyjne:
-- "Zero Trust" / "Any location": Szukaj IAP. To jedyna technologia GCP zaprojektowana do bezpiecznego dostępu bez VPN.
-- "In-progress sites": Często mylnie chce się użyć VPN, ale pamiętaj: VPN = trudna obsługa użytkowników; IAP = przeglądarka + zalogowanie się kontem Google.
-- Eliminacja: Jeśli widzisz VPN w kontekście dostępu dla pracowników do aplikacji webowych, zazwyczaj jest to dystraktor.
+Tips & Tricks:
+- Słowo "Non-transitive" jest kluczowe dla VPC Peering w GCP. Zapamiętaj to!
+- Peering = Decentralizacja (każdy projekt ma swój admin sieci). Shared VPC = Centralizacja (jeden Host Project zarządza siecią dla innych).
+- VPC Peering to najlepsze rozwiązanie dla "Cross-organization connectivity" przy zachowaniu prywatności ruchu.
+
+Zagadnienia:
+- VPC Network Peering Features
+- Network Transitivity (Tranzystywność sieci)
+- Cross-project and Cross-org connectivity
 
 Dokumentacja:
-<a href="https://cloud.google.com/iap" target="_blank">https://cloud.google.com/iap</a>
+<a href="https://cloud.google.com/vpc/docs/vpc-peering#features" target="_blank">https://cloud.google.com/vpc/docs/vpc-peering#features</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (Egzamin)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> IAP działa na poziomie warstwy 7 modelu OSI. Po włączeniu IAP dla aplikacji, serwer odrzuca absolutnie wszystkie przychodzące żądania, które nie posiadają ważnego dowodu tożsamości wystawionego przez proxy Google.</p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<h3>Kluczowe wnioski</h3>
+<p><b>Potwierdzona odpowiedź: B, C</b></p>
+<p>Zrozumienie granic sieci VPC i sposobów ich łączenia jest fundamentem bezpieczeństwa sieciowego w chmurze. VPC Peering jest prosty w konfiguracji, ale jego nietranzytywność często wymaga budowania topologii typu "Hub and Spoke" z centralnym urządzeniem sieciowym (NVA), jeśli wymagana jest komunikacja tranzytowa.</p>
+<h3>Praktyczne wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/iap" target="_blank">https://cloud.google.com/iap</a></li>
+<li>Zawsze upewnij się, że zakresy adresów IP (CIDR) sieci, które chcesz połączyć przez Peering, nie nakładają się na siebie. Jeśli się nakładają, Peering nie zostanie utworzony.</li>
+<li>Pamiętaj, że w Peeringu limity (quota) na liczbę połączeń są per sieć VPC, co może być ograniczeniem w bardzo dużych środowiskach.</li>
 </ul>
 </div>
 </div>

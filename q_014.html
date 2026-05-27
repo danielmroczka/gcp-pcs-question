@@ -89,23 +89,30 @@ A business unit at a multinational corporation signs up for GCP and starts movin
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Organization Administrator)
+Potwierdzona odpowiedź: A (Organization Administrator)
 
-Analiza poprawności:
-Rola "Organization Administrator" jest najwyższą rolą w hierarchii Google Cloud (zaraz po Super Administratorze w Cloud Identity/Workspace). Osoba posiadająca tę rolę ma pełną kontrolę nad wszystkimi zasobami w ramach organizacji. Obejmuje to prawo do nadawania i odbierania uprawnień IAM w dowolnym projekcie, zarządzania politykami bezpieczeństwa (Organization Policies), przeglądania logów audytowych oraz zarządzania strukturą folderów i projektów. Jest to jedyna rola, która daje pełną władzę nad "zarządzaniem" i "audytowaniem" domeny w żądanym zakresie.
+Wyjaśnienie: 
+Aby przejąć pełną kontrolę nad zarządzaniem uprawnieniami (IAM) oraz audytowaniem zasobów w całej organizacji (wszystkich projektów podpiętych pod Cloud Identity), niezbędna jest rola Organization Administrator (`roles/resourcemanager.organizationAdmin`). 
+- Rola ta pozwala na przydzielanie uprawnień IAM na poziomie organizacji, co propaguje się w dół do wszystkich folderów i projektów. 
+- Administrator organizacji może również konfigurować ustawienia auditów dla całej organizacji, zapewniając pełną widoczność działań we wszystkich projektach.
 
 Dlaczego pozostałe są błędne:
-B (Security Reviewer): Pozwala jedynie na przeglądanie konfiguracji bezpieczeństwa i logów, ale nie daje uprawnień do zmiany polityk czy nadawania dostępów (brak prawa do "zarządzania").
-C (Organization Role Administrator): Ta rola ogranicza się wyłącznie do zarządzania rolami niestandardowymi (custom roles). Nie daje wglądu w projekty ani prawa do zarządzania dostępem użytkowników do tych projektów.
-D (Organization Policy Administrator): Pozwala na definiowanie ograniczeń (np. "zabroń tworzenia publicznych bucketów"), ale nie służy do zarządzania uprawnieniami IAM użytkowników czy audytowania zasobów w projektach.
+B. Security Reviewer: Pozwala na podgląd (view only) polityk IAM, ale nie pozwala na ich modyfikację ani na zarządzanie zasobami.
+C. Organization Role Administrator: Pozwala jedynie na zarządzanie niestandardowymi rolami (Custom Roles) w organizacji, a nie na przypisywanie uprawnień użytkownikom do projektów czy zarządzanie auditami.
+D. Organization Policy Administrator: Pozwala na zarządzanie ograniczeniami (Constraints) w ramach Organization Policy Service, ale nie daje uprawnień do zarządzania tożsamościami w IAM.
 
-Wskazówki egzaminacyjne:
-- "Take over managing": Szukaj roli "Administrator".
-- "Auditing": Często mylnie wskazuje się Security Reviewer, ale on nie pozwala na "zarządzanie" (tylko podgląd). Jeśli musisz zarówno zarządzać, jak i audytować – potrzebujesz Administratora Organizacji.
-- Hierarchia: Pamiętaj, że Admin Organizacji "dziedziczy" uprawnienia w dół do wszystkich folderów i projektów.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Take over management" + "Organization resource" = Organization Administrator.
+- Pamiętaj, że rola ta sama w sobie nie daje dostępu do danych (np. do odczytu plików w GCS), ale pozwala na nadanie SOBIE (lub innym) dowolnych uprawnień w całej organizacji.
+- Jest to rola typu "wszechmocnego" administratora w kontekście hierarchii zasobów.
+
+Kluczowe zagadnienia do powtórzenia:
+- Hierarchia zasobów Google Cloud (Org -> Folder -> Project)
+- Predefiniowane role na poziomie organizacji
+- Cloud IAM Inheritance (Dziedziczenie uprawnień)
 
 Dokumentacja:
-<a href="https://cloud.google.com/resource-manager/docs/access-control-org" target="_blank">https://cloud.google.com/resource-manager/docs/access-control-org</a>
+<a href="https://cloud.google.com/resource-manager/docs/creating-managing-organization#organization_administrator_role" target="_blank">https://cloud.google.com/resource-manager/docs/creating-managing-organization#organization_administrator_role</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -113,21 +120,20 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Rola ta powinna być nadawana z ogromną ostrożnością (zasada "Least Privilege"). Zazwyczaj zaleca się posiadanie co najmniej dwóch kont z tą rolą, zabezpieczonych sprzętowym kluczem MFA, aby uniknąć ryzyka "lockoutu" (utraty dostępu do zarządzania organizacją).</p>
+<p><b>Analiza spornych kwestii (AI):</b> Niektórzy inżynierowie uważają, że Security Reviewer (B) wystarczy do audytu. Jednak pytanie mówi o 'managing permissions AND auditing'. Tylko rola Administratora Organizacji daje władzę nad oboma tymi aspektami na najwyższym poziomie hierarchii.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/access-control-org" target="_blank">https://cloud.google.com/resource-manager/docs/access-control-org</a></li>
+<li><a href="https://cloud.google.com/resource-manager/docs/creating-managing-organization#organization_administrator_role" target="_blank">https://cloud.google.com/resource-manager/docs/creating-managing-organization#organization_administrator_role</a></li>
 </ul>
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -142,9 +148,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

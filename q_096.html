@@ -89,17 +89,26 @@ You are the project owner for a regulated workload that runs in a project you ow
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Potwierdzona odpowiedź: B (Policy Analyzer)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Policy Analyzer: Pozwala na tworzenie raportów 'kto ma dostęp do czego'. Potrafi odpowiedzieć na skomplikowane pytania uwzględniając grupy i hierarchię projektów, co jest idealnym dowodem (audit evidence) dla audytorów.
+Wyjaśnienie: 
+Policy Analyzer to narzędzie w GCP, które pozwala na głęboką analizę tego, kto ma dostęp do jakich zasobów. W przeciwieństwie do prostego przeglądu IAM, Policy Analyzer potrafi rozwinąć grupy i konta serwisowe, dając pełny obraz uprawnień, co jest niezbędne jako dowód dla audytora.
 
-Dlaczego inne są błędne:
-A. Policy Troubleshooter: Służy do sprawdzania, dlaczego KONKRETNY użytkownik nie ma dostępu do KONKRETNEGO zasobu TERAZ. Nie nadaje się do masowych raportów audytowych.
-C. IAM Recommender: Podpowiada jak ZMNIEJSZYĆ uprawnienia, ale nie raportuje aktualnego stanu dla audytu.
-D. Policy Simulator: Sprawdza wpływ zmiany uprawnień ZANIM ją wprowadzisz.
+Dlaczego pozostałe są błędne:
+A. Policy Troubleshooter służy do sprawdzania, dlaczego konkretny użytkownik NIE ma dostępu do zasobu w danym momencie.
+C. IAM Recommender sugeruje usunięcie nadmiarowych uprawnień, nie służy do generowania raportów dowodowych.
+D. Policy Simulator pozwala testować zmiany w uprawnieniach przed ich wprowadzeniem, aby uniknąć błędów.
 
-Konsensus społeczności ExamTopics: 100% na B. Policy Analyzer to główne narzędzie audytowe IAM.
+Wskazówki egzaminacyjne (Tips & Tricks):
+Raport dla audytora (kto ma dostęp) = Policy Analyzer.
+
+Kluczowe zagadnienia do powtórzenia:
+- IAM Policy Analyzer
+- Access Reviews
+- GCP Auditing tools
+
+Dokumentacja:
+<a href="https://cloud.google.com/iam/docs/policy-analyzer-overview" target="_blank">https://cloud.google.com/iam/docs/policy-analyzer-overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

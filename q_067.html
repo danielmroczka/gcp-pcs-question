@@ -88,26 +88,29 @@ A company is backing up logs to Cloud Storage. Analysts should only access logs 
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Poprawna odpowiedź: A
+<pre>
+Potwierdzona odpowiedź: A (Pub/Sub + Cloud Functions + DLP scan)
 
-Analiza poprawności:
-Wymóg segregacji danych z PII w czasie rzeczywistym wymaga zautomatyzowanego potoku przetwarzania zdarzeń.
-1. Cloud Storage Trigger + Cloud Functions: Każde przesłanie pliku (Object Finalize) wyzwala zdarzenie, które jest przekazywane przez Pub/Sub do Cloud Functions.
-2. DLP API: Funkcja wywołuje Cloud DLP (Data Loss Prevention), aby sprawdzić zawartość pliku pod kątem obecności PII.
-3. Segregacja: Jeśli DLP potwierdzi obecność PII, Cloud Function przenosi obiekt do bezpiecznego bucketa, do którego dostęp ma tylko administrator, zapewniając zgodność z polityką prywatności.
+Wyjaśnienie: 
+To rozwiązanie implementuje architekturę sterowaną zdarzeniami (event-driven). Każdy upload do bucketu wyzwala funkcję Cloud Function, która przesyła dane do Cloud DLP API. Jeśli DLP wykryje dane wrażliwe (PII), funkcja może automatycznie przenieść plik do bezpiecznego bucketu administratora, zapewniając izolację danych wrażliwych od analityków.
 
 Dlaczego pozostałe są błędne:
-B. Upload do obu bucketów: Jest to rozwiązanie kosztowne (podwójna opłata za storage) i niebezpieczne – PII nadal trafia do współdzielonego bucketa, co samo w sobie jest naruszeniem zasad.
-C. Object Lifecycle Management (OLM): Służy do automatycznego usuwania starych plików lub zmiany ich klasy przechowywania, ale nie posiada wbudowanej logiki inspekcji zawartości plików pod kątem PII.
-D. Cloud Storage Trigger dla PII: Cloud Storage nie posiada natywnego wyzwalacza "wykryj PII". Trigger uruchamia się po zmianie stanu obiektu, a inspekcja musi zostać wykonana przez zewnętrzny kod (Cloud Functions + DLP).
+B. Przesyłanie do obu bucketów narusza zasadę bezpieczeństwa, ponieważ PII trafia do bucketu współdzielonego (nawet jeśli zostanie później usunięte).
+C. Object Lifecycle Management służy do zarządzania czasem życia obiektów (np. przenoszenie do Coldline po 30 dniach), a nie do analizy zawartości pod kątem PII.
+D. Nie istnieje natywny trigger Cloud Storage 'on PII data upload'. Triggery reagują na zdarzenia (np. OBJECT_FINALIZE), a zawartość musi sprawdzić kod (np. w Cloud Functions).
 
-Wskazówki egzaminacyjne:
-- "Segregacja danych" w oparciu o treść = zawsze myśl o Cloud DLP.
-- "Real-time" / "Automatyzacja po zdarzeniu" = zawsze myśl o Cloud Functions + Pub/Sub.
-- Pamiętaj, że Cloud Storage OLM nie "widzi" treści plików (tylko metadane).
+Wskazówki egzaminacyjne (Tips & Tricks):
+Dla zadań związanych z automatyczną reakcją na zawartość plików w GCS, standardowym wzorcem jest: GCS Trigger -> Cloud Function -> DLP API.
+
+Kluczowe zagadnienia do powtórzenia:
+- Cloud DLP (Data Loss Prevention)
+- Cloud Functions triggers
+- Cloud Storage security
 
 Dokumentacja:
-<a href="https://cloud.google.com/dlp/docs/creating-dlp-jobs" target="_blank">https://cloud.google.com/dlp/docs/creating-dlp-jobs</a></pre>
+<a href="https://cloud.google.com/dlp/docs/inspecting-storage" target="_blank">https://cloud.google.com/dlp/docs/inspecting-storage</a>
+<a href="https://cloud.google.com/functions/docs/calling/storage" target="_blank">https://cloud.google.com/functions/docs/calling/storage</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

@@ -64,15 +64,14 @@
 <h2>Question 42 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You need to ensure that specific sensitive data in a BigQuery table is only visible to authorized users. What is the most granular way to achieve this?
+A DevOps team will create a new container to run on Google Kubernetes Engine. As the application will be internet-facing, they want to minimize the attack surface of the container. What should they do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Dataset-level permissions</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Table-level permissions</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Row-level security</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Column-level security using policy tags</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use Cloud Build to build the container images.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Build small containers using small base images.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Delete non-used versions from Container Registry.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use a Continuous Delivery tool to deploy the application.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +79,7 @@ You need to ensure that specific sensitive data in a BigQuery table is only visi
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">D</span>
+<span class="correct-answer">B</span>
 <br/>
 </span>
 </div>
@@ -88,38 +87,52 @@ You need to ensure that specific sensitive data in a BigQuery table is only visi
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: D.
+<pre>
+Potwierdzona odpowiedź: B (Build small containers using small base images)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Column-level security: To najbardziej granularna (szczegółowa) metoda kontroli dostępu w BigQuery. Pozwala na przypisanie tagów polityk (policy tags) do konkretnych kolumn (np. numer karty kredytowej) i ograniczenie widoczności tylko dla wybranych osób, mimo że widzą one resztę tabeli.
+Wyjaśnienie:
+Minimalizacja powierzchni ataku (attack surface) w kontenerach polega na usunięciu wszystkiego, co nie jest niezbędne do działania aplikacji.
+1. Małe obrazy bazowe (Small base images): Używanie minimalistycznych obrazów (np. Alpine Linux, Distroless) zamiast pełnych dystrybucji (np. Ubuntu, Debian) znacząco redukuje liczbę zainstalowanych pakietów, powłok (shells) i narzędzi systemowych.
+2. Korzyści: Mniej zainstalowanego oprogramowania oznacza mniej potencjalnych podatności (CVE), które haker może wykorzystać po przejęciu kontenera. Obrazy "Distroless" nie zawierają nawet managera pakietów ani powłoki sh/bash, co dramatycznie utrudnia życie napastnikowi.
 
-Dlaczego inne są błędne:
-A. Dataset-level: Daje dostęp do wszystkich tabel w zbiorze - najmniej granularne.
-B. Table-level: Daje dostęp do wszystkich danych w tabeli - mniej granularne niż kolumny.
-C. Row-level security: Służy do filtrowania wierszy (np. dany handlowiec widzi tylko swoich klientów), ale nie chroni konkretnych atrybutów (kolumn) we wszystkich wierszach.
+Dlaczego pozostałe są błędne:
+A. Cloud Build: To usługa do budowania obrazów (CI). Sam wybór narzędzia do budowania nie wpływa bezpośrednio na zawartość obrazu i jego powierzchnię ataku. Można zbudować "ciężki" i niebezpieczny obraz za pomocą Cloud Build.
+C. Usuwanie starych wersji: To dobra praktyka porządkowa i oszczędność miejsca, ale nie minimalizuje powierzchni ataku kontenera, który jest aktualnie uruchomiony w GKE.
+D. Continuous Delivery: Narzędzia CD służą do automatyzacji wdrożeń. Podobnie jak w przypadku Cloud Build, samo zautomatyzowanie wdrożenia nie zmienia struktury bezpieczeństwa wnętrza kontenera.
 
-Konsensus społeczności ExamTopics: Prawie 100% na D. Słowo 'granular' w pytaniu o BQ prawie zawsze wskazuje na Column lub Row level security.</pre>
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Minimize attack surface" w kontekście kontenerów = "Lean images", "Small base images", "Distroless".
+- Pamiętaj o "Multi-stage builds" w Dockerze – to technika pozwalająca na użycie ciężkich narzędzi w fazie budowania i skopiowanie tylko binarnego pliku do finalnego, małego obrazu.
+- Szukaj odpowiedzi, które promują usunięcie zbędnych narzędzi (np. SSH, curl, ping) z obrazu produkcyjnego.
+
+Kluczowe zagadnienia do powtórzenia:
+- Container security best practices.
+- Distroless images.
+- Multi-stage Docker builds.
+
+Dokumentacja:
+<a href="https://cloud.google.com/architecture/best-practices-for-building-containers#optimize_for_security" target="_blank">Best practices for building containers - GCP</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Column-level security integruje się z Data Catalog. Nawet jeśli użytkownik wykona zapytanie 'SELECT *', kolumny, do których nie ma uprawnień, zostaną zablokowane (wyrzuci błąd dostępu).</p>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p><b>Analiza spornych kwestii (AI):</b> Spośród wszystkich opcji, tylko B bezpośrednio odnosi się do "wnętrza" kontenera. Pozostałe opcje dotyczą procesu (A, D) lub cyklu życia (C). W bezpieczeństwie kontenerów panuje zasada: "Czego nie ma w obrazie, tego nie da się zhakować".</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/bigquery/docs/column-level-security-intro" target="_blank">https://cloud.google.com/bigquery/docs/column-level-security-intro</a></li>
+<li><a href="https://github.com/GoogleContainerTools/distroless" target="_blank">Google Distroless Images (GitHub)</a></li>
 </ul>
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +147,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

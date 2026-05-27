@@ -90,20 +90,27 @@ In order to meet PCI DSS requirements, a customer wants to ensure that all outbo
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: CD (Compute Engine oraz Google Kubernetes Engine)
+Potwierdzona odpowiedź: CD (Compute Engine oraz Google Kubernetes Engine)
 
-Analiza poprawności:
-PCI DSS (wymóg 1.2.1) nakłada obowiązek ograniczania ruchu wychodzącego (egress) tylko do niezbędnych, autoryzowanych połączeń.
-- Compute Engine (C): Jako rozwiązanie IaaS (Infrastructure as a Service), daje pełną kontrolę nad siecią VPC. Administratorzy mogą definiować restrykcyjne reguły Firewall (Egress Firewall Rules), które blokują cały ruch wychodzący domyślnie, a zezwalają tylko na specyficzne, wymagane połączenia.
-- Google Kubernetes Engine (D): GKE działa wewnątrz sieci VPC. Umożliwia wykorzystanie polityk sieciowych (Kubernetes Network Policies) oraz reguł firewall VPC na poziomie węzłów (nodes), co pozwala na precyzyjne ograniczenie ruchu wychodzącego z kontenerów i węzłów.
+Wyjaśnienie: 
+PCI DSS (wymóg 1.2.1) nakłada obowiązek ograniczania ruchu wychodzącego (egress) tylko do niezbędnych, autoryzowanych połączeń. W modelu współdzielonej odpowiedzialności, tylko usługi dające bezpośredni dostęp do warstwy sieciowej VPC pozwalają na pełną kontrolę ruchu wychodzącego bez dodatkowych mechanizmów:
+- Compute Engine (C): Jako rozwiązanie IaaS, umożliwia definiowanie reguł Egress Firewall, które mogą blokować cały ruch wychodzący domyślnie (deny all egress) i zezwalać tylko na specyficzne, autoryzowane cele.
+- Google Kubernetes Engine (D): GKE korzysta z sieci VPC i wspiera Network Policies, co pozwala na granularne ograniczanie ruchu na poziomie podów i węzłów, spełniając wymogi PCI bez dodatkowych kontroli kompensacyjnych.
 
 Dlaczego pozostałe są błędne:
-A, B (App Engine, Cloud Functions): Są to usługi typu serverless (PaaS). Ruch wychodzący z tych usług zazwyczaj przechodzi przez współdzieloną infrastrukturę Google (shared egress IPs), nad którą klient nie ma pełnej kontroli na poziomie sieciowym bez dodatkowych, złożonych konfiguracji (np. VPC Access Connector). Nie są to usługi "natywnie" podlegające pod VPC Firewall Egress w taki sam sposób jak instancje VM.
-E (Cloud Storage): Jest to usługa obiektowa (Storage-as-a-Service), a nie środowisko obliczeniowe generujące ruch sieciowy, który klient mógłby filtrować regułami firewall.
+A. App Engine: To usługa PaaS. Domyślnie ruch wychodzi przez współdzieloną pulę adresów IP Google. Aby go kontrolować zgodnie z PCI, wymagany jest Serverless VPC Access Connector, co stanowi "dodatkową kontrolę kompensacyjną".
+B. Cloud Functions: Podobnie jak App Engine, jest to usługa serverless wymagająca dodatkowych komponentów sieciowych do pełnej kontroli ruchu wychodzącego przez VPC.
+E. Cloud Storage: Jest to usługa typu Storage, a nie środowisko wykonawcze (compute), które inicjuje ruch sieciowy podlegający pod te same wymogi filtrowania egress co serwery.
 
-Wskazówki egzaminacyjne:
-- "PCI DSS" + "Restrict Egress": Szukaj usług IaaS/CaaS (VM, GKE), gdzie masz kontrolę nad VPC.
-- "Without additional compensating controls": Jeśli usługa serverless wymaga VPC Access Connector (by być w VPC), to jest to właśnie "dodatkowa kontrola" (compensating control).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Słowo-klucz "Restrict Egress" + "PCI DSS" w GCP prawie zawsze kieruje w stronę VPC Firewall Rules i usług IaaS/CaaS.
+- "Without additional compensating controls" wyklucza usługi serverless, które do wejścia w VPC potrzebują "VPC Access Connector".
+
+Kluczowe zagadnienia do powtórzenia:
+- PCI DSS Requirement 1.2.1 (Egress control)
+- VPC Firewall Rules (Ingress vs Egress)
+- Network Policies w klastrach GKE
+- Serverless VPC Access Connector
 
 Dokumentacja:
 <a href="https://cloud.google.com/vpc/docs/firewalls" target="_blank">https://cloud.google.com/vpc/docs/firewalls</a>
@@ -114,7 +121,7 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: CD</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Kluczowy jest termin "bez dodatkowych kontroli". Usługi serverless w GCP są domyślnie odizolowane od VPC i wymagają Connectorów, aby stały się częścią sieci podlegającej pod Firewall Rules. Zatem tylko VM i GKE oferują tę kontrolę "out-of-the-box".</p>
+<p><b>Analiza spornych kwestii (AI):</b> Głównym punktem debaty jest to, co Google uznaje za "dodatkową kontrolę". W oficjalnych materiałach szkoleniowych GCP, VPC Access Connector jest traktowany jako dodatkowy element infrastruktury, który trzeba wdrożyć i nim zarządzać, stąd przewaga Compute Engine i GKE, które mają natywny dostęp do VPC.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc/docs/firewalls" target="_blank">https://cloud.google.com/vpc/docs/firewalls</a></li>
@@ -125,10 +132,10 @@ Dokumentacja:
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -143,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
 

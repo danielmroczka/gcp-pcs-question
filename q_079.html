@@ -89,17 +89,26 @@ An organization's security and risk management teams are concerned about where t
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Potwierdzona odpowiedź: B (Defending against XSS and SQLi attacks)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Application-level attacks: App Engine to usługa PaaS. Google zarządza serwerami, systemem operacyjnym i środowiskiem uruchomieniowym. Odpowiedzialność klienta skupia się na KODZIE aplikacji. Ochrona przed błędami logicznymi, takimi jak XSS czy SQL Injection, leży w 100% po stronie programistów klienta.
+Wyjaśnienie: 
+W modelu PaaS (App Engine), Google odpowiada za system operacyjny, runtime i infrastrukturę. Odpowiedzialność klienta kończy się na kodzie aplikacji. Zabezpieczenie przed atakami typu Cross-Site Scripting (XSS) czy SQL Injection leży całkowicie po stronie dewelopera.
 
-Dlaczego inne są błędne:
-A. VPC Flow Logs: W App Engine Standard nie masz nawet dostępu do tradycyjnej sieci VPC w taki sposób, aby zarządzać Flow Logami (to rola Google).
-C. Guest OS patches: To całkowita odpowiedzialność Google w modelu PaaS.
-D. Encrypting data: Google szyfruje dane domyślnie 'at rest'. Choć możesz dodać własne klucze, 'obrona przed atakami' w kodzie jest bardziej unikalną i krytyczną odpowiedzialnością klienta w tym modelu.
+Dlaczego pozostałe są błędne:
+A. VPC Flow Logs w App Engine Standard są zarządzane przez Google.
+C. Aktualizacje systemu operacyjnego (Guest OS) w PaaS to zadanie Google.
+D. Domyślne szyfrowanie danych (encryption at rest) jest zapewniane automatycznie przez Google.
 
-Konsensus społeczności ExamTopics: 100% na B. Klasyka modelu PaaS.
+Wskazówki egzaminacyjne (Tips & Tricks):
+PaaS = Twoja aplikacja, Twoje dane, Twoje bezpieczeństwo kodu.
+
+Kluczowe zagadnienia do powtórzenia:
+- Shared Responsibility Model
+- PaaS Security
+- App Engine security features
+
+Dokumentacja:
+<a href="https://cloud.google.com/security/shared-responsibility-model" target="_blank">https://cloud.google.com/security/shared-responsibility-model</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

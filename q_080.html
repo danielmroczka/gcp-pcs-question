@@ -89,17 +89,26 @@ An engineering team is launching a web application that will be public on the in
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Potwierdzona odpowiedź: A (Cloud Armor)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Cloud Armor: Jest to jedyna usługa w GCP, która oferuje 'IP Blacklisting' i 'IP Whitelisting' na brzegu sieci (Edge) dla aplikacji webowych. Pozwala na zdefiniowanie polityk bezpieczeństwa, które odrzucają ruch ze wskazanych zakresów IP zanim trafią do Load Balancera.
+Wyjaśnienie: 
+Cloud Armor to usługa typu WAF (Web Application Firewall) i ochrony przed DDoS, która integruje się z HTTP(S) Load Balancerem. Pozwala na tworzenie czarnych i białych list adresów IP oraz ochronę przed typowymi atakami (OWASP Top 10) na brzegu sieci Google.
 
-Dlaczego inne są błędne:
-B. Network LB: Działa na warstwie 4. Filtrowanie IP musiałbyś robić ręcznie w firewallu VPC na każdej maszynie, co jest mniej efektywne i trudniejsze w zarządzaniu.
-C. SSL Proxy LB: Nie posiada wbudowanego silnika WAF ani tak łatwego zarządzania czarnymi listami IP jak Cloud Armor.
-D. NAT Gateway: Służy do ukrywania adresów IP maszyn wychodzących do internetu, nie chroni aplikacji przed ruchem przychodzącym.
+Dlaczego pozostałe są błędne:
+B. Network LB działa w warstwie 4 i nie oferuje zaawansowanego filtrowania IP na poziomie aplikacji.
+C. SSL Proxy LB również nie posiada wbudowanych funkcji WAF/IP Blacklisting w taki sposób jak Cloud Armor.
+D. NAT Gateway służy do ruchu wychodzącego, a nie ochrony ruchu przychodzącego do aplikacji.
 
-Konsensus społeczności ExamTopics: 100% na A. Cloud Armor to standardowa odpowiedź na wszystko co dotyczy 'IP blocking' dla publicznych stron WWW.
+Wskazówki egzaminacyjne (Tips & Tricks):
+Blokowanie IP dla stron WWW / Load Balancera = Cloud Armor.
+
+Kluczowe zagadnienia do powtórzenia:
+- Cloud Armor
+- WAF (Web Application Firewall)
+- Global HTTP(S) Load Balancing security
+
+Dokumentacja:
+<a href="https://cloud.google.com/armor/docs/cloud-armor-overview" target="_blank">https://cloud.google.com/armor/docs/cloud-armor-overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

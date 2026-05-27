@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="pl">
 <head>
 <meta charset="utf-8"/>
@@ -65,14 +64,14 @@
 <h2>Question 64 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-In an effort for your company messaging app to comply with FIPS 140-2, a decision was made to use GCP compute and network services. The instances use Local SSDs for data caching and UDP for instance-to-instance communications. Which options should you recommend to meet the requirements?
+In an effort for your company messaging app to comply with FIPS 140-2, a decision was made to use GCP compute and network services. The messaging app architecture includes a Managed Instance Group (MIG) that controls a cluster of Compute Engine instances. The instances use Local SSDs for data caching and UDP for instance-to-instance communications. The app development team is willing to make any changes necessary to comply with the standard. Which options should you recommend to meet the requirements?
 </p>
 <div class="question-choices-container">
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Encrypt all cache storage and VM-to-VM communication using the BoringCrypto module.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Set Disk Encryption on the Instance Template to customer-managed key and use BoringSSL for all data transit.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Change the app instance-to-instance communications from UDP to TCP and enable BoringSSL.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Set Disk Encryption to Google-managed Key and use BoringSSL library.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Set Disk Encryption on the Instance Template used by the MIG to customer-managed key and use BoringSSL for all data transit between instances.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Change the app instance-to-instance communications from UDP to TCP and enable BoringSSL on clients' TLS connections.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Set Disk Encryption on the Instance Template used by the MIG to Google-managed Key and use BoringSSL library on all instance-to-instance communications.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -88,44 +87,52 @@ In an effort for your company messaging app to comply with FIPS 140-2, a decisio
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Poprawna odpowiedź: A
+<pre>
+Potwierdzona odpowiedź: A (Encrypt all cache storage and VM-to-VM communication using the BoringCrypto module.)
 
-Analiza poprawności:
-Wymóg zgodności FIPS 140-2 (Federal Information Processing Standard) w chmurze wymaga, aby wszystkie operacje kryptograficzne były wykonywane przez moduły certyfikowane przez NIST.
-1. BoringCrypto: Google Cloud wykorzystuje moduł BoringCrypto w swoich instancjach i usługach. Jest to zweryfikowana wersja biblioteki BoringSSL, która spełnia wymogi FIPS 140-2.
-2. Zastosowanie: W przypadku aplikacji komunikującej się przez UDP i korzystającej z Local SSD (dane w spoczynku), zapewnienie zgodności FIPS wymaga włączenia szyfrowania przy użyciu tego certyfikowanego modułu zarówno dla danych zapisywanych na dysku, jak i dla ruchu sieciowego (wspierającego TLS/SSL/DTLS).
+Wyjaśnienie:
+FIPS 140-2 to amerykański standard federalny określający wymagania bezpieczeństwa dla modułów kryptograficznych. Google używa biblioteki `BoringSSL`, która zawiera moduł `BoringCrypto`, posiadający certyfikację FIPS 140-2.
+1. BoringCrypto: Aby aplikacja działająca na infrastrukturze Google była w pełni zgodna z FIPS, musi używać certyfikowanych modułów do wszelkich operacji kryptograficznych – zarówno dla danych "at rest" (w tym przypadku cache na Local SSD), jak i danych "in transit" (komunikacja między instancjami).
+2. Local SSD: Domyślne szyfrowanie GCP chroni dane na dyskach, ale w przypadku rygorystycznych wymogów FIPS na poziomie aplikacji, to aplikacja sama powinna zarządzać szyfrowaniem przy użyciu zatwierdzonego modułu (BoringCrypto).
+3. UDP/TCP: Standard FIPS nie zabrania używania UDP, ale wymaga, aby sama kryptografia użyta do zabezpieczenia tego ruchu była zgodna ze standardem.
 
 Dlaczego pozostałe są błędne:
-B. Customer-managed keys (CMEK): Choć CMEK jest dobrym wzorcem, sama konfiguracja CMEK dla dysku nie zapewnia automatycznie, że cała komunikacja sieciowa instancji (zwłaszcza UDP) jest szyfrowana za pomocą FIPS-validated modułów.
-C. Zmiana UDP na TCP: Choć zmiana protokołu może ułatwić użycie standardowego TLS, pytanie wymaga spełnienia FIPS w ramach istniejącej architektury, a nie jej drastycznej przebudowy, jeśli istnieją bardziej bezpośrednie sposoby (np. wykorzystanie bibliotek zgodnych z FIPS wewnątrz aplikacji).
-D. Google-managed Key: Klucze zarządzane przez Google są szyfrowane zgodnie z FIPS, ale nie dają administratorowi zgodności (compliance officer) pełnej kontroli nad cyklem życia klucza, co często jest wymogiem w rygorystycznych regulacjach.
+B, D: Skupiają się na zarządzaniu kluczami (CMEK/GMEK), co jest istotne, ale samo zarządzanie kluczem nie gwarantuje, że *moduł użyty do szyfrowania* (biblioteka wewnątrz aplikacji) posiada certyfikat FIPS 140-2.
+C: Zmiana protokołu z UDP na TCP nie jest wymagana przez FIPS. Kluczem jest biblioteka kryptograficzna, a nie protokół warstwy transportowej.
 
-Wskazówki egzaminacyjne:
-- FIPS 140-2 = szukaj "BoringCrypto" lub "validated modules".
-- Jeśli aplikacja korzysta z niestandardowego protokołu (UDP) lub dysków (Local SSD), certyfikacja musi dotyczyć całego łańcucha kryptograficznego.
-- Nie daj się zwieść "Customer-managed keys" w pytaniach o FIPS – to dwa różne aspekty (zarządzanie kluczem vs moduł kryptograficzny).
+Tips & Tricks:
+- Słowo "FIPS 140-2" w kontekście Google Cloud = "BoringCrypto" lub "BoringSSL".
+- Google Cloud posiada certyfikację FIPS dla swojej infrastruktury, ale aplikacje klienta muszą same zadbać o użycie odpowiednich bibliotek, aby zachować zgodność na poziomie "Guest OS" i wyżej.
+- Local SSD w GKE/GCE są szyfrowane domyślnie, ale certyfikacja FIPS na poziomie aplikacji wymaga jawnego użycia certyfikowanego modułu.
+
+Zagadnienia:
+- FIPS 140-2 Compliance in GCP.
+- BoringCrypto module (Google's FIPS-validated library).
+- Encryption at rest vs. Encryption in transit requirements.
 
 Dokumentacja:
-<a href="https://cloud.google.com/security/fips-140-2-compliance" target="_blank">https://cloud.google.com/security/fips-140-2-compliance</a></pre>
+<a href="https://cloud.google.com/security/fips" target="_blank">https://cloud.google.com/security/fips</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> FIPS 140-2 to standard sprzętowo-programowy. W GCP kluczem jest zrozumienie, że Google zapewnia certyfikowaną bibliotekę (BoringCrypto). Użytkownik musi tylko upewnić się, że jego aplikacja i konfiguracja instancji z niej korzystają.</p>
+<p><b>Głęboka analiza:</b> Wybór BoringCrypto zapewnia, że operacje takie jak `AES-GCM` czy `SHA-256` są wykonywane przez kod, który przeszedł rygorystyczne testy NIST. Jest to niezbędne dla klientów z sektora publicznego i regulowanego.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/security/fips-140-2-compliance" target="_blank">https://cloud.google.com/security/fips-140-2-compliance</a></li>
+<li><a href="https://csrc.nist.gov/projects/cryptographic-module-validation-program/certificate/3678" target="_blank">NIST: BoringCrypto FIPS 140-2 Certificate</a></li>
 </ul>
+</div>
 </div>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -140,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
 </body>

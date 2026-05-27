@@ -64,15 +64,14 @@
 <h2>Question 24 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-A company's application is deployed with a user-managed Service Account key. You want to use Google-recommended practices to rotate the key. What should you do?
+A company's application is deployed with a user-managed Service Account key. You want to use Google-recommended practices to rotate the key. <br>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Run gcloud iam service-accounts enable-auto-rotate.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Run gcloud iam service-accounts keys rotate.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a new key, update the application, and delete the old key.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Store the old key as a backup.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Open Cloud Shell and run gcloud iam service-accounts enable-auto-rotate --iam-account=IAM_ACCOUNT.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Open Cloud Shell and run gcloud iam service-accounts keys rotate --iam-account=IAM_ACCOUNT --key=NEW_KEY.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a new key, and use the new key in the application. Delete the old key from the Service Account.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a new key, and use the new key in the application. Store the old key on the system as a backup key.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,24 +88,27 @@ A company's application is deployed with a user-managed Service Account key. You
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Create a new key, update the application, and delete the old key.)
+Potwierdzona odpowiedź: C (Create a new key, and use the new key in the application. Delete the old key from the Service Account.)
 
-Analiza poprawności:
-Google Cloud nie oferuje automatycznej rotacji dla kluczy serwisowych (Service Account Keys) w formacie JSON, które zostały pobrane przez użytkownika ("user-managed"). Bezpieczna procedura rotacji, zgodna z najlepszymi praktykami, to:
-1. Utwórz nowy klucz (z nowym identyfikatorem).
-2. Wdróż aplikację z nowym kluczem.
-3. Upewnij się, że aplikacja poprawnie uwierzytelnia się nowym kluczem.
-4. Usuń stary klucz.
-Taka procedura gwarantuje brak przestojów w działaniu aplikacji.
+Wyjaśnienie: 
+Google Cloud nie oferuje automatycznej rotacji dla kluczy serwisowych zarządzanych przez użytkownika (user-managed Service Account keys) w formacie JSON. Zalecaną i najbezpieczniejszą praktyką rotacji, która minimalizuje ryzyko przestojów, jest procedura manualna:
+1. Utworzenie nowego klucza (nowa para publiczny/prywatny).
+2. Zaktualizowanie konfiguracji aplikacji tak, aby korzystała z nowego klucza.
+3. Zweryfikowanie poprawności działania aplikacji (test).
+4. Usunięcie starego klucza z konta serwisowego w IAM, co trwale unieważnia go w całym systemie Google Cloud.
 
 Dlaczego pozostałe są błędne:
-A, B (Auto-rotate): Takie komendy nie istnieją w `gcloud` dla kluczy typu "user-managed". Google automatyzuje rotację wyłącznie dla kluczy zarządzanych przez system (system-managed keys), do których użytkownik nie ma bezpośredniego dostępu.
-D (Store old key): Przechowywanie starych kluczy "na wszelki wypadek" jest poważnym naruszeniem bezpieczeństwa. Rotacja ma na celu unieważnienie starych kluczy, aby ograniczyć skutki ich ewentualnego wycieku w przeszłości.
+A, B. gcloud commands: Komendy takie jak `enable-auto-rotate` czy `keys rotate` dla kluczy typu "user-managed" (JSON pobrany na dysk) po prostu nie istnieją w narzędziu `gcloud`. Automatyczna rotacja dotyczy wyłącznie kluczy zarządzanych przez Google (Google-managed keys), do których użytkownik nigdy nie ma dostępu.
+D. Store old key as backup: Przechowywanie starych kluczy "na zapas" jest poważnym błędem bezpieczeństwa. Ideą rotacji jest właśnie to, aby stary klucz przestał działać, ograniczając okno czasowe, w którym ewentualnie przejęty przez napastnika klucz mógłby zostać użyty.
 
-Wskazówki egzaminacyjne:
-- "User-managed key" + "Rotate": Szukaj procedury ręcznej (utwórz nowy -> usuń stary).
-- "Automatically rotate": Jeśli w pytaniu o klucze SA widzisz "auto-rotate", to prawie zawsze jest to dystraktor.
-- Eliminacja: Zawsze usuwaj stare klucze po rotacji.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "User-managed key" + "Rotate" = Zawsze oznacza procedurę: Nowy klucz -> Update aplikacji -> Usunięcie starego.
+- Pamiętaj: Jeśli możesz pobrać klucz JSON, jest on "user-managed". Google nigdy nie rotuje takich kluczy automatycznie.
+
+Kluczowe zagadnienia do powtórzenia:
+- Zarządzanie kluczami kont serwisowych (Service Account Keys)
+- Najlepsze praktyki rotacji (Zero Downtime Rotation)
+- Google-managed vs User-managed keys
 
 Dokumentacja:
 <a href="https://cloud.google.com/iam/docs/creating-managing-service-account-keys#rotating" target="_blank">https://cloud.google.com/iam/docs/creating-managing-service-account-keys#rotating</a>
@@ -117,7 +119,7 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Najlepszą praktyką jest całkowite odejście od kluczy JSON (Service Account Keys) na rzecz tożsamości instancji (dla VM/GKE) lub Workload Identity Federation (dla innych usług), co całkowicie eliminuje potrzebę manualnej rotacji.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Współczesne zalecenia bezpieczeństwa Google sugerują całkowite unikanie kluczy JSON (Service Account Keys) na rzecz tożsamości instancji lub Workload Identity Federation, co eliminuje problem rotacji. Jeśli jednak musisz ich używać, procedura opisana w punkcie C jest jedynym poprawnym i wspieranym sposobem na ich odświeżenie.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/iam/docs/creating-managing-service-account-keys#rotating" target="_blank">https://cloud.google.com/iam/docs/creating-managing-service-account-keys#rotating</a></li>
@@ -128,10 +130,10 @@ Dokumentacja:
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -146,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
 

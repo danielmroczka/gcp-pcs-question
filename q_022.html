@@ -89,20 +89,24 @@ A website design company recently migrated all customer sites to App Engine. Som
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Enable Cloud Identity-Aware Proxy (IAP).)
+Potwierdzona odpowiedź: C (Enable Cloud Identity-Aware Proxy (IAP))
 
-Analiza poprawności:
-Identity-Aware Proxy (IAP) to kluczowe narzędzie Google w architekturze "Zero Trust" (BeyondCorp). Pozwala ono na zabezpieczenie aplikacji webowych (np. na App Engine) bez konieczności wystawiania ich bezpośrednio do publicznego internetu (brak publicznego IP) lub wymuszania użycia VPN. IAP weryfikuje tożsamość użytkownika (przez Cloud Identity) oraz kontekst (np. czy urządzenie jest zarządzane, lokalizacja) przed przyznaniem dostępu. Dla pracowników jest to najbardziej wygodne rozwiązanie – dostęp odbywa się przez zwykłą przeglądarkę, z dowolnego miejsca.
+Wyjaśnienie: 
+Identity-Aware Proxy (IAP) to kluczowe narzędzie Google Cloud realizujące architekturę "Zero Trust" (BeyondCorp). Pozwala ono na zabezpieczenie aplikacji webowych (jak App Engine) bez konieczności używania VPN. IAP weryfikuje tożsamość użytkownika (poprzez Cloud Identity/Google Groups) oraz opcjonalnie kontekst żądania (np. lokalizacja, stan urządzenia) przed przyznaniem dostępu. Jest to rozwiązanie idealne dla pracowników i klientów pracujących z różnych lokalizacji, ponieważ wymaga jedynie zalogowania się na konto Google w przeglądarce.
 
 Dlaczego pozostałe są błędne:
-A (.htaccess): App Engine to środowisko PaaS/Serverless. Nie obsługuje bezpośrednio serwerów WWW typu Apache/Nginx, więc pliki .htaccess nie mają tam zastosowania.
-B (App Engine firewall): Reguły te operują na adresach IP. Jeśli pracownicy są "w dowolnej lokalizacji" (używają domowego internetu, kawiarni, hoteli), ich adresy IP są dynamiczne i nieprzewidywalne, więc nie da się stworzyć skutecznej listy dozwolonych adresów.
-D (Cloud VPN): VPN wymusza na użytkowniku (pracowniku lub kliencie) instalację dodatkowego oprogramowania klienckiego i konfigurację tunelu. Jest to rozwiązanie znacznie trudniejsze w zarządzaniu i mniej wygodne ("overhead") niż IAP.
+A. .htaccess: Pliki .htaccess są specyficzne dla serwera Apache. App Engine jest usługą PaaS, która nie korzysta z tradycyjnej konfiguracji Apache w sposób umożliwiający prosty upload takiego pliku do kontroli dostępu.
+B. App Engine firewall: Reguły firewall w App Engine bazują na adresach IP. Ponieważ użytkownicy łączą się z "dowolnej lokalizacji", ich adresy IP są zmienne, co uniemożliwia stworzenie stabilnej białej listy (whitelist).
+D. Cloud VPN: Choć VPN zapewnia bezpieczny dostęp, wymaga on instalacji i konfiguracji oprogramowania klienckiego na urządzeniach użytkowników. Jest to znacznie bardziej skomplikowane i mniej skalowalne rozwiązanie dla szerokiej grupy klientów niż IAP.
 
-Wskazówki egzaminacyjne:
-- "Zero Trust" / "Any location": Szukaj IAP. To jedyna technologia GCP zaprojektowana do bezpiecznego dostępu bez VPN.
-- "In-progress sites": Często mylnie chce się użyć VPN, ale pamiętaj: VPN = trudna obsługa użytkowników; IAP = przeglądarka + zalogowanie się kontem Google.
-- Eliminacja: Jeśli widzisz VPN w kontekście dostępu dla pracowników do aplikacji webowych, zazwyczaj jest to dystraktor (zbyt skomplikowane).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Zero Trust" / "Any location" / "Remote access without VPN": To główne sygnały wskazujące na IAP.
+- IAP jest preferowanym rozwiązaniem Google dla dostępu administracyjnego i dostępu do wewnętrznych aplikacji webowych.
+
+Kluczowe zagadnienia do powtórzenia:
+- Identity-Aware Proxy (IAP) i jego warstwy (Layer 7)
+- Zasada BeyondCorp (Zero Trust)
+- Konfiguracja dostępu przez Google Groups w IAP
 
 Dokumentacja:
 <a href="https://cloud.google.com/iap" target="_blank">https://cloud.google.com/iap</a>
@@ -113,7 +117,7 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> IAP działa na poziomie warstwy 7 modelu OSI. Po włączeniu IAP dla aplikacji, App Engine odrzuca absolutnie wszystkie przychodzące żądania, które nie posiadają ważnego dowodu tożsamości wystawionego przez proxy Google.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Kluczowym elementem pytania jest "any location". Każda próba filtrowania po IP (opcja B) zawiedzie w świecie pracy zdalnej. IAP przesuwa punkt kontroli z adresu sieciowego (IP) na tożsamość użytkownika (Konto Google), co jest fundamentem nowoczesnego bezpieczeństwa chmurowego.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/iap" target="_blank">https://cloud.google.com/iap</a></li>
@@ -124,10 +128,10 @@ Dokumentacja:
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -142,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
 

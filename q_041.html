@@ -64,15 +64,14 @@
 <h2>Question 41 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization has many projects. You want to audit and enforce security policies across all projects. Which tool should you use?
+Your company runs a website that will store PII on Google Cloud Platform. To comply with data privacy regulations, this data can only be stored for a specific amount of time and must be fully deleted after this specific period. Data that has not yet reached the time period should not be deleted. You want to automate the process of complying with this regulation. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Forseti Security</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud IAM</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Stackdriver Logging</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Resource Manager</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Store the data in a single Persistent Disk, and delete the disk at expiration time.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Store the data in a single BigQuery table and set the appropriate table expiration time.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Store the data in a single Cloud Storage bucket and configure the bucket's Time to Live.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Store the data in a single BigTable table and set an expiration time on the column families.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +79,7 @@ Your organization has many projects. You want to audit and enforce security poli
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">C</span>
 <br/>
 </span>
 </div>
@@ -88,38 +87,52 @@ Your organization has many projects. You want to audit and enforce security poli
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: A.
+<pre>
+Potwierdzona odpowiedź: C (Cloud Storage Bucket + Object Lifecycle Management)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Forseti Security: Jest to zestaw narzędzi open-source (obecnie SCC Enterprise ma wiele jego funkcji), który pozwala na skanowanie całej organizacji pod kątem niezgodności z politykami (np. publiczne buckety, nieautoryzowane reguły firewall) i automatyczne naprawianie tych błędów.
+Wyjaśnienie:
+Aby zautomatyzować retencję i usuwanie danych PII zgodnie z przepisami (np. RODO), Google Cloud oferuje funkcję Object Lifecycle Management w usłudze Cloud Storage.
+1. Bucket Time to Live (TTL): Możemy skonfigurować zasadę cyklu życia (lifecycle rule), która automatycznie usunie obiekty po osiągnięciu określonego wieku (np. 30 dni od utworzenia). Jest to mechanizm natywny, darmowy i w pełni zautomatyzowany.
+2. Precyzja: Reguły te działają na poziomie poszczególnych obiektów, co oznacza, że każdy plik z PII zostanie usunięty dokładnie po upływie swojego czasu retencji, bez wpływu na dane, które jeszcze go nie osiągnęły.
 
-Dlaczego inne są błędne:
-B. Cloud IAM: Zarządza tym, kto ma dostęp, ale sam w sobie nie audytuje ani nie wymusza polityk infrastrukturalnych (np. typu VM czy regionu).
-C. Stackdriver Logging: Rejestruje zdarzenia, ale nie egzekwuje polityk ani nie raportuje automatycznie o ich naruszeniu bez dodatkowej konfiguracji alertów.
-D. Resource Manager: Służy do organizacji struktury (projekty, foldery), a nie do audytu technicznego bezpieczeństwa zasobów.
+Dlaczego pozostałe są błędne:
+A. Persistent Disk: Usunięcie całego dysku spowodowałoby utratę wszystkich danych naraz, niezależnie od tego, kiedy zostały zapisane. Nie pozwala to na selektywne usuwanie starych danych przy jednoczesnym zachowaniu nowych.
+B. BigQuery Table Expiration: Wygaśnięcie tabeli powoduje usunięcie całej tabeli. Choć BigQuery ma również "Partition Expiration" (wygasanie partycji), Cloud Storage jest zazwyczaj bardziej elastycznym i tańszym rozwiązaniem do przechowywania surowych danych PII/logów wymagających retencji. Opcja C jest tu bardziej standardową odpowiedzią dla "PII storage".
+D. BigTable: Chociaż BigTable posiada mechanizm "Garbage Collection" dla rodzin kolumn (column families) oparty na wieku (max age), jest to usługa typu NoSQL o wysokiej wydajności, która rzadko jest wybierana jako główne miejsce składowania PII w celu samej retencji – Cloud Storage jest tu rozwiązaniem bardziej oczywistym i prostszym w konfiguracji dla tego scenariusza.
 
-Konsensus społeczności ExamTopics: Zdecydowane A. Forseti to klasyczny przykład narzędzia do wymuszania 'compliance as code'.</pre>
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Słowo klucz "Automate deletion" + "Time period" = "Lifecycle Management" (Cloud Storage) lub "TTL".
+- Jeśli dane są plikami/obiektami, Cloud Storage jest zawsze pierwszym wyborem.
+- Pamiętaj, że reguły cyklu życia Cloud Storage mogą być używane również do przenoszenia danych do tańszych klas (np. z Standard do Archive) przed ich ostatecznym usunięciem.
+
+Kluczowe zagadnienia do powtórzenia:
+- Cloud Storage Object Lifecycle Management.
+- Klasy przechowywania danych w GCP.
+- Retencja danych i zgodność (compliance).
+
+Dokumentacja:
+<a href="https://cloud.google.com/storage/docs/lifecycle" target="_blank">Object Lifecycle Management w Cloud Storage</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Forseti składa się z modułów takich jak Inventory, Scanner i Enforcer. Scanner porównuje aktualny stan z Twoją zdefiniowaną polityką, a Enforcer może automatycznie przywrócić poprawną konfigurację.</p>
+<p><b>Sugerowana odpowiedź: C</b></p>
+<p><b>Analiza spornych kwestii (AI):</b> Niektórzy mogą wskazywać na BigQuery (B), ponieważ również posiada mechanizmy retencji. Jednak w kontekście egzaminacyjnym GCP, jeśli mowa o "bucket", "object lifecycle" i "automatyzacji usuwania danych wrażliwych", Cloud Storage jest odpowiedzią wzorcową ze względu na najniższy koszt i najprostszą implementację (native TTL).</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://forsetisecurity.org/" target="_blank">https://forsetisecurity.org/</a></li>
+<li><a href="https://cloud.google.com/storage/docs/lifecycle" target="_blank">Cloud Storage Lifecycle Rules</a></li>
 </ul>
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +147,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -64,14 +64,14 @@
 <h2>Question 34 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your company is using Cloud Dataproc. You want to be able to create, rotate, and destroy symmetric encryption keys used for persistent disks. What should you do?
+Your company is using Cloud Dataproc for its Spark and Hadoop jobs. You want to be able to create, rotate, and destroy symmetric encryption keys used for the persistent disks used by Cloud Dataproc. Keys can be stored in the cloud. <br>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use Cloud KMS to manage DEK.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use Cloud KMS to manage KEK.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use CSEK to manage DEK.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use CSEK to manage KEK.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use the Cloud Key Management Service to manage the data encryption key (DEK).</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use the Cloud Key Management Service to manage the key encryption key (KEK).</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use customer-supplied encryption keys to manage the data encryption key (DEK).</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use customer-supplied encryption keys to manage the key encryption key (KEK).</li>
 
 </ul>
 </div>
@@ -89,24 +89,29 @@ Your company is using Cloud Dataproc. You want to be able to create, rotate, and
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Use Cloud KMS to manage KEK.)
+Potwierdzona odpowiedź: B (Use the Cloud Key Management Service to manage the key encryption key (KEK).)
 
-Analiza poprawności:
-Szyfrowanie kopertowe (Envelope Encryption) to fundament bezpiecznego zarządzania danymi w chmurze. W tym modelu istnieją dwa typy kluczy:
-1. Klucz Danych (DEK - Data Encryption Key): Służy do szyfrowania właściwych danych (np. bloków dysku). Jest on generowany lokalnie dla wydajności i szybkości operacji.
-2. Klucz Szyfrujący Klucz (KEK - Key Encryption Key): Służy do zaszyfrowania (opakowania) klucza DEK. To właśnie tym kluczem (KEK) zarządzasz w usłudze Cloud KMS. KMS pozwala na jego rotację, wyłączenie czy zniszczenie – a więc kontrolujesz cykl życia klucza nadrzędnego, który chroni wszystkie Twoje klucze danych.
+Wyjaśnienie:
+Aby zarządzać cyklem życia kluczy (tworzenie, rotacja, niszczenie) przechowywanych w chmurze Google, należy użyć usługi Cloud Key Management Service (KMS). W modelu szyfrowania kopertowego (envelope encryption) stosowanym w GCP, użytkownik zarządza kluczem szyfrującym klucze (KEK - Key Encryption Key), który chroni (szyfruje) klucze danych (DEK - Data Encryption Key). Cloud KMS pozwala na pełną kontrolę nad KEK, w tym na automatyczną rotację i definiowanie polityk dostępu IAM.
 
 Dlaczego pozostałe są błędne:
-A, C (DEK): Użytkownik nigdy nie zarządza kluczami danych (DEK) bezpośrednio w Cloud KMS. DEK-i są efemeryczne, generowane "w locie" blisko danych i nie wymagają ręcznego zarządzania (rotacji/niszczenia).
-D (CSEK): To usługa "Customer-Supplied Encryption Keys", gdzie dostarczasz własny klucz do każdej operacji. Nie używasz do tego Cloud KMS jako centralnego magazynu zarządzania.
+A. Use the Cloud Key Management Service to manage the data encryption key (DEK): W modelu GCP to system automatycznie zarządza kluczami DEK. Użytkownik zarządza kluczami KEK w KMS, które z kolei szyfrują DEK-i. Nie zarządza się DEK-ami bezpośrednio w KMS.
+C. Use customer-supplied encryption keys to manage the data encryption key (DEK): CSEK (Customer-Supplied Encryption Keys) oznacza, że klucze są dostarczane przez użytkownika z zewnątrz przy każdej operacji i nie są trwale przechowywane w chmurze. Pytanie mówi o kluczach, które mogą być przechowywane w chmurze. Dodatkowo, użytkownik nie zarządza bezpośrednio DEK-ami w tym modelu.
+D. Use customer-supplied encryption keys to manage the key encryption key (KEK): CSEK nie służy do zarządzania KEK w taki sposób, jak opisano w pytaniu (tworzenie, rotacja, niszczenie wewnątrz infrastruktury chmurowej). Do tego celu służy Cloud KMS (CMEK - Customer-Managed Encryption Keys).
 
-Wskazówki egzaminacyjne:
-- "Manage" + "Symmetric keys": Zawsze szukaj "Cloud KMS" i "KEK".
-- Hierarchia: Użytkownik zarządza KEK (w KMS), system zarządza DEK (automatycznie).
-- Eliminacja: Jeśli widzisz "manage DEK" – to zawsze błędna odpowiedź.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o "zarządzaniu cyklem życia" (create, rotate, destroy) i "kluczach w chmurze", prawie zawsze chodzi o Cloud KMS.
+- Pamiętaj o hierarchii: Użytkownik (KMS) -> KEK -> DEK -> Dane.
+- "Symmetric encryption keys" w kontekście zarządzania przez użytkownika w chmurze to domyślnie KEK w KMS.
+
+Kluczowe zagadnienia do powtórzenia:
+- Szyfrowanie kopertowe (Envelope Encryption)
+- Różnica między CMEK (Cloud KMS) a CSEK (Customer-Supplied)
+- Zarządzanie kluczami w Cloud KMS
 
 Dokumentacja:
 <a href="https://cloud.google.com/kms/docs/envelope-encryption" target="_blank">https://cloud.google.com/kms/docs/envelope-encryption</a>
+<a href="https://cloud.google.com/dataproc/docs/concepts/configuring-clusters/customer-managed-encryption" target="_blank">https://cloud.google.com/dataproc/docs/concepts/configuring-clusters/customer-managed-encryption</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

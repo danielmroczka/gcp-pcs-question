@@ -89,17 +89,25 @@ You are the security admin of your company. Your development team creates multip
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Potwierdzona odpowiedź: B (Access Context Manager + Shared VPC)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Single Service Perimeter: Umieszczenie wszystkich projektów wewnątrz JEDNEGO perymetru VPC Service Controls pozwala im na swobodną komunikację między sobą (brak restrykcji wewnątrz), ale jednocześnie tworzy twardą barierę chroniącą przed kopiowaniem danych na zewnątrz perymetru (data exfiltration). Automatyzacja (IaC) zapewnia, że nowe projekty w folderze są automatycznie dodawane do ochrony.
+Wyjaśnienie: 
+VPC Service Controls (VPC SC) wykorzystuje Access Context Manager do definiowania poziomów dostępu. Pozwala to na stworzenie perymetru wokół wielu projektów, co zapobiega eksfiltracji danych na zewnątrz perymetru, jednocześnie nie ograniczając komunikacji między projektami wewnątrz tego samego perymetru.
 
-Dlaczego inne są błędne:
-A. Shared VPC: Chroni tylko warstwę sieciową, nie zapobiega kopiowaniu danych między API Google (np. z GCS do innego GCS poza Twoją kontrolą).
-B. Access levels: Kontrolują kto może wejść DO perymetru, ale nie blokują wyjścia danych przez uprawnionego użytkownika.
-D. Three perimeters: Zablokowałyby komunikację między projektami, co jest sprzeczne z wymogiem 'without restricting communication'.
+Dlaczego pozostałe są błędne:
+A. Shared VPC ułatwia łączność sieciową, ale nie chroni przed eksfiltracją danych (np. kopiowaniem danych do zewnętrznego bucketu przez osobę z uprawnieniami).
+C, D. Te opcje są zbyt skomplikowane technicznie (automatyzacja Cloud Functions) w porównaniu do natywnej funkcjonalności VPC Service Controls wspieranej przez Shared VPC.
 
-Konsensus społeczności ExamTopics: Silne poparcie dla C. Jeden perymetr dla grupy projektów to standardowy wzorzec izolacji zespołów.
+Wskazówki egzaminacyjne (Tips & Tricks):
+Ochrona przed exfiltration = VPC Service Controls.
+
+Kluczowe zagadnienia do powtórzenia:
+- VPC Service Controls
+- Access Context Manager
+- Data Exfiltration protection
+
+Dokumentacja:
+<a href="https://cloud.google.com/vpc-service-controls/docs/overview" target="_blank">https://cloud.google.com/vpc-service-controls/docs/overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

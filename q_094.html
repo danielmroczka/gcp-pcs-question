@@ -89,17 +89,25 @@ You are responsible for protecting highly sensitive data in BigQuery. Your opera
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Potwierdzona odpowiedź: D (Tokenization for Pseudonymization (DLP))
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Tokenization/Pseudonymization: Pozwala na zastąpienie danych wrażliwych (np. imienia) unikalnym tokenem. Zespół Ops może pracować na tabeli, widząc tylko tokeny, a HR posiada klucz pozwalający na odwrócenie procesu (re-identification) i zobaczenie prawdziwych danych.
+Wyjaśnienie: 
+Tokenizacja (lub Pseudonimizacja) za pomocą Cloud DLP API pozwala na zastąpienie wrażliwych danych (jak e-mail) unikalnym tokenem. Dane zachowują swoją użyteczność analityczną (można łączyć rekordy po tokenach), ale są nieczytelne dla osób postronnych. Tylko uprawniony zespół (HR) może posiadać klucz do 'odkodowania' tokenów.
 
-Dlaczego inne są błędne:
-A. Data masking: To technika BigQuery, która ukrywa dane, ale zazwyczaj nie jest tak elastyczna w scenariuszach 'odwracalności' dla wybranych grup jak pełna tokenizacja DLP. (Uwaga: BQ ma teraz natywne maskowanie, ale DLP Tokenization jest potężniejszym, systemowym rozwiązaniem).
-B. Redaction: Usuwa dane bezpowrotnie. HR też by ich nie zobaczyło.
-C. Inspection: To tylko znalezienie danych, nie chroni ich przed odczytem.
+Dlaczego pozostałe są błędne:
+A, B. Maskowanie (masking) lub Redakcja (redaction) zazwyczaj niszczą dane bezpowrotnie lub czynią je bezużytecznymi dla referencyjnej analizy (np. zastąpienie wszystkiego znakiem X).
+C. Inspekcja (inspection) to tylko proces wykrywania, a nie zabezpieczania danych.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na D. Tokenizacja to złoty środek między bezpieczeństwem a użytecznością danych.
+Wskazówki egzaminacyjne (Tips & Tricks):
+Ukrywanie danych przy zachowaniu ich użyteczności (referential integrity) = Tokenization / Pseudonymization.
+
+Kluczowe zagadnienia do powtórzenia:
+- Cloud DLP Tokenization
+- Pseudonymization vs Anonymization
+- BigQuery Data Security
+
+Dokumentacja:
+<a href="https://cloud.google.com/dlp/docs/pseudonymization" target="_blank">https://cloud.google.com/dlp/docs/pseudonymization</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

@@ -88,25 +88,28 @@ An organization uses a well-established directory service as the `source of trut
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Poprawna odpowiedź: A
+<pre>
+Potwierdzona odpowiedź: A (Google Cloud Directory Sync (GCDS))
 
-Analiza poprawności:
-W sytuacjach, gdy organizacja posiada już "source of truth" (np. Active Directory lub LDAP), wymagany jest mechanizm synchronizacji, który przeniesie te tożsamości do Google Cloud.
-1. GCDS (Google Cloud Directory Sync): Jest to dedykowane narzędzie Google, które służy właśnie do synchronizacji katalogów użytkowników (LDAP/AD) z Google Cloud Identity. Zapewnia ono, że tożsamości w GCP są odzwierciedleniem tego, co znajduje się w lokalnym katalogu.
-2. Source of Truth: GCDS pozwala na zachowanie lokalnego katalogu jako głównego miejsca zarządzania użytkownikami, co było wymogiem pytania.
+Wyjaśnienie: 
+Aby zachować lokalną usługę katalogową jako 'źródło prawdy' (source of truth), należy użyć narzędzia synchronizującego dane w jedną stronę (one-way sync) do Google Cloud. GCDS pobiera informacje z LDAP i aktualizuje Cloud Identity, zapewniając spójność danych bez zmiany ich pierwotnego źródła.
 
 Dlaczego pozostałe są błędne:
-B. Cloud Identity: To platforma tożsamości (IdP w chmurze), a nie narzędzie do synchronizacji. Cloud Identity może być *odbiorcą* synchronizacji, ale nie jest rozwiązaniem realizującym automatyczną replikację z on-premises.
-C. SAML: Jest protokołem federacji tożsamości (pozwala na SSO), ale sam w sobie nie synchronizuje rekordów użytkowników, grup ani nie zarządza ich cyklem życia.
-D. Pub/Sub: Jest usługą przesyłania komunikatów, kompletnie niezwiązaną z zarządzaniem tożsamościami.
+B. Cloud Identity to usługa (platforma), w której przechowywane są konta, a nie narzędzie do synchronizacji.
+C. SAML służy do Single Sign-On (federacja uwierzytelniania), a nie do synchronizacji/tworzenia kont w chmurze (choć może być używany razem z JIT provisioning, GCDS jest bardziej kompletnym rozwiązaniem dla zarządzania cyklem życia).
+D. Pub/Sub to usługa przesyłania wiadomości, nie służy do zarządzania tożsamościami.
 
-Wskazówki egzaminacyjne:
-- "Synchronizacja z lokalnym katalogiem" = GCDS.
-- "Federacja tożsamości / SSO" = SAML / OIDC.
-- Zawsze odróżniaj *synchronizację danych* (GCDS) od *uwierzytelniania* (SSO/SAML).
+Wskazówki egzaminacyjne (Tips & Tricks):
+'Source of truth' on-premises + GCP = GCDS.
+
+Kluczowe zagadnienia do powtórzenia:
+- Identity Source of Truth
+- GCDS vs SAML
+- Cloud Identity architecture
 
 Dokumentacja:
-<a href="https://cloud.google.com/directorysync/docs" target="_blank">https://cloud.google.com/directorysync/docs</a></pre>
+<a href="https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction" target="_blank">https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

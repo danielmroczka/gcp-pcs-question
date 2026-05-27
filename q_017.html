@@ -89,23 +89,28 @@ An employer wants to track how bonus compensations have changed over time to ide
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (CryptoReplaceFfxFpeConfig)
+Potwierdzona odpowiedź: D (CryptoReplaceFfxFpeConfig)
 
-Analiza poprawności:
-Technika ta wykorzystuje "Szyfrowanie Zachowujące Format" (Format-Preserving Encryption - FPE). Jest ona idealna w scenariuszach, gdzie musimy zanonimizować dane (np. numery kart kredytowych, kwoty bonusów), ale nadal potrzebujemy zachować ich pierwotny "kształt" i relacje, aby umożliwić analitykom identyfikację anomalii (outliers). Kluczową cechą FPE jest jej odwracalność – przy posiadaniu odpowiedniego klucza szyfrującego, możemy w każdej chwili przywrócić oryginalną wartość, aby zidentyfikować konkretnego pracownika po wykryciu przez analityka, że "ta konkretna kwota jest anomalna".
+Wyjaśnienie: 
+Aby umożliwić analizę danych bez ujawniania wrażliwych informacji, przy zachowaniu możliwości odwrócenia tego procesu (de-identyfikacja odwracalna), należy zastosować tokenizację. `CryptoReplaceFfxFpeConfig` w Cloud DLP implementuje szyfrowanie zachowujące format (Format-Preserving Encryption - FPE). Pozwala ono zastąpić np. identyfikator pracownika tokenem o identycznym formacie. Dzięki użyciu klucza kryptograficznego, proces ten jest odwracalny – po znalezieniu anomalii (outlier), administrator może odszyfrować token, aby dowiedzieć się, o którego konkretnego pracownika chodzi.
 
 Dlaczego pozostałe są błędne:
-A (Generalization): Zastępuje dane bardziej ogólnymi wartościami (np. wiek 35 -> "30-40"). Utrudnia to precyzyjną analizę anomalii, gdyż dane tracą swoją szczegółowość.
-B (Redaction): Całkowicie usuwa dane (np. zamienia na "***"). Uniemożliwia jakąkolwiek analizę statystyczną czy identyfikację anomalii.
-C (CryptoHashConfig): Haszowanie jest funkcją jednokierunkową. Po przekształceniu danych w hasz nie da się wrócić do oryginalnej wartości (nieodwracalne), więc nie można zidentyfikować pracownika, który otrzymał anomalityczny bonus.
+A. Generalization (Generalizacja): Zastępuje dokładne wartości przedziałami (np. zarobki 5000 -> 4000-6000). Jest to proces nieodwracalny, co uniemożliwiłoby późniejszą identyfikację pracownika.
+B. Redaction (Redagowanie): Całkowicie usuwa lub zasłania dane (np. czarny pasek). Jest to proces definitywnie nieodwracalny.
+C. CryptoHashConfig (Haszowanie): Haszowanie jest funkcją jednostronną. Chociaż pozwala na zliczanie wystąpień tej samej wartości, nie pozwala na bezpośrednie odkodowanie hasza z powrotem do tekstu jawnego bez posiadania bazy wszystkich możliwych wartości (brute-force).
 
-Wskazówki egzaminacyjne:
-- "Reversible" (odwracalne) + "Analyze": To zawsze wskazuje na techniki szyfrowania, a nie maskowania/haszowania.
-- "Format-Preserving": Jeśli w pytaniu o DLP API widzisz to hasło – szukaj "CryptoReplaceFfxFpeConfig".
-- Eliminacja: Haszowanie (Hash) = nieodwracalne. Redakcja (Redaction) = nieużyteczne.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Słowa klucze: "Without exposing sensitive data" + "Reversible" = Tokenization / FPE.
+- W Google Cloud DLP, jeśli widzisz "FPE" (Format-Preserving Encryption), jest to klucz do odwracalnej anonimizacji.
+- Pamiętaj: Haszowanie jest bezpieczne, ale nieodwracalne (jednostronne).
+
+Kluczowe zagadnienia do powtórzenia:
+- Cloud DLP - Techniki de-identyfikacji
+- Format-Preserving Encryption (FPE)
+- Pseudonimizacja vs Anonimizacja
 
 Dokumentacja:
-<a href="https://cloud.google.com/dlp/docs/concepts-pseudonymization" target="_blank">https://cloud.google.com/dlp/docs/concepts-pseudonymization</a>
+<a href="https://cloud.google.com/dlp/docs/concepts-fpe" target="_blank">https://cloud.google.com/dlp/docs/concepts-fpe</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -113,21 +118,20 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> FPE jest wysoce cenione w branżach finansowych i medycznych, ponieważ zaszyfrowana wartość może pasować do tego samego schematu bazy danych co oryginał (np. zaszyfrowany numer PESEL nadal wygląda jak PESEL), co pozwala na działanie istniejących aplikacji analitycznych bez ich przebudowywania.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Głównym punktem analizy jest wymóg 'odwracalności'. Wiele osób wybiera haszowanie (C), myśląc, że jest to standard. Jednak w kryptografii hasz jest z definicji jednostronny. FPE (D) pozwala na zachowanie struktury danych, co jest kluczowe przy analizie w bazach danych, i daje administratorowi posiadającemu klucz drogę powrotną do danych osobowych.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/dlp/docs/concepts-pseudonymization" target="_blank">https://cloud.google.com/dlp/docs/concepts-pseudonymization</a></li>
+<li><a href="https://cloud.google.com/dlp/docs/concepts-fpe" target="_blank">https://cloud.google.com/dlp/docs/concepts-fpe</a></li>
 </ul>
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -142,9 +146,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

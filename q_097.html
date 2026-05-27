@@ -89,16 +89,25 @@ Your organization has implemented synchronization and SAML federation between Cl
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Potwierdzona odpowiedź: C (AD password policy + Post-SSO 2FA (Security Keys))
 
-Wyjaśnienie (Dlaczego poprawna):
-C. AD Policy + Post-SSO 2SV: Przy federacji SAML, hasło jest sprawdzane przez AD, więc to tam musi być silna polityka haseł. Google oferuje funkcję 'post-SSO 2-Step Verification', która dodaje wymóg drugiego składnika (klucz fizyczny) PO zalogowaniu w AD. To najsilniejsza ochrona konta hybrydowego.
+Wyjaśnienie: 
+W modelu federacyjnym (SAML) hasło jest weryfikowane przez AD (on-premises). GCP może jednak dodać własną warstwę bezpieczeństwa w postaci 'Post-SSO 2-Step Verification'. Użycie kluczy bezpieczeństwa (Security Keys/FIDO2) jest najsilniejszą formą ochrony przed phishingiem.
 
-Dlaczego inne są błędne:
-A, B. Password policy in Cloud Identity: Przy SSO hasło w Google nie jest używane, więc ta polityka nie ma znaczenia.
-D. Codes via text: SMS jest podatny na phishing i SIM swapping. Klucze fizyczne (C) są znacznie bezpieczniejsze.
+Dlaczego pozostałe są błędne:
+A, B. Polityka haseł w Cloud Identity nie zadziała, jeśli używasz SSO (wtedy hasło sprawdza Twoje AD).
+D. Kody SMS/telefoniczne są uważane za mniej bezpieczne niż fizyczne klucze bezpieczeństwa (podatność na SIM swapping/phishing).
 
-Konsensus społeczności ExamTopics: 100% poparcia dla C. Najlepsza praktyka łączenia on-prem i cloud security.
+Wskazówki egzaminacyjne (Tips & Tricks):
+Najsilniejsza ochrona konta = Security Keys (FIDO2). Przy SSO hasło zarządza IdP (AD).
+
+Kluczowe zagadnienia do powtórzenia:
+- SAML Federation
+- Post-SSO 2FA
+- Phishing-resistant MFA
+
+Dokumentacja:
+<a href="https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction" target="_blank">https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

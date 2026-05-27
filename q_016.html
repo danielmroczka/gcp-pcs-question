@@ -80,7 +80,7 @@ An organization's typical network and security review consists of analyzing appl
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">A</span>
 <br/>
 </span>
 </div>
@@ -89,45 +89,48 @@ An organization's typical network and security review consists of analyzing appl
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Mandate use of infrastructure as code and provide static analysis in the CI/CD pipelines to enforce policies.)
+Potwierdzona odpowiedź: A (Use Forseti with Firewall filters to catch any unwanted configurations in production.)
 
-Analiza poprawności:
-Przeniesienie kontroli na etap projektowania i wdrażania (tzw. "Shift Left") jest fundamentem nowoczesnych praktyk DevSecOps. Korzystanie z Infrastructure as Code (IaC), takiego jak Terraform, w połączeniu z narzędziami do statycznej analizy kodu (np. Terraform Validator, `gcloud terraform vet`), pozwala na automatyczne sprawdzanie zgodności konfiguracji z politykami bezpieczeństwa przed ich wdrożeniem w chmurze. Dzięki temu programiści mogą bezpiecznie wdrażać swoje aplikacje bez potrzeby manualnej, długotrwałej weryfikacji przez zespół bezpieczeństwa dla każdej zmiany.
+Wyjaśnienie: 
+Aby umożliwić zespołom deweloperskim szybkie wdrażanie aplikacji przy jednoczesnym zachowaniu bezpieczeństwa bez ręcznego przeglądu każdego wdrożenia, należy zautomatyzować nadzór (governance). Forseti Security to dedykowane narzędzie open-source dla Google Cloud, które stale skanuje zasoby i reguły zapory (Firewall filters). Pozwala ono na automatyczne wykrywanie konfiguracji niezgodnych z polityką firmy (np. zbyt otwarte porty) i ich raportowanie lub naprawę, co zdejmuje ciężar ręcznej kontroli z zespołu bezpieczeństwa.
 
 Dlaczego pozostałe są błędne:
-A (Forseti): Forseti to narzędzie typu "Detective". Wykrywa naruszenia po fakcie (gdy zasób już powstał w chmurze). Pozwala to na naprawę, ale nie zapobiega wdrożeniu ("overhead" wciąż występuje, gdy zespół security musi reagować na alerty).
-C (Customer-managed routers): To podejście jest skrajnie nieefektywne, kosztowne i wprowadza ogromne opóźnienia w ruchu sieciowym. Nie rozwiązuje problemu weryfikacji konfiguracji, a jedynie dokłada warstwę kontroli w czasie wykonywania (runtime).
-D (Run on-premises): Jest to unikanie problemu, a nie rozwiązanie (zamykanie się w starym modelu), co stoi w sprzeczności z celami adopcji chmury.
+B. Chociaż "Infrastructure as Code" (IaC) i statyczna analiza w CI/CD (np. Terraform Validator) są uznawane za nowoczesny standard ("shift left"), w kontekście egzaminacyjnym Google często promuje Forseti jako główne rozwiązanie do ciągłego monitoringu zgodności (compliance) w środowisku produkcyjnym. Społeczność często uważa B za lepszą odpowiedź, ale A jest bliższa oficjalnym materiałom szkoleniowym Google z okresu powstania pytania.
+C. Kierowanie całego ruchu przez własne routery (NVA) wprowadza ogromny narzut (overhead), utrudnia skalowanie i jest sprzeczne z celem automatyzacji i uproszczenia procesu.
+D. Przeniesienie produkcji on-premises całkowicie neguje korzyści z używania chmury i nie rozwiązuje problemu bezpieczeństwa w GCP, a jedynie go unika.
 
-Wskazówki egzaminacyjne:
-- "Enable developer teams": Jeśli widzisz to hasło, szukaj rozwiązań "Shift Left" (IaC + automatyzacja w CI/CD).
-- "Shift Left": W GCP oznacza to sprawdzanie kodu przed jego uruchomieniem (statyczna analiza).
-- Eliminacja: Forseti to świetne narzędzie, ale wykrywa błędy po fakcie. Jeśli pytanie pyta o "zapobieganie overheadowi", wybierz IaC w CI/CD.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Governance" + "Security Review Automation" + "GCP Native/Open Source" = Forseti Security.
+- Pamiętaj: Forseti służy do wykrywania dryftu konfiguracji (Configuration Drift) w czasie rzeczywistym.
+
+Kluczowe zagadnienia do powtórzenia:
+- Forseti Security (Inventory, Scanner, Enforcer)
+- Infrastructure as Code (IaC) Security
+- Automatyzacja zgodności (Compliance automation)
 
 Dokumentacja:
-<a href="https://cloud.google.com/docs/security/infrastructure-as-code" target="_blank">https://cloud.google.com/docs/security/infrastructure-as-code</a>
+<a href="https://forsetisecurity.org/docs/latest/concepts/" target="_blank">https://forsetisecurity.org/docs/latest/concepts/</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Automatyzacja polityk w CI/CD pipeline to klucz do nowoczesnego modelu DevSecOps. Statyczna analiza pozwala na sprawdzanie reguł takich jak: "czy ten firewall otwiera port 22 na cały świat?" jeszcze zanim jakikolwiek zasób powstanie w chmurze.</p>
+<p><b>Sugerowana odpowiedź: A</b></p>
+<p><b>Analiza spornych kwestii (AI):</b> To pytanie wywołuje silną debatę. Opcja B (IaC + CI/CD) jest obecnie uważana za 'złoty standard'. Jednak egzamin Google Cloud Security Professional często odnosi się do Forseti jako kluczowego elementu ekosystemu bezpieczeństwa Google. Jeśli na egzaminie nie widzisz opcji B lub pytanie sugeruje ciągły monitoring istniejącej produkcji – wybierz Forseti.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/docs/security/infrastructure-as-code" target="_blank">https://cloud.google.com/docs/security/infrastructure-as-code</a></li>
+<li><a href="https://forsetisecurity.org/docs/latest/concepts/" target="_blank">https://forsetisecurity.org/docs/latest/concepts/</a></li>
 </ul>
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -142,9 +145,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

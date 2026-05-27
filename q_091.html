@@ -90,18 +90,26 @@ You need to provide a corporate user account in Google Cloud for each of your de
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: AD.
+Potwierdzona odpowiedź: AD (GCDS + Transfer Tool for Unmanaged Users (TTUU))
 
-Wyjaśnienie (Dlaczego poprawna):
-A. GCDS: Najpierw synchronizujesz tożsamości z AD do Google, aby system wiedział, jakie konta są 'oficjalne'. GCDS stworzy konta dla osób, których jeszcze nie ma w Google.
-D. Transfer Tool (TTUU): Narzędzie to identyfikuje konflikty (konta osobiste @firma.com) i pozwala wysłać zaproszenia do użytkowników, aby przekazali swoje konta pod zarząd firmy. To jedyna metoda zachowania danych użytkownika przy przejmowaniu kontroli.
+Wyjaśnienie: 
+Aby uporządkować konta osobiste używające domen firmowych: 1. Używamy GCDS do stworzenia oficjalnych kont w Cloud Identity. 2. Używamy narzędzia Transfer Tool (TTUU), aby zidentyfikować konflikty i poprosić użytkowników o przeniesienie ich kont pod kontrolę organizacji.
 
-Dlaczego inne są błędne:
-B. Recovery emails: Nie pomagają w procesie konwersji kont na zarządzane.
-C. Force change: Jest to technicznie możliwe (poprzez stworzenie konta zarządzanego o tej samej nazwie), ale powoduje powstanie 'conflicting accounts', co jest mniej eleganckie i bezpieczne niż proces TTUU.
-E. Manual delete: Nieskalowalne i ryzykowne (utrata danych firmowych na koncie osobistym).
+Dlaczego pozostałe są błędne:
+B. Recovery email nie jest metodą identyfikacji kont unmanaged.
+C. Nie można 'wymusić' zmiany adresu w koncie osobistym bez udziału użytkownika (wymagane jest zaproszenie do transferu).
+E. Prośba o usunięcie kont jest mało profesjonalna i trudna do wyegzekwowania w dużej skali.
 
-Konsensus społeczności ExamTopics: 100% na AD. To standardowa ścieżka 'Cleanup' domeny.
+Wskazówki egzaminacyjne (Tips & Tricks):
+Unmanaged users / Personal accounts with company email = Transfer Tool (TTUU).
+
+Kluczowe zagadnienia do powtórzenia:
+- Unmanaged accounts
+- Transfer Tool for Unmanaged Users
+- Cloud Identity adoption
+
+Dokumentacja:
+<a href="https://cloud.google.com/architecture/identity/migrating-consumer-accounts" target="_blank">https://cloud.google.com/architecture/identity/migrating-consumer-accounts</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

@@ -70,7 +70,7 @@ A customer deploys an application to App Engine and needs to check for Open Web 
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud Armor</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Google Cloud Audit Logs</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Web Security Scanner</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C.</span> Web Security Scanner</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Anomaly Detection</li>
 
 </ul>
@@ -89,20 +89,29 @@ A customer deploys an application to App Engine and needs to check for Open Web 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Web Security Scanner)
+Potwierdzona odpowiedź: C (Web Security Scanner)
 
-Analiza poprawności:
-Web Security Scanner jest dedykowanym narzędziem DAST (Dynamic Application Security Testing) w Google Cloud. Automatycznie skanuje aplikacje webowe (uruchomione na App Engine, GKE, Compute Engine) w poszukiwaniu typowych podatności, takich jak Cross-Site Scripting (XSS), Flash injection, Mixed Content i innych błędów sklasyfikowanych w ramach projektu OWASP. Pomaga to inżynierom wcześnie identyfikować luki w bezpieczeństwie przed ich wykorzystaniem przez atakujących.
+Wyjaśnienie: 
+Web Security Scanner to dedykowane narzędzie w Google Cloud przeznaczone do identyfikowania luk w zabezpieczeniach aplikacji internetowych (App Engine, GKE, Compute Engine). Skaner automatycznie sprawdza aplikację pod kątem typowych podatności z listy OWASP Top 10, takich jak:
+- Cross-Site Scripting (XSS)
+- Flash injection
+- Mixed content (HTTP in HTTPS)
+- Outdated / insecure libraries (użycie niebezpiecznych bibliotek)
+Jest to narzędzie typu DAST (Dynamic Application Security Testing).
 
 Dlaczego pozostałe są błędne:
-A (Cloud Armor): To firewall aplikacyjny (WAF). Służy do blokowania znanych ataków (np. SQL Injection, XSS) w czasie rzeczywistym, gdy ruch dociera do aplikacji. Nie służy do aktywnego skanowania kodu w poszukiwaniu luk.
-B (Audit Logs): Są to dzienniki zdarzeń administracyjnych i dostępowych. Służą do audytu "kto, co, kiedy", a nie do testowania bezpieczeństwa samej aplikacji.
-D (Anomaly Detection): W GCP odnosi się to zazwyczaj do systemów monitorowania anomalii (np. w Cloud Monitoring), które wykrywają nietypowe wzorce w ruchu lub metrykach, ale nie są narzędziem do systematycznego audytu bezpieczeństwa OWASP.
+A. Cloud Armor: Jest to Web Application Firewall (WAF). Służy do ochrony aplikacji w czasie rzeczywistym przed atakami (np. filtrowanie ruchu, ochrona DDoS), ale nie służy do skanowania i wykrywania podatności w kodzie/konfiguracji samej aplikacji.
+B. Google Cloud Audit Logs: Rejestrują one, "kto zrobił co i kiedy" w infrastrukturze GCP. Są niezbędne do analizy po incydencie, ale nie potrafią wykryć luk OWASP wewnątrz aplikacji.
+D. Anomaly Detection: To ogólny termin dotyczący wykrywania nietypowych wzorców zachowań (np. w logach lub ruchu sieciowym), często realizowany przez Security Command Center lub Cloud Monitoring, ale nie jest to skaner podatności OWASP.
 
-Wskazówki egzaminacyjne:
-- "OWASP vulnerabilities" + "App Engine": Szukaj "Web Security Scanner". To jedyna logiczna odpowiedź w tym kontekście.
-- DAST vs WAF: Zapamiętaj: DAST (Scanner) = testuje luki; WAF (Armor) = chroni przed atakiem.
-- Eliminacja: Jeśli pytanie mówi o szukaniu luk w kodzie aplikacji – odrzuć Cloud Armor (on tylko filtruje ruch).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Słowo klucz: "Check for OWASP vulnerabilities" = Web Security Scanner.
+- Pamiętaj: Web Security Scanner jest narzędziem "skanującym" (proaktywnym), a Cloud Armor jest narzędziem "blokującym" (reaktywnym).
+
+Kluczowe zagadnienia do powtórzenia:
+- Web Security Scanner - funkcje i zakres działania
+- OWASP Top 10
+- Różnice między WAF (Cloud Armor) a Skanerem Podatności
 
 Dokumentacja:
 <a href="https://cloud.google.com/security-command-center/docs/concepts-web-security-scanner-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-web-security-scanner-overview</a>
@@ -113,7 +122,7 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Web Security Scanner jest darmowy dla podstawowych skanów w App Engine (w ograniczonym zakresie). Wersja Premium (w ramach SCC) oferuje szerszy zakres wykrywania podatności i wsparcie dla aplikacji za zewnętrznymi Load Balancerami.</p>
+<p><b>Analiza spornych kwestii (AI):</b> W dyskusjach eksperci podkreślają, że Web Security Scanner jest częścią pakietu Security Command Center (SCC). Najważniejsze to nie pomylić go z Cloud Armor – Armor 'stoi przed' aplikacją i odbija ataki, podczas gdy Scanner 'przeczesuje' aplikację w poszukiwaniu błędów programistycznych.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/security-command-center/docs/concepts-web-security-scanner-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-web-security-scanner-overview</a></li>
@@ -121,13 +130,12 @@ Dokumentacja:
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -142,9 +150,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -70,7 +70,7 @@ A customer implements Cloud Identity-Aware Proxy for their ERP system hosted on 
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Make sure that the ERP system can validate the JWT assertion in the HTTP requests.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Make sure that the ERP system can validate the identity headers in the HTTP requests.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Make sure that the ERP system can validate the x-forwarded-for headers in the HTTP requests.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C.</span> Make sure that the ERP system can validate the x-forwarded-for headers in the HTTP requests.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Make sure that the ERP system can validate the user's unique identifier headers in the HTTP requests.</li>
 
 </ul>
@@ -89,19 +89,25 @@ A customer implements Cloud Identity-Aware Proxy for their ERP system hosted on 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Make sure that the ERP system can validate the JWT assertion in the HTTP requests.)
+Potwierdzona odpowiedź: A (Make sure that the ERP system can validate the JWT assertion in the HTTP requests.)
 
-Analiza poprawności:
-Identity-Aware Proxy (IAP) dołącza do każdego żądania HTTP nagłówek `x-goog-iap-jwt-assertion`. Jest to token JWT (JSON Web Token) podpisany przez Google. Weryfikacja podpisu tego tokenu przez aplikację ERP (przy użyciu publicznych kluczy Google) daje pewność, że żądanie rzeczywiście przeszło przez IAP. Dzięki temu aplikacja nie musi ufać sieci i może odrzucić każde połączenie, które nie posiada poprawnego, zweryfikowanego podpisu Google, co chroni przed atakami typu "bypass" (połączenie bezpośrednie do serwera z pominięciem IAP).
+Wyjaśnienie: 
+Aby zapewnić, że aplikacja (ERP) akceptuje ruch wyłącznie z Cloud IAP i nie można jej oszukać (np. wysyłając żądanie bezpośrednio do serwera, omijając proxy IAP), aplikacja musi weryfikować nagłówek `x-goog-iap-jwt-assertion`. Nagłówek ten zawiera podpisany cyfrowo token JWT, który zawiera tożsamość użytkownika. Weryfikacja podpisu tego tokenu za pomocą kluczy publicznych Google daje pewność, że żądanie przeszło przez IAP i nie zostało sfałszowane.
 
 Dlaczego pozostałe są błędne:
-B, D: Nagłówki takie jak `x-goog-authenticated-user-email` czy inne identyfikatory użytkownika mogą być łatwo sfałszowane przez każdego, kto uzyska dostęp do sieci wewnętrznej (np. z innej maszyny w tym samym VPC). Sama obecność nagłówka nie jest dowodem autentyczności.
-C: Nagłówek `x-forwarded-for` informuje o adresie IP klienta pierwotnego, ale nie pełni funkcji zabezpieczającej ani weryfikującej, że żądanie przeszło przez bezpieczną bramę IAP.
+B. Nagłówki tożsamości (np. `x-goog-authenticated-user-email`) są przesyłane przez IAP, ale bez weryfikacji podpisu JWT mogą zostać łatwo sfałszowane przez napastnika, który uzyska bezpośredni dostęp sieciowy do serwera ERP.
+C. Nagłówek `x-forwarded-for` zawiera adres IP klienta, ale nie służy do uwierzytelniania źródła ruchu jako zaufanego proxy Google.
+D. Unikalne identyfikatory użytkowników bez podpisu kryptograficznego są tak samo podatne na manipulację jak adresy email (opcja B).
 
-Wskazówki egzaminacyjne:
-- Zero Trust: Zawsze wybieraj opcje, które zakładają, że sieć może być skompromitowana, a aplikacja musi sama weryfikować tożsamość żądania (podpis JWT).
-- JWT assertion: To słowo-klucz w pytaniach o bezpieczeństwo IAP.
-- Eliminacja: Jeśli widzisz "headers" w kontekście bezpieczeństwa IAP, zawsze szukaj słowa "signed" lub "JWT assertion".
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Słowo klucz: "Only accept traffic from IAP" = Weryfikacja podpisu JWT (JWT assertion).
+- Zapamiętaj nazwę nagłówka: `x-goog-iap-jwt-assertion`.
+- Sama obecność IAP w projekcie nie blokuje ruchu bezpośredniego na adres IP instancji – to aplikacja lub firewall musi o to zadbać.
+
+Kluczowe zagadnienia do powtórzenia:
+- Cloud Identity-Aware Proxy (IAP) - mechanizm działania
+- Weryfikacja podpisanych nagłówków (Signed Headers)
+- JSON Web Token (JWT) w Google Cloud
 
 Dokumentacja:
 <a href="https://cloud.google.com/iap/docs/signed-headers-howto" target="_blank">https://cloud.google.com/iap/docs/signed-headers-howto</a>
@@ -112,7 +118,7 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Wielu deweloperów uważa, że wystarczy firewall blokujący wszystko poza IP Load Balancera. Jednak eksperci security na forach podkreślają, że w modelu "Defense in Depth" aplikacja nigdy nie powinna ufać sieci. Weryfikacja JWT to jedyna metoda, która chroni przed atakami typu "lateral movement" wewnątrz chmury.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Eksperci zwracają uwagę, że weryfikacja JWT jest jedynym sposobem na 'zero trust' wewnątrz sieci VPC. Jeśli Twoja aplikacja nie sprawdza podpisu, napastnik, który dostanie się do Twojej sieci (np. przez inną skompromitowaną maszynę), może wysłać spreparowane nagłówki z dowolnym adresem email i przejąć konto administratora ERP.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/iap/docs/signed-headers-howto" target="_blank">https://cloud.google.com/iap/docs/signed-headers-howto</a></li>
@@ -120,13 +126,12 @@ Dokumentacja:
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -141,9 +146,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

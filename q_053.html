@@ -64,14 +64,15 @@
 <h2>Question 53 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-A user needs to view the configuration of a VPC network but should not be able to change anything. Which role should you grant?
+A customer deployed an application on Compute Engine that takes advantage of the elastic nature of cloud computing.
+How can you work with Infrastructure Operations Engineers to best ensure that Windows Compute Engine VMs are up to date with all the latest OS patches?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Compute Network Admin</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Compute Network Viewer</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Compute Viewer</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Project Viewer</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Build new base images when patches are available, and use a CI/CD pipeline to rebuild VMs, deploying incrementally.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Federate a Domain Controller into Compute Engine, and roll out weekly patches via Group Policy Object.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use Deployment Manager to provision updated VMs into new serving Instance Groups (IGs).</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Reboot all VMs during the weekly maintenance window and allow the StartUp Script to download the latest patches from the internet.</li>
 
 </ul>
 </div>
@@ -80,7 +81,7 @@ A user needs to view the configuration of a VPC network but should not be able t
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">A</span>
 <br/>
 </span>
 </div>
@@ -89,34 +90,41 @@ A user needs to view the configuration of a VPC network but should not be able t
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Compute Network Viewer)
+Potwierdzona odpowiedź: A
 
-Analiza poprawności:
-Rola `roles/compute.networkViewer` (`Compute Network Viewer`) jest precyzyjnie dopasowana do wymagań audytowych. Użytkownik z tą rolą może przeglądać (podglądać) wszystkie zasoby sieciowe w projekcie (takie jak VPC, Firewall Rules, trasy statyczne), ale nie ma absolutnie żadnych uprawnień do wprowadzania w nich jakichkolwiek zmian (brak uprawnień `compute.networks.update`, `compute.firewalls.delete` itp.). Spełnia to zasadę najniższych uprawnień (Least Privilege) – użytkownik widzi stan infrastruktury, ale nie może go zepsuć.
+Wyjaśnienie:
+W nowoczesnych środowiskach chmurowych najlepszą praktyką zarządzania aktualizacjami jest stosowanie koncepcji "Immutable Infrastructure" (infrastruktura niezmienna). Zamiast aktualizować (patchować) działające instancje, co może prowadzić do tzw. "configuration drift" (rozbieżności w konfiguracji), tworzy się nowy, zaktualizowany obraz bazowy (tzw. Golden Image). Następnie, za pomocą potoku CI/CD, stare instancje są zastępowane nowymi, utworzonymi z tego obrazu, przy użyciu mechanizmów takich jak "Rolling Updates" w Managed Instance Groups (MIGs). Gwarantuje to spójność, testowalność i szybkość przywracania środowiska.
 
-Dlaczego pozostałe są błędne:
-A (Compute Network Admin): Daje pełną władzę nad siecią: możliwość tworzenia, edycji i usuwania reguł firewall, tras i VPC. Jest to sprzeczne z wymogiem "should not be able to change anything".
-C (Compute Viewer): Daje dostęp do podglądu zasobów obliczeniowych (VM, Instance Templates, dyski). To uprawnienie jest szersze niż potrzeba i niepotrzebnie pokazuje inżynierowi listę maszyn wirtualnych, co narusza zasadę najniższych uprawnień.
-D (Project Viewer): To rola o najwyższym poziomie uprawnień do przeglądania wewnątrz całego projektu (SQL, Storage, IAM, logi). Daje wgląd w dane, do których inżynier sieci nie powinien mieć dostępu.
+Dlaczego pozostałe opcje są niepoprawne:
+- B: Stosowanie GPO (Group Policy Objects) to tradycyjne podejście on-premises. W chmurze jest ono trudniejsze do monitorowania, wolniejsze i nie zapewnia, że nowo wyskalowane instancje będą miały poprawki od razu po uruchomieniu (zanim GPO się zaaplikuje).
+- C: Sam Deployment Manager służy do definiowania zasobów (IaC), ale bez integracji z procesem budowania obrazów i automatyzacją wdrożeń (CI/CD) nie stanowi kompletnego rozwiązania problemu regularnego patchowania.
+- D: Pobieranie aktualizacji przez StartUp Script przy każdym starcie instancji drastycznie wydłuża czas jej gotowości do pracy (co psuje zaletę elastyczności/autoskalowania). Ponadto wprowadza ryzyko, że błąd w zewnętrznym repozytorium uniemożliwi uruchomienie nowych serwerów.
 
-Wskazówki egzaminacyjne:
-- "Manage" + "Config" + "Cannot change": Szukaj roli "*Viewer" (w tym przypadku Network Viewer).
-- "Specific service" / "Granular": Jeśli pytanie prosi o rolę do konkretnej usługi (sieć), wybieraj role dedykowane (Compute Network Viewer), a nie ogólne (Project Viewer).
-- Eliminacja: Zawsze odrzucaj role "Admin" jeśli wymagane jest tylko "przeglądanie".
+Tips & Tricks:
+- Gdy widzisz "latest OS patches" + "elastic/cloud-native", szukaj odpowiedzi promujących automatyzację budowania obrazów (Golden Images) i potoki CI/CD.
+- Unikaj rozwiązań, które aktualizują system "w locie" na działających maszynach (In-place patching).
+- "Immutable Infrastructure" to kluczowe hasło w egzaminach architektonicznych i bezpieczeństwa GCP.
+
+Zagadnienia:
+- Immutable Infrastructure (Infrastruktura niezmienna)
+- Golden Images (Wzorcowe obrazy)
+- Managed Instance Groups (MIGs) Rolling Updates
+- CI/CD dla Infrastruktury
 
 Dokumentacja:
-<a href="https://cloud.google.com/compute/docs/access/iam#compute.networkViewer" target="_blank">https://cloud.google.com/compute/docs/access/iam#compute.networkViewer</a>
+<a href="https://cloud.google.com/architecture/image-management-best-practices" target="_blank">https://cloud.google.com/architecture/image-management-best-practices</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (Egzamin)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Wybieranie ról specyficznych dla usługi (np. Network Viewer) zamiast ogólnych (Project Viewer) to kluczowy element zdania egzaminu Professional Security Engineer. Zawsze szukaj najbardziej granularnej (najwęższej) roli, która spełnia wymagania biznesowe.</p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<h3>Kluczowe wnioski</h3>
+<p><b>Potwierdzona odpowiedź: A</b></p>
+<p>Zapewnienie bezpieczeństwa na poziomie systemu operacyjnego w chmurze wymaga odejścia od manualnego patchowania. Google promuje automatyzację cyklu życia obrazów, co pozwala na szybką reakcję na nowe podatności (Zero-day vulnerabilities) poprzez szybkie wypchnięcie nowej wersji obrazu do floty serwerów.</p>
+<h3>Praktyczne wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/compute/docs/access/iam#compute.networkViewer" target="_blank">https://cloud.google.com/compute/docs/access/iam#compute.networkViewer</a></li>
+<li>Warto znać narzędzie <b>VM Manager</b> (Cloud OS Config), które w rzeczywistości pomaga zarządzać patchami w GCP, ale w kontekście tego pytania egzaminacyjnego nacisk położony jest na architektoniczną koncepcję niezmienności.</li>
+<li>Jeśli pytanie wspomina o "autoskalowaniu" lub "elastyczności", odrzuć rozwiązania spowalniające start instancji (jak duże skrypty startowe).</li>
 </ul>
 </div>
 </div>

@@ -64,14 +64,15 @@
 <h2>Question 55 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You want to enable SSO for your GCP users using your on-premises SAML 2.0 Identity Provider. What should you configure?
+An organization receives an increasing number of phishing emails.
+Which method should be used to protect employee credentials in this situation?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud Identity</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Google Cloud Directory Sync</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> SAML SSO in Google Admin Console</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud IAM</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Multifactor Authentication</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> A strict password policy</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Captcha on login pages</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Encrypted emails</li>
 
 </ul>
 </div>
@@ -80,7 +81,7 @@ You want to enable SSO for your GCP users using your on-premises SAML 2.0 Identi
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">C</span>
+<span class="correct-answer">A</span>
 <br/>
 </span>
 </div>
@@ -89,34 +90,41 @@ You want to enable SSO for your GCP users using your on-premises SAML 2.0 Identi
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (SAML SSO in Google Admin Console)
+Potwierdzona odpowiedź: A
 
-Analiza poprawności:
-Aby skonfigurować logowanie jednokrotne (SSO) za pomocą zewnętrznego dostawcy tożsamości (IdP), który wspiera standard SAML 2.0 (np. ADFS, Okta, PingFederate), należy przejść do Google Admin Console (zarządzającej całą organizacją w Cloud Identity lub Google Workspace). Tam w ustawieniach "SSO z zewnętrznym dostawcą tożsamości" konfigurujesz profil SSO: wpisujesz adresy URL strony logowania swojego IdP, URL zmiany hasła oraz wgrywasz certyfikat X.509, który służy do weryfikacji podpisów asercji SAML przesyłanych przez Twój IdP.
+Wyjaśnienie:
+Ataki typu phishing polegają na wyłudzaniu poświadczeń (loginów i haseł) poprzez podszywanie się pod zaufane instytucje lub usługi. Nawet najsilniejsze hasło jest bezużyteczne, jeśli użytkownik sam je poda na fałszywej stronie logowania. Uwierzytelnianie wieloskładnikowe (MFA / 2-Step Verification) stanowi krytyczną warstwę ochrony, ponieważ wymaga od użytkownika przedstawienia drugiego składnika (czegoś, co posiada, np. klucza bezpieczeństwa Titan, kodu z aplikacji lub telefonu), którego atakujący nie jest w stanie łatwo pozyskać za pomocą phishingu.
 
-Dlaczego pozostałe są błędne:
-A (Cloud Identity): To ogólna nazwa usługi zarządzania tożsamością w Google Cloud. Nie jest to konkretny "punkt" w menu konsoli, gdzie konfiguruje się SAML.
-B (Google Cloud Directory Sync - GCDS): GCDS służy wyłącznie do *synchronizacji* kont użytkowników i grup z Twojego lokalnego katalogu (np. Active Directory) do Google. Nie obsługuje samego procesu uwierzytelniania (logowania).
-D (Cloud IAM): IAM służy do nadawania *uprawnień* do zasobów GCP (kto może zarządzać VM, kto ma dostęp do baz danych). Nie konfiguruje się w nim metod logowania do całego ekosystemu Google.
+Dlaczego pozostałe opcje są niepoprawne:
+- B: Restrykcyjna polityka haseł (długość, znaki specjalne) chroni przed atakami typu brute-force lub zgadywaniem haseł, ale nie chroni przed phishingiem, w którym użytkownik dobrowolnie ujawnia swoje poprawne hasło.
+- C: Mechanizmy Captcha służą do odróżniania ludzi od botów i chronią przed automatycznymi atakami typu credential stuffing, ale nie zapobiegają oszukaniu człowieka przez złośliwą wiadomość e-mail.
+- D: Szyfrowanie e-maili (np. S/MIME lub PGP) chroni treść wiadomości przed odczytaniem przez niepowołane osoby w trakcie transmisji, ale nie powstrzymuje atakujących przed wysyłaniem e-maili z linkami do fałszywych stron.
 
-Wskazówki egzaminacyjne:
-- "SAML 2.0" + "SSO": Zawsze szukaj konfiguracji w "Google Admin Console".
-- Synchronizacja vs Uwierzytelnianie: Synchronizacja (GCDS) != Uwierzytelnianie (SAML/SSO). To rozróżnienie często pojawia się w pytaniach.
-- Eliminacja: Jeśli pytanie pyta o logowanie do *całej platformy* (SAML), nigdy nie wybieraj IAM (uprawnienia) ani GCDS (synchronizacja).
+Tips & Tricks:
+- Gdy pytanie dotyczy phishingu i ochrony kont, MFA (lub 2FA) jest niemal zawsze poprawną odpowiedzią.
+- W ekosystemie Google najwyższym poziomem ochrony przed phishingiem są fizyczne klucze bezpieczeństwa zgodne ze standardem FIDO/WebAuthn.
+- Pamiętaj, że MFA jest częścią strategii "Defense in Depth" (Obrona w głąb).
+
+Zagadnienia:
+- Multi-factor Authentication (MFA)
+- Phishing & Social Engineering
+- Identity and Access Management (IAM)
+- 2-Step Verification (2SV)
 
 Dokumentacja:
-<a href="https://support.google.com/cloudidentity/answer/60224" target="_blank">https://support.google.com/cloudidentity/answer/60224</a>
+<a href="https://cloud.google.com/identity-platform/docs/multi-factor-authentication" target="_blank">https://cloud.google.com/identity-platform/docs/multi-factor-authentication</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (Egzamin)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Przy tej konfiguracji Google staje się "Service Providerem" (SP). Gdy użytkownik wpisze e-mail w Gmailu lub konsoli GCP, zostanie przekierowany do Twojego on-premises IdP (np. ADFS lub Okta) w celu uwierzytelnienia. W ten sposób zachowujesz pełną kontrolę nad hasłami swoich pracowników.</p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<h3>Kluczowe wnioski</h3>
+<p><b>Potwierdzona odpowiedź: A</b></p>
+<p>Zagrożenia tożsamości są obecnie najczęstszym wektorem ataku w chmurze. MFA jest podstawowym i najskuteczniejszym zabezpieczeniem, które powinno być wymuszane dla wszystkich kont, a w szczególności dla kont z uprawnieniami administracyjnymi.</p>
+<h3>Praktyczne wskazówki</h3>
 <ul>
-<li><a href="https://support.google.com/cloudidentity/answer/60224" target="_blank">https://support.google.com/cloudidentity/answer/60224</a></li>
+<li>Na egzaminie szukaj wzmianek o <b>Security Keys</b> (kluczach Titan), jeśli pytanie jest bardziej szczegółowe – są one jedyną formą MFA w pełni odporną na zaawansowany phishing (dzięki powiązaniu sesji z domeną).</li>
+<li>Zwróć uwagę na Program Ochrony Zaawansowanej (Advanced Protection Program) dla użytkowników o wysokim ryzyku.</li>
 </ul>
 </div>
 </div>

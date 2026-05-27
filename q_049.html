@@ -64,15 +64,14 @@
 <h2>Question 49 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-A company wants to securely connect their on-premises data center to GCP with high availability and high throughput (10 Gbps+). What should they use?
+You are in charge of migrating a legacy application from your company datacenters to GCP before the current maintenance contract expires. You do not know what ports the application is using and no documentation is available for you to check. You want to complete the migration without putting your environment at risk. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud VPN</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Carrier Peering</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Dedicated Interconnect</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Partner Interconnect</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Migrate the application into an isolated project using a "Lift & Shift" approach. Enable all internal TCP traffic using VPC Firewall rules. Use VPC Flow logs to determine what traffic should be allowed for the application to work properly.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Migrate the application into an isolated project using a "Lift & Shift" approach in a custom network. Disable all traffic within the VPC and look at the Firewall logs to determine what traffic should be allowed for the application to work properly.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Refactor the application into a micro-services architecture in a GKE cluster. Disable all traffic from outside the cluster using Firewall Rules. Use VPC Flow logs to determine what traffic should be allowed for the application to work properly.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Refactor the application into a micro-services architecture hosted in Cloud Functions in an isolated project. Disable all traffic from outside your project using Firewall Rules. Use VPC Flow logs to determine what traffic should be allowed for the application to work properly.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +79,7 @@ A company wants to securely connect their on-premises data center to GCP with hi
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">C</span>
+<span class="correct-answer">A</span>
 <br/>
 </span>
 </div>
@@ -89,46 +88,51 @@ A company wants to securely connect their on-premises data center to GCP with hi
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Dedicated Interconnect)
+Potwierdzona odpowiedź: A (Isolated project + Lift & Shift + VPC Flow Logs)
 
-Analiza poprawności:
-Dedicated Interconnect oferuje bezpośrednie, fizyczne połączenie (podłączone w punkcie styku Google - PoP) między siecią on-premises a siecią VPC w GCP. Jest to rozwiązanie klasy Enterprise, które zapewnia gwarantowaną przepustowość (np. 10 Gbps lub 100 Gbps na link) oraz wysoką niezawodność, ponieważ omija publiczny internet. Dla firmy wymagającej stabilnego pasma 10 Gbps+ jest to jedyne optymalne i wydajne rozwiązanie.
+Wyjaśnienie:
+Mamy tutaj scenariusz z silną presją czasu (wygasający kontrakt) oraz brakiem wiedzy o aplikacji (brak dokumentacji portów).
+1. Izolowany projekt: Przeniesienie aplikacji do osobnego, dedykowanego projektu GCP minimalizuje ryzyko dla reszty środowiska firmowego (blast radius), nawet jeśli reguły firewall w tym konkretnym projekcie będą tymczasowo zbyt luźne.
+2. Lift & Shift: To najszybsza metoda migracji ("as-is"), polegająca na przeniesieniu maszyn wirtualnych bez zmiany ich architektury. Jest to jedyna realna opcja przy goniących terminach.
+3. VPC Flow Logs: Włączając logi przepływów VPC, możemy monitorować, na jakich portach aplikacja faktycznie próbuje się komunikować. Pozwala to na późniejsze "zacieśnienie" reguł firewall do tylko niezbędnego minimum, bazując na empirycznych danych z działającej aplikacji.
 
 Dlaczego pozostałe są błędne:
-A (Cloud VPN): VPN opiera się na publicznym internecie. Jego przepustowość jest ograniczona (jeden tunel to max 3 Gbps) i zależy od jakości łączy internetowych między lokalizacją a punktem styku GCP. Stabilne 10 Gbps w VPN jest praktycznie niemożliwe do utrzymania w środowisku produkcyjnym.
-B (Carrier Peering): Służy wyłącznie do uzyskania dostępu do usług Google dostępnych publicznie (np. YouTube, Workspace, czy publicznych API GCP). Nie zapewnia prywatnego połączenia z Twoją siecią VPC (wewnątrz której pracują Twoje maszyny VM).
-D (Partner Interconnect): Jest podobny do Dedicated, ale realizowany przez pośrednika. Choć jest to poprawne technicznie rozwiązanie hybrydowe, dla przepustowości 10 Gbps+ zazwyczaj stosuje się już bezpośrednie, dedykowane łącze (Dedicated Interconnect), aby uniknąć zależności od dostawców trzecich (partnerów).
+B. Disable all traffic: Jeśli wyłączymy cały ruch, aplikacja nie będzie działać, a my nie dowiemy się, jakie porty są jej potrzebne do poprawnej pracy. Firewall logs pokazałyby tylko próby połączeń (denied), ale aplikacja mogłaby zachowywać się nieprzewidywalnie.
+C i D. Refactoring: Refaktoryzacja do mikrousług (GKE) lub Cloud Functions to proces długotrwały i skomplikowany. Przy braku dokumentacji i goniącym terminie wygaśnięcia kontraktu, jest to przepis na porażkę projektu migracyjnego.
 
-Wskazówki egzaminacyjne:
-- "10 Gbps+" / "High throughput": Jeśli widzisz te liczby – od razu szukaj "Dedicated Interconnect".
-- "Prywatne połączenie" (VPC): VPN lub Interconnect.
-- "Publiczne usługi" (YouTube/API): Carrier Peering.
-- Eliminacja: Jeśli potrzebujesz prywatnej sieci (VPC) i dużej przepustowości (10 Gbps+) – nigdy nie wybieraj VPN ani Carrier Peering.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Contract expires soon" = szukaj "Lift & Shift" lub "Rehost". Odrzuć "Refactor" lub "Rewrite".
+- "Unknown ports" = szukaj "VPC Flow Logs" do analizy ruchu.
+- Izolacja projektu to standardowa metoda ograniczania ryzyka przy migracjach "legacy".
+
+Kluczowe zagadnienia do powtórzenia:
+- Strategie migracji (Lift & Shift, Improve & Move, Rip & Replace).
+- VPC Flow Logs - co rejestrują i jak je analizować.
+- Zasady projektowania izolowanych środowisk w GCP.
 
 Dokumentacja:
-<a href="https://cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview" target="_blank">https://cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview</a>
+<a href="https://cloud.google.com/vpc/docs/using-flow-logs" target="_blank">Korzystanie z VPC Flow Logs</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Warto pamiętać o fizycznej kolokacji. Dedicated Interconnect wymaga, abyś miał własny sprzęt sieciowy w tym samym "Carrier Hotel" (PoP), gdzie znajdują się urządzenia brzegowe Google. To duży nakład inwestycyjny, ale niezbędny dla najwyższej wydajności.</p>
+<p><b>Sugerowana odpowiedź: A</b></p>
+<p><b>Analiza spornych kwestii (AI):</b> Kluczowym elementem jest balans między bezpieczeństwem a dostępnością aplikacji. Opcja B jest zbyt restrykcyjna ("app doesn't work"), a opcje C i D są nierealne czasowo. Opcja A pozwala na szybkie uruchomienie biznesu w bezpiecznym, odizolowanym "piaskownicy", a następnie precyzyjne dostrojenie zabezpieczeń dzięki logom.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview" target="_blank">https://cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview</a></li>
+<li><a href="https://cloud.google.com/architecture/migration-to-google-cloud-getting-started" target="_blank">Migration to GCP: Getting started</a></li>
 </ul>
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -143,9 +147,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

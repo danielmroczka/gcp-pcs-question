@@ -89,17 +89,26 @@ Your company operates an application instance group that is currently deployed b
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Potwierdzona odpowiedź: B (Premium Tier network)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Premium Tier Network: Tylko Premium Tier w Google Cloud wspiera globalne adresy IP (Anycast IP) i globalny Load Balancing. Pozwala to na użycie JEDNEGO adresu IP dla całego świata, który automatycznie kieruje ruch do najbliższego regionu (np. US lub EU) w zależności od lokalizacji klienta.
+Wyjaśnienie: 
+Tylko Network Service Tiers w wersji 'Premium' oferuje globalny adres IP Anycast, który pozwala na kierowanie ruchu do najbliższego regionu przez globalną sieć Google. 'Standard Tier' działa regionalnie i wymagałby oddzielnych adresów IP dla każdego regionu.
 
-Dlaczego inne są błędne:
-A. NEGs: Są mechanizmem backendowym (np. dla kontenerów), ale same w sobie nie decydują o globalności adresu IP Load Balancera.
-C. Standard Tier: Działa tylko regionalnie. Musiałbyś mieć osobne adresy IP dla każdego regionu i zarządzać nimi np. przez zewnętrzny DNS, co nie spełnia wymogu 'single external IP'.
-D. Cloud VPN: Służy do łączności hybrydowej, nie do globalnego serwowania aplikacji webowych pod jednym IP.
+Dlaczego pozostałe są błędne:
+A. Network Endpoint Groups (NEG) są przydatne, ale same w sobie nie rozwiązują problemu globalnego adresu IP dla wielu regionów w Standard Tier.
+C. Stworzenie nowego LB w Standard Tier da Ci drugi, oddzielny adres IP, co narusza wymóg 'single external IP'.
+D. Cloud VPN nie służy do dystrybucji publicznego ruchu HTTP do wielu regionów za pomocą jednego IP.
 
-Konsensus społeczności ExamTopics: 100% na B. To kluczowa różnica między poziomami sieci w Google Cloud.
+Wskazówki egzaminacyjne (Tips & Tricks):
+Global Load Balancing / Jeden IP dla wielu regionów = Premium Tier.
+
+Kluczowe zagadnienia do powtórzenia:
+- Network Service Tiers (Premium vs Standard)
+- Global HTTP(S) Load Balancing
+- Anycast IP
+
+Dokumentacja:
+<a href="https://cloud.google.com/network-tiers/docs/overview" target="_blank">https://cloud.google.com/network-tiers/docs/overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

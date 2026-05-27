@@ -90,18 +90,26 @@ A customer is running an analytics workload on Google Cloud Platform (GCP) where
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: AB.
+Potwierdzona odpowiedź: AB (Private Google Access, No public IP)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Private Google Access: Pozwala instancjom w podsieci, które nie posiadają publicznych adresów IP, na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage). Jest to niezbędne, aby maszyny odizolowane od internetu mogły nadal pracować z danymi w GCS.
-B. No public IP: Brak publicznego adresu IP fizycznie uniemożliwia bezpośrednie połączenie z maszyny do internetu oraz z internetu do maszyny.
+Wyjaśnienie: 
+Aby odizolować instancje od internetu, nie należy nadawać im publicznych adresów IP. Aby jednak te instancje mogły komunikować się z Cloud Storage (które ma publiczne adresy IP Google), należy włączyć Private Google Access w ich podsieci.
 
-Dlaczego inne są błędne:
-C. Separate subnet: Sam podział na podsieci nie blokuje dostępu do internetu, jeśli podsieć ma trasę do internet gateway.
-D. IP forwarding: Dotyczy przekazywania pakietów przez maszynę (router programowy), nie kontroluje dostępu do API Google.
-E. Cloud NAT: Służy właśnie do umożliwienia maszynom bez publicznego IP dostępu DO internetu (np. po updejty), co jest sprzeczne z wymogiem 'cannot access the internet'.
+Dlaczego pozostałe są błędne:
+C. Oddzielna podsieć sama w sobie nie blokuje dostępu do internetu.
+D. IP forwarding służy do przekazywania ruchu przez VM, nie do blokowania jej własnego dostępu.
+E. Cloud NAT pozwoliłby maszynom na wyjście DO internetu, co jest sprzeczne z wymogiem izolacji.
 
-Konsensus społeczności ExamTopics: 100% na AB. Standardowa metoda izolacji obciążeń korzystających z usług Google.
+Wskazówki egzaminacyjne (Tips & Tricks):
+Brak internetu + dostęp do usług Google = Private Google Access + No Public IP.
+
+Kluczowe zagadnienia do powtórzenia:
+- Private Google Access (PGA)
+- VPC Network Isolation
+- Public vs Private IP addresses
+
+Dokumentacja:
+<a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

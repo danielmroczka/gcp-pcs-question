@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="pl">
 <head>
 <meta charset="utf-8"/>
@@ -88,42 +87,54 @@ For compliance reasons, an organization needs to ensure that in-scope PCI Kubern
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Poprawna odpowiedź: C
+<pre>
+Potwierdzona odpowiedź: C (Place a taint on the Nodes with the label inscope: true and effect NoSchedule and a toleration to match in the Pod configuration.)
 
-Analiza poprawności:
-W środowiskach GKE wymagających spełnienia rygorystycznych wymogów zgodności (jak PCI DSS), kluczowe jest zapewnienie fizycznej lub logicznej separacji obciążeń wrażliwych od standardowych. 
-1. Tainty i Tolerancje: Tainty na węzłach (nodes) oznaczają je jako "niechciane" dla standardowych podów. Pod (PCI) musi posiadać odpowiednią tolerancję (toleration), aby "tolerować" taint i móc zostać uruchomionym na tych specjalnych węzłach.
-2. Izolacja: Mechanizm ten gwarantuje, że na węzłach oznaczonych jako `in-scope` uruchamiane są tylko pody z PCI, spełniając wymóg izolacji.
+Wyjaśnienie:
+To pytanie dotyczy izolacji obciążeń (workload isolation) w klastrze GKE. Aby zapewnić, że konkretne pody (PCI) działają TYLKO na konkretnych węzłach ORAZ że żadne inne pody nie trafią na te węzły, należy użyć mechanizmu Taints i Tolerations.
+1. Taint (Skażenie): Nakładasz "skażenie" na węzły z efektem `NoSchedule`. Powoduje to, że żaden pod nie zostanie na nich uruchomiony, chyba że posiada odpowiednią "tolerancję". To załatwia wymóg: "These Nodes can only contain the in-scope Pods".
+2. Toleration (Tolerancja): Dodajesz tolerancję do konfiguracji podów PCI. Pozwala im to "zignorować" skażenie i zostać uruchomionym na tych konkretnych węzłach.
+3. Node Affinity / nodeSelector: Często stosuje się je razem z taints, aby upewnić się, że pody PCI trafią WŁAŚNIE tam (przyciąganie), a taints zapewniają, że inne pody tam NIE trafią (odpychanie).
 
 Dlaczego pozostałe są błędne:
-A. nodeSelector: Jest to mechanizm wyboru węzłów, ale nie posiada funkcji "blokującej". Jeśli węzeł nie posiada tainty, inne pody nadal mogłyby zostać na nim zaplanowane (scheduling), co narusza wymóg wyłączności.
-B. Pod Security Policy (PSP): PSP jest mechanizmem wycofanym (deprecated) w Kubernetesie. Ponadto służy do definiowania uprawnień security kontekstu podów, a nie do bezpośredniego zarządzania fizycznym rozmieszczeniem (placement) podów na węzłach.
-D. Namespaces: Przestrzenie nazw (namespaces) są logiczną izolacją, ale nie zapewniają separacji na poziomie węzłów (fizycznego hosta/kernela), co jest wymagane przez PCI DSS w kontekście izolacji obciążeń.
+A. nodeSelector: Pozwala podom wybrać konkretne węzły, ale NIE zapobiega sytuacji, w której inne pody (bez nodeSelector) również zostaną tam zaplanowane przez scheduler. Nie spełnia więc drugiej części wymogu.
+B. Pod Security Policy: PSP (obecnie deprecated na rzecz Pod Security Admission) służy do kontroli uprawnień wewnątrz kontenera (np. czy może działać jako root), a nie do sterowania tym, na których węzłach fizycznych pod ma się znaleźć.
+D. Namespaces: Przestrzenie nazw zapewniają izolację logiczną wewnątrz API Kubernetes, ale nie gwarantują izolacji fizycznej na poziomie węzłów (maszyn wirtualnych). Pody z różnych przestrzeni nazw mogą działać na tym samym węźle.
 
-Wskazówki egzaminacyjne:
-- "PCI compliance" w pytaniach o GKE prawie zawsze wskazuje na izolację na poziomie węzłów (Taints/Tolerations lub Node Affinity).
-- Jeśli widzisz "Pod Security Policy", traktuj to jako dystraktor (zazwyczaj błędna odpowiedź, bo standard wycofany).
-- Zawsze rozróżniaj izolację logiczną (namespaces) od fizycznej (taints/tolerations).</pre>
+Tips & Tricks:
+- "Nodes can only contain specific Pods" = Taints and Tolerations.
+- NodeSelector = "Pod chce tam być" (ale inni też mogą).
+- Taint = "Nikt tu nie wejdzie bez przepustki (tolerancji)".
+- Na egzaminie PCI DSS często wymaga fizycznej separacji danych lub procesów – Taints są standardowym sposobem na jej osiągnięcie w Kubernetes.
+
+Zagadnienia:
+- GKE Workload Isolation.
+- Kubernetes Taints and Tolerations.
+- PCI DSS Compliance in Kubernetes.
+
+Dokumentacja:
+<a href="https://cloud.google.com/kubernetes-engine/docs/how-to/node-taints" target="_blank">https://cloud.google.com/kubernetes-engine/docs/how-to/node-taints</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> Wymogi PCI DSS kładą nacisk na izolację. W GKE, taint/toleration to jedyny natywny sposób na zapewnienie, że "wrażliwe" pody nie współdzielą fizycznych węzłów z nieautoryzowanymi obciążeniami.</p>
+<p><b>Głęboka analiza:</b> Połączenie `nodeAffinity` (aby pod chciał trafić na węzeł PCI) z `taints` (aby nikt inny tam nie trafił) to złoty standard izolacji w GKE dla rygorystycznych wymogów compliance.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/kubernetes-engine/docs/concepts/taints-and-tolerations" target="_blank">https://cloud.google.com/kubernetes-engine/docs/concepts/taints-and-tolerations</a></li>
+<li><a href="https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/" target="_blank">Kubernetes Documentation: Taints and Tolerations</a></li>
 </ul>
 </div>
 </div>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -138,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
 </body>

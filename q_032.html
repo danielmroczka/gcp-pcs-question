@@ -64,15 +64,14 @@
 <h2>Question 32 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You are creating an internal application that needs to access a user's Google Drive on the user's behalf. What should you do?
+You are creating an internal App Engine application that needs to access a user's Google Drive on the user's behalf. Your company does not want to rely on the current user's credentials. It also wants to follow Google-recommended practices. <br>What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Give users the Service Account User role.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Give a group the Service Account User role.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use G Suite Admin credentials.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a service account with G Suite domain-wide delegation.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a new Service account, and give all application users the role of Service Account User.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a new Service account, and add all application users to a Google Group. Give this group the role of Service Account User.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use a dedicated G Suite Admin account, and authenticate the application's operations with these G Suite credentials.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a new service account, and grant it G Suite domain-wide delegation. Have the application use it to impersonate the user.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,19 +88,23 @@ You are creating an internal application that needs to access a user's Google Dr
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (Create a service account with G Suite domain-wide delegation.)
+Potwierdzona odpowiedź: D (Create a new service account, and grant it G Suite domain-wide delegation. Have the application use it to impersonate the user.)
 
-Analiza poprawności:
-Domain-wide delegation (delegacja na całą domenę) to mechanizm umożliwiający kontu serwisowemu (Service Account) podszywanie się pod dowolnego użytkownika domeny Google Workspace (G Suite). Dzięki temu aplikacja może uzyskać dostęp do plików użytkownika na Dysku Google (Drive API) z uprawnieniami danego użytkownika, bez konieczności interaktywnego logowania się przez niego. Jest to standardowy sposób na automatyzację zadań administracyjnych lub przetwarzanie danych wewnątrz domeny.
+Wyjaśnienie: 
+Domain-wide delegation (delegacja na całą domenę) to mechanizm w Google Workspace (dawniej G Suite), który pozwala kontu serwisowemu (Service Account) na uzyskanie dostępu do danych użytkowników w całej organizacji bez konieczności ich interaktywnego logowania się czy wyrażania zgody przy każdym zapytaniu. Jest to oficjalna i zalecana praktyka Google dla aplikacji serwerowych (np. działających na App Engine), które muszą wykonywać operacje "w imieniu" użytkownika (tzw. impersonacja), takie jak odczyt lub zapis plików na Dysku Google. Wymaga to autoryzacji konta serwisowego przez administratora Workspace z określeniem konkretnych zakresów (OAuth Scopes).
 
 Dlaczego pozostałe są błędne:
-A, B (Service Account User): Ta rola IAM pozwala użytkownikowi (np. deweloperowi) używać konta serwisowego do uruchamiania instancji VM (podpinania SA do VM). Nie daje ona aplikacji uprawnień do "impersonacji" użytkownika w Workspace.
-C (Admin credentials): Przechowywanie haseł administratora (lub jakichkolwiek innych) w kodzie aplikacji jest skrajnie niebezpiecznym błędem (hardcoding credentials) i drastycznym naruszeniem zasad bezpieczeństwa.
+A, B. Service Account User: Rola `roles/iam.serviceAccountUser` pozwala użytkownikowi IAM na używanie konta serwisowego do uruchamiania zasobów (np. VM, klastrów GKE). Nie daje ona jednak mechanizmu do impersonowania użytkownika Workspace w celu dostępu do jego prywatnych danych (np. plików na Drive czy maili).
+C. G Suite Admin credentials: Używanie haseł administratora (lub jakichkolwiek kont użytkowników) bezpośrednio w kodzie aplikacji jest krytycznym błędem bezpieczeństwa (hardcoding credentials) i jest całkowicie niezgodne z najlepszymi praktykami Google Cloud.
 
-Wskazówki egzaminacyjne:
-- "Access Drive on user's behalf" / "G Suite" / "Service Account": To słowa klucze dla "Domain-wide delegation".
-- Mechanizm: Aplikacja serwerowa -> Konto serwisowe -> Delegacja -> Dostęp do danych użytkownika.
-- Eliminacja: Hasła (Admin credentials) = zawsze źle. SA User (rola w IAM) = błędny kontekst.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Access on user's behalf" + "Google Workspace / G Suite": To najsilniejszy sygnał, by szukać odpowiedzi z "Domain-wide delegation".
+- Impersonacja (impersonation): To kluczowy termin techniczny opisujący sytuację, w której konto serwisowe działa jako konkretny użytkownik.
+
+Kluczowe zagadnienia do powtórzenia:
+- Domain-wide delegation (DWD) w Workspace
+- OAuth 2.0 Scopes i ich ograniczanie (Least Privilege)
+- Różnica między IAM (GCP) a delegacją uprawnień (Workspace)
 
 Dokumentacja:
 <a href="https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority" target="_blank">https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority</a>
@@ -112,7 +115,7 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Delegacja na całą domenę wymaga precyzyjnego ograniczenia zakresów (OAuth Scopes) w konsoli Admin Workspace, aby konto serwisowe miało dostęp tylko do niezbędnych API (np. tylko Drive, bez poczty Gmail), zgodnie z zasadą "Least Privilege".</p>
+<p><b>Analiza spornych kwestii (AI):</b> Delegacja na całą domenę jest potężnym narzędziem i musi być używana ostrożnie. Zawsze należy ograniczać zakresy OAuth (Scopes) do absolutnego minimum (np. tylko `https://www.googleapis.com/auth/drive.readonly` zamiast pełnego dostępu do Drive), aby zminimalizować skutki ewentualnego wycieku kluczy konta serwisowego.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority" target="_blank">https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority</a></li>
@@ -123,10 +126,10 @@ Dokumentacja:
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -141,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
 

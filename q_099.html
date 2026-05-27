@@ -89,16 +89,25 @@ You are asked to recommend a solution to store and retrieve sensitive configurat
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Potwierdzona odpowiedź: D (Secret Manager)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Secret Manager: Jest to dedykowana usługa Google Cloud do bezpiecznego przechowywania sekretów (hasła, klucze API). Dane są tam szyfrowane, wersjonowane, a dostęp do nich jest ściśle kontrolowany przez IAM z pełnym logowaniem audytowym.
+Wyjaśnienie: 
+Secret Manager to dedykowana usługa Google Cloud do bezpiecznego przechowywania wrażliwych danych konfiguracyjnych, takich jak klucze API, hasła do baz danych czy certyfikaty. Oferuje wersjonowanie, audytowanie i silną kontrolę dostępu przez IAM.
 
-Dlaczego inne są błędne:
-A. Cloud KMS: Służy do zarządzania kluczami binarnymi, nie do przechowywania haseł tekstowych (to Secret Manager jest 'szufladą' na te zaszyfrowane dane).
-B, C. Metadata: Dane w metadanych są przesyłane i przechowywane w jawnym tekście. Każdy z dostępem do VM może je odczytać. To kardynalny błąd bezpieczeństwa.
+Dlaczego pozostałe są błędne:
+A. Cloud KMS służy do zarządzania kluczami kryptograficznymi, a nie do bezpośredniego przechowywania haseł czy ciągów tekstowych konfiguracji.
+B, C. Metadane (Metadata) i atrybuty gościa (Guest attributes) są widoczne dla każdego, kto ma uprawnienia do edycji lub podglądu VM, i nie są szyfrowane w taki sposób jak sekrety w Secret Managerze.
 
-Konsensus społeczności ExamTopics: 100% na D. Słowo 'Store and retrieve secrets' = Secret Manager.
+Wskazówki egzaminacyjne (Tips & Tricks):
+Hasła / API Keys / Certyfikaty = Secret Manager.
+
+Kluczowe zagadnienia do powtórzenia:
+- Secret Manager
+- Secret vs ConfigMap
+- IAM for secrets
+
+Dokumentacja:
+<a href="https://cloud.google.com/secret-manager/docs/overview" target="_blank">https://cloud.google.com/secret-manager/docs/overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

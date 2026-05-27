@@ -64,14 +64,15 @@
 <h2>Question 54 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-How can you restrict access to a specific Cloud Storage bucket so that only users from your corporate network can access it?
+Your team needs to make sure that their backend database can only be accessed by the frontend application and no other instances on the network.
+How should your team design this network?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud IAM roles</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Bucket ACLs</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> VPC Service Controls with Access Levels</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Firewall rules</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create an ingress firewall rule to allow access only from the application to the database using firewall tags.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a different subnet for the frontend application and database to ensure network isolation.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create two VPC networks, and connect the two networks using Cloud VPN gateways to ensure network isolation.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create two VPC networks, and connect the two networks using VPC peering to ensure network isolation.</li>
 
 </ul>
 </div>
@@ -80,7 +81,7 @@ How can you restrict access to a specific Cloud Storage bucket so that only user
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">C</span>
+<span class="correct-answer">A</span>
 <br/>
 </span>
 </div>
@@ -89,34 +90,40 @@ How can you restrict access to a specific Cloud Storage bucket so that only user
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (VPC Service Controls with Access Levels)
+Potwierdzona odpowiedź: A
 
-Analiza poprawności:
-VPC Service Controls (VPC SC) to zaawansowana usługa bezpieczeństwa Google Cloud, która pozwala na tworzenie "perymetrów bezpieczeństwa" wokół usług Google, takich jak Cloud Storage. W połączeniu z Access Context Manager (gdzie definiujesz "Access Levels"), możesz stworzyć regułę: "Dostęp do tego API jest dozwolony tylko, jeśli żądanie pochodzi z zakresu IP mojej sieci korporacyjnej". Jest to najskuteczniejszy sposób na walkę z kradzieżą danych (data exfiltration), ponieważ nawet jeśli ktoś ukradnie poprawne klucze administratora, nie pobierze danych spoza Twojego biura.
+Wyjaśnienie:
+W Google Cloud najskuteczniejszym i najbardziej eleganckim sposobem na wymuszenie izolacji między warstwami aplikacji (np. frontend i backend/baza danych) wewnątrz tej samej sieci VPC jest użycie reguł zapory ogniowej (VPC Firewall Rules) opartych na tagach sieciowych (network tags). Dzięki temu możesz zdefiniować regułę, która pozwala na ruch przychodzący (ingress) do instancji z tagiem `database` tylko wtedy, gdy źródłem ruchu są instancje z tagiem `frontend`. Wszystkie inne próby połączenia zostaną odrzucone przez domyślną regułę "deny all ingress". To podejście realizuje koncepcję mikrosegmentacji.
 
-Dlaczego pozostałe są błędne:
-A (Cloud IAM): IAM weryfikuje *tożsamość* (kto?), a nie *lokalizację* (skąd?). Nawet uprawniony administrator nie powinien mieć dostępu z dowolnego miejsca w internecie, jeśli polityka firmy tego zabrania.
-B (Bucket ACLs): ACL-e (Access Control Lists) to tradycyjna metoda kontroli dostępu do bucketów (kto ma dostęp do pliku). Podobnie jak IAM, nie sprawdzają adresu IP źródła żądania.
-D (Firewall rules): Reguły firewall działają tylko na poziomie sieci VPC (np. ruch do/z maszyn VM w Twojej sieci). API Cloud Storage znajduje się poza Twoją siecią VPC (w sieci Google), więc reguły firewall VPC nie mają na nie wpływu.
+Dlaczego pozostałe opcje są niepoprawne:
+- B: Same podsieci w GCP nie zapewniają izolacji ruchu. Domyślnie wszystkie podsieci wewnątrz tej samej sieci VPC mogą się ze sobą komunikować bez ograniczeń (o ile nie ma blokujących reguł firewall). Umieszczenie aplikacji i bazy w różnych podsieciach bez reguł firewall nic nie zmienia w kwestii bezpieczeństwa.
+- C i D: Tworzenie oddzielnych sieci VPC dla frontendu i bazy danych oraz łączenie ich przez Cloud VPN lub VPC Peering jest niepotrzebnie skomplikowane dla tego scenariusza. Wprowadza to dodatkowe koszty i narzut administracyjny, a ten sam (lub lepszy) poziom bezpieczeństwa można osiągnąć prostszą konfiguracją tagów w jednej sieci.
 
-Wskazówki egzaminacyjne:
-- "Restrict access to a specific Cloud Storage bucket" + "Only from corporate network": Zawsze szukaj "VPC Service Controls" (VPC SC).
-- "Data Exfiltration": Jeśli pytanie wspomina o zapobieganiu kradzieży danych – VPC SC to najlepsze narzędzie.
-- Eliminacja: Odrzucaj IAM i ACL, bo nie sprawdzają one lokalizacji użytkownika (IP).
+Tips & Tricks:
+- "Database only by frontend": To klasyczne pytanie o reguły firewall i tagi (lub Service Accounts).
+- Pamiętaj: Podsieci w GCP ≠ Izolacja. Tagi/Service Accounts w Firewall Rules = Izolacja.
+- Na egzaminie preferuj rozwiązania oparte na Service Accounts zamiast Network Tags, jeśli są dostępne (Service Accounts są bardziej bezpieczne, bo są powiązane z tożsamością, a nie tylko z etykietą tekstową maszyny), ale w tym pytaniu tagi są poprawną odpowiedzią.
+
+Zagadnienia:
+- VPC Firewall Rules
+- Network Tags (Tagi sieciowe)
+- Micro-segmentation (Mikrosegmentacja)
+- Principle of Least Privilege (Zasada najniższych uprawnień)
 
 Dokumentacja:
-<a href="https://cloud.google.com/vpc-service-controls/docs/access-level-usage" target="_blank">https://cloud.google.com/vpc-service-controls/docs/access-level-usage</a>
+<a href="https://cloud.google.com/vpc/docs/firewalls" target="_blank">https://cloud.google.com/vpc/docs/firewalls</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (Egzamin)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Wiele osób myli IAP (Identity-Aware Proxy) z VPC SC. IAP służy do kontroli dostępu do *Twoich* aplikacji (np. webowych na App Engine), natomiast VPC SC służy do ochrony *usług Google* (jak Cloud Storage API), z których korzystasz w swoim projekcie.</p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
+<h3>Kluczowe wnioski</h3>
+<p><b>Potwierdzona odpowiedź: A</b></p>
+<p>Zarządzanie bezpieczeństwem sieciowym w GCP opiera się na tożsamościach i tagach, a nie tylko na adresach IP czy podsieciach. Pozwala to na budowanie bardzo dynamicznych i bezpiecznych środowisk, gdzie reguły firewall automatycznie "podążają" za nowo tworzonymi instancjami z odpowiednimi tagami.</p>
+<h3>Praktyczne wskazówki</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc-service-controls/docs/access-level-usage" target="_blank">https://cloud.google.com/vpc-service-controls/docs/access-level-usage</a></li>
+<li>Zwróć uwagę na różnicę między "Network Tags" a "Service Accounts" w regułach firewall. Tagi może zmienić każdy, kto ma uprawnienia <code>compute.instances.setTag</code>, natomiast przypisanie Service Account wymaga uprawnień <code>iam.serviceAccounts.actAs</code>, co czyni to drugie rozwiązanie bezpieczniejszym w dużych zespołach.</li>
+<li>Domyślnie nowa sieć VPC (typu 'default') ma regułę pozwalającą na cały ruch wewnętrzny. W produkcji zawsze należy tę regułę usunąć i stosować podejście "White-listing" (jawne pozwalanie na wymagany ruch).</li>
 </ul>
 </div>
 </div>

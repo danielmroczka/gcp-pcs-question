@@ -90,17 +90,25 @@ Your team wants to limit users with administrative privileges at the organizatio
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: AB.
+Potwierdzona odpowiedź: AB (Organization Administrator, Super Admin)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Organization Administrator: Ta rola IAM w GCP pozwala na pełne zarządzanie uprawnieniami i politykami całej organizacji. Ktoś z tą rolą może nadać sobie każdą inną uprawnienie.
-B. Super Admin: To rola w Google Workspace / Cloud Identity. Super Admin może zarządzać samymi tożsamościami, resetować hasła innym administratorom i posiada pełną władzę nad domeną, która jest fundamentem organizacji w GCP.
+Wyjaśnienie: 
+Na najwyższym poziomie hierarchii mamy: 1. Super Admin (Cloud Identity/Workspace) - może zarządzać kontami i resetować hasła adminom. 2. Organization Administrator (IAM) - może zmieniać polityki dla całej organizacji i nadawać uprawnienia. Ograniczenie tych ról jest kluczowe dla bezpieczeństwa całej struktury.
 
-Dlaczego inne są błędne:
-C, D: To role administracyjne, ale ograniczone do konkretnych usług (GKE, VM) i zazwyczaj na poziomie projektu, a nie całej organizacji.
-E. Organization Role Viewer: To rola tylko do odczytu, nie daje żadnych uprawnień 'privilege' pozwalających na zmianę konfiguracji.
+Dlaczego pozostałe są błędne:
+C, D. Te role są ograniczone do konkretnych usług i zazwyczaj nadawane na poziomie projektu, a nie organizacji.
+E. Role Viewer nie pozwala na żadne zmiany administracyjne.
 
-Konsensus społeczności ExamTopics: 100% na AB. To duet 'najpotężniejszych' ról w ekosystemie Google Cloud.
+Wskazówki egzaminacyjne (Tips & Tricks):
+Zasada 'Piramidy': Super Admin i Org Admin to wierzchołek. Musi być ich jak najmniej.
+
+Kluczowe zagadnienia do powtórzenia:
+- GCP Resource Hierarchy
+- Organization-level IAM roles
+- Super Admin vs Org Admin
+
+Dokumentacja:
+<a href="https://cloud.google.com/resource-manager/docs/access-control-org" target="_blank">https://cloud.google.com/resource-manager/docs/access-control-org</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

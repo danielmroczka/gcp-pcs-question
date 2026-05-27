@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 62</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,15 +64,14 @@
 <h2>Question 62 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-An engineering team is launching a web application that will be public on the internet. The web application is hosted in multiple GCP regions and will be directed to the respective backend based on the URL request. Your team wants to avoid exposing the application directly on the internet and wants to deny traffic from a specific list of malicious IP addresses. Which solution should your team implement to meet these requirements?
+A manager wants to start retaining security event logs for 2 years while minimizing costs. You write a filter to select the appropriate log entries. Where should you export the logs?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud Armor</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Network Load Balancing</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> SSL Proxy Load Balancing</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> NAT Gateway</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> BigQuery datasets</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud Storage buckets</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> StackDriver logging</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud Pub/Sub topics</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +79,7 @@ An engineering team is launching a web application that will be public on the in
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">B</span>
 <br/>
 </span>
 </div>
@@ -89,45 +88,53 @@ An engineering team is launching a web application that will be public on the in
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Cloud Armor)
+Potwierdzona odpowiedź: B (Cloud Storage buckets)
 
-Analiza poprawności:
-Cloud Armor to w pełni zarządzana usługa Google Cloud, która pełni rolę Web Application Firewall (WAF) oraz mechanizmu ochrony przed atakami DDoS (Distributed Denial of Service). Zapewnia ona wbudowane, gotowe reguły chroniące aplikacje przed najczęstszymi atakami, a w szczególności pozwala na tworzenie list IP (whitelist/blacklist), co jest kluczowe dla blokowania "złośliwych adresów IP". Współpracuje bezpośrednio z globalnym Load Balancerem HTTP(S), co pozwala filtrować ruch na brzegu sieci Google (Edge), zanim dotrze on do Twoich serwerów.
+Wyjaśnienie:
+Gdy głównym celem jest długoterminowe przechowywanie logów (retencja) przy jednoczesnej minimalizacji kosztów ("minimizing costs"), Cloud Storage jest bezkonkurencyjnym rozwiązaniem.
+1. Niskie koszty: Przechowywanie danych w Cloud Storage (szczególnie w klasach Nearline, Coldline lub Archive) jest znacznie tańsze niż w BigQuery czy domyślnym systemie Cloud Logging (Stackdriver).
+2. Długi czas retencji: Cloud Logging domyślnie przechowuje logi tylko przez 30-400 dni (zależnie od typu logów). Przechowywanie ich przez 2 lata wymaga eksportu (sink) do zewnętrznego systemu.
+3. Object Lifecycle Management: Cloud Storage pozwala na automatyczne przenoszenie logów do tańszych klas (Archive) lub ich usuwanie po upływie dokładnie 2 lat, co dodatkowo optymalizuje koszty.
 
 Dlaczego pozostałe są błędne:
-B (Network Load Balancing): To regionalny LB działający w warstwie 4 (TCP/UDP). Nie wspiera filtrowania ruchu na podstawie URL i nie integruje się z Cloud Armor dla zaawansowanej ochrony warstwy 7.
-C (SSL Proxy Load Balancing): Służy do obsługi ruchu TCP z szyfrowaniem SSL, ale nie wspiera routingu opartego na ścieżkach URL (path rules), który jest wymagany w pytaniu.
-D (NAT Gateway): Służy do zapewnienia dostępu do internetu instancjom wewnątrz sieci prywatnej (ruch WYCHODZĄCY), a nie do obsługi ruchu przychodzącego od użytkowników publicznych.
+A. BigQuery: Jest świetne do zaawansowanej analizy logów w czasie rzeczywistym przy użyciu SQL, ale jest droższe niż Cloud Storage przy czystym składowaniu danych ("at rest") przez tak długi czas.
+C. StackDriver logging: Posiada sztywne limity retencji (zazwyczaj 30 dni dla logów administracyjnych, chyba że używasz log buckets z niestandardową retencją, ale Cloud Storage wciąż jest tańszą opcją "eksportową").
+D. Cloud Pub/Sub: To usługa przesyłania wiadomości w czasie rzeczywistym. Nie służy do przechowywania (retencji) danych, a jedynie do ich przekazywania do innych systemów (np. SIEM on-premises).
 
-Wskazówki egzaminacyjne:
-- "Public application" + "Malicious IP addresses": Zawsze szukaj "Cloud Armor".
-- "WAF" / "DDoS": To klasyczne zastosowania Cloud Armor.
-- Eliminacja: Jeśli pytanie dotyczy filtrowania ruchu przychodzącego do aplikacji webowej – odrzuć NAT Gateway i Network LB.
+Tips & Tricks:
+- "Long-term retention" + "Minimum cost" = Cloud Storage.
+- "Real-time analysis" + "SQL" = BigQuery.
+- "Streaming to SIEM" = Pub/Sub.
+- Pamiętaj o klasach Archive w Cloud Storage – są idealne na logi "na wszelki wypadek", których nikt nie planuje czytać regularnie.
+
+Zagadnienia:
+- Cloud Logging Sinks (Exporters).
+- Cloud Storage Storage Classes and Lifecycle.
+- Compliance requirements for log retention.
 
 Dokumentacja:
-<a href="https://cloud.google.com/armor/docs/cloud-armor-overview" target="_blank">https://cloud.google.com/armor/docs/cloud-armor-overview</a>
+<a href="https://cloud.google.com/logging/docs/export" target="_blank">https://cloud.google.com/logging/docs/export</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Cloud Armor jest niezwykle skuteczny, ponieważ korzysta z tej samej technologii, którą Google używa do ochrony własnych usług (Search, YouTube, Gmail). Dzięki temu może filtrować ataki na wielką skalę, które mogłyby położyć każdą własną infrastrukturę.</p>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p><b>Praktyczne wnioski:</b> Eksport logów do Cloud Storage tworzy pliki w formacie JSON, które można później łatwo zaimportować do BigQuery, jeśli zajdzie potrzeba nagłej analizy incydentu sprzed roku.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/armor/docs/cloud-armor-overview" target="_blank">https://cloud.google.com/armor/docs/cloud-armor-overview</a></li>
+<li><a href="https://cloud.google.com/logging/docs/export/configure_export_v2" target="_blank">Configure log sinks</a></li>
 </ul>
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -142,9 +149,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

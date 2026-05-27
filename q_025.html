@@ -64,15 +64,14 @@
 <h2>Question 25 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your team needs to centralize control over networking resources like firewall rules, subnets, and routes. Which type of networking design should your team use?
+Your team needs to configure their Google Cloud Platform (GCP) environment so they can centralize the control over networking resources like firewall rules, subnets, and routes. They also have an on-premises environment where resources need access back to the GCP resources through a private VPN connection. <br>The networking resources will need to be controlled by the network security team. <br>Which type of networking design should your team use to meet these requirements?
 </p>
 <div class="question-choices-container">
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Shared VPC Network with a host project and service projects</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Grant Compute Admin role to each project</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> VPC peering hub and spoke</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud VPN hub and spoke</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Grant Compute Admin role to the networking team for each engineering project</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">C.</span> VPC peering between all engineering projects using a hub and spoke model</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">D.</span> Cloud VPN Gateway between all engineering projects using a hub and spoke model</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,20 +88,25 @@ Your team needs to centralize control over networking resources like firewall ru
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Shared VPC Network with a host project and service projects)
+Potwierdzona odpowiedź: A (Shared VPC Network with a host project and service projects)
 
-Analiza poprawności:
-Shared VPC to zaawansowane rozwiązanie w Google Cloud, które pozwala na centralizację zarządzania zasobami sieciowymi. Polega ono na wyznaczeniu jednego projektu (Host Project) jako centralnego punktu zarządzania siecią (firewalle, podsieci, trasy, VPC). Inne projekty (Service Projects) przyłączają się do tej sieci, mogąc z niej korzystać, ale bez uprawnień do zmiany jej konfiguracji sieciowej. Zapewnia to separację obowiązków (SoD) między zespołem sieciowym (admini host project) a zespołami deweloperskimi (użytkownicy service projects).
+Wyjaśnienie: 
+Shared VPC to zaawansowane rozwiązanie w Google Cloud, które pozwala na centralizację zarządzania zasobami sieciowymi w skali całej organizacji. Polega ono na wyznaczeniu jednego projektu (Host Project) jako centralnego punktu zarządzania siecią (firewalle, podsieci, trasy, bramy VPN). Inne projekty (Service Projects) przyłączają się do tej sieci, mogąc z niej korzystać, ale bez uprawnień do zmiany jej konfiguracji sieciowej. Zapewnia to idealną separację obowiązków (SoD) – zespół sieciowy kontroluje infrastrukturę w Host Project, a deweloperzy budują zasoby w Service Projects.
 
 Dlaczego pozostałe są błędne:
-B (Compute Admin): Nadanie roli Compute Admin w każdym projekcie to decentralizacja, a nie centralizacja. Programiści z uprawnieniami admina mogliby sami zmieniać reguły sieciowe w swoim projekcie, co narusza zasady centralnego zarządzania.
-C (VPC peering hub and spoke): Peering łączy sieci, ale nie zarządza nimi centralnie w jeden spójny system. Każda sieć (hub i spoke) nadal posiada własne, niezależne reguły firewalla i tablice routingu.
-D (Cloud VPN hub and spoke): VPN służy do łączenia odrębnych sieci (często chmura z on-premises), a nie do centralizacji zarządzania konfiguracją wewnątrz chmury GCP.
+B. Grant Compute Admin role: Nadanie roli Compute Admin w każdym projekcie inżynieryjnym to decentralizacja, a nie centralizacja. Zespół sieciowy musiałby zarządzać setkami niezależnych projektów, co jest nieefektywne, trudne do audytowania i podatne na błędy konfiguracyjne.
+C. VPC peering hub and spoke: Peering łączy odrębne sieci VPC, ale nie zarządza nimi centralnie. Każda sieć (każdy spoke) nadal posiada własne, niezależne reguły firewalla i tablice routingu, co uniemożliwia spójną kontrolę z jednego miejsca.
+D. Cloud VPN hub and spoke: VPN służy głównie do łączenia odrębnych sieci (np. chmura z on-premises) przez internet. Używanie VPN do łączenia wszystkich projektów wewnątrz chmury jest nieefektywne kosztowo i wydajnościowo w porównaniu do Shared VPC.
 
-Wskazówki egzaminacyjne:
-- "Centralize control over networking": To hasło-klucz dla "Shared VPC".
-- "Host project / Service projects": To specyficzna terminologia GCP dla Shared VPC.
-- Eliminacja: Jeśli pytanie pyta o zarządzanie siecią w skali przedsiębiorstwa (Enterprise) – Shared VPC zawsze wygrywa z peeringiem.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Centralize control over networking": To sygnał dla "Shared VPC".
+- "Host project / Service projects": To specyficzna terminologia Shared VPC, którą musisz znać.
+- Shared VPC jest standardem w dużych organizacjach (Enterprise) wymagających wysokiego poziomu bezpieczeństwa i compliance.
+
+Kluczowe zagadnienia do powtórzenia:
+- Shared VPC (Host Project vs Service Project)
+- Separacja obowiązków (Separation of Duties) w sieciach
+- IAM w Shared VPC (Rola Compute Network User)
 
 Dokumentacja:
 <a href="https://cloud.google.com/vpc/docs/shared-vpc" target="_blank">https://cloud.google.com/vpc/docs/shared-vpc</a>
@@ -113,7 +117,7 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Shared VPC rozwiązuje problem tzw. "Shadow IT" w sieciach. Deweloperzy mogą bezpiecznie tworzyć zasoby (VM, klastry), ale to zespół bezpieczeństwa i sieci decyduje, jakie porty są otwarte, co jest kluczowe w regulowanych środowiskach (np. PCI DSS, HIPAA).</p>
+<p><b>Analiza spornych kwestii (AI):</b> Shared VPC rozwiązuje problem tzw. "Shadow IT" w sieciach. Deweloperzy mogą bezpiecznie tworzyć zasoby (VM, klastry), ale to zespół bezpieczeństwa i sieci decyduje, jakie porty są otwarte i jak wygląda routing, co jest kluczowe w regulowanych środowiskach (np. PCI DSS).</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/vpc/docs/shared-vpc" target="_blank">https://cloud.google.com/vpc/docs/shared-vpc</a></li>
@@ -124,10 +128,10 @@ Dokumentacja:
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -142,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
 

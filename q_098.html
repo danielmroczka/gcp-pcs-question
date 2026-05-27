@@ -90,16 +90,26 @@ You have been tasked with implementing external web application protection again
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Potwierdzona odpowiedź: A (Cloud Armor's preconfigured rules in preview mode)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Cloud Armor Preview Mode: Pozwala na uruchomienie reguł WAF (np. przeciwko SQLi), które tylko LOGUJĄ co by się stało, zamiast blokować ruch. Pozwala to na sprawdzenie, czy reguła nie blokuje legalnych użytkowników (false positives) przed jej włączeniem.
+Wyjaśnienie: 
+Tryb 'preview' w Cloud Armor pozwala na testowanie reguł bezpieczeństwa (np. przeciw SQLi lub XSS) na rzeczywistym ruchu, ale bez ich blokowania. Zdarzenia pasujące do reguł są odnotowywane w logach, co pozwala ocenić ryzyko 'false positives' przed faktycznym włączeniem blokady.
 
-Dlaczego inne są błędne:
-B. VPC firewall: Nie posiada tak zaawansowanego trybu 'monitor' z symulacją reguł aplikacyjnych.
-D. VPC SC dry run: Chroni przed kradzieżą danych (exfiltration), a nie przed 'common web attacks' (SQLi/XSS).
+Dlaczego pozostałe są błędne:
+B. VPC Firewall nie posiada 'monitor mode' dla reguł L7 ani predefiniowanych reguł przeciw atakom webowym.
+C. Inherent protections GFE są podstawowe i nie pozwalają na specyficzną walidację własnych polityk.
+E. VPC Service Controls dry run dotyczy izolacji API (eksfiltracji), a nie ataków typu SQLi/XSS na aplikację webową.
 
-Konsensus społeczności ExamTopics: 100% na A. To standardowy krok wdrożenia WAF w Enterprise.
+Wskazówki egzaminacyjne (Tips & Tricks):
+Testowanie reguł WAF bez ryzyka przerwy w działaniu = Cloud Armor Preview Mode.
+
+Kluczowe zagadnienia do powtórzenia:
+- Cloud Armor Preview Mode
+- WAF rule validation
+- Security log analysis
+
+Dokumentacja:
+<a href="https://cloud.google.com/armor/docs/configure-security-policies#preview-mode" target="_blank">https://cloud.google.com/armor/docs/configure-security-policies#preview-mode</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

@@ -64,15 +64,15 @@
 <h2>Question 48 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Which role allows a user to manage encryption keys in Cloud KMS but not use them to encrypt/decrypt data?
+Applications often require access to `secrets` - small pieces of sensitive data at build or run time. The administrator managing these secrets on GCP wants to keep a track of `who did what, where, and when?` within their GCP projects. Which two log streams would provide the information that the administrator is looking for? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Cloud KMS Admin</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud KMS CryptoKey Decrypter</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud KMS CryptoKey Encrypter</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Cloud KMS CryptoKey User</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Admin Activity logs</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> System Event logs</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Data Access logs</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> VPC Flow logs</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Agent logs</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +80,7 @@ Which role allows a user to manage encryption keys in Cloud KMS but not use them
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">AC</span>
 <br/>
 </span>
 </div>
@@ -89,43 +89,51 @@ Which role allows a user to manage encryption keys in Cloud KMS but not use them
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Cloud KMS Admin)
+Potwierdzona odpowiedź: AC (Admin Activity logs oraz Data Access logs)
 
-Analiza poprawności:
-W Google Cloud obowiązuje zasada separacji obowiązków (Separation of Duties). Rola `roles/cloudkms.admin` (`Cloud KMS Admin`) jest przeznaczona dla administratorów bezpieczeństwa, którzy zarządzają *samą infrastrukturą kluczy*: tworzą klucze, nadają do nich uprawnienia IAM, rotują je lub wyłączają. Zgodnie z zasadą najniższych uprawnień (Least Privilege), administrator kluczy nie powinien mieć możliwości używania tych kluczy do rzeczywistych operacji kryptograficznych (szyfrowania/deszyfrowania danych), ponieważ jego rola ogranicza się do zarządzania, a nie do "dotykania" danych.
+Wyjaśnienie:
+W Google Cloud to "Cloud Audit Logs" są kluczowym źródłem informacji o tym "kto, co, gdzie i kiedy" zrobił w projekcie. Składają się one z kilku strumieni:
+1. Admin Activity logs (A): Rejestrują operacje zapisu lub zmiany konfiguracji (np. utworzenie nowego sekretu, zmiana uprawnień IAM do sekretu, usunięcie sekretu). Są one włączone domyślnie i darmowe.
+2. Data Access logs (C): Rejestrują operacje odczytu danych (np. pobranie wartości sekretu przez aplikację lub użytkownika). Są one niezwykle ważne dla sekretów, ale domyślnie wyłączone (z wyjątkiem BigQuery), ponieważ mogą generować duże ilości logów i wiążą się z kosztami. Aby śledzić, kto odczytał sekret, administrator musi je ręcznie włączyć.
 
 Dlaczego pozostałe są błędne:
-B (Decrypter), C (Encrypter), D (User): Te role (`roles/cloudkms.cryptoKeyDecrypter`, `roles/cloudkms.cryptoKeyEncrypter`, `roles/cloudkms.cryptoKeyUser`) dają uprawnienia do WYKONYWANIA operacji kryptograficznych, a nie do administracji samym kluczem.
+B. System Event logs: Rejestrują zdarzenia systemowe Google (np. restart instancji przez system w celu utrzymania infrastruktury), a nie akcje użytkowników związane z zarządzaniem danymi.
+D. VPC Flow logs: Rejestrują ruch sieciowy (IP, porty, bajty) w sieci VPC. Nie zawierają informacji o tym, jakie konkretne API (np. Secret Manager) było wywoływane ani przez kogo (na poziomie tożsamości IAM).
+E. Agent logs: To logi pochodzące z oprogramowania zainstalowanego wewnątrz VM (np. Ops Agent). Nie służą one do audytowania operacji na poziomie API Google Cloud Platform.
 
-Wskazówki egzaminacyjne:
-- "Manage encryption keys" + "not use them to encrypt/decrypt": To klasyczna definicja roli Admina.
-- "Separation of Duties": Admin (zarządza) vs User (używa). Nigdy nie mieszaj tych dwóch ról u jednego użytkownika/aplikacji.
-- Eliminacja: Zawsze odrzucaj role "User" lub "Encrypter/Decrypter", gdy w pytaniu pojawia się wymóg "administrowania" samym kluczem.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Pamiętaj mantrę audytową GCP: "Admin Activity = Changes/Write", "Data Access = Reading/Accessing data".
+- Jeśli pytanie pyta o "audit trails" lub "compliance", Cloud Audit Logs (Admin + Data Access) to zawsze właściwa ścieżka.
+- Zapamiętaj, że Data Access logs muszą być jawnie włączone dla większości usług (np. Secret Manager, Cloud Storage).
+
+Kluczowe zagadnienia do powtórzenia:
+- Typy Cloud Audit Logs.
+- Retencja logów audytowych.
+- Różnica między logami włączonymi domyślnie a konfigurowalnymi.
 
 Dokumentacja:
-<a href="https://cloud.google.com/kms/docs/reference/iam-roles" target="_blank">https://cloud.google.com/kms/docs/reference/iam-roles</a>
+<a href="https://cloud.google.com/logging/docs/audit" target="_blank">Cloud Audit Logs overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Dzięki temu administrator kluczy może dbać o ich bezpieczeństwo i rotację, ale nie może odczytać zaszyfrowanych danych (np. z bazy), do których te klucze służą. To wymusza współpracę między zespołem operacyjnym (Security Admin) a aplikacyjnym (deweloperzy).</p>
+<p><b>Sugerowana odpowiedź: AC</b></p>
+<p><b>Analiza spornych kwestii (AI):</b> Niektórzy kursanci mylą Admin Activity z System Events. System Events są generowane przez Google, Admin Activity przez użytkowników. Dla administratora chcącego śledzić dostęp do danych, połączenie logów zmian (Admin) i logów odczytu (Data Access) daje pełny obraz (360 stopni) cyklu życia sekretu.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/kms/docs/reference/iam-roles" target="_blank">https://cloud.google.com/kms/docs/reference/iam-roles</a></li>
+<li><a href="https://cloud.google.com/secret-manager/docs/audit-logging" target="_blank">Audit logging in Secret Manager</a></li>
 </ul>
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -140,9 +148,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

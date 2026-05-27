@@ -89,23 +89,27 @@ A customer needs to prevent attackers from hijacking their domain/IP and redirec
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (DNS Security Extensions)
+Potwierdzona odpowiedź: C (DNS Security Extensions - DNSSEC)
 
-Analiza poprawności:
-DNS Security Extensions (DNSSEC) to zestaw rozszerzeń protokołu DNS, które zapewniają autentyczność i integralność danych DNS. Działają poprzez cyfrowe podpisywanie rekordów DNS przy użyciu kryptografii klucza publicznego. Dzięki temu klient (np. przeglądarka) może zweryfikować, czy otrzymana odpowiedź DNS pochodzi z zaufanego, autentycznego źródła i nie została zmodyfikowana przez atakującego (np. w ataku typu DNS cache poisoning lub man-in-the-middle).
+Wyjaśnienie: 
+Aby zapobiec przejęciu domeny/IP (hijacking) i atakom typu man-in-the-middle polegającym na fałszowaniu odpowiedzi DNS (np. DNS cache poisoning), należy zastosować DNSSEC. DNSSEC dodaje cyfrowe podpisy do rekordów DNS, co pozwala serwerom rozwiązującym nazwy (resolvers) na zweryfikowanie, czy odpowiedź pochodzi z autentycznego źródła i nie została zmodyfikowana w trakcie przesyłania.
 
 Dlaczego pozostałe są błędne:
-A (VPC Flow Logs): Rejestrują metadane ruchu sieciowego wewnątrz sieci VPC (źródło, cel, bajty). Służą do audytu i monitorowania przepływu, a nie do ochrony integralności domen.
-B (Cloud Armor): Jest to WAF (Web Application Firewall) oraz ochrona DDoS, która chroni aplikację webową (L7) przed atakami na poziomie HTTP/S. Nie dotyczy infrastruktury DNS.
-D (Cloud Identity-Aware Proxy): Służy do kontrolowania dostępu do aplikacji (na podstawie tożsamości użytkownika), a nie do ochrony samego protokołu DNS czy domen.
+A. VPC Flow Logs: Służą do monitorowania i rejestrowania ruchu IP w sieciach VPC. Pomagają w analizie incydentów, ale nie zapobiegają fałszowaniu rekordów DNS na poziomie publicznego internetu.
+B. Cloud Armor: Jest to WAF (Web Application Firewall) i ochrona przed DDoS. Chroni aplikacje przed atakami L7 (np. SQLi, XSS), ale nie zabezpiecza integralności samego protokołu DNS.
+D. Cloud Identity-Aware Proxy: Zarządza dostępem do aplikacji na podstawie tożsamości użytkownika. Nie chroni infrastruktury DNS przed atakami typu spoofing czy hijacking.
 
-Wskazówki egzaminacyjne:
-- "Man-in-the-middle" + "Domain": To niemal zawsze oznacza atak na DNS lub certyfikaty SSL. Jeśli w opcjach widzisz DNSSEC – zazwyczaj to jest poprawna odpowiedź.
-- "DNS Integrity": DNSSEC to jedyny standard branżowy służący do ochrony integralności odpowiedzi DNS.
-- Eliminacja: Cloud Armor (WAF) i IAP (Auth) to narzędzia warstwy 7 (aplikacyjnej), DNSSEC to warstwa sieciowo-infrastrukturalna (DNS).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Hijacking domain/IP" + "Man-in-the-middle" + "DNS context" = DNSSEC.
+- Pamiętaj, że DNSSEC zapewnia integralność i autentyczność, ale NIE zapewnia poufności (dane DNS wciąż są jawne, tylko podpisane).
+
+Kluczowe zagadnienia do powtórzenia:
+- DNSSEC (Domain Name System Security Extensions)
+- DNS Cache Poisoning / Spoofing
+- Cloud DNS security features
 
 Dokumentacja:
-<a href="https://cloud.google.com/dns/docs/dnssec-configs" target="_blank">https://cloud.google.com/dns/docs/dnssec-configs</a>
+<a href="https://cloud.google.com/dns/docs/dnssec" target="_blank">https://cloud.google.com/dns/docs/dnssec</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -113,21 +117,20 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> DNSSEC wprowadza zaufanie do hierarchii DNS poprzez łańcuch podpisów cyfrowych. W Google Cloud DNS włączenie DNSSEC sprowadza się do zmiany jednego ustawienia w strefie DNS – jest to jedna z najprostszych, a jednocześnie najważniejszych operacji zabezpieczających domenę.</p>
+<p><b>Analiza spornych kwestii (AI):</b> Niektórzy kursanci mylą przejęcie domeny (hijacking) z atakami na aplikację (WAF). DNSSEC jest jedyną technologią w tym zestawieniu, która bezpośrednio adresuje 'zaufanie' do odpowiedzi z serwerów DNS, co jest fundamentem ochrony przed przekierowaniem użytkowników na fałszywe strony.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/dns/docs/dnssec-configs" target="_blank">https://cloud.google.com/dns/docs/dnssec-configs</a></li>
+<li><a href="https://cloud.google.com/dns/docs/dnssec" target="_blank">https://cloud.google.com/dns/docs/dnssec</a></li>
 </ul>
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -142,9 +145,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

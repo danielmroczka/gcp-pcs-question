@@ -64,15 +64,14 @@
 <h2>Question 45 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You are investigating a security incident and need to see who modified a firewall rule. Which log should you check?
+A large financial institution is moving its Big Data analytics to Google Cloud Platform. They want to have maximum control over the encryption process of data stored at rest in BigQuery. What technique should the institution use?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Data Access logs</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Admin Activity logs</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> VPC Flow Logs</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> System Event logs</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use Cloud Storage as a federated Data Source.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use a Cloud Hardware Security Module (Cloud HSM).</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Customer-managed encryption keys (CMEK).</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Customer-supplied encryption keys (CSEK).</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +79,7 @@ You are investigating a security incident and need to see who modified a firewal
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">C</span>
 <br/>
 </span>
 </div>
@@ -88,38 +87,52 @@ You are investigating a security incident and need to see who modified a firewal
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
-<pre>Odpowiedź: B.
+<pre>
+Potwierdzona odpowiedź: C (Customer-managed encryption keys - CMEK)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Admin Activity logs: Rejestrują one wszystkie operacje zapisu (create, update, delete, patch) wykonane na zasobach poprzez API. Każda zmiana reguły firewalla jest taką operacją i zawiera informację o tożsamości (kto), czasie i rodzaju zmiany.
+Wyjaśnienie:
+Gdy klient potrzebuje "maksymalnej kontroli" nad kluczami szyfrującymi dane w spoczynku (at rest) w usłudze BigQuery, właściwym rozwiązaniem jest CMEK.
+1. CMEK (Customer-managed encryption keys): Pozwala klientowi na tworzenie i zarządzanie kluczami w usłudze Cloud KMS (Key Management Service). Klient ma kontrolę nad rotacją kluczy, ich wyłączaniem oraz niszczeniem. BigQuery używa tych kluczy do szyfrowania danych zamiast domyślnych kluczy zarządzanych przez Google.
+2. BigQuery Support: Ważne jest, aby pamiętać, że BigQuery wspiera CMEK, ale NIE wspiera CSEK (kluczy dostarczanych przez klienta w każdym żądaniu).
 
-Dlaczego inne są błędne:
-A. Data Access logs: Rejestrują operacje odczytu danych (np. kto pobrał plik z bucketu) lub metadanych. Nie służą do śledzenia zmian w konfiguracji sieci.
-C. VPC Flow Logs: Rejestrują pakiety IP przepływające przez sieć. Powiedzą Ci, że ruch został zablokowany, ale nie powiedzą, kto stworzył regułę, która go zablokowała.
-D. System Event logs: Dotyczą zdarzeń systemowych Google (np. restart VM z powodu awarii hosta), a nie działań użytkowników.
+Dlaczego pozostałe są błędne:
+A. Federated Data Source: To metoda odpytywania danych znajdujących się poza BigQuery (np. w Cloud Storage). Nie jest to technika szyfrowania zapewniająca kontrolę nad danymi wewnątrz BigQuery.
+B. Cloud HSM: To sprzętowy moduł bezpieczeństwa (FIPS 140-2 L3), który może przechowywać klucze dla Cloud KMS. Chociaż zwiększa on poziom bezpieczeństwa fizycznego kluczy, sam w sobie nie jest "techniką" szyfrowania BigQuery. Klucze z Cloud HSM są używane w ramach CMEK.
+D. CSEK (Customer-supplied encryption keys): W tej metodzie klient wysyła surowy klucz w każdym żądaniu API. CSEK jest wspierany przez Cloud Storage i Compute Engine, ale BigQuery go nie obsługuje. Dlatego CMEK jest jedyną poprawną opcją dla BigQuery przy wymogu kontroli klucza przez klienta.
 
-Konsensus społeczności ExamTopics: 100% na B. Admin Activity to podstawowy dziennik audytowy dla zmian w konfiguracji.</pre>
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Zapamiętaj: BigQuery = CMEK (Tak), CSEK (Nie).
+- Jeśli pytanie pyta o "control" w BigQuery, szukaj CMEK.
+- Pamiętaj, że CMEK wymaga nadania uprawnień (role/cloudkms.cryptoKeyEncrypterDecrypter) kontu serwisowemu BigQuery do klucza w KMS.
+
+Kluczowe zagadnienia do powtórzenia:
+- Różnica między Default encryption, CMEK i CSEK.
+- Wsparcie dla CSEK w różnych usługach GCP.
+- Integracja BigQuery z Cloud KMS.
+
+Dokumentacja:
+<a href="https://cloud.google.com/bigquery/docs/customer-managed-encryption-keys" target="_blank">CMEK w BigQuery</a>
+</pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Admin Activity logs są darmowe, zawsze włączone i nie można ich wyłączyć, co czyni je najbardziej wiarygodnym źródłem dla audytora.</p>
+<p><b>Sugerowana odpowiedź: C</b></p>
+<p><b>Analiza spornych kwestii (AI):</b> Pułapką w tym pytaniu jest opcja D. Inżynierowie przyzwyczajeni do Cloud Storage często szukają CSEK jako formy "największej kontroli". Jednak w BigQuery najwyższą dostępną formą kontroli klucza zarządzanego przez klienta jest CMEK (z ewentualnym wsparciem Cloud HSM dla najwyższej zgodności).</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/logging/docs/audit/understanding-audit-logs#admin-activity" target="_blank">https://cloud.google.com/logging/docs/audit/understanding-audit-logs#admin-activity</a></li>
+<li><a href="https://cloud.google.com/kms/docs/hsm" target="_blank">Cloud HSM overview</a></li>
 </ul>
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -134,9 +147,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

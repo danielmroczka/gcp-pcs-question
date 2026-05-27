@@ -51,7 +51,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 59</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -64,15 +64,14 @@
 <h2>Question 59 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-How does Google Cloud ensure data is encrypted at rest by default?
+A patch for a vulnerability has been released, and a DevOps team needs to update their running containers in Google Kubernetes Engine (GKE). How should the DevOps team accomplish this?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Using Customer-Supplied Encryption Keys.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Using Customer-Managed Encryption Keys.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Using Google-managed encryption keys.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Data is not encrypted by default.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use Puppet or Chef to push out the patch to the running container.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Verify that auto upgrade is enabled; if so, Google will upgrade the nodes in a GKE cluster.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Update the application code or apply a patch, build a new image, and redeploy it.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure containers to automatically upgrade when the base image is available in Container Registry.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,23 +88,31 @@ How does Google Cloud ensure data is encrypted at rest by default?
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Using Google-managed encryption keys.)
+Potwierdzona odpowiedź: C (Update the application code or apply a patch, build a new image, and redeploy it.)
 
-Analiza poprawności:
-Google Cloud domyślnie szyfruje wszystkie dane "at rest" (w spoczynku) w infrastrukturze GCP. Dzieje się to automatycznie za pomocą kluczy zarządzanych przez Google (GMEK - Google-managed encryption keys). Użytkownik nie musi podejmować żadnych działań, konfigurować kluczy ani zarządzać ich cyklem życia. Jest to warstwa bezpieczeństwa "wbudowana" w architekturę fizyczną i logiczną GCP, chroniąca dane na poziomie bloków dyskowych przed dostępem osób nieuprawnionych do fizycznej warstwy infrastruktury.
+Wyjaśnienie:
+Kontenery w ekosystemie Docker/Kubernetes są z założenia niemutowalne (immutable). Oznacza to, że nie powinno się ich patchować "na żywo" w trakcie działania. Prawidłowy proces aktualizacji (tzw. "Cloud-native way") polega na:
+1. Naniesieniu poprawek w kodzie źródłowym lub pliku Dockerfile.
+2. Zbudowaniu nowego obrazu kontenera z nowym tagiem (wersją).
+3. Przesłaniu obrazu do rejestru (np. Artifact Registry).
+4. Wykonaniu nowej instalacji (redeploy) w klastrze GKE (np. za pomocą `kubectl set image` lub aktualizacji manifestu Deployment), co spowoduje, że Kubernetes automatycznie zastąpi stare kontenery nowymi (Rolling Update).
 
 Dlaczego pozostałe są błędne:
-A (Customer-Supplied Encryption Keys - CSEK): Jest to opcja wymagająca od klienta dostarczenia własnego klucza w momencie każdej operacji zapisu/odczytu. Nie jest to mechanizm domyślny.
-B (Customer-Managed Encryption Keys - CMEK): To opcja, w której użytkownik tworzy i zarządza własnym kluczem w Cloud KMS (rotacja, niszczenie). Nie jest to mechanizm domyślny.
-D (Data is not encrypted by default): To błędne stwierdzenie. Google od lat szyfruje wszystkie dane domyślnie ("encryption at rest by default").
+A. Puppet/Chef: Narzędzia do zarządzania konfiguracją są świetne dla systemów operacyjnych maszyn wirtualnych, ale nie dla kontenerów. Kontener powinien być traktowany jako "jednorazowy" – jeśli wymaga zmiany, tworzy się nowy.
+B. Node Auto-upgrade: To ustawienie dotyczy aktualizacji systemu operacyjnego i oprogramowania samych węzłów (maszyn wirtualnych) klastra GKE, a nie aplikacji działających w kontenerach na tych węzłach.
+D. Auto-upgrade kontenerów: W GKE nie ma wbudowanego mechanizmu, który automatycznie wykrywa nowy obraz w rejestrze i samoczynnie aktualizuje działające kontenery bez zewnętrznego wyzwalacza (np. CI/CD pipeline).
 
-Wskazówki egzaminacyjne:
-- "Encryption at rest by default": Google-managed encryption keys.
-- "You" (użytkownik) + "manage/rotate": CMEK (Cloud KMS).
-- "You" + "bring your own": CSEK.
+Tips & Tricks:
+- "Immutability" (Niemutowalność) to słowo klucz w świecie kontenerów. Pamiętaj: nie naprawiaj kontenera, wymień go na nowy.
+- Na egzaminie Google Cloud zawsze wybieraj odpowiedzi promujące standardowe cykle CI/CD (Build -> Image -> Deploy).
+
+Zagadnienia:
+- Kubernetes Deployment strategies (Rolling Updates).
+- Container Best Practices.
+- Artifact Registry / Container Registry integration.
 
 Dokumentacja:
-<a href="https://cloud.google.com/docs/security/encryption/at-rest" target="_blank">https://cloud.google.com/docs/security/encryption/at-rest</a>
+<a href="https://cloud.google.com/kubernetes-engine/docs/concepts/deployment-objects" target="_blank">https://cloud.google.com/kubernetes-engine/docs/concepts/deployment-objects</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -113,21 +120,20 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Szyfrowanie to odbywa się na poziomie warstwy fizycznej (bloków danych). Klucze są przechowywane w bezpiecznym systemie zarządzania kluczami Google i są odseparowane od samych danych, co jest fundamentalnym założeniem bezpieczeństwa GCP.</p>
+<p><b>Praktyczne wnioski:</b> Strategia "Build once, deploy anywhere" wymaga, aby obrazy były wersjonowane. Nigdy nie używaj tagu `:latest` w produkcji, ponieważ utrudnia to proces wycofywania zmian (rollback) i śledzenie, co faktycznie działa na klastrze.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/docs/security/encryption/at-rest" target="_blank">https://cloud.google.com/docs/security/encryption/at-rest</a></li>
+<li><a href="https://cloud.google.com/architecture/best-practices-for-building-containers" target="_blank">Google Cloud: Best practices for building containers</a></li>
 </ul>
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -142,9 +148,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

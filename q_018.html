@@ -89,21 +89,26 @@ An organization adopts Google Cloud Platform (GCP) for application hosting servi
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Set the minimum length for passwords to be 8 characters.)
+Potwierdzona odpowiedź: A (Set the minimum length for passwords to be 8 characters.)
 
-Analiza poprawności:
-Google Cloud Identity (i zintegrowany z nim Google Workspace) oferuje administratorom możliwość konfiguracji polityk haseł dla kont użytkowników. Zgodnie z najlepszymi praktykami bezpieczeństwa, zalecaną minimalną długością hasła, która zapewnia rozsądny kompromis między bezpieczeństwem a użytecznością dla pracowników korporacyjnych, jest 8 znaków. Jest to wartość często spotykana jako domyślna w standardach zgodności (compliance).
+Wyjaśnienie: 
+Zgodnie z oficjalną dokumentacją Google dotyczącą zarządzania hasłami w Cloud Identity i Google Workspace, minimalna dopuszczalna długość hasła, którą administrator może ustawić, to 8 znaków. Jest to wartość bazowa (baseline), która pojawia się w oficjalnych materiałach szkoleniowych jako rekomendowane minimum dla polityki haseł w usłudze Cloud Identity.
 
 Dlaczego pozostałe są błędne:
-B (10 znaków) i C (12 znaków): Choć administrator może ustawić wyższą wartość, nie są to "podstawowe wytyczne" (guidelines) definiowane jako minimalny standard przez Google.
-D (6 znaków): Jest to wartość zdecydowanie zbyt niska w nowoczesnym środowisku zagrożeń (podatność na ataki typu brute-force/dictionary). Większość systemów bezpieczeństwa odrzuca hasła krótsze niż 8 znaków.
+B, C. Chociaż długości 10 czy 12 znaków są bezpieczniejsze i zgodne z nowszymi standardami (np. NIST), pytanie dotyczy specyficznych "wytycznych" (guidelines) dostępnych w usłudze Cloud Identity, gdzie 8 znaków jest uznawane za standardowe, systemowe minimum. Społeczność często debatuje nad opcją C jako lepszą praktyką, ale z punktu widzenia egzaminu technicznego GCP, 8 jest poprawną odpowiedzią.
+D. 6 znaków jest uznawane za zbyt słabe zabezpieczenie dla kont korporacyjnych i nie jest promowane jako wytyczna bezpieczeństwa w GCP.
 
-Wskazówki egzaminacyjne:
-- "Minimum password length": Jeśli pytanie pyta o wytyczne Google, "magiczna liczba" to zazwyczaj 8.
-- Bezpieczeństwo vs. Użyteczność: Pamiętaj, że polityki GCP/Workspace pozwalają na wymuszenie silnych haseł, ale wytyczne bezpieczeństwa to zawsze balans między tymi dwoma.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Zapamiętaj liczbę 8 jako standardowe minimum dla haseł w Google Cloud Identity.
+- Jeśli pytanie dotyczy "best practices" w szerokim sensie (nie tylko Cloud Identity), standardy mogą sugerować więcej znaków, ale w tym konkretnym pytaniu kluczem jest mechanizm usługi.
+
+Kluczowe zagadnienia do powtórzenia:
+- Cloud Identity Password Policies
+- Google Workspace security settings
+- Zarządzanie kontami użytkowników
 
 Dokumentacja:
-<a href="https://support.google.com/a/answer/139399" target="_blank">https://support.google.com/a/answer/139399</a>
+<a href="https://support.google.com/a/answer/139390" target="_blank">https://support.google.com/a/answer/139390</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -111,21 +116,20 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> Sama długość hasła to tylko jeden z elementów. Nowoczesne podejście (np. NIST) sugeruje, że ważniejsza niż częsta rotacja hasła jest jego długość (złożoność) oraz sprawdzenie, czy hasło nie wyciekło w innym serwisie (Google Cloud Identity sprawdza hasła względem znanych baz wycieków).</p>
+<p><b>Analiza spornych kwestii (AI):</b> W społeczności egzaminacyjnej toczy się spór między 8 a 12 znakami. Wielu uważa, że chmura powinna wymuszać 12 znaków. Jednak Google w swoim interfejsie administracyjnym jako domyślną i najczęściej przywoływaną wartość graniczną podaje właśnie 8. Pamiętaj: egzamin sprawdza znajomość produktu, a nie tylko ogólnych dobrych praktyk.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://support.google.com/a/answer/139399" target="_blank">https://support.google.com/a/answer/139399</a></li>
+<li><a href="https://support.google.com/a/answer/139390" target="_blank">https://support.google.com/a/answer/139390</a></li>
 </ul>
 </div>
 </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
             const aiSection = document.querySelector('.ai-analysis-container');
@@ -140,9 +144,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             isVisible = !isVisible;
         });
-    }
+    });
 });
 </script>
-
 </body>
 </html>

@@ -89,17 +89,26 @@ Your team uses a service account to authenticate data transfers from a given Com
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Potwierdzona odpowiedź: B (Use the undelete command)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Undelete command: Google Cloud umożliwia przywrócenie usuniętego konta serwisowego w ciągu 30 dni od usunięcia. Jest to najszybsza metoda, ponieważ przywraca konto wraz z jego unikalnym identyfikatorem (Unique ID), co sprawia, że wszystkie istniejące uprawnienia IAM (które są przypisane do ID, a nie do nazwy) znów zaczynają działać.
+Wyjaśnienie: 
+Usunięte konto serwisowe można przywrócić w ciągu 30 dni za pomocą komendy `gcloud iam service-accounts undelete`. Jest to najszybsza metoda, ponieważ przywraca ten sam unikalny identyfikator (Unique ID), dzięki czemu wszystkie istniejące przypisania ról IAM automatycznie znów stają się aktywne.
 
-Dlaczego inne są błędne:
-A. Disable auth: Skrajne naruszenie bezpieczeństwa. Dane byłyby publiczne.
-C. New SA with same name: Nowe konto otrzyma NOWY Unique ID. Nawet jeśli nazwa jest ta sama, uprawnienia IAM starego konta NIE będą działać. Musiałbyś ręcznie odtworzyć całą politykę IAM.
-D. Another SA: Wymagałoby zmian w konfiguracji aplikacji na wszystkich maszynach, co jest wolniejsze i wprowadza chaos.
+Dlaczego pozostałe są błędne:
+A. Wyłączenie uwierzytelniania na buckecie jest niebezpieczne i rzadko możliwe w środowisku produkcyjnym.
+C. Stworzenie konta o tej samej nazwie nada mu NOWY Unique ID. Uprawnienia IAM starego konta nie zostaną przeniesione na nowe.
+D. Zmiana konfiguracji aplikacji na wszystkich instancjach jest czasochłonna i obarczona ryzykiem błędu.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. To 'life-saver' w sytuacjach awaryjnych.
+Wskazówki egzaminacyjne (Tips & Tricks):
+W GCP IAM uprawnienia są przypisane do ID, a nie do nazwy (e-maila). 'Undelete' zachowuje ID.
+
+Kluczowe zagadnienia do powtórzenia:
+- Service Account lifecycle
+- IAM Unique Identifiers
+- Disaster Recovery for IAM
+
+Dokumentacja:
+<a href="https://cloud.google.com/iam/docs/creating-managing-service-accounts#undeleting" target="_blank">https://cloud.google.com/iam/docs/creating-managing-service-accounts#undeleting</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
