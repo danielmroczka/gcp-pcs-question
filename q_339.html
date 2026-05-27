@@ -72,7 +72,6 @@ Your company is migrating a three-tier web application to Google Cloud. The appl
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Establish a direct internet connection between the Google Cloud VPC network hosting the web frontend and the on-premises network that hosts the backend and database. Configure firewall rules to allow communication between the three tiers.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Replicate the on-premises backend and database to Google Cloud. Use a hybrid connectivity network endpoint group for the primary. Backup to the zonal network endpoint group.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use a highly-available Cloud VPN connection over the public internet to connect the Google Cloud VPC network to the on-premises network.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,34 @@ Your company is migrating a three-tier web application to Google Cloud. The appl
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Establish a Dedicated Interconnect connection between the Google Cloud VPC network and the on-premises network. Configure firewall rules to allow communication between the three tiers.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Dedicated Interconnect: Jest to rozwiązanie oferujące najniższe opóźnienia (latency) i najwyższą stabilność (przepustowość fizyczna). Dla aplikacji, gdzie frontend w chmurze musi przy każdym żądaniu pytać bazę danych on-premise, czas odpowiedzi łącza jest krytyczny. Interconnect jest znacznie szybszy i bardziej przewidywalny niż VPN.
+Dlaczego ta odpowiedź jest poprawna:
+- Dedicated Interconnect: To usługa zapewniająca bezpośrednie (private), stabilne, o wysokiej przepustowości połączenie z GCP.
+- "Minimizing latency and maximizing availability": Dedicated Interconnect jest najlepszym rozwiązaniem dla środowisk hybrydowych (Enterprise), oferującym stałą przepustowość i znacznie mniejsze opóźnienia niż internet (VPN).
 
-Dlaczego inne są błędne:
-B. Direct internet: Skrajnie niebezpieczne (brak prywatności) i zmienna wydajność.
-C. Hybrid NEGs: To mechanizm Load Balancera służący do adresowania backendów on-prem, ale potrzebuje on pod spodem bezpiecznego 'kabla', którym jest Interconnect (A).
-D. HA VPN: Bezpieczny, ale wprowadza narzut na szyfrowanie i korzysta z publicznego internetu, co zwiększa opóźnienia i ryzyko pętelek opóźnień (jitter).
+Analiza niepoprawnych odpowiedzi:
+- B. Internet connection: Bardzo niebezpieczne (dane w sieci publicznej) i nieprzewidywalne pod kątem wydajności/latencji.
+- C. Replicate: To nie jest "hybrid cloud architecture", to migracja (wymóg mówi o pozostawieniu backendu on-premises).
+- D. Cloud VPN: VPN jest OK, ale Dedicated Interconnect oferuje lepszą wydajność ("maximizing availability" i wydajność dla trzech warstw aplikacji) i jest bardziej standardowy w dużych środowiskach "regulated".
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na A. Latency = Interconnect.
+Wskazówki i triki (Tips & Tricks):
+- "Hybrid" + "High bandwidth/Availability/Security" = Dedicated Interconnect.
+- Internet to NIGDY nie jest odpowiedź w pytaniach o wysoką wydajność/bezpieczeństwo.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Interconnect = Private, High Speed. VPN = Private, Public internet based.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/network-connectivity/docs/interconnect" target="_blank">Cloud Interconnect overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> W architekturze hybrydowej każda milisekunda na łączu między chmurą a bazą danych przekłada się na gorsze odczucia użytkownika końcowego. Interconnect to 'światłowód pod biurkiem' Google.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview" target="_blank">https://cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie o wybór mechanizmu łączności hybrydowej. Wymogi wysokiej dostępności, niskiej latencji oraz "bezpieczeństwa" dla dużych przedsiębiorstw kierują wybór ku fizycznym połączeniom typu Dedicated Interconnect, a nie VPN przez internet.</p>
 </div>
 </div>
 <script>

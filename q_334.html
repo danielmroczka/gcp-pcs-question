@@ -72,7 +72,6 @@ Your organization is using AI to improve products through innovation. The develo
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Grant the developers and AI engineers the Vertex AI User role. Monitor the audit trails with Cloud Logging.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Deploy Model Armor to protect the Vertex AI endpoint. Review Security Command Center findings to detect information leakages.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Implement a firewall rule that allows all traffic to and from the Vertex AI API endpoint.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,33 @@ Your organization is using AI to improve products through innovation. The develo
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Deploy Model Armor to protect the Vertex AI endpoint. Review Security Command Center findings to detect information leakages.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Model Armor: Jest to nowa, dedykowana usługa Google Cloud zaprojektowana specjalnie do ochrony interakcji z modelami LLM (AI). Potrafi ona w czasie rzeczywistym blokować przesyłanie danych wrażliwych (leakage) w promptach oraz wykrywać ataki typu jailbreak. Integracja z SCC zapewnia detekcję incydentów.
+Dlaczego ta odpowiedź jest poprawna:
+- Model Armor: To specjalistyczne narzędzie Google do ochrony modeli AI (np. Vertex AI/Gemini). Służy do filtrowania niebezpiecznych treści (zarówno wejściowych "jailbreak", jak i wyjściowych - wyciek PII/danych wrażliwych).
+- Security Command Center (SCC): Jest głównym narzędziem do detekcji zagrożeń i wycieków danych wewnątrz organizacji.
 
-Dlaczego inne są błędne:
-A. VPC SC + DLP: VPC SC chroni granice API, a DLP skanuje storage. Model Armor (C) jest bardziej specyficzny dla dynamicznych rozmów z modelem AI (runtime prompt protection).
-B. Logging: Pozwala na audyt po fakcie (detect), ale nie zapobiega wyciekowi w momencie wysyłania pytania do AI (prevent).
-D. Firewall: Nie ma żadnego wglądu w treść zapytań przesyłanych protokołem HTTPS do usługi Vertex AI.
+Analiza niepoprawnych odpowiedzi:
+- A. VPC SC + DLP API: VPC SC chroni przed eksfiltracją przez sieć, ale nie rozumie "treści" generowanej przez model AI. DLP API wymagałoby skomplikowanej integracji "w locie" z endpointem modelu.
+- B. Vertex AI User + Logging: IAM daje dostęp, a logowanie pozwala *po fakcie* (reaktywnie) sprawdzić co się stało, ale nie zapobiega wyciekom w czasie rzeczywistym.
+- D. Firewall: Nie ma zastosowania – Vertex AI to usługa API, firewall nie ma wglądu w payloady API.
 
-Konsensus społeczności ExamTopics: 100% na C. Model Armor lo nowość w programie egzaminacyjnym skupiona na AI Security.
+Wskazówki i triki (Tips & Tricks):
+- "Gemini in Vertex AI" + "Prevent and detect information leakages" = Model Armor + Security Command Center.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Model Armor to "WAF" dla modeli językowych AI.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/model-armor/docs/overview" target="_blank">Model Armor overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Model Armor działa jako filtr przed modelem AI. Może np. automatycznie zamienić nazwisko klienta na gwiazdki ZANIM model je przetworzy, co chroni prywatność danych.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/security/products" target="_blank">https://cloud.google.com/security/products</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie o nowoczesne podejście do bezpieczeństwa AI. Wymagane jest użycie dedykowanych rozwiązań klasy "AI Firewall" (Model Armor), które rozumieją specyfikę komunikacji z modelami LLM.</p>
 </div>
 </div>
 <script>

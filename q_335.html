@@ -72,7 +72,6 @@ You are responsible for configuring Identity and Access Management in your organ
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure organization restriction headers for your environment. Only include the organization ID of your organization in the list of allowed resources.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create an IAM deny policy on the organization level that prevents access to Cloud Storage buckets outside the organization.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enforce domain restricted sharing in your organization. Configure a managed constraint, and only include the principals in your organization.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,32 @@ You are responsible for configuring Identity and Access Management in your organ
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Set a principal access boundary policy with the appropriate enforcement version. Bind the policy to the principals of your organization.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Principal Access Boundary (PAB): Jest to potężna funkcja IAM, która pozwala zdefiniować 'granicę' dla tożsamości (użytkowników/SA). PAB mówi: 'To konto może używać swoich uprawnień TYLKO wewnątrz mojej organizacji'. Dzięki temu, nawet jeśli użytkownik doda swoje firmowe konto do uprawnień w swoim prywatnym projekcie, PAB zablokuje mu dostęp do tego obcego projektu.
+Dlaczego ta odpowiedź jest poprawna:
+- Principal Access Boundary (PAB): To zaawansowana funkcja, która definiuje granice (boundaries) dla tożsamości (principals). Pozwala ona ograniczyć, do których *zasobów* (np. bucketów) w organizacji mogą uzyskiwać dostęp tożsamości z Twojej organizacji. Jest to rozwiązanie stworzone dokładnie do scenariuszy zapobiegania "data exfiltration to outside organizations".
 
-Dlaczego inne są błędne:
-B. Organization restriction headers: Służą do blokowania dostępu Z Twojej sieci VPC do obcych organizacji (kontrola sieciowa), ale nie kontrolują uprawnień samej TOŻSAMOŚCI (IAM) w internecie. PAB (A) jest silniejszym mechanizmem tożsamościowym.
-C. IAM Deny: Może zablokować dostęp w Twoim projekcie, ale nie może zabronić użytkownikowi korzystania z uprawnień w cudzym projekcie.
-D. Domain restricted sharing: Uniemożliwia zapraszanie obcych osób DO Twoich projektów, ale nie zabrania Twoim ludziom wychodzenia NA ZEWNĄTRZ do obcych bucketów.
+Analiza niepoprawnych odpowiedzi:
+- B. Organization restriction headers: Służy do blokowania *logowania* do obcych organizacji (np. w przeglądarce), a nie do ograniczania dostępu do zasobów (bucketów) przez API.
+- C. IAM deny policy: IAM Deny nie ma takiego zasięgu, by skutecznie blokować dostęp do *zewnętrznych* organizacji na poziomie API (deny dotyczy zasobów wewnątrz Twojej organizacji).
+- D. Domain restricted sharing: Służy do ograniczania tego, *komu* można udostępnić zasoby (czyli czy mogę wysłać e-mail do kogoś spoza domeny), a nie *czy użytkownik* może sięgnąć do obcego bucketa.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na A. PAB to przełom w walce z eksfiltracją danych przez tożsamość.
+Wskazówki i triki (Tips & Tricks):
+- "Restrict ... users from accessing Cloud Storage buckets in OTHER Google Cloud organizations" = Principal Access Boundary (PAB).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: PAB to najsilniejsza forma ochrony przed "insider threat" (wyciekiem do obcych organizacji).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iam/docs/principal-access-boundaries-overview" target="_blank">Principal Access Boundary overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> PAB to 'odwrotność' perymetru. Perymetr chroni ZASÓB przed ludźmi, a PAB chroni LUDZI przed używaniem ich mocy w niewłaściwych miejscach.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/iam/docs/principal-access-boundary" target="_blank">https://cloud.google.com/iam/docs/principal-access-boundary</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie o zaawansowane mechanizmy ochrony danych przed wyciekiem (data exfiltration) między organizacjami w chmurze. PAB to nowoczesne podejście do definiowania "granic dostępności" dla tożsamości.</p>
 </div>
 </div>
 <script>

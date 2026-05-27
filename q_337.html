@@ -70,9 +70,8 @@ There is a vendor who needs access to your company's Google Cloud environment. T
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use Google Cloud Directory Sync to synchronize user accounts from the IdP to Google Workspace, and then configure SSO between Google Workspace and Google Cloud.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Develop a custom application that queries the IdP for user authentication and then programmatically creates Google Cloud user accounts.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Connect the vendor's IdP with Google Cloud using Workforce Identify Federation.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Connect the vendor's IdP with Google Cloud using Workforce Identity Federation.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create Google Cloud accounts for each user and synchronize their passwords with the third-party IdP.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,32 @@ There is a vendor who needs access to your company's Google Cloud environment. T
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Connect the vendor's IdP with Google Cloud using Workforce Identity Federation.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Workforce Identity Federation (WIF): Jest to idealne rozwiązanie, gdy nie chcesz zarządzać kontami (lifecycle) osób trzecich. Użytkownik loguje się do swojego IdP, a WIF wymienia jego token na dostęp do Twojego GCP. Gdy partner usunie pracownika, straci on dostęp do Twoich zasobów natychmiast, bez Twojej ingerencji.
+Dlaczego ta odpowiedź jest poprawna:
+- Workforce Identity Federation: To rozwiązanie stworzone do tego, aby "zewnętrzni użytkownicy" (np. vendorzy, partnerzy) mogli logować się do GCP za pomocą swojego zewnętrznego IdP.
+- Nie zarządza cyklem życia: Użytkownicy vendorzy nie muszą mieć kont w Google (brak konieczności *provisioning* w Google Workspace/Cloud Identity). Zarządzanie tożsamością pozostaje po stronie vendora (w jego IdP), co w pełni realizuje wymóg "You don't want to manage any of the vendor users' lifecycle management".
 
-Dlaczego inne są błędne:
-A. GCDS sync: Wymagałbyś dostępu do serwerów LDAP partnera i tworzyłbyś konta 'shadow' w swojej domenie, co jest sprzeczne z wymogiem 'no lifecycle management'.
-B. Custom app: Niepotrzebny narzut deweloperski.
-D. Manual accounts: Skrajne przeciwieństwo wymogów (wymagałoby manualnego usuwania kont po zakończeniu współpracy).
+Analiza niepoprawnych odpowiedzi:
+- A. GCDS: Wymaga synchronizacji kont do Twojego Google Workspace (czyli musisz zarządzać kontami/cyklem życia tych użytkowników w Google).
+- B, D: Są to metody niebezpieczne, skomplikowane i nie zapewniają "most secure way".
 
-Konsensus społeczności ExamTopics: 100% na C. WIF to przyszłość współpracy międzyorganizacyjnej w chmurze.
+Wskazówki i triki (Tips & Tricks):
+- "External vendor" + "External IdP" + "No lifecycle management" = Workforce Identity Federation.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Workforce Identity Federation (dla pracowników/partnerów) vs Workload Identity Federation (dla usług/maszyn).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iam/docs/workforce-identity-federation" target="_blank">Workforce Identity Federation</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Przy WIF nie płacisz za licencje Cloud Identity dla partnerów, ponieważ nie są oni zarejestrowani jako Twoi użytkownicy.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/iam/docs/workforce-identity-federation" target="_blank">https://cloud.google.com/iam/docs/workforce-identity-federation</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie o nowoczesne podejście do federacji tożsamości. Workforce Identity Federation to rozwiązanie, które pozwala w pełni delegować zarządzanie tożsamością i cyklem życia użytkowników zewnętrznych do ich własnego, zaufanego IdP.</p>
 </div>
 </div>
 <script>

@@ -72,7 +72,6 @@ Your organization is building an application powered by generative AI that uses 
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Encrypt your data by using customer-managed encryption keys (CMEK) to have full control over encryption key access.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Do nothing. Vertex AI foundation models are frozen by default and do not use your data for model-tuning purposes.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Contact Google support to opt out of model tuning.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,32 @@ Your organization is building an application powered by generative AI that uses 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Do nothing. Vertex AI foundation models are frozen by default and do not use your data for model-tuning purposes.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Default Data Governance: Google Cloud w swoich warunkach prawnych (GCP Data Processing Addendum) gwarantuje, że dane klientów przetwarzane w Vertex AI są ich własnością i NIE są wykorzystywane do trenowania modeli bazowych (foundation models), z których korzystają inni klienci. Twoje dane są odizolowane.
+Dlaczego ta odpowiedź jest poprawna:
+- Zasada Google Cloud: Google nie wykorzystuje danych klientów (w tym promptów i danych treningowych w Vertex AI) do trenowania swoich publicznych/podstawowych modeli (foundation models). Twoje dane są *Twoimi* danymi.
 
-Dlaczego inne są błędne:
-A. Do not use: Niepotrzebne, platforma jest bezpieczna.
-B. CMEK: Chroni przed odczytem danych, ale nie wpływa na to, czy Google (jako system) używa ich do uczenia (choć warunki prawne C to wykluczają).
-D. Support opt-out: Nie jest wymagany, bo 'opt-out' jest stanem domyślnym i niezmiennym dla usług Vertex AI Enterprise.
+Analiza niepoprawnych odpowiedzi:
+- A. Do not use: Niepotrzebna rezygnacja z innowacji.
+- B. CMEK: Szyfrowanie chroni dane "at rest", ale nie zmienia polityki Google dotyczącej tego, do czego Google wykorzystuje dane w celach model-tuning.
+- D. Contact support: Nie jest to konieczne, ponieważ ochrona danych klientów jest domyślnym zachowaniem w Vertex AI.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla C. To kluczowa informacja dla firm obawiających się wycieku własności intelektualnej do publicznych modeli AI.
+Wskazówki i triki (Tips & Tricks):
+- "Gemini/Vertex AI" + "Sensitive data" + "Google tuning models" = Google nie używa Twoich danych (domyślnie).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Google Cloud gwarantuje prywatność danych klientów w Vertex AI.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/vertex-ai/docs/generative-ai/data-governance" target="_blank">Data governance in Vertex AI</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Google oferuje tzw. 'Customer Managed Tuning', gdzie model jest dotrenowywany Twoimi danymi, ale ta 'wersja' modelu istnieje tylko w Twoim projekcie i nikt inny nie ma do niej dostępu.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/vertex-ai/docs/generative-ai/data-governance" target="_blank">https://cloud.google.com/vertex-ai/docs/generative-ai/data-governance</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie sprawdzające znajomość polityki prywatności danych w usługach AI Google Cloud. Ważne jest, aby odróżnić rzeczywiste mechanizmy ochrony od niepotrzebnych, kosztownych lub nadmiarowych kroków.</p>
 </div>
 </div>
 <script>

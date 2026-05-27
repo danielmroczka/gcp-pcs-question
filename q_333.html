@@ -72,7 +72,6 @@ Your organization is implementing a Zero Trust security model and using Chrome E
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure IAM conditions based on IP address ranges. Require users to connect through a VPN. Implement endpoint verification software on user devices to check for basic compliance.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create an access level in Access Context Manager that requires a device policy. Create a Context-Aware Access policy using this access level. Apply the policy to the VPC Service Controls perimeter that includes the Cloud Storage buckets.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use Cloud Firewall rules to restrict access to the Cloud Storage buckets based on the source IP addresses. Require users to authenticate with a multi-factor authentication method.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,31 @@ Your organization is implementing a Zero Trust security model and using Chrome E
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Create an access level in Access Context Manager that requires a device policy. Create a Context-Aware Access policy using this access level. Apply the policy to the VPC Service Controls perimeter that includes the Cloud Storage buckets.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Context-Aware Access (CAA): To serce modelu Zero Trust w Google Cloud. Pozwala na zdefiniowanie 'Access Level' w ACM, który wymaga określonego stanu urządzenia (managed, patches, AV). Przypisanie tego poziomu do VPC SC (dla Cloud Storage) gwarantuje, że użytkownik nie pobierze danych nawet z poprawnym hasłem, jeśli jego laptop nie jest 'zdrowy' (managed device).
+Dlaczego ta odpowiedź jest poprawna:
+- Access Context Manager + Device Policy: To jedyny sposób na implementację wymogów "device security posture" (sprawdzenie OS patches, antivirus).
+- Context-Aware Access + VPC SC: To standard w modelu Zero Trust w GCP – łączysz warstwę tożsamości z warstwą kontekstu urządzenia (device posture) i perimetrem sieciowym (VPC SC).
 
-Dlaczego inne są błędne:
-A. IAP + VPC SC: IAP chroni aplikacje webowe/SSH, ale dostęp do natywnego API Cloud Storage (np. przez gcloud lub konsolę) najlepiej zabezpiecza CAA na perymetrze VPC SC.
-B. VPN: Zaprzeczenie idei Zero Trust 'regardless of location'. VPN opiera się na lokalizacji sieciowej, a nie na tożsamości i stanie urządzenia.
-D. Cloud Firewall: Nie ma wglądu w to, czy system operacyjny laptopa użytkownika ma zainstalowane poprawki.
+Analiza niepoprawnych odpowiedzi:
+- A, B, D: Brak mechanizmu "device security posture" (sprawdzania, czy urządzenie ma łatki, AV, itp.). VPN czy IP-based filtering to nie jest Zero Trust oparty na tożsamości i urządzeniu.
 
-Konsensus społeczności ExamTopics: 100% na C. To najbardziej zaawansowany i zalecany model izolacji danych wrażliwych.
+Wskazówki i triki (Tips & Tricks):
+- "Zero Trust" + "Managed devices" + "Device security posture" = Access Context Manager (Access Level).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Access Context Manager pozwala definiować atrybuty, które muszą być spełnione, aby uzyskać dostęp (np. urządzenie musi być firmowe, zaszyfrowane, z aktualnym OS).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/access-context-manager/docs/overview" target="_blank">Access Context Manager overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Ten model (Chrome Enterprise Premium + ACM) eliminuje potrzebę VPN. Pracownik może być w kawiarni, ale jego laptop musi być zaszyfrowany i zarządzany przez firmę, aby system 'otworzył' dostęp do danych.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/vpc-service-controls/docs/access-level-usage" target="_blank">https://cloud.google.com/vpc-service-controls/docs/access-level-usage</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie o implementację zaawansowanego modelu Zero Trust. W GCP to połączenie Access Context Manager (warstwa kontekstu urządzenia) z VPC Service Controls (warstwa perimetru sieciowego).</p>
 </div>
 </div>
 <script>

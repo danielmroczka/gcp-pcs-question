@@ -72,7 +72,6 @@ Your organization has a hybrid cloud environment with a data center connected to
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Establish VPC peering between your on-premises network and your Google Cloud VPC network. Configure Cloud Firewall rules to allow traffic to Google API IP ranges.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use Private Google Access for on-premises hosts. Configure DNS resolution to point to the private.googleapis.com domain.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure Cloud NAT on your on-premises network. Configure DNS records in a private DNS zone to send requests to 199.36.153.8/30 to access Google APIs.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,33 @@ Your organization has a hybrid cloud environment with a data center connected to
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Use Private Google Access for on-premises hosts. Configure DNS resolution to point to the private.googleapis.com domain.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. PGA for on-premises + private VIP: Aby hosty lokalne (on-prem) mogły 'rozmawiać' z usługami Google przez Interconnect, muszą kierować zapytania DNS do zakresu IP `199.36.153.8/30` (private.googleapis.com). Google Cloud zajmuje się wtedy routingiem tego ruchu przez prywatne łącze zamiast przez internet.
+Dlaczego ta odpowiedź jest poprawna:
+- Private Google Access for on-premises: Pozwala on-premises hostom (poprzez Interconnect/VPN) na dostęp do usług Google (Cloud Storage, BigQuery) przez prywatne adresy IP wewnątrz sieci Google, bez wychodzenia do publicznego internetu.
+- private.googleapis.com: Jest to odpowiednia domena dla usług GCP, która mapuje się na prywatny zakres IP.
 
-Dlaczego inne są błędne:
-A. PGA: Dotyczy ruchu Z chmury, PGA 'for on-premises' to osobna, choć powiązana funkcja.
-B. VPC Peering: Nie łączy on-prem z chmurą i nie ma wpływu na dostęp do publicznych API Google (GCS/BQ).
-D. Cloud NAT: Służy do WYJŚCIA na internet, a tu chcemy go UNIKNĄĆ.
+Analiza niepoprawnych odpowiedzi:
+- A. Shared VPC: Shared VPC służy do udostępniania sieci między *projektami GCP*, a nie między on-premises a GCP.
+- B. VPC Peering: VPC Peering nie działa między on-premises a GCP (VPN/Interconnect działa).
+- D. Cloud NAT on-premises: Cloud NAT to usługa GCP, nie on-premises.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla C. To standardowa konfiguracja 'Hybrid Private Access'.
+Wskazówki i triki (Tips & Tricks):
+- "On-premises" + "Access to Google APIs" + "No public internet" = Private Google Access for on-premises + private.googleapis.com.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: restricted.googleapis.com (z VPC SC) vs private.googleapis.com (bez VPC SC).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/vpc/docs/private-google-access-hybrid" target="_blank">Private Google Access for on-premises</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Wybór między `private` (wszystkie API) a `restricted` (tylko VPC SC) zależy od Twojej polityki bezpieczeństwa, ale technicznie oba rozwiązania PGA for on-prem działają podobnie.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/vpc/docs/configure-private-google-access-settings" target="_blank">https://cloud.google.com/vpc/docs/configure-private-google-access-settings</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie o bezpieczny dostęp do usług GCP z sieci lokalnej. Kluczowe jest użycie dedykowanego mechanizmu "Private Google Access for on-premises" i odpowiedniej domeny DNS (private.googleapis.com).</p>
 </div>
 </div>
 <script>

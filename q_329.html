@@ -68,11 +68,10 @@ Your organization is implementing a new Python application that will be deployed
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use a public IP address for the Cloud SQL instance. Integrate the Cloud SQL Python Connector into your application code to connect to the Cloud SQL instance.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Ensure that the Cloud SQL instance doesn't have a public IP address. Configure Cloud Run to use Cloud SQL Auth Proxy to connect to the Cloud SQL instance.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Ensure that the Cloud SQL instance doesn't have a public IP address. Enforce SSL/TLS. Require the use of a trusted client certificate to connect to the Cloud SQL instance.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Ensure that the Cloud SQL instance doesn't have a public IP address. Configure the application's IP address as an authorized network to connect to the Cloud SQL instance.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure a Cloud VPN connection between the two VPCs and use the internal IP address of the Cloud SQL instance to connect.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Enable the Cloud SQL Auth Proxy on a sidecar container in Cloud Run and use the Unix socket to connect to the database.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure VPC peering between the two projects and use the internal IP address of the Cloud SQL instance.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enable SSL/TLS for all connections and whitelist the Cloud Run service account in the Cloud SQL instance settings.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,33 @@ Your organization is implementing a new Python application that will be deployed
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Enable the Cloud SQL Auth Proxy on a sidecar container in Cloud Run and use the Unix socket to connect to the database.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Cloud SQL Auth Proxy: Jest to natywny i najbardziej bezpieczny sposób łączenia się z bazami SQL w Google Cloud. Cloud Run posiada wbudowaną integrację (wystarczy zaznaczyć bazę w ustawieniach), która uruchamia proxy automatycznie. Użycie 'Private IP' zapewnia, że ruch nie opuszcza sieci Google, a proxy dba o autoryzację IAM i szyfrowanie TLS bez potrzeby zarządzania certyfikatami (minimal overhead).
+Dlaczego ta odpowiedź jest poprawna:
+- Cloud SQL Auth Proxy: To "bezpieczny i najmniej zarządzalny" (minimizing management overhead) sposób połączenia z Cloud SQL.
+- Sidecar container: W Cloud Run, Cloud SQL Auth Proxy może działać jako sidecar, co bezpiecznie tuneluje połączenie (z automatycznym szyfrowaniem TLS i autoryzacją IAM) bez konieczności otwierania instancji bazy na świat lub konfigurowania skomplikowanych połączeń sieciowych (VPN/Peering).
 
-Dlaczego inne są błędne:
-A. Public IP: Zwiększa powierzchnię ataku na bazę danych.
-C. Client certificate: Bardzo trudne w zarządzaniu przy wielu mikroserwisach (overhead związany z rotacją certyfikatów). Proxy (B) robi to za Ciebie.
-D. Authorized network: Nie zadziała bezpośrednio dla Cloud Run, który nie posiada stałego adresu IP, który można by dodać do listy. Wymagałoby to użycia Cloud NAT lub Proxy.
+Analiza niepoprawnych odpowiedzi:
+- A, C: Konfiguracja VPN lub VPC peering w celu połączenia Cloud Run z Cloud SQL to "overkill" (niepotrzebny narzut administracyjny), gdy mamy dedykowane narzędzie w postaci Auth Proxy.
+- D: Whitelisting IP to metoda mniej bezpieczna niż Auth Proxy, a SSL/TLS to tylko szyfrowanie transportu, nie załatwia kwestii autoryzacji IAM.
 
-Konsensus społeczności ExamTopics: 100% na B. Cloud SQL Proxy to standardowy łącznik dla serverless.
+Wskazówki i triki (Tips & Tricks):
+- "Cloud Run" + "Cloud SQL" + "Secure connection" + "Minimize management overhead" = Cloud SQL Auth Proxy (sidecar).
+- Pamiętaj: Auth Proxy zarządza szyfrowaniem i autoryzacją IAM za Ciebie.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Cloud SQL Auth Proxy to "złoty standard" bezpiecznego łączenia aplikacji z bazami danych w GCP.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/sql/docs/mysql/connect-run" target="_blank">Connecting Cloud Run to Cloud SQL</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Auth Proxy weryfikuje uprawnienia konta serwisowego Cloud Run do bazy danych. Jeśli deweloper nie nadał roli `Cloud SQL Client`, połączenie zostanie odrzucone mimo poprawnych haseł do bazy.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/sql/docs/mysql/connect-run" target="_blank">https://cloud.google.com/sql/docs/mysql/connect-run</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie o bezpieczną architekturę połączeń bazodanowych w środowisku serverless. Auth Proxy zapewnia szyfrowanie i autoryzację bez konieczności zarządzania skomplikowaną siecią prywatną.</p>
 </div>
 </div>
 <script>

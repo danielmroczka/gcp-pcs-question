@@ -68,11 +68,10 @@ Your organization is planning to deploy a large number of Google Kubernetes Engi
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> After creating clusters, use the Google Cloud console gcloud container node-pools describe NODE_POOL_NAME --cluster=CLUSTER_NAME command. Examine the upgradeSettings and UpdateInfo output.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure node auto-upgrades for node pools in the maintenance windows.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a custom organization policy constraint resource.management.autoUpgrade == true with an action type of ALLOW at the organization level before deployment.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a new node pool with the newer version for each cluster. Migrate the workload. Eliminate the outdated node pool.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Manually run the Google Cloud console gcloud container clusters upgrade CLUSTER_NAME--node-pool=NODE_POOL_NAME --cluster-version VERSION command on newly created clusters regularly.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +79,7 @@ Your organization is planning to deploy a large number of Google Kubernetes Engi
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">A</span>
 <br/>
 </span>
 </div>
@@ -89,30 +88,33 @@ Your organization is planning to deploy a large number of Google Kubernetes Engi
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: A (Configure node auto-upgrades for node pools in the maintenance windows.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Org Policy Enforcement: Aby mieć pewność, że wszystkie zespoły w firmie dbają o bezpieczeństwo węzłów, administrator może wymusić włączenie funkcji 'Auto-upgrade' za pomocą polityki organizacji. Uniemożliwia to stworzenie klastra z wyłączonymi automatycznymi poprawkami.
+Dlaczego ta odpowiedź jest poprawna:
+- Node Auto-upgrades: To funkcja GKE, która automatycznie dba o to, aby węzły (nodes) miały najnowszą wersję Kubernetes i poprawki bezpieczeństwa.
+- "Latest release" + "Minimize vulnerability risk" + "Administrative effort" = Node Auto-upgrades.
 
-Dlaczego inne są błędne:
-A. gcloud describe: Służy do sprawdzania, nie do zapewniania (enforcement).
-C. Migrate: To czynność manualna, nie jest to 'automatyczny proces' zapewniający stałą aktualność w czasie.
-D. Manually upgrade: Nieskalowalne i podatne na błędy ludzkie (zapomnienie).
+Analiza niepoprawnych odpowiedzi:
+- B. Organization Policy: Nie istnieje taka polityka "autoUpgrade".
+- C. Manual migration: Bardzo pracochłonne, zwiększa "administrative effort".
+- D. Manual gcloud upgrade: Również manualne, zwiększa "administrative effort".
 
-Konsensus społeczności ExamTopics: 100% na B. Polityki organizacji to jedyny sposób na skalowalne egzekwowanie standardów GKE.
+Wskazówki i triki (Tips & Tricks):
+- "GKE nodes" + "latest release" + "minimize administrative effort" = Auto-upgrades.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: W GKE najlepiej zostawić zarządzanie wersjami (upgrade) usłudze zarządzanej Google.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/kubernetes-engine/docs/concepts/node-upgrades" target="_blank">GKE node auto-upgrades</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Node auto-upgrades w GKE zazwyczaj odbywają się kilka dni po aktualizacji Mastera, co zapewnia stabilność klastra.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/node-auto-upgrades" target="_blank">https://cloud.google.com/kubernetes-engine/docs/how-to/node-auto-upgrades</a></li>
-
-</ul>
+<h3>Kluczowe zagadnienia</h3>
+<p><b>Sugerowana odpowiedź: A</b></p>
+<p><b>Analiza strategiczna:</b> Pytanie o automatyzację utrzymania klastrów GKE. Auto-upgrade to natywna, bezobsługowa metoda zapewnienia aktualności klastra, co bezpośrednio redukuje ryzyko podatności.</p>
 </div>
 </div>
 <script>

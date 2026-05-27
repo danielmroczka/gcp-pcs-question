@@ -64,15 +64,15 @@
 <h2>Question 330 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization has Google Cloud applications that require access to external web services. You must monitor, control, and log access to these services. What should you do?
+You are working with protected health information (PHI) for an electronic health record system. The privacy officer is concerned that sensitive data is stored in the analytics system. You are tasked with anonymizing the sensitive data in a way that is not reversible. Also, the anonymized data should not preserve the character set and length. Which Google Cloud solution should you use?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Set up a Secure Web Proxy that allows access to the specific external web services. Configure applications to use the proxy for the web service requests.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Set up a Cloud NAT instance to allow egress traffic from your VPC.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure VPC firewall rules to allow the services to access the IP addresses of required external web services.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure Google Cloud Armor to monitor and protect your applications by checking incoming traffic patterns for attack patterns.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use CryptoHashConfig with the Cloud Data Loss Prevention (DLP) API to perform cryptographic hashing.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Perform de-identification with the Cloud Data Loss Prevention API, using the CryptoReplaceFfxFpeConfig transformation.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Perform de-identification with the Cloud Data Loss Prevention API, using the CharacterMaskConfig transformation.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Perform de-identification with the Cloud Data Loss Prevention API, using the CryptoHashConfig transformation.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Perform de-identification with the Cloud Data Loss Prevention API, using the FixedSizeBucketingConfig transformation.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +80,7 @@ Your organization has Google Cloud applications that require access to external 
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">C</span>
 <br/>
 </span>
 </div>
@@ -89,30 +89,33 @@ Your organization has Google Cloud applications that require access to external 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: C (Perform de-identification with the Cloud Data Loss Prevention API, using the CryptoHashConfig transformation.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Secure Web Proxy: To dedykowana usługa Google Cloud do filtrowania ruchu WYCHODZĄCEGO (egress) do internetu. Pozwala na tworzenie reguł opartych na nazwach FQDN (np. 'pozwól tylko na github.com'), monitorowanie pełnych adresów URL oraz logowanie całej aktywności sieciowej aplikacji.
+Dlaczego ta odpowiedź jest poprawna:
+- CryptoHashConfig (Hashing): Jest to proces jednostronny (nieodwracalny), więc spełnia wymóg "not reversible". Dodatkowo wynik hashowania jest ciągiem znaków o stałej długości (hex), który nie przypomina ani formatem, ani długością danych oryginalnych (nie zachowuje charakterystyki zestawu znaków/długości).
 
-Dlaczego inne są błędne:
-B. Cloud NAT: Pozwala na wyjście, ale nie oferuje zaawansowanego filtrowania po nazwach domenowych ani logowania URL-i.
-C. Firewall rules: Operują na adresach IP. Większość usług webowych ma dynamiczne IP, co czyni firewall bezużytecznym do blokowania domen.
-D. Cloud Armor: Chroni ruch PRZYCHODZĄCY (ingress) do Twoich aplikacji, nie zajmuje się tym, gdzie Twoje aplikacje same 'dzwonią'.
+Analiza niepoprawnych odpowiedzi:
+- CryptoReplaceFfxFpeConfig: Jest odwracalne i zachowuje format (format-preserving).
+- CharacterMaskConfig: Zachowuje długość (maskuje tylko część znaków).
+- FixedSizeBucketingConfig: Służy do generalizacji (np. grupowanie wieku), nie do całkowitej anonimizacji nieodwracalnej.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla A. SWP to brakujące ogniwo ochrony egress w GCP.
+Wskazówki i triki (Tips & Tricks):
+- "Not reversible" + "Not preserve character set and length" = Hashing (CryptoHashConfig).
+- "Reversible" + "Preserve format/length" = Format-Preserving Encryption (FFX/FPE).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: DLP API to najważniejsze narzędzie do pracy z PII/PHI w GCP.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/dlp/docs/concepts-deidentification" target="_blank">De-identification techniques</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Secure Web Proxy nie wymaga instalowania agentów na VM. Działa jako transparentne lub jawne proxy wewnątrz Twojej sieci VPC.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/secure-web-proxy/docs/overview" target="_blank">https://cloud.google.com/secure-web-proxy/docs/overview</a></li>
-
-</ul>
+<h3>Kluczowe zagadnienia</h3>
+<p><b>Sugerowana odpowiedź: C</b></p>
+<p><b>Analiza strategiczna:</b> Pytanie techniczne sprawdzające znajomość technik anonimizacji w Cloud DLP. Kluczowe jest rozróżnienie technik odwracalnych (szyfrowanie format-preserving) od nieodwracalnych (hashowanie).</p>
 </div>
 </div>
 <script>

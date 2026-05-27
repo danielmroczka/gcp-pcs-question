@@ -72,7 +72,6 @@ Your organization's application is being integrated with a partner application t
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Define a VPC Service Controls perimeter, and restrict the Cloud Storage API. Add an ingress rule to the perimeter to allow access to the Cloud Storage API for the service account from outside of the perimeter.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Ensure that all data for the application that is accessed through the relevant service accounts is encrypted at rest by using customer-managed encryption keys (CMEK).</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Implement a secret management service. Configure the service to frequently rotate the service account key. Configure proper access control to the key, and restrict who can create service account keys.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,33 @@ Your organization's application is being integrated with a partner application t
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (Implement a secret management service. Configure the service to frequently rotate the service account key. Configure proper access control to the key, and restrict who can create service account keys.)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Hygiene of static keys: Skoro wymóg (evaluated constraint) mówi, że MUSISZ użyć kluczy statycznych (SA keys), to jedyną drogą ochrony jest: 1. Przechowywanie ich w bezpiecznym miejscu (Secret Manager). 2. Częsta rotacja (skracanie czasu przydatności skradzionego klucza). 3. Restrykcja tworzenia kluczy tylko dla uprawnionych procesów.
+Dlaczego ta odpowiedź jest poprawna:
+- Service Account Keys: Są niebezpieczne, ponieważ jeśli zostaną skradzione, dają dostęp do zasobów aż do momentu ich unieważnienia. Jeśli musisz ich używać (np. przy integracjach zewnętrznych), kluczową praktyką jest **częsta rotacja** (rotation) oraz **ścisła kontrola** tego, kto może takie klucze tworzyć i używać (IAM policies). Sekret manager zapewnia bezpieczne przechowywanie i rotację.
 
-Dlaczego inne są błędne:
-A. SDP scan: Chroni treść danych, ale nie chroni samego mechanizmu dostępu (klucza).
-B. VPC SC: Chroni przed wyciekiem, ale nie chroni przed nieautoryzowanym użyciem klucza z poprawnych adresów IP partnera.
-C. CMEK: Chroni dane na dysku, ale partner z kluczem SA i tak będzie mógł je odczytać (bo SA ma uprawnienia do odszyfrowania).
+Analiza niepoprawnych odpowiedzi:
+- A. DLP scan: Służy do ochrony danych przed wyciekiem (maskowanie), ale nie chroni przed skradzionym kluczem, który daje dostęp do *już* odmaskowanych danych.
+- B. VPC Service Controls: Jest potężne, ale w przypadku "service account key compromised", klucz nadal będzie działał wewnątrz lub w połączeniu z perimetrem. Nie rozwiązuje to problemu samego klucza.
+- C. CMEK: Szyfrowanie "at rest" nie chroni przed dostępem "read access" (autoryzowany dostęp), a klucze serwisowe właśnie autoryzują odczyt danych.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na D. Jeśli musisz używać 'złej' technologii (klucze JSON), musisz wokół niej zbudować 'dobre' procesy.
+Wskazówki i triki (Tips & Tricks):
+- "Compromised service account key" + "Minimize risk" = Rotation + Strict access control.
+- Pamiętaj: Jeśli używasz SA Keys – rotuj je!
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Secret Manager to standardowe miejsce do przechowywania kluczy/haseł w GCP.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iam/docs/best-practices-for-managing-service-account-keys" target="_blank">Best practices for service account keys</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> W idealnym świecie użyłbyś WIF, ale egzaminy często sprawdzają jak radzisz sobie z narzuconymi ograniczeniami technologicznymi.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/iam/docs/key-rotation" target="_blank">https://cloud.google.com/iam/docs/key-rotation</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje pragmatyczne podejście do bezpieczeństwa w sytuacjach, gdy nie da się uniknąć użycia Service Account Keys (np. integracja z podmiotem trzecim). Rotacja i kontrola dostępu do samego klucza to niezbędne minimum.</p>
 </div>
 </div>
 <script>

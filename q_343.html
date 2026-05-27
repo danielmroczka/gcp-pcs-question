@@ -72,7 +72,6 @@ You manage the security logs within your cloud environment. You have configured 
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use the data in the Cloud Storage bucket as an external table in BigQuery. Provide the auditors access to the BigQuery dataset.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use Dataflow to import the data from Cloud Storage into Elasticsearch. Provide the auditors with access to Elasticsearch.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use a Cloud Run job to import the log data from Cloud Storage to Cloud Logging. Provide the auditors access through Log Analytics.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,33 @@ You manage the security logs within your cloud environment. You have configured 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Use the data in the Cloud Storage bucket as an external table in BigQuery. Provide the auditors access to the BigQuery dataset.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. BigQuery External Tables: Pozwalają one na odpytywanie danych bezpośrednio w Cloud Storage przy użyciu SQL. Jest to najszybsza implementacja (kilka kliknięć) i najbardziej kosztowo efektywna dla audytorów, ponieważ nie płacisz za import i przechowywanie danych w BigQuery, a jedynie za samo zapytanie.
+Dlaczego ta odpowiedź jest poprawna:
+- BigQuery External Table: Pozwala na wykonywanie zapytań SQL bezpośrednio na plikach (np. JSON, CSV) znajdujących się w Cloud Storage, bez konieczności ich kopiowania/importowania (tzw. "zero-copy").
+- "Cost-effective" + "Quickly implemented": Jest to najtańsza i najszybsza metoda analizy ogromnych zbiorów danych logów (log files) w Cloud Storage.
 
-Dlaczego inne są błędne:
-A. Download: Bardzo powolne przy dużych logach i trudne do analizy (brak możliwości zapytań SQL).
-C. Dataflow + Elasticsearch: Bardzo drogie i skomplikowane w konfiguracji (duży overhead).
-D. Cloud Run: Niepotrzebnie skomplikowane podejście do prostej analizy plików logów.
+Analiza niepoprawnych odpowiedzi:
+- A. VM + analytics toolset: Bardzo czasochłonne, drogie (koszty utrzymania VM) i wymagające ręcznego kopiowania danych.
+- C. Dataflow + Elasticsearch: Bardzo kosztowne (Dataflow + licencja/utrzymanie Elasticsearch) i wymagające dużo czasu na konfigurację.
+- D. Cloud Run job + Cloud Logging: Cloud Logging nie jest narzędziem do analizy dużych zbiorów danych (BigQuery jest).
 
-Konsensus społeczności ExamTopics: 100% na B. To standardowa technika 'Log Investigation' bez generowania dużych kosztów.
+Wskazówki i triki (Tips & Tricks):
+- "Logs in Cloud Storage" + "Auditors need to analyze" + "Cost-effective/Quickly" = BigQuery (External Table).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: BigQuery to "złoty standard" analityki w GCP.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/bigquery/docs/external-data-cloud-storage" target="_blank">Querying data from Cloud Storage</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> BigQuery wspiera formaty JSON i Parquet, w których Cloud Logging zapisuje logi w GCS, co czyni integrację natychmiastową.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/bigquery/docs/external-data-cloud-storage" target="_blank">https://cloud.google.com/bigquery/docs/external-data-cloud-storage</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie o efektywną analizę logów w chmurze. Kluczem jest wykorzystanie funkcji "external table" w BigQuery, która pozwala na analizę SQL bezpośrednio na plikach w GCS bez kosztów importu danych.</p>
 </div>
 </div>
 <script>

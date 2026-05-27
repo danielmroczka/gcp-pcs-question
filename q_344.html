@@ -72,7 +72,6 @@ Your organization currently uses a third-party identity provider (IdP) that only
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Collaborate with the third-party IdP to enable 2SV for Super admins while maintaining the current Cloud Identity configuration.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Implement monitoring tools to track the authentication methods used by Super admins in Cloud Identity. Alert on those not using 2SV.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Evaluate the 2SV options for Super admins offered by both the third-party IdP and Cloud Identity. Implement the solution that provides the strongest second factor.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,31 @@ Your organization currently uses a third-party identity provider (IdP) that only
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Create an organizational unit (OU) for Super admins, and enable 2SV within Cloud Identity for the OU.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Post-SSO 2SV: Nawet jeśli Twoje główne logowanie (IdP) nie ma MFA, Google pozwala na dodanie 'drugiego kroku' po swojej stronie. Umieszczenie Super Adminów w osobnej jednostce organizacyjnej (OU) i włączenie tam 2SV wymusi na nich użycie np. Titan Key po poprawnym zalogowaniu się w firmowym IdP.
+Dlaczego ta odpowiedź jest poprawna:
+- Google Workspace/Cloud Identity: 2-Step Verification (2SV) wymusza się za pomocą polityk w panelu Google Admin (Admin Console).
+- OU (Organizational Unit): Jest to standardowy sposób na stosowanie różnych polityk dla różnych grup użytkowników wewnątrz Google Workspace. Umieszczenie Super Adminów w dedykowanej OU pozwala włączyć 2SV tylko dla nich.
 
-Dlaczego inne są błędne:
-B. Collaborate: Może trwać miesiące. Rozwiązanie A jest natychmiastowe i pod Twoją kontrolą.
-C. Monitor: Wykryje włamanie, ale mu nie zapobiegnie.
-D. Evaluate: To nie jest techniczne rozwiązanie problemu.
+Analiza niepoprawnych odpowiedzi:
+- B, C, D: Są to metody nieskuteczne w kontekście *wymuszenia* (enforcement) przez panel Google Admin. Monitorowanie (C) to detekcja, a nie wymuszenie.
 
-Konsensus społeczności ExamTopics: 100% na A. To kluczowa funkcja bezpieczeństwa dla kont uprzywilejowanych w środowiskach hybrydowych.
+Wskazówki i triki (Tips & Tricks):
+- "Enforce 2-step verification (2SV)" + "Specific users (e.g., Super admins)" = OU (Organizational Unit) + 2SV Policy.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Panel Google Admin to miejsce zarządzania politykami 2SV.
+
+Dokumentacja i linki:
+- <a href="https://support.google.com/a/answer/175197" target="_blank">Enforce 2-Step Verification</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Super Admini są jedynymi kontami, które mogą ominąć SSO w sytuacjach awaryjnych, więc posiadanie u nich 2SV bezpośrednio w Google jest absolutnie krytyczne.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://support.google.com/cloudidentity/answer/9366694" target="_blank">https://support.google.com/cloudidentity/answer/9366694</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie o egzekwowanie polityk bezpieczeństwa (2SV) dla uprzywilejowanych użytkowników. Kluczem jest wykorzystanie natywnych narzędzi do zarządzania tożsamością w Google Workspace (OU) do wymuszenia silniejszej autoryzacji.</p>
 </div>
 </div>
 <script>

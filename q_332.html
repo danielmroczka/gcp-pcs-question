@@ -72,7 +72,6 @@ Your organization has recently migrated sensitive customer data to Cloud Storage
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Enable Access Transparency for the organization.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure Data Access audit logs for Cloud Storage at the organization level.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enable Access Transparency for the project hosting the Cloud Storage buckets.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,29 +88,33 @@ Your organization has recently migrated sensitive customer data to Cloud Storage
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Enable Access Transparency for the organization.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Access Transparency at Org Level: Jak wspomniano wcześniej, Access Transparency to jedyna usługa dostarczająca logi z działań PRACOWNIKÓW GOOGLE. Włączenie jej na poziomie organizacji zapewnia, że każdy dostęp supportu czy inżynierów Google do Twoich bucketów GCS we wszystkich projektach zostanie odnotowany.
+Dlaczego ta odpowiedź jest poprawna:
+- Access Transparency: To kluczowa usługa, która loguje dostęp do Twoich danych przez pracowników Google (tzw. "administrative access by Google personnel").
+- "Organization level": Access Transparency włącza się na poziomie organizacji, aby objąć swoim działaniem wszystkie projekty wewnątrz niej.
 
-Dlaczego inne są błędne:
-A, C. Data Access logs: Rejestrują aktywność Twoich własnych użytkowników (pracowników firmy), nie personelu Google.
-D. Project level: Można, ale włączenie na poziomie organizacji (B) jest lepszą praktyką zapewniającą spójność i brak luk w audycie dla wszystkich zasobów firmy.
+Analiza niepoprawnych odpowiedzi:
+- A, C. Data Access audit logs: Śledzą dostęp użytkowników/serwisów (Twoich lub vendorów), ale NIE śledzą działań pracowników Google.
+- D. Access Transparency (Project level): Access Transparency włącza się dla całej organizacji, nie dla pojedynczego projektu.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. Access Transparency to fundament zaufania do dostawcy chmury.
+Wskazówki i triki (Tips & Tricks):
+- "Administrative access by Google personnel" = Access Transparency.
+- Zapamiętaj: Data Access Audit Logs to Twój dostęp, Access Transparency to dostęp pracowników Google.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Access Transparency pozwala zobaczyć *kto* z Google i *dlaczego* uzyskał dostęp do Twoich danych.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/access-transparency/docs/overview" target="_blank">Access Transparency overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Logi AT zawierają informację o numerze zgłoszenia (support ticket), co pozwala powiązać działanie Google z Twoją prośbą o pomoc.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/access-transparency" target="_blank">https://cloud.google.com/access-transparency</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie testuje znajomość narzędzi do audytu dostępu technicznego. Kluczowe jest rozróżnienie audytu działań użytkowników (Audit Logs) od audytu działań personelu Google (Access Transparency).</p>
 </div>
 </div>
 <script>

@@ -72,7 +72,6 @@ Your company is in a regulated industry that requires low overhead encryption us
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Set up pairs of Cloud Interconnect connections to your data centers in multiple regions, and employ MACSec encryption.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Set up L2TP encryption over pairs of dedicated Cloud Interconnect connections from the data centers in multiple regions.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Set up IPSec encryption over Partner Interconnect connections from your data centers in multiple regions.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,29 +88,34 @@ Your company is in a regulated industry that requires low overhead encryption us
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Set up pairs of Cloud Interconnect connections to your data centers in multiple regions, and employ MACSec encryption.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Interconnect + MACsec: MACsec (szyfrowanie warstwy 2) oferuje najniższy narzut (low overhead), ponieważ odbywa się na poziomie sprzętowym portu sieciowego. Cloud Interconnect zapewnia wysoką dostępność i przepustowość wymaganą w branży finansowej/regulowanej.
+Dlaczego ta odpowiedź jest poprawna:
+- "Regulated industry" + "Low overhead encryption": Cloud Interconnect zapewnia prywatne, stabilne połączenie.
+- "MACsec": Jest to protokół szyfrowania warstwy 2, który oferuje szyfrowanie z bardzo niskim opóźnieniem (low overhead) na poziomie sprzętowym (line-rate encryption). Jest to idealne rozwiązanie do wymogów regulacyjnych.
 
-Dlaczego inne są błędne:
-A, D. IPsec (VPN): Szyfrowanie warstwy 3 (IPsec) wprowadza znacznie większy narzut procesora i nagłówków (overhead) oraz mniejszą przepustowość niż MACsec.
-C. L2TP: Nie zapewnia nowoczesnego, silnego szyfrowania wymaganego przez regulacje i nie jest natywną usługą bezpieczeństwa Google dla Interconnecta.
+Analiza niepoprawnych odpowiedzi:
+- A. HA VPN: Używa IPSec, który ma wyższy "overhead" (enkapsulacja IP) i opiera się na internecie publicznym (lub współdzielonej sieci), co nie spełnia wymogu "private connectivity" w takim stopniu jak Interconnect.
+- C. L2TP: Nie jest standardem wspieranym przez Google do szyfrowania Interconnecta.
+- D. IPSec over Partner Interconnect: IPSec ma wyższy narzut (overhead) niż MACsec, co narusza wymóg "low overhead".
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. MACsec to standard dla 'high-speed low-latency encryption'.
+Wskazówki i triki (Tips & Tricks):
+- "Low overhead encryption" + "Private connectivity" = Interconnect + MACsec.
+- Pamiętaj: MACsec = sprzętowe szyfrowanie (bardzo szybkie). IPSec = softwarowe szyfrowanie (większy overhead).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: MACsec jest natywnie wspierany przez Google Dedicated Interconnect.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/interconnect/docs/concepts/macsec" target="_blank">MACsec for Dedicated Interconnect</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> MACsec chroni dane na całym odcinku światłowodu między Twoim routerem a routerem brzegowym Google, co spełnia wymogi ochrony danych w transmisji bez wpływu na wydajność aplikacji.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/network-connectivity/docs/interconnect/concepts/macsec-overview" target="_blank">https://cloud.google.com/network-connectivity/docs/interconnect/concepts/macsec-overview</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie techniczne o wydajność szyfrowania w połączeniach hybrydowych. Kluczem jest rozróżnienie protokołów szyfrowania (MACsec vs IPSec) w kontekście "low overhead" (niskiego narzutu na wydajność).</p>
 </div>
 </div>
 <script>

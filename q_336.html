@@ -70,9 +70,6 @@ Your organization is storing regulated data in Cloud Storage. Data in Cloud Stor
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a new key ring and key in the Cloud Key Management Service. In each Cloud Storage bucket configuration, change the encryption type to customer-managed encryption key.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Identify which projects contain Cloud Storage buckets with regulated data. Apply the restrictNonCmekServices organization policy constraint to the identified projects or parent folder.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a new key ring and key in the Cloud Key Management Service. Identify which projects contain Cloud Storage buckets with regulated data. Perform a write action on all existing objects in the buckets.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a customer-managed encryption key. Change the encryption type in each Cloud Storage bucket configuration to the newly created key. Perform a write action on all existing objects in the buckets.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +77,7 @@ Your organization is storing regulated data in Cloud Storage. Data in Cloud Stor
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">D</span>
+<span class="correct-answer">B</span>
 <br/>
 </span>
 </div>
@@ -89,30 +86,32 @@ Your organization is storing regulated data in Cloud Storage. Data in Cloud Stor
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: B (Identify which projects contain Cloud Storage buckets with regulated data. Apply the restrictNonCmekServices organization policy constraint to the identified projects or parent folder.)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Config change + Rewrite: Aby w pełni przejść na CMEK, musisz: 1. Stworzyć klucz w KMS. 2. Ustawić go jako domyślny dla bucketu (to chroni nowe pliki). 3. Wykonać operację 'rewrite' (np. `gsutil rewrite -k`) na wszystkich starych plikach, co wymusi ich przeszyfrowanie nowym kluczem CMEK.
+Dlaczego ta odpowiedź jest poprawna:
+- Pytanie dotyczy zgodności (compliance) i *wymuszenia* użycia CMEK dla *istniejących* lub nowych danych.
+- Organization Policy constraint `restrictNonCmekServices` jest mechanizmem, który *wymusza* użycie CMEK w usługach (w tym Cloud Storage).
+- Wersja A mówi o zmianie "konfiguracji bucketu" (zmiana typu szyfrowania w bucketach nie powoduje automatycznego przesyfrowania *istniejących* danych). Aby wymusić zgodność w skali organizacji/projektu, stosuje się politykę (Constraint), która odrzuca operacje zapisu, jeśli dane nie są szyfrowane przez CMEK.
 
-Dlaczego inne są błędne:
-A. Bucket config only: Nie zmienia szyfrowania plików, które już tam są. Pozostaną one pod kluczami Google (GMEK).
-B. Org policy: Zablokuje tworzenie nowych niezaszyfrowanych plików, ale nie naprawi tych istniejących.
-C. Write action only: Bez zmiany konfiguracji domyślnej bucketu (D), operacja zapisu mogłaby nadal używać starego typu szyfrowania.
+Analiza niepoprawnych odpowiedzi:
+- A. Zmiana konfiguracji w bucketach: Nie rozwiązuje problemu w sposób zautomatyzowany i wymuszony (enforcement). To podejście manualne i podatne na błędy.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla D. To kompletna procedura migracji szyfrowania.
+Wskazówki i triki (Tips & Tricks):
+- "Meet compliance requirements" + "Update existing data to use CMEK" + "Enforcement" = Organization Policy constraint (`restrictNonCmekServices`).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: W GCP, gdy widzisz pytanie o wymuszanie określonego standardu bezpieczeństwa na poziomie projektów/folderów, odpowiedzią niemal zawsze jest "Organization Policy".
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/restricting-service-usage" target="_blank">Organization policy constraints</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Operacja 'rewrite' w GCS jest bardzo wydajna, ponieważ odbywa się w całości wewnątrz infrastruktury Google (nie pobierasz i nie wysyłasz danych ponownie).</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/storage/docs/using-customer-managed-encryption-keys#rewrite" target="_blank">https://cloud.google.com/storage/docs/using-customer-managed-encryption-keys#rewrite</a></li>
-
-</ul>
+<h3>Kluczowe zagadnienia</h3>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p><b>Analiza strategiczna:</b> Pytanie sprawdza różnicę między prostą zmianą konfiguracji zasobu a wymuszeniem polityki bezpieczeństwa w skali organizacji. Organization Policy jest właściwym narzędziem do automatycznego wymuszania standardów CMEK.</p>
 </div>
 </div>
 <script>
