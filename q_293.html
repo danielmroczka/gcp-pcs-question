@@ -72,7 +72,6 @@ Your organization has hired a small, temporary partner team for 18 months. The t
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a workforce identity pool and federate the identity pool with the identity provider (IdP) of the temporary partner team.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Implement just-in-time privileged access to Google Cloud for the temporary partner team.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Add the identities of the temporary partner team members to your identity provider (IdP).</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,36 +88,39 @@ Your organization has hired a small, temporary partner team for 18 months. The t
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Create a workforce identity pool and federate the identity pool with the identity provider (IdP) of the temporary partner team.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Workforce Identity Federation: Federacja z IdP partnera gwarantuje, że proces logowania odbywa się u nich. Jeśli partner usunie pracownika, ich IdP przestanie wydawać mu tokeny, a on natychmiast straci dostęp do Twojego GCP. Nie musisz ręcznie sprzątać kont - partner dba o swój cykl życia (lifecycle).
+Dlaczego ta odpowiedź jest poprawna:
+- Workforce Identity Federation: To rozwiązanie stworzone do tego, aby "zewnętrzni użytkownicy" (np. vendorzy, partnerzy) mogli logować się do GCP za pomocą swojego zewnętrznego IdP.
+- Nie zarządza cyklem życia: Użytkownicy vendorzy nie muszą mieć kont w Google (brak konieczności *provisioning* w Google Workspace/Cloud Identity). Zarządzanie tożsamością pozostaje po stronie vendora (w jego IdP), co w pełni realizuje wymóg "ensure that partner employees lose access if they are removed from their employer's organization".
 
-Dlaczego inne są błędne:
-A. Temporary password: Bardzo słabe bezpieczeństwo, brak automatyzacji wygaśnięcia.
-C. JIT: Ogranicza uprawnienia, ale nie rozwiązuje problemu tożsamości użytkownika zewnętrznego.
-D. Add to own IdP: Wymaga od Ciebie manualnego zarządzania obcymi kontami, co jest błędotwórcze.
+Analiza niepoprawnych odpowiedzi:
+- A. Temporary password: Bardzo słabe bezpieczeństwo, brak automatyzacji wygaśnięcia.
+- C. JIT: Ogranicza uprawnienia, ale nie rozwiązuje problemu tożsamości użytkownika zewnętrznego.
+- D. Add to own IdP: Wymaga od Ciebie manualnego zarządzania obcymi kontami, co jest błędotwórcze i uciążliwe.
 
-Konsensus społeczności ExamTopics: 100% na B. Federacja to jedyny poprawny sposób współpracy z partnerami B2B.
+Wskazówki i triki (Tips & Tricks):
+- "External partner team" + "No lifecycle management" = Workforce Identity Federation.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Workforce Identity Federation (dla użytkowników/partnerów) vs Workload Identity Federation (dla usług/maszyn).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iam/docs/workforce-identity-federation" target="_blank">Workforce Identity Federation overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> WIF wspiera również ograniczanie dostępu tylko do osób o określonych atrybutach (np. tylko osoby z działu 'GCP-Consultants' u partnera).</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/iam/docs/workforce-identity-federation" target="_blank">https://cloud.google.com/iam/docs/workforce-identity-federation</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie o nowoczesne podejście do federacji tożsamości. Workforce Identity Federation to rozwiązanie, które pozwala w pełni delegować zarządzanie tożsamością użytkowników zewnętrznych do ich własnego IdP, zapewniając automatyczne wygaszenie dostępu w razie zmian u partnera.</p>
 </div>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelectorAll('.reveal-solution');
-    revealButton.forEach(button => {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
         button.addEventListener('click', function(e) {
             e.preventDefault();

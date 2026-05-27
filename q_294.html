@@ -72,7 +72,6 @@ Your organization has an internet-facing application behind a load balancer. You
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Concatenate the credential with a timestamp. Submit the timestamp and hashed value of credentials to the network.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Deploy the TLS certificate at Google Cloud Global HTTPs Load Balancer, and submit the user credentials through HTTPs.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Generate an asymmetric key with Cloud KMS. Encrypt client-side user credentials using the public key.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,33 +88,38 @@ Your organization has an internet-facing application behind a load balancer. You
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Deploy the TLS certificate at Google Cloud Global HTTPs Load Balancer, and submit the user credentials through HTTPs.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. TLS on Load Balancer: Podstawową i wystarczającą metodą ochrony poświadczeń w internecie jest protokół HTTPS (TLS). Szyfruje on całą komunikację (w tym login i hasło) od przeglądarki użytkownika do punktu zakończenia TLS na Load Balancerze Google.
+Dlaczego ta odpowiedź jest poprawna:
+- HTTPS (TLS): To branżowy standard szyfrowania komunikacji sieciowej. Zapewnia ochronę poufności (encryption) oraz integralności danych przesyłanych między klientem a load balancerem. W połączeniu z poprawnie skonfigurowanym TLS między load balancerem a backendem (jeśli wymagane), zapewnia pełną ochronę typu "end-to-end".
 
-Dlaczego inne są błędne:
-A, D: Szyfrowanie kluczem KMS w przeglądarce (client-side) jest niepraktyczne i nadmiarowe przy poprawnie działającym HTTPS.
-B. Hashing: Chroni hasło w bazie, ale jeśli samo przesyłanie nie jest szyfrowane (HTTP), haker przejmie hasz i może wykonać atak typu 'Pass-the-hash'.
+Analiza niepoprawnych odpowiedzi:
+- A, D: Szyfrowanie danych po stronie klienta (przeglądarki) przy użyciu kluczy KMS jest technicznie trudne, niepraktyczne i w zupełności zbędne, gdy HTTPS (TLS) rozwiązuje problem szyfrowania kanału transmisyjnego.
+- B: Hashing (haszowanie) nie jest szyfrowaniem. Samo haszowanie danych (np. SHA-256) bez kanału szyfrowanego pozwala na atak typu "Replay Attack" (przejęcie zahaszowanego hasła i jego odtworzenie).
+
+Wskazówki i triki (Tips & Tricks):
+- "End-to-end encryption" + "User credentials" + "Web application" = HTTPS/TLS.
+- Zapamiętaj: Zawsze szukaj najprostszego i standardowego rozwiązania – w tym przypadku jest to HTTPS.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Load Balancer w GCP posiada natywną obsługę certyfikatów SSL/TLS.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/load-balancing/docs/https" target="_blank">Setting up HTTPS load balancing</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Pamiętaj, aby na Load Balancerze wymusić przekierowanie z HTTP na HTTPS oraz używać nowoczesnych wersji TLS (1.2+).</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/load-balancing/docs/https" target="_blank">https://cloud.google.com/load-balancing/docs/https</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie o standardowe praktyki zabezpieczania danych w przesyłach internetowych. Wykorzystanie HTTPS/TLS na Load Balancerze jest jedynym właściwym i rekomendowanym przez Google sposobem ochrony poświadczeń w aplikacjach webowych.</p>
 </div>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelectorAll('.reveal-solution');
-    revealButton.forEach(button => {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
         button.addEventListener('click', function(e) {
             e.preventDefault();

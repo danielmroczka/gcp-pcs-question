@@ -64,7 +64,7 @@
 <h2>Question 236 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You are deploying regulated workloads on Google Cloud. The regulation has data residency and data access requirements. It also requires that support is provided from the same geographical location as where the data resides.<br/>What should you do?
+You are deploying regulated workloads on Google Cloud. The regulation has data residency and data access requirements. It also requires that support is provided from the same geographical location as where the data resides. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -72,7 +72,6 @@ You are deploying regulated workloads on Google Cloud. The regulation has data r
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Deploy Assured Workloads.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Deploy resources only to regions permitted by data residency requirements.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use Data Access logging and Access Transparency logging to confirm that no users are accessing data from another region.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,36 +88,37 @@ You are deploying regulated workloads on Google Cloud. The regulation has data r
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: B (Deploy Assured Workloads.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. accesscontextmanager.policyAdmin: To specyficzna rola do zarządzania perymetrami VPC Service Controls i poziomami dostępu (Access Levels) w Access Context Managerze. Pozwala na pełne zarządzanie granicami danych w całej firmie.
+Dlaczego ta odpowiedź jest poprawna:
+- Assured Workloads: Jest to usługa zaprojektowana specjalnie dla "regulated industry" (np. sektor publiczny, finanse, opieka zdrowotna). Pozwala ona na automatyczne wymuszanie lokalizacji danych (data residency) oraz, co kluczowe w tym pytaniu, zapewnia, że personel wsparcia technicznego Google spełnia określone wymogi geograficzne ("support is provided from the same geographical location").
 
-Dlaczego inne są błędne:
-B. organizationAdmin: Zbyt wysoka rola.
-C. networkAdmin: Zarządza routingiem i subnets, nie ma praw do zarządzania 'Perymetrami API' (VPC SC).
-D. Viewer: Tylko do odczytu.
+Analiza niepoprawnych odpowiedzi:
+- A, D: Logging/Auditing pozwala na detekcję, ale nie gwarantuje spełnienia wymogów (np. nie wymusza lokalizacji wsparcia).
+- C: Sama selekcja regionów jest dobrym krokiem, ale nie spełnia wymogu dotyczącego "wsparcia z tej samej lokalizacji" (support location).
 
-Konsensus społeczności ExamTopics: 100% na A. Perymetry = Access Context Manager Admin.
+Wskazówki i triki (Tips & Tricks):
+- "Regulated industry" + "Data residency" + "Support location requirement" = Assured Workloads.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Assured Workloads to kompleksowe rozwiązanie do spełniania wymogów regulacyjnych.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/assured-workloads/docs/overview" target="_blank">Assured Workloads overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Wiele osób szuka słowa 'VPC' w nazwie roli. Eksperci wyjaśniają: VPC Service Controls to nazwa handlowa, ale technicznie usługa ta rezyduje w Access Context Managerze (A). To częsta pułapka nazewnictwa na egzaminie.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/access-context-manager/docs/access-control" target="_blank">https://cloud.google.com/access-context-manager/docs/access-control</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie o egzekwowanie skomplikowanych wymogów regulacyjnych. Assured Workloads to jedyne rozwiązanie w GCP, które łączy wymogi techniczne (residency) z operacyjnymi (lokalizacja personelu wsparcia).</p>
 </div>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelectorAll('.reveal-solution');
-    revealButton.forEach(button => {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
         button.addEventListener('click', function(e) {
             e.preventDefault();

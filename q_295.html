@@ -72,7 +72,6 @@ Your organization heavily utilizes serverless applications while prioritizing se
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a Binary Authorization attestor that utilizes a scanner to evaluate container image build processes. Define a policy that requires deployment of images only if this attestation is present.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a Binary Authorization attestor that retrieves the Cloud Build build ID of the container image. Configure a policy to allow deployment only if there's a matching build ID attestation.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Utilize a custom Security Health Analytics module to create a policy. Enforce the policy through Binary Authorization to prevent deployment of images that do not meet predefined security standards.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,35 +88,37 @@ Your organization heavily utilizes serverless applications while prioritizing se
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Create a Binary Authorization attestor that retrieves the Cloud Build build ID of the container image. Configure a policy to allow deployment only if there's a matching build ID attestation.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Cloud Build Attestation: Cloud Build potrafi automatycznie generować podpisaną atestację zawierającą ID procesu budowania. Binary Authorization w klastrze GKE weryfikuje ten podpis. To daje pewność, że obraz kontenera pochodzi z Twojego zaufanego pipeline'u, a nie został zbudowany lokalnie na laptopie dewelopera.
+Dlaczego ta odpowiedź jest poprawna:
+- Cloud Build Attestation: Cloud Build posiada natywną funkcjonalność generowania podpisanej atestacji (z build ID) po pomyślnym zbudowaniu obrazu. Binary Authorization w klastrze (GKE/Cloud Run) weryfikuje ten podpis. Jest to złoty standard (SLSA) gwarantujący, że wdrożony obraz pochodzi z Twojego zaufanego potoku CI/CD (provenance).
 
-Dlaczego inne są błędne:
-A, B: Nie są to techniczne mechanizmy wbudowane w Binary Authorization.
-D. SHA: Służy do detekcji po fakcie, nie jest 'bramkarzem' wdrożeń.
+Analiza niepoprawnych odpowiedzi:
+- A, B: Są to opisy ogólne lub nieistniejące funkcjonalności w Binary Authorization.
+- D. Security Health Analytics: Służy do audytu konfiguracji, a nie do "enforcement" (wymuszania) przepływu obrazów w potoku CI/CD.
 
-Konsensus społeczności ExamTopics: 100% na C. Integracja Cloud Build z BinAuth to fundament bezpieczeństwa kontenerów.
+Wskazówki i triki (Tips & Tricks):
+- "Only images built by your Cloud Build pipeline" + "Binary Authorization" = Cloud Build Attestation (matching build ID).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Binary Authorization to brama bezpieczeństwa, która sprawdza cyfrowe podpisy (atestacje) na obrazach przed ich uruchomieniem.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/binary-authorization/docs/cloud-build-attestations" target="_blank">Binary Authorization: Cloud Build attestations</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> To rozwiązanie realizuje standard SLSA (Supply-chain Levels for Software Artifacts), gwarantując integralność artefaktu binarnego.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/binary-authorization/docs/cloud-build-attestations" target="_blank">https://cloud.google.com/binary-authorization/docs/cloud-build-attestations</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie sprawdza znajomość integracji Binary Authorization z CI/CD (Cloud Build). Kluczem jest automatyczna weryfikacja pochodzenia (provenance) obrazu przez podpisaną atestację z identyfikatorem buildu.</p>
 </div>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelectorAll('.reveal-solution');
-    revealButton.forEach(button => {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
         button.addEventListener('click', function(e) {
             e.preventDefault();

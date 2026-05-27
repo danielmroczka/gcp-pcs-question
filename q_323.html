@@ -118,13 +118,14 @@ Dokumentacja i linki:
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelectorAll('.reveal-solution');
-    revealButton.forEach(button => {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
         button.addEventListener('click', function(e) {
             e.preventDefault();
-            const answerSection = document.querySelector('.q-answer');
-            const aiSection = document.querySelector('.ai-analysis-container');
+            const qCard = this.closest('.q-card');
+            const answerSection = qCard.querySelector('.q-answer');
+            const aiSection = qCard.querySelector('.ai-analysis-container');
             if (isVisible) {
                 if (answerSection) answerSection.style.display = 'none';
                 if (aiSection) aiSection.style.display = 'none';
