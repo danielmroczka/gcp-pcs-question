@@ -64,15 +64,14 @@
 <h2>Question 291 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization is using a third-party identity and authentication provider to centrally manage users. You want to use this identity provider to grant access to the Google Cloud console without syncing identities to Google Cloud. Users should receive permissions based on attributes. What should you do?
+Your organization has recently deployed a new web application on Compute Engine. You need to provide users with access to the application while minimizing exposure to the public internet. Furthermore, you need to provide the internal backend services with secure connectivity to the database while keeping them isolated from public access. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure the central identity provider as a workforce identity pool provider in Workforce Identity Federation. Create an attribute mapping by using the Common Expression Language (CEL).</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure a periodic synchronization of relevant users and groups with attributes to Cloud Identity. Activate single sign-on by using the Security Assertion Markup Language (SAML).</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Set up the Google Cloud Identity Platform. Configure an external authentication provider by using OpenID Connect and link user accounts based on attributes.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Activate external identities on the Identity-Aware Proxy. Use the Security Assertion Markup Language (SAML) to configure authentication based on attributes to the central authentication provider.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Place the frontend instances in a public subnet with external IP addresses and the backend services in a private subnet. Use a NAT gateway to allow the backend to communicate with the frontend.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Place the frontend instances in a public subnet with external IP addresses and use a Cloud Load Balancer with Google Cloud Armor for security. Place the backend services in a private subnet and use Internal HTTP(S) Load Balancing.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Place all instances in a single public subnet. Use Identity-Aware Proxy (IAP) to restrict access to the frontend instances and use firewall rules to block access to backend instances.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Place all instances in a single private subnet. Use a load balancer to expose both the frontend and backend instances to the internet, and configure firewall rules to secure the services.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +79,7 @@ Your organization is using a third-party identity and authentication provider to
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">B</span>
 <br/>
 </span>
 </div>
@@ -89,30 +88,33 @@ Your organization is using a third-party identity and authentication provider to
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: B (Place the frontend instances in a public subnet with external IP addresses and use a Cloud Load Balancer with Google Cloud Armor for security. Place the backend services in a private subnet and use Internal HTTP(S) Load Balancing.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Workforce Identity Federation (WIF): Jest to usługa pozwalająca na logowanie pracowników do GCP BEZ tworzenia kont w Google Cloud Identity (wymóg 'without syncing'). Mapowanie atrybutów za pomocą języka CEL pozwala na dynamiczne przydzielanie ról IAM na podstawie atrybutów z zewnętrznego tokena IdP.
+Dlaczego ta odpowiedź jest poprawna:
+- Architektura warstwowa (Tiered Architecture): Frontend jest dostępny przez Load Balancer (który chroni go przez Cloud Armor – WAF). Backend jest w pełni odizolowany w prywatnej podsieci i komunikuje się z frontendem tylko przez wewnętrzny Load Balancer (Internal LB), co zapewnia brak publicznej widoczności dla wrażliwych usług backendowych.
 
-Dlaczego inne są błędne:
-B. Periodic sync: Jawnie zabronione przez wymóg 'without syncing'.
-C. Identity Platform: Służy do logowania klientów do Twojej aplikacji, nie pracowników do Konsoli Google.
-D. IAP: Chroni Twoje aplikacje, a nie dostęp administracyjny do platformy GCP bez kont użytkowników.
+Analiza niepoprawnych odpowiedzi:
+- A. NAT gateway: NAT pozwala na wyjście do internetu, ale nie zastępuje Load Balancera jako punktu wejścia do aplikacji.
+- C. Single subnet: To brak poprawnej izolacji sieciowej (brak separacji frontend/backend).
+- D. All in private + Load Balancer to public: Jeśli wstawisz wszystkie w prywatnej sieci, Load Balancer nie może do nich 'dosięgnąć' (chyba że przez zaawansowaną konfigurację, ale A/B są lepszymi wzorcami).
 
-Konsensus społeczności ExamTopics: 100% poparcia dla A. WIF to rewolucja w 'stateless' IAM.
+Wskazówki i triki (Tips & Tricks):
+- "Frontend public" + "Backend private" + "Secure connectivity" = Tiered Architecture z Load Balancerami.
+- Publiczna widoczność (public subnets) jest tylko dla LB i Frontendu.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Internal Load Balancing (ILB) to klucz do bezpiecznej komunikacji "wschód-zachód" wewnątrz VPC.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/architecture/best-practices-vpc-design" target="_blank">VPC design best practices</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> To podejście eliminuje potrzebę synchronizacji tysięcy użytkowników przez GCDS, co upraszcza infrastrukturę i zwiększa bezpieczeństwo.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/iam/docs/workforce-identity-federation" target="_blank">https://cloud.google.com/iam/docs/workforce-identity-federation</a></li>
-
-</ul>
+<h3>Kluczowe zagadnienia</h3>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do projektowania bezpiecznych sieci "od zera". Warstwowa architektura z użyciem zewnętrznego Load Balancera (z WAF) dla frontendu i wewnętrznego Load Balancera dla backendu to standardowy, bezpieczny model w chmurze.</p>
 </div>
 </div>
 <script>

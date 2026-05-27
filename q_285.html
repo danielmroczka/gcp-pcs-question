@@ -72,7 +72,6 @@ Your organization is developing a new SaaS application on Google Cloud. Stringen
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Deploy Cloud IDS and activate Firewall Rules Logging. Create a custom dashboard in Security Command Center to visualize potential intrusion attempts.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Detect sensitive administrative actions by using Cloud Logging with custom filters. Enable VPC Flow Logs with BigQuery exports for rapid analysis of network traffic patterns.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enable Event Threat Detection and Security Health Analytics in Security Command Center. Set up detailed logging for IAM-related activity and relevant project resources by deploying Cloud Audit Logs.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,26 +88,31 @@ Your organization is developing a new SaaS application on Google Cloud. Stringen
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (Enable Event Threat Detection and Security Health Analytics in Security Command Center. Set up detailed logging for IAM-related activity and relevant project resources by deploying Cloud Audit Logs.)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. SCC Suite: Zestaw ETD (wykrywanie włamań), SHA (wykrywanie błędów konfiguracji) oraz Cloud Audit Logs (ślad zmian IAM) pokrywa wszystkie wymogi monitoringu compliance dla aplikacji SaaS.
+Dlaczego ta odpowiedź jest poprawna:
+- SCC Suite: Zestaw ETD (wykrywanie włamań), SHA (wykrywanie błędów konfiguracji) oraz Cloud Audit Logs (ślad zmian IAM) pokrywa wszystkie wymogi monitoringu compliance dla aplikacji SaaS.
 
-Dlaczego inne są błędne:
-A, B, C: Są to rozwiązania fragmentaryczne, skupiające się tylko na sieci lub samej archiwizacji logów, bez inteligentnej analizy zagrożeń tożsamościowych i konfiguracyjnych.
+Analiza niepoprawnych odpowiedzi:
+- A, B, C: Są to rozwiązania fragmentaryczne, skupiające się tylko na sieci lub samej archiwizacji logów, bez inteligentnej analizy zagrożeń tożsamościowych i konfiguracyjnych.
+
+Wskazówki i triki (Tips & Tricks):
+- "Visibility into privileged account activity" + "Unauthorized changes" + "Compliance" = Security Command Center (SCC) Suite + Cloud Audit Logs.
+- Pamiętaj: SCC jest scentralizowanym hubem bezpieczeństwa w GCP.
+
+Praktyczne informacje na egzamin:
+- Integracja SCC z Audit Logs pozwala na korelację zdarzeń - np. "ktoś z IP z Chin (ETD) zmienił rolę IAM (Audit Logs) na uprzywilejowaną".
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/security-command-center" target="_blank">Security Command Center overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Integracja SCC z Audit Logs pozwala na korelację zdarzeń - np. 'ktoś z IP z Chin (ETD) zmienił rolę IAM (Audit Logs) na uprzywilejowaną'.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/security-command-center" target="_blank">https://cloud.google.com/security-command-center</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do projektowania kompletnego systemu monitoringu bezpieczeństwa. W GCP "Visibility" osiąga się przez kombinację logów audytowych (szczegóły) oraz SCC (inteligentna analiza i wizualizacja).</p>
 </div>
 </div>
 <script>

@@ -64,15 +64,14 @@
 <h2>Question 290 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You are implementing communications restrictions for specific services in your Google Cloud organization. Your data analytics team works in a dedicated folder. You need to ensure that access to BigQuery is controlled for that folder and its projects. The data analytics team must be able to control the restrictions only at the folder level. What should you do?
+You need to identify common misconfigurations and compliance violations across the organization and track findings for remedial action in a dashboard. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create an organization-level access policy with a service perimeter to restrict BigQuery access. Assign the data analytics team the Access Context Manager Editor role on the access policy to allow the team to configure the access policy.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a scoped policy on the folder with a service perimeter to restrict BigQuery access. Assign the data analytics team the Access Context Manager Editor role on the scoped policy to allow the team to configure the scoped policy.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Define a hierarchical firewall policy on the folder to deny BigQuery access. Assign the data analytics team the Compute Organization Firewall Policy Admin role to allow the team to configure rules for the firewall policy.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enforce the Restrict Resource Service Usage organization policy constraint on the folder to restrict BigQuery access. Assign the data analytics team the Organization Policy Administrator role to allow the team to manage exclusions within the folder.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a filter set in Cloud Asset Inventory to identify service accounts with high privileges and IAM principals with Gmail domains.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Scan and alert vulnerabilities and misconfigurations by using Secure Health Analytics detectors in Security Command Center Premium.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Set up filters on Cloud Audit Logs to flag log entries for specific, risky API calls, and display the calls in a Cloud Log Analytics dashboard.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Alert and track emerging attacks detected in your environment by using Event Threat Detection detectors.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,33 @@ You are implementing communications restrictions for specific services in your G
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Scan and alert vulnerabilities and misconfigurations by using Secure Health Analytics detectors in Security Command Center Premium.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Scoped Access Policies: Pozwalają one na delegowanie zarządzania perymetrami VPC Service Controls do konkretnych folderów. Zespół analityczny dostaje rolę ACM Editor TYLKO na swojej polityce 'scoped', co pozwala im na izolację BigQuery bez dostępu do globalnych ustawień firmy.
+Dlaczego ta odpowiedź jest poprawna:
+- Security Health Analytics (SHA): To moduł SCC Premium dedykowany do "Posture Management". Automatycznie skanuje on zasoby (bucket, VM, IAM) pod kątem błędów (np. brak MFA, publiczne porty, otwarte buckety) i prezentuje je w czytelnym dashboardzie Compliance.
 
-Dlaczego inne są błędne:
-A. Org-level: Narusza zasadę 'least privilege' i autonomii zespołu.
-C. Firewall: Nie chroni API BigQuery (to rola VPC SC).
-D. Restrict Service Usage: Blokuje włączenie usługi, a nie dostęp sieciowy do danych wewnątrz niej.
+Analiza niepoprawnych odpowiedzi:
+- A. Cloud Asset Inventory: To narzędzie do inwentaryzacji i przeszukiwania zasobów, nie posiada wbudowanego silnika analizy podatności/misconfiguration.
+- C. Cloud Audit Logs: Logi pokazują historię zmian (kto zmienił?), ale nie dają gotowej oceny stanu bezpieczeństwa ("czy ta konfiguracja jest bezpieczna?").
+- D. Event Threat Detection (ETD): Szuka AKTYWNYCH zagrożeń (włamań, malware, cryptomining), a nie statycznych błędów w konfiguracji.
 
-Konsensus społeczności ExamTopics: 100% na B. Scoped policies to klucz do delegowanego bezpieczeństwa w Enterprise.
+Wskazówki i triki (Tips & Tricks):
+- "Identify common misconfigurations" + "Compliance violations" + "Dashboard" = Security Health Analytics (SHA) w SCC Premium.
+- Pamiętaj: SCC = Twoje centrum dowodzenia bezpieczeństwem.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: SHA wspiera standardy takie jak CIS, NIST i PCI DSS, automatycznie przypisując błędy do konkretnych wymogów tych norm.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/security-command-center/docs/concepts-security-health-analytics-overview" target="_blank">Security Health Analytics overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Dzięki Scoped Policies możesz uniknąć 'wąskiego gardła' w centralnym zespole IT, dając zaufanym zespołom kontrolę nad ich własnymi granicami danych.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/access-context-manager/docs/scoped-access-policies" target="_blank">https://cloud.google.com/access-context-manager/docs/scoped-access-policies</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość narzędzi do "Posture Management" w GCP. W chmurze, gdzie zasoby powstają automatycznie, jedynym sposobem na utrzymanie standardów jest użycie zautomatyzowanych "strażników", jakimi są detektory SHA w Security Command Center.</p>
 </div>
 </div>
 <script>

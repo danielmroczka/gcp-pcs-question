@@ -72,7 +72,6 @@ Your organization operates in a highly regulated industry and uses multiple Goog
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Sensitive data is stored in a Cloud Storage bucket with the uniform bucket-level access setting enabled.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> The audit team needs access to Cloud Audit Logs related to managed services like BigQuery.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Principals have broad IAM roles allowing the creation and management of Compute Engine VMs without a pre-defined hardening process.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,28 +88,31 @@ Your organization operates in a highly regulated industry and uses multiple Goog
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Poprawna odpowiedź: D (Principals have broad IAM roles allowing the creation and management of Compute Engine VMs without a pre-defined hardening process.)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Broad roles + no hardening: Połączenie zbyt szerokich uprawnień (np. Owner/Editor) z brakiem zabezpieczenia systemów operacyjnych (hardening) to największe ryzyko. Pozwala ono hakerowi, który przejął maszynę przez lukę w OS, na natychmiastowe przejęcie całej chmury i wszystkich danych, co dyskwalifikuje firmę z większości norm compliance.
+Dlaczego ta odpowiedź jest poprawna:
+- Broad roles + no hardening: Połączenie zbyt szerokich uprawnień (np. Owner/Editor) z brakiem zabezpieczenia systemów operacyjnych (hardening) to największe ryzyko. Pozwala ono hakerowi, który przejął maszynę przez lukę w OS, na natychmiastowe przejęcie całej chmury i wszystkich danych, co dyskwalifikuje firmę z większości norm compliance.
 
-Dlaczego inne są błędne:
-A, B, C: To wszystko są dobre praktyki bezpieczeństwa, zwiększające zgodność, a nie ryzyka.
+Analiza niepoprawnych odpowiedzi:
+- A, B, C: To wszystko są dobre praktyki bezpieczeństwa, zwiększające zgodność, a nie ryzyka.
 
-Konsensus społeczności ExamTopics: 100% na D. Brak higieny IAM to najczęstsza przyczyna wycieków danych w chmurze.
+Wskazówki i triki (Tips & Tricks):
+- "Least privilege" = Zawsze ograniczaj role. 
+- "Hardening" = Zawsze zabezpieczaj obrazy OS (np. używając "Golden Images").
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Brak higieny IAM to najczęstsza przyczyna wycieków danych w chmurze.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/compute/docs/instances/hardening-os-images" target="_blank">Hardening OS images</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Zawsze preferuj granularne role predefiniowane i regularne skanowanie obrazów VM pod kątem luk CVE.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/compute/docs/instances/hardening-os-images" target="_blank">https://cloud.google.com/compute/docs/instances/hardening-os-images</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją umiejętność oceny ryzyka. Zawsze preferuj granularne role predefiniowane i automatyczne skanowanie obrazów VM pod kątem luk CVE zamiast pozwalania na "wolną amerykankę" w zarządzaniu infrastrukturą.</p>
 </div>
 </div>
 <script>

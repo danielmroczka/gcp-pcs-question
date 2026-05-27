@@ -64,15 +64,14 @@
 <h2>Question 298 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-A security audit uncovered several inconsistencies in your project's Identity and Access Management (IAM) configuration. Some service accounts have overly permissive roles, and a few external collaborators have more access than necessary. You need to gain detailed visibility into changes to IAM policies, user activity, service account behavior, and access to sensitive projects. What should you do?
+You are responsible for a set of Cloud Functions running on your organization's Google Cloud environment. During the last annual security review, secrets were identified in environment variables of some of these Cloud Functions. You must ensure that secrets are identified in a timely manner. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure Google Cloud Functions to be triggered by changes to IAM policies. Analyze changes by using the policy simulator, send alerts upon risky modifications, and store event details.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Enable the metrics explorer in Cloud Monitoring to follow the service account authentication events and build alerts linked on it.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use Cloud Audit Logs. Create log export sinks to send these logs to a security information and event management (SIEM) solution for correlation with other event sources.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Deploy the OS Config Management agent to your VMs. Use OS Config Management to create patch management jobs and monitor system modifications.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Implement regular peer reviews to assess the environment variables and identify secrets in your Cloud Functions. Raise a security incident if secrets are discovered.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Implement a Cloud Function that scans the environment variables multiple times a day, and creates a finding in Security Command Center if secrets are discovered.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use Sensitive Data Protection to scan the environment variables multiple times per day, and create a finding in Security Command Center if secrets are discovered.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Integrate dynamic application security testing into the CI/CD pipeline that scans the application code for the Cloud Functions. Fail the build process if secrets are discovered.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,33 @@ A security audit uncovered several inconsistencies in your project's Identity an
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Use Sensitive Data Protection to scan the environment variables multiple times per day, and create a finding in Security Command Center if secrets are discovered.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Audit Logs + SIEM: Logi audytowe (Admin Activity i Data Access) to jedyne źródło prawdy o tym, kto zmienił uprawnienia i kto ich użył. Eksport do SIEM (np. Splunk, Chronicle) pozwala na detekcję anomalii w czasie rzeczywistym i długoterminowy audyt zgodności.
+Dlaczego ta odpowiedź jest poprawna:
+- Sensitive Data Protection (DLP): Posiada funkcję skanowania konfiguracji usług Google Cloud. Można zaplanować automatyczny skan (np. codzienny) metadanych Cloud Functions, który wykryje wzorce haseł czy kluczy API w zmiennych środowiskowych i zaraportuje to bezpośrednio do Security Command Center (SCC).
 
-Dlaczego inne są błędne:
-A. Simulator: Służy do planowania zmian, nie widzi historii działań użytkowników.
-B. Metrics: Pokazują ile, ale nie KTO i CO zrobił (brak szczegółów zdarzeń).
-D. OS Config: Dotyczy wnętrza maszyny VM, nie widzi chmurowego systemu IAM.
+Analiza niepoprawnych odpowiedzi:
+- A. Peer reviews: Metoda manualna, nie gwarantuje detekcji wszystkich błędów w czasie rzeczywistym, uciążliwa w dużej skali.
+- B. Custom scan: Wymaga pisania kodu (dodatkowy dług techniczny), podczas gdy DLP (C) jest gotową usługą typu "managed".
+- D. DAST: Testuje aplikację "z zewnątrz" (przez HTTP), zazwyczaj nie ma wglądu w zmienne środowiskowe serwera.
 
-Konsensus społeczności ExamTopics: 100% na C. Logi audytowe to podstawa audytowalności IAM.
+Wskazówki i triki (Tips & Tricks):
+- "Cloud Function" + "Secrets in Env Vars" + "Detection" = Sensitive Data Protection (DLP).
+- Pamiętaj: DLP API działa na strumieniach tekstowych i konfiguracjach.
+
+Praktyczne informacje na egzamin:
+- Prawidłowym miejscem na przechowywanie sekretów w GCP jest **Secret Manager**. DLP służy tylko do wykrywania, gdzie ich tam zabrakło (gdzie wyciekły do środowiska).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/dlp/docs/inspecting-storage" target="_blank">Inspecting storage and configuration for sensitive data</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Logi Admin Activity są darmowe i niezmywalne (tamper-proof), co czyni je idealnym materiałem dowodowym.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/logging/docs/audit" target="_blank">https://cloud.google.com/logging/docs/audit</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do projektowania systemów detekcji błędów. Użycie natywnych usług zarządzanych (DLP + SCC) jest zawsze preferowane względem własnych skryptów (Dług Techniczny), ponieważ zapewnia lepszą skalowalność, utrzymanie i integrację z ekosystemem bezpieczeństwa GCP.</p>
 </div>
 </div>
 <script>

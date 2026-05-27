@@ -72,7 +72,6 @@ Your application development team is releasing a new critical feature. To comple
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Scan and redact PII from the records by using the Cloud Data Loss Prevention API. Perform format-preserving encryption on the card PAN.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Encrypt the records by using Cloud Key Management Service to protect the PII and card PAN.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Build a tool to replace the card PAN and PII fields with randomly generated values.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,34 @@ Your application development team is releasing a new critical feature. To comple
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Scan and redact PII from the records by using the Cloud Data Loss Prevention API. Perform format-preserving encryption on the card PAN.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. DLP + FPE: Pytanie wymaga możliwości TESTOWANIA logiki formantu PAN. FPE szyfruje numer tak, że wynik nadal wygląda jak numer karty i ma poprawną długość, co pozwala aplikacji 'myśleć', że pracuje na realnych danych, mimo że są one bezpiecznie zanonimizowane.
+Dlaczego ta odpowiedź jest poprawna:
+- Cloud DLP (Sensitive Data Protection): To usługa służąca do odkrywania i ochrony danych wrażliwych. 
+- FPE (Format-Preserving Encryption): Jest to technika pseudonimizacji oferowana przez DLP API. Pozwala ona zaszyfrować numer (np. karty kredytowej) tak, aby wynik miał ten sam format (np. 16 cyfr) i przeszedł walidację (np. sumę kontrolną Luhna), ale był całkowicie bezpieczny (nieodwracalny dla osób nieuprawnionych). Idealne do testowania logiki aplikacji bez ujawniania rzeczywistych danych.
 
-Dlaczego inne są błędne:
-A. Confidential Computing: Chroni przed hakerem, ale programista i tak widziałby jawne dane w logach testowych.
-C. KMS: Binarny szyfrogram niszczy format numeru karty, uniemożliwiając testowanie logiki pola tekstowego.
-D. Random values: Może zniszczyć sumy kontrolne (Luhn), które aplikacja może chcieć walidować.
+Analiza niepoprawnych odpowiedzi:
+- A. Confidential Computing: Chroni dane w pamięci przed dostępem z zewnątrz, ale nie usuwa PII z logów, zrzutów pamięci czy baz danych, z którymi pracuje programista.
+- C. Cloud KMS: Standardowe szyfrowanie (np. AES) zmieni format danych (wynikiem będzie długi ciąg base64), co zepsuje testy aplikacji sprawdzające format danych (np. czy numer karty ma 16 cyfr).
+- D. Random values: Może nie spełniać wymogów walidacji (np. algorytmu Luhna), co uniemożliwi poprawne testowanie logiki funkcjonalności.
 
-Konsensus społeczności ExamTopics: 100% na B. FPE to 'best practice' dla bezpiecznych danych testowych.
+Wskazówki i triki (Tips & Tricks):
+- "Format checking" + "PII" + "Security" = DLP + Format-Preserving Encryption (FPE).
+- FPE = Zmieniasz dane, zachowujesz ich format/użyteczność.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: FPE jest deterministyczne (ta sama wejściówka da ten sam token), co pozwala zachować relacje w danych (np. joiny w bazach danych) przy pełnym bezpieczeństwie.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/dlp/docs/pseudonymization#fpe" target="_blank">Format-preserving encryption in Cloud DLP</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> FPE jest deterministyczne - ten sam numer karty zawsze da ten sam token, co pozwala na testowanie złączeń (joins) między bazami bez ujawniania PII.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/dlp/docs/pseudonymization#fpe" target="_blank">https://cloud.google.com/dlp/docs/pseudonymization#fpe</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do projektowania bezpiecznych środowisk testowych. W środowiskach testowych często używa się danych rzeczywistych, co jest naruszeniem standardów bezpieczeństwa. Użycie natywnych funkcji "Format Preserving" pozwala zachować użyteczność aplikacji, przy jednoczesnej eliminacji ryzyka wycieku rzeczywistych danych PII.</p>
 </div>
 </div>
 <script>
