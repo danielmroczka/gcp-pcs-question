@@ -72,7 +72,6 @@ You work for a financial organization in a highly regulated industry that is sub
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create an Assured Workloads folder for your required compliance program to apply defined controls and requirements.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Go to the Compliance page in Security Command Center. View the report for your status against the required compliance standard. Triage violations to maintain compliance on a regular basis.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a posture.yaml file with the required security compliance posture. Apply the posture with the gcloud scc postures create POSTURE_NAME --posture-from-file=posture.yaml command in Security Command Center Premium.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,54 +88,36 @@ You work for a financial organization in a highly regulated industry that is sub
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Create an Assured Workloads folder for your required compliance program to apply defined controls and requirements.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Assured Workloads: Jest to usługa typu 'Active Compliance'. Nie tylko raportuje błędy, ale aktywnie WYMUSZA i UTRZYMUJE (maintain) pożądaną konfigurację. Jeśli wrzucisz projekt do folderu Assured Workloads, system automatycznie nałoży odpowiednie polityki organizacji i restrykcje, gwarantując stałą zgodność z wybranym standardem (np. IL4, EU).
+Dlaczego ta odpowiedź jest poprawna:
+- Assured Workloads: Jest to usługa typu 'Active Compliance'. Nie tylko raportuje błędy, ale aktywnie WYMUSZA i UTRZYMUJE (maintain) pożądaną konfigurację. Jeśli wrzucisz projekt do folderu Assured Workloads, system automatycznie nałoży odpowiednie polityki organizacji i restrykcje, gwarantując stałą zgodność z wybranym standardem (np. IL4, EU).
 
-Dlaczego inne są błędne:
-A. Org policy: To tylko jeden element układanki, nie zapewnia całościowej 'utrzymania' zgodności (np. nie kontroluje personelu supportu).
-C. SCC Compliance triage: To proces ręczny, nie jest to 'automatyczne utrzymanie' konfiguracji.
-D. Posture.yaml: Służy do monitorowania stanu (Posture), ale Assured Workloads (B) jest bardziej kompletną usługą dla rygorystycznych, 'ciągłych' wymogów prawnych.
+Analiza niepoprawnych odpowiedzi:
+- A. Org policy: To tylko jeden element układanki, nie zapewnia całościowej 'utrzymania' zgodności (np. nie kontroluje personelu supportu).
+- C. SCC Compliance triage: To proces ręczny, nie jest to 'automatyczne utrzymanie' konfiguracji.
+- D. Posture.yaml: Służy do monitorowania stanu (Posture), ale Assured Workloads (B) jest bardziej kompletną usługą dla rygorystycznych, 'ciągłych' wymogów prawnych.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. Assured Workloads to król 'Automated Governance'.
+Wskazówki i triki (Tips & Tricks):
+- "Compliance requirements" + "Continuously maintain" + "Folder level" = Assured Workloads.
+- Zapamiętaj: Assured Workloads to król 'Automated Governance'.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj, że Assured Workloads posiada funkcję 'Compliance drift monitoring', która natychmiast wykrywa każdą próbę zmiany konfiguracji na niezgodną z normą.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/assured-workloads/docs/overview" target="_blank">Assured Workloads overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Assured Workloads posiada funkcję 'Compliance drift monitoring', która natychmiast wykrywa każdą próbę zmiany konfiguracji na niezgodną z normą.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/assured-workloads/docs/overview" target="_blank">https://cloud.google.com/assured-workloads/docs/overview</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość narzędzi do zarządzania zgodnością (Compliance) w skali. W środowiskach o wysokich rygorach regulacyjnych, gdzie "zgodność" jest stanem ciągłym, automatyczne wymuszanie konfiguracji przez *Assured Workloads* jest jedynym skutecznym rozwiązaniem.</p>
 </div>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const revealButton = document.querySelectorAll('.reveal-solution');
-    revealButton.forEach(button => {
-        let isVisible = false;
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const answerSection = document.querySelector('.q-answer');
-            const aiSection = document.querySelector('.ai-analysis-container');
-            if (isVisible) {
-                if (answerSection) answerSection.style.display = 'none';
-                if (aiSection) aiSection.style.display = 'none';
-                this.textContent = 'Show Suggested Answer';
-            } else {
-                if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
-                this.textContent = 'Hide Suggested Answer';
-            }
-            isVisible = !isVisible;
-        });
-    });
-});
-</script>
-</body>
-</html>
+...

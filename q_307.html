@@ -72,7 +72,6 @@ Your organization is developing a sophisticated machine learning (ML) model to p
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Implement Identity-Aware Proxy to enforce context-aware access to BigQuery and models based on user identity and device.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Implement at-rest encryption by using customer-managed encryption keys (CMEK) for the pipeline. Implement strict Identity and Access Management (IAM) policies to control access to BigQuery.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Deploy the model on Confidential VMs for enhanced protection of data and code while in use. Implement strict Identity and Access Management (IAM) policies to control access to BigQuery.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,33 @@ Your organization is developing a sophisticated machine learning (ML) model to p
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (De-identify sensitive data before model training by using Cloud Data Loss Prevention (DLP) APIs, and implement strict Identity and Access Management (IAM) policies to control access to BigQuery.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. DLP De-identification: Jedyną gwarancją, że dane osobowe 'nie zostaną użyte w treningu' (co mogłoby doprowadzić do wycieku danych przez gotowy model AI), jest ich usunięcie lub zamaskowanie (DLP) przed rozpoczęciem procesu uczenia. DLP API jest do tego dedykowanym i najbardziej skutecznym narzędziem w GCP.
+Dlaczego ta odpowiedź jest poprawna:
+- DLP De-identification: Jedyną gwarancją, że dane osobowe 'nie zostaną użyte w treningu' (co mogłoby doprowadzić do wycieku danych przez gotowy model AI), jest ich usunięcie lub zamaskowanie (DLP) przed rozpoczęciem procesu uczenia. DLP API jest do tego dedykowanym i najbardziej skutecznym narzędziem w GCP.
 
-Dlaczego inne są błędne:
-B. IAP: Kontroluje kto wchodzi do systemu, nie kontroluje treści danych używanych przez algorytmy.
-C. CMEK: Chroni dane przed hakerem z zewnątrz, ale model AI widzi dane odszyfrowane podczas treningu, więc nadal 'widzi' PII i może się ich 'nauczyć'.
-D. Confidential VMs: Chronią pamięć RAM, ale nie zapobiegają 'zapamiętaniu' przez model danych wrażliwych, które mu podasz w zestawie treningowym.
+Analiza niepoprawnych odpowiedzi:
+- B. IAP: Kontroluje kto wchodzi do systemu, nie kontroluje treści danych używanych przez algorytmy.
+- C. CMEK: Chroni dane przed hakerem z zewnątrz, ale model AI widzi dane odszyfrowane podczas treningu, więc nadal 'widzi' PII i może się ich 'nauczyć'.
+- D. Confidential VMs: Chronią pamięć RAM, ale nie zapobiegają 'zapamiętaniu' przez model danych wrażliwych, które mu podasz w zestawie treningowym.
 
-Konsensus społeczności ExamTopics: 100% na A. Czyszczenie danych u źródła to fundament prywatności w ML.
+Wskazówki i triki (Tips & Tricks):
+- "Format checking" + "PII" + "Security" = DLP + Format-Preserving Encryption (FPE).
+- FPE = Zmieniasz dane, zachowujesz ich format/użyteczność.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Modele generatywne (LLM) są szczególnie podatne na 'cytowanie' unikalnych danych z zestawu treningowego, dlatego DLP jest krytycznym elementem pipeline'u AI.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/dlp/docs/inspecting-storage" target="_blank">Inspecting storage for sensitive data</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Modele generatywne (LLM) są szczególnie podatne na 'cytowanie' unikalnych danych z zestawu treningowego, dlatego DLP jest krytycznym elementem pipeline'u AI.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/dlp/docs/inspecting-storage" target="_blank">https://cloud.google.com/dlp/docs/inspecting-storage</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do projektowania bezpiecznych środowisk testowych/treningowych. W środowiskach AI często używa się danych rzeczywistych, co jest naruszeniem standardów bezpieczeństwa. Użycie natywnych funkcji "De-identification" pozwala zachować użyteczność modelu, przy jednoczesnej eliminacji ryzyka wycieku rzeczywistych danych PII.</p>
 </div>
 </div>
 <script>

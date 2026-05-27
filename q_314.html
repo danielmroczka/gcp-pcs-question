@@ -72,7 +72,6 @@ Your organization operates in a highly regulated environment and has a stringent
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Establish a trusted execution environment with a Confidential VM.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use a Shielded VM to ensure a secure boot with integrity monitoring for the application environment.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use customer-managed encryption keys (CMEK) and Cloud KSM to enable your organization to control their keys for data encryption in Cloud SQL.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,32 @@ Your organization operates in a highly regulated environment and has a stringent
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Establish a trusted execution environment with a Confidential VM.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Organization Policy: Polityka `gcp.restrictCmekCryptoKeyProjects` pozwala na zdefiniowanie listy 'zaufanych projektów z kluczami'. Wymusza ona, aby każda usługa (np. GCS) używała klucza CMEK wyłącznie z tych projektów, co de facto blokuje używanie domyślnych kluczy Google lub kluczy z nieautoryzowanych projektów.
+Dlaczego ta odpowiedź jest poprawna:
+- "Encrypt data while in use": To kluczowe sformułowanie. Confidential Computing (Confidential VMs) pozwala na szyfrowanie danych podczas przetwarzania (w pamięci RAM), co jest jedynym sposobem na zapewnienie ochrony danych "in use" w ramach GCP.
 
-Dlaczego inne są błędne:
-A. IAM: Nie wymusza technologii szyfrowania.
-C. Bucket settings: To ustawienie lokalne, polityka (B) gwarantuje spójność w całej organizacji.
-D. VPC SC: Chroni przed wyciekiem danych, a nie zarządza kluczami szyfrującymi.
+Analiza niepoprawnych odpowiedzi:
+- A. CSEK: Służy do szyfrowania danych "at rest" (na dysku), nie "in use".
+- C. Shielded VM: Zapewnia integralność bootowania (Secure Boot, vTPM), ale nie szyfruje danych w pamięci RAM podczas pracy aplikacji.
+- D. CMEK/KMS: Również szyfrowanie "at rest".
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. To najsilniejszy mechanizm kontroli CMEK w firmie.
+Wskazówki i triki (Tips & Tricks):
+- Słowa klucze: "in use" = Confidential Computing/Confidential VMs. "At rest" = CMEK/CSEK.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Confidential VMs używają bezpiecznych procesorów do szyfrowania pamięci, dzięki czemu nawet Google (jako operator infrastruktury) nie widzi danych w pamięci operacyjnej VM.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/confidential-computing" target="_blank">Confidential Computing</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Inżynierowie na Reddit radzą: 'Połącz B z polityką restrictNonCmekServices'. Dzięki temu masz pewność, że deweloper nie tylko użyje CMEK, ale użyje WŁAŚCIWEGO klucza z projektu pod nadzorem działu Security.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints#cmek" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints#cmek</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie sprawdza znajomość różnych stanów szyfrowania danych. "In use" to specyficzny stan, w którym konwencjonalne metody (CMEK/CSEK) nie działają, wymagane jest Confidential Computing.</p>
 </div>
 </div>
 <script>

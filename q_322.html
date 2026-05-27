@@ -72,7 +72,6 @@ You are responsible for managing identities in your company's Google Cloud organ
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Implement an automated process that scans all identities in your organization and disables any unmanaged accounts.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Register a new domain for your Google Cloud resources. Move all existing identities and resources to this domain.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Switch your corporate email system to another domain to avoid using the same domain for Google Cloud identities and corporate emails.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,29 +88,32 @@ You are responsible for managing identities in your company's Google Cloud organ
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Create a Google Cloud identity for all users in your organization. Ensure that new users are added automatically.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Provision all identities: Jeśli stworzysz (sprovisionujesz) konta dla wszystkich pracowników w Cloud Identity (np. przez synchronizację z AD), to gdy użytkownik spróbuje założyć konto 'osobiste' na swój firmowy adres, system mu to uniemożliwi (bo adres jest już zajęty przez konto zarządzane). To najbardziej 'efficient' metoda zapobiegająca powstawaniu 'Shadow IT'.
+Dlaczego ta odpowiedź jest poprawna:
+- Provision all identities: Jeśli stworzysz (sprovisionujesz) konta dla wszystkich pracowników w Cloud Identity (np. przez synchronizację z AD przez Google Cloud Directory Sync - GCDS), to gdy użytkownik spróbuje założyć konto 'osobiste' na swój firmowy adres, system mu to uniemożliwi (bo adres jest już zajęty przez konto zarządzane). To najbardziej 'efficient' metoda zapobiegająca powstawaniu 'Shadow IT'.
 
-Dlaczego inne są błędne:
-B. Scan and disable: Google nie pozwala administratorowi firmy na 'wyłączenie' prywatnego konta użytkownika, dopóki ten nie przejdzie przez proces Transfer Tool.
-C, D: To unikanie problemu poprzez uciążliwą zmianę domeny, co nie jest rozwiązaniem merytorycznym.
+Analiza niepoprawnych odpowiedzi:
+- B. Scan and disable: Google nie pozwala administratorowi firmy na 'wyłączenie' prywatnego konta użytkownika, dopóki ten nie przejdzie przez proces Transfer Tool.
+- C, D: To unikanie problemu poprzez uciążliwą zmianę domeny, co nie jest rozwiązaniem merytorycznym.
 
-Konsensus społeczności ExamTopics: 100% na A. Rezerwacja tożsamości to standard higieny domeny.
+Wskazówki i triki (Tips & Tricks):
+- "Employees" + "Unmanaged accounts" + "Prevent" = Provision all identities (Cloud Identity).
+- Pamiętaj: Rezerwacja tożsamości w Cloud Identity blokuje możliwość rejestracji kont prywatnych na ten sam adres e-mail.
+
+Praktyczne informacje na egzamin:
+- Najlepiej połączyć to z włączeniem SSO (Single Sign-On). Wtedy użytkownik nawet nie zna swojego hasła Google i nie ma jak 'założyć' konta poza Twoją kontrolą.
+
+Dokumentacja i linki:
+- <a href="https://support.google.com/cloudidentity/answer/175367" target="_blank">Cloud Identity: Provisioning users</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Najlepiej połączyć to z włączeniem SSO. Wtedy użytkownik nawet nie zna swojego hasła Google i nie ma jak 'założyć' konta poza Twoją kontrolą.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://support.google.com/cloudidentity/answer/175367" target="_blank">https://support.google.com/cloudidentity/answer/175367</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość zarządzania tożsamością w modelu Enterprise. W nowoczesnych ekosystemach "nie twórz kont dla zewnętrznych użytkowników" – ale wewnątrz firmy musisz mieć pełną kontrolę (Identity Provisioning), aby zapobiegać Shadow IT.</p>
 </div>
 </div>
 <script>

@@ -72,7 +72,6 @@ You manage a Google Cloud organization with many projects located in various reg
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Enable Identity Aware Proxy in the new projects. Create an Access Context Manager access level with an "IP Subnetworks" attribute condition set to the US-based corporate IP range. Enable the "Restrict Resource Service Usage" organization policy at the new folder level with an "Allow" policy type and set both "storage.googleapis.com" and "bigquery.googleapis.com" under "Custom values."</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Edit the organization-level access policy and add the new folder under "Select resources to include in the policy." Specify the two new projects as "Resources to protect" in the service perimeter configuration. Set "Restricted services" to "all services," set "VPC accessible services" to "Selected services," and specify only BigQuery and Cloud Storage. Edit the existing access level to add a "Geographic locations" condition set to "US."</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure a Cloud Interconnect connection or a Virtual Private Network (VPN) between the on-premises environment and the Google Cloud organization. Configure the VPC firewall policies within the new projects to only allow connections from the on-premises IP address range. Enable the Restrict Resource Service Usage organization policy on the new folder with an "Allow" policy type, and set both "storage.googleapis.com" and "bigquery.googleapis.com" under "Custom values."</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,28 +88,33 @@ You manage a Google Cloud organization with many projects located in various reg
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Create a scoped access policy, add the new folder under "Select resources to include in the policy," and assign an administrator under "Manage principals." For the service perimeter, specify the two new projects as "Resources to protect" in the service perimeter configuration. Set "Restricted services" to "all services," set "VPC accessible services" to "Selected services," and specify only BigQuery and Cloud Storage under "Selected services.")
 
-Wyjaśnienie (Dlaczego poprawna):
-A. VPC SC with Accessible Services: To rozwiązanie kompleksowe. 'Scoped policy' izoluje zarządzanie. 'Access Level' wymusza geolokalizację. Funkcja 'VPC accessible services' fizycznie wycina widoczność wszystkich innych API Google (np. SQL, Pub/Sub) wewnątrz perymetru, co drastycznie zmniejsza ryzyko pomyłek i eksfiltracji danych.
+Dlaczego ta odpowiedź jest poprawna:
+- Scoped Access Policy: Jest to mechanizm, który pozwala na odizolowanie zarządzania polityką dostępu (Access Policy) dla określonych zasobów (w tym przypadku folderu z projektami PHI). Jest to najlepsza praktyka dla "stricter protections".
+- VPC Service Controls: Mechanizm chroniący zasoby przed eksfiltracją.
+- VPC Accessible Services: Funkcja ta pozwala na ograniczenie dostępu do usług Google Cloud wewnątrz perymetru tylko do wybranych API (w tym przypadku BigQuery i GCS). To drastycznie zmniejsza powierzchnię ataku.
 
-Dlaczego inne są błędne:
-B, C, D: Żadna z tych opcji nie realizuje wymogu BLOKADY API na poziomie sieciowym tak precyzyjnie jak VPC Service Controls. Org Policy (B, D) blokuje tylko WŁĄCZENIE usługi, ale nie blokuje DOSTĘPU do API, jeśli usługa jest już włączona przez kogoś innego.
+Analiza niepoprawnych odpowiedzi:
+- B, C, D: Żadna z tych opcji nie realizuje wymogu BLOKADY API na poziomie sieciowym tak precyzyjnie jak VPC Service Controls w połączeniu z funkcją "VPC accessible services". Org Policy (B, D) blokuje tylko włączenie usługi, ale nie blokuje DOSTĘPU do API, jeśli usługa jest już włączona przez kogoś innego.
 
-Konsensus społeczności ExamTopics: 100% na A. Tylko VPC SC potrafi ograniczyć listę dostępnych API wewnątrz sieci.
+Wskazówki i triki (Tips & Tricks):
+- "Granular/Stricter protection" + "Restrict API access" = VPC Service Controls + VPC Accessible Services.
+- Zapamiętaj: Tylko VPC SC pozwala fizycznie "odciąć" API wewnątrz projektu.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj, że "VPC accessible services" jest kluczowe w architekturze "Zero Trust API".
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/vpc-service-controls/docs/vpc-accessible-services" target="_blank">VPC Service Controls: VPC accessible services</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> To podejście 'Zero Trust API'. Nawet jeśli haker przejmie uprawnienia administratora SQL, nie połączy się z bazą, bo API SQL jest zablokowane na poziomie perymetru sieciowego.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/vpc-service-controls/docs/vpc-accessible-services" target="_blank">https://cloud.google.com/vpc-service-controls/docs/vpc-accessible-services</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje zrozumienie architektury "VPC Service Controls". W nowoczesnych, wieloprojektowych środowiskach, izolacja usług jest kluczowa. Reguły Ingress/Egress oraz ograniczenie dostępnych API to "bezpieczne furtki" w tej izolacji, pozwalające na precyzyjne sterowanie przepływem danych bez niszczenia bariery ochronnej.</p>
 </div>
 </div>
 <script>

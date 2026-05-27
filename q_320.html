@@ -72,7 +72,6 @@ You are developing an application that runs on a Compute Engine VM. The applicat
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create IAM bindings for the VM's service account and the required buckets that allow appropriate access to the data stored in the buckets.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Grant the VM's service account access to the required buckets by using domain-wide delegation.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a group and assign IAM bindings to the group for each bucket that the application needs to access. Assign the VM's service account to the group.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,31 +88,33 @@ You are developing an application that runs on a Compute Engine VM. The applicat
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: AB.
+Poprawna odpowiedź: B (Create IAM bindings for the VM's service account and the required buckets that allow appropriate access to the data stored in the buckets.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Cloud KMS: Usługa do zarządzania kluczami, która zapewnia mechanizm automatycznej rotacji (np. co 30 dni).
-B. Compute Engine: Usługa infrastrukturalna, w której konfigurujesz użycie kluczy CMEK z KMS dla swoich dysków.
+Dlaczego ta odpowiedź jest poprawna:
+- Least Privilege + IAM: To jedyne poprawne podejście. Service account powiązany z VM powinien mieć bezpośrednio nadane uprawnienia (IAM binding) do konkretnych zasobów (bucketów), do których potrzebuje dostępu.
 
-Dlaczego inne są błędne:
-C. Cloud HSM: To tylko sprzętowy backend dla KMS (opcjonalny, KMS sam w sobie wystarcza).
-D. Secret Manager: Do haseł, nie do kluczy szyfrujących wolumeny danych.
-E. IAM: Zarządza uprawnieniami, nie samym procesem szyfrowania.
+Analiza niepoprawnych odpowiedzi:
+- A. Access Scopes: Są przestarzałą metodą (legacy) ograniczania uprawnień VM. Zawsze używaj IAM Service Accounts, które oferują bardziej granulowaną kontrolę.
+- C. Domain-wide delegation: Służy do impersonacji użytkowników w Google Workspace (np. Gmail, Drive), nie do dostępu do Cloud Storage przez service account z VM.
+- D. Group IAM: Grupy są do zarządzania dostępem użytkowników (ludzi), a nie tożsamościami maszyn (service accounts).
 
-Konsensus społeczności ExamTopics: 100% poparcia dla AB. Klasyczna para dla wymogów Encryption Control.
+Wskazówki i triki (Tips & Tricks):
+- "Compute Engine" + "Access to resources" = Service Account + IAM bindings.
+- Nigdy nie używaj Access Scopes w nowych projektach.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: IAM jest "źródłem prawdy" o dostępach w GCP.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iam/docs/service-accounts" target="_blank">Service accounts overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Dyskusja w sieci skupia się na 're-encryption'. Zapamiętaj: rotacja klucza w KMS (A) nie powoduje natychmiastowego re-szyfrowania starych danych na dysku (B). Nowy klucz będzie używany do nowych zapisów, co jest akceptowalne dla większości audytorów jako 'rotacja klucza'.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/compute/docs/disks/customer-managed-encryption" target="_blank">https://cloud.google.com/compute/docs/disks/customer-managed-encryption</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie o fundamentalną zasadę "najniższych uprawnień" (Least Privilege) w GCP. Użycie Service Account z IAM binding to jedyna poprawna, nowoczesna metoda autoryzacji zasobów dla maszyn wirtualnych.</p>
 </div>
 </div>
 <script>

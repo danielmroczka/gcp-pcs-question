@@ -72,7 +72,6 @@ Your development team is launching a new application. The new application has a 
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use data masking and tokenization techniques on sensitive financial data fields throughout the application and the application's data processing workflows.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use the Cloud Data Loss Prevention (Cloud DLP) API to scan and mask sensitive data before feeding the data into any compute environment.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Store all sensitive data during processing in Cloud Storage by using customer-managed encryption keys (CMEK), and set strict bucket-level permissions.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,29 +88,31 @@ Your development team is launching a new application. The new application has a 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Enable Confidential VM instances for Compute Engine, and ensure that relevant Cloud Functions can leverage hardware-based memory isolation.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Confidential Computing: To jedyna technologia chroniąca dane 'w użyciu' (in memory). Dla CE są to Confidential VMs (AMD SEV). Dla Cloud Functions Google zapewnia sprzętową izolację pamięci na poziomie mikro-VM (gVisor) w swojej infrastrukturze, co minimalizuje ryzyko nieuprawnionego odczytu RAM.
+Dlaczego ta odpowiedź jest poprawna:
+- Confidential Computing: To jedyna technologia chroniąca dane 'w użyciu' (in memory). Dla CE są to Confidential VMs (AMD SEV). Dla Cloud Functions Google zapewnia sprzętową izolację pamięci na poziomie mikro-VM (gVisor) w swojej infrastrukturze, co minimalizuje ryzyko nieuprawnionego odczytu RAM.
 
-Dlaczego inne są błędne:
-B, C: Chronią treść danych logicznie, ale nie zapobiegają technicznemu odczytowi pamięci RAM przez złośliwy proces na hoście.
-D. GCS CMEK: Chroni dane na dysku, nie ma wpływu na bezpieczeństwo pamięci RAM procesora.
+Analiza niepoprawnych odpowiedzi:
+- B, C: Chronią treść danych logicznie, ale nie zapobiegają technicznemu odczytowi pamięci RAM przez złośliwy proces na hoście.
+- D. GCS CMEK: Chroni dane na dysku, nie ma wpływu na bezpieczeństwo pamięci RAM procesora.
 
-Konsensus społeczności ExamTopics: 100% na A. Dane 'in use' = Confidential Computing.
+Wskazówki i triki (Tips & Tricks):
+- "Data in use" / "Encrypt memory" = Confidential VMs.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj, że Confidential Computing jest kluczowe w branżach takich jak bankowość (dane transakcyjne) czy medycyna (dane pacjentów), gdzie suwerenność danych w każdym stanie jest wymogiem prawnym.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/confidential-computing/confidential-vm/docs/introduction" target="_blank">Confidential VM introduction</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Confidential VMs szyfrują RAM kluczem, którego nie zna nawet system operacyjny Google (hypervisor), co czyni ataki typu 'memory dump' bezużytecznymi dla hakera.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/confidential-computing" target="_blank">https://cloud.google.com/confidential-computing</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość "poufności obliczeniowej" (Confidential Computing). Przez lata był to brakujący element w bezpieczeństwie chmurowym. Google jako lider w tej dziedzinie pozwala na całkowite odizolowanie danych klienta od infrastruktury dostawcy. Na egzaminie zawsze łącz "Data in use" z "Confidential VMs".</p>
 </div>
 </div>
 <script>

@@ -64,15 +64,14 @@
 <h2>Question 323 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization leverages folders to represent different teams within your Google Cloud environment. To support Infrastructure as Code (IaC) practices, each team receives a dedicated service account upon onboarding. You want to ensure that teams have comprehensive permissions to manage resources within their assigned folders while adhering to the principle of least privilege. You must design the permissions for these team-based service accounts in the most effective way possible. What should you do?
+Your organization is managing identities in your Google Cloud organization. Employees are frequently using your organization's corporate domain name to create unmanaged Google accounts. You want to implement a practical and efficient solution to prevent employees from completing this action in the future. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Grant each service account the folder administrator role on its respective folder.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Grant each service account the project creator role at the organization level and use folder-level IAM conditions to restrict project creation to specific folders.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Assign each service account the project editor role at the organization level and instruct teams to use IAM bindings at the folder level for fine-grained permissions.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Assign each service account the folder IAM administrator role on its respective folder to allow teams to create and manage additional custom roles if needed.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create a Google Cloud identity for all users in your organization. Ensure that new users are added automatically.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Implement an automated process that scans all identities in your organization and disables any unmanaged accounts.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Register a new domain for your Google Cloud resources. Move all existing identities and resources to this domain.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Switch your corporate email system to another domain to avoid using the same domain for Google Cloud identities and corporate emails.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,32 @@ Your organization leverages folders to represent different teams within your Goo
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Create a Google Cloud identity for all users in your organization. Ensure that new users are added automatically.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Folder Admin: Nadanie roli `roles/resourcemanager.folderAdmin` na poziomie konkretnego foldera daje zespołowi pełną władzę nad ich projektami i zasobami wewnątrz, bez żadnych uprawnień do innych części organizacji. Jest to zgodne z zasadą najniższych uprawnień dla 'autonomicznych zespołów'.
+Dlaczego ta odpowiedź jest poprawna:
+- Provision all identities: Jeśli stworzysz (sprovisionujesz) konta dla wszystkich pracowników w Cloud Identity (np. przez synchronizację z AD przez Google Cloud Directory Sync - GCDS), to gdy użytkownik spróbuje założyć konto 'osobiste' na swój firmowy adres, system mu to uniemożliwi (bo adres jest już zajęty przez konto zarządzane). To najbardziej 'efficient' metoda zapobiegająca powstawaniu 'Shadow IT'.
 
-Dlaczego inne są błędne:
-B. Project creator at org: Pozwalałoby zespołom tworzyć projekty wszędzie, nawet poza ich folderem (chyba że Condition byłoby bardzo skomplikowane). A jest prostsze i bardziej natywne.
-C. Project editor at org: Skrajnie zbyt wysokie uprawnienia.
-D. Folder IAM administrator: Pozwala tylko zarządzać uprawnieniami, nie pozwala na tworzenie i zarządzanie samymi zasobami (np. VM, GKE) wewnątrz folderu tak szeroko jak Folder Admin.
+Analiza niepoprawnych odpowiedzi:
+- B. Scan and disable: Google nie pozwala administratorowi firmy na 'wyłączenie' prywatnego konta użytkownika, dopóki ten nie przejdzie przez proces Transfer Tool.
+- C, D: To unikanie problemu poprzez uciążliwą zmianę domeny, co nie jest rozwiązaniem merytorycznym.
 
-Konsensus społeczności ExamTopics: 100% na A. Delegacja folderowa to fundament Landing Zone.
+Wskazówki i triki (Tips & Tricks):
+- "Employees" + "Unmanaged accounts" + "Prevent" = Provision all identities (Cloud Identity).
+- Pamiętaj: Rezerwacja tożsamości w Cloud Identity blokuje możliwość rejestracji kont prywatnych na ten sam adres e-mail.
+
+Praktyczne informacje na egzamin:
+- Najlepiej połączyć to z włączeniem SSO (Single Sign-On). Wtedy użytkownik nawet nie zna swojego hasła Google i nie ma jak 'założyć' konta poza Twoją kontrolą.
+
+Dokumentacja i linki:
+- <a href="https://support.google.com/cloudidentity/answer/175367" target="_blank">Cloud Identity: Provisioning users</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Folder Admin może tworzyć pod-foldery i projekty, co pozwala zespołowi na pełne zarządzanie cyklem życia ich własnej mikro-infrastruktury.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/access-control-folders" target="_blank">https://cloud.google.com/resource-manager/docs/access-control-folders</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość zarządzania tożsamością w modelu Enterprise. W nowoczesnych ekosystemach "nie twórz kont dla zewnętrznych użytkowników" – ale wewnątrz firmy musisz mieć pełną kontrolę (Identity Provisioning), aby zapobiegać Shadow IT.</p>
 </div>
 </div>
 <script>

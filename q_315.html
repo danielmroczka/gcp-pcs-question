@@ -64,15 +64,14 @@
 <h2>Question 315 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization is building a real-time recommendation engine using ML models that process live user activity data stored in BigQuery and Cloud Storage. Each new model developed is saved to Artifact Registry. This new system deploys models to Google Kubernetes Engine, and uses Pub/Sub for message queues. Recent industry news have been reporting attacks exploiting ML model supply chains. You need to enhance the security in this serverless architecture, specifically against risks to the development and deployment pipeline. What should you do?
+Your organization is worried about recent news headlines regarding application vulnerabilities in production applications that have led to security breaches. You want to automatically scan your deployment pipeline for vulnerabilities and ensure only scanned and verified containers can run in the environment. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enable container image vulnerability scanning during development and pre-deployment. Enforce Binary Authorization on images deployed from Artifact Registry to your continuous integration and continuous deployment (CI/CD) pipeline.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Thoroughly sanitize all training data prior to model development to reduce risk of poisoning attacks. Use IAM for authorization, and apply role-based restrictions to code repositories and cloud services.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Limit external libraries and dependencies that are used for the ML models as much as possible. Continuously rotate encryption keys that are used to access the user data from BigQuery and Cloud Storage.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Develop strict firewall rules to limit external traffic to Cloud Run instances. Integrate intrusion detection systems (IDS) for real-time anomaly detection on Pub/Sub message flows.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use Kubernetes role-based access control (RBAC) as the source of truth for cluster access by granting "container.clusters.get" to limited users. Restrict deployment access by allowing these users to generate a kubeconfig file containing the configuration access to the GKE cluster.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use gcloud artifacts docker images describe LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE_ID@sha256:HASH --show-package-vulnerability in your CI/CD pipeline, and trigger a pipeline failure for critical vulnerabilities.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Enforce the use of Cloud Code for development so users receive real-time security feedback on vulnerable libraries and dependencies before they check in their code.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enable Binary Authorization and create attestations of scans.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +79,7 @@ Your organization is building a real-time recommendation engine using ML models 
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">D</span>
 <br/>
 </span>
 </div>
@@ -89,28 +88,34 @@ Your organization is building a real-time recommendation engine using ML models 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: D (Enable Binary Authorization and create attestations of scans.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Policy Analyzer: To jedyne narzędzie w GCP, które potrafi 'rozwinąć' całą strukturę IAM. Pokaże Ci, że użytkownik X ma dostęp, bo należy do grupy Y, która ma rolę przypisaną na poziomie Foldera. To kluczowe dla rzetelnego audytu 'kto ma klucze do projektu'.
+Dlaczego ta odpowiedź jest poprawna:
+- Binary Authorization: To kluczowa usługa w GCP służąca do zapewnienia integralności łańcucha dostaw oprogramowania (Supply Chain Security). Wymusza ona, aby każdy kontener przed uruchomieniem w GKE posiadał podpisane zaświadczenie (attestation) o tym, że został poprawnie przeskanowany pod kątem podatności.
+- "Scanned and verified containers": To definicja działania Binary Authorization. Jeśli kontener nie ma poprawnej atestacji (np. skanowanie nie wyszło czysto lub nie przeszło procesu CI/CD), GKE po prostu go nie uruchomi.
 
-Dlaczego inne są błędne:
-B, C, D: Jak w poprzednich analogicznych pytaniach – brak funkcji całościowej analizy dziedziczenia i grup.
+Analiza niepoprawnych odpowiedzi:
+- A. RBAC: Zarządza dostępem do klastra, ale nie sprawdza bezpieczeństwa samych obrazów kontenerów.
+- B. Gcloud description: To tylko sprawdzenie podatności. Sama komenda nie 'zablokuje' uruchomienia kontenera w GKE.
+- C. Cloud Code: Zapewnia feedback dla deweloperów (IDE), ale nie gwarantuje wdrożenia bezpiecznego obrazu do produkcji w sposób wymuszony.
 
-Konsensus społeczności ExamTopics: 100% na A. Policy Analyzer to 'Single Source of Truth' dla audytu dostępów.
+Wskazówki i triki (Tips & Tricks):
+- "Only scanned and verified containers" + "Pipeline enforcement" = Binary Authorization.
+- Zapamiętaj: Binary Authorization to brama bezpieczeństwa dla GKE.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Binary Authorization sprawdza sygnatury (atestacje) w momencie próby wdrożenia poda do klastra.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/binary-authorization/docs/overview" target="_blank">Binary Authorization overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Na forach audytorzy podkreślają: 'Nigdy nie sprawdzaj IAM w samym projekcie'. Zawsze używaj Policy Analyzer (A), bo tylko on wykryje 'Shadow Admins' – osoby, które mają uprawnienia dziedziczone z samej góry hierarchii firmy.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/iam/docs/policy-analyzer-overview" target="_blank">https://cloud.google.com/iam/docs/policy-analyzer-overview</a></li>
-
-</ul>
+<h3>Kluczowe zagadnienia</h3>
+<p><b>Sugerowana odpowiedź: D</b></p>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją wiedzę o zabezpieczaniu łańcucha dostaw oprogramowania (Supply Chain Security). Binary Authorization to "najtwardsza" metoda wymuszania standardów – jeśli obraz nie przejdzie przez bezpieczny proces CI/CD i nie zostanie podpisany, nie ma prawa zaistnieć w Twoim klastrze produkcyjnym.</p>
 </div>
 </div>
 <script>

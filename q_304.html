@@ -72,7 +72,6 @@ You are managing a Google Cloud environment that is organized into folders that 
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Assign the organization policy administrator role to a central service account and provide teams with the credentials to use the service account when needed.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create an organization-level tag. Attach the tag to relevant folders. Use an IAM condition to restrict the organization policy administrator role to resources with that tag.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Grant each team the organization policy administrator role at the organization level.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,33 @@ You are managing a Google Cloud environment that is organized into folders that 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Create an organization-level tag. Attach the tag to relevant folders. Use an IAM condition to restrict the organization policy administrator role to resources with that tag.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Tags + IAM Conditions: To najbardziej nowoczesna i bezpieczna metoda delegacji (least privilege). Pozwala nadać zespołowi uprawnienia administratora polityk organizacji, ale TYLKO pod warunkiem (Condition), że operacja dotyczy folderu oznaczonego konkretnym tagiem. Dzięki temu deweloperzy nie mogą zmienić polityk w cudzych folderach ani na poziomie całej firmy.
+Dlaczego ta odpowiedź jest poprawna:
+- Tags + IAM Conditions: To najbardziej nowoczesna i bezpieczna metoda delegacji (least privilege). Pozwala nadać zespołowi uprawnienia administratora polityk organizacji, ale TYLKO pod warunkiem (Condition), że operacja dotyczy folderu oznaczonego konkretnym tagiem. Dzięki temu deweloperzy nie mogą zmienić polityk w cudzych folderach ani na poziomie całej firmy.
 
-Dlaczego inne są błędne:
-A. Custom role on folder: Choć bliskie prawdy, to Tagi (C) są obecnie silniej promowaną przez Google metodą granularnego ograniczania zasięgu ról administracyjnych.
-B. Shared credentials: Błąd krytyczny. Nigdy nie udostępniaj poświadczeń kont serwisowych ludziom.
-D. Org level for all: Skrajne naruszenie izolacji bezpieczeństwa.
+Analiza niepoprawnych odpowiedzi:
+- A. Custom role on folder: Choć bliskie prawdy, to Tagi (C) są obecnie silniej promowaną przez Google metodą granularnego ograniczania zasięgu ról administracyjnych.
+- B. Shared credentials: Błąd krytyczny. Nigdy nie udostępniaj poświadczeń kont serwisowych ludziom.
+- D. Org level for all: Skrajne naruszenie izolacji bezpieczeństwa.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na C. IAM Conditions to potężne narzędzie bezpiecznego zarządzania w skali.
+Wskazówki i triki (Tips & Tricks):
+- "Effective management at scale" + "Consistency" + "Autonomy" = Folders + Organization Policy Hierarchy.
+- Zapamiętaj: Foldery to fundament 'Cloud Governance'.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj, że w GCP polityki dziedziczą się w dół (Organization -> Folder -> Project -> Resource), a restrykcje z góry są priorytetowe (tzw. 'policy inheritance').
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/understanding-hierarchy" target="_blank">Organization policy hierarchy</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Tagi zasobów (Resource Tags) są odporne na zmiany nazw folderów i działają niezależnie od hierarchii technicznej, co ułatwia zarządzanie.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/iam/docs/conditions-overview" target="_blank">https://cloud.google.com/iam/docs/conditions-overview</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość zarządzania chmurą w dużej skali. Foldery nie są tylko "katalogami" – to punkty egzekwowania polityk bezpieczeństwa (Governance), które pozwalają na jednoczesne utrzymanie globalnych standardów i lokalnej elastyczności.</p>
 </div>
 </div>
 <script>

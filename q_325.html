@@ -64,15 +64,14 @@
 <h2>Question 325 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization manages a critical web application that serves international customers on Google Cloud. An increase in malicious traffic targeting this application has strained resources and caused periods of downtime. You need to design security measures to increase the application's resilience against web attacks, enhance perimeter protection, and provide access control. What should you do?
+Your organization has recently deployed a new web application on Compute Engine. You need to provide users with access to the application while minimizing exposure to the public internet. Furthermore, you need to provide the internal backend services with secure connectivity to the database while keeping them isolated from public access. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Employ network load balancing for traffic distribution. Update Identity-Aware Proxy (IAP) policies to allow only administrative access. Implement custom firewall rules on all external IP addresses.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Set up firewall rules on Compute Engine instances within the application's environment. Rely on load balancers for threat detection. Increase instance resources to cope with attack volume.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure firewall rules to block traffic from known malicious IP ranges. Set up Google Cloud Armor and implement Identity-Aware Proxy (IAP) for granular access control.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Add firewall rules that restrict all internal IP ranges. Establish Cloud DNS security policies. Disable external IP addresses to reduce the attack surface. Create user groups for access control.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Place the frontend instances in a public subnet with external IP addresses and the backend services in a private subnet. Use a NAT gateway to allow the backend to communicate with the frontend.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Place the frontend instances in a public subnet with external IP addresses and use a Cloud Load Balancer with Google Cloud Armor for security. Place the backend services in a private subnet and use Internal HTTP(S) Load Balancing.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Place all instances in a single public subnet. Use Identity-Aware Proxy (IAP) to restrict access to the frontend instances and use firewall rules to block access to backend instances.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Place all instances in a single private subnet. Use a load balancer to expose both the frontend and backend instances to the internet, and configure firewall rules to secure the services.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +79,7 @@ Your organization manages a critical web application that serves international c
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">C</span>
+<span class="correct-answer">B</span>
 <br/>
 </span>
 </div>
@@ -89,54 +88,36 @@ Your organization manages a critical web application that serves international c
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: B (Place the frontend instances in a public subnet with external IP addresses and use a Cloud Load Balancer with Google Cloud Armor for security. Place the backend services in a private subnet and use Internal HTTP(S) Load Balancing.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Defense in Depth (Armor + Firewall + IAP): Ten zestaw realizuje wszystkie wymogi: 1. Resilience against web attacks (Cloud Armor jako WAF). 2. Enhance perimeter (Firewall blokujący znanych agresorów). 3. Access control (IAP dla granularnego dostępu użytkowników).
+Dlaczego ta odpowiedź jest poprawna:
+- Architektura warstwowa (Tiered Architecture): Frontend jest dostępny przez Load Balancer (który chroni go przez Cloud Armor – WAF). Backend jest w pełni odizolowany w prywatnej podsieci i komunikuje się z frontendem tylko przez wewnętrzny Load Balancer (Internal LB), co zapewnia brak publicznej widoczności dla wrażliwych usług backendowych.
 
-Dlaczego inne są błędne:
-A. Network LB: Nie wspiera Cloud Armor ani IAP w warstwie 7, co jest kluczowe dla ochrony aplikacji webowych.
-B. Increase resources: To 'pudrowanie' problemu (skalowanie w odpowiedzi na atak), a nie jego techniczne rozwiązanie.
-D. Disable external IPs: Choć dobre, uniemożliwiłoby wejście zwykłym użytkownikom do publicznej aplikacji bez dodatkowych, skomplikowanych mechanizmów (IAP jest tu lepszym sposobem kontroli dostępu).
+Analiza niepoprawnych odpowiedzi:
+- A. NAT gateway: NAT pozwala na wyjście do internetu, ale nie zastępuje Load Balancera jako punktu wejścia do aplikacji.
+- C. Single subnet: To brak poprawnej izolacji sieciowej (brak separacji frontend/backend).
+- D. All in private + Load Balancer to public: Jeśli wstawisz wszystkie w prywatnej sieci, Load Balancer nie może do nich 'dosięgnąć' (chyba że przez zaawansowaną konfigurację, ale A/B są lepszymymi wzorcami).
 
-Konsensus społeczności ExamTopics: 100% na C. To kompletny stos bezpieczeństwa webowego w GCP.
+Wskazówki i triki (Tips & Tricks):
+- "Frontend public" + "Backend private" + "Secure connectivity" = Tiered Architecture z Load Balancerami.
+- Publiczna widoczność (public subnets) jest tylko dla LB i Frontendu.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Internal Load Balancing (ILB) to klucz do bezpiecznej komunikacji "wschód-zachód" wewnątrz VPC.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/architecture/best-practices-vpc-design" target="_blank">VPC design best practices</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Cloud Armor chroni przed botami i exploitami, IAP zapewnia, że tylko Twoi pracownicy wejdą do paneli administracyjnych, a Firewall VPC stanowi ostatnią linię obrony sieciowej.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/security/products" target="_blank">https://cloud.google.com/security/products</a></li>
-
-</ul>
+<h3>Kluczowe zagadnienia</h3>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do projektowania bezpiecznych sieci "od zera". Warstwowa architektura z użyciem zewnętrznego Load Balancera (z WAF) dla frontendu i wewnętrznego Load Balancera dla backendu to standardowy, bezpieczny model w chmurze.</p>
 </div>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const revealButton = document.querySelectorAll('.reveal-solution');
-    revealButton.forEach(button => {
-        let isVisible = false;
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const answerSection = document.querySelector('.q-answer');
-            const aiSection = document.querySelector('.ai-analysis-container');
-            if (isVisible) {
-                if (answerSection) answerSection.style.display = 'none';
-                if (aiSection) aiSection.style.display = 'none';
-                this.textContent = 'Show Suggested Answer';
-            } else {
-                if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
-                this.textContent = 'Hide Suggested Answer';
-            }
-            isVisible = !isVisible;
-        });
-    });
-});
-</script>
-</body>
-</html>
+...

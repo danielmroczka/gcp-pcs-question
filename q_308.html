@@ -72,7 +72,6 @@ Your organization wants to publish yearly reports of your website usage analytic
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Discover and quarantine your PII data in your storage by using the Cloud DLP API.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Discover and transform PII data in your reports by using the Cloud DLP API.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Encrypt the PII from the report by using the Cloud DLP API.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,33 @@ Your organization wants to publish yearly reports of your website usage analytic
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Discover and transform PII data in your reports by using the Cloud DLP API.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. DLP Discovery & Transformation: DLP API potrafi przeanalizować gotowy raport i inteligentnie zamaskować tylko dane wrażliwe (np. imiona), pozostawiając resztę danych (statystyki, kwoty) nietkniętą. Pozwala to na publikację raportu bez ryzyka naruszenia prywatności, przy zachowaniu jego pełnej wartości informacyjnej.
+Dlaczego ta odpowiedź jest poprawna:
+- DLP Discovery & Transformation: DLP API potrafi przeanalizować gotowy raport i inteligentnie zamaskować tylko dane wrażliwe (np. imiona), pozostawiając resztę danych (statystyki, kwoty) nietkniętą. Pozwala to na publikację raportu bez ryzyka naruszenia prywatności, przy zachowaniu jego pełnej wartości informacyjnej.
 
-Dlaczego inne są błędne:
-A. Delete: Usunięcie danych źródłowych uniemożliwiłoby stworzenie raportu w ogóle.
-B. Quarantine: To izolacja plików, nie jest to proces 'czyszczenia' raportu przed publikacją.
-D. Encrypt: Zaszyfrowane dane w publicznym raporcie są bezużyteczne dla czytelnika. Maskowanie (transformacja) jest lepszym wyborem dla publicznych dokumentów.
+Analiza niepoprawnych odpowiedzi:
+- A. Delete: Usunięcie danych źródłowych uniemożliwiłoby stworzenie raportu w ogóle.
+- B. Quarantine: To izolacja plików, nie jest to proces 'czyszczenia' raportu przed publikacją.
+- D. Encrypt: Zaszyfrowane dane w publicznym raporcie są bezużyteczne dla czytelnika. Maskowanie (transformacja) jest lepszym wyborem dla publicznych dokumentów.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla C. To klasyczny przypadek użycia 'InfoType redaction'.
+Wskazówki i triki (Tips & Tricks):
+- "Public reporting" / "Report" + "No PII" = Cloud DLP (Discovery & Transformation).
+- DLP wspiera techniki takie jak 'Substitution' (zastąpienie imienia tekstem [NAZWISKO]), co pozwala zachować kontekst dokumentu dla czytelnika przy pełnym bezpieczeństwie.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: DLP to nie tylko "wykrywanie" (detect), ale przede wszystkim "transformacja" (de-identification).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/dlp" target="_blank">Sensitive Data Protection overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> DLP wspiera techniki takie jak 'Substitution' (zastąpienie imienia tekstem [NAZWISKO]), co pozwala zachować kontekst dokumentu dla czytelnika przy pełnym bezpieczeństwie.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/dlp" target="_blank">https://cloud.google.com/dlp</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do projektowania bezpiecznych procesów udostępniania danych. Użycie natywnych funkcji transformacji (redakcja/maskowanie) pozwala na publikację raportów z zachowaniem wymogów prawnych bez konieczności rezygnacji z użyteczności danych.</p>
 </div>
 </div>
 <script>

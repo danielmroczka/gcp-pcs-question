@@ -72,7 +72,6 @@ You work for a large organization that recently implemented a 100GB Cloud Interc
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Ensure that the on-premises router is not down.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Ensure that the active pre-shared key created for MACsec is not expired on both the on-premises and Google edge routers.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Ensure that the active pre-shared key matches on both the on-premises and Google edge routers.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,30 @@ You work for a large organization that recently implemented a 100GB Cloud Interc
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: D (Ensure that the active pre-shared key matches on both the on-premises and Google edge routers.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Metadata Concealment / Workload Identity: Serwer metadanych węzła zawiera bardzo wrażliwe informacje (np. tokeny konta serwisowego maszyny). Workload Identity automatycznie zabezpiecza dostęp do metadanych, sprawiając, że pody widzą tylko własne, ograniczone informacje, a nie metadane całego węzła.
+Dlaczego ta odpowiedź jest poprawna:
+- MACsec: Jest to protokół warstwy 2, który zapewnia szyfrowanie ruchu między routerami. Aby działał poprawnie, klucze współdzielone (pre-shared keys) muszą być identyczne po obu stronach połączenia (na routerze brzegowym klienta i routerze brzegowym Google). Jeśli są niespójne, tunel MACsec nie wstanie (będzie "operationally down").
 
-Dlaczego inne są błędne:
-A. VPC Firewall: Nie blokuje ruchu do lokalnego adresu `169.254.169.254` wewnątrz interfejsu loopback/bridge.
-C. Network Policies: Mogą blokować, ale WI (B) jest bardziej kompletnym i zalecanym sposobem izolacji tożsamości w GKE.
-D. Cloud Armor: Dla ruchu zewnętrznego.
+Analiza niepoprawnych odpowiedzi:
+- A, B, C: Są to działania wtórne. Niezgodność kluczy (D) jest najczęstszą przyczyną błędu "operationally down" przy skonfigurowanym MACsec.
 
-Konsensus społeczności ExamTopics: 100% na B. Workload Identity to podstawowy element 'Hardeningu' klastra GKE.
+Wskazówki i triki (Tips & Tricks):
+- Słowo klucz: "MACsec" = zawsze sprawdzaj klucze (keys).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: MACsec wymaga fizycznej zgodności po obu stronach.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/interconnect/docs/concepts/macsec" target="_blank">MACsec for Dedicated Interconnect</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Na GitHubie specjaliści ostrzegają: 'Bez WI, każdy pod w klastrze może udawać węzeł'. Włączenie Workload Identity (B) to nie tylko wygoda, ale krytyczny krok blokujący jeden z najczęstszych wektorów eskalacji uprawnień w Kubernetes.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity" target="_blank">https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie techniczne dotyczące troubleshooting'u Cloud Interconnect z MACsec. Kluczową zasadą bezpieczeństwa w tym protokole jest idealna synchronizacja kluczy.</p>
 </div>
 </div>
 <script>

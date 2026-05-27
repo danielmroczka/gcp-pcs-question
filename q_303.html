@@ -72,7 +72,6 @@ There is a threat actor that is targeting organizations like yours. Attacks are 
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Activate Identity-Aware Proxy for the backend of the Application Load Balancer. Create a firewall rule that only allows traffic from the proxy to the application.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a log sink with a filter containing the known IP address range. Trigger an alert that detects when the Application Load Balancer is accessed from those IPs.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a Cloud Firewall policy with a deny-rule for the known IP address range. Associate the firewall policy to the Virtual Private Cloud with the application backend.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,29 +88,32 @@ There is a threat actor that is targeting organizations like yours. Attacks are 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Create a Cloud Armor policy with a deny-rule for the known IP address range. Attach the policy to the backend of the Application Load Balancer.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Cloud Armor: Jest to jedyna usługa w GCP, która pozwala na blokowanie adresów IP na brzegu sieci Google (Edge), ZANIM trafią one do Load Balancera i Twojej sieci. Jest to najbardziej efektywne i skalowalne rozwiązanie dla aplikacji webowych.
+Dlaczego ta odpowiedź jest poprawna:
+- Cloud Armor: Jest to jedyna usługa w GCP, która pozwala na blokowanie adresów IP na brzegu sieci Google (Edge), ZANIM trafią one do Load Balancera i Twojej sieci. Jest to najbardziej efektywne i skalowalne rozwiązanie dla aplikacji webowych.
 
-Dlaczego inne są błędne:
-B. IAP: Służy do uwierzytelniania osób, nie do masowego blokowania zakresów IP agresorów.
-D. VPC Firewall: Działa głęboko w sieci, blisko VM. W przypadku dużego ataku, Twoja sieć VPC musiałaby procesować te pakiety tylko po to, by je odrzucić, co marnuje zasoby. Armor robi to 'przed drzwiami'.
+Analiza niepoprawnych odpowiedzi:
+- B. IAP: Służy do uwierzytelniania osób, nie do masowego blokowania zakresów IP agresorów.
+- D. VPC Firewall: Działa głęboko w sieci, blisko VM. W przypadku dużego ataku, Twoja sieć VPC musiałaby procesować te pakiety tylko po to, by je odrzucić, co marnuje zasoby. Armor robi to 'przed drzwiami'.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla A. Cloud Armor to standardowy WAF/IP-filter w GCP.
+Wskazówki i triki (Tips & Tricks):
+- "Threat actor" / "Known IP range" + "Web application" + "Block" = Cloud Armor (Security Policy).
+- Zapamiętaj: Cloud Armor to standardowy WAF/IP-filter w GCP.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj, że Cloud Armor wspiera również gotowe listy IP od Google (Threat Intelligence), co pozwala na automatyczne blokowanie znanych botnetów.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/armor/docs/security-policy-concepts" target="_blank">Cloud Armor security policy concepts</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Cloud Armor wspiera również gotowe listy IP od Google (Threat Intelligence), co pozwala na automatyczne blokowanie botnetów bez ręcznej pracy administratora.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/armor/docs/security-policy-concepts" target="_blank">https://cloud.google.com/armor/docs/security-policy-concepts</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do diagnozowania problemów bezpieczeństwa w usługach zarządzanych. Cloud Armor to potężne narzędzie, ale bez odpowiedniego wglądu w logi (visibility) staje się "czarną skrzynką". Kluczem dla inżyniera bezpieczeństwa jest poprawne skonfigurowanie logowania w momencie wdrożenia, aby w razie awarii szybko zidentyfikować przyczynę blokady.</p>
 </div>
 </div>
 <script>

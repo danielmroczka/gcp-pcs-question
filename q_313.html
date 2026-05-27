@@ -64,15 +64,14 @@
 <h2>Question 313 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your Google Cloud organization is subdivided into three folders: production, development, and networking. Networking resources for the organization are centrally managed in the networking folder. You discovered that projects in the production folder are attaching to Shared VPCs that are outside of the networking folder which could become a data exfiltration risk. You must resolve the production folder issue without impacting the development folder. You need to use the most efficient and least disruptive approach. What should you do?
+Your organization has recently deployed a new web application on Compute Engine. You need to provide users with access to the application while minimizing exposure to the public internet. Furthermore, you need to provide the internal backend services with secure connectivity to the database while keeping them isolated from public access. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enable the Restrict Shared VPC Host Projects organization policy on the production folder. Create a custom rule and configure the policy type to Allow. In the Custom value section, enter under:folders/networking.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Enable the Restrict Shared VPC Host Projects organization policy on the networking folder only. Create a new custom rule and configure the policy type to Allow. In the Custom value section, enter under:organizations/123456739123.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Enable the Restrict Shared VPC Host Projects organization policy at the project level for each of the production projects. Create a custom rule and configure the policy type to Allow. In the Custom value section, enter under:folders/networking.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enable the Restrict Shared VPC Host Projects organization policy at the organization level. Create a custom rule and configure the policy type to Allow. In the Custom value section, enter under:folders/networking.</li>
-
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Place the frontend instances in a public subnet with external IP addresses and the backend services in a private subnet. Use a NAT gateway to allow the backend to communicate with the frontend.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Place the frontend instances in a public subnet with external IP addresses and use a Cloud Load Balancer with Google Cloud Armor for security. Place the backend services in a private subnet and use Internal HTTP(S) Load Balancing.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Place all instances in a single public subnet. Use Identity-Aware Proxy (IAP) to restrict access to the frontend instances and use firewall rules to block access to backend instances.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Place all instances in a single private subnet. Use a load balancer to expose both the frontend and backend instances to the internet, and configure firewall rules to secure the services.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -80,7 +79,7 @@ Your Google Cloud organization is subdivided into three folders: production, dev
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">B</span>
 <br/>
 </span>
 </div>
@@ -89,54 +88,36 @@ Your Google Cloud organization is subdivided into three folders: production, dev
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: B (Place the frontend instances in a public subnet with external IP addresses and use a Cloud Load Balancer with Google Cloud Armor for security. Place the backend services in a private subnet and use Internal HTTP(S) Load Balancing.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Event Threat Detection: To moduł SCC Premium, który skanuje logi audytowe BigQuery i szuka wzorców ataków. Posiada on specyficzny detektor dla 'BigQuery exfiltration', który wykrywa próby kopiowania tabel do projektów poza organizacją Google Cloud firmy.
+Dlaczego ta odpowiedź jest poprawna:
+- Architektura warstwowa (Tiered Architecture): Frontend jest dostępny przez Load Balancer (który chroni go przez Cloud Armor – WAF). Backend jest w pełni odizolowany w prywatnej podsieci i komunikuje się z frontendem tylko przez wewnętrzny Load Balancer (Internal LB), co zapewnia brak publicznej widoczności dla wrażliwych usług backendowych.
 
-Dlaczego inne są błędne:
-A. SHA: Wykrywa błędy konfiguracji (np. publiczny zbiór danych), nie wykrywa Akcji wycieku w locie.
-C. Flow Logs: BigQuery to API, jego ruch nie jest widoczny w tradycyjnych Flow Logach sieciowych VPC.
-D. Audit Logs: Są ŹRÓDŁEM danych dla ETD, ale same w sobie nie generują alertów o podejrzeniu włamania bez silnika analizy (B).
+Analiza niepoprawnych odpowiedzi:
+- A. NAT gateway: NAT pozwala na wyjście do internetu, ale nie zastępuje Load Balancera jako punktu wejścia do aplikacji.
+- C. Single subnet: To brak poprawnej izolacji sieciowej (brak separacji frontend/backend).
+- D. All in private + Load Balancer to public: Jeśli wstawisz wszystkie w prywatnej sieci, Load Balancer nie może do nich 'dosięgnąć' (chyba że przez zaawansowaną konfigurację, ale A/B są lepszymymi wzorcami).
 
-Konsensus społeczności ExamTopics: 100% na B. Wykrywanie behawioralnych ataków na dane = ETD.
+Wskazówki i triki (Tips & Tricks):
+- "Frontend public" + "Backend private" + "Secure connectivity" = Tiered Architecture z Load Balancerami.
+- Publiczna widoczność (public subnets) jest tylko dla LB i Frontendu.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Internal Load Balancing (ILB) to klucz do bezpiecznej komunikacji "wschód-zachód" wewnątrz VPC.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/architecture/best-practices-vpc-design" target="_blank">VPC design best practices</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Na forach podkreśla się, że ETD (B) jest zasilane przez Threat Intelligence Google. Potrafi ono odróżnić legalny proces 'Export to GCS' od ataku nieuczciwego pracownika, który próbuje wyprowadzić dane do swojego prywatnego projektu.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/security-command-center/docs/concepts-event-threat-detection-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-event-threat-detection-overview</a></li>
-
-</ul>
+<h3>Kluczowe zagadnienia</h3>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do projektowania bezpiecznych sieci "od zera". Warstwowa architektura z użyciem zewnętrznego Load Balancera (z WAF) dla frontendu i wewnętrznego Load Balancera dla backendu to standardowy, bezpieczny model w chmurze.</p>
 </div>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const revealButton = document.querySelectorAll('.reveal-solution');
-    revealButton.forEach(button => {
-        let isVisible = false;
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const answerSection = document.querySelector('.q-answer');
-            const aiSection = document.querySelector('.ai-analysis-container');
-            if (isVisible) {
-                if (answerSection) answerSection.style.display = 'none';
-                if (aiSection) aiSection.style.display = 'none';
-                this.textContent = 'Show Suggested Answer';
-            } else {
-                if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
-                this.textContent = 'Hide Suggested Answer';
-            }
-            isVisible = !isVisible;
-        });
-    });
-});
-</script>
-</body>
-</html>
+...

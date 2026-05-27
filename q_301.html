@@ -72,7 +72,6 @@ Your organization is implementing separation of duties in a Google Cloud project
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use Access Context Manager to create conditions that allow only authorized administrators to change firewall rules based on attributes such as IP address or device security posture.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create and assign two custom IAM roles. Assign the deployer role to control Compute Engine and deployment-related permissions. Assign the network administrator role to manage firewall permissions.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Grant the editor IAM role to the developer group. Explicitly negate any firewall modification permissions by using IAM deny policies.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,34 @@ Your organization is implementing separation of duties in a Google Cloud project
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Poprawna odpowiedź: C (Create and assign two custom IAM roles. Assign the deployer role to control Compute Engine and deployment-related permissions. Assign the network administrator role to manage firewall permissions.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Granular Roles: Aby wymusić separację obowiązków (Separation of Duties), należy użyć ról o wąskich uprawnieniach. Deweloper dostaje rolę `compute.instanceAdmin` (bez uprawnień sieciowych), a zespół sieciowy rolę `compute.networkAdmin`. To jedyna metoda gwarantująca techniczne wymuszenie blokady zmian sieci przez programistów.
+Dlaczego ta odpowiedź jest poprawna:
+- Granular Roles: Aby wymusić separację obowiązków (Separation of Duties), należy użyć ról o wąskich uprawnieniach. Deweloper dostaje rolę `compute.instanceAdmin` (bez uprawnień sieciowych), a zespół sieciowy rolę `compute.networkAdmin`. To jedyna metoda gwarantująca techniczne wymuszenie blokady zmian sieci przez programistów.
 
-Dlaczego inne są błędne:
-A. Verbal instruction: Błąd. Bezpieczeństwo musi być wymuszone systemowo, a nie tylko proceduralnie.
-B. CAA: Kontroluje lokalizację logowania, a nie uprawnienia do edycji zasobów (IAM to robi).
-D. Editor + Deny: IAM Deny Policies są trudniejsze w zarządzaniu niż proste nadanie tylko niezbędnych ról (C).
+Analiza niepoprawnych odpowiedzi:
+- A. Verbal instruction: Błąd. Bezpieczeństwo musi być wymuszone systemowo, a nie tylko proceduralnie.
+- B. CAA: Kontroluje lokalizację logowania, a nie uprawnienia do edycji zasobów.
+- D. Editor + Deny: IAM Deny Policies są trudniejsze w zarządzaniu niż proste nadanie tylko niezbędnych ról (C).
 
-Konsensus społeczności ExamTopics: 100% na C. Podstawowa zasada IAM: nadawaj tylko to, co jest niezbędne.
+Wskazówki i triki (Tips & Tricks):
+- "Least privilege" + "Separation of duties" = Zawsze Custom Roles lub Predefined Roles (nigdy Basic Roles).
+- Jeśli widzisz "No action needed" / "Automatic" w kontekście uprawnień -> odrzuć to w 99% przypadków.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Rola Owner posiada uprawnienia do zarządzania IAM, co jest naruszeniem zasady separacji obowiązków w większości scenariuszy audytowych.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iam/docs/understanding-roles" target="_blank">Understanding IAM roles</a>
+- <a href="https://cloud.google.com/iam/docs/creating-custom-roles" target="_blank">Creating custom roles</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Google dąży do całkowitego wyeliminowania ról podstawowych (Owner/Editor) na rzecz ról predefiniowanych o wąskim zakresie.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/iam/docs/understanding-roles" target="_blank">https://cloud.google.com/iam/docs/understanding-roles</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do projektowania bezpiecznych procesów administracyjnych. W chmurze uprawnienia są "wszędobylskie". Twoim zadaniem jako inżyniera bezpieczeństwa jest ich "przycinanie" (pruning), aby każda osoba miała tylko tyle uprawnień, ile jest jej niezbędne do wykonania pracy – ani mniej, ani więcej.</p>
 </div>
 </div>
 <script>

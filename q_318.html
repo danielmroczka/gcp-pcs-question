@@ -72,7 +72,6 @@ Your organization must store highly sensitive data within Google Cloud. You need
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use Cloud Storage with customer-managed encryption keys (CMEK), Cloud DLP for data classification, and Secret Manager for storing API access tokens.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use Cloud Storage with client-side encryption, Cloud KMS for key management, and Cloud HSM for cryptographic operations.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use Cloud Storage with server-side encryption, BigQuery with column-level encryption, and IAM roles for access control.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,31 @@ Your organization must store highly sensitive data within Google Cloud. You need
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: C (Use Cloud Storage with client-side encryption, Cloud KMS for key management, and Cloud HSM for cryptographic operations.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. logging.admin: Ta rola pozwala na pełne zarządzanie usługą logowania (tworzenie sinków, retencja) oraz przeglądanie wszystkich logów (w tym audytowych), ale celowo NIE daje uprawnień do innych zasobów projektu (np. nie pozwala na startowanie VM czy czytanie baz danych).
+Dlaczego ta odpowiedź jest poprawna:
+- Client-side encryption: To najsilniejszy poziom ochrony. Dane są szyfrowane po stronie klienta (przed wysłaniem do chmury), więc Google nigdy nie ma dostępu do surowych danych w formie niezaszyfrowanej.
+- Cloud HSM (Hardware Security Module): Zapewnia najwyższy poziom sprzętowej ochrony kluczy (FIPS 140-2 Level 3), znacznie wyższy niż standardowy KMS oparty na oprogramowaniu.
 
-Dlaczego inne są błędne:
-B. Viewer: Nie widzi logów Data Access (prywatnych).
-C. Admin: Zdecydowanie zbyt wysoka rola.
-D. Viewer: Widzi zasoby biznesowe, co narusza zasadę separacji obowiązków.
+Analiza niepoprawnych odpowiedzi:
+- A, B, D: Są to bezpieczne rozwiązania (CSEK, CMEK, Server-side), ale z punktu widzenia "najsilniejszego poziomu kontroli" (dane nigdy nie docierają do Google w formie jawnej), szyfrowanie po stronie klienta w połączeniu z Cloud HSM jest bezkonkurencyjne.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla A. To standardowa rola dla zespołu SOC (Security Operations Center).
+Wskazówki i triki (Tips & Tricks):
+- "Strongest level of security and control" + "Highly sensitive data" = Client-side encryption + Cloud HSM.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Client-side encryption oznacza, że Google Cloud Storage "widzi" tylko zaszyfrowane bajty (blob), co gwarantuje pełną prywatność.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/kms/docs/hsm" target="_blank">Cloud HSM overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Wiele osób wybiera B. Eksperci na forach przypominają: audytor potrzebuje widzieć 'kto czytał dane' (Data Access Logs), a te logi są widoczne tylko dla roli Admin (A) lub Private Log Viewer. Ponieważ zadanie mówi o 'zarządzaniu' (manage), Admin jest jedyną opcją.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/logging/docs/access-control" target="_blank">https://cloud.google.com/logging/docs/access-control</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie o architekturę wysokiego bezpieczeństwa. Kluczem jest rozróżnienie między ochroną oferowaną przez chmurę (server-side, CMEK) a ochroną, w której chmura jest tylko "ciemnym magazynem" (client-side + HSM).</p>
 </div>
 </div>
 <script>

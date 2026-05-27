@@ -72,7 +72,6 @@ A team at your organization collects logs in an on-premises security information
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Define a log view for the relevant logs. Provide access to the log view to a principal from your on-premises identity provider by using workforce identity federation.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a log sink for the relevant logs. Send the logs to Pub/Sub. Retrieve the logs from Pub/Sub and push the logs to the SIEM by using Dataflow.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Filter for the relevant logs. Store the logs in a Cloud Storage bucket. Grant the service account access to the bucket. Provide the service account key to the SIEM team.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,54 +88,36 @@ A team at your organization collects logs in an on-premises security information
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: C (Create a log sink for the relevant logs. Send the logs to Pub/Sub. Retrieve the logs from Pub/Sub and push the logs to the SIEM by using Dataflow.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Secure Web Proxy (SWP): Jest to usługa zaprojektowana do filtrowania ruchu wychodzącego (egress). W przeciwieństwie do zwykłych firewalli, SWP potrafi przeprowadzać inspekcję TLS (TLS decryption), co pozwala na blokowanie złośliwych URL-i ukrytych wewnątrz szyfrowanych sesji HTTPS.
+Dlaczego ta odpowiedź jest poprawna:
+- Log Sinks + Pub/Sub + Dataflow: Jest to standardowa, rekomendowana architektura dla "log ingestion" do zewnętrznych systemów SIEM (np. Splunk, QRadar). Log Sink pozwala wyfiltrować tylko pożądany podzbiór logów, Pub/Sub zapewnia buforowanie (jeśli SIEM ma chwilową przerwę w dostępności), a Dataflow przetwarza i dostarcza logi w czasie rzeczywistym.
 
-Dlaczego inne są błędne:
-A. Cloud NAT: Służy do translacji adresów, nie posiada funkcji inspekcji TLS i filtrowania URL.
-C. VPC Firewall: Działa na warstwach 3/4, nie widzi treści wewnątrz sesji TLS.
-D. Cloud Armor: Chroni ruch PRZYCHODZĄCY (ingress) do Load Balancera.
+Analiza niepoprawnych odpowiedzi:
+- A. BigQuery: To świetne miejsce do analizy logów wewnątrz GCP, ale nie jest to mechanizm dostarczania logów w czasie rzeczywistym do SIEM (wymagałoby ciągłego odpytywania bazy przez SIEM).
+- B. Log view: Służy do ograniczania widoczności logów wewnątrz interfejsu GCP, a nie do ich eksportu.
+- D. Storage + Keys: Skrajnie niebezpieczne. Udostępnianie kluczy serwisowych (keys) ludziom i zewnętrznym systemom to największy błąd bezpieczeństwa w GCP.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. SWP to jedyne natywne rozwiązanie proxy z inspekcją TLS.
+Wskazówki i triki (Tips & Tricks):
+- "Cloud logs to SIEM" + "Real-time" + "Security" = Log Sink -> Pub/Sub -> Dataflow.
+- Zapamiętaj: Klucze serwisowe (SA keys) są wrogiem numer jeden. NIGDY ich nie eksportuj, jeśli istnieje alternatywa (Workload Identity).
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Google udostępnia gotowe, zarządzane szablony Dataflow (Pub/Sub to Splunk/Elasticsearch).
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/logging/docs/routing/overview" target="_blank">Cloud Logging sinks overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Debata w sieci dotyczy złożoności wdrożenia. SWP (B) wymaga zainstalowania certyfikatu CA firmy na wszystkich maszynach, co jest narzutem, ale w sektorach regulowanych (bankowość) jest to jedyny sposób na walkę z wyciekiem danych przez HTTPS.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/secure-web-proxy/docs/overview" target="_blank">https://cloud.google.com/secure-web-proxy/docs/overview</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość wzorców projektowych logowania w skali. Architektura Sink -> Pub/Sub -> Dataflow jest najbardziej skalowalna i bezpieczna, ponieważ w pełni wykorzystuje usługi zarządzane, eliminuje potrzebę zarządzania kluczami i zapewnia odporność na awarie (fault tolerance).</p>
 </div>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const revealButton = document.querySelectorAll('.reveal-solution');
-    revealButton.forEach(button => {
-        let isVisible = false;
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const answerSection = document.querySelector('.q-answer');
-            const aiSection = document.querySelector('.ai-analysis-container');
-            if (isVisible) {
-                if (answerSection) answerSection.style.display = 'none';
-                if (aiSection) aiSection.style.display = 'none';
-                this.textContent = 'Show Suggested Answer';
-            } else {
-                if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
-                this.textContent = 'Hide Suggested Answer';
-            }
-            isVisible = !isVisible;
-        });
-    });
-});
-</script>
-</body>
-</html>
+...

@@ -72,7 +72,6 @@ The InfoSec team has mandated that all new Cloud Run jobs and services in produc
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure a Security Health Analytics (SHA) custom rule that prevents the execution of Cloud Run jobs and services without Binary Authorization.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Ensure the Cloud Run admin role is not assigned to developers.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Configure a Binary Authorization custom policy that is not editable by developers and auto-attaches to all Cloud Run jobs and services.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,32 @@ The InfoSec team has mandated that all new Cloud Run jobs and services in produc
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Poprawna odpowiedź: A (Configure an organization policy to require Binary Authorization enforcement on images deployed to Cloud Run.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Event Threat Detection (ETD): Jest to silnik analityczny SCC Premium, który wykorzystuje modele Machine Learning Google oraz bazy Threat Intelligence do wykrywania wycieków danych (Data Exfiltration) na podstawie śladów w logach Flow i logach audytowych.
+Dlaczego ta odpowiedź jest poprawna:
+- Organization Policy: To jedyny skuteczny sposób na *wymuszenie* (enforcement) pewnych zachowań w skali całej organizacji. Jeśli InfoSec "mandates" (nakazuje), to polityka organizacyjna jest narzędziem, które technicznie uniemożliwi wdrożenie obrazów nieposiadających odpowiednich atestacji w Cloud Run.
 
-Dlaczego inne są błędne:
-A. BigQuery: Narzędzie do analizy ręcznej, nie jest 'automatycznym systemem detekcji ML' w czasie rzeczywistym.
-C. Flow Logs: To surowe dane wejściowe dla ETD (B).
-D. Packet Mirroring: Przechwytuje dane, ale do ich analizy ML potrzebowałbyś własnego, drogiego rozwiązania.
+Analiza niepoprawnych odpowiedzi:
+- B. SHA rule: Security Health Analytics służy do detekcji (monitorowania), a nie do prewencyjnego blokowania (enforcement) akcji w czasie rzeczywistym.
+- C. IAM: Ograniczenie ról nie zapewnia technicznego wymuszenia (Binary Auth) – deweloper nadal mógłby wdrożyć niebezpieczny obraz, jeśli by miał dostęp.
+- D. Custom policy: To opcja konfiguracji samego Binary Auth, ale nie jest to metoda "wymuszenia" (enforcement) dla wszystkich usług w organizacji.
 
-Konsensus społeczności ExamTopics: 100% na B. SCC Premium to mózg detekcji zagrożeń w GCP.
+Wskazówki i triki (Tips & Tricks):
+- "Mandate" + "All new ... in production" = Organization Policy.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Organization Policy jest używane do narzucania ograniczeń bezpieczeństwa w całej organizacji ("guardrails").
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/binary-authorization/docs/policy-enforcement" target="_blank">Binary Authorization policy enforcement</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Inżynierowie na Reddit podkreślają, że ETD (B) jest 'bezobsługowy'. Google stale uczy modele wykrywania nowych metod wycieku danych, co czyni to rozwiązanie znacznie skuteczniejszym od statycznych reguł w systemach on-premises.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/security-command-center/docs/concepts-event-threat-detection-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-event-threat-detection-overview</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje zrozumienie hierarchii zarządzania bezpieczeństwem w GCP. "Mandat" organizacji wymaga mechanizmów typu "enforcement", a nie tylko detekcji czy ograniczania dostępu przez IAM.</p>
 </div>
 </div>
 <script>

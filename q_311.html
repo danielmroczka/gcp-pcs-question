@@ -72,7 +72,6 @@ Your organization is worried about recent news headlines regarding application v
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use gcloud artifacts docker images describe LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE_ID@sha256:HASH --show-package-vulnerability in your CI/CD pipeline, and trigger a pipeline failure for critical vulnerabilities.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Enforce the use of Cloud Code for development so users receive real-time security feedback on vulnerable libraries and dependencies before they check in their code.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enable Binary Authorization and create attestations of scans.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,34 @@ Your organization is worried about recent news headlines regarding application v
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: D (Enable Binary Authorization and create attestations of scans.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Workload Identity + Secret Manager: To duet idealny. Workload Identity (WI) łączy tożsamość poda z tożsamością Google IAM, co eliminuje potrzebę używania statycznych kluczy JSON. Secret Manager (SM) bezpiecznie przechowuje dane wrażliwe. WI pozwala podowi na pobranie sekretu bezpośrednio z API SM bez żadnych haseł w konfiguracji.
+Dlaczego ta odpowiedź jest poprawna:
+- Binary Authorization: To kluczowa usługa w GCP służąca do zapewnienia integralności łańcucha dostaw oprogramowania (Supply Chain Security). Wymusza ona, aby każdy kontener przed uruchomieniem w GKE posiadał podpisane zaświadczenie (attestation) o tym, że został poprawnie przeskanowany pod kątem podatności.
+- "Scanned and verified containers": To definicja działania Binary Authorization. Jeśli kontener nie ma poprawnej atestacji (np. skanowanie nie wyszło czysto lub nie przeszło procesu CI/CD), GKE po prostu go nie uruchomi.
 
-Dlaczego inne są błędne:
-B, C: Wymagają zarządzania statycznymi kluczami (JSON), co generuje narzut operacyjny i ryzyko wycieku.
-D. CMEK: To szyfrowanie dysku, a nie system zarządzania sekretami aplikacji.
+Analiza niepoprawnych odpowiedzi:
+- A. RBAC: Zarządza dostępem do klastra, ale nie sprawdza bezpieczeństwa samych obrazów kontenerów.
+- B. Gcloud description: To tylko sprawdzenie podatności. Sama komenda nie 'zablokuje' uruchomienia kontenera w GKE.
+- C. Cloud Code: Zapewnia feedback dla deweloperów (IDE), ale nie gwarantuje wdrożenia bezpiecznego obrazu do produkcji w sposób wymuszony.
 
-Konsensus społeczności ExamTopics: 100% na A. WI + SM to 'złoty standard' bezpieczeństwa mikroserwisów w GCP.
+Wskazówki i triki (Tips & Tricks):
+- "Only scanned and verified containers" + "Pipeline enforcement" = Binary Authorization.
+- Zapamiętaj: Binary Authorization to brama bezpieczeństwa dla GKE.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Binary Authorization sprawdza sygnatury (atestacje) w momencie próby wdrożenia poda do klastra.
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/binary-authorization/docs/overview" target="_blank">Binary Authorization overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Eksperci na GitHubie sugerują użycie 'Secret Manager CSI Driver', który mapuje sekrety bezpośrednio na wolumeny wewnątrz kontenerów. Jest to rozwinięcie opcji A, które jeszcze bardziej upraszcza kod aplikacji.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity" target="_blank">https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity</a></li>
-<li><a href="https://cloud.google.com/secret-manager/docs/overview" target="_blank">https://cloud.google.com/secret-manager/docs/overview</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją wiedzę o zabezpieczaniu łańcucha dostaw oprogramowania (Supply Chain Security). Binary Authorization to "najtwardsza" metoda wymuszania standardów – jeśli obraz nie przejdzie przez bezpieczny proces CI/CD i nie zostanie podpisany, nie ma prawa zaistnieć w Twoim klastrze produkcyjnym.</p>
 </div>
 </div>
 <script>
