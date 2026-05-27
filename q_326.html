@@ -72,7 +72,6 @@ Your organization deploys a large number of containerized applications on Google
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Develop a custom script to continuously check for patch availability, download patches, and apply the patches across all components of the cluster.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Migrate the cluster infrastructure to a self-managed Kubernetes environment for greater control over the patching process.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Schedule a daily reboot for all nodes to automatically upgrade.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -89,30 +88,34 @@ Your organization deploys a large number of containerized applications on Google
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Poprawna odpowiedź: A (Configure node auto-upgrades for node pools in the maintenance windows.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. GKE Node Auto-upgrades: Jest to usługa zarządzana, która automatycznie dba o to, by węzły miały najnowsze poprawki bezpieczeństwa. Skaluje się ona automatycznie dla dowolnej liczby klastrów. Użycie 'Maintenance Windows' pozwala kontrolować, kiedy te aktualizacje mogą się odbywać, aby nie zakłócać pracy aplikacji.
+Dlaczego ta odpowiedź jest poprawna:
+- Node Auto-upgrades: To funkcja GKE, która automatycznie dba o to, aby węzły (nodes) miały najnowszą wersję Kubernetes i poprawki bezpieczeństwa.
+- Maintenance windows: Pozwalają na kontrolowanie czasu, w którym te automatyczne aktualizacje mogą się odbyć, aby nie zakłócać pracy aplikacji.
 
-Dlaczego inne są błędne:
-B. Custom script: Rozwiązanie trudne w utrzymaniu i nieskalowalne.
-C. Self-managed: Zwiększa narzut operacyjny i ryzyko błędów (musisz sam dbać o wszystko). GKE jest właśnie po to, by Google robiło to za Ciebie.
-D. Daily reboot: Nie instaluje poprawek, po prostu restartuje potencjalnie dziurawy system.
+Analiza niepoprawnych odpowiedzi:
+- B. Custom script: Jest to metoda "najmniej skalowalna" i bardzo pracochłonna (zwiększa "management overhead").
+- C. Self-managed Kubernetes: Zwiększa odpowiedzialność za patching – w GKE chcemy maksymalnie wykorzystać automatyzację Google.
+- D. Daily reboot: Reboot nie zawsze oznacza upgrade, a robienie tego codziennie to niepotrzebne ryzyko dla dostępności aplikacji.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla A. To fundament bezpieczeństwa platformy GKE.
+Wskazówki i triki (Tips & Tricks):
+- "More reliable, cloud-first, and scalable" = Managed services, Auto-upgrades.
+- Unikaj "custom scripts" lub "manual management" na egzaminie.
+
+Praktyczne informacje na egzamin:
+- Zapamiętaj: W GCP zawsze szukaj natywnych, zarządzanych funkcji, które zdejmują z Ciebie ciężar zarządzania ("undifferentiated heavy lifting").
+
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/kubernetes-engine/docs/concepts/node-upgrades" target="_blank">GKE node auto-upgrades</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
+<h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Node auto-upgrades są powiązane z wersją Mastera klastra. Google najpierw aktualizuje Mastera, a potem stopniowo, w sposób bezpieczny, wymienia węzły robocze.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/node-auto-upgrades" target="_blank">https://cloud.google.com/kubernetes-engine/docs/how-to/node-auto-upgrades</a></li>
-
-</ul>
+<p><b>Analiza strategiczna:</b> Pytanie o automatyzację zarządzania infrastrukturą w GKE. Główną zasadą GCP jest delegowanie zarządzania łatami i aktualizacjami do usługi zarządzanej, co zapewnia bezpieczeństwo bez dodatkowej pracy manualnej.</p>
 </div>
 </div>
 <script>
