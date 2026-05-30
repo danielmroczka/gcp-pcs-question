@@ -89,18 +89,27 @@ You are exporting application logs to Cloud Storage. You encounter an error mess
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: AC.
+Potwierdzona odpowiedź: A (Change the access control model for the bucket)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Cloud KMS: To usługa do zarządzania kluczami szyfrującymi. Pozwala na automatyczną rotację kluczy (KEK) zgodnie z harmonogramem (np. co 90 dni).
-C. Cloud Storage (GCS): Wspiera integrację z KMS (CMEK), co pozwala na szyfrowanie obiektów w bucketach kluczami zarządzanymi przez klienta, które podlegają rotacji.
+Wyjaśnienie:
+- Problem: Komunikat o błędzie wskazuje, że mechanizm eksportu logów (log sinks) w tym konkretnym scenariuszu nie obsługuje polityki "Uniform bucket-level access" (UBLA). UBLA wymusza zarządzanie dostępem wyłącznie przez IAM, wyłączając listy kontroli dostępu (ACL).
+- Rozwiązanie: Aby umożliwić sinkowi zapis logów do kubełka w sytuacji, gdy wymaga on uprawnień opartych na ACL, należy zmienić model kontroli dostępu na "Fine-grained" (Drobnoziarnisty). Pozwala to na jednoczesne używanie IAM oraz ACL.
+- Uwaga techniczna: Chociaż Google zaleca stosowanie UBLA dla większości kubełków, niektóre starsze mechanizmy lub specyficzne konfiguracje sinków mogą nadal polegać na uprawnieniach ACL do zapisu obiektów przez tożsamość sinka.
 
-Dlaczego inne są błędne:
-B. Secret Manager: Służy do haseł, nie do kluczy szyfrujących wolumeny danych.
-D. Compute Engine: Wspiera CMEK, ale GCS (C) jest bardziej fundamentalnym przykładem składowania danych wymagającego kluczy rotowanych w tym scenariuszu (często GCS i KMS idą w parze w pytaniach o compliance).
-E. IAM: Zarządza uprawnieniami, nie szyfrowaniem.
+Dlaczego pozostałe są błędne:
+- B: Aktualizacja celu sinka nie rozwiąże problemu, jeśli przyczyną jest niekompatybilność modelu uprawnień na samym kubełku docelowym.
+- C i D: Nadanie ról IAM (`logging.logWriter` lub `logging.bucketWriter`) jest standardowym wymogiem dla sinka, ale błąd w pytaniu precyzuje, że problemem jest polityka "uniform bucket-level access", a nie brak samych uprawnień IAM. Jeśli kubełek wymusza UBLA, a mechanizm zapisu próbuje użyć ACL, same role IAM nie wystarczą bez zmiany modelu dostępu kubełka.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na AC. KMS to mózg operacji, GCS to serce danych.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli usługa "nie wspiera uniform bucket-level access", jedynym wyjściem jest powrót do modelu "Fine-grained" (ACL).
+- Zapamiętaj różnicę: Uniform = Tylko IAM; Fine-grained = IAM + ACL.
+
+Kluczowe zagadnienia do powtórzenia:
+- Modele kontroli dostępu w Cloud Storage (Uniform vs Fine-grained).
+- Tożsamość i uprawnienia dla Cloud Logging Sinks.
+
+Dokumentacja:
+- <a href="https://cloud.google.com/storage/docs/uniform-bucket-level-access" target="_blank">Używanie Uniform bucket-level access</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

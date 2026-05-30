@@ -89,17 +89,28 @@ You need to enable VPC Service Controls and allow changes to perimeters in exist
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Potwierdzona odpowiedź: D (Dry run)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Cloud HSM: To dedykowana usługa Google, która pozwala na przechowywanie kluczy w fizycznych urządzeniach HSM certyfikowanych wg standardu FIPS 140-2 Level 3. Usługa jest w pełni zarządzana przez Google, więc nie musisz dbać o sprzęt.
+Wyjaśnienie:
+- Tryb Dry run: Jest to tryb pracy VPC Service Controls, który pozwala administratorom na testowanie konfiguracji perymetru bez faktycznego blokowania jakiegokolwiek ruchu.
+- Bezpieczeństwo wdrażania: W tym trybie każde naruszenie zasad perymetru jest rejestrowane w logach audytowych jako "dryRun: true". Pozwala to na dokładną analizę, które żądania zostałyby zablokowane w trybie rzeczywistym, bez wpływu na działające aplikacje (without preventing access).
+- Najlepsza praktyka: Zawsze używaj trybu Dry run przy modyfikowaniu istniejących perymetrów w środowiskach produkcyjnych.
 
-Dlaczego inne są błędne:
-A. Cloud KMS: To ogólna usługa zarządzania kluczami. Może używać HSM jako backendu, ale to Cloud HSM (B) precyzuje wymóg sprzętowy.
-C. Cloud EKM: Służy do łączenia się z TWOIM HSM-em poza Google.
-D. Secret Manager: Służy do haseł, nie jest usługą HSM.
+Dlaczego pozostałe są błędne:
+- A: Cloud Run to usługa typu serverless do uruchamiania kontenerów, nie ma związku z trybami pracy VPC Service Controls.
+- B: Native nie jest poprawnym terminem określającym tryb pracy perymetru w VPC SC.
+- C: Tryb Enforced (Wymuszony) natychmiast blokuje ruch naruszający politykę perymetru. Użycie go w istniejącym środowisku bez wcześniejszych testów grozi przerwaniem działania usług.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. Pytanie o definicję usługi.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Enable without preventing access" = Dry run mode.
+- Logi z trybu Dry run są zapisywane w Cloud Audit Logs (AuditData).
+
+Kluczowe zagadnienia do powtórzenia:
+- Różnica między trybem Dry run a Enforced w VPC Service Controls.
+- Korzystanie z Logs Explorer do analizy naruszeń Dry run.
+
+Dokumentacja:
+- <a href="https://cloud.google.com/vpc-service-controls/docs/dry-run-mode" target="_blank">Tryb Dry run w VPC Service Controls</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

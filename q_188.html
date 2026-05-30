@@ -89,44 +89,38 @@ A company is using Google Kubernetes Engine (GKE) with container images of a mis
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (1. Enable vulnerability scanning in the Artifact Registry settings. 2. Use Cloud Build to build the images. 3. Push the images to the Artifact Registry for automatic scanning. 4. View the reports in the Artifact Registry)
+Potwierdzona odpowiedź: C (1. Enable vulnerability scanning in the Artifact Registry settings. 2. Use Cloud Build to build the images. 3. Push the images to the Artifact Registry for automatic scanning. 4. View the reports in the Artifact Registry).
 
-Dlaczego ta odpowiedź jest poprawna:
-- Artifact Registry: Jest to następca Google Container Registry (GCR) i natywne miejsce do przechowywania obrazów kontenerów w GCP.
-- Vulnerability Scanning: Artifact Registry posiada wbudowaną usługę skanowania podatności (część Container Analysis). Po jej włączeniu, każdy obraz wypchnięty (push) do rejestru jest automatycznie analizowany pod kątem znanych luk (CVE) w paczkach systemowych.
-- Bezpieczeństwo i Integracja: Ten proces odbywa się w całości wewnątrz infrastruktury Google Cloud. Raporty są dostępne bezpośrednio w konsoli dla osób z odpowiednimi uprawnieniami IAM (np. zespół security), co spełnia wymóg "without exposing them outside Google Cloud".
-- Automatyzacja: Użycie Cloud Build do budowania i automatycznego wypychania obrazów do rejestru tworzy spójny i bezpieczny potok CI/CD (DevSecOps).
+Wyjaśnienie:
+Artifact Registry to nowoczesny, natywny rejestr obrazów kontenerów w Google Cloud. Posiada on wbudowaną funkcję "Vulnerability Scanning" (część usługi Container Analysis). Po jej włączeniu każde wypchnięcie (push) obrazu do rejestru automatycznie uruchamia skanowanie pod kątem znanych podatności (CVE) w paczkach systemowych. Cały proces odbywa się wewnątrz bezpiecznej infrastruktury Google Cloud, a raporty są dostępne bezpośrednio w konsoli dla uprawnionych osób (np. zespołu security), co spełnia wymóg poufności i braku ekspozycji raportów na zewnątrz.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Container Threat Detection (SCC Premium): Ta usługa SCC służy do wykrywania zagrożeń w CZASIE RZECZYWISTYM na uruchomionych klastrach (np. podejrzane procesy, reverse shells). Nie jest to narzędzie do statycznego skanowania obrazów w rejestrze pod kątem luk przed wdrożeniem.
-- B. Open source tool + Public buckets: Wysyłanie raportów bezpieczeństwa do PUBLICZNYCH bucketów jest rażącym błędem i narusza wymóg "without exposing them outside Google Cloud".
-- D. GitHub scanning: Choć GitHub posiada dobre skanery, wymóg pytania wyraźnie sugeruje wykorzystanie ekosystemu Google Cloud ("without exposing them outside") oraz natywną integrację z GKE/Cloud Build.
+Dlaczego pozostałe są błędne:
+- A. Container Threat Detection (SCC Premium): Ta usługa służy do wykrywania zagrożeń w czasie rzeczywistym na już URUCHOMIONYCH kontenerach (np. wykrywanie reverse shell). Nie służy do statycznego skanowania obrazów w rejestrze przed ich wdrożeniem.
+- B. Open source tool + Public buckets: Publikowanie raportów bezpieczeństwa w PUBLICZNYCH bucketach Cloud Storage jest rażącym naruszeniem zasad bezpieczeństwa i wprost przeczy wymogowi "without exposing them outside Google Cloud".
+- D. GitHub scanning: Przechowywanie obrazów i raportów w zewnętrznym serwisie (GitHub) wykracza poza infrastrukturę Google Cloud, co narusza wymóg zachowania danych wewnątrz chmury Google.
 
-Wskazówki i triki (Tips & Tricks):
-- "Scan container images" + "Google Cloud native" = Artifact Registry Vulnerability Scanning.
-- Pamiętaj: Container Analysis to usługa "podkładowa", która przechowuje metadane skanów, a Artifact Registry to interfejs użytkownika.
-- Skanowanie w Artifact Registry dzieli się na "On-push scanning" (automatyczne) oraz "Continuous scanning" (monitorowanie nowych luk dla już istniejących obrazów).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Scan container images" + "GCP native" = Artifact Registry Vulnerability Scanning.
+- Pamiętaj o podejściu "Shift Left" – skanujemy obrazy ZANIM trafią na produkcję.
 
-Praktyczne informacje na egzamin:
-- Zwróć uwagę na koszty: Skanowanie "On-push" jest płatne za każdy obraz, natomiast "Continuous scanning" ma model subskrypcyjny lub oparty na liczbie obrazów.
-- Skanowanie wykrywa podatności głównie w paczkach zarządzanych przez menedżery (np. apt, yum, apk). Nie wykrywa błędów w samym kodzie aplikacji (do tego służy SAST).
+Kluczowe zagadnienia do powtórzenia:
+- Integracja Cloud Build z Artifact Registry.
+- Container Analysis API i automatyczne skanowanie.
+- Binary Authorization (blokowanie wdrożeń obrazów z krytycznymi podatnościami).
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/artifact-registry/docs/analysis/vulnerability-scanning" target="_blank">Artifact Registry vulnerability scanning overview</a>
-- <a href="https://cloud.google.com/container-analysis/docs/container-analysis-overview" target="_blank">Container Analysis overview</a>
-- <a href="https://cloud.google.com/build/docs/securing-builds/scan-images-vulnerabilities" target="_blank">Scanning images in Cloud Build pipelines</a>
+Dokumentacja:
+<a href="https://cloud.google.com/artifact-registry/docs/analysis/vulnerability-scanning" target="_blank">Skanowanie podatności w Artifact Registry</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
+<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
+<h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie sprawdza znajomość cyklu życia bezpiecznego oprogramowania (Secure SDLC) w chmurze. Google stawia na podejście "Shift Left" – wykrywanie błędów jak najwcześniej. Skanowanie w rejestrze (Artifact Registry) pozwala zatrzymać niebezpieczny obraz jeszcze przed jego wdrożeniem na produkcję (GKE), co jest znacznie tańsze i bezpieczniejsze niż reagowanie na incydenty po fakcie.</p>
-<h3>Dodatkowe wskazówki</h3>
+<p><b>Głęboka analiza:</b> Zadanie wymaga bezpiecznego i natywnego procesu skanowania. Artifact Registry w połączeniu z Container Analysis oferuje w pełni zautomatyzowane rozwiązanie, które nie wymaga przesyłania danych do zewnętrznych dostawców. To standardowa metoda budowania bezpiecznego łańcucha dostaw oprogramowania (Secure Software Supply Chain) w Google Cloud.</p>
+<h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li>W połączeniu z Binary Authorization, możesz skonfigurować GKE tak, aby odrzucał obrazy, które posiadają luki o poziomie "High" lub "Critical".</li>
-<li>Raporty skanowania zawierają nie tylko listę CVE, ale także informacje o tym, która wersja paczki naprawia dany błąd (fix version).</li>
+<li><a href="https://cloud.google.com/artifact-registry/docs/analysis/vulnerability-scanning" target="_blank">https://cloud.google.com/artifact-registry/docs/analysis/vulnerability-scanning</a></li>
 </ul>
 </div>
 </div>

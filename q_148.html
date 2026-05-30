@@ -89,17 +89,28 @@ Which Google Cloud service should you use to enforce access control policies for
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Potwierdzona odpowiedź: A (Identity-Aware Proxy).
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Cloud DLP API: Posiada specjalne techniki transformacji danych (de-identification), takie jak maskowanie, szyfrowanie zachowujące format (FPE) czy k-anonimizacja. Są one idealne do przygotowywania bezpiecznych zestawów danych testowych na podstawie realnych danych produkcyjnych.
+Wyjaśnienie:
+Identity-Aware Proxy (IAP) to usługa GCP, która pozwala kontrolować dostęp do aplikacji HTTPS oraz zasobów (takich jak instancje Compute Engine przez SSH/TCP) na podstawie tożsamości użytkownika i kontekstu (np. stan urządzenia, lokalizacja). IAP działa jako warstwa uwierzytelniająca i autoryzująca przed aplikacją, co pozwala na wdrożenie modelu Zero Trust (BeyondCorp) bez konieczności korzystania z tradycyjnych sieci VPN.
 
-Dlaczego inne są błędne:
-A. KMS: Szyfruje dane tak, że stają się nieczytelnym 'bełkotem', co uniemożliwia testowanie logiki aplikacji na nich.
-C. BigQuery: To baza, nie silnik transformacji danych wrażliwych.
-D. Web Security Scanner: Szuka luk w kodzie stron WWW.
+Dlaczego pozostałe są błędne:
+- B. Cloud NAT: Służy do umożliwienia maszynom bez publicznych adresów IP dostępu do internetu (ruch wychodzący), ale nie pełni funkcji kontroli dostępu do aplikacji dla użytkowników zewnętrznych.
+- C. Google Cloud Armor: Chroni aplikacje przed atakami DDoS i zawiera reguły WAF (np. ochrona przed SQLi, XSS), ale podstawowym narzędziem do egzekwowania polityk dostępu opartych na tożsamości ("access control policies") jest IAP.
+- D. Shielded VMs: Zapewniają bezpieczeństwo na poziomie integralności systemu operacyjnego i bootowania maszyn wirtualnych, ale nie zarządzają dostępem użytkowników do zasobów aplikacji.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. DLP to standard dla czyszczenia danych deweloperskich.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Enforce access control" + "Applications" -> IAP (Identity-Aware Proxy).
+- IAP to kluczowy produkt dla strategii BeyondCorp (Zero Trust) w Google Cloud.
+- Pamiętaj, że IAP sprawdza uprawnienia IAM przed dopuszczeniem ruchu do backendu.
+
+Kluczowe zagadnienia do powtórzenia:
+- Zasada działania Cloud IAP.
+- Model bezpieczeństwa Zero Trust.
+- Różnica między IAP, Cloud Armor i Cloud VPN.
+
+Dokumentacja:
+<a href="https://cloud.google.com/iap/docs/concepts-overview" target="_blank">Cloud Identity-Aware Proxy overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

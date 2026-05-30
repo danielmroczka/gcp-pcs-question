@@ -89,15 +89,28 @@ Your company has been creating users manually in Cloud Identity to provide acces
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Potwierdzona odpowiedź: A (1. Configure the option to suspend domain users not found in LDAP. 2. Set up a recurring GCDS task.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Suspend + Recurring: Aby AD/LDAP było jedynym źródłem prawdy, GCDS musi działać w pętli (recurring). Opcja 'Suspend' (zawieszenie konta) jest bezpieczniejsza niż usuwanie (Delete) – pozwala na odzyskanie danych, jeśli ktoś został omyłkowo usunięty z LDAP, jednocześnie blokując dostęp nieuprawnionym (tym, których nie ma w LDAP).
+Wyjaśnienie:
+- Suspend users (Zawieszenie użytkowników): Wybranie opcji zawieszenia użytkowników, których nie znaleziono w LDAP, gwarantuje, że każde konto w Cloud Identity, które zostało utworzone ręcznie lub przestało istnieć w źródłowym systemie LDAP, zostanie zablokowane. Jest to bezpieczniejsze niż usuwanie (Delete), ponieważ pozwala na zachowanie danych i ich ewentualne odzyskanie.
+- Recurring task (Zadanie cykliczne): Aby GCDS skutecznie zarządzał cyklem życia kont (onboarding/offboarding), synchronizacja musi odbywać się automatycznie i regularnie. GCDS nie jest procesem działającym w tle (daemon), więc wymaga harmonogramu (np. cron lub Task Scheduler).
 
-Dlaczego inne są błędne:
-C, D. Exclude: Jeśli wykluczysz ręcznie stworzone konta, to one nadal będą aktywne i będą stanowić lukę w polityce 'jedynego źródła prawdy'. Celem jest ich wyeliminowanie.
+Dlaczego pozostałe są błędne:
+- B: Usuwanie (Delete) kont, których nie ma w LDAP, jest ryzykowne, zwłaszcza na początku wdrażania GCDS, ponieważ może prowadzić do nieodwracalnej utraty danych użytkowników utworzonych wcześniej ręcznie. Dodatkowo, uruchamianie GCDS tylko po zmianach nie gwarantuje spójności przy braku automatyzacji.
+- C i D: Skonfigurowanie atrybutów wyszukiwania w celu wykluczenia (Exclude) ręcznie utworzonych użytkowników spowodowałoby, że GCDS po prostu by ich ignorował. Oznacza to, że te konta pozostałyby aktywne i poza kontrolą, co bezpośrednio narusza wymóg "Disable any manually created users".
 
-Konsensus społeczności ExamTopics: 100% na A. 'Suspend' to złoty standard wdrożeń Enterprise.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- GCDS to synchronizacja jednostronna (LDAP -> Google).
+- "Suspend" jest najlepszą praktyką (bezpieczeństwo danych + blokada dostępu).
+- "Recurring task" to klucz do automatyzacji cyklu życia tożsamości.
+
+Kluczowe zagadnienia do powtórzenia:
+- Mechanizm synchronizacji Google Cloud Directory Sync (GCDS).
+- Lifecycle management (zarządzanie cyklem życia użytkownika).
+- Reguły wykluczania i zawieszania w GCDS.
+
+Dokumentacja:
+- <a href="https://support.google.com/a/answer/612003" target="_blank">GCDS: Suspend or delete users</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

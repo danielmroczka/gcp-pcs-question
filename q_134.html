@@ -89,18 +89,32 @@ You need to set up a Cloud interconnect connection between your company's on-pre
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: AD.
+Potwierdzona odpowiedź: D (Use restricted googleapis.com to access Google APIs using a set of IP addresses only routable from within Google Cloud, which are advertised as routes over the Cloud Interconnect connection).
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Authorized Views: Pozwalają na udostępnienie partnerowi wyniku zapytania SQL (widoku), który nie zawiera kolumn PII, bez dawania im dostępu do tabel źródłowych.
-D. Cloud DLP: Służy do automatycznego wykrywania i maskowania/tokenizacji danych wrażliwych przed ich wystawieniem lub w samej tabeli, co zapewnia, że partner nigdy nie zobaczy danych PII.
+Wyjaśnienie:
+Aby umożliwić aplikacjom on-premises dostęp do usług Google Cloud przy jednoczesnym zachowaniu ochrony VPC Service Controls (VPC SC), należy skonfigurować dostęp przez domenę `restricted.googleapis.com`.
+1. `restricted.googleapis.com` rozwiązuje się na zakres adresów IP `199.36.153.4/30`, który nie jest rutowalny w internecie.
+2. Ten zakres musi być rozgłoszony do sieci on-premises przez Cloud Interconnect (BGP).
+3. Kluczową cechą `restricted.googleapis.com` jest to, że obsługuje ona wyłącznie API wspierane przez VPC Service Controls. Jeśli aplikacja spróbuje połączyć się z usługą, która nie jest wspierana (i tym samym mogłaby służyć do exfiltracji danych), połączenie zostanie zablokowane. Jest to wymaganie bezpośrednio wymienione w zadaniu.
 
-Dlaczego inne są błędne:
-B. VPC Service Controls: Chroni przed kradzieżą danych, ale nie rozwiązuje problemu 'co partner widzi wewnątrz uprawnionego połączenia'.
-C. IAM roles: Jeśli dasz partnerowi rolę na dacie, zobaczy wszystko (PII również).
-E. Shared VPC: To warstwa sieciowa, partnerzy zazwyczaj nie łączą się przez Shared VPC do BigQuery (korzystają z publicznego API lub Analytics Hub).
+Dlaczego pozostałe są błędne:
+- A. Enable Private Google Access on the regional subnets...: Private Google Access (PGA) dotyczy instancji wewnątrz VPC, a nie hostów on-premises. Ponadto samo PGA nie wymusza korzystania wyłącznie z API wspieranych przez VPC SC.
+- B. Set up a Private Service Connect endpoint... bundle of "all-apis": Private Service Connect (PSC) to nowoczesna metoda, ale paczka "all-apis" zawiera wszystkie usługi Google, w tym te niewspierane przez VPC SC, co narusza wymóg minimalizacji ryzyka exfiltracji do nieobsługiwanych API.
+- C. Use private.googleapis.com...: Domena `private.googleapis.com` (`199.36.153.8/30`) pozwala na dostęp do większości usług Google (w tym Map, YouTube itp.), które nie są wspierane przez VPC Service Controls. Nie zapewnia więc ochrony przed exfiltracją danych do usług spoza perymetru bezpieczeństwa.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na AD. Duet Widoki + DLP to standard ochrony prywatności w analityce.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Słowo klucz "VPC Service Controls" + "on-premises/Interconnect" = zawsze szukaj `restricted.googleapis.com`.
+- `restricted.googleapis.com` = tylko usługi wspierane przez VPC SC.
+- `private.googleapis.com` = prawie wszystkie usługi Google (szerszy zakres, mniejsze bezpieczeństwo).
+- Pamiętaj o konfiguracji DNS w sieci on-premises, aby mapować żądania do API na te specjalne zakresy IP.
+
+Kluczowe zagadnienia do powtórzenia:
+- VPC Service Controls (VPC SC).
+- Private Google Access for on-premises hosts.
+- Różnice między `restricted.googleapis.com` a `private.googleapis.com`.
+
+Dokumentacja:
+<a href="https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity" target="_blank">Konfiguracja prywatnej łączności dla VPC Service Controls</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

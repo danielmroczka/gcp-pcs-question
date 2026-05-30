@@ -89,31 +89,28 @@ Your company's chief information security officer (CISO) is requiring business d
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Potwierdzona odpowiedź: C (Project).
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Folder Admin: Rola `roles/resourcemanager.folderAdmin` daje pełną władzę nad folderem, w tym możliwość edycji jego polityki IAM (kto ma do niego dostęp).
+Wyjaśnienie:
+- Granular Control (Szczegółowa kontrola): Pytanie zaznacza, że projekty są dopasowane do konkretnych lokalizacji (Projects are aligned to specific locations), a struktura folderów może zawierać wiele lokalizacji rezydencji danych. Aby zapewnić "bardzo szczegółową kontrolę" (very granular control), politykę ograniczenia lokalizacji zasobów (Resource Location Restriction) należy ustawić na poziomie Projektu. Pozwala to na precyzyjne określenie, w którym regionie mogą powstawać zasoby dla każdego projektu z osobna, nawet jeśli projekty te znajdują się w tym samym folderze.
 
-Dlaczego inne są błędne:
-B. Folder Editor: Pozwala tworzyć projekty wewnątrz, ale celowo NIE pozwala na zmianę polityk IAM (uprawnień) dla tego foldera.
-C. Security Admin: Pozwala na zarządzanie rolami w całym projekcie/organizacji, ale `folderAdmin` (A) jest bardziej specyficzną i kompletną rolą dla zarządzania folderami.
-D. Project IAM Admin: Jak sama nazwa wskazuje, ogranicza się do poziomu Projektu, nie Foldera.
+Dlaczego pozostałe są błędne:
+- A. Organization: Ustawienie na poziomie organizacji wymusiłoby te same lokalizacje dla wszystkich projektów w całej firmie, co nie zapewnia szczegółowej kontroli (granular control).
+- B. Resource: Polityki organizacji (Organization Policies) nie są ustawiane bezpośrednio na poziomie pojedynczych zasobów (takich jak instancja VM czy bucket GCS), lecz na węzłach hierarchii zasobów (Org, Folder, Project).
+- D. Folder: Chociaż folder zapewnia pewien poziom granularności, treść pytania mówi, że foldery mogą zawierać projekty z różnymi wymaganiami co do lokalizacji. Ustawienie na poziomie foldera byłoby zbyt ogólne w tym konkretnym scenariuszu.
 
-Konsensus społeczności ExamTopics: 100% na A. To rola 'wszechwładna' na poziomie foldera.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Hierarchia Org Policy: Org -> Folder -> Project. Najniższy (najbardziej szczegółowy) poziom to Projekt.
+- Jeśli projekty wewnątrz jednego foldera mają inne wymagania (np. jeden musi być w UE, inny w USA), jedynym sposobem na granularną kontrolę jest poziom Projektu.
+
+Kluczowe zagadnienia do powtórzenia:
+- Hierarchia zasobów w Google Cloud.
+- Organization Policy Service i więzy (constraints).
+- Rezydencja danych (Data Residency) i ograniczenia lokalizacji.
+
+Dokumentacja:
+<a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">Ograniczanie lokalizacji zasobów w Google Cloud</a>
 </pre>
-</div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
-<div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Na forach podkreśla się zasadę dziedziczenia. Folder Admin (A) może nadać uprawnienia na folderze, które automatycznie 'spłyną' na wszystkie projekty pod nim. To potężna rola, którą należy nadawać rzadko.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/access-control-folders" target="_blank">https://cloud.google.com/resource-manager/docs/access-control-folders</a></li>
-
-</ul>
-</div>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {

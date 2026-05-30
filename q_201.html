@@ -64,7 +64,7 @@
 <h2>Question 201 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your company's Google Cloud organization has about 200 projects and 1,500 virtual machines. There is no uniform strategy for logs and events management, which reduces visibility for your security operations team. You need to design a logs management solution that provides visibility and allows the security team to view the environment's configuration.<br/>What should you do?
+Your company's Google Cloud organization has about 200 projects and 1,500 virtual machines. There is no uniform strategy for logs and events management, which reduces visibility for your security operations team. You need to design a logs management solution that provides visibility and allows the security team to view the environment's configuration.
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,43 +89,41 @@ Your company's Google Cloud organization has about 200 projects and 1,500 virtua
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (1. Create one log sink at the organization level that includes all the child resources. 2. Use as destination a Pub/Sub topic to ingest the logs into the security information and event management (SIEM) on-premises. 3. Grant the Viewer role at organization level to the security operations team)
+Potwierdzona odpowiedź: B (1. Create one log sink at the organization level that includes all the child resources. 2. Use as destination a Pub/Sub topic to ingest the logs into the security information and event management (SIEM) on-premises. 3. Grant the Viewer role at organization level to the security operations team).
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Agregowanie logów (Aggregated Sinks): W organizacji posiadającej 200 projektów, tworzenie oddzielnych sinków w każdym z nich jest nieefektywne i trudne do zarządzania. Jeden sink na poziomie organizacji z zaznaczoną opcją "include children" automatycznie zbiera logi ze wszystkich obecnych i przyszłych projektów.
-- Integracja z SIEM przez Pub/Sub: Pub/Sub jest standardowym mechanizmem Google Cloud do przesyłania strumieniowego logów do systemów zewnętrznych (takich jak on-premises SIEM, Splunk czy Chronicle). Zapewnia on niskie opóźnienia i wysoką niezawodność.
+- Integracja z SIEM przez Pub/Sub: Pub/Sub jest standardowym mechanizmem Google Cloud do przesyłania strumieniowego logów do systemów zewnętrznych (takich jak on-premises SIEM, Splunk czy Chronicle). Zapewnia on niskie opóźnienia i wysoką niezawodność przy dużej skali danych.
 - Widoczność konfiguracji: Nadanie roli `Viewer` na poziomie organizacji pozwala zespołowi bezpieczeństwa na przeglądanie konfiguracji wszystkich zasobów (metadata) w całej firmie, co jest niezbędne do audytu, przy jednoczesnym zachowaniu zasady Least Privilege (brak uprawnień do zmiany danych).
 
-Analiza niepoprawnych odpowiedzi:
-- A. Project-level sinks + BigQuery: Tworzenie 200 sinków ręcznie jest błędem operacyjnym. BigQuery jest świetne do analizy SQL, ale SIEM-y on-premises zazwyczaj wymagają strumienia danych (Pub/Sub) zamiast zapytań do bazy. Rola `Monitoring Viewer` nie daje pełnej widoczności konfiguracji zasobów tak jak rola `Viewer`.
-- C. No log sinks: Brak sinków oznacza, że logi są dostępne tylko przez 30 dni (domyślnie) w każdym projekcie z osobna. Uniemożliwia to centralną analizę w SIEM i długoterminowe przechowywanie.
-- D. Production folder sink: To rozwiązanie jest zbyt wąskie – pomija logi z projektów deweloperskich, testowych czy z poziomu samej organizacji, co tworzy luki w widoczności bezpieczeństwa. Rola `Security Reviewer` jest bardzo przydatna, ale sama w sobie nie zapewnia logów w SIEM.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A. Project-level sinks + BigQuery: Tworzenie 200 sinków ręcznie jest błędem operacyjnym. BigQuery jest świetne do analizy SQL, ale SIEM-y on-premises zazwyczaj wymagają ciągłego strumienia danych (Pub/Sub) zamiast zapytań do bazy. Rola `Monitoring Viewer` nie daje pełnej widoczności konfiguracji zasobów tak jak rola `Viewer`.
+- C. No log sinks: Brak sinków oznacza, że logi są dostępne tylko przez 30 dni (domyślnie) w każdym projekcie z osobna. Uniemożliwia to centralną analizę w SIEM i długoterminowe przechowywanie wymagane dla compliance.
+- D. Production folder sink: To rozwiązanie jest zbyt wąskie – pomija logi z projektów deweloperskich, testowych czy z poziomu samej organizacji, co tworzy niebezpieczne "martwe punkty" w monitoringu. Rola `Security Reviewer` jest przydatna, ale sama w sobie nie zapewnia logów w SIEM.
 
-Wskazówki i triki (Tips & Tricks):
+Wskazówki egzaminacyjne (Tips & Tricks):
 - "Organization-wide visibility" + "SIEM" = Aggregated Sink + Pub/Sub.
-- Pamiętaj: Agregowane sinki mogą być tworzone na poziomie Organizacji lub Folderu.
-- Jeśli celem jest analiza SQL w GCP -> wybierz BigQuery. Jeśli celem jest SIEM/Zewnętrzny system -> wybierz Pub/Sub.
+- Słowo klucz: "Scale" lub "200 projects" sugeruje rozwiązanie na poziomie Organizacji (Organization-level).
+- Jeśli celem jest analiza SQL wewnątrz GCP -> wybierz BigQuery. Jeśli celem jest SIEM lub system zewnętrzny -> wybierz Pub/Sub.
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj uprawnienia: Aby stworzyć agregowany sink, musisz mieć uprawnienia `Logging Admin` lub `Project Creator` na poziomie organizacji.
-- Konta serwisowe sinków: Przy tworzeniu sinka na poziomie organizacji powstaje unikalne konto serwisowe, któremu musisz nadać uprawnienia do zapisu w miejscu docelowym (np. Pub/Sub Publisher).
+Kluczowe zagadnienia do powtórzenia:
+- Aggregated Sinks (Agregowane Sinki).
+- Log Sinks i ich cele (Cloud Storage, BigQuery, Pub/Sub).
+- Rola IAM Viewer vs Security Reviewer.
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/logging/docs/export/aggregated_sinks" target="_blank">Aggregated sinks overview</a>
-- <a href="https://cloud.google.com/architecture/exporting-stackdriver-logs-to-splunk" target="_blank">Exporting logs to SIEM (Splunk example)</a>
-- <a href="https://cloud.google.com/iam/docs/understanding-roles#logging-roles" target="_blank">Logging IAM roles</a>
+Dokumentacja:
+<a href="https://cloud.google.com/logging/docs/export/aggregated_sinks" target="_blank">Aggregated sinks overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
+<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
+<h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje umiejętność projektowania architektury "Logging & Monitoring" w skali Enterprise. Kluczowym wyzwaniem w dużych organizacjach jest eliminacja "martwych punktów" (blind spots). Agregowany sink na poziomie organizacji jest jedynym sposobem, aby zagwarantować, że każdy nowo powstały projekt będzie od pierwszej sekundy objęty monitoringiem bezpieczeństwa.</p>
-<h3>Dodatkowe wskazówki</h3>
+<p><b>Głęboka analiza:</b> To pytanie testuje umiejętność projektowania architektury "Logging & Monitoring" w skali Enterprise. Kluczowym wyzwaniem w dużych organizacjach jest eliminacja "martwych punktów" (blind spots). Agregowany sink na poziomie organizacji jest jedynym sposobem, aby zagwarantować, że każdy nowo powstały projekt będzie od pierwszej sekundy objęty monitoringiem bezpieczeństwa bez interwencji ludzkiej.</p>
+<h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li>Możesz używać filtrów w sinku, aby przesyłać do SIEM tylko logi o krytycznym znaczeniu (np. Audit Logs, VPC Flow Logs), oszczędzając na kosztach transferu i licencji SIEM.</li>
-<li>Pamiętaj, że logi w Cloud Logging są przechowywane przez określony czas (retencja), a sinki służą do ich eksportu poza ten domyślny magazyn.</li>
+<li><a href="https://cloud.google.com/architecture/exporting-stackdriver-logs-to-splunk" target="_blank">Exporting logs to SIEM (Splunk example)</a></li>
 </ul>
 </div>
 </div>

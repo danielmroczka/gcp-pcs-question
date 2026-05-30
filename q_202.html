@@ -64,7 +64,7 @@
 <h2>Question 202 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your Google Cloud organization allows for administrative capabilities to be distributed to each team through provision of a Google Cloud project with Owner role (roles/owner). The organization contains thousands of Google Cloud projects. Security Command Center Premium has surfaced multiple OPEN_MYSQL_PORT findings. You are enforcing the guardrails and need to prevent these types of common misconfigurations.<br/>What should you do?
+Your Google Cloud organization allows for administrative capabilities to be distributed to each team through provision of a Google Cloud project with Owner role (roles/owner). The organization contains thousands of Google Cloud projects. Security Command Center Premium has surfaced multiple OPEN_MYSQL_PORT findings. You are enforcing the guardrails and need to prevent these types of common misconfigurations.
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,43 +89,41 @@ Your Google Cloud organization allows for administrative capabilities to be dist
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Create a hierarchical firewall policy configured at the organization to allow connections only from internal IP ranges)
+Potwierdzona odpowiedź: B (Create a hierarchical firewall policy configured at the organization to allow connections only from internal IP ranges).
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Hierarchiczne polityki firewalla (Hierarchical Firewall Policies): Pozwalają na definiowanie i wymuszanie reguł na poziomie całej organizacji lub folderów. Są one sprawdzane PRZED tradycyjnymi regułami firewalla VPC w poszczególnych projektach.
 - Guardrails (Barierki ochronne): Ponieważ organizacja posiada tysiące projektów, z których każdy ma swojego Ownera (posiadającego pełne uprawnienia do swojej sieci VPC), jedynym sposobem na "twarde" zablokowanie niebezpiecznych konfiguracji (takich jak publicznie otwarty port MySQL 3306) jest narzucenie reguły z góry.
 - Skuteczność: Reguła "allow only from internal IP" na poziomie organizacji automatycznie blokuje wszelkie próby otwarcia MySQL (i innych portów) na świat (0.0.0.0/0), nawet jeśli Project Owner stworzy regułę "Allow" w swojej sieci VPC.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Deny all from 0.0.0.0/0: Choć brzmi poprawnie, restrykcja "deny all" mogłaby zablokować również legalny ruch (np. HTTP/HTTPS dla serwerów webowych). Opcja B (tylko ruch wewnętrzny) jest bardziej precyzyjna dla baz danych, które z definicji nie powinny być wystawione na internet.
-- C. Google Cloud Armor: Cloud Armor służy do ochrony aplikacji webowych za Load Balancerem (L7). MySQL działa na poziomie TCP (L4) i zazwyczaj nie jest umieszczany za HTTP(S) Load Balancerem. Cloud Armor nie jest narzędziem do ochrony tysięcy rozproszonych projektów przed błędami firewalla VPC.
+- C. Google Cloud Armor: Cloud Armor służy do ochrony aplikacji webowych za Load Balancerem (Warstwa 7). MySQL działa na poziomie TCP (Warstwa 4) i zazwyczaj nie jest umieszczany za HTTP(S) Load Balancerem. Cloud Armor nie jest narzędziem do ochrony tysięcy rozproszonych projektów przed błędami firewalla VPC.
 - D. Firewall rule for each VPC: Przy tysiącach projektów, ręczne tworzenie reguł w każdym z nich jest operacyjnie niemożliwe i nieskuteczne (Owner projektu mógłby taką regułę usunąć lub zmienić jej priorytet).
 
-Wskazówki i triki (Tips & Tricks):
+Wskazówki egzaminacyjne (Tips & Tricks):
 - "Prevent misconfigurations at scale" + "Network guardrails" = Hierarchical Firewall Policies.
-- Pamiętaj o hierarchii sprawdzania firewalla: Polityka Organizacji -> Polityka Folderu -> Reguły VPC. 
+- Pamiętaj o hierarchii sprawdzania firewalla: Polityka Organizacji -> Polityka Folderu -> Reguły VPC.
 - "First match wins": Jeśli polityka hierarchiczna dopasuje ruch i go zablokuje, reguły wewnątrz projektu nie są nawet sprawdzane.
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj, że do stworzenia hierarchicznej polityki potrzebujesz roli `Compute Security Admin` na poziomie organizacji lub folderu.
-- Możesz używać akcji `goto_next`, aby polityka hierarchiczna pozwoliła na dalsze sprawdzenie reguł wewnątrz projektu (delegacja), ale w tym pytaniu celem jest "wymuszenie" (enforcement).
+Kluczowe zagadnienia do powtórzenia:
+- Hierarchical Firewall Policies (Hierarchiczne polityki firewalla).
+- Priorytety reguł firewalla i kolejność ich przetwarzania.
+- Rola IAM Compute Security Admin.
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/vpc/docs/firewall-policies" target="_blank">Hierarchical firewall policies overview</a>
-- <a href="https://cloud.google.com/vpc/docs/firewall-policies-concepts" target="_blank">Firewall policies concepts</a>
-- <a href="https://cloud.google.com/security-command-center/docs/how-to-remediate-firewall-vulnerabilities" target="_blank">Remediating SCC firewall findings</a>
+Dokumentacja:
+<a href="https://cloud.google.com/vpc/docs/firewall-policies" target="_blank">Hierarchical firewall policies overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
+<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
+<h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje fundamentalny koncept "Centralized Control vs Decentralized Management". W Google Cloud możesz dać zespołom wolną rękę w projektach (Owner), ale musisz otoczyć ich bezpiecznymi ramami (guardrails), których nie mogą przekroczyć. Hierarchiczne polityki firewalla są "betonowym płotem" wokół Twojej organizacji sieciowej.</p>
-<h3>Dodatkowe wskazówki</h3>
+<p><b>Głęboka analiza:</b> To pytanie testuje fundamentalny koncept "Centralized Control vs Decentralized Management". W Google Cloud możesz dać zespołom wolną rękę w projektach (Owner), ale musisz otoczyć ich bezpiecznymi ramami (guardrails), których nie mogą przekroczyć. Hierarchiczne polityki firewalla są "betonowym płotem" wokół Twojej organizacji sieciowej.</p>
+<h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li>Warto wspomnieć o funkcji "Dry-run" dla polityk hierarchicznych, która pozwala przetestować wpływ globalnych reguł przed ich faktycznym wdrożeniem.</li>
-<li>Pamiętaj, że polityki te można stosować również do sieci VPC współdzielonych (Shared VPC).</li>
+<li><a href="https://cloud.google.com/vpc/docs/firewall-policies-concepts" target="_blank">Firewall policies concepts</a></li>
 </ul>
 </div>
 </div>

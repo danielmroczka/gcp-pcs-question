@@ -89,16 +89,29 @@ Your company requires the security and network engineering teams to identify all
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Potwierdzona odpowiedź: C (Enable VPC Flow Logs on the subnet.)
 
-Wyjaśnienie (Dlaczego poprawna):
-C. VPC Flow Logs: Rejestrują pakiety IP przepływające przez interfejsy sieciowe. Są najbardziej wydajną i skalowalną metodą na wykrywanie nietypowych wzorców ruchu (anomalii) bez zbierania pełnej zawartości pakietów.
+Wyjaśnienie:
+- Monitorowanie anomalii: VPC Flow Logs to standardowe narzędzie do monitorowania ruchu sieciowego w Google Cloud. Rejestrują one metadane o przepływach IP (źródło, cel, porty, protokół, liczba pakietów/bajtów), co pozwala na statystyczną analizę i wykrywanie anomalii (nietypowych wzorców ruchu).
+- Szeroki zakres: Flow Logi rejestrują ruch wewnątrz VPC (VM do VM), między różnymi VPC, ruch do/z internetu oraz ruch do usług Google Cloud. Jest to najbardziej skalowalne rozwiązanie dla środowisk produkcyjnych.
+- Integracja: Dane te są przesyłane do Cloud Logging i mogą być analizowane w czasie rzeczywistym lub eksportowane do systemów SIEM.
 
-Dlaczego inne są błędne:
-B. Packet mirroring: Kopiuje pełne pakiety (łącznie z treścią). Jest to bardzo drogie i zazwyczaj używane do IDS, a nie do ogólnej identyfikacji anomalii przepływów, gdzie Flow Logi (C) są wystarczające i tańsze.
-D. Audit Logs: Widzą kto zmienił konfigurację, ale nie widzą samego ruchu sieciowego.
+Dlaczego pozostałe są błędne:
+- A: Organization policy constraints służą do wymuszania konfiguracji (np. zakaz przypisywania publicznych IP), ale nie monitorują bieżącego ruchu sieciowego i nie wykrywają anomalii w przepływach danych.
+- B: Packet Mirroring służy do kopiowania pełnej zawartości pakietów (payload) w celach głębokiej inspekcji (IDS/IPS). Jest to rozwiązanie znacznie droższe i generujące ogromne ilości danych, zazwyczaj stosowane punktowo, a nie jako główna metoda wykrywania anomalii w całej sieci produkcyjnej.
+- D: Cloud Audit Logs rejestrują zmiany w konfiguracji zasobów (np. "kto dodał regułę firewalla"), ale nie widzą samego ruchu sieciowego przepływającego przez te zasoby.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla C. Flow Logi to standardowy sensor sieciowy.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Identify network anomalies" + "Production" = VPC Flow Logs (skalowalność i efektywność kosztowa).
+- Flow Logi są domyślnie próbkowane (sampling), co jest wystarczające do wykrywania większości anomalii sieciowych.
+
+Kluczowe zagadnienia do powtórzenia:
+- Zastosowania VPC Flow Logs w bezpieczeństwie.
+- Różnica między Flow Logs (metadane) a Packet Mirroring (pełne pakiety).
+- Analiza logów w Cloud Logging.
+
+Dokumentacja:
+- <a href="https://cloud.google.com/vpc/docs/using-flow-logs" target="_blank">Korzystanie z VPC Flow Logs</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

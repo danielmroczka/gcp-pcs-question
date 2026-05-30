@@ -89,43 +89,39 @@ A service account key has been publicly exposed on multiple public code reposito
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Delete the compromised service account)
+Potwierdzona odpowiedź: A (Delete the compromised service account).
 
-Dlaczego ta odpowiedź jest poprawna:
-- Powaga sytuacji: Jeśli klucz konta serwisowego został upubliczniony (np. na GitHubie) i logi wskazują, że został JUŻ użyty do generowania krótkotrwałych poświadczeń (short-lived credentials), oznacza to, że atakujący posiada aktywny dostęp.
-- Natychmiastowe usunięcie dostępu: Usunięcie samego konta serwisowego (A) jest najbardziej drastycznym, ale i najskuteczniejszym krokiem. Powoduje ono natychmiastowe unieważnienie wszystkich wygenerowanych na jego podstawie tokenów oraz uniemożliwia jakiekolwiek dalsze działania przy użyciu tego konta.
-- Przerwanie sesji: W przypadku wycieku klucza, samo "wyłączenie klucza" (B) może nie wystarczyć, jeśli atakujący zdążył już wygenerować tokeny OAuth, które mogą być ważne jeszcze przez jakiś czas. Usunięcie konta czyści wszystko "do zera".
+Wyjaśnienie:
+Wyciek klucza konta serwisowego (JSON key) do publicznych repozytoriów to poważny incydent. Jeśli logi wskazują, że klucz został już użyty do generowania krótkotrwałych poświadczeń (tokenów OAuth), samo wyłączenie klucza (Disable key) może nie wystarczyć, ponieważ aktywne tokeny mogą nadal działać przez pewien czas (standardowo do 1 godziny). Usunięcie całego konta serwisowego (Delete account) jest najskuteczniejszą i najszybszą metodą natychmiastowego przerwania wszelkiego dostępu – unieważnia ono wszystkie powiązane klucze oraz aktywne sesje i tokeny oparte na tym koncie.
 
-Analiza niepoprawnych odpowiedzi:
-- B. Disable the compromised service account key: Choć jest to dobry krok "pierwszej pomocy", usunięcie całego konta (A) daje 100% pewności, że żadne powiązane uprawnienia ani wcześniej wygenerowane tokeny nie zadziałają. W scenariuszu egzaminacyjnym, gdzie wymagane jest "natychmiastowe usunięcie dostępu" przy trwającym ataku, opcja A jest traktowana jako nadrzędna.
-- C. Wait until credentials expire: To zaproszenie dla atakującego do kontynuowania kradzieży danych lub niszczenia infrastruktury. Nigdy nie czekaj w przypadku naruszenia bezpieczeństwa.
-- D. Rotate the compromised service account key: Rotacja polega na stworzeniu nowego klucza i usunięciu starego. Jest to proces standardowy dla utrzymania higieny, ale w sytuacji AKTYWNEGO wycieku, atakujący wciąż może korzystać z wygenerowanych wcześniej tokenów.
+Dlaczego pozostałe są błędne:
+- B. Disable the compromised service account key: Jest to dobra praktyka, ale w sytuacji aktywnego ataku z użyciem tokenów, usunięcie konta (A) daje większą pewność całkowitego odcięcia intruza.
+- C. Wait until credentials expire: To działanie skrajnie niebezpieczne, pozwalające atakującemu na dalszą kradzież danych lub niszczenie zasobów przez czas ważności tokenów.
+- D. Rotate the compromised key: Rotacja klucza w trakcie trwającego incydentu nie rozwiązuje problemu już wygenerowanych i aktywnych tokenów sesyjnych, którymi posługuje się atakujący.
 
-Wskazówki i triki (Tips & Tricks):
-- "Publicly exposed key" + "Immediate removal" = Delete account lub Disable account.
-- Unikaj przechowywania kluczy JSON (Service Account Keys). Zamiast tego używaj Workload Identity lub Instance Service Accounts.
-- Pamiętaj: Klucze kont serwisowych nie wygasają same z siebie (mają ważność 10 lat lub więcej).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Sytuacje typu "Public exposure" wymagają najbardziej zdecydowanych działań.
+- Pamiętaj o zasadzie: usunięcie konta = natychmiastowe unieważnienie wszystkich tokenów.
+- Najlepszą praktyką zapobiegawczą jest nieużywanie kluczy JSON (Service Account Keys) i zastąpienie ich Workload Identity.
 
-Praktyczne informacje na egzamin:
-- Zrozum różnicę między kluczem (Key) a tokenem (Token). Klucz służy do generowania tokenów. Nawet jeśli usuniesz klucz, token może działać do godziny (standardowy TTL).
-- Google zaleca automatyzację wykrywania kluczy w repozytoriach (np. przez GitHub Secret Scanning), co pozwala na automatyczne wyłączanie kluczy zaraz po ich wycieku.
+Kluczowe zagadnienia do powtórzenia:
+- Różnica między kluczem konta serwisowego (Key) a tokenem dostępowym (Access Token).
+- Procedury reagowania na incydenty (Incident Response) w GCP.
+- TTL (Time-to-Live) dla poświadczeń krótkotrwałych.
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/iam/docs/service-accounts#compromised-key" target="_blank">Handling compromised service account keys</a>
-- <a href="https://cloud.google.com/iam/docs/best-practices-for-managing-service-account-keys" target="_blank">Best practices for service account keys</a>
-- <a href="https://cloud.google.com/iam/docs/short-lived-credentials" target="_blank">Understanding short-lived credentials</a>
+Dokumentacja:
+<a href="https://cloud.google.com/iam/docs/service-accounts#compromised-key" target="_blank">Postępowanie z naruszonymi kluczami kont serwisowych</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
+<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
+<h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją reakcję na incydent bezpieczeństwa. W chmurze każda sekunda zwłoki to ryzyko. Usunięcie konta serwisowego to opcja "nuklearna", która może przerwać działanie legalnych aplikacji, ale w obliczu kradzieży poświadczeń priorytetem jest zatrzymanie intruza. Na egzaminie Google kładzie duży nacisk na to zdecydowane podejście.</p>
-<h3>Dodatkowe wskazówki</h3>
+<p><b>Głęboka analiza:</b> Zadanie testuje reakcję na krytyczny błąd bezpieczeństwa. W chmurze czas reakcji jest kluczowy. Usunięcie konta to opcja "nuklearna", która może przerwać działanie legalnych procesów, ale w obliczu trwającego ataku bezpieczeństwo danych i infrastruktury jest priorytetem nadrzędnym.</p>
+<h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li>Zanim usuniesz konto, sprawdź w logach, co dokładnie zostało skradzione i jakie operacje wykonał intruz.</li>
-<li>Po incydencie musisz odtworzyć konto serwisowe (z nowym ID) i zaktualizować wszystkie legalne aplikacje, które go używały.</li>
+<li><a href="https://cloud.google.com/iam/docs/service-accounts#compromised-key" target="_blank">https://cloud.google.com/iam/docs/service-accounts#compromised-key</a></li>
 </ul>
 </div>
 </div>

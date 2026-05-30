@@ -89,31 +89,29 @@ You work for an organization in a regulated industry that has strict data protec
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Potwierdzona odpowiedź: D (Store the data in a Cloud Storage bucket, and configure the bucket's Object Lifecycle Management feature).
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Automatic rotation schedule: Cloud KMS posiada natywną funkcję automatycznej rotacji. Możesz ustawić okres rotacji (np. co 30 dni), a Google samo wygeneruje nową wersję klucza i ustawi ją jako wersję podstawową (Primary) dla nowych operacji szyfrowania.
+Wyjaśnienie:
+- Cloud Storage Object Lifecycle Management: Jest to optymalne rozwiązanie dla kopii zapasowych (backups), ponieważ Cloud Storage oferuje najniższe koszty przechowywania (klasy Nearline, Coldline, Archive). Funkcja Lifecycle Management pozwala na automatyczne usuwanie obiektów po określonym czasie (warunek "Age") bez konieczności pisania skryptów, co spełnia wymaganie automatyzacji i minimalizacji kosztów.
 
-Dlaczego inne są błędne:
-A. Manually: Niezgodne z wymogiem 'most efficient' (najbardziej efektywne).
-C. Script: Zbyteczne skomplikowanie, gdy funkcja jest już wbudowana w usługę.
-D. Fałsz. KMS wspiera rotację od 24 godzin do wielu lat.
+Dlaczego pozostałe są błędne:
+- A. Persistent Disk: Dyski trwałe są znacznie droższe niż Cloud Storage i nie oferują natywnej funkcji automatycznego usuwania po określonym czasie bez użycia skryptów lub dodatkowych narzędzi.
+- B. Cloud Bigtable: Jest to baza danych NoSQL o wysokiej wydajności, przeznaczona do dużych obciążeń analitycznych i operacyjnych, a nie do taniego przechowywania kopii zapasowych. Chociaż ma funkcję "garbage collection" (TTL) na poziomie rodzin kolumn, koszty przechowywania danych byłyby nieproporcjonalnie wysokie.
+- C. BigQuery: Jest to magazyn danych (data warehouse). Chociaż pozwala na ustawienie czasu wygaśnięcia tabeli (expiration time), jest droższy od Cloud Storage w scenariuszu czystego backupu danych binarnych lub plików logów.
 
-Konsensus społeczności ExamTopics: 100% na B. Wykorzystaj wbudowane automaty platformy.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Minimize storage costs" + "Backups" = Zawsze myśl o Cloud Storage (GCS).
+- "Automate deletion after period" = Object Lifecycle Management (GCS) lub TTL (BigQuery/Bigtable).
+- Zwróć uwagę na rodzaj danych – kopie zapasowe rzadko wymagają bazy danych typu Bigtable.
+
+Kluczowe zagadnienia do powtórzenia:
+- Klasy przechowywania Cloud Storage (Standard, Nearline, Coldline, Archive).
+- Object Lifecycle Management i dostępne warunki (Age, CreatedBefore, IsLive).
+- Retencja danych i polityki usuwania w różnych usługach GCP.
+
+Dokumentacja:
+<a href="https://cloud.google.com/storage/docs/lifecycle" target="_blank">Zarządzanie cyklem życia obiektów w Cloud Storage</a>
 </pre>
-</div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
-<div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Ważny detal techniczny: po rotacji klucza, stare wersje nadal istnieją i są używane do DESZYFROWANIA starych danych. Nowa wersja (Primary) służy tylko do SZYFROWANIA nowych danych. To zapewnia ciągłość dostępu bez konieczności re-szyfrowania wszystkiego co 30 dni.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/kms/docs/key-rotation" target="_blank">https://cloud.google.com/kms/docs/key-rotation</a></li>
-
-</ul>
-</div>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {

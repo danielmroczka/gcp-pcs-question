@@ -90,18 +90,30 @@ You want to use the gcloud command-line tool to authenticate using a third-party
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: AE.
+Potwierdzona odpowiedź: AE (A. SSO SAML as a third-party IdP, E. Cloud Identity)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. SSO SAML: Niezbędny komponent IdP.
-E. Cloud Identity: To domena Google, która musi być skonfigurowana, aby przekierować proces logowania gcloud do Twojego IdP.
+Wyjaśnienie:
+- Cloud Identity (E): Jest to fundament tożsamości w Google Cloud. Nawet jeśli używasz zewnętrznego dostawcy tożsamości (IdP), musisz mieć instancję Cloud Identity (lub Google Workspace), aby reprezentować te tożsamości w Google Cloud i zarządzać ich uprawnieniami IAM.
+- SSO SAML as a third-party IdP (A): Aby uwierzytelnić się za pomocą zewnętrznego dostawcy przez gcloud, musisz skonfigurować federację SAML. gcloud obsługuje przepływ przeglądarkowy, który przekierowuje użytkownika do zewnętrznego IdP w celu zalogowania.
 
-Dlaczego inne są błędne:
-B. Identity Platform: Dla klientów Twojej aplikacji, nie dla adminów gcloud.
-C. OIDC: Alternatywa dla SAML, ale pytanie precyzuje SAML IdP.
-D. IAP: Chroni dostęp do zasobów, nie proces logowania administratora do CLI.
+Dlaczego pozostałe są błędne:
+- B: Identity Platform służy do dodawania uwierzytelniania do własnych aplikacji (B2C/B2B), a nie do zarządzania tożsamościami pracowników uzyskujących dostęp do zasobów GCP przez gcloud.
+- C: OpenID Connect (OIDC) to inny protokół federacji. Chociaż Google go obsługuje, pytanie wyraźnie wskazuje na dostawcę SAML.
+- D: Identity-Aware Proxy (IAP) służy do kontrolowania dostępu do aplikacji i zasobów (np. SSH/RDP), a nie do uwierzytelniania samego narzędzia gcloud u dostawcy tożsamości.
 
-Konsensus społeczności ExamTopics: 100% na AE. Podstawy federacji tożsamości.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Aby używać zewnętrznego IdP z Google Cloud, zawsze potrzebujesz Cloud Identity jako "mostu".
+- SAML 2.0 to standardowy protokół używany przez przedsiębiorstwa do SSO z Google Cloud.
+- Polecenie `gcloud auth login` inicjuje przepływ OAuth2, który w przypadku federacji przekierowuje do IdP skonfigurowanego w Cloud Identity.
+
+Kluczowe zagadnienia do powtórzenia:
+- Konfiguracja SSO SAML w Cloud Identity.
+- Rola Cloud Identity w federacji tożsamości.
+- Przepływy uwierzytelniania w gcloud CLI.
+
+Dokumentacja:
+- <a href="https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction" target="_blank">Federowanie GCP z Active Directory (SAML)</a>
+- <a href="https://cloud.google.com/identity/docs/how-to/setup-sso" target="_blank">Konfiguracja SSO w Cloud Identity</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

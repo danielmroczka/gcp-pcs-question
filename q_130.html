@@ -90,18 +90,28 @@ You plan to use a Google Cloud Armor policy to prevent common attacks such as cr
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: DE.
+Potwierdzona odpowiedź: DE (D. The backend service's load balancing scheme must be EXTERNAL, E. The load balancer must be an external HTTP(S) load balancer).
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Backend scheme EXTERNAL: Cloud Armor jest usługą chroniącą zasoby wystawione na internet. Backend Load Balancera musi być skonfigurowany jako zewnętrzny.
-E. External HTTP(S) Load Balancer: Cloud Armor (w kontekście ochrony przed atakami webowymi XSS/SQLi) działa wyłącznie z zewnętrznymi Load Balancerami warstwy 7 (GCLB HTTP/S).
+Wyjaśnienie:
+Google Cloud Armor to usługa WAF (Web Application Firewall) i ochrony przed DDoS, która integruje się z brzegowymi load balancerami Google. Aby korzystać z polityk bezpieczeństwa Cloud Armor (szczególnie w celu ochrony przed atakami warstwy 7, takimi jak XSS czy SQLi), muszą być spełnione dwa kluczowe warunki architektoniczne: load balancer musi być typu External HTTP(S) (warstwa 7) oraz schemat równoważenia obciążenia (load balancing scheme) musi być ustawiony na EXTERNAL. Cloud Armor "doczepia się" do usług backendowych (Backend Services) tych load balancerów.
 
-Dlaczego inne są błędne:
-A. SSL Proxy: To Load Balancer warstwy 4 (TCP). Cloud Armor może go chronić przed DDoS, ale nie oferuje dla niego reguł WAF (XSS/SQLi), bo nie deszyfruje on ruchu HTTP do poziomu aplikacji.
-B. L7 attributes: Cloud Armor może filtrować również po L3/L4 (IP, porty), nie ogranicza się tylko do L7.
-C. Premium Tier: Choć zalecany, nie jest technicznym wymogiem 'koniecznym' do działania samych reguł WAF Cloud Armor (choć standard tier ma ograniczone LB).
+Dlaczego pozostałe są błędne:
+- A. The load balancer must be an external SSL proxy load balancer: SSL Proxy to load balancer warstwy 4 (TCP). Chociaż Cloud Armor oferuje pewną ochronę przed DDoS dla L4, nie wspiera on reguł WAF (jak SQLi/XSS) dla tego typu load balancera, ponieważ SSL Proxy nie analizuje warstwy aplikacji (HTTP).
+- B. Google Cloud Armor Policy rules can only match on Layer 7 (L7) attributes: To nieprawda. Cloud Armor pozwala na filtrowanie ruchu zarówno w warstwie 7 (atrybuty HTTP, nagłówki, pliki cookie), jak i w warstwie 3/4 (adresy IP źródłowe/docelowe).
+- C. The load balancer must use the Premium Network Service Tier: Choć większość globalnych load balancerów domyślnie korzysta z Premium Tier, nie jest to sztywny wymóg techniczny specyficzny dla Cloud Armor. Cloud Armor może działać również z regionalnymi load balancerami (które mogą używać Standard Tier), o ile są to zewnętrzne HTTP(S) LB.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na DE. To fundamenty architektury WAF w Google Cloud.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Słowo klucz "XSS" lub "SQL injection" + "GCP" = zawsze myśl o Google Cloud Armor.
+- Cloud Armor zawsze wymaga zewnętrznego load balancera (HTTP(S) lub Network/Proxy dla ochrony DDoS).
+- Pamiętaj, że Cloud Armor przypisuje się do Backend Service, a nie bezpośrednio do Forwarding Rule.
+
+Kluczowe zagadnienia do powtórzenia:
+- Typy load balancerów w GCP i ich warstwy (L4 vs L7).
+- Funkcje WAF w Google Cloud Armor (preconfigured WAF rules).
+- Integracja Cloud Armor z Cloud CDN i External HTTP(S) LB.
+
+Dokumentacja:
+<a href="https://cloud.google.com/armor/docs/cloud-armor-overview" target="_blank">Google Cloud Armor Overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

@@ -64,15 +64,15 @@
 <h2>Question 209 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization is transitioning to Google Cloud. You want to ensure that only trusted container images are deployed on Google Kubernetes Engine (GKE) clusters in a project. The containers must be deployed from a centrally managed Container Registry and signed by a trusted authority.<br/>What should you do? (Choose two.)
+Your organization is transitioning to Google Cloud. You want to ensure that only trusted container images are deployed on Google Kubernetes Engine (GKE) clusters in a project. The containers must be deployed from a centrally managed Container Registry and signed by a trusted authority.
 </p>
 <div class="question-choices-container">
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enable Container Threat Detection in the Security Command Center (SCC) for the project.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure the trusted image organization policy constraint for the project.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a custom organization policy constraint to enforce Binary Authorization for Google Kubernetes Engine (GKE).</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enable PodSecurity standards, and set them to Restricted.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Configure the Binary Authorization policy with respective attestations for the project.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Enable PodSecurity standards, and set them to Restricted.</li>
 
 </ul>
 </div>
@@ -90,42 +90,40 @@ Your organization is transitioning to Google Cloud. You want to ensure that only
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: CE (C: Enforce Binary Authorization via organization policy, E: Configure Binary Authorization policy with attestations)
+Potwierdzona odpowiedź: CE (C. Create a custom organization policy constraint to enforce Binary Authorization for GKE, E. Configure the Binary Authorization policy with respective attestations for the project).
 
-Dlaczego te odpowiedzi są poprawne:
-- Binary Authorization (BinAuthz - E): Jest to kluczowa usługa bezpieczeństwa dla GKE, która pozwala na zdefiniowanie polityki "kto i co może zostać uruchomione". Wymóg "signed by a trusted authority" realizuje się właśnie w BinAuthz poprzez tzw. atestacje (attestations). Atestacja to cyfrowy podpis potwierdzający, że dany obraz kontenera przeszedł pomyślnie przez określony etap (np. skanowanie podatności lub testy QA).
-- Polityka Organizacji (C): Aby zapewnić, że zabezpieczenie to nie jest opcjonalne, można użyć polityki organizacji, która wymusza włączenie Binary Authorization na wszystkich klastrach GKE w projekcie lub folderze. Uniemożliwia to deweloperom tworzenie klastrów omijających mechanizm weryfikacji podpisów.
+Wyjaśnienie:
+- Binary Authorization (BinAuthz - E): Jest to kluczowa usługa bezpieczeństwa dla GKE, która pozwala na zdefiniowanie polityki "kto i co może zostać uruchomione". Wymóg "signed by a trusted authority" realizuje się właśnie w BinAuthz poprzez tzw. atestacje (attestations). Atestacja to cyfrowy podpis potwierdzający, że dany obraz kontenera przeszedł pomyślnie przez określony etap (np. skanowanie podatności).
+- Polityka Organizacji (C): Aby zapewnić, że zabezpieczenie to nie jest opcjonalne, należy użyć polityki organizacji, która wymusza (enforce) włączenie Binary Authorization na wszystkich klastrach GKE w projekcie. Uniemożliwia to deweloperom tworzenie klastrów omijających mechanizm weryfikacji podpisów.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Container Threat Detection: Służy do wykrywania zagrożeń w CZASIE RZECZYWISTYM (runtime) na już działających kontenerach (np. wykrywanie reverse shells). Nie służy do zapobiegania wdrożeniu niezaufanych obrazów (to zadanie dla BinAuthz).
-- B. trustedImageProjects: Ta polityka organizacji dotyczy obrazów maszyn wirtualnych (Compute Engine), a nie obrazów kontenerów dla GKE.
-- D. PodSecurity standards: Standardy te kontrolują uprawnienia kontenera wewnątrz klastra (np. czy może działać jako root, czy ma dostęp do sieci hosta). Nie kontrolują one pochodzenia obrazu ani jego autentyczności.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A. Container Threat Detection: Służy do wykrywania zagrożeń w CZASIE RZECZYWISTYM (runtime) na już działających kontenerach (np. wykrywanie reverse shells). Nie służy do zapobiegania wdrożeniu niezaufanych obrazów przed ich uruchomieniem.
+- B. trustedImageProjects: Ta polityka organizacji dotyczy obrazów maszyn wirtualnych (Compute Engine), a nie obrazów kontenerów (Docker/OCI) dla GKE.
+- D. PodSecurity standards: Standardy te kontrolują uprawnienia kontenera wewnątrz klastra (np. czy może działać jako root). Nie kontrolują one pochodzenia obrazu ani jego autentyczności (podpisu).
 
-Wskazówki i triki (Tips & Tricks):
+Wskazówki egzaminacyjne (Tips & Tricks):
 - "Only trusted images" + "GKE" = Binary Authorization.
 - "Signed by authority" = Attestations (wewnątrz Binary Authorization).
-- Pamiętaj: BinAuthz sprawdza obraz w momencie wywołania API `kubectl apply` lub `helm install`.
+- Pamiętaj: BinAuthz sprawdza obraz w momencie wywołania API deploymentu (`kubectl apply`). Jest to brama wejściowa na klaster.
 
-Praktyczne informacje na egzamin:
-- Zrozum role: **Attestor** (tworzy podpis), **Evaluator** (sprawdza podpis przed deploymentem).
-- Binary Authorization jest fundamentem "Software Supply Chain Security" w Google Cloud.
+Kluczowe zagadnienia do powtórzenia:
+- Binary Authorization workflow (Build -> Attest -> Deploy).
+- Role IAM: Attestor (tworzy podpis), Evaluator (sprawdza podpis).
+- Bezpieczeństwo łańcucha dostaw oprogramowania (Supply Chain Security).
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/binary-authorization/docs/overview" target="_blank">Binary Authorization overview</a>
-- <a href="https://cloud.google.com/binary-authorization/docs/how-it-works" target="_blank">How Binary Authorization works</a>
-- <a href="https://cloud.google.com/kubernetes-engine/docs/how-to/binary-authorization" target="_blank">Enabling Binary Authorization on GKE</a>
+Dokumentacja:
+<a href="https://cloud.google.com/binary-authorization/docs/overview" target="_blank">Binary Authorization overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
+<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
+<h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: CE</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do budowania wielowarstwowej obrony (Defense in Depth) dla kontenerów. Sama technologia (BinAuthz) to połowa sukcesu – druga połowa to zarządzanie (Organization Policy), które gwarantuje, że technologia ta jest faktycznie używana wszędzie tam, gdzie jest potrzebna.</p>
-<h3>Dodatkowe wskazówki</h3>
+<p><b>Głęboka analiza:</b> To pytanie testuje Twoją zdolność do budowania wielowarstwowej obrony (Defense in Depth) dla kontenerów. Sama technologia (BinAuthz) to połowa sukcesu – druga połowa to zarządzanie (Organization Policy), które gwarantuje, że technologia ta jest faktycznie używana we wszystkich klastrach w projekcie, uniemożliwiając "ludzkie błędy" przy konfiguracji klastra.</p>
+<h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li>Możesz użyć Cloud Build do automatycznego tworzenia atestacji po pomyślnym zakończeniu skanowania obrazu w Artifact Registry.</li>
-<li>Pamiętaj o opcji "Dry run" w Binary Authorization, która pozwala na audytowanie naruszeń bez blokowania wdrożeń na etapie testów.</li>
+<li><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/binary-authorization" target="_blank">Enabling Binary Authorization on GKE</a></li>
 </ul>
 </div>
 </div>

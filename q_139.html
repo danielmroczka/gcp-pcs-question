@@ -89,31 +89,34 @@ You are backing up application logs to a shared Cloud Storage bucket that is acc
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Potwierdzona odpowiedź: D (Use Pub/Sub and Cloud Functions to trigger a Cloud Data Loss Prevention scan every time a file is uploaded to the administrator's bucket. If the scan does not detect PII, have the function move the objects into the shared Cloud Storage bucket).
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Admin Activity logs: Zmiana polityki IAM (np. dodanie użytkownika do roli) jest operacją typu 'Write' na metadanych zasobów. Każda taka zmiana jest automatycznie rejestrowana w tym dzienniku w całej organizacji.
+Wyjaśnienie:
+- Bezpieczeństwo przede wszystkim (Security first): Najbezpieczniejszym podejściem jest przesyłanie logów najpierw do bezpiecznego, odizolowanego miejsca (bucket administratora), a dopiero po weryfikacji udostępnianie ich szerszemu gronu (analitykom).
+- Proces automatyzacji:
+  1. Logi trafiają do bucketu administratora.
+  2. Powiadomienie o nowym pliku (Cloud Storage Notification) trafia do Pub/Sub.
+  3. Pub/Sub wyzwala Cloud Function.
+  4. Funkcja wywołuje DLP API w celu przeskanowania pliku pod kątem PII.
+  5. Jeśli wynik skanowania jest negatywny (brak PII), funkcja przenosi plik do współdzielonego bucketu analityków.
 
-Dlaczego inne są błędne:
-B. Data Access: Rejestrują użycie uprawnień (kto skorzystał z dostępu), a nie zmianę samych reguł uprawnień.
-C. VPC Flow Logs: To logi sieciowe, nie widzą operacji na systemie uprawnień.
-D. Access Transparency: Dotyczą działań Google, a pytanie pyta o audyt zmian wykonanych przez TWOICH administratorów.
+Dlaczego pozostałe są błędne:
+- A. Upload do obu + usuwanie: To podejście jest niebezpieczne (Race Condition). Istnieje okno czasowe, w którym analitycy mogą odczytać logi z PII zanim DLP zdąży je wykryć i usunąć.
+- B. Object Lifecycle Management: Ta funkcja służy do zarządzania wiekiem obiektów lub ich wersjami (np. przenoszenie do Coldline lub usuwanie po 30 dniach). Nie potrafi ona skanować zawartości plików pod kątem PII.
+- C. Cloud Storage trigger na PII upload: Triggery GCS reagują na zdarzenia techniczne (finalize, delete, metadata update), a nie na zawartość merytoryczną pliku. Trigger sam w sobie nie "wie", czy w pliku jest PII.
 
-Konsensus społeczności ExamTopics: 100% na A. Admin Activity to fundament audytu IAM.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli musisz odfiltrować dane wrażliwe przed ich udostępnieniem, zawsze wybieraj schemat: [Miejsce Bezpieczne] -> [Skanowanie DLP] -> [Miejsce Współdzielone].
+- Unikaj rozwiązań, które udostępniają dane "na chwilę" z zamiarem ich późniejszego usunięcia.
+
+Kluczowe zagadnienia do powtórzenia:
+- Cloud Data Loss Prevention (DLP) API.
+- Integracja Cloud Storage z Cloud Functions i Pub/Sub.
+- Zasada Least Privilege w dostępie do danych.
+
+Dokumentacja:
+<a href="https://cloud.google.com/dlp/docs/inspecting-storage" target="_blank">Skanowanie danych w Cloud Storage przy użyciu DLP</a>
 </pre>
-</div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
-<div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> W dyskusjach na forach audytorzy podkreślają, że logi Admin Activity są darmowe i niezmywalne. Są one pierwszym źródłem dowodowym w przypadku wykrycia nieautoryzowanej eskalacji uprawnień.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/logging/docs/audit/understanding-audit-logs#admin-activity" target="_blank">https://cloud.google.com/logging/docs/audit/understanding-audit-logs#admin-activity</a></li>
-
-</ul>
-</div>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {

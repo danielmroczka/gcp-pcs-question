@@ -90,17 +90,28 @@ You are a consultant for an organization that is considering migrating their dat
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Potwierdzona odpowiedź: A (Organization Policy Service constraints).
 
-Wyjaśnienie (Dlaczego poprawna):
-B. billing.viewer: Ta rola pozwala na wgląd we wszystkie koszty, faktury i historię płatności na poziomie konta rozliczeniowego, bez możliwości dokonywania jakichkolwiek płatności czy zmian.
+Wyjaśnienie:
+W Google Cloud podstawowym narzędziem do wymuszania zgodności (compliance) w zakresie lokalizacji danych (data residency) jest usługa polityk organizacji (Organization Policy Service). Za pomocą ograniczenia o nazwie "Resource Location Restriction" administrator może zdefiniować listę dozwolonych lokalizacji (regionów lub multiregionów), w których użytkownicy mogą tworzyć zasoby. Gwarantuje to, że dane przechowywane w tych zasobach (data at rest) pozostaną w określonych granicach geograficznych.
 
-Dlaczego inne są błędne:
-A. Admin: Pozwala na zmianę metod płatności i zamykanie konta - zbyt wysokie uprawnienia.
-C. Organization Viewer: Pozwala widzieć Strukturę firmy, ale nie daje wglądu w dane Finansowe (billing).
-D. Project Viewer: Daje wgląd w zasoby projektu, ale zazwyczaj nie widzi szczegółów faktur całego konta billingowego.
+Dlaczego pozostałe są błędne:
+- B. Shielded VM: To rozwiązanie zwiększa bezpieczeństwo instancji VM poprzez monitorowanie integralności bootowania i zapobieganie rootkitom, ale nie ma wpływu na to, w którym regionie fizycznie znajduje się serwer.
+- C. ACL (Access Control Lists): Służą do definiowania uprawnień do obiektów (np. w Cloud Storage), czyli kto ma dostęp, a nie gdzie dane są fizycznie składowane.
+- D. Geolocation access controls: Zazwyczaj odnoszą się do filtrowania dostępu użytkowników na podstawie ich lokalizacji geograficznej (np. blokowanie IP z konkretnych krajów), co nie rozwiązuje problemu miejsca składowania danych przez Google.
+- E. Google Cloud Armor: Jest to usługa typu WAF i ochrony przed DDoS. Chroni aplikacje przed atakami, ale nie kontroluje lokalizacji fizycznej zasobów backendowych.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. Standardowa rola dla działu finansowego.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Data residency" lub "Specific geographic boundaries" = Organization Policy (Resource Location Restriction).
+- Pamiętaj, że polityki organizacji działają prewencyjnie – blokują tworzenie zasobów w niedozwolonych regionach, ale nie przenoszą automatycznie już istniejących danych.
+- Usługi objęte tą polityką to m.in. Compute Engine, Cloud Storage, BigQuery i Pub/Sub.
+
+Kluczowe zagadnienia do powtórzenia:
+- Organization Policy Service i najpopularniejsze ograniczenia (constraints).
+- Różnica między lokalizacją danych (data residency) a suwerennością danych (data sovereignty).
+
+Dokumentacja:
+<a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">Resource Location Restriction</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

@@ -89,15 +89,28 @@ Your organization has had a few recent DDoS attacks. You need to authenticate re
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Potwierdzona odpowiedź: A (Cloud DNS with DNSSEC)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. DNSSEC: Cyfrowo podpisuje rekordy DNS, gwarantując ich autentyczność (wymóg 'authenticate responses'). Chroni to przed przekierowaniem użytkowników na złośliwe serwery przez podrobione odpowiedzi DNS.
+Wyjaśnienie:
+- Autentykacja odpowiedzi (Authenticate responses): DNSSEC (Domain Name System Security Extensions) dodaje warstwę autentykacji do zapytań DNS. Cyfrowo podpisuje odpowiedzi, dzięki czemu klient może zweryfikować, czy dane DNS nie zostały podrobione lub zmodyfikowane w trakcie przesyłania.
+- Ochrona przed DNS Spoofing: DNSSEC skutecznie chroni przed atakami typu cache poisoning, które są często częścią kampanii hakerskich lub prób przekierowania ruchu po ataku DDoS.
 
-Dlaczego inne są błędne:
-D. Cloud Armor: Chroni przed DDoS na poziomie sieci/aplikacji, ale nie zapewnia autentyczności rekordów w bazie DNS.
+Dlaczego pozostałe są błędne:
+- B: Cloud NAT zapewnia dostęp do internetu instancjom bez publicznych adresów IP, ale nie ma żadnej funkcji związanej z autentykacją DNS.
+- C: HTTP(S) Load Balancing rozdziela ruch webowy, ale nie chroni ani nie autentykuje zapytań na poziomie protokołu DNS.
+- D: Google Cloud Armor to usługa ochrony przed atakami DDoS i WAF, która blokuje złośliwy ruch na warstwie 3, 4 i 7, ale nie służy do cyfrowego podpisywania i autentykacji odpowiedzi DNS.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla A. Autentykacja odpowiedzi DNS to definicja DNSSEC.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Authenticate responses to domain name lookups" to definicja celu stosowania DNSSEC.
+- Nie daj się zmylić słowu "DDoS" – Cloud Armor go zwalcza, ale nie "autentykuje odpowiedzi DNS".
+
+Kluczowe zagadnienia do powtórzenia:
+- Jak działa DNSSEC (cyfrowe podpisywanie rekordów).
+- Rola Cloud DNS w architekturze bezpieczeństwa.
+- Typy ataków na protokół DNS (Cache Poisoning, Spoofing).
+
+Dokumentacja:
+- <a href="https://cloud.google.com/dns/docs/dnssec-configs" target="_blank">Konfiguracja DNSSEC w Cloud DNS</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

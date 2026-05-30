@@ -89,17 +89,26 @@ You are responsible for managing your company's identities in Google Cloud. Your
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Potwierdzona odpowiedź: A (On the Google Admin console, select the appropriate user account, and generate a backup code to allow the user to sign in. Ask the user to update their second factor).
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Cloud EKM (External Key Manager): Pozwala Google Cloud na korzystanie z kluczy, które fizycznie nigdy nie opuszczają Twojej lokalnej infrastruktury (on-premises HSM). Google wysyła prośbę o szyfrowanie/deszyfrowanie do Twojego systemu przez bezpieczne połączenie.
+Wyjaśnienie:
+W sytuacji, gdy użytkownik utraci dostęp do swojego urządzenia MFA/2SV, najbezpieczniejszą metodą przywrócenia dostępu przy minimalizacji ryzyka jest wygenerowanie jednorazowego kodu zapasowego (backup code) przez administratora. Pozwala to użytkownikowi na bezpieczne zalogowanie się i natychmiastowe ustawienie nowej metody drugiego składnika. Ta procedura nie wymaga wyłączania ochrony 2SV dla całego konta, co czyni ją najbardziej bezpieczną.
 
-Dlaczego inne są błędne:
-A. Cloud KMS: Klucze są zarządzane przez Google w oprogramowaniu.
-B. Cloud HSM: Klucze są w sprzęcie Google, a nie w TWOIM lokalnym HSM.
-D. Secret Manager: Służy do haseł, nie do operacji kryptograficznych na wolumenach danych.
+Dlaczego pozostałe są błędne:
+- B. Wyłączenie 2SV dla wszystkich: Jest to niedopuszczalne naruszenie bezpieczeństwa całej organizacji z powodu problemu jednego użytkownika.
+- C. Tymczasowe wyłączenie 2SV dla konta: Jest to mniej ryzykowne niż opcja B, ale nadal pozostawia konto całkowicie bez ochrony drugiego składnika na czas logowania. Opcja A (kod zapasowy) jest uważana za "best practice" w Google Workspace/Cloud Identity.
+- D. Reset poświadczeń (hasła): Samo zresetowanie hasła nie pomoże, ponieważ system nadal będzie wymagał drugiego składnika (2SV) podczas próby logowania z nowym hasłem.
 
-Konsensus społeczności ExamTopics: 100% na C. To jedyna odpowiedź na wymóg 'klucze u klienta'.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Lost 2SV" + "Minimize risk" -> administrator generuje "backup code".
+- Nigdy nie wybieraj odpowiedzi sugerującej "wyłączenie" (Disable) globalnych zabezpieczeń, jeśli dostępna jest opcja bardziej precyzyjna (jak kod zapasowy).
+
+Kluczowe zagadnienia do powtórzenia:
+- Zarządzanie tożsamościami i 2-Step Verification (2SV) w Cloud Identity.
+- Role Super Admina w Google Workspace/GCP.
+
+Dokumentacja:
+<a href="https://support.google.com/a/answer/1035070" target="_blank">Recover a user account protected by 2-step verification</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

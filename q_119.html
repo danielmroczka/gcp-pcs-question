@@ -89,17 +89,29 @@ You are a member of your company's security team. You have been asked to reduce 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Potwierdzona odpowiedź: C (Implement Identity-Aware Proxy TCP forwarding for the bastion host.)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Bucket Lock: Pozwala na zablokowanie polityki retencji (Retention Policy). Po zablokowaniu, dopóki w buckecie są jakiekolwiek obiekty objęte retencją, SAMEGO BUCKETU NIE DA SIĘ USUNĄĆ, nawet przez administratora.
+Wyjaśnienie:
+- IAP TCP Forwarding: Jest to usługa Google Cloud, która umożliwia bezpieczny dostęp SSH i RDP do maszyn wirtualnych znajdujących się w sieciach prywatnych (bez publicznego adresu IP).
+- Redukcja powierzchni ataku: Dzięki temu rozwiązaniu bastion host nie potrzebuje publicznego adresu IP, co całkowicie eliminuje możliwość bezpośredniego ataku z internetu. Cały ruch jest tunelowany przez bezpieczny endpoint Google.
+- Dostęp zdalny: Inżynierowie SRE mogą łączyć się z bastionem z dowolnej lokalizacji przez internet, autentykując się w Google Cloud (wymagana rola `roles/iap.tunnelResourceAccessor`).
 
-Dlaczego inne są błędne:
-A. IAM: Nawet z minimalnymi rolami, ktoś z uprawnieniami Owner mógłby bucket skasować. Bucket Lock chroni przed 'nadmiarowymi uprawnieniami'.
-C. Object Versioning: Chroni przed usunięciem Treści (tworzy kopie plików), ale nie zapobiega skasowaniu całego bucketu.
-D. Retention Policy: Samo w sobie określa czas, ale dopiero 'Lock' (B) sprawia, że polityka jest nieusuwalna i chroni strukturę bucketu.
+Dlaczego pozostałe są błędne:
+- A: Cloud VPN wymaga ustanowienia stałego tunelu między dwiema sieciami (lub klientem VPN). Jest to znacznie bardziej złożone w konfiguracji dla rozproszonych inżynierów łączących się z "publicznych lokalizacji" niż proste użycie IAP.
+- B: OS Login z weryfikacją dwuetapową (2SV) zwiększa bezpieczeństwo samego procesu logowania do systemu operacyjnego, ale nie rozwiązuje problemu braku trasy do maszyny, która nie posiada publicznego adresu IP.
+- D: Google Cloud Armor chroni wystawione na zewnątrz aplikacje webowe za Load Balancerem. Nie służy do zapewniania dostępu administracyjnego SSH do pojedynczych serwerów bastion.
 
-Konsensus społeczności ExamTopics: 100% na B. To jedyna twarda blokada usuwania zasobu.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Remove public IP" + "Access via internet" = IAP TCP Forwarding.
+- IAP to nowoczesna alternatywa dla tradycyjnych VPN-ów w zadaniach administracyjnych.
+
+Kluczowe zagadnienia do powtórzenia:
+- Jak działa tunelowanie IAP dla protokołów innych niż HTTP (TCP Forwarding).
+- Wymagane uprawnienia IAM dla dostępu przez IAP.
+- Reguły firewalla wymagane dla IAP (zezwolenie na zakres IP `35.235.240.0/20`).
+
+Dokumentacja:
+- <a href="https://cloud.google.com/iap/docs/tcp-forwarding-overview" target="_blank">Omówienie przekierowywania TCP przez IAP</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

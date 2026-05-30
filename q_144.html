@@ -90,17 +90,30 @@ Your company's new CEO recently sold two of the company's divisions. Your Direct
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Potwierdzona odpowiedź: CE (C. Identify inherited Identity and Access Management (IAM) roles on projects to be migrated, E. Remove the specific migration projects from any VPC Service Controls perimeters and bridges).
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Packet Mirroring: Jest to jedyna usługa w GCP, która kopiuje CAŁĄ zawartość pakietu (payload) i wysyła go do wybranego miejsca (np. do maszyny z systemem IDS typu Snort lub Suricata). To niezbędne do 'Full Packet Inspection'.
+Wyjaśnienie:
+Migracja projektów między organizacjami (Project Migration) to operacja krytyczna, która wymaga usunięcia powiązań z usługami specyficznymi dla danej organizacji (Organization-level services).
+- C. Role IAM dziedziczone: Uprawnienia nadane na poziomie organizacji lub folderu w "starej" organizacji nie zostaną przeniesione. Należy je zidentyfikować, aby móc je odtworzyć w nowej organizacji po zakończeniu migracji.
+- E. VPC Service Controls: VPC SC jest usługą na poziomie organizacji. Projekt, który jest częścią obwodu (perimeter) lub mostu (bridge), nie może zostać zmigrowany, dopóki nie zostanie z nich usunięty. Jest to jeden z najczęstszych technicznych powodów blokady migracji.
 
-Dlaczego inne są błędne:
-A. Flow Logs: Widzą tylko nagłówki (skąd-dokąd-ile), nie widzą co jest w środku pakietu.
-C. Cloud Armor: Działa na brzegu sieci, nie widzi ruchu 'wschód-zachód' między Twoimi maszynami VM.
-D. VPC SC: Chroni API, nie analizuje pakietów sieciowych VM.
+Dlaczego pozostałe są błędne:
+- A. Role niestandardowe (Custom roles) na poziomie projektu zostają przeniesione wraz z nim. Usunięcie ich byłoby błędem i spowodowałoby utratę konfiguracji uprawnień.
+- B. Polityki organizacji (Organization Policies) i tak przestaną obowiązywać (dziedziczenie zostanie przerwane), a projekt zacznie dziedziczyć polityki nowej organizacji. Nie jest to krok techniczny wymagany "przed migracją" w celu jej umożliwienia.
+- D. Stworzenie folderu w nowej organizacji może być częścią planowania, ale nie jest technicznie niezbędnym krokiem przygotowawczym do samej operacji przeniesienia projektu tak jak punkty C i E.
 
-Konsensus społeczności ExamTopics: 100% na B. Packet Mirroring = Deep Packet Inspection (DPI).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Zapamiętaj mantrę: "VPC SC i IAM inheritance to najwięksi wrogowie migracji projektu". Zawsze trzeba je obsłużyć przed ruchem.
+- Projekt zachowuje swój numer (Project Number) i ID (Project ID), co jest ważne dla aplikacji korzystających z tych danych.
+- Po migracji konieczne jest ponowne podpięcie konta rozliczeniowego (Billing Account) w nowej organizacji.
+
+Kluczowe zagadnienia do powtórzenia:
+- Resource Manager: Project Migration.
+- VPC Service Controls: Perimeter management.
+- IAM: Inheritance and resource hierarchy.
+
+Dokumentacja:
+<a href="https://cloud.google.com/resource-manager/docs/project-migration" target="_blank">Migrating projects between organizations</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

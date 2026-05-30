@@ -89,43 +89,44 @@ Your organization is using Active Directory and wants to configure Security Asse
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (1. Create a new SAML profile. 2. Populate the sign-in and sign-out page URLs. 3. Upload the X.509 certificate. 4. Configure Entity ID and ACS URL in your IdP)
+Potwierdzona odpowiedź: A (1. Create a new SAML profile. 2. Populate the sign-in and sign-out page URLs. 3. Upload the X.509 certificate. 4. Configure Entity ID and ACS URL in your IdP).
 
-Dlaczego ta odpowiedź jest poprawna:
-- SAML SSO (Single Sign-On): Jest to standard federacji tożsamości, w którym Google Cloud pełni rolę Service Provider (SP), a Twoja firma (np. Active Directory z ADFS) pełni rolę Identity Provider (IdP).
-- Konfiguracja w Google (SP): Aby Google wiedziało, dokąd wysłać użytkownika w celu zalogowania, musisz stworzyć profil SAML i podać adresy URL strony logowania (Sign-in) i wylogowania (Sign-out) Twojego IdP.
-- Certyfikat X.509: Jest kluczowy dla bezpieczeństwa. IdP podpisuje asercje SAML swoim kluczem prywatnym, a Google weryfikuje ten podpis za pomocą klucza publicznego zawartego w przesłanym certyfikacie X.509.
-- Konfiguracja w IdP: Aby Twoje Active Directory wiedziało, że ma wysłać poświadczenia do Google, musisz w nim skonfigurować Entity ID (identyfikator Google jako SP) oraz ACS URL (Assertion Consumer Service URL – adres, pod który Google przyjmuje potwierdzenia zalogowania).
+Wyjaśnienie:
+Konfiguracja Single Sign-On (SSO) za pomocą SAML 2.0 wymaga wymiany metadanych i zaufania między Google (Service Provider - SP) a Active Directory (Identity Provider - IdP).
+Kroki po stronie Google:
+1. Utworzenie profilu SAML.
+2. Podanie adresów URL stron logowania i wylogowania IdP (aby Google wiedziało, dokąd przekierować użytkownika).
+3. Przesłanie certyfikatu X.509 (zawierającego klucz publiczny IdP), aby Google mogło weryfikować podpisy pod asercjami SAML.
+Kroki po stronie IdP (np. ADFS):
+4. Skonfigurowanie Entity ID i ACS URL (Assertion Consumer Service URL), aby IdP wiedziało, że wysyła poświadczenia do Google Cloud i pod jaki adres.
 
-Analiza niepoprawnych odpowiedzi:
-- B i D. OpenID Connect (OIDC): Choć OIDC jest nowocześniejszym protokołem (opartym na OAuth 2.0), pytanie wyraźnie prosi o konfigurację SAML. OIDC i SAML to dwa różne światy techniczne i nie konfiguruje się ich tymi samymi krokami.
-- C. SAML profile without URLs: Opcja ta pomija kluczowy krok podania adresów URL (sign-in/sign-out), bez których użytkownik nie zostanie przekierowany do strony logowania firmy. "Change password URL" jest opcjonalny i nie jest fundamentem działania SSO.
+Dlaczego pozostałe są błędne:
+- B i D. OpenID Connect (OIDC): OIDC to inny protokół niż SAML (oparty na OAuth 2.0). Chociaż oba służą do federacji, ich konfiguracja techniczna jest diametralnie inna. Pytanie wyraźnie prosi o konfigurację SAML.
+- C. Brak adresów URL: Utworzenie profilu bez podania adresów sign-in/sign-out uniemożliwi poprawne przekierowanie użytkownika do strony logowania firmy. "Change password URL" jest opcjonalny i nie jest fundamentem SSO.
 
-Wskazówki i triki (Tips & Tricks):
-- "SAML" + "AD" = SSO (Federacja).
-- Zapamiętaj "Czwórkę SAML": Sign-in URL, X.509 Cert (w SP) + Entity ID, ACS URL (w IdP).
-- Jeśli widzisz "Entity ID" i "ACS URL", niemal na pewno chodzi o konfigurację SAML.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "SAML" + "Federacja" = SSO.
+- Zapamiętaj kluczowe pojęcia SAML: Entity ID, ACS URL, X.509 Certificate, Sign-in URL.
+- Pamiętaj, że SSO zajmuje się uwierzytelnianiem, a nie automatycznym tworzeniem kont (do tego służy GCDS).
 
-Praktyczne informacje na egzamin:
-- Zrozum kierunek zaufania: Google ufa Twojemu IdP, ponieważ posiada jego certyfikat publiczny.
-- Pamiętaj, że SSO nie tworzy użytkowników w Google Cloud – do tego potrzebujesz GCDS (Google Cloud Directory Sync) lub Just-in-Time provisioning.
+Kluczowe zagadnienia do powtórzenia:
+- Różnica między SAML a OIDC.
+- Rola Cloud Identity jako dostawcy tożsamości.
+- Przypisywanie profilu SSO do jednostek organizacyjnych (OU).
 
-Dokumentacja i linki:
-- <a href="https://support.google.com/cloudidentity/answer/60224" target="_blank">Set up SSO via SAML</a>
-- <a href="https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction" target="_blank">Federating GCP with Active Directory</a>
-- <a href="https://support.google.com/a/answer/6330801" target="_blank">SAML SSO technical overview</a>
+Dokumentacja:
+<a href="https://support.google.com/cloudidentity/answer/60224" target="_blank">Konfiguracja SSO za pomocą SAML</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
+<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
+<h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie sprawdza fundamentalną wiedzę o tym, jak połączyć tożsamość korporacyjną z chmurą. SAML jest standardem "Enterprise", który pozwala na zachowanie jednego hasła (tego z AD) do wszystkich usług. Najważniejszym elementem dla inżyniera jest zrozumienie mechanizmu "handshake'u" – wymiany metadanych między dwiema stronami procesu.</p>
-<h3>Dodatkowe wskazówki</h3>
+<p><b>Głęboka analiza:</b> Zadanie testuje fundamentalną wiedzę o łączeniu tożsamości korporacyjnej z chmurą. SAML jest standardem "Enterprise", który pozwala pracownikom używać ich haseł z Active Directory do logowania się do Google Cloud. Najważniejszym elementem bezpieczeństwa w tym procesie jest certyfikat X.509, który gwarantuje, że to faktycznie Twój serwer AD potwierdził tożsamość użytkownika.</p>
+<h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li>W Cloud Identity możesz przypisać różne profile SAML do różnych jednostek organizacyjnych (OU), co pozwala np. na użycie Okty dla deweloperów i AD dla reszty firmy.</li>
-<li>Pamiętaj o ważności certyfikatu X.509 – jeśli wygaśnie, nikt nie będzie mógł się zalogować do Google Cloud.</li>
+<li><a href="https://support.google.com/cloudidentity/answer/60224" target="_blank">https://support.google.com/cloudidentity/answer/60224</a></li>
 </ul>
 </div>
 </div>

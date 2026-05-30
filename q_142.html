@@ -89,31 +89,29 @@ You have noticed an increased number of phishing attacks across your enterprise 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Potwierdzona odpowiedź: A (Titan Security Keys).
 
-Wyjaśnienie (Dlaczego poprawna):
-D. findingsViewer: Jest to najbardziej granularna rola tylko do odczytu dla alertów (znalezisk). Pozwala widzieć co się dzieje, bez uprawnień do edycji stanu znalezisk (np. oznaczania ich jako 'zamknięte').
+Wyjaśnienie:
+- Klucze bezpieczeństwa Titan (Titan Security Keys): Wykorzystują standardy FIDO (Fast Identity Online), w tym U2F (Universal 2nd Factor) i FIDO2. Są to jedyne opcje 2-stopniowej weryfikacji (2SV), które zapewniają kryptograficzną weryfikację adresu URL strony logowania. Oznacza to, że klucz nie wyśle podpisu kryptograficznego, jeśli strona logowania jest fałszywa (phishingowa), nawet jeśli wygląda identycznie jak prawdziwa strona Google.
+- Kryptograficzny podpis: Klucz generuje podpis unikalny dla danej sesji logowania, którego nie da się przejąć ani wykorzystać powtórnie przez atakującego.
 
-Dlaczego inne są błędne:
-A. Admin: Pełna władza.
-B. Viewer: Daje wgląd w CAŁE Security Command Center (ustawienia, źródła danych), co może być zbyt szerokie, jeśli użytkownik ma tylko analizować alerty.
-C. findingsEditor: Pozwala zmieniać status alertów, co narusza zasadę 'view only'.
+Dlaczego pozostałe są błędne:
+- B. Google prompt: Przesyła powiadomienie "Czy to Ty?" na urządzenie mobilne. Chociaż jest bezpieczniejszy niż SMS, nie oferuje sprzętowej weryfikacji adresu URL strony logowania i może być podatny na błąd użytkownika (przypadkowe kliknięcie "Tak").
+- C. Google Authenticator app: Generuje kody czasowe (TOTP). Użytkownik musi ręcznie przepisać kod na stronę. Nie ma tu mechanizmu sprawdzającego, czy strona, na której wpisywany jest kod, nie jest stroną phishingową.
+- D. Cloud HSM keys: Służą do przechowywania kluczy szyfrujących dane w chmurze (np. dla KMS), a nie do uwierzytelniania użytkowników podczas logowania do konta Google.
 
-Konsensus społeczności ExamTopics: 100% na D. Zasada najniższych uprawnień.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli w pytaniu pojawia się "phishing protection" + "cryptographic signature" + "verify URL" = Zawsze wybieraj Security Keys (Titan, FIDO/U2F).
+- Klucze sprzętowe są uważane za najmocniejszą formę 2FA/2SV dostępną na rynku.
+
+Kluczowe zagadnienia do powtórzenia:
+- Metody 2-stopniowej weryfikacji (2SV) w Google Cloud/Cloud Identity.
+- Standardy FIDO/U2F.
+- Program ochrony zaawansowanej (Advanced Protection Program).
+
+Dokumentacja:
+<a href="https://support.google.com/titansecuritykey/answer/9111684" target="_blank">Informacje o kluczach bezpieczeństwa Titan</a>
 </pre>
-</div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
-<div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Wiele osób myli `viewer` (B) z `findingsViewer` (D). Eksperci wyjaśniają: jeśli Twoim zadaniem jest tylko praca operacyjna na alertach (triage), wystarczy `findingsViewer`. Rola `viewer` jest dla managerów potrzebujących wglądu w całą posturę bezpieczeństwa.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/security-command-center/docs/access-control" target="_blank">https://cloud.google.com/security-command-center/docs/access-control</a></li>
-
-</ul>
-</div>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {

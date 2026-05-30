@@ -89,43 +89,38 @@ For compliance reporting purposes, the internal audit department needs you to pr
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (Ensure the OS Config agent is installed on all VMs and extract the patch status dashboard every six months)
+Potwierdzona odpowiedź: D (Ensure the OS Config agent is installed on all VMs and extract the patch status dashboard every six months).
 
-Dlaczego ta odpowiedź jest poprawna:
-- OS Config Agent: Jest to kluczowy komponent usługi VM Manager. Agent ten zbiera informacje o systemie operacyjnym, zainstalowanych pakietach oraz dostępnych aktualizacjach bezpośrednio z instancji VM.
-- Patch Status Dashboard: VM Manager udostępnia w konsoli Google Cloud gotowy pulpit nawigacyjny (dashboard), który w czasie rzeczywistym (lub z niewielkim opóźnieniem) pokazuje stan "zdrowia" floty maszyn pod kątem poprawek. Pozwala to na błyskawiczne wyeksportowanie listy maszyn z brakującymi poprawkami krytycznymi.
-- Compliance & Speed: To rozwiązanie jest zaprojektowane dokładnie pod wymogi audytowe i compliance. Pozwala na wykonanie zadania "szybko" (quickly) i bez konieczności pisania własnych skryptów czy analizowania surowych logów.
+Wyjaśnienie:
+VM Manager (którego częścią jest OS Config agent) to dedykowana usługa Google Cloud do zarządzania inwentarzem oraz poprawkami systemów operacyjnych. Pulpit nawigacyjny (Patch Status Dashboard) w konsoli GCP udostępnia gotowe zestawienie brakujących aktualizacji krytycznych dla całej floty maszyn. Jest to najszybsza i najbardziej wiarygodna metoda przygotowania raportu dla audytu, eliminująca konieczność ręcznego sprawdzania każdej instancji.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Security Command Center (SCC) scan: Choć SCC posiada moduł "Security Health Analytics", który wykrywa podatności, raportowanie konkretnie o brakujących poprawkach systemowych (patches) jest domeną VM Manager. SCC jest bardziej ogólnym narzędziem do wykrywania błędów konfiguracji chmurowej.
-- B. gcloud CLI command for OS version: Sama wersja systemu operacyjnego (np. "Ubuntu 20.04.5") nie mówi audytorowi, czy wszystkie poprawki bezpieczeństwa zostały zainstalowane. Wymagałoby to ręcznego porównywania wersji z bazą patchy, co jest pracochłonne i wolne.
-- C. Cloud Logging agent + last update log: Logi o ostatniej aktualizacji mogą być niekompletne lub trudne do wyciągnięcia (wymagają parsowania tekstu). Logging agent nie "wie", jakie poprawki są DOSTĘPNE u dostawcy systemu, a jedynie co zostało zrobione w przeszłości.
+Dlaczego pozostałe są błędne:
+- A. Security Command Center (SCC) scan: SCC służy do wykrywania błędów w konfiguracji chmurowej i ogólnych podatności, ale raportowanie o konkretnych, brakujących poprawkach systemowych (OS patches) jest domeną VM Managera.
+- B. gcloud CLI command for OS version: Wyciągnięcie samej wersji systemu (np. "Ubuntu 20.04") nie dostarcza informacji o tym, czy wszystkie dostępne poprawki bezpieczeństwa zostały zainstalowane. Wymagałoby to dodatkowej, żmudnej analizy.
+- C. Cloud Logging agent: Agent ten służy do zbierania logów. Choć można by próbować analizować logi z przebiegu aktualizacji, nie jest to narzędzie pozwalające na szybkie i bezpośrednie sprawdzenie, jakich poprawek brakuje w danej chwili w repozytoriach systemowych.
 
-Wskazówki i triki (Tips & Tricks):
-- "Compliance reporting" + "Missing OS patches" = OS Config / VM Manager.
-- "Dashboard" w odpowiedziach dotyczących monitorowania floty często wskazuje na najbardziej efektywne (najszybsze) rozwiązanie.
-- Pamiętaj: OS Config agent jest domyślnie zainstalowany na wielu obrazach Google Cloud (np. Compute Engine, Container-Optimized OS), ale musi zostać włączony w metadanych.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Compliance reporting" oraz "OS security updates" to słowa klucze wskazujące na VM Managera (OS Patch / OS Inventory).
+- "Dashboard" w odpowiedziach często wskazuje na najbardziej efektywne i gotowe do użycia rozwiązanie raportowe w GCP.
 
-Praktyczne informacje na egzamin:
-- Zrozum różnicę: **OS Inventory** (co mam zainstalowane?), **OS Patch** (czego mi brakuje?), **OS Policy** (co muszę mieć skonfigurowane?). Wszystkie trzy to części VM Manager.
-- Audytorzy uwielbiają dashboardy VM Manager, ponieważ dają one jasny dowód "zgodności" (Compliance) całej infrastruktury.
+Kluczowe zagadnienia do powtórzenia:
+- Różnica między OS Inventory Management a OS Patch Management.
+- Włączanie agenta OS Config w metadanych instancji.
+- Możliwości raportowania w VM Manager.
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/compute/docs/os-config/view-patch-compliance" target="_blank">Viewing patch compliance</a>
-- <a href="https://cloud.google.com/compute/docs/os-inventory-management" target="_blank">OS inventory management overview</a>
-- <a href="https://cloud.google.com/compute/docs/os-config/setup-vm-manager" target="_blank">Setting up VM Manager</a>
+Dokumentacja:
+<a href="https://cloud.google.com/compute/docs/os-config/view-patch-compliance" target="_blank">Wyświetlanie zgodności poprawek w Google Cloud</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
+<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
+<h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie sprawdza umiejętność wyboru odpowiedniego narzędzia do specyficznego zadania administracyjnego. W chmurze często istnieje wiele sposobów na osiągnięcie celu (skrypty, logi, skany), ale Google promuje rozwiązania "Managed", które dają najwyższą wiarygodność danych audytowych przy minimalnym wysiłku ludzkim.</p>
-<h3>Dodatkowe wskazówki</h3>
+<p><b>Głęboka analiza:</b> Audytorzy wymagają konkretnych dowodów na to, że systemy są aktualne. VM Manager z agentem OS Config jest natywnym mechanizmem Google Cloud zaprojektowanym dokładnie do tego celu. Użycie dashboardu pozwala na szybkie spełnienie wymogu audytowego "wykonania zadania szybko" i dostarczenia precyzyjnej listy maszyn wymagających uwagi.</p>
+<h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li>VM Manager integruje się również z "Vulnerability Management" w SCC, co pozwala widzieć brakujące patche jako luki bezpieczeństwa (CVE).</li>
-<li>Możesz filtrować dashboardy po projektach, regionach i tagach, co ułatwia przygotowanie raportów dla różnych jednostek biznesowych.</li>
+<li><a href="https://cloud.google.com/compute/docs/os-config/view-patch-compliance" target="_blank">https://cloud.google.com/compute/docs/os-config/view-patch-compliance</a></li>
 </ul>
 </div>
 </div>

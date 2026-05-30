@@ -89,17 +89,29 @@ You need to implement an encryption-at-rest strategy that protects sensitive dat
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Potwierdzona odpowiedź: D (Encrypt non-sensitive data with Google default encryption, and encrypt sensitive data with Cloud Key Management Service).
 
-Wyjaśnienie (Dlaczego poprawna):
-B. ETD (Event Threat Detection): To moduł SCC Premium, który automatycznie analizuje logi (w tym Flow Logi) i porównuje je z bazą zagrożeń Google (Threat Intelligence). Potrafi wykryć komunikację z serwerami C2 (Command & Control).
+Wyjaśnienie:
+- Google Default Encryption: Google automatycznie szyfruje wszystkie dane w spoczynku bez dodatkowych kosztów i bez konieczności zarządzania kluczami. Jest to idealne rozwiązanie dla danych "non-sensitive", ponieważ minimalizuje złożoność zarządzania kluczami (Key Management Complexity) oraz zapewnia najniższe opóźnienia (latency), gdyż klucze są blisko danych.
+- Cloud Key Management Service (Cloud KMS): Pozwala na tworzenie kluczy zarządzanych przez klienta (CMEK). Umożliwia planowanie rotacji kluczy (Schedule key rotation) oraz wybór regionu przechowywania kluczy (Control which region encryption keys are stored), co spełnia wymagania dla danych wrażliwych (sensitive data). KMS zapewnia również niskie opóźnienia w porównaniu do systemów zewnętrznych.
 
-Dlaczego inne są błędne:
-A. Cloud Armor: Chroni ruch PRZYCHODZĄCY do Load Balancera, nie monitoruje ruchu WYCHODZĄCEGO z maszyn VM do internetu.
-C. Packet Mirroring: Przechwytuje pakiety, ale samo w sobie nie 'wie', który serwer jest złośliwy – potrzebuje silnika analizy takiego jak ETD lub IDS.
-D. Cloud IDS: Jest to poprawna alternatywa, ale ETD (B) jest częściej wskazywane jako rozwiązanie natywne SCC do detekcji 'known malicious' na podstawie metadanych logów.
+Dlaczego pozostałe są błędne:
+- A. Cloud External Key Manager (EKM): Korzystanie z EKM dla wszystkich danych (w tym niejawnych) drastycznie zwiększa złożoność i opóźnienia (latency), ponieważ każde żądanie szyfrowania/odszyfrowania musi opuścić infrastrukturę Google Cloud do zewnętrznego dostawcy kluczy.
+- B. Cloud KMS dla wszystkich danych: Chociaż możliwe, zwiększa to niepotrzebnie złożoność zarządzania kluczami dla danych niejawnych, dla których Google Default Encryption jest wystarczające i prostsze.
+- C. Cloud EKM dla danych wrażliwych: Chociaż zapewnia kontrolę, wprowadza znacznie wyższe opóźnienia niż Cloud KMS, co narusza wymaganie "Minimize the latency". EKM jest zazwyczaj używany tylko wtedy, gdy wymagana jest suwerenność kluczy poza chmurą.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. ETD to mózg detekcji zagrożeń w GCP.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Reduce key management complexity" + "non-sensitive data" = Default Encryption.
+- "Schedule rotation" + "Control region" = Cloud KMS (CMEK).
+- "Minimize latency" = Wybieraj rozwiązania natywne Google (Default lub KMS), unikaj zewnętrznych (EKM), chyba że suwerenność jest priorytetem.
+
+Kluczowe zagadnienia do powtórzenia:
+- Hierarchia szyfrowania w GCP (Default vs CMEK vs CSEK vs EKM).
+- Cloud KMS i jego możliwości (rotacja, rezydencja danych).
+- Latency w dostępie do kluczy szyfrujących.
+
+Dokumentacja:
+<a href="https://cloud.google.com/docs/security/encryption-at-rest" target="_blank">Szyfrowanie w spoczynku w Google Cloud</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

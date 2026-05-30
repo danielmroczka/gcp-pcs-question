@@ -64,7 +64,8 @@
 <h2>Question 204 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You are using Security Command Center (SCC) to protect your workloads and receive alerts for suspected security breaches at your company. You need to detect cryptocurrency mining software.<br/>Which SCC service should you use?
+You are using Security Command Center (SCC) to protect your workloads and receive alerts for suspected security breaches at your company. You need to detect cryptocurrency mining software.
+Which SCC service should you use?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,43 +90,41 @@ You are using Security Command Center (SCC) to protect your workloads and receiv
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Virtual Machine Threat Detection)
+Potwierdzona odpowiedź: A (Virtual Machine Threat Detection).
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - VM Threat Detection (VMTD): Jest to usługa wchodząca w skład Security Command Center (SCC) Premium. Jej głównym zadaniem jest skanowanie pamięci RAM instancji Compute Engine w poszukiwaniu śladów złośliwego oprogramowania.
 - Detekcja bezagentowa (Agentless): VMTD działa na poziomie hiperwizora Google, co oznacza, że nie wymaga instalowania żadnego oprogramowania (agenta) wewnątrz systemu operacyjnego VM. Dzięki temu jest niewidoczna dla atakującego i nie zużywa zasobów procesora maszyny.
-- Crypto-mining: Jednym z głównych zastosowań VMTD jest wykrywanie oprogramowania do kopania kryptowalut (cryptomining), które często pojawia się na maszynach po ich przejęciu przez hakerów. VMTD rozpoznaje charakterystyczne wzorce kodu i zachowania koparek bezpośrednio w pamięci.
+- Crypto-mining: Jednym z głównych zastosowań VMTD jest wykrywanie oprogramowania do kopania kryptowalut (cryptomining), które często pojawia się na maszynach po ich nieautoryzowanym przejęciu. VMTD rozpoznaje charakterystyczne wzorce kodu i zachowania koparek bezpośrednio w pamięci maszyn Compute Engine.
 
-Analiza niepoprawnych odpowiedzi:
-- B. Container Threat Detection: Służy do wykrywania zagrożeń (w tym koparek) wewnątrz kontenerów działających na GKE. Choć technicznie podobna, pytanie dotyczy ogólnie "workloads", a VMTD jest bardziej podstawową odpowiedzią dla klasycznych instancji VM.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- B. Container Threat Detection: Służy do wykrywania zagrożeń (w tym koparek) wewnątrz kontenerów działających na GKE. Choć technicznie podobna, pytanie dotyczy ogólnie "workloads", a VMTD jest podstawową odpowiedzią dla klasycznych instancji VM w ekosystemie SCC.
 - C. Rapid Vulnerability Detection: Służy do szybkiego skanowania publicznie dostępnych zasobów pod kątem znanych luk (np. słabe hasła, błędy w oprogramowaniu serwerowym). Nie skanuje pamięci pod kątem aktywnego malware.
-- D. Web Security Scanner: Służy do szukania luk w aplikacjach webowych (App Engine, GKE, Compute Engine), takich jak SQL Injection czy Cross-Site Scripting (XSS). Nie służy do wykrywania koparek kryptowalut na poziomie systemu operacyjnego.
+- D. Web Security Scanner: Służy do szukania luk w aplikacjach webowych (np. SQL Injection, XSS). Nie służy do wykrywania koparek kryptowalut na poziomie systemu operacyjnego czy procesów systemowych.
 
-Wskazówki i triki (Tips & Tricks):
+Wskazówki egzaminacyjne (Tips & Tricks):
 - "Detect cryptocurrency mining" + "Compute Engine" = VM Threat Detection.
-- "Detect cryptocurrency mining" + "GKE/Containers" = Container Threat Detection.
 - "Agentless memory scanning" = VM Threat Detection.
+- Detekcja koparek jest priorytetem dla Google, ponieważ nieautoryzowany mining generuje ogromne koszty finansowe dla klientów i zużywa zasoby chmury.
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj, że VMTD jest częścią warstwy "Threat Detection" w SCC Premium.
-- Detekcja koparek jest kluczowa, ponieważ nieautoryzowany mining generuje ogromne koszty na koncie Google Cloud klienta.
+Kluczowe zagadnienia do powtórzenia:
+- Security Command Center Premium Services (VMTD, ETD, CTD).
+- Agentless Security (bezpieczeństwo bezagentowe).
+- Wykrywanie zagrożeń w czasie rzeczywistym (Runtime Threat Detection).
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/security-command-center/docs/concepts-vm-threat-detection-overview" target="_blank">VM Threat Detection overview</a>
-- <a href="https://cloud.google.com/security-command-center/docs/concepts-cryptocurrency-mining-detection" target="_blank">Detecting cryptocurrency mining</a>
-- <a href="https://cloud.google.com/security-command-center/docs/concepts-security-command-center-overview" target="_blank">SCC services overview</a>
+Dokumentacja:
+<a href="https://cloud.google.com/security-command-center/docs/concepts-vm-threat-detection-overview" target="_blank">VM Threat Detection overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
+<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
+<h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość narzędzi do "Runtime Security". Tradycyjne skanery podatności (SHA) szukają błędów w konfiguracji. Threat Detection (VMTD) szuka aktywnych intruzów i złośliwego kodu już po fakcie przejęcia maszyny. Agentless scanning to unikalna cecha GCP, którą Google mocno promuje na egzaminach.</p>
-<h3>Dodatkowe wskazówki</h3>
+<p><b>Głęboka analiza:</b> To pytanie testuje Twoją znajomość narzędzi do "Runtime Security". Tradycyjne skanery podatności szukają błędów w konfiguracji. Threat Detection (VMTD) szuka aktywnych intruzów i złośliwego kodu już po fakcie przejęcia maszyny. Agentless scanning to unikalna cecha GCP, którą Google mocno promuje na egzaminach jako sposób na zachowanie wysokiej wydajności przy jednoczesnym bezpieczeństwie.</p>
+<h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li>VMTD może wykrywać również rootkity i inne zaawansowane techniki ukrywania malware.</li>
-<li>Alerty z VMTD trafiają do konsoli SCC jako findings typu "Execution: Compute Engine / Malicious Software".</li>
+<li><a href="https://cloud.google.com/security-command-center/docs/concepts-cryptocurrency-mining-detection" target="_blank">Detecting cryptocurrency mining</a></li>
 </ul>
 </div>
 </div>

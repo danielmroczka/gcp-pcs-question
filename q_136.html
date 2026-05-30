@@ -90,30 +90,29 @@ Your security team uses encryption keys to ensure confidentiality of user data. 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Potwierdzona odpowiedź: BD (B. Enable automatic key version rotation on a regular schedule, D. Limit the number of messages encrypted with each key version).
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Default encryption in transit: Google Cloud domyślnie szyfruje cały ruch wewnątrz swojej fizycznej sieci oraz między centrami danych przy użyciu protokołów takich jak ALTS lub TLS. Klient nie musi nic robić, aby ruch między jego VM w różnych regionach był bezpieczny.
+Wyjaśnienie:
+- B. Automatyczna rotacja kluczy (Automatic key version rotation): Regularna zmiana wersji klucza ogranicza ilość danych zaszyfrowanych tym samym kluczem. W przypadku kompromitacji jednej wersji klucza, tylko dane nią zaszyfrowane są zagrożone, a nie cały zbiór danych historycznych i przyszłych.
+- D. Ograniczenie liczby wiadomości (Limit the number of messages): Jest to dobra praktyka kryptograficzna (limitowanie "key usage"). Ogranicza to ilość materiału dowodowego dla kryptoanalizy oraz zmniejsza "blast radius" w przypadku złamania konkretnej wersji klucza.
 
-Dlaczego inne są błędne:
-B. VPN/Interconnect: One zapewniają szyfrowanie na styku z TWOIM on-premises, ale szyfrowanie WEWNĄTRZ chmury jest szersze i domyślne (A).
-D. Fałsz. Szyfrowanie wewnątrz sieci Google jest wbudowane w infrastrukturę.
+Dlaczego pozostałe są błędne:
+- A. Disable and revoke access to compromised keys: To jest działanie REAKTYWNE (po incydencie), a pytanie pyta o kroki, które należy podjąć PRZED wystąpieniem incydentu (before an incident occurs).
+- C. Manualna rotacja ad hoc: Chociaż rotacja jest dobra, automatyzacja (B) jest zalecaną praktyką w celu zapewnienia regularności i uniknięcia błędów ludzkich. Błąd polega na tym, że automatyczna rotacja jest lepszym procesem "do ustanowienia".
+- E. Wyłączenie API Cloud KMS: Uniemożliwiłoby to korzystanie z kluczy i sparaliżowało aplikacje, nie jest to proces redukcji wpływu kompromitacji klucza.
 
-Konsensus społeczności ExamTopics: 100% na A. To jedna z głównych zalet bezpieczeństwa Google Cloud.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Czytaj uważnie: "before an incident occurs" sugeruje działania zapobiegawcze/przygotowawcze (Proactive).
+- "Reduce impact" w kryptografii często oznacza rotację (ograniczenie ilości danych na jeden klucz).
+
+Kluczowe zagadnienia do powtórzenia:
+- Zarządzanie cyklem życia kluczy w Cloud KMS.
+- Rotacja kluczy (automatyczna vs manualna).
+- Działania reaktywne vs proaktywne w bezpieczeństwie.
+
+Dokumentacja:
+<a href="https://cloud.google.com/kms/docs/key-rotation" target="_blank">Rotacja kluczy w Cloud KMS</a>
 </pre>
-</div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
-<div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: BD</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Pytanie to testuje świadomość 'Physical Security'. Google posiada własne chipy kryptograficzne na kartach sieciowych, które szyfrują ruch na warstwie sprzętowej, co sprawia, że nawet haker mający dostęp do włókna światłowodowego nie odczyta danych.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/docs/security/encryption/in-transit" target="_blank">https://cloud.google.com/docs/security/encryption/in-transit</a></li>
-
-</ul>
-</div>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {

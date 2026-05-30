@@ -90,31 +90,30 @@ You have been tasked with configuring Security Command Center for your organizat
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Potwierdzona odpowiedź: AC (A. Event Threat Detection, C. Security Health Analytics).
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Cloud Armor: Jest to usługa zaprojektowana do walki z atakami DDoS (zarówno wolumetrycznymi, jak i aplikacyjnymi L7). Wykorzystuje infrastrukturę Google (Anycast) do rozpraszania i odrzucania ogromnych ilości szkodliwego ruchu zanim dotrze on do Twojej sieci.
+Wyjaśnienie:
+- A. Event Threat Detection (ETD): Jest to funkcja Security Command Center (SCC), która automatycznie skanuje logi (Cloud Audit Logs, VPC Flow Logs itp.) pod kątem znanych zagrożeń. ETD potrafi wykryć ślady kopania kryptowalut (cryptomining), np. komunikację z serwerami mining pools lub adresami C2.
+- C. Security Health Analytics (SHA): Jest to skaner podatności SCC, który automatycznie wykrywa typowe błędy konfiguracji (misconfigurations) w środowisku Google Cloud, takie jak publicznie dostępne buckety GCS, brak włączonego logowania czy słabe reguły firewall.
 
-Dlaczego inne są błędne:
-A. VPC Firewall: Twoja sieć VPC ma ograniczone 'rury' wejściowe. Atak wolumetryczny zapcha je, zanim firewall zdąży odrzucić pakiety.
-C. IAP: Służy do uwierzytelniania, nie do filtrowania milionów złośliwych pakietów na sekundę.
-D. Cloud DNS: Chroni przed atakami na samą nazwę domeny, ale nie chroni serwera przed potopem pakietów pod adres IP.
+Dlaczego pozostałe są błędne:
+- B. Container Threat Detection: Chociaż potrafi wykryć kopanie kryptowalut wewnątrz kontenerów GKE, ETD (A) jest rozwiązaniem szerszym, monitorującym całe środowisko compute (VM i kontenery) na poziomie logów zdarzeń. SHA (C) jest niezbędne do spełnienia drugiej części wymagania (misconfigurations).
+- D. Cloud Data Loss Prevention (DLP): Służy do wykrywania i ochrony danych wrażliwych (PII), a nie do wykrywania zagrożeń typu cryptomining czy błędów konfiguracji infrastruktury.
+- E. Google Cloud Armor: Jest to firewall aplikacyjny (WAF) i ochrona przed DDoS. Nie służy do wykrywania kopania kryptowalut ani audytowania konfiguracji zasobów Google Cloud.
 
-Konsensus społeczności ExamTopics: 100% na B. DDoS = Cloud Armor.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Threats" (zagrożenia, np. mining, malware, phishing) = Event Threat Detection.
+- "Misconfigurations" (błędy konfiguracji, np. public buckets, open ports) = Security Health Analytics.
+- Obie te usługi są częścią Security Command Center (SCC).
+
+Kluczowe zagadnienia do powtórzenia:
+- Moduły Security Command Center (SHA, ETD, Container Threat Detection, VM Threat Detection).
+- Różnica między detekcją zagrożeń a skanowaniem konfiguracji.
+- Poziomy SCC (Standard vs Premium).
+
+Dokumentacja:
+<a href="https://cloud.google.com/security-command-center/docs/concepts-security-sources" target="_blank">Źródła detekcji w Security Command Center</a>
 </pre>
-</div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
-<div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: AC</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Dyskusja na Reddit przypomina: Cloud Armor Standard jest darmowy i chroni przed standardowymi atakami L3/L4. To wystarcza na 'volumetric DDoS'. Wersja Premium dodaje ochronę przed inteligentnymi botami i atakami L7.</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/armor/docs/managed-protection-overview" target="_blank">https://cloud.google.com/armor/docs/managed-protection-overview</a></li>
-
-</ul>
-</div>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {

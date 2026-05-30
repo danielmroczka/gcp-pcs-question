@@ -64,7 +64,8 @@
 <h2>Question 195 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You are auditing all your Google Cloud resources in the production project. You want to identify all principals who can change firewall rules.<br/>What should you do?
+You are auditing all your Google Cloud resources in the production project. You want to identify all principals who can change firewall rules.
+What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,43 +90,41 @@ You are auditing all your Google Cloud resources in the production project. You 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (Use Policy Analyzer to query the permissions compute.firewalls.create or compute.firewalls.update or compute.firewalls.delete)
+Potwierdzona odpowiedź: D (Use Policy Analyzer to query the permissions compute.firewalls.create or compute.firewalls.update or compute.firewalls.delete).
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Cel audytu: Musimy zidentyfikować osoby, które mogą ZMIENIAĆ (change) reguły firewall. W Google Cloud uprawnienia do odczytu (view/list) i zapisu (create/update/delete) są od siebie odseparowane.
 - Policy Analyzer: Jest to potężne narzędzie w IAM, które pozwala na zadawanie pytań o to, "kto ma jakie uprawnienia do jakiego zasobu". Największą zaletą Policy Analyzer jest to, że automatycznie analizuje on całą hierarchię (organizacja, foldery, projekty) oraz rozwiązuje członkostwo w grupach Google Groups.
 - Precyzja: Zapytanie o uprawnienia `create`, `update` oraz `delete` (opcja D) precyzyjnie wskazuje osoby z uprawnieniami modyfikacyjnymi.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Permissions compute.firewalls.get or list: Te uprawnienia pozwalają jedynie na PRZEGLĄDANIE reguł (Viewer). Osoba z tymi uprawnieniami nie może wprowadzić żadnych zmian, więc audyt omijający uprawnienia modyfikacyjne byłby niepełny i błędny.
 - B. Firewall Insights: To narzędzie służy do analizy użycia reguł (np. które reguły są nieużywane, które się pokrywają). Pomaga optymalizować firewall, ale nie służy do audytowania tożsamości użytkowników i ich uprawnień IAM.
-- C. Security Health Analytics: Moduł SCC, który wykrywa błędy w konfiguracji (np. "firewall pozwala na ruch SSH z całego świata"). Podobnie jak opcja B, SHA skupia się na zasobach, a nie na tym, "kto" ma uprawnienia do ich zmiany.
+- C. Security Health Analytics (SHA): Moduł SCC, który wykrywa błędy w konfiguracji (np. "firewall pozwala na ruch SSH z całego świata"). Skupia się na zasobach i ich stanie bezpieczeństwa, a nie na tym, "kto" ma uprawnienia do ich zmiany.
 
-Wskazówki i triki (Tips & Tricks):
+Wskazówki egzaminacyjne (Tips & Tricks):
 - "Who can [ACTION]" + "Audit/Identify" = IAM Policy Analyzer.
 - Pamiętaj: W GCP zmiana zasobu to zawsze zestaw uprawnień: create, update, delete.
-- Policy Analyzer to "Google Search dla uprawnień IAM".
+- Policy Analyzer to "Google Search dla uprawnień IAM" – potrafi przeskanować miliardy kombinacji ról i tożsamości.
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj, że Policy Analyzer może również analizować dostęp do danych w BigQuery i Cloud Storage.
-- Wyniki audytu z Policy Analyzer można wyeksportować do BigQuery lub Cloud Storage w celu dalszej analizy lub raportowania dla audytorów zewnętrznych.
+Kluczowe zagadnienia do powtórzenia:
+- IAM Policy Analyzer i jego zastosowania.
+- Uprawnienia IAM dla VPC Firewall.
+- Analiza hierarchii zasobów i dziedziczenia ról.
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/iam/docs/policy-analyzer-overview" target="_blank">IAM Policy Analyzer overview</a>
-- <a href="https://cloud.google.com/iam/docs/using-policy-analyzer" target="_blank">Using Policy Analyzer to audit permissions</a>
-- <a href="https://cloud.google.com/vpc/docs/firewalls#iam" target="_blank">IAM roles for VPC firewalls</a>
+Dokumentacja:
+<a href="https://cloud.google.com/iam/docs/policy-analyzer-overview" target="_blank">IAM Policy Analyzer overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
+<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
+<h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość narzędzi do "Identity Governance". W dużych organizacjach uprawnienia są rozproszone – ktoś może mieć rolę Ownera na poziomie folderu, a ktoś inny specyficzną rolę Security Admin na poziomie projektu. Ręczne sprawdzanie każdego użytkownika jest niemożliwe. Policy Analyzer to jedyny sposób na uzyskanie pełnego obrazu "kto faktycznie rządzi siecią".</p>
-<h3>Dodatkowe wskazówki</h3>
+<p><b>Głęboka analiza:</b> To pytanie testuje Twoją znajomość narzędzi do "Identity Governance". W dużych organizacjach uprawnienia są rozproszone – ktoś może mieć rolę Ownera na poziomie folderu, a ktoś inny specyficzną rolę Security Admin na poziomie projektu. Policy Analyzer to jedyny sposób na uzyskanie pełnego obrazu "kto faktycznie rządzi siecią".</p>
+<h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li>Możesz użyć Policy Analyzer, aby sprawdzić "Effective Permissions" dla konkretnego konta serwisowego, co jest kluczowe przy debugowaniu problemów z dostępem aplikacji.</li>
-<li>Pamiętaj, że Policy Analyzer jest dostępny dla klientów Cloud Identity Premium, Google Workspace Enterprise lub SCC Premium.</li>
+<li><a href="https://cloud.google.com/iam/docs/using-policy-analyzer" target="_blank">Using Policy Analyzer to audit permissions</a></li>
 </ul>
 </div>
 </div>

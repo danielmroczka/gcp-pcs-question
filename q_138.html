@@ -89,31 +89,32 @@ A database administrator notices malicious activities within their Cloud SQL ins
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Potwierdzona odpowiedź: D (Data Access).
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Master Authorized Networks: Pozwala na stworzenie białej listy adresów IP, które mogą komunikować się z serwerem API Kubernetes (Master). Jest to jedyny sposób na zabezpieczenie punktu styku z Twoim klastrem GKE przed niepowołanym dostępem z internetu.
+Wyjaśnienie:
+- Logi dostępu do danych (Data Access audit logs): Rejestrują wywołania API, które tworzą, modyfikują lub odczytują dane dostarczane przez użytkowników, a także wywołania API, które odczytują konfigurację lub metadane zasobów. Wyróżnia się trzy rodzaje tych logów:
+  1. ADMIN_READ: Rejestruje operacje odczytu metadanych lub informacji konfiguracyjnych (to, o co pyta administrator w pytaniu).
+  2. DATA_READ: Rejestruje operacje odczytu danych użytkownika.
+  3. DATA_WRITE: Rejestruje operacje zapisu danych użytkownika.
 
-Dlaczego inne są błędne:
-A. VPC Firewall: Master GKE jest zarządzany przez Google i nie znajduje się w Twoim VPC, więc Twoje firewalle go 'nie widzą'.
-C. Network Policies: Kontrolują ruch Między Podami wewnątrz klastra, nie dostęp do samego API Kubernetes.
-D. Private Cluster: Sprawia, że węzły nie mają publicznych IP, ale Master nadal może mieć publiczny endpoint, który wymaga ochrony przez (B).
+Dlaczego pozostałe są błędne:
+- A. Admin Activity: Te logi rejestrują operacje zapisu API lub inne działania administracyjne, które MODYFIKUJĄ konfigurację lub metadane zasobów. Pytanie dotyczy operacji ODCZYTU (read).
+- B. System Event: Logi zdarzeń systemowych rejestrują działania Google Cloud, które zmieniają konfigurację zasobów (np. restart maszyny przez Google). Nie rejestrują odczytów metadanych przez użytkowników.
+- C. Access Transparency: Te logi rejestrują działania podejmowane przez pracowników Google, gdy uzyskują oni dostęp do Twoich treści. Nie służą do monitorowania Twoich własnych wywołań API.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. Standard bezpieczeństwa GKE Mastera.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Słowo klucz "READ configuration/metadata" = Data Access (ADMIN_READ).
+- Słowo klucz "WRITE/MODIFY configuration/metadata" = Admin Activity.
+- Pamiętaj, że logi Data Access (poza BigQuery) są domyślnie wyłączone, bo mogą generować duże koszty.
+
+Kluczowe zagadnienia do powtórzenia:
+- Rodzaje logów audytowych w Cloud Audit Logs.
+- Różnica między Admin Activity a Data Access.
+- Konfiguracja logów Data Access (ADMIN_READ, DATA_READ, DATA_WRITE).
+
+Dokumentacja:
+<a href="https://cloud.google.com/logging/docs/audit#data-access" target="_blank">Logi audytowe dostępu do danych</a>
 </pre>
-</div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
-<div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Eksperci na GitHubie radzą: zawsze używaj Master Authorized Networks nawet w klastrach prywatnych. Zmniejsza to powierzchnię ataku do niezbędnego minimum (np. tylko IP Twojego biura i Twojego CI/CD).</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/authorized-networks" target="_blank">https://cloud.google.com/kubernetes-engine/docs/how-to/authorized-networks</a></li>
-
-</ul>
-</div>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {

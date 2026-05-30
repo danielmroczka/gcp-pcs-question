@@ -90,18 +90,30 @@ An office manager at your small startup company is responsible for matching paym
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: CD.
+Potwierdzona odpowiedź: CD (C. Billing Account Viewer, D. Billing Account Costs Manager).
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Billing Account Viewer: Pozwala widzieć faktury i płatności.
-D. Billing Account Costs Manager: Pozwala zarządzać alertami budżetowymi.
+Wyjaśnienie:
+- C. Billing Account Viewer: Ta rola pozwala użytkownikowi przeglądać informacje o koncie rozliczeniowym, w tym faktury, historię płatności i raporty kosztów. Jest niezbędna do "dopasowywania płatności do faktur".
+- D. Billing Account Costs Manager: Ta rola umożliwia zarządzanie alertami budżetowymi oraz przeglądanie kosztów. Jest kluczowa dla wymogu "tworzenia alertów rozliczeniowych".
 
-Dlaczego inne są błędne:
-A. Org Admin: Zdecydowanie zbyt wysokie uprawnienia.
-B. Project Creator: Pozwala wydawać pieniądze poprzez tworzenie nowych zasobów, nie jest potrzebne do audytu faktur.
-E. Billing Account User: Pozwala 'podpinać' projekty do płatności, co wykracza poza rolę managera od faktur.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A. Organization Administrator: Jest to najwyższa rola administracyjna w organizacji GCP, dająca pełną kontrolę nad wszystkimi zasobami. Przyznanie jej do prostych zadań finansowych narusza zasadę najniższych uprawnień (Least Privilege).
+- B. Project Creator: Ta rola pozwala na tworzenie nowych projektów w organizacji, co wiąże się z możliwością generowania nowych kosztów, a nie jest potrzebne do zarządzania fakturami czy alertami na istniejącym koncie rozliczeniowym.
+- E. Billing Account User: Ta rola pozwala na powiązywanie projektów z kontem rozliczeniowym. Użytkownik z tą rolą może przypisywać koszty do konta, co wykracza poza czysto audytową i monitorującą rolę "office managera".
 
-Konsensus społeczności ExamTopics: 100% na CD. To podręcznikowy podział ról finansowych.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie dotyczy finansów i faktur, szukaj ról z przedrostkiem "Billing Account".
+- "Matching payments to invoices" = Viewer.
+- "Billing alerts" = Costs Manager.
+- Pamiętaj o zasadzie Least Privilege – nigdy nie wybieraj roli "Admin", jeśli istnieją bardziej szczegółowe role (granular roles).
+
+Kluczowe zagadnienia do powtórzenia:
+- Role IAM dla Cloud Billing.
+- Zasada najniższych uprawnień (Least Privilege).
+- Budżety i alerty w Google Cloud.
+
+Dokumentacja:
+<a href="https://cloud.google.com/billing/docs/how-to/billing-access" target="_blank">Zarządzanie dostępem do Cloud Billing</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

@@ -89,17 +89,28 @@ Your organization hosts a financial services application running on Compute Engi
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Potwierdzona odpowiedź: A (Configure a Cloud VPN connection between your organization's VPC network and the third party's that is controlled by VPC firewall rules).
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Organization Policy Service: To narzędzie 'polityki prewencyjnej'. Pozwala na zdefiniowanie twardych reguł (np. zakaz tworzenia zewnętrznych IP, zakaz tworzenia VM poza Europą). Każdy zasób stworzony w organizacji MUSI być z nimi zgodny, inaczej Google odrzuci żądanie jego utworzenia.
+Wyjaśnienie:
+Cloud VPN umożliwia bezpieczne połączenie dwóch sieci VPC (nawet w różnych organizacjach) za pomocą tunelu IPsec. Spełnia oba kluczowe wymagania zadania: ruch jest szyfrowany (protokół IPsec) oraz odbywa się za pomocą prywatnych adresów IP (RFC 1918). Jest to standardowe rozwiązanie w GCP do bezpiecznego łączenia odizolowanych środowisk różnych organizacji.
 
-Dlaczego inne są błędne:
-A. IAM: Mówi kto może stworzyć zasób, ale nie mówi JAK ten zasób ma być skonfigurowany.
-C. Audit Logs: Rejestrują co się stało (reaktywne), nie zapewniają zgodności PRZED powstaniem zasobu.
-D. Monitoring: Tylko dla wydajności.
+Dlaczego pozostałe są błędne:
+- B. VPC Peering: Chociaż pozwala na komunikację po prywatnych adresach IP i Google szyfruje ruch wewnątrz swojej sieci, w kontekście egzaminacyjnym Cloud VPN jest wskazywany jako rozwiązanie spełniające wymóg "encrypted connection" w sposób jawny i konfigurowalny (IPsec). Peering jest częściej wybierany dla wydajności (niskie opóźnienia, wysoka przepustowość).
+- C. VPC Service Controls: To rozwiązanie służy do tworzenia obwodów bezpieczeństwa (perimeters) wokół usług zarządzanych (SaaS/PaaS jak Cloud Storage czy BigQuery), a nie do nawiązywania bezpośredniej łączności sieciowej między instancjami Compute Engine.
+- D. Apigee: Jest to platforma do zarządzania API. Chociaż obsługuje TLS, jest to rozwiązanie warstwy aplikacji (L7), a nie warstwy sieciowej (L3/L4), o którą pyta scenariusz dotyczący bezpośredniej komunikacji między serwerami.
 
-Konsensus społeczności ExamTopics: 100% na B. Org Policy to 'Compliance Guardrails' w chmurze.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli widzisz wymagania: "Encrypted" + "Private IP" + "Separate Organizations/Networks" -> najsilniejszym kandydatem jest Cloud VPN.
+- Pamiętaj, że VPC Peering nie jest przechodni (non-transitive) – jeśli sieć A jest połączona z B, a B z C, to A nie widzi C.
+- Cloud VPN zawsze wiąże się z kosztami za tunel i ruch, podczas gdy Peering jest zazwyczaj tańszy, ale oferuje mniejszą kontrolę nad "izolacją" tunelu.
+
+Kluczowe zagadnienia do powtórzenia:
+- Rodzaje Cloud VPN (HA VPN vs Classic VPN).
+- Różnice między VPC Peering a Cloud VPN.
+- Szyfrowanie w tranzycie (Encryption in transit) w Google Cloud.
+
+Dokumentacja:
+<a href="https://cloud.google.com/network-connectivity/docs/vpn/concepts/overview" target="_blank">Cloud VPN overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

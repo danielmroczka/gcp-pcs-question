@@ -64,7 +64,8 @@
 <h2>Question 197 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You run applications on Cloud Run. You already enabled container analysis for vulnerability scanning. However, you are concerned about the lack of control on the applications that are deployed. You must ensure that only trusted container images are deployed on Cloud Run.<br/>What should you do? (Choose two.)
+You run applications on Cloud Run. You already enabled container analysis for vulnerability scanning. However, you are concerned about the lack of control on the applications that are deployed. You must ensure that only trusted container images are deployed on Cloud Run.
+What should you do? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
@@ -90,43 +91,41 @@ You run applications on Cloud Run. You already enabled container analysis for vu
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: AB (A: Enable Binary Authorization on the existing Cloud Run service, B: Set the organization policy constraint constraints/run.allowedBinaryAuthorizationPolicies to the list or allowed Binary Authorization policy names)
+Potwierdzona odpowiedź: AB (A. Enable Binary Authorization on the existing Cloud Run service, B. Set the organization policy constraint constraints/run.allowedBinaryAuthorizationPolicies to the list or allowed Binary Authorization policy names).
 
-Dlaczego te odpowiedzi są poprawne:
+Wyjaśnienie:
 - Binary Authorization (BinAuthz): Jest to usługa bezpieczeństwa Google Cloud, która działa jako "strażnik" (gatekeeper) przy wdrażaniu kontenerów. Pozwala ona na zdefiniowanie polityk, które sprawdzają, czy obraz kontenera spełnia określone wymogi (np. czy został zbudowany w zaufanym pipeline, czy posiada atestację zespołu security).
-- A. Włączenie BinAuthz na Cloud Run: Aby Cloud Run zaczął weryfikować obrazy przed uruchomieniem, musisz jawnie włączyć funkcję Binary Authorization dla danej usługi Cloud Run.
+- A. Włączenie BinAuthz na Cloud Run: Aby Cloud Run zaczął weryfikować obrazy przed uruchomieniem, musisz jawnie włączyć funkcję Binary Authorization dla danej usługi Cloud Run (można to zrobić w ustawieniach usługi lub przez gcloud).
 - B. Polityka Organizacji: Aby zapewnić spójną kontrolę w całej firmie, należy użyć polityki organizacji `constraints/run.allowedBinaryAuthorizationPolicies`. Pozwala ona na wymuszenie, aby wszystkie usługi Cloud Run korzystały wyłącznie z zatwierdzonych i zdefiniowanych centralnie polityk Binary Authorization, co uniemożliwia deweloperom omijanie zabezpieczeń.
 
-Analiza niepoprawnych odpowiedzi:
-- C. BinAuthz on Kubernetes cluster: To pytanie dotyczy Cloud Run (usługa serverless), a nie klastrów GKE. Choć BinAuthz działa na GKE, włączenie go tam nie zabezpieczy wdrożeń na Cloud Run.
-- D. Breakglass: Funkcja "breakglass" służy do ominięcia polityki w sytuacjach awaryjnych (incydenty). Użycie jej domyślnie przeczy celowi pytania, którym jest "zapewnienie, że tylko zaufane obrazy są wdrażane".
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- C. BinAuthz on Kubernetes cluster: To pytanie dotyczy Cloud Run (usługa serverless), a nie klastrów GKE. Choć BinAuthz działa na GKE, włączenie go tam nie zabezpieczy wdrożeń na Cloud Run – to osobne integracje.
+- D. Breakglass: Funkcja "breakglass" służy do celowego OMINIĘCIA polityki w sytuacjach awaryjnych (incydenty). Użycie jej domyślnie przeczy celowi pytania, którym jest "zapewnienie, że tylko zaufane obrazy są wdrażane".
 - E. trustedImageProjects: Ta polityka organizacji dotyczy obrazów maszyn wirtualnych (Compute Engine), a nie obrazów kontenerów (Docker/OCI) wdrażanych w Artifact Registry lub Cloud Run.
 
-Wskazówki i triki (Tips & Tricks):
+Wskazówki egzaminacyjne (Tips & Tricks):
 - "Trusted container images" + "Cloud Run" / "GKE" = Binary Authorization.
-- Szukaj słowa "Attestors" (osoby/systemy poświadczające) w podobnych pytaniach.
-- Pamiętaj: Binary Authorization sprawdza obraz w momencie wdrożenia (deployment), a nie w czasie budowania (build).
+- Szukaj słowa "Attestors" (osoby/systemy poświadczające) w podobnych pytaniach o podpisywanie obrazów.
+- Pamiętaj: Binary Authorization sprawdza obraz w momencie wdrożenia (deployment), a nie w czasie budowania (build). To ostatnia linia obrony przed nieautoryzowanym kodem.
 
-Praktyczne informacje na egzamin:
-- Zrozum workflow: Build w Cloud Build -> Atestacja (podpisanie obrazu) -> Deployment -> Sprawdzenie podpisu przez Binary Authorization.
-- Binary Authorization jest kluczowym elementem strategii "Secure Supply Chain" (SLSA).
+Kluczowe zagadnienia do powtórzenia:
+- Binary Authorization dla Cloud Run i GKE.
+- Atestacje (Attestations) i Atesorzy (Attestors).
+- Polityki Organizacji dla usług serverless.
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/binary-authorization/docs/cloud-run/overview" target="_blank">Binary Authorization for Cloud Run overview</a>
-- <a href="https://cloud.google.com/binary-authorization/docs/using-binary-authorization" target="_blank">Using Binary Authorization</a>
-- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">Organization Policy constraints reference</a>
+Dokumentacja:
+<a href="https://cloud.google.com/binary-authorization/docs/cloud-run/overview" target="_blank">Binary Authorization for Cloud Run overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
+<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
+<h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: AB</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość mechanizmów kontroli wdrożeń (Deployment Governance). W środowiskach mikroserwisowych łatwo o wdrożenie nieprzetestowanego lub złośliwego kodu. Binary Authorization w połączeniu z polityką organizacji daje zespołowi security gwarancję, że na produkcji (Cloud Run) działają tylko te bity, które zostały oficjalnie zatwierdzone.</p>
-<h3>Dodatkowe wskazówki</h3>
+<p><b>Głęboka analiza:</b> To pytanie testuje Twoją znajomość mechanizmów kontroli wdrożeń (Deployment Governance). W środowiskach mikroserwisowych łatwo o wdrożenie nieprzetestowanego lub złośliwego kodu. Binary Authorization w połączeniu z polityką organizacji daje zespołowi security gwarancję, że na produkcji (Cloud Run) działają tylko te bity, które zostały oficjalnie zatwierdzone przez CI/CD.</p>
+<h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li>Możesz używać polityki "Allow All" w fazie testów, ale na produkcji zawsze stosuj polityki oparte na atestacjach.</li>
-<li>Pamiętaj, że do działania BinAuthz na Cloud Run potrzebujesz roli `binaryauthorization.policyEvaluator`.</li>
+<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">Organization Policy constraints reference</a></li>
 </ul>
 </div>
 </div>

@@ -89,16 +89,28 @@ The security operations team needs access to the security-related logs for all p
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Potwierdzona odpowiedź: A (roles/logging.privateLogViewer)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Private Log Viewer: Standardowy `logging.viewer` (D) nie widzi logów Data Access (kto czytał dane) ani Access Transparency (co robiło Google). Tylko rola `privateLogViewer` daje wgląd w te wrażliwe dzienniki bez uprawnień do ich usuwania czy zmiany (view-only).
+Wyjaśnienie:
+- roles/logging.privateLogViewer: Ta rola jest niezbędna do przeglądania logów zawierających wrażliwe dane (private logs), takie jak Data Access logs (kto czytał Twoje dane) oraz Access Transparency logs (działania personelu Google). Pozwala ona na wgląd we wszystkie dzienniki bez możliwości ich modyfikacji czy usuwania.
+- Least privilege (Najniższe uprawnienia): Rola ta idealnie wpisuje się w ten model, ponieważ daje dostęp tylko do odczytu (view access) wszystkich logów wymaganych przez zespół operacyjny, nie dając uprawnień administracyjnych.
 
-Dlaczego inne są błędne:
-B. Admin: Pozwala na usuwanie logów - naruszenie zasady least privilege.
-C. Project Viewer: Widzi tylko logi Admin Activity, nie ma dostępu do prywatnych dzienników.
+Dlaczego pozostałe są błędne:
+- B: roles/logging.admin daje pełne uprawnienia do Logging, w tym możliwość usuwania dzienników i zmiany polityk ich retencji, co narusza zasadę najniższych uprawnień.
+- C: roles/viewer to rola podstawowa (primitive), która daje dostęp do odczytu większości zasobów w projekcie, ale paradoksalnie NIE daje dostępu do prywatnych logów (Data Access). Jest zbyt szeroka w jednych obszarach i zbyt wąska w innych.
+- D: roles/logging.viewer pozwala na przeglądanie logów Admin Activity i System Event, ale nie daje uprawnień do widzenia logów Data Access ani Access Transparency.
 
-Konsensus społeczności ExamTopics: 100% na A. Zrozumienie różnicy między viewer a privateLogViewer jest kluczowe dla audytora.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli zespół bezpieczeństwa potrzebuje widzieć "kto czytał dane" (Data Access), zwykły "Viewer" to za mało – potrzebny jest "Private Log Viewer".
+- Pamiętaj o hierarchii logów: Admin Activity (standardowe) < Data Access (prywatne/wrażliwe).
+
+Kluczowe zagadnienia do powtórzenia:
+- Różnice między rolami Logging Viewer i Private Log Viewer.
+- Rodzaje Cloud Audit Logs.
+- Zasada najniższych uprawnień (Least Privilege) w kontekście audytu.
+
+Dokumentacja:
+- <a href="https://cloud.google.com/logging/docs/access-control#roles" target="_blank">Role IAM w Cloud Logging</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

@@ -64,7 +64,8 @@
 <h2>Question 198 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization has on-premises hosts that need to access Google Cloud APIs. You must enforce private connectivity between these hosts, minimize costs, and optimize for operational efficiency.<br/>What should you do?
+Your organization has on-premises hosts that need to access Google Cloud APIs. You must enforce private connectivity between these hosts, minimize costs, and optimize for operational efficiency.
+What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,43 +90,41 @@ Your organization has on-premises hosts that need to access Google Cloud APIs. Y
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Route all on-premises traffic to Google Cloud through an IPsec VPN tunnel to a VPC with Private Google Access enabled)
+Potwierdzona odpowiedź: B (Route all on-premises traffic to Google Cloud through an IPsec VPN tunnel to a VPC with Private Google Access enabled).
 
-Dlaczego ta odpowiedź jest poprawna:
-- Private Google Access (PGA) for On-Premises: Jest to funkcja, która pozwala hostom w sieci lokalnej (on-premises) na łączenie się z API i usługami Google Cloud bez użycia publicznych adresów IP.
-- IPsec VPN: W porównaniu do Cloud Interconnect, tunel VPN jest znacznie tańszym i szybszym w konfiguracji rozwiązaniem, co spełnia wymóg "minimize costs" oraz "operational efficiency". VPN zapewnia szyfrowane, prywatne połączenie przez publiczny internet.
-- Workflow: Ruch z on-premises trafia przez VPN do sieci VPC w Google Cloud. Jeśli w tej sieci włączono PGA, a zapytania DNS są poprawnie kierowane (np. do `private.googleapis.com` lub `restricted.googleapis.com`), hosty lokalne mogą bezpiecznie korzystać z usług takich jak Cloud Storage, BigQuery czy KMS bez wychodzenia do publicznego internetu.
+Wyjaśnienie:
+- Private Google Access (PGA) for On-Premises: Jest to funkcja, która pozwala hostom w sieci lokalnej (on-premises) na łączenie się z API i usługami Google Cloud (jak Cloud Storage, BigQuery) bez użycia publicznych adresów IP.
+- IPsec VPN: W porównaniu do Cloud Interconnect, tunel VPN jest znacznie tańszym i szybszym w konfiguracji rozwiązaniem, co idealnie spełnia wymóg "minimize costs" oraz "operational efficiency". VPN zapewnia szyfrowane, prywatne połączenie przez publiczny internet.
+- Workflow: Ruch z on-premises trafia przez VPN do sieci VPC w Google Cloud. Jeśli w tej sieci włączono PGA, a zapytania DNS są poprawnie kierowane (np. do `private.googleapis.com` lub `restricted.googleapis.com`), hosty lokalne mogą bezpiecznie korzystać z usług Google Cloud bez wychodzenia do publicznego internetu.
 
-Analiza niepoprawnych odpowiedzi:
-- A. VPC Peering over internet: VPC Peering służy do łączenia dwóch sieci VPC WEWNĄTRZ Google Cloud. Nie można zestawić peeringu między siecią lokalną a chmurą przez publiczny internet.
-- C. Security policy for KMS encryption: Choć szyfrowanie danych przed wysyłką jest dobrą praktyką, samo w sobie nie zapewnia "prywatnej łączności" (private connectivity) na poziomie sieciowym. Dane wciąż płynęłyby przez publiczne punkty styku API Google.
-- D. Dedicated/Partner Interconnect: Interconnect zapewnia najwyższą wydajność i niezawodność, ale wiąże się z bardzo wysokimi kosztami stałymi (instalacja, porty, opłaty miesięczne). Przeczy to wymogowi minimalizacji kosztów w scenariuszu, gdzie VPN (B) jest wystarczający.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A. VPC Peering over internet: VPC Peering służy do łączenia dwóch sieci VPC WEWNĄTRZ Google Cloud. Nie można zestawić peeringu między siecią lokalną a chmurą, a już na pewno nie przez publiczny internet.
+- C. Security policy for KMS encryption: Choć szyfrowanie danych przed wysyłką jest dobrą praktyką, samo w sobie nie zapewnia "prywatnej łączności" (private connectivity) na poziomie sieciowym. Dane wciąż płynęłyby przez publiczne punkty styku API Google (Internet).
+- D. Dedicated/Partner Interconnect: Interconnect zapewnia najwyższą wydajność i niezawodność, ale wiąże się z bardzo wysokimi kosztami stałymi (instalacja, porty, opłaty miesięczne). Przeczy to wymogowi "minimalizacji kosztów" w scenariuszu, gdzie VPN (B) jest wystarczający.
 
-Wskazówki i triki (Tips & Tricks):
+Wskazówki egzaminacyjne (Tips & Tricks):
 - "Private access to APIs" + "On-premises" = Private Google Access for on-prem.
 - "Minimize cost" + "Private connection" = Cloud VPN (zamiast Interconnect).
-- Pamiętaj: Do działania PGA for on-prem musisz skonfigurować DNS tak, aby `*.googleapis.com` rozwiązywało się na zakresy 199.36.153.8/30 (private) lub 199.36.153.4/30 (restricted).
+- Pamiętaj o konfiguracji DNS: musisz przekierować zapytania o usługi Google na odpowiednie wirtualne zakresy IP (199.36.153.8/30 lub 199.36.153.4/30).
 
-Praktyczne informacje na egzamin:
-- Cloud VPN obsługuje do 3 Gbps na tunel (HA VPN). Jeśli Twoje zapotrzebowanie jest mniejsze, VPN jest zawsze odpowiedzią "low cost".
-- Zrozum różnicę: **Private Google Access** (dla VM wewnątrz GCP) vs **Private Google Access for On-Premises** (wymaga VPN lub Interconnect).
+Kluczowe zagadnienia do powtórzenia:
+- Private Google Access for on-premises hosts.
+- Różnice między Cloud VPN a Cloud Interconnect.
+- Konfiguracja hybrydowego DNS.
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/vpc/docs/configure-private-google-access-hybrid" target="_blank">Configure Private Google Access for on-premises hosts</a>
-- <a href="https://cloud.google.com/network-connectivity/docs/vpn/concepts/overview" target="_blank">Cloud VPN overview</a>
-- <a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">Private Google Access overview</a>
+Dokumentacja:
+<a href="https://cloud.google.com/vpc/docs/configure-private-google-access-hybrid" target="_blank">Configure Private Google Access for on-premises hosts</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
+<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
+<h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje umiejętność projektowania łączności hybrydowej z uwzględnieniem ograniczeń budżetowych. W świecie realnym firmy często wybierają Interconnect dla stabilności, ale na egzaminie "minimalizacja kosztów" jest silnym sygnałem do wyboru VPN. Kluczowe jest zrozumienie, że PGA rozszerza swoje działanie na sieci połączone hybrydowo.</p>
-<h3>Dodatkowe wskazówki</h3>
+<p><b>Głęboka analiza:</b> To pytanie testuje umiejętność projektowania łączności hybrydowej z uwzględnieniem ograniczeń budżetowych. W świecie realnym firmy często wybierają Interconnect dla stabilności, ale na egzaminie "minimalizacja kosztów" jest silnym sygnałem do wyboru VPN. Kluczowe jest zrozumienie, że PGA rozszerza swoje działanie na sieci połączone hybrydowo.</p>
+<h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li>Wymagana jest konfiguracja BGP na Cloud Routerze, aby rozgłosić odpowiednie trasy do sieci on-premises.</li>
-<li>Pamiętaj o firewallach: musisz pozwolić na ruch z on-premises do zakresów IP przeznaczonych dla PGA.</li>
+<li><a href="https://cloud.google.com/network-connectivity/docs/vpn/concepts/overview" target="_blank">Cloud VPN overview</a></li>
 </ul>
 </div>
 </div>

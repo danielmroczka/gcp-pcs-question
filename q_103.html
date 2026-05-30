@@ -89,16 +89,31 @@ You are designing a new governance model for your organization's secrets that ar
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Potwierdzona odpowiedź: A (1. Use separate Google Cloud projects to store Production and Non-Production secrets. 2. Enforce access control to secrets using project-level identity and Access Management (IAM) bindings. 3. Use customer-managed encryption keys to encrypt secrets.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Separate projects + CMEK: Osobne projekty dają najsilniejszą izolację środowisk (Prod/Dev). Zarządzanie na poziomie projektu jest łatwiejsze niż na poziomie pojedynczych sekretów. CMEK daje pełną kontrolę nad kluczem nadrzędnym (wrap key) i jego rotacją.
+Wyjaśnienie:
+- Oddzielne projekty: Rozdzielenie sekretów produkcyjnych i nieprodukcyjnych na osobne projekty zapewnia najsilniejszą izolację środowisk (environment separation). Jest to zgodne z najlepszymi praktykami Google Cloud dotyczącymi hierarchii zasobów.
+- IAM na poziomie projektu: Choć uprawnienia można nadawać na poziomie poszczególnych sekretów, zarządzanie nimi na poziomie projektu (project-level IAM) znacznie upraszcza administrację (ease of management), zwłaszcza przy dużej liczbie sekretów, jednocześnie zapewniając wystarczającą granularność (wszystkie sekrety w danym projekcie mają tę samą klasyfikację).
+- CMEK (Customer-Managed Encryption Keys): Wykorzystanie CMEK jest niezbędne, aby spełnić wymóg kontroli nad harmonogramem rotacji kluczy szyfrujących (wrapping keys). Klucze zarządzane przez Google są rotowane automatycznie, ale użytkownik nie ma wpływu na ich konkretny harmonogram.
 
-Dlaczego inne są błędne:
-B, D. Single project: To 'jeden koszyk' dla wszystkich sekretów - błąd administratora może wystawić wszystko wszystkim.
-C. Secret-level IAM: Bardzo trudne w utrzymaniu przy setkach sekretów (brak 'ease of management').
+Dlaczego pozostałe są błędne:
+- B: Przechowywanie wszystkich sekretów w jednym projekcie nie zapewnia izolacji środowisk. Dodatkowo, klucze zarządzane przez Google nie pozwalają na kontrolę harmonogramu rotacji.
+- C: Chociaż osobne projekty są poprawne, uprawnienia na poziomie pojedynczych sekretów (secret-level IAM) są trudne do zarządzania na dużą skalę (brak "ease of management"). Klucze zarządzane przez Google nie dają kontroli nad rotacją.
+- D: Jeden projekt nie zapewnia wymaganej izolacji środowisk. Zarządzanie na poziomie projektu jest tu zniwelowane przez brak separacji Prod/Non-Prod.
 
-Konsensus społeczności ExamTopics: 100% na A. Izolacja na poziomie projektu to fundament bezpieczeństwa w GCP.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Słowo klucz "rotation schedules" w kontekście kluczy szyfrujących prawie zawsze wskazuje na konieczność użycia CMEK.
+- "Environment separation" w GCP najlepiej realizować przez osobne projekty.
+- Pamiętaj o balansie między bezpieczeństwem (granularność) a operacyjnością (łatwość zarządzania).
+
+Kluczowe zagadnienia do powtórzenia:
+- Model uprawnień IAM w Secret Manager (Project-level vs Secret-level).
+- Różnice między kluczami zarządzanymi przez Google a CMEK.
+- Zasady izolacji środowisk w hierarchii zasobów GCP.
+
+Dokumentacja:
+- <a href="https://cloud.google.com/secret-manager/docs/access-control" target="_blank">Kontrola dostępu w Secret Manager</a>
+- <a href="https://cloud.google.com/secret-manager/docs/cmek" target="_blank">Używanie CMEK w Secret Manager</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

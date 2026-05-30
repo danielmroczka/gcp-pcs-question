@@ -89,16 +89,28 @@ You are a security administrator at your company. Per Google-recommended best pr
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Potwierdzona odpowiedź: D (Turn off the domain restricted sharing organization policy. Set the policy value to "Custom." Add each external partner's Cloud Identity or Google Workspace customer ID as an exception under the organization policy, and then turn the policy back on).
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Custom Policy with Customer ID: Polityka 'Domain Restricted Sharing' pozwala na zdefiniowanie wyjątków dla konkretnych identyfikatorów klientów Google Cloud (Customer ID). Jest to najbezpieczniejsza metoda, ponieważ dopuszczasz TYLKO wybraną firmę partnerską, zachowując blokadę dla całego reszty świata.
+Wyjaśnienie:
+Polityka organizacji "Domain restricted sharing" (iam.allowedPolicyMemberDomains) służy do ograniczania tożsamości, którym można nadawać role IAM, tylko do tych należących do określonych organizacji (identyfikowanych przez Customer ID). Jeśli musisz współpracować z zewnętrznym partnerem, najlepszą praktyką (zgodną z modelem Least Privilege i zapobieganiem exfiltracji danych do prywatnych kont) jest dodanie identyfikatora klienta (Customer ID) tego partnera do listy dozwolonych domen w Twojej polityce organizacji. Wybranie opcji "Custom" pozwala na wskazanie wielu dozwolonych organizacji obok Twojej własnej.
 
-Dlaczego inne są błędne:
-A, B. Turn off / Allow All: Całkowicie niweluje sens posiadania polityki bezpieczeństwa i naraża firmę na wyciek danych do prywatnych kont pracowników.
-C. Google Group: Grupy służą do IAM, ale 'Domain Restricted Sharing' to polityka organizacji, która blokuje nadanie uprawnienia IAM komukolwiek spoza listy dozwolonych domen, nawet jeśli jest w Twojej grupie. Musisz dodać domenę/ID partnera do samej polityki (D).
+Dlaczego pozostałe są błędne:
+- A. Set the policy value to "Allow All": To całkowicie wyłącza zabezpieczenie, pozwalając na dodawanie dowolnych tożsamości (np. prywatnych kont @gmail.com), co narusza zasady bezpieczeństwa i best practices.
+- B. Turn off... Provide... using IAM: Wyłączenie polityki otwiera lukę bezpieczeństwa. Nawet jeśli nadasz uprawnienia tylko partnerom, brak wymuszenia domenowego pozwoli innym administratorom na dodawanie nieautoryzowanych kont w przyszłości.
+- C. Add... to a Google group... add group as exception: To technicznie niemożliwe w ten sposób. Polityka "Domain restricted sharing" nie obsługuje grup jako wyjątków – sprawdza ona domenę/organizację każdego indywidualnego członka dodawanego do IAM. Jeśli członek grupy pochodzi z niedozwolonej domeny, próba nadania uprawnień grupie zawierającej taką osobę lub dodania takiej osoby do zasobu zostanie zablokowana.
 
-Konsensus społeczności ExamTopics: 100% na D. To standardowy sposób współpracy B2B w GCP.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Domain restricted sharing" działa na poziomie identyfikatora organizacji (Customer ID), a nie nazwy domeny (choć potocznie tak się o tym mówi).
+- Customer ID to unikalny identyfikator zaczynający się zazwyczaj od litery 'C' (np. C0123abcd).
+- Pamiętaj: Ta polityka blokuje dodawanie nowych tożsamości do IAM, nie usuwa tych już istniejących (chyba że zostaną one zmodyfikowane).
+
+Kluczowe zagadnienia do powtórzenia:
+- iam.allowedPolicyMemberDomains (Organization Policy).
+- Cloud Identity Customer ID.
+- Bezpieczeństwo tożsamości w relacjach B2B.
+
+Dokumentacja:
+<a href="https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains" target="_blank">Ograniczanie współdzielenia zasobów według domeny</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

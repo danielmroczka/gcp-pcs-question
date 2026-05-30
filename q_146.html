@@ -89,16 +89,27 @@ Your security team wants to reduce the risk of user-managed keys being mismanage
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+Potwierdzona odpowiedź: C (Enable an organization policy to prevent service account keys from being created).
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Service Account based rules: Jest to najbardziej skalowalna i bezpieczna metoda. Pozwala na zdefiniowanie reguł typu: 'Aplikacja Web (SA-Web) może rozmawiać z Bazą Danych (SA-DB)'. Jeśli Twoja flota VM powiększy się z 10 do 1000, reguła nadal działa bez zmian, niezależnie od adresów IP czy tagów.
+Wyjaśnienie:
+Klucze kont serwisowych zarządzane przez użytkownika (user-managed keys) stanowią duże ryzyko bezpieczeństwa, ponieważ są plikami tekstowymi, które mogą wyciec (np. zostać przypadkowo dodane do Gituba). Aby centralnie wymusić zakaz ich tworzenia w całej organizacji, należy użyć polityki organizacji (Organization Policy) z ograniczeniem `iam.disableServiceAccountKeyCreation`. Dzięki temu programiści nie będą mogli wygenerować nowych kluczy .json, co zmusza ich do korzystania z bezpieczniejszych metod uwierzytelniania, takich jak Workload Identity lub krótkotrwałe poświadczenia.
 
-Dlaczego inne są błędne:
-A. IP whitelisting: Nieskalowalne. Adresy IP się zmieniają, a ich wpisywanie ręczne przy dużej liczbie maszyn to gwarancja błędów.
-B. Network tags: Lepsze niż IP, ale tagi może nadać każdy 'Instance Admin'. Uprawnienia do kont serwisowych (SA) są znacznie lepiej kontrolowane, co czyni (C) bezpieczniejszym wyborem Enterprise.
+Dlaczego pozostałe są błędne:
+- A. Secret Manager: To usługa do bezpiecznego przechowywania sekretów, ale sama w sobie nie blokuje technicznej możliwości wygenerowania klucza przez programistę w panelu IAM.
+- B. Wyłączenie tworzenia kont serwisowych: To zbyt drastyczne rozwiązanie. Konta serwisowe są niezbędne do poprawnego działania aplikacji i usług GCP; problemem nie jest samo konto, ale posiadanie do niego długoterminowego klucza w pliku zewnętrznym.
+- D. Usunięcie uprawnienia `getAccessToken`: Uniemożliwiłoby to generowanie krótkotrwałych tokenów (impersonation), co jest akurat zalecaną i bezpieczną praktyką (alternatywą dla kluczy). Nie rozwiązuje to jednak problemu tworzenia stałych kluczy .json.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na C. To 'best practice' dla mikroserwisów w GCP.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Słowo klucz: "Prevent service account keys from being created" -> Organization Policy `iam.disableServiceAccountKeyCreation`.
+- Zawsze wybieraj opcje promujące "Keyless" (bezkluczykowe) podejście do bezpieczeństwa.
+- Pamiętaj, że klucze zarządzane przez Google (Google-managed keys) są bezpieczne, bo Google dba o ich rotację i nigdy nie udostępnia ich do pobrania.
+
+Kluczowe zagadnienia do powtórzenia:
+- Najważniejsze ograniczenia polityki organizacji (Organization Policy constraints).
+- Metody uwierzytelniania bez użycia kluczy (Workload Identity Federation).
+
+Dokumentacja:
+<a href="https://cloud.google.com/resource-manager/docs/organization-policy/restricting-service-accounts#disable_service_account_key_creation" target="_blank">Disabling service account key creation</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

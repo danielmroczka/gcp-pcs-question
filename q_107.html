@@ -89,17 +89,30 @@ Your organization recently deployed a new application on Google Kubernetes Engin
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Potwierdzona odpowiedź: B (Web Security Scanner)
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Web Security Scanner: Narzędzie DAST, które potrafi udawać zalogowanego użytkownika Google, skanować aplikację webową (nawet na GKE) raz w tygodniu i precyzyjnie identyfikować luki XSS w kodzie strony.
+Wyjaśnienie:
+- Web Security Scanner (WSS): Jest to dedykowane narzędzie do wykrywania podatności w aplikacjach internetowych (DAST). Automatycznie skanuje aplikacje pod kątem typowych zagrożeń, takich jak Cross-Site Scripting (XSS).
+- Harmonogram skanowania: WSS pozwala na definiowanie harmonogramów (np. raz w tygodniu), co spełnia wymóg regularnych skanów.
+- Uwierzytelnianie kontami Google: Jest to jedna z kluczowych funkcji WSS, która pozwala na skanowanie części aplikacji dostępnych tylko po zalogowaniu, przy użyciu tożsamości Google.
+- Wsparcie dla GKE: WSS może skanować aplikacje hostowane na GKE, Compute Engine oraz App Engine.
 
-Dlaczego inne są błędne:
-A. Cloud Armor: Blokuje ataki (WAF), ale nie 'skanuje' i nie wykrywa luk w kodzie przed atakiem.
-C. SHA: Sprawdza błędy w konfiguracji chmury (np. publiczne IP), nie błędy w kodzie HTML/JS.
-D. CTD: Monitoruje wnętrze kontenera (runtime), nie warstwę prezentacji webowej.
+Dlaczego pozostałe są błędne:
+- A: Google Cloud Armor to firewall aplikacji webowych (WAF), który chroni przed atakami w czasie rzeczywistym, ale nie przeprowadza proaktywnych skanów kodu pod kątem podatności.
+- C: Security Health Analytics (SHA) skupia się na bezpieczeństwie samej platformy (konfiguracji zasobów GCP, np. otwartych reguł zapory), a nie na lukach w logice i kodzie aplikacji webowej.
+- D: Container Threat Detection monitoruje podejrzaną aktywność wewnątrz uruchomionych kontenerów (runtime security), np. próby instalacji rootkitów, a nie skanuje interfejsu webowego aplikacji.
 
-Konsensus społeczności ExamTopics: 100% na B. To jedyny skaner warstwy aplikacyjnej w ofercie.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Słowo klucz "Scan" + "XSS" + "Application" = Web Security Scanner.
+- Pamiętaj, że WSS wykrywa podatności "od zewnątrz" (podobnie jak haker), udając ruch przeglądarkowy.
+
+Kluczowe zagadnienia do powtórzenia:
+- Możliwości Web Security Scanner (WSS).
+- Różnica między WAF (Cloud Armor) a DAST (WSS).
+- Skanery wbudowane w Security Command Center.
+
+Dokumentacja:
+- <a href="https://cloud.google.com/security-command-center/docs/concepts-web-security-scanner-overview" target="_blank">Omówienie Web Security Scanner</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

@@ -64,13 +64,15 @@
 <h2>Question 193 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization's Customers must scan and upload the contract and their driver license into a web portal in Cloud Storage. You must remove all personally identifiable information (PII) from files that are older than 12 months. Also, you must archive the anonymized files for retention purposes.<br/>What should you do?
+Your organization's Customers must scan and upload the contract and their driver license into a web portal in Cloud Storage. You must remove all personally identifiable information (PII) from files that are older than 12 months. Also, you must archive the anonymized files for retention purposes.
+What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Set a time to live (TTL) of 12 months for the files in the Cloud Storage bucket that removes PII and moves the files to the archive storage class.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a Cloud Data loss Prevention (DLP) inspection job that de-identifies PII in files created more than 12 months ago and archives them to another Cloud Storage bucket. Delete the original files.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure the Autoclass feature of the Cloud Stor</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Configure the Autoclass feature of the Cloud Storage bucket to move files to the Archive storage class after 12 months. Use a Cloud Function to remove PII.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Implement a lifecycle policy to move objects to the Archive storage class after 12 months. Use the Cloud Data Loss Prevention (DLP) API to remove PII.</li>
 
 </ul>
 </div>
@@ -79,7 +81,7 @@ Your organization's Customers must scan and upload the contract and their driver
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer"></span>
+<span class="correct-answer">B</span>
 <br/>
 </span>
 </div>
@@ -88,43 +90,42 @@ Your organization's Customers must scan and upload the contract and their driver
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Create a Cloud Data loss Prevention (DLP) inspection job that de-identifies PII in files created more than 12 months ago and archives them to another Cloud Storage bucket. Delete the original files)
+Potwierdzona odpowiedź: B (Create a Cloud Data loss Prevention (DLP) inspection job that de-identifies PII in files created more than 12 months ago and archives them to another Cloud Storage bucket. Delete the original files).
 
-Dlaczego ta odpowiedź jest poprawna:
-- Cloud Data Loss Prevention (DLP): Jest to dedykowana usługa Google Cloud do odkrywania, klasyfikowania i ochrony danych wrażliwych (PII). 
+Wyjaśnienie:
+- Cloud Data Loss Prevention (DLP): Jest to dedykowana usługa Google Cloud do odkrywania, klasyfikowania i ochrony danych wrażliwych (PII).
 - Modyfikacja zawartości: Wymóg "remove all PII" oznacza konieczność edycji zawartości plików (np. zamazywanie danych na skanach dokumentów). DLP jest jedynym narzędziem w GCP, które potrafi "zajrzeć" do plików w Cloud Storage, rozpoznać PII i wykonać ich de-identyfikację (redakcję).
 - Automatyzacja i Archiwizacja: Zadanie inspekcji DLP (Inspection Job) można skonfigurować tak, aby przetworzone pliki trafiały do innego bucketu (archiwum), co spełnia wymóg retencji danych zanonimizowanych.
 - Usuwanie oryginałów: Po stworzeniu bezpiecznej kopii, usunięcie oryginałów zawierających pełne PII jest kluczowym krokiem dla zachowania zgodności (Compliance).
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Lifecycle Policy (TTL): Polityki cyklu życia (Object Lifecycle Management) działają na metadanych obiektu. Potrafią automatycznie usunąć plik (Delete) lub zmienić jego klasę (np. na Archive) po określonym czasie, ale NIE potrafią modyfikować zawartości pliku (usuwać PII).
 - C. Autoclass: Ta funkcja służy do automatycznego optymalizowania kosztów poprzez przenoszenie rzadziej używanych plików do tańszych klas storage. Nie ma ona nic wspólnego z bezpieczeństwem danych ani usuwaniem PII.
+- D. Lifecycle Policy + DLP API: Choć teoretycznie można by spróbować połączyć te usługi, opcja B opisuje natywną funkcję DLP (Inspection Job), która jest zaprojektowana właśnie do tego celu – skanowania storage i wykonywania akcji na podstawie wyników. Lifecycle policy w tej opcji nie rozwiązuje problemu modyfikacji zawartości przed przeniesieniem.
 
-Wskazówki i triki (Tips & Tricks):
+Wskazówki egzaminacyjne (Tips & Tricks):
 - "Remove PII from files" / "Anonymize files" + "Cloud Storage" = Cloud DLP.
 - Lifecycle Policy = Tylko "Delete" lub "Change Storage Class". Nigdy nie modyfikuje zawartości.
 - Pamiętaj: DLP obsługuje skanowanie obrazów (skany dowodów) za pomocą wbudowanego OCR.
 
-Praktyczne informacje na egzamin:
-- Zrozum terminologię: **De-identification** to proces usuwania lub maskowania PII. **Inspection** to proces szukania PII.
-- Cloud DLP jest płatny za ilość przetworzonych danych, co jest ważne przy planowaniu budżetu dla dużych archiwów.
+Kluczowe zagadnienia do powtórzenia:
+- Cloud Data Loss Prevention (DLP) - de-identyfikacja.
+- Cloud Storage Object Lifecycle Management.
+- Przetwarzanie danych wrażliwych (PII) w chmurze.
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/dlp/docs/inspecting-storage" target="_blank">Inspecting Cloud Storage with Cloud DLP</a>
-- <a href="https://cloud.google.com/dlp/docs/concepts-deidentification" target="_blank">DLP de-identification overview</a>
-- <a href="https://cloud.google.com/storage/docs/lifecycle" target="_blank">Cloud Storage Object Lifecycle Management</a>
+Dokumentacja:
+<a href="https://cloud.google.com/dlp/docs/inspecting-storage" target="_blank">Inspecting Cloud Storage with Cloud DLP</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
+<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
+<h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do odróżnienia zarządzania "kontenerem" (bucketem) od zarządzania "zawartością". Wiele osób mylnie uważa, że Lifecycle Policy wystarczy do compliance, ale polityka ta jest "ślepa" na to, co jest w środku pliku. Cloud DLP to "inteligentne oko" bezpieczeństwa w GCP, niezbędne do realizacji wymogów takich jak RODO (right to be forgotten / minimization).</p>
-<h3>Dodatkowe wskazówki</h3>
+<p><b>Głęboka analiza:</b> To pytanie testuje Twoją zdolność do odróżnienia zarządzania "kontenerem" (bucketem) od zarządzania "zawartością". Wiele osób mylnie uważa, że Lifecycle Policy wystarczy do compliance, ale polityka ta jest "ślepa" na to, co jest w środku pliku. Cloud DLP to "inteligentne oko" bezpieczeństwa w GCP, niezbędne do realizacji wymogów takich jak RODO (right to be forgotten / minimization).</p>
+<h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li>Możesz użyć szablonów DLP (DLP Templates), aby reużywać te same reguły rozpoznawania PII w różnych projektach.</li>
-<li>Pamiętaj o uprawnieniach: konto serwisowe DLP musi mieć dostęp `Storage Object Viewer` do źródła i `Storage Object Admin` do celu (archiwum).</li>
+<li><a href="https://cloud.google.com/dlp/docs/concepts-deidentification" target="_blank">DLP de-identification overview</a></li>
 </ul>
 </div>
 </div>

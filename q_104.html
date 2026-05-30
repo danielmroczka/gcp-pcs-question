@@ -89,17 +89,30 @@ You are a security engineer at a finance company. Your organization plans to sto
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Potwierdzona odpowiedź: D (Enable Access Transparency logs with Access Approval requests for Google employees.)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Access Transparency + Approval: Access Transparency daje logi z działań personelu Google. Access Approval idzie krok dalej – inżynier Google NIE MOŻE dotknąć Twoich danych, dopóki Ty nie klikniesz 'Zatwierdzam' w odpowiedzi na jego prośbę. To rozwiązuje obawy liderów o niekontrolowany dostęp zewnętrzny.
+Wyjaśnienie:
+- Access Transparency: Ta usługa zapewnia logi w czasie rzeczywistym, gdy pracownicy Google uzyskują dostęp do Twoich treści. Rozwiązuje to problem widoczności działań dostawcy chmury.
+- Access Approval: To kluczowy element rozwiązania. Pozwala on na zatwierdzanie lub odrzucanie próśb pracowników Google o dostęp do Twoich danych lub konfiguracji. Pracownik Google nie może uzyskać dostępu, dopóki uprawniony użytkownik w Twojej organizacji nie wyrazi na to wyraźnej zgody. Jest to najwyższy poziom kontroli nad dostępem wewnętrznym dostawcy (insider access).
 
-Dlaczego inne są błędne:
-A. CMEK: Szyfruje, ale personel Google z uprawnieniami systemowymi mógłby teoretycznie mieć dostęp 'w locie' (bez EKM/KAJ). Opcja D jest bardziej trafną odpowiedzią na 'obawy o ludzi'.
-B. IAM: Zarządza Twoimi ludźmi, nie pracownikami Google.
-C. Admin activity logs: Rejestrują Twoje działania, nie działania administratorów platformy Google.
+Dlaczego pozostałe są błędne:
+- A: Customer-managed encryption keys (CMEK) chronią dane w spoczynku, ale w niektórych przypadkach wsparcia technicznego pracownicy Google mogą potrzebować dostępu do danych "w locie" lub metadanych. Same klucze nie dają kontroli nad tym, *kto* z Google prosi o dostęp i *dlaczego*.
+- B: Google Cloud IAM służy do zarządzania uprawnieniami użytkowników wewnątrz Twojej organizacji, a nie do kontrolowania dostępu pracowników Google Cloud Support czy Engineering.
+- C: Admin Activity logs rejestrują działania Twoich administratorów (np. tworzenie VM, zmiana ustawień sieci), a nie działania pracowników Google w infrastrukturze backendowej.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla D. To flagowe rozwiązanie dla suwerenności danych.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Internal Google employees access" = Access Transparency + Access Approval.
+- Access Transparency to "widzieć", Access Approval to "zezwalać".
+- To rozwiązanie jest często wymagane w sektorze finansowym i regulowanym (suwerenność danych).
+
+Kluczowe zagadnienia do powtórzenia:
+- Różnica między Access Transparency a Access Approval.
+- Model współdzielonej odpowiedzialności (Shared Responsibility Model).
+- Logi audytowe (Audit Logs) vs Access Transparency logs.
+
+Dokumentacja:
+- <a href="https://cloud.google.com/access-approval/docs/overview" target="_blank">Omówienie Access Approval</a>
+- <a href="https://cloud.google.com/logging/docs/audit/access-transparency-overview" target="_blank">Omówienie Access Transparency</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

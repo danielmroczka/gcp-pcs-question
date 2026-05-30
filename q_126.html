@@ -89,16 +89,28 @@ Which type of load balancer should you use to maintain client IP by default whil
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Potwierdzona odpowiedź: D (TCP/UDP Network).
 
-Wyjaśnienie (Dlaczego poprawna):
-D. TCP/UDP Network Load Balancer: Jest to Load Balancer 'pass-through'. Nie kończy on połączenia TCP/UDP, tylko przekazuje pakiety bezpośrednio do VM. Dzięki temu docelowa maszyna widzi oryginalny adres IP klienta w nagłówkach IP bez żadnej dodatkowej konfiguracji.
+Wyjaśnienie:
+Zewnętrzny (External) passthrough Network Load Balancer (TCP/UDP Network) jest jedynym typem load balancera w Google Cloud, który domyślnie zachowuje adres IP klienta (Client IP). Działa on na warstwie 3/4 modelu OSI (Network/Transport) i nie kończy sesji TCP/UDP na load balancerze – zamiast tego pakiety są przekazywane bezpośrednio do instancji backendowych (pass-through). Dzięki temu adres źródłowy IP w pakiecie docierającym do VM pozostaje adresem IP klienta. W Standard Network Tier ten typ load balancera jest często wybierany ze względu na koszty i prostotę.
 
-Dlaczego inne są błędne:
-A, B. Proxy LBs: Są to urządzenia typu proxy, które kończą połączenie u siebie i nawiązują nowe do VM. Aby zobaczyć IP klienta, wymagają użycia nagłówków PROXY protocol.
-C. Internal TCP/UDP: Choć zachowuje IP, działa tylko wewnątrz sieci VPC, nie jest dostępny dla użytkowników zewnętrznych w Standard Tierze.
+Dlaczego pozostałe są błędne:
+- A. SSL Proxy: Jest to load balancer typu proxy (warstwa 4). Kończy on połączenie SSL/TCP na load balancerze i nawiązuje nowe połączenie z backendem. W rezultacie backend widzi adres IP load balancera, a nie klienta (chyba że użyje się protokołu PROXY).
+- B. TCP Proxy: Podobnie jak SSL Proxy, jest to load balancer typu proxy. Kończy połączenie TCP i maskuje adres IP klienta.
+- C. Internal TCP/UDP: Jest to load balancer wewnętrzny, przeznaczony do ruchu wewnątrz sieci VPC. Chociaż zachowuje adres IP (również jest pass-through), nie jest przeznaczony do obsługi ruchu zewnętrznego z internetu, o który pyta zadanie w kontekście "Standard Network Tier".
 
-Konsensus społeczności ExamTopics: 100% na D. Network LB = IP visibility by default.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Słowo klucz "maintain client IP by default" zawsze powinno kierować Cię ku "Network Load Balancer" (passthrough).
+- Load balancery typu Proxy (HTTP(S), SSL Proxy, TCP Proxy) zawsze wymagają dodatkowej konfiguracji (np. nagłówek X-Forwarded-For dla L7 lub PROXY protocol dla L4), aby przekazać adres IP klienta.
+- Standard Tier obsługuje tylko niektóre typy load balancerów (głównie Network LB i niektóre regionalne HTTP(S) LB).
+
+Kluczowe zagadnienia do powtórzenia:
+- Różnice między Pass-through (L3/L4) a Proxy (L4/L7) Load Balancing.
+- Network Tiers (Standard vs Premium).
+- Zachowywanie adresu IP klienta (Client IP Preservation).
+
+Dokumentacja:
+<a href="https://cloud.google.com/load-balancing/docs/network#client-ip-address" target="_blank">Zachowywanie adresu IP klienta w Network Load Balancer</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

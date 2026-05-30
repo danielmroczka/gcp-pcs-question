@@ -64,7 +64,7 @@
 <h2>Question 203 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization must comply with the regulation to keep instance logging data within Europe. Your workloads will be hosted in the Netherlands in region europe-west4 in a new project. You must configure Cloud Logging to keep your data in the country.<br/>What should you do?
+Your organization must comply with the regulation to keep instance logging data within Europe. Your workloads will be hosted in the Netherlands in region europe-west4 in a new project. You must configure Cloud Logging to keep your data in the country.
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,43 +89,41 @@ Your organization must comply with the regulation to keep instance logging data 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (Set the logging storage region to europe-west4 by using the gcloud CLI logging settings update)
+Potwierdzona odpowiedź: D (Set the logging storage region to europe-west4 by using the gcloud CLI logging settings update).
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Rezydencja danych (Data Residency): Niektóre regulacje (np. RODO/GDPR w specyficznych interpretacjach lub lokalne prawo holenderskie) wymagają, aby logi nie tylko były "dostępne" w regionie, ale fizycznie tam składowane.
-- gcloud logging settings update: Jest to najskuteczniejszy i najbardziej elegancki sposób na wymuszenie rezydencji danych dla całego projektu. Komenda ta pozwala na ustawienie domyślnej lokalizacji (storage location) dla automatycznie tworzonych bucketów logów (`_Default` i `_Required`). 
+- gcloud logging settings update: Jest to najskuteczniejszy i najbardziej elegancki sposób na wymuszenie rezydencji danych dla całego projektu. Komenda ta pozwala na ustawienie domyślnej lokalizacji (storage location) dla automatycznie tworzonych bucketów logów (`_Default` i `_Required`).
 - Automatyzacja: Zmieniając to ustawienie na poziomie projektu, masz pewność, że wszystkie logi systemowe i aplikacyjne trafią do właściwego regionu bez konieczności ręcznego tworzenia nowych bucketów i konfigurowania skomplikowanych sinków.
 
-Analiza niepoprawnych odpowiedzi:
-- A. resourceLocations organization policy: Ta polityka ogranicza to, GDZIE można tworzyć zasoby (np. w którym regionie postawić VM), ale nie kontroluje ona bezpośrednio fizycznej lokalizacji składowania logów wewnątrz usługi Cloud Logging.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A. resourceLocations organization policy: Ta polityka ogranicza to, GDZIE można tworzyć zasoby (np. w którym regionie postawić maszynę VM), ale nie kontroluje ona bezpośrednio fizycznej lokalizacji składowania logów wewnątrz samej usługi Cloud Logging.
 - B. Log sink to Cloud Storage: Choć eksport logów do GCS w konkretnym regionie zapewnia kopię danych w tym regionie, nie rozwiązuje problemu "głównych" logów, które wciąż trafiałyby do domyślnej lokalizacji Cloud Logging (często Global lub US).
-- C. Redirect _Default bucket: Jest to technicznie możliwe i często stosowane (stworzenie własnego bucketu i ustawienie sinka), ale opcja D jest uznawana za bardziej "natywną" i systemową metodę zarządzania ustawieniami regionalnymi Cloud Logging w nowszych wersjach platformy.
+- C. Redirect _Default bucket: Jest to technicznie możliwe i często stosowane (stworzenie własnego bucketu i ustawienie sinka), ale opcja D jest uznawana za bardziej "natywną" i systemową metodę zarządzania ustawieniami regionalnymi Cloud Logging w nowoczesnej infrastrukturze GCP.
 
-Wskazówki i triki (Tips & Tricks):
+Wskazówki egzaminacyjne (Tips & Tricks):
 - "Keep logging data within [REGION]" = `gcloud logging settings update --storage-location=[REGION]`.
-- Pamiętaj: Zmiana lokalizacji składowania logów dotyczy tylko NOWYCH logów. Stare logi pozostają w poprzedniej lokalizacji do czasu wygaśnięcia retencji.
-- Zakresy lokalizacji: Możesz wybrać konkretny region (np. `europe-west4`) lub zakresy geograficzne (np. `europe`).
+- Pamiętaj: Zmiana lokalizacji składowania logów dotyczy tylko NOWYCH logów od momentu zmiany. Stare logi pozostają w poprzedniej lokalizacji.
+- Google Cloud Logging domyślnie przechowuje logi w lokalizacji "Global", co oznacza replikację danych na cały świat. Dla compliance w UE zawsze wymagana jest zmiana na konkretny region.
 
-Praktyczne informacje na egzamin:
-- Zrozum różnicę między **Log Sink** (gdzie wysyłam logi?) a **Storage Settings** (gdzie fizycznie leżą kubły na logi?).
-- Google Cloud Logging domyślnie przechowuje logi w lokalizacji "Global", co oznacza, że mogą być replikowane między różnymi regionami na świecie. Dla compliance w UE zawsze wymagana jest zmiana na konkretny region.
+Kluczowe zagadnienia do powtórzenia:
+- Cloud Logging Regionalization (Regionalizacja logów).
+- Cloud Audit Logs i ich składowanie.
+- Rezydencja danych w chmurze (Data Sovereignty).
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/logging/docs/region-restrictions" target="_blank">Cloud Logging regional settings overview</a>
-- <a href="https://cloud.google.com/logging/docs/reference/v2/rest/v2/Settings" target="_blank">Cloud Logging Settings API</a>
-- <a href="https://cloud.google.com/sdk/gcloud/reference/logging/settings/update" target="_blank">gcloud logging settings update command</a>
+Dokumentacja:
+<a href="https://cloud.google.com/logging/docs/region-restrictions" target="_blank">Cloud Logging regional settings overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
+<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
+<h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje znajomość "Sovereignty" (suwerenności) w chmurze. Google Cloud coraz częściej oferuje dedykowane parametry konfiguracyjne (Settings), które zastępują starsze metody oparte na sinkach. Ustawienie lokalizacji na poziomie projektu (D) jest metodą preferowaną przez audytorów, ponieważ działa jako globalny przełącznik dla całej usługi Logging w danym kontekście.</p>
-<h3>Dodatkowe wskazówki</h3>
+<p><b>Głęboka analiza:</b> To pytanie testuje znajomość "Sovereignty" (suwerenności) w chmurze. Google Cloud oferuje dedykowane parametry konfiguracyjne (Settings), które zastępują starsze metody oparte na sinkach. Ustawienie lokalizacji na poziomie projektu (D) jest metodą preferowaną przez audytorów, ponieważ działa jako globalny przełącznik dla całej usługi Logging w danym kontekście.</p>
+<h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li>Warto wiedzieć, że zmiana lokalizacji logów może wpłynąć na dostępność niektórych funkcji analitycznych, jeśli nie są one jeszcze wspierane w danym regionie (choć dla europe-west4 wsparcie jest zazwyczaj pełne).</li>
-<li>Możesz również wyłączyć zbieranie logów `_Default`, jeśli Twoja polityka bezpieczeństwa wymaga tylko specyficznych, filtrowanych danych.</li>
+<li><a href="https://cloud.google.com/sdk/gcloud/reference/logging/settings/update" target="_blank">gcloud logging settings update command</a></li>
 </ul>
 </div>
 </div>

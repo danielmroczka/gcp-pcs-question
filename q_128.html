@@ -89,17 +89,28 @@ Users are reporting an outage on your public-facing application that is hosted o
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Potwierdzona odpowiedź: A (Enable Firewall Rules Logging on the latest rules that were changed. Use Logs Explorer to analyze whether the rules are working correctly).
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Firewall Rules Logging: To najszybsza i najdokładniejsza metoda diagnozy. Rejestruje ona każdy pakiet, który został dopuszczony lub odrzucony przez konkretną regułę. W Logs Explorerze zobaczysz dokładnie nazwę reguły, która 'zabiła' ruch aplikacji.
+Wyjaśnienie:
+Firewall Rules Logging to dedykowana funkcja w Google Cloud, która pozwala na rejestrowanie zdarzeń dopasowania (hit) pakiety do konkretnej reguły firewalla. W sytuacji awarii aplikacji po zmianie konfiguracji, włączenie logowania dla podejrzanych reguł (lub wszystkich reguł w VPC) pozwala na natychmiastowe sprawdzenie w Logs Explorerze, czy ruch jest blokowany (deny) czy dopuszczany (allow), oraz która konkretnie reguła za to odpowiada. Jest to najbardziej precyzyjne narzędzie do debugowania problemów z łącznością sieciową na poziomie firewalla.
 
-Dlaczego inne są błędne:
-B. Bastion host: Analiza z poziomu bastionu nie powie Ci, co dzieje się na interfejsach innych maszyn chronionych przez rozproszony firewall GCP.
-C. Disable rules: Bardzo ryzykowne i czasochłonne. Może pogorszyć sytuację bezpieczeństwa na produkcji.
-D. VPC Flow Logs: Rejestrują przepływy, ale nie zawsze precyzują nazwę reguły firewalla, która spowodowała blokadę tak czytelnie jak dedykowane logi firewalla.
+Dlaczego pozostałe są błędne:
+- B. Connect to a bastion host...: Użycie bastionu i analizatora ruchu (np. tcpdump) pokaże tylko, że ruch nie dociera do maszyny, ale nie wyjaśni dlaczego (czy to firewall VPC, czy systemowy firewall OS, czy routing). Nie wskaże też nazwy reguły w GCP.
+- C. In a pre-production environment...: Wyłączanie reguł pojedynczo jest procesem żmudnym, nieefektywnym i nie gwarantuje odtworzenia identycznych warunków ruchu produkcyjnego. Nie jest to rekomendowana metoda debugowania w chmurze.
+- D. Enable VPC Flow Logs: VPC Flow Logs rejestrują próbki przepływów sieciowych. Choć są przydatne do ogólnej analizy ruchu i kosztów, nie są tak precyzyjne w kontekście reguł firewalla jak dedykowane logi firewalla (Firewall Logging pokazuje dokładnie identyfikator reguły, która podjęła decyzję o pakiecie).
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na A. To standardowe narzędzie do debugowania sieci w GCP.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Słowo klucz "test whether your firewall rules are working properly" = "Firewall Rules Logging".
+- Jeśli pytanie dotyczy "dlaczego ruch nie dociera", pierwszym krokiem w GCP jest zawsze sprawdzenie logów firewalla lub użycie narzędzia Connectivity Tests.
+- Pamiętaj, że logowanie firewalla może generować dodatkowe koszty, więc zazwyczaj włącza się je tymczasowo do debugowania lub tylko dla krytycznych reguł.
+
+Kluczowe zagadnienia do powtórzenia:
+- VPC Firewall Rules Logging.
+- Cloud Logging (Logs Explorer).
+- Connectivity Tests (narzędzie do symulacji ścieżki pakietu).
+
+Dokumentacja:
+<a href="https://cloud.google.com/vpc/docs/firewall-rules-logging" target="_blank">Using Firewall Rules Logging</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

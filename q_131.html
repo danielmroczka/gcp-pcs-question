@@ -89,18 +89,28 @@ You perform a security assessment on a customer architecture and discover that m
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: AC.
+Potwierdzona odpowiedź: B (Cloud NAT).
 
-Wyjaśnienie (Dlaczego poprawna):
-A. container.admin: Ta rola daje pełne uprawnienia do zarządzania klastrami GKE (tworzenie, usuwanie, edycja), ale nie daje uprawnień do edycji sieci VPC.
-C. iam.serviceAccountUser: Jest to rola technicznie niezbędna. Aby stworzyć klaster GKE, użytkownik musi móc 'użyć' (impersonate) konta serwisowego, które zostanie przypięte do węzłów klastra. Bez tej roli stworzenie klastra zakończy się błędem uprawnień.
+Wyjaśnienie:
+Cloud NAT (Network Address Translation) to usługa zarządzana, która pozwala instancjom maszyn wirtualnych (VM) bez publicznych adresów IP na bezpieczne nawiązywanie połączeń wychodzących do internetu. Dzięki Cloud NAT, maszyny posiadają jedynie prywatne adresy IP, co znacznie zmniejsza powierzchnię ataku (są niewidoczne i niedostępne bezpośrednio z zewnątrz), a jednocześnie zachowują możliwość pobierania aktualizacji czy komunikacji z zewnętrznymi API. Cloud NAT obsługuje zarówno Compute Engine, jak i węzły GKE.
 
-Dlaczego inne są błędne:
-B. compute.networkAdmin: Pozwala na modyfikację sieci, co jest jawnie zabronione w pytaniu.
-D. compute.admin: Zbyt wysokie uprawnienia (zarządzanie wszystkimi VM i siecią).
-E. container.clusterAdmin: Ta rola daje uprawnienia Wewnątrz klastra (Kubernetes RBAC), ale nie wystarcza do zarządzania samym Zasobem klastra w API Google Cloud tak jak rola A.
+Dlaczego pozostałe są błędne:
+- A. Google Cloud Armor: Jest to usługa WAF i ochrony przed DDoS dla ruchu przychodzącego (ingress) przez load balancery. Nie służy do zapewniania łączności wychodzącej dla maszyn z prywatnymi IP.
+- C. Cloud Router: Cloud Router odpowiada za dynamiczną wymianę tras (BGP) pomiędzy siecią VPC a siecią on-premises (przez VPN lub Interconnect). Sam w sobie nie zapewnia translacji adresów NAT dla ruchu internetowego. Cloud NAT wymaga Cloud Routera do działania, ale to NAT realizuje funkcję wyjścia do internetu.
+- D. Cloud VPN: Służy do bezpiecznego łączenia sieci VPC z innymi sieciami (np. biurem lub inną chmurą) przez tunel IPsec. Nie jest to rozwiązanie przeznaczone do ogólnej komunikacji VM z publicznymi stronami internetowymi w celu redukcji publicznych IP.
 
-Konsensus społeczności ExamTopics: 100% na AC. Para container.admin + SA User to klasyka zarządzania GKE.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Słowo klucz "reduce/remove public IP" + "communicate to external sites" = zawsze Cloud NAT.
+- Cloud NAT jest usługą typu "egress-only" – pozwala na wyjście do internetu, ale nie pozwala internetowi na zainicjowanie połączenia z maszyną.
+- Pamiętaj, że Cloud NAT jest powiązany z Cloud Routerem, ale to dwie różne funkcje.
+
+Kluczowe zagadnienia do powtórzenia:
+- Cloud NAT i jego architektura.
+- Bezpieczeństwo sieci VPC (brak publicznych adresów IP).
+- Private Google Access (komunikacja z API Google bez publicznego IP).
+
+Dokumentacja:
+<a href="https://cloud.google.com/nat/docs/overview" target="_blank">Cloud NAT Overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

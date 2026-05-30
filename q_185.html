@@ -89,42 +89,38 @@ Your organization is moving virtual machines (VMs) to Google Cloud. You must ens
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Implement an organization policy to enforce that boot disks can only be created from images that come from the trusted image project)
+Potwierdzona odpowiedź: A (Implement an organization policy to enforce that boot disks can only be created from images that come from the trusted image project).
 
-Dlaczego ta odpowiedź jest poprawna:
-- compute.trustedImageProjects: Jest to specyficzny constraint polityki organizacji (Organization Policy), który pozwala administratorowi na zdefiniowanie listy projektów, z których można pobierać obrazy systemowe (images) do tworzenia dysków rozruchowych (boot disks).
-- Wymuszenie (Enforcement): Włączenie tej polityki sprawia, że każda próba stworzenia VM na podstawie obrazu spoza dozwolonej listy (np. z obrazów publicznych Google, jeśli nie zostały dodane do białej listy) zostanie zablokowana przez API Google Cloud.
-- Skuteczność: Jest to najbardziej bezpośrednia i skuteczna metoda zapewnienia, że wszystkie VM w organizacji korzystają wyłącznie z obrazów zatwierdzonych przez zespół bezpieczeństwa (tzw. "Golden Images").
+Wyjaśnienie:
+Ograniczenie `compute.trustedImageProjects` w polityce organizacji Google Cloud pozwala na zdefiniowanie białej listy projektów, z których użytkownicy mogą pobierać obrazy systemowe (images) do tworzenia dysków rozruchowych. Jest to najskuteczniejszy i najbardziej proaktywny sposób wymuszenia stosowania wyłącznie zaufanych i utwardzonych (hardened) obrazów OS w całej organizacji. Każda próba użycia obrazu spoza listy zostanie natychmiast zablokowana przez API.
 
-Analiza niepoprawnych odpowiedzi:
-- B. Shielded VM service: Shielded VMs to funkcja zapewniająca integralność procesu startu systemu (Secure Boot, vTPM). Choć zwiększają bezpieczeństwo, same w sobie nie ograniczają listy projektów, z których można pobierać obrazy. Możesz uruchomić "Shielded VM" z niezaufanego obrazu.
-- C. Cloud Function trigger: To rozwiązanie reaktywne. Funkcja uruchomiłaby się PO stworzeniu VM. Nawet jeśli usunęłaby maszynę natychmiast, przez kilka sekund niebezpieczny system byłby uruchomiony. Rozwiązanie to jest skomplikowane w utrzymaniu w porównaniu do natywnej polityki organizacji.
-- D. Automated security scanner (CVE): Skanowanie obrazów pod kątem podatności (CVE) jest bardzo dobrą praktyką (część procesu budowania obrazu), ale samo w sobie nie uniemożliwia użytkownikom użycia innego, nieprzeskanowanego obrazu do stworzenia VM.
+Dlaczego pozostałe są błędne:
+- B. Shielded VM service: Shielded VM to funkcja zwiększająca bezpieczeństwo startu systemu (Secure Boot, vTPM), ale sama w sobie nie ogranicza źródła obrazów. Można uruchomić "Shielded VM" z niezaufanego projektu.
+- C. Cloud Function trigger: To rozwiązanie reaktywne. Funkcja usuwałaby maszyny PO ich stworzeniu, co nie zapobiega samemu incydentowi i jest trudniejsze w utrzymaniu niż natywna polityka organizacji.
+- D. Automated security scanner: Skanowanie obrazów pod kątem podatności (CVE) jest kluczowe w procesie CI/CD budowania obrazu, ale samo w sobie nie uniemożliwia użytkownikom uruchomienia maszyny z innego, niebezpiecznego źródła.
 
-Wskazówki i triki (Tips & Tricks):
-- "Trusted OS images" + "Across projects" = Organization Policy (Trusted Image Projects).
-- Zapamiętaj: Ta polityka dotyczy tylko dysków rozruchowych (boot disks).
-- Pamiętaj, aby dodać projekt `projects/debian-cloud` itp., jeśli chcesz pozwolić również na standardowe obrazy publiczne obok swoich własnych.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Trusted OS images" + "Across projects" = szukaj "Organization Policy" oraz "trustedImageProjects".
+- Zapamiętaj: Ta polityka dotyczy dysków rozruchowych (boot disks), a nie wszystkich dysków w ogóle.
 
-Praktyczne informacje na egzamin:
-- Zrozum hierarchię: Najpierw tworzysz bezpieczny obraz w centralnym projekcie, potem nadajesz uprawnienia `imageUser`, a na końcu włączasz Org Policy `trustedImageProjects`, aby zablokować inne źródła.
+Kluczowe zagadnienia do powtórzenia:
+- Hierarchia polityk organizacji (Organization Policy Service).
+- Proces tworzenia i udostępniania obrazów (Golden Images).
+- Rola uprawnienia `compute.imageUser`.
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/compute/docs/images/restricting-image-access" target="_blank">Restricting image access with organization policies</a>
-- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">Organization Policy constraints reference</a>
-- <a href="https://cloud.google.com/compute/docs/images/sharing-images-across-projects" target="_blank">Sharing images across projects</a>
+Dokumentacja:
+<a href="https://cloud.google.com/compute/docs/images/restricting-image-access" target="_blank">Ograniczanie dostępu do obrazów w Google Cloud</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
+<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
+<h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie sprawdza znajomość mechanizmów kontroli nad cyklem życia zasobów obliczeniowych. W dużej firmie nie możesz polegać na dobrej woli deweloperów. Musisz technicznie uniemożliwić uruchamianie systemów, które nie przeszły przez Twój proces utwardzania (hardeningu). `trustedImageProjects` to standardowe narzędzie do tego celu w GCP.</p>
-<h3>Dodatkowe wskazówki</h3>
+<p><b>Głęboka analiza:</b> W środowiskach korporacyjnych kontrola nad systemami operacyjnymi jest krytyczna dla zachowania zgodności (compliance). Google Cloud oferuje natywny mechanizm `trustedImageProjects`, który pozwala oddzielić projekt "budujący obrazy" (zarządzany przez zespół bezpieczeństwa) od projektów "użytkowych". To rozwiązanie jest skalowalne i niemożliwe do obejścia przez standardowych użytkowników.</p>
+<h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li>Polityka ta może być nakładana na poziomie całej organizacji lub konkretnych folderów (np. bardziej restrykcyjna dla folderu PROD).</li>
-<li>Uważaj, aby nie zablokować sobie możliwości odzyskiwania systemu (Recovery) poprzez zbyt rygorystyczne listy projektów.</li>
+<li><a href="https://cloud.google.com/compute/docs/images/restricting-image-access" target="_blank">https://cloud.google.com/compute/docs/images/restricting-image-access</a></li>
 </ul>
 </div>
 </div>

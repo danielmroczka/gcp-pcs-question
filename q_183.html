@@ -89,43 +89,38 @@ Your company conducts clinical trials and needs to analyze the results of a rece
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Use date shifting with the context set to the unique ID of the test subject)
+Potwierdzona odpowiedź: A (Use date shifting with the context set to the unique ID of the test subject).
 
-Dlaczego ta odpowiedź jest poprawna:
-- Date Shifting (Przesunięcie daty): Jest to specyficzna technika de-identyfikacji w Cloud DLP, która dodaje lub odejmuje losową liczbę dni od daty. 
-- Zachowanie interwałów (Interval Preservation): Najważniejszą cechą Date Shiftingu w Cloud DLP jest możliwość użycia "kontekstu" (np. ID pacjenta). Jeśli dla danego ID pacjenta wszystkie daty w różnych wierszach zostaną przesunięte o TĘ SAMĄ losową liczbę dni, to różnica między datami (np. czas trwania kuracji) zostanie zachowana w 100%. 
-- Obfuskacja: Dzięki losowemu przesunięciu, analityk nie widzi prawdziwych dat (co chroni przed identyfikacją konkretnej partii leku na podstawie daty produkcji/dostawy), ale wciąż może precyzyjnie obliczyć, ile dni trwała terapia u każdego pacjenta.
+Wyjaśnienie:
+Date Shifting (przesunięcie daty) to technika pseudonimizacji w Cloud DLP, która dodaje lub odejmuje losową liczbę dni od daty. Kluczowym elementem jest użycie "kontekstu" (np. ID pacjenta) – dzięki temu dla danego pacjenta wszystkie daty (np. rozpoczęcia i zakończenia leczenia) zostaną przesunięte o TĘ SAMĄ liczbę dni. Pozwala to na zachowanie precyzyjnych interwałów czasowych (czasu trwania kuracji) przy jednoczesnym ukryciu prawdziwych dat kalendarzowych, co chroni przed identyfikacją konkretnych partii leku lub osób.
 
-Analiza niepoprawnych odpowiedzi:
-- B. TimePartConfig with random month/year: Wyciągnięcie części daty i dodanie losowego miesiąca/roku całkowicie niszczy informację o precyzyjnym interwale czasowym (np. nie będziesz wiedzieć, czy pacjent brał lek 2 dni czy 28 dni).
-- C. Bucketing: Grupowanie dat (np. "Wiosna 2023") drastycznie zmniejsza precyzję danych i uniemożliwia dokładną analizę czasu trwania (interval data) wymaganą w badaniach klinicznych.
-- D. Format-preserving encryption (FFX mode): FPE służy do szyfrowania wartości (np. numeru ID) tak, aby wyglądały jak oryginalne. Choć technicznie możliwe do zastosowania na datach, nie jest to technika zoptymalizowana pod zachowanie relacji czasowych (interwałów) w taki sposób jak natywny Date Shifting w DLP.
+Dlaczego pozostałe są błędne:
+- B. TimePartConfig: Wyciąganie części daty (np. tylko roku) całkowicie niszczy informację o precyzyjnym interwale czasowym. Nie będziesz wiedzieć, czy pacjent brał lek 2 dni czy 20 dni.
+- C. Bucketing: Grupowanie dat w przedziały (np. "Styczeń 2023") powoduje utratę precyzji niezbędnej do analizy interwałów czasowych w badaniach klinicznych.
+- D. Format Preserving Encryption (FPE): FFX/FPE służy do szyfrowania danych przy zachowaniu ich formatu (np. numeru karty kredytowej), ale nie jest to technika optymalna do manipulacji datami w celu zachowania relacji czasowych (interwałów).
 
-Wskazówki i triki (Tips & Tricks):
-- "Preserve interval" + "Obfuscate dates" = Date Shifting.
-- "Context" w Date Shiftingu zapewnia spójność przesunięcia dla danego obiektu (np. użytkownika, pacjenta).
-- Pamiętaj: Date Shifting jest odwracalny, jeśli znasz algorytm przesunięcia i klucz kryptograficzny użyty do generowania losowej liczby dni.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- "Preserve interval data" + "obfuscate dates" = zawsze szukaj "Date Shifting".
+- Słowo "Context" w Date Shiftingu zapewnia spójność zmian dla danego obiektu (np. użytkownika, pacjenta).
 
-Praktyczne informacje na egzamin:
-- Cloud DLP jest kluczowym narzędziem dla branży medycznej (HIPAA) i finansowej (PCI-DSS).
-- Zrozum różnicę między de-identyfikacją (usunięcie PII) a pseudonimizacją (zastąpienie PII tak, aby zachować użyteczność danych). Date Shifting to forma pseudonimizacji.
+Kluczowe zagadnienia do powtórzenia:
+- Metody de-identyfikacji w Cloud DLP (redaction, masking, bucketing, date shifting).
+- Różnica między de-identyfikacją a pseudonimizacją.
+- Zastosowanie Cloud DLP w branżach regulowanych (Healthcare - HIPAA).
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/dlp/docs/concepts-date-shifting" target="_blank">Date shifting in Cloud DLP</a>
-- <a href="https://cloud.google.com/dlp/docs/pseudonymization" target="_blank">Pseudonymization overview</a>
-- <a href="https://cloud.google.com/dlp/docs/transformations-reference#date-shifting" target="_blank">DLP Date shifting reference</a>
+Dokumentacja:
+<a href="https://cloud.google.com/dlp/docs/concepts-date-shifting" target="_blank">Przesuwanie dat w Cloud DLP</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
+<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
+<h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie uderza w konkretną potrzebę analityczną: jak ukryć "kiedy" coś się stało, ale zachować informację "jak długo" to trwało. W badaniach naukowych prawdziwe daty są często danymi wrażliwymi (mogą wskazywać na konkretną osobę), ale różnica między datami (interwał) jest esencją badania. Date Shifting z odpowiednim kontekstem jest jedyną natywną funkcją GCP, która rozwiązuje ten problem elegancko i skalowalnie.</p>
-<h3>Dodatkowe wskazówki</h3>
+<p><b>Głęboka analiza:</b> W badaniach klinicznych daty są danymi wrażliwymi, ale różnica między nimi (interwał) jest krytyczna dla analizy skuteczności leku. Date Shifting w Google Cloud DLP jest unikalnym narzędziem, które pozwala na zachowanie tej użyteczności danych przy pełnym zachowaniu prywatności. Przesunięcie o losową liczbę dni (np. +14 dni dla wszystkich dat pacjenta X) sprawia, że interwał pozostaje ten sam.</p>
+<h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li>Warto wiedzieć, że przesunięcie może być zarówno dodatnie, jak i ujemne (w przód lub w tył w czasie).</li>
-<li>DLP pozwala na zdefiniowanie zakresu przesunięcia (np. maksymalnie +/- 30 dni).</li>
+<li><a href="https://cloud.google.com/dlp/docs/concepts-date-shifting" target="_blank">https://cloud.google.com/dlp/docs/concepts-date-shifting</a></li>
 </ul>
 </div>
 </div>

@@ -89,17 +89,32 @@ Your company's Chief Information Security Officer (CISO) creates a requirement t
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+Potwierdzona odpowiedź: C (Project).
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Organization Policy: Polityki organizacji pozwalają na wymuszanie standardów (constraints) na poziomie całej firmy. Specyficzne polityki dla Compute Engine pozwalają na ograniczanie lub wymuszanie konkretnych ustawień metadanych podczas tworzenia zasobów.
+Wyjaśnienie:
+Ograniczenie lokalizacji zasobów (Resource Location Restriction) to polityka organizacji (`gcp.resourceLocations`), która pozwala na zdefiniowanie listy dozwolonych regionów i stref dla nowo tworzonych zasobów. Zgodnie z wymaganiami CISO:
+1. Dane muszą być w konkretnych lokalizacjach (wymóg regulacyjny).
+2. Struktura folderów może zawierać wiele różnych lokalizacji (co sugeruje, że nie można narzucić jednej lokalizacji na poziomie całej organizacji lub wysokiego folderu, bo pod spodem potrzebna jest różnorodność).
+3. Dane biznesowe pozostają w specyficznych lokalizacjach w ramach tej samej organizacji.
+Ustawienie tego ograniczenia na poziomie Projektu (C) pozwala na najbardziej precyzyjne dopasowanie lokalizacji do konkretnego projektu, który może mieć inne wymagania rezydencji danych niż projekt sąsiedni w tym samym folderze. Jest to zgodne z zasadą, że projekty są jednostkami "wyrównanymi" do specyficznych lokalizacji.
 
-Dlaczego inne są błędne:
-A. IAM: Kontroluje kto może tworzyć VM, ale nie 'wymusza' zawartości konfiguracji tej VM.
-C. Project metadata: To tylko domyślne wartości, użytkownik może je nadpisać podczas tworzenia instancji, więc nie jest to 'wymuszenie' (enforcement).
-D. Shared VPC: To architektura sieciowa, nie ma nic wspólnego z metadanymi VM.
+Dlaczego pozostałe są błędne:
+- A. Folder: Choć możliwe, ustawienie polityki na poziomie folderu wymusiłoby tę samą lokalizację dla wszystkich projektów wewnątrz. Pytanie zaznacza, że struktura folderów może zawierać wiele lokalizacji, co czyni Folder mniej optymalnym niż Projekt dla "granulowanej" kontroli.
+- B. Resource: Polityki organizacji nie są ustawiane na poziomie pojedynczych zasobów (np. konkretnego dysku), lecz na węzłach hierarchii zasobów (Org, Folder, Project).
+- D. Organization: Ustawienie wymuszenia lokalizacji na poziomie całej organizacji zablokowałoby możliwość elastycznego wyboru różnych lokalizacji dla różnych projektów/zespołów, co kłóci się z informacją o różnorodności potrzeb wewnątrz struktury folderów.
 
-Konsensus społeczności ExamTopics: 100% na B. Org Policy to jedyny mechanizm twardego wymuszania parametrów zasobów.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli w pytaniu pojawia się wymóg "granular control" lub informacja, że różne części organizacji mają różne potrzeby lokalizacyjne, celuj w poziom Projektu.
+- `gcp.resourceLocations` to najczęstsza polityka dotycząca rezydencji danych (Data Residency).
+- Pamiętaj o hierarchii: polityki są dziedziczone, ale mogą być nadpisywane na niższych poziomach (chyba że dziedziczenie zostanie zablokowane).
+
+Kluczowe zagadnienia do powtórzenia:
+- Hierarchia zasobów Google Cloud (Organization -> Folder -> Project -> Resource).
+- Polityki organizacji (Organization Policy Service).
+- Data Residency (Rezydencja danych).
+
+Dokumentacja:
+<a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">Ograniczanie lokalizacji zasobów</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

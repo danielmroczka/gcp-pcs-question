@@ -89,16 +89,28 @@ You are troubleshooting access denied errors between Compute Engine instances co
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Potwierdzona odpowiedź: A (Add the host project containing the Shared VPC to the service perimeter.)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Add host project: W Shared VPC sieć fizycznie 'należy' do projektu hosta. Gdy VM z projektu usługowego woła BigQuery chronione przez VPC SC, system sprawdza czy sieć, z której pochodzi ruch, jest zaufana. Jeśli host sieci nie jest w perymetrze, ruch zostanie odrzucony jako 'pochodzący z zewnątrz'.
+Wyjaśnienie:
+- Shared VPC i VPC Service Controls: W modelu Shared VPC sieć (VPC) należy do projektu hosta (Host Project), podczas gdy instancje VM działają w projektach usługowych (Service Projects). VPC Service Controls identyfikuje sieć na podstawie projektu, w którym została utworzona.
+- Problem: Jeśli VM z projektu usługowego próbuje uzyskać dostęp do BigQuery chronionego przez VPC SC, system sprawdza, czy sieć, z której pochodzi ruch, jest częścią perymetru. Aby Shared VPC została uznana za "zaufaną", projekt hosta (do którego sieć należy) musi zostać dodany do perymetru.
 
-Dlaczego inne są błędne:
-B. Service project: Zazwyczaj już tam jest, ale to nie wystarcza przy Shared VPC.
-C, D. Bridge: Służą do łączenia różnych perymetrów, tutaj problemem jest brak fundamentu (hosta sieci) w obwodzie bezpieczeństwa.
+Dlaczego pozostałe są błędne:
+- B: Dodanie samego projektu usługowego jest niewystarczające, ponieważ tożsamość sieciowa zapytania jest powiązana z projektem hosta Shared VPC.
+- C: Nie tworzy się perymetru "pomiędzy" projektami. Projekty są dodawane do perymetru jako jego członkowie.
+- D: Perimeter Bridge służy do umożliwienia komunikacji między dwoma różnymi perymetrami (np. między perymetrem projektu A i perymetrem projektu B). W tym przypadku problemem jest to, że sieć (host) nie jest w ogóle częścią żadnego zaufanego perymetru dla tych zasobów.
 
-Konsensus społeczności ExamTopics: 100% na A. To najczęstsza przyczyna błędów VPC SC w dużych firmach.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli w pytaniu pojawia się "Shared VPC" i "VPC Service Controls" (VPC SC), zapamiętaj: Projekt HOSTA sieci musi być w perymetrze.
+- VPC SC chroni nie tylko projekty, ale przede wszystkim połączenia API z sieci VPC.
+
+Kluczowe zagadnienia do powtórzenia:
+- Integracja VPC Service Controls z Shared VPC.
+- Jak działają perymetry serwisowe (Service Perimeters).
+- Tożsamość sieciowa w VPC SC.
+
+Dokumentacja:
+- <a href="https://cloud.google.com/vpc-service-controls/docs/shared-vpc" target="_blank">VPC Service Controls i Shared VPC</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

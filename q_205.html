@@ -64,7 +64,8 @@
 <h2>Question 205 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You are running applications outside Google Cloud that need access to Google Cloud resources. You are using workload identity federation to grant external identities Identity and Access Management (IAM) roles to eliminate the maintenance and security burden associated with service account keys. You must protect against attempts to spoof another user's identity and gain unauthorized access to Google Cloud resources.<br/>What should you do? (Choose two.)
+You are running applications outside Google Cloud that need access to Google Cloud resources. You are using workload identity federation to grant external identities Identity and Access Management (IAM) roles to eliminate the maintenance and security burden associated with service account keys. You must protect against attempts to spoof another user's identity and gain unauthorized access to Google Cloud resources.
+What should you do? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
@@ -90,43 +91,41 @@ You are running applications outside Google Cloud that need access to Google Clo
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: CD (C: Use a dedicated project to manage workload identity pools and providers, D: Use immutable attributes in attribute mappings)
+Potwierdzona odpowiedź: CD (C. Use a dedicated project to manage workload identity pools and providers, D. Use immutable attributes in attribute mappings).
 
-Dlaczego te odpowiedzi są poprawne:
-- Workload Identity Federation (WIF): Pozwala aplikacjom spoza Google Cloud (np. działającym na AWS, Azure czy GitHub Actions) na bezpieczny dostęp do zasobów GCP bez konieczności używania statycznych, niebezpiecznych kluczy JSON kont serwisowych.
-- D. Niezmienne atrybuty (Immutable Attributes): To klucz do ochrony przed spoofingiem (podszywaniem się). Atrybuty takie jak nazwa użytkownika czy e-mail mogą ulec zmianie w zewnętrznym systemie (IdP). Jeśli mapowanie w WIF opiera się na zmiennym atrybucie, atakujący, który przejmie kontrolę nad IdP, może zmienić e-mail innego użytkownika na swój, aby "odziedziczyć" jego uprawnienia w GCP. Użycie niezmiennych identyfikatorów (np. stały numer ID subiekta) uniemożliwia taki atak.
-- C. Dedykowany projekt: Zarządzanie pulami tożsamości (Identity Pools) w osobnym projekcie pozwala na ścisłą kontrolę nad tym, kto może zmieniać konfigurację federacji. Izoluje to fundamenty zaufania od projektów, w których znajdują się dane i aplikacje, co jest zgodne z zasadą "Separation of Duties".
+Wyjaśnienie:
+- Workload Identity Federation (WIF): Pozwala aplikacjom spoza Google Cloud (np. AWS, Azure, GitHub Actions) na bezpieczny dostęp do zasobów GCP bez statycznych kluczy JSON kont serwisowych.
+- D. Niezmienne atrybuty (Immutable Attributes): To klucz do ochrony przed spoofingiem (podszywaniem się). Atrybuty takie jak e-mail mogą ulec zmianie w zewnętrznym systemie. Jeśli mapowanie w WIF opiera się na zmiennym atrybucie, atakujący, który przejmie kontrolę nad IdP, może zmienić e-mail innego użytkownika na swój, aby przejąć jego uprawnienia w GCP. Użycie niezmiennych identyfikatorów (np. stały numer ID subiekta `sub`) uniemożliwia taki atak.
+- C. Dedykowany projekt: Zarządzanie pulami tożsamości (Identity Pools) w osobnym projekcie pozwala na ścisłą kontrolę nad tym, kto może zmieniać konfigurację federacji. Izoluje to fundamenty zaufania od projektów, w których znajdują się dane, co jest zgodne z zasadą "Separation of Duties".
 
-Analiza niepoprawnych odpowiedzi:
-- A. Data access logs for IAM: Logi te informują PO FAKCIE, kto i co zrobił. Choć są ważne dla audytu, nie "chronią przed próbami podszywania się" (nie blokują ich proaktywnie).
-- B. Limit identities impersonating SA: Choć brzmi to jak dobra rada, nie rozwiązuje technicznego problemu spoofingu atrybutów wewnątrz samego procesu federacji.
-- E. Limit resources SA can access: Jest to ogólna zasada Least Privilege. Ogranicza "promień rażenia" po udanym ataku, ale nie zapobiega samemu procesowi nieautoryzowanego przejęcia tożsamości (identity spoofing).
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A. Data access logs for IAM: Logi te informują PO FAKCIE o zdarzeniach. Choć są ważne dla audytu, nie "chronią przed próbami podszywania się" (nie blokują ich proaktywnie).
+- B. Limit identities impersonating SA: Choć brzmi to jak dobra praktyka, nie rozwiązuje technicznego problemu spoofingu atrybutów wewnątrz samego procesu federacji tożsamości.
+- E. Limit resources SA can access: Jest to ogólna zasada Least Privilege. Ogranicza skutki włamania, ale nie zapobiega samemu procesowi nieautoryzowanego podszycia się pod tożsamość.
 
-Wskazówki i triki (Tips & Tricks):
+Wskazówki egzaminacyjne (Tips & Tricks):
 - "WIF" + "Spoofing protection" = Immutable attributes.
 - "Manage WIF" + "Security hygiene" = Dedicated project for pools.
-- Pamiętaj: WIF zamienia zewnętrzny token (np. OIDC/SAML) na krótkotrwały token GCP.
+- Pamiętaj: WIF zamienia zewnętrzny token (OIDC/SAML) na krótkotrwały token GCP. Zaufanie opiera się na poprawności atrybutów przesyłanych w tym tokenie.
 
-Praktyczne informacje na egzamin:
-- Zrozum strukturę mapowania: `google.subject = assertion.sub`. Atrybut `sub` (subject) w standardzie OIDC powinien być niezmienny.
-- WIF jest rekomendowanym sposobem łączenia GitHub Actions z Google Cloud.
+Kluczowe zagadnienia do powtórzenia:
+- Workload Identity Federation (WIF) - zasada działania.
+- Attribute Mapping i Attribute Conditions.
+- Najlepsze praktyki zarządzania Identity Pools.
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/iam/docs/best-practices-for-using-workload-identity-federation" target="_blank">Best practices for using WIF</a>
-- <a href="https://cloud.google.com/iam/docs/workload-identity-federation" target="_blank">Workload Identity Federation overview</a>
-- <a href="https://cloud.google.com/blog/products/identity-security/using-workload-identity-federation-with-other-clouds" target="_blank">WIF with AWS and Azure</a>
+Dokumentacja:
+<a href="https://cloud.google.com/iam/docs/best-practices-for-using-workload-identity-federation" target="_blank">Best practices for using WIF</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
+<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
+<h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: CD</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją wiedzę o zaawansowanej architekturze tożsamości (Identity-First Security). Workload Identity Federation eliminuje klucze JSON (największą bolączkę security), ale przenosi ciężar zaufania na atrybuty tokena zewnętrznego. Dlatego poprawność i niezmienność tych atrybutów staje się nowym krytycznym punktem kontroli.</p>
-<h3>Dodatkowe wskazówki</h3>
+<p><b>Głęboka analiza:</b> To pytanie testuje Twoją wiedzę o zaawansowanej architekturze tożsamości. Workload Identity Federation eliminuje klucze JSON (największą bolączkę security), ale przenosi ciężar zaufania na atrybuty tokena zewnętrznego. Dlatego poprawność i niezmienność tych atrybutów staje się nowym krytycznym punktem kontroli dla inżyniera bezpieczeństwa.</p>
+<h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li>Warto wspomnieć o warunkach atrybutów (Attribute Conditions), które pozwalają na dodatkowe sprawdzenie, np. czy żądanie pochodzi z konkretnego repozytorium GitHub.</li>
-<li>Pamiętaj, że WIF jest darmowy jako funkcja IAM (płacisz tylko za ewentualne użycie innych usług).</li>
+<li><a href="https://cloud.google.com/iam/docs/workload-identity-federation" target="_blank">Workload Identity Federation overview</a></li>
 </ul>
 </div>
 </div>

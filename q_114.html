@@ -89,16 +89,27 @@ You recently joined the networking team supporting your company's Google Cloud i
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+Potwierdzona odpowiedź: D (Firewall Insights)
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Firewall Insights: Narzędzie analityczne stworzone dokładnie do tego celu. Potrafi ono wskazać reguły 'shadowed' (przykryte przez inne), reguły nieużywane oraz sugerować optymalizacje.
+Wyjaśnienie:
+- Firewall Insights: Jest to dedykowane narzędzie w ramach Network Intelligence Center, które służy do optymalizacji i audytu reguł zapory ogniowej. Automatycznie wykrywa reguły typu "Shadowed" (przykryte przez inne reguły o wyższym lub równym priorytecie) oraz reguły nakładające się (Overlapping).
+- Cele: Narzędzie to pomaga zmniejszyć powierzchnię ataku i uprościć konfigurację sieci poprzez usuwanie nieużywanych lub zbędnych reguł.
 
-Dlaczego inne są błędne:
-A. SCC: Może zgłosić, że port jest otwarty, ale nie analizuje logiki 'nakładania się' reguł między sobą.
-B. Logging: Powie Ci która reguła zadziałała, ale nie powie Ci, że 10 innych reguł pod nią jest martwych.
+Dlaczego pozostałe są błędne:
+- A: Security Command Center (SCC) może zgłaszać luki w konfiguracji (np. "port SSH otwarty dla wszystkich"), ale nie analizuje logicznych powiązań i konfliktów priorytetów między wieloma regułami firewall w sieci VPC.
+- B: Firewall Rules Logging rejestruje, która reguła została zastosowana do konkretnego przepływu ruchu, ale nie analizuje statycznie konfiguracji pod kątem reguł, które nigdy nie zadziałają, bo są przykryte przez inne.
+- C: VPC Flow Logs monitorują ruch sieciowy, ale nie posiadają logiki analizy "cienia" (shadowing) reguł zapory.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla D. To jedyne narzędzie do higieny logicznej firewalli.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Słowa klucze: "Overlapped", "Shadowed", "Unused firewall rules" = Firewall Insights.
+- Firewall Insights pomaga w zachowaniu "higieny" reguł sieciowych.
+
+Kluczowe zagadnienia do powtórzenia:
+- Priorytety reguł firewalla (0 to najwyższy, 65535 to najniższy).
+- Funkcjonalności Firewall Insights (shadowing detection, hit counting).
+
+Dokumentacja:
+- <a href="https://cloud.google.com/firewall-insights/docs/overview" target="_blank">Omówienie Firewall Insights</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

@@ -90,16 +90,30 @@ You are setting up a CI/CD pipeline to deploy containerized applications to your
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: AE.
+Potwierdzona odpowiedź: AE (A. Create a Cloud Build pipeline... analyze Container Analysis results, E. In your CI/CD pipeline, add an attestation... Use a Binary Authorization policy)
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Cloud Build + Container Analysis: To natywne rozwiązanie GCP. Cloud Build automatycznie wywołuje skanowanie obrazów w Artifact Registry (Container Analysis), co identyfikuje luki CVE bez dodatkowych serwerów.
-E. Binary Authorization: Jest to mechanizm 'enforcement'. Zapewnia on, że w klastrze GKE uruchomią się TYLKO te obrazy, które zostały pomyślnie przeskanowane i 'podpisane' (atestowane) w kroku A.
+Wyjaśnienie:
+- Container Analysis (A): Jest to natywna usługa Google Cloud, która automatycznie skanuje obrazy kontenerów w poszukiwaniu znanych luk w zabezpieczeniach (CVE) w momencie ich przesyłania do Artifact Registry lub Container Registry. Integracja z Cloud Build pozwala na przerwanie procesu budowania, jeśli zostaną wykryte krytyczne podatności.
+- Binary Authorization (E): To mechanizm kontroli wdrożeń (deployment-time security). GKE sprawdza politykę Binary Authorization przed uruchomieniem kontenera. Jeśli obraz nie posiada "atestacji" (cyfrowego podpisu) potwierdzającego, że przeszedł pomyślnie skanowanie w pipeline CI/CD, wdrożenie zostanie zablokowane.
+- Synergia: Połączenie skanowania (Analysis) z egzekwowaniem (Authorization) tworzy bezpieczny łańcuch dostaw oprogramowania (Secure Software Supply Chain) przy minimalnym nakładzie operacyjnym, ponieważ obie usługi są w pełni zarządzane (serverless).
 
-Dlaczego inne są błędne:
-B, C, D: Wprowadzają dodatkowy narzut (serwery Jenkins, własne skrypty, VM), co jest sprzeczne z wymogiem 'minimal overhead' i 'cloud-native'.
+Dlaczego pozostałe są błędne:
+- B: Cloud Functions wyzwalane logami to rozwiązanie "reaktywne" (skanowanie po fakcie), które jest trudniejsze do wdrożenia i zarządzania niż wbudowana Container Analysis.
+- C: Użycie instancji Compute Engine i zadań cron wprowadza niepotrzebny "operational overhead" (zarządzanie systemem operacyjnym, patchowanie samej VM) i nie jest rozwiązaniem natywnym dla chmury (cloud-native).
+- D: Jenkins wymaga samodzielnego hostowania, zarządzania i skalowania. Cloud Build (A) jako usługa zarządzana znacznie lepiej spełnia wymóg minimalizacji narzutu operacyjnego.
 
-Konsensus społeczności ExamTopics: 100% na AE. To podręcznikowy duet dla 'Supply Chain Security' w GKE.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Bezpieczeństwo kontenerów w GCP = Container Analysis (Skanowanie) + Binary Authorization (Blokowanie).
+- Słowo klucz "prevent containers from being deployed" zawsze wskazuje na Binary Authorization.
+
+Kluczowe zagadnienia do powtórzenia:
+- Jak działa Binary Authorization (Attestors, Attestations, Policy).
+- Automatyczne skanowanie podatności w Artifact Registry.
+- Budowanie bezpiecznych rurociągów CI/CD w Cloud Build.
+
+Dokumentacja:
+- <a href="https://cloud.google.com/binary-authorization/docs/overview" target="_blank">Omówienie Binary Authorization</a>
+- <a href="https://cloud.google.com/container-analysis/docs/container-analysis-overview" target="_blank">Omówienie Container Analysis</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

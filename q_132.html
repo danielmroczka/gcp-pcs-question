@@ -90,17 +90,30 @@ You are tasked with exporting and auditing security logs for login activity even
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+Potwierdzona odpowiedź: BC (B. Create a Log Sink at the organization level with the includeChildren parameter, and set the destination to a Pub/Sub topic, C. Enable Data Access audit logs at the organization level to apply to all projects).
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Enable Data Access logs: Logi Data Access (kto czytał/pobrał plik) są domyślnie wyłączone ze względu na ich dużą objętość i koszt. Jeśli chcesz audytować dostęp do obiektów, musisz je najpierw jawnie włączyć w polityce IAM projektu lub organizacji.
+Wyjaśnienie:
+Aby wyeksportować logi bezpieczeństwa dla całej organizacji w czasie zbliżonym do rzeczywistego do zewnętrznego systemu SIEM, należy:
+1. Włączyć logi audytowe dostępu do danych (Data Access audit logs) na poziomie organizacji (opcja C). Logi te rejestrują m.in. logowania do konsoli oraz wywołania API czytające lub modyfikujące dane (np. konfiguracje). Logi Admin Activity są włączone domyślnie, ale Data Access (szczególnie Administrative Reads) wymagają jawnego włączenia.
+2. Utworzyć zagregowany zlew logów (Aggregated Log Sink) na poziomie organizacji z parametrem `includeChildren` ustawionym na true (opcja B). Pozwala to na zbieranie logów ze wszystkich projektów, folderów i samej organizacji. Najlepszym miejscem docelowym dla SIEM jest Pub/Sub, który zapewnia przesyłanie strumieniowe w czasie rzeczywistym.
 
-Dlaczego inne są błędne:
-B. Admin Activity: Rejestrują tylko zmiany konfiguracji (np. zmianę nazwy bucketu), nie widzą operacji na samych plikach.
-C. VPC Flow Logs: Widzą ruch sieciowy, ale nie powiedzą Ci który konkretnie plik został pobrany przez API.
-D. Cloud Asset Inventory: Pokazuje stan zasobów, nie jest dziennikiem zdarzeń dostępu użytkowników.
+Dlaczego pozostałe są błędne:
+- A. Create a Log Sink... without includeChildren: Zwykły zlew na poziomie organizacji bez parametru `includeChildren` zbierze tylko logi wygenerowane przez same zasoby organizacji (np. zmiany w politykach IAM organizacji), a nie logi z projektów podrzędnych.
+- D. Enable Google Workspace audit logs...: Choć logi Workspace mogą zawierać informacje o logowaniu użytkowników do ich kont, zadanie wyraźnie prosi o logi aktywności w Google Cloud Console i API GCP, co zapewniają logi audytowe Cloud Audit Logs.
+- E. Ensure that the SIEM processes the AuthenticationInfo field...: Jest to dobra praktyka operacyjna, ale nie jest to krok niezbędny do skonfigurowania samego eksportu logów, o który pyta zadanie.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla A. Nie da się audytować czegoś, co nie jest logowane.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Słowo klucz "all projects in the organization" = "Aggregated Sink" + "includeChildren".
+- Słowo klucz "near real-time to SIEM" = Pub/Sub jako destination.
+- Logi "Data Access" (Administrative Reads) są niezbędne do śledzenia "kto co widział" w konfiguracjach, a nie są włączone domyślnie.
+
+Kluczowe zagadnienia do powtórzenia:
+- Aggregated Log Sinks.
+- Rodzaje Cloud Audit Logs (Admin Activity, Data Access, System Event, Policy Denied).
+- Integracja z SIEM przez Pub/Sub.
+
+Dokumentacja:
+<a href="https://cloud.google.com/logging/docs/export/aggregated_sinks" target="_blank">Zagregowane zlewy logów</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

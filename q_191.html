@@ -64,7 +64,8 @@
 <h2>Question 191 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Employees at your company use their personal computers to access your organization's Google Cloud console. You need to ensure that users can only access the Google Cloud console from their corporate-issued devices and verify that they have a valid enterprise certificate.<br/>What should you do?
+Employees at your company use their personal computers to access your organization's Google Cloud console. You need to ensure that users can only access the Google Cloud console from their corporate-issued devices and verify that they have a valid enterprise certificate.
+What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,43 +90,41 @@ Employees at your company use their personal computers to access your organizati
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Implement an Access Policy in BeyondCorp Enterprise to verify the device certificate. Create an access binding with the access policy just created)
+Potwierdzona odpowiedź: A (Implement an Access Policy in BeyondCorp Enterprise to verify the device certificate. Create an access binding with the access policy just created).
 
-Dlaczego ta odpowiedź jest poprawna:
-- BeyondCorp Enterprise (Context-Aware Access): Jest to rozwiązanie Google Cloud typu Zero Trust, które pozwala na kontrolowanie dostępu do aplikacji i konsoli Google Cloud w oparciu o kontekst (tożsamość, lokalizacja, stan urządzenia).
+Wyjaśnienie:
+- BeyondCorp Enterprise (wcześniej Context-Aware Access): Jest to rozwiązanie Google Cloud typu Zero Trust, które pozwala na kontrolowanie dostępu do aplikacji i konsoli Google Cloud w oparciu o kontekst (tożsamość, lokalizacja, stan urządzenia).
 - Weryfikacja certyfikatu: BeyondCorp pozwala na zdefiniowanie poziomów dostępu (Access Levels), które sprawdzają, czy urządzenie, z którego loguje się użytkownik, posiada poprawny, korporacyjny certyfikat X.509.
 - Access Policy: Stworzenie polityki dostępu (Access Policy) i powiązanie jej z konsolą Google Cloud (poprzez Access Binding) jest standardową metodą wymuszenia, aby tylko autoryzowane urządzenia (corporate-issued) miały dostęp.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - B. VPC firewall policy: Firewalle VPC działają wewnątrz sieci wirtualnej i chronią ruch między maszynami lub ruch do internetu. Nie służą do kontrolowania dostępu użytkowników do samej konsoli Google Cloud (warstwa zarządzania / Control Plane).
 - C. Organization policy: Polityki organizacji służą do narzucania ograniczeń konfiguracyjnych na zasoby (np. "zakaz tworzenia publicznych IP"), ale nie posiadają natywnej funkcji weryfikacji certyfikatów na urządzeniach końcowych użytkowników.
 - D. IAM conditional policy: Choć IAM Conditions pozwalają na pewną kontrolę kontekstową (np. IP źródłowe, czas), nie mają one bezpośredniego wglądu w certyfikaty sprzętowe urządzenia tak jak BeyondCorp (który wykorzystuje agenta Endpoint Verification).
 
-Wskazówki i triki (Tips & Tricks):
+Wskazówki egzaminacyjne (Tips & Tricks):
 - "Corporate-issued devices" / "Device certificate" + "Access to Console" = BeyondCorp Enterprise / Context-Aware Access.
 - Szukaj słów takich jak "Access Context Manager" lub "Access Level" w podobnych pytaniach.
 - Pamiętaj, że do działania tego rozwiązania potrzebujesz wtyczki "Endpoint Verification" w przeglądarce Chrome.
 
-Praktyczne informacje na egzamin:
-- Zrozum filozofię BeyondCorp: "Trust no one, verify everything". Tożsamość (login/hasło) to za mało – stan urządzenia jest równie ważny.
-- BeyondCorp Enterprise jest usługą płatną, ale Context-Aware Access w podstawowej wersji jest dostępny dla użytkowników Cloud Identity Premium i Google Workspace.
+Kluczowe zagadnienia do powtórzenia:
+- Model Zero Trust w Google Cloud.
+- BeyondCorp Enterprise i Context-Aware Access.
+- Access Context Manager i Access Levels.
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/access-context-manager/docs/device-policy" target="_blank">Device policy in Access Context Manager</a>
-- <a href="https://cloud.google.com/beyondcorp-enterprise/docs/context-aware-access-overview" target="_blank">Context-Aware Access overview</a>
-- <a href="https://cloud.google.com/endpoint-verification/docs/overview" target="_blank">Endpoint Verification overview</a>
+Dokumentacja:
+<a href="https://cloud.google.com/access-context-manager/docs/device-policy" target="_blank">Device policy in Access Context Manager</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
+<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
+<h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie dotyczy przejścia od tradycyjnego modelu bezpieczeństwa obwodowego (VPN) do modelu Zero Trust. W dobie pracy zdalnej, weryfikacja czy użytkownik korzysta z "bezpiecznego" laptopa firmowego jest kluczowa. BeyondCorp Enterprise jest flagowym produktem Google rozwiązującym ten problem.</p>
-<h3>Dodatkowe wskazówki</h3>
+<p><b>Głęboka analiza:</b> To pytanie dotyczy przejścia od tradycyjnego modelu bezpieczeństwa obwodowego (VPN) do modelu Zero Trust. W dobie pracy zdalnej, weryfikacja czy użytkownik korzysta z "bezpiecznego" laptopa firmowego jest kluczowa. BeyondCorp Enterprise jest flagowym produktem Google rozwiązującym ten problem.</p>
+<h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li>Możesz konfigurować polityki tak, aby blokować dostęp z konkretnych krajów lub jeśli urządzenie nie jest zaszyfrowane lub nie ma włączonego hasła do ekranu.</li>
-<li>Certyfikaty mogą być dostarczane na urządzenia przez systemy MDM (np. Microsoft Intune, JAMF).</li>
+<li><a href="https://cloud.google.com/beyondcorp-enterprise/docs/context-aware-access-overview" target="_blank">Context-Aware Access overview</a></li>
 </ul>
 </div>
 </div>
