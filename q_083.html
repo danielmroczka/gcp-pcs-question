@@ -89,25 +89,29 @@ As adoption of the Cloud Data Loss Prevention (Cloud DLP) API grows within your 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Sampling (rowsLimit, bytesLimitPerFile) + Regex)
+Potwierdzona odpowiedź: C (Use rowsLimit and bytesLimitPerFile to sample data and use CloudStorageRegexFileSet to limit scans)
 
 Wyjaśnienie: 
-Koszty Cloud DLP zależą głównie od ilości skanowanych danych. Optymalizacja polega na: 1. Skanowaniu tylko reprezentatywnej próbki (`rowsLimit` w BigQuery, `bytesLimitPerFile` w GCS). 2. Użyciu `CloudStorageRegexFileSet`, aby skanować tylko istotne pliki (np. *.log), zamiast całej zawartości bucketu.
+Aby zoptymalizować koszty korzystania z interfejsu Cloud DLP API, należy ograniczyć ilość skanowanych danych. Można to osiągnąć poprzez:
+1. Próbkowanie danych (Sampling): Użycie `rowsLimit` dla BigQuery i `bytesLimitPerFile` dla Cloud Storage pozwala na skanowanie tylko reprezentatywnej części danych zamiast całości.
+2. Ograniczenie zakresu skanowania (Scoping): Użycie `CloudStorageRegexFileSet` pozwala na wskazanie konkretnych plików do skanowania (np. tylko pliki .csv lub .log), co zapobiega skanowaniu nieistotnych danych.
 
-Dlaczego pozostałe są błędne:
-A, B. Lokalizacja danych (poza USA) nie jest głównym czynnikiem optymalizacji kosztów w porównaniu do wolumenu danych.
-D. FindingLimits ogranicza liczbę wyników, ale nie ilość danych, które DLP musi 'przeczytać', aby te wyniki znaleźć.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A. Set appropriate rowsLimit value on BigQuery data hosted outside the US...: Lokalizacja danych (poza USA) nie jest głównym czynnikiem kosztowym, który należy optymalizować w ten sposób. Kluczowy jest wolumen skanowanych bajtów.
+- B. ...minimize transformation units on multiregional Cloud Storage buckets: Chociaż jednostki transformacji generują koszty, pytanie dotyczy optymalizacji użycia (skanowania), a sampling i regex to najskuteczniejsze metody redukcji ilości danych wejściowych.
+- D. Use FindingLimits and TimespanContfig to sample data...: `FindingLimits` ogranicza liczbę znalezionych wyników, ale nie ilość danych, które DLP musi "przeczytać", aby te wyniki znaleźć. Nie redukuje to kosztów skanowania (inspection costs).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-DLP Cost Optimization = Sampling (Limit bytes/rows) + Scoping (Regex/Include).
+Wskazówki i triki (Tips & Tricks):
+- Koszt Cloud DLP opiera się głównie na ilości skanowanych danych (Inspection) i liczbie przekształceń (Transformation).
+- Zawsze używaj samplingu w dużych zbiorach danych, aby zidentyfikować, gdzie znajdują się wrażliwe informacje, bez ponoszenia kosztów skanowania całego terabajtowego zbioru.
 
-Kluczowe zagadnienia do powtórzenia:
-- Cloud DLP cost management
-- Data sampling techniques
-- DLP Inspection jobs
+Praktyczne informacje na egzamin:
+- Zapamiętaj: `rowsLimit` (BigQuery), `bytesLimitPerFile` (GCS) = Oszczędność pieniędzy.
+- `CloudStorageRegexFileSet` jest kluczowy dla precyzyjnego targetowania plików w bucketach.
 
-Dokumentacja:
-<a href="https://cloud.google.com/dlp/docs/cost-control" target="_blank">https://cloud.google.com/dlp/docs/cost-control</a>
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/dlp/docs/cost-control" target="_blank">Cloud DLP cost control methods</a>
+- <a href="https://cloud.google.com/dlp/docs/inspecting-storage" target="_blank">Inspecting storage and databases</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -115,11 +119,10 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Jeśli masz 1TB logów, skanowanie 100MB z każdego pliku (sampling) zazwyczaj wystarczy, aby wykryć, czy dany proces zaczął omyłkowo zapisywać PII, a kosztuje ułamek ceny pełnego skanu.</p></p>
+<p><b>Głęboka analiza:</b> Cloud DLP może stać się bardzo drogą usługą, jeśli nie jest odpowiednio skonfigurowana. Strategia "Skanuj wszystko, zawsze" jest rzadko opłacalna. Większość organizacji stosuje sampling, aby monitorować zgodność (compliance) i identyfikować nowe źródła PII, a pełne skanowanie wykonuje tylko tam, gdzie ryzyko jest najwyższe.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/dlp/docs/cost-control" target="_blank">https://cloud.google.com/dlp/docs/cost-control</a></li>
-
+<li><a href="https://cloud.google.com/dlp/docs/concepts-sampling" target="_blank">Data sampling in Cloud DLP</a></li>
 </ul>
 </div>
 </div>

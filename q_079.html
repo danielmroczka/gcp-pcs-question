@@ -92,23 +92,24 @@ An organization's security and risk management teams are concerned about where t
 Potwierdzona odpowiedź: B (Defending against XSS and SQLi attacks)
 
 Wyjaśnienie: 
-W modelu PaaS (App Engine), Google odpowiada za system operacyjny, runtime i infrastrukturę. Odpowiedzialność klienta kończy się na kodzie aplikacji. Zabezpieczenie przed atakami typu Cross-Site Scripting (XSS) czy SQL Injection leży całkowicie po stronie dewelopera.
+W modelu PaaS (Platform as a Service), takim jak App Engine, Google odpowiada za zarządzanie infrastrukturą, systemem operacyjnym i runtime'em. Klient jest odpowiedzialny za bezpieczeństwo samej aplikacji, co obejmuje ochronę przed atakami warstwy aplikacji, takimi jak Cross-Site Scripting (XSS) i SQL Injection (SQLi).
 
-Dlaczego pozostałe są błędne:
-A. VPC Flow Logs w App Engine Standard są zarządzane przez Google.
-C. Aktualizacje systemu operacyjnego (Guest OS) w PaaS to zadanie Google.
-D. Domyślne szyfrowanie danych (encryption at rest) jest zapewniane automatycznie przez Google.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A. Configuring and monitoring VPC Flow Logs: W App Engine Standard sieć jest zarządzana przez Google. Chociaż logi przepływu są ważne, nie są one głównym obszarem odpowiedzialności klienta w PaaS.
+- C. Managing the latest updates and security patches for the Guest OS: To jest klasyczny przykład odpowiedzialności dostawcy w modelu PaaS. W IaaS (Compute Engine) byłoby to zadanie klienta.
+- D. Encrypting all stored data: Google Cloud domyślnie szyfruje dane w spoczynku (at rest). Klient może zarządzać własnymi kluczami (CMEK), ale podstawowe szyfrowanie jest zapewnione przez Google.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-PaaS = Twoja aplikacja, Twoje dane, Twoje bezpieczeństwo kodu.
+Wskazówki i triki (Tips & Tricks):
+- Pamiętaj zasadę: Im więcej "as a Service", tym mniej Twojej odpowiedzialności za infrastrukturę, a więcej za kod i dane.
+- PaaS = Twoja aplikacja (kod) i Twoje dane.
 
-Kluczowe zagadnienia do powtórzenia:
-- Shared Responsibility Model
-- PaaS Security
-- App Engine security features
+Praktyczne informacje na egzamin:
+- Zrozum model współdzielonej odpowiedzialności (Shared Responsibility Model) dla IaaS, PaaS i SaaS.
+- W PaaS (App Engine, Cloud Functions) zawsze skupiaj się na bezpieczeństwie kodu i sanitizacji danych wejściowych.
 
-Dokumentacja:
-<a href="https://cloud.google.com/security/shared-responsibility-model" target="_blank">https://cloud.google.com/security/shared-responsibility-model</a>
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/security/shared-responsibility-model" target="_blank">Google Cloud Shared Responsibility Model</a>
+- <a href="https://cloud.google.com/appengine/docs/standard/security" target="_blank">App Engine Security</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -116,11 +117,10 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Wiele osób myśli, że chmura załatwia wszystko. Jednak luka w kodzie (np. brak sanitizacji inputu) pozwoli hakerowi wykraść dane niezależnie od tego, jak bezpieczna jest infrastruktura Google.</p></p>
+<p><b>Głęboka analiza:</b> W modelu PaaS granica odpowiedzialności przebiega na poziomie interfejsu aplikacji. Deweloper musi zapewnić, że aplikacja jest bezpieczna "od środka" (brak luk w kodzie), podczas gdy Google zapewnia, że platforma, na której aplikacja działa, jest bezpieczna i aktualna.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/security/shared-responsibility-model" target="_blank">https://cloud.google.com/security/shared-responsibility-model</a></li>
-
+<li><a href="https://cloud.google.com/security/shared-responsibility-model" target="_blank">Shared Responsibility Model overview</a></li>
 </ul>
 </div>
 </div>

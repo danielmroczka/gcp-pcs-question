@@ -90,26 +90,27 @@ A customer is running an analytics workload on Google Cloud Platform (GCP) where
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: AB (Private Google Access, No public IP)
+Potwierdzona odpowiedź: AB (Configure Private Google Access, Avoid assigning public IP addresses)
 
 Wyjaśnienie: 
-Aby odizolować instancje od internetu, nie należy nadawać im publicznych adresów IP. Aby jednak te instancje mogły komunikować się z Cloud Storage (które ma publiczne adresy IP Google), należy włączyć Private Google Access w ich podsieci.
+Aby całkowicie odizolować obciążenia analityczne od internetu (zarówno przychodzącego, jak i wychodzącego), instancje Compute Engine nie powinny mieć przypisanych publicznych adresów IP. Ponieważ jednak instancje te muszą uzyskać dostęp do danych w Cloud Storage (usługa Google z publicznymi punktami końcowymi API), konieczne jest włączenie funkcji Private Google Access (PGA) w podsieci, w której znajdują się te instancje. PGA umożliwia maszynom z tylko prywatnymi adresami IP komunikację z usługami Google przez sieć Google.
 
-Dlaczego pozostałe są błędne:
-C. Oddzielna podsieć sama w sobie nie blokuje dostępu do internetu.
-D. IP forwarding służy do przekazywania ruchu przez VM, nie do blokowania jej własnego dostępu.
-E. Cloud NAT pozwoliłby maszynom na wyjście DO internetu, co jest sprzeczne z wymogiem izolacji.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- C. Make sure that the Compute Engine cluster is running on a separate subnet: Sama separacja podsieci nie blokuje dostępu do internetu, jeśli podsieć ma trasę do bramy internetowej i instancje mają publiczne IP.
+- D. Turn off IP forwarding on the Compute Engine instances: Przekazywanie IP (IP forwarding) jest wymagane tylko wtedy, gdy instancja ma działać jako router/NAT; jego wyłączenie nie izoluje instancji od internetu.
+- E. Configure a Cloud NAT gateway: Cloud NAT umożliwiłby instancjom WYJŚCIE do internetu (np. w celu pobrania poprawek), co jest sprzeczne z wymogiem, aby workload NIE mógł uzyskać dostępu do internetu.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-Brak internetu + dostęp do usług Google = Private Google Access + No Public IP.
+Wskazówki i triki (Tips & Tricks):
+- Słowo klucz: "not able to access internet" + "access Cloud Storage/BigQuery" = Private Google Access + No Public IP.
+- Private Google Access włącza się na poziomie PODSIECI (Subnet).
 
-Kluczowe zagadnienia do powtórzenia:
-- Private Google Access (PGA)
-- VPC Network Isolation
-- Public vs Private IP addresses
+Praktyczne informacje na egzamin:
+- Zapamiętaj, że Private Google Access dotyczy usług Google dostępnych przez publiczne adresy IP (jak GCS, BigQuery).
+- Private Service Connect to alternatywa dla nowszych i bardziej złożonych scenariuszy, ale PGA to podstawa egzaminu.
 
-Dokumentacja:
-<a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">https://cloud.google.com/vpc/docs/private-google-access</a>
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">Private Google Access overview</a>
+- <a href="https://cloud.google.com/compute/docs/ip-addresses" target="_blank">Compute Engine IP addresses</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -117,11 +118,10 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: AB</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> To klasyczne pytanie sprawdzające zrozumienie 'Private Google Access'. Kluczem jest zrozumienie, że API Google mają publiczne adresy IP, więc maszyna bez Public IP potrzebuje specjalnego 'mostu' (PGA), aby z nich korzystać bez wychodzenia do internetu.</p></p>
+<p><b>Głęboka analiza:</b> To pytanie testuje zrozumienie fundamentalnej koncepcji sieciowej w GCP: jak połączyć prywatne maszyny z usługami publicznymi Google bez "wystawiania" ich na świat. PGA jest darmowe i łatwe do włączenia, co czyni je domyślnym wyborem w takich scenariuszach.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">https://cloud.google.com/vpc/docs/private-google-access</a></li>
-
+<li><a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">Configuring Private Google Access</a></li>
 </ul>
 </div>
 </div>

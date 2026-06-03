@@ -93,22 +93,24 @@ Your team wants to limit users with administrative privileges at the organizatio
 Potwierdzona odpowiedź: AB (Organization Administrator, Super Admin)
 
 Wyjaśnienie: 
-Na najwyższym poziomie hierarchii mamy: 1. Super Admin (Cloud Identity/Workspace) - może zarządzać kontami i resetować hasła adminom. 2. Organization Administrator (IAM) - może zmieniać polityki dla całej organizacji i nadawać uprawnienia. Ograniczenie tych ról jest kluczowe dla bezpieczeństwa całej struktury.
+Ograniczenie liczby użytkowników z uprawnieniami administracyjnymi na poziomie organizacji jest fundamentem bezpieczeństwa w GCP. Super Admin (zarządzany przez Cloud Identity/Workspace) posiada pełną kontrolę nad tożsamościami i kontami, natomiast Organization Administrator (IAM) ma pełną kontrolę nad zasobami GCP i politykami w całej hierarchii organizacji. Obie role pozwalają na eskalację uprawnień i głębokie zmiany w konfiguracji.
 
-Dlaczego pozostałe są błędne:
-C, D. Te role są ograniczone do konkretnych usług i zazwyczaj nadawane na poziomie projektu, a nie organizacji.
-E. Role Viewer nie pozwala na żadne zmiany administracyjne.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- C. GKE Cluster Admin: Ta rola jest ograniczona do zarządzania klastrami Kubernetes i zazwyczaj nadawana na poziomie projektu lub konkretnego klastra, nie organizacji.
+- D. Compute Admin: Ta rola dotyczy zarządzania zasobami Compute Engine i zwykle jest ograniczona do poziomu projektu.
+- E. Organization Role Viewer: To rola tylko do odczytu (read-only), która nie pozwala na wprowadzanie żadnych zmian ani wykonywanie akcji administracyjnych.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-Zasada 'Piramidy': Super Admin i Org Admin to wierzchołek. Musi być ich jak najmniej.
+Wskazówki i triki (Tips & Tricks):
+- Myśl o hierarchii: Pytanie dotyczy 'organization level'. Szukaj ról, które mają 'Organization' w nazwie lub są nadrzędne (jak Super Admin).
+- Zasada 'Least Privilege': Zawsze ograniczaj role o szerokim zasięgu.
 
-Kluczowe zagadnienia do powtórzenia:
-- GCP Resource Hierarchy
-- Organization-level IAM roles
-- Super Admin vs Org Admin
+Praktyczne informacje na egzamin:
+- Zapamiętaj różnicę: Super Admin zarządza tożsamością (Cloud Identity), a Organization Admin zarządza zasobami GCP (IAM).
+- Google zaleca posiadanie mniej niż 3 Super Adminów.
 
-Dokumentacja:
-<a href="https://cloud.google.com/resource-manager/docs/access-control-org" target="_blank">https://cloud.google.com/resource-manager/docs/access-control-org</a>
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/resource-manager/docs/access-control-org" target="_blank">Access Control for Organizations</a>
+- <a href="https://support.google.com/a/answer/2405986" target="_blank">Best practices for Super Admin accounts</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -116,11 +118,11 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: AB</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Najlepszą praktyką jest posiadanie mniej niż 3 Super Adminów i Adminów Organizacji, a ich konta powinny być używane tylko do zadań 'Break Glass'.</p></p>
+<p><b>Głęboka analiza:</b> Najlepszą praktyką jest posiadanie mniej niż 3 Super Adminów i Adminów Organizacji, a ich konta powinny być używane tylko do zadań 'Break Glass' (awaryjnych). Ograniczenie uprawnień na poziomie organizacji jest kluczowe dla zminimalizowania pola ataku.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/access-control-org" target="_blank">https://cloud.google.com/resource-manager/docs/access-control-org</a></li>
-
+<li><a href="https://cloud.google.com/resource-manager/docs/access-control-org" target="_blank">Access Control for Organizations</a></li>
+<li><a href="https://support.google.com/a/answer/2405986" target="_blank">Best practices for Super Admin accounts</a></li>
 </ul>
 </div>
 </div>

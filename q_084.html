@@ -89,26 +89,27 @@ Your team uses a service account to authenticate data transfers from a given Com
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Use the undelete command)
+Potwierdzona odpowiedź: B (Use the undelete command to recover the deleted service account)
 
 Wyjaśnienie: 
-Usunięte konto serwisowe można przywrócić w ciągu 30 dni za pomocą komendy `gcloud iam service-accounts undelete`. Jest to najszybsza metoda, ponieważ przywraca ten sam unikalny identyfikator (Unique ID), dzięki czemu wszystkie istniejące przypisania ról IAM automatycznie znów stają się aktywne.
+Usunięte konto serwisowe (Service Account) można przywrócić w ciągu 30 dni od jego usunięcia. Użycie komendy `gcloud iam service-accounts undelete` jest najszybszym sposobem na przywrócenie funkcjonalności, ponieważ przywraca ona konto z tym samym unikalnym identyfikatorem (Unique ID). Dzięki temu wszystkie wcześniej przypisane role IAM i polityki dostępu (np. do bucketu Cloud Storage) automatycznie znów zaczną obowiązywać bez konieczności ich ponownej konfiguracji.
 
-Dlaczego pozostałe są błędne:
-A. Wyłączenie uwierzytelniania na buckecie jest niebezpieczne i rzadko możliwe w środowisku produkcyjnym.
-C. Stworzenie konta o tej samej nazwie nada mu NOWY Unique ID. Uprawnienia IAM starego konta nie zostaną przeniesione na nowe.
-D. Zmiana konfiguracji aplikacji na wszystkich instancjach jest czasochłonna i obarczona ryzykiem błędu.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A. Temporarily disable authentication on the Cloud Storage bucket: To działanie drastycznie obniża poziom bezpieczeństwa i jest sprzeczne z wymogiem "without compromising security". Ponadto nie rozwiązuje problemu tożsamości po stronie Compute Engine.
+- C. Create a new service account with the same name as the deleted service account: Chociaż nazwa (e-mail) będzie taka sama, nowe konto otrzyma NOWY Unique ID. Uprawnienia IAM w GCP są powiązane z ID, więc nowe konto nie będzie miało dostępu do zasobów, do których miało dostęp stare, dopóki nie zostaną mu one ręcznie nadane.
+- D. Update the permissions of another existing service account...: Ta metoda wymagałaby zmiany konfiguracji aplikacji lub instancji VM, co jest czasochłonne i nie jest "najszybszym" rozwiązaniem.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-W GCP IAM uprawnienia są przypisane do ID, a nie do nazwy (e-maila). 'Undelete' zachowuje ID.
+Wskazówki i triki (Tips & Tricks):
+- W Google Cloud tożsamości (użytkownicy, grupy, konta serwisowe) są identyfikowane wewnętrznie przez Unique ID, a nie przez adres e-mail. Adres e-mail jest tylko "przyjazną dla człowieka" etykietą.
+- Zawsze najpierw próbuj `undelete`, jeśli konto zostało usunięte niedawno (do 30 dni).
 
-Kluczowe zagadnienia do powtórzenia:
-- Service Account lifecycle
-- IAM Unique Identifiers
-- Disaster Recovery for IAM
+Praktyczne informacje na egzamin:
+- Zapamiętaj: `undelete` = zachowanie tego samego ID = automatyczne przywrócenie uprawnień.
+- Po 30 dniach konto jest usuwane permanentnie i `undelete` nie zadziała.
 
-Dokumentacja:
-<a href="https://cloud.google.com/iam/docs/creating-managing-service-accounts#undeleting" target="_blank">https://cloud.google.com/iam/docs/creating-managing-service-accounts#undeleting</a>
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/iam/docs/creating-managing-service-accounts#undeleting" target="_blank">Undeleting a service account</a>
+- <a href="https://cloud.google.com/iam/docs/service-accounts" target="_blank">Service accounts overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -116,11 +117,10 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Pamiętaj, że w GCP uprawnienia są przypisane do numeru seryjnego konta (Unique ID). Nazwa jest tylko etykietą. Dlatego 'undelete' jest jedynym sposobem na zachowanie ciągłości dostępu bez re-konfiguracji IAM.</p></p>
+<p><b>Głęboka analiza:</b> Ten scenariusz podkreśla wagę Unique ID w systemie IAM. Wiele systemów opartych na rolach (RBAC) działa w ten sposób, aby zapobiec sytuacji, w której nowo utworzony użytkownik o tej samej nazwie co stary (np. po zwolnionym pracowniku) przejąłby jego uprawnienia. W GCP 'undelete' to bezpieczny "wehikuł czasu" dla administratorów.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/iam/docs/creating-managing-service-accounts#undeleting" target="_blank">https://cloud.google.com/iam/docs/creating-managing-service-accounts#undeleting</a></li>
-
+<li><a href="https://cloud.google.com/iam/docs/creating-managing-service-accounts" target="_blank">Managing service accounts</a></li>
 </ul>
 </div>
 </div>

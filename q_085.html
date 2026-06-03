@@ -89,25 +89,27 @@ You are the Security Admin in your company. You want to synchronize all security
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (GCDS (one-way sync) with email attribute)
+Potwierdzona odpowiedź: A (Configure Google Cloud Directory Sync to sync security groups using LDAP search rules that have "user email address" as the attribute to facilitate one-way sync.)
 
 Wyjaśnienie: 
-Google Cloud Directory Sync (GCDS) synchronizuje dane w jedną stronę: z LDAP do chmury. Filtrowanie po atrybucie e-mail jest poprawne, ponieważ w Google Cloud grupy muszą posiadać unikalny adres e-mail, aby mogły być używane w politykach IAM.
+Google Cloud Directory Sync (GCDS) to narzędzie służące do synchronizacji użytkowników i grup z lokalnego katalogu LDAP (np. Active Directory) do Cloud Identity lub Google Workspace. Synchronizacja ta jest zawsze jednokierunkowa (one-way sync), co oznacza, że źródłem prawdy (source of truth) pozostaje katalog lokalny. Aby grupy mogły być używane w IAM do nadawania uprawnień, muszą posiadać atrybut adresu e-mail, który jest unikalny w skali organizacji Google.
 
-Dlaczego pozostałe są błędne:
-B. GCDS nie wspiera synchronizacji dwukierunkowej (bidirectional).
-C, D. Te opcje wspominają o 'automatycznym posiadaniu ról IAM' przez grupy stworzone w Google, co nie jest prawdą – role trzeba nadać ręcznie lub przez skrypt.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- B. ...to facilitate bidirectional sync: GCDS nie wspiera synchronizacji dwukierunkowej. Zmiany wprowadzone ręcznie w konsoli Google nie zostaną przeniesione z powrotem do LDAP.
+- C. ...A group created in a Google domain will automatically have an explicit Google Cloud Identity and Access Management (IAM) role: To stwierdzenie jest nieprawdziwe. Grupy po zsynchronizowaniu do Google nie posiadają domyślnie żadnych ról IAM. Role te muszą zostać nadane ręcznie lub poprzez skrypty na poziomie organizacji, folderu lub projektu.
+- D. ...sync the subset based on group object class attribute: Chociaż filtrowanie po klasie obiektu jest możliwe, pytanie precyzuje potrzebę synchronizacji grup posiadających adres e-mail, co czyni atrybut e-mail kluczowym elementem reguł wyszukiwania (LDAP search rules).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-GCDS = One-way sync (Source of truth is on-prem).
+Wskazówki i triki (Tips & Tricks):
+- GCDS = One-way sync (LDAP -> Cloud).
+- Grupa w Google Cloud musi mieć e-mail, aby być "widoczną" dla IAM.
 
-Kluczowe zagadnienia do powtórzenia:
-- GCDS (Google Cloud Directory Sync)
-- LDAP to Cloud Identity mapping
-- IAM Group best practices
+Praktyczne informacje na egzamin:
+- Zapamiętaj: Google Cloud Directory Sync (GCDS) synchronizuje tożsamości, a nie uprawnienia (role).
+- Zrozum proces: GCDS odczytuje dane z LDAP, porównuje je ze stanem w Google i wykonuje operacje dodawania/usuwania/aktualizacji, aby stan w chmurze odpowiadał lokalnemu.
 
-Dokumentacja:
-<a href="https://support.google.com/a/answer/612003" target="_blank">https://support.google.com/a/answer/612003</a>
+Dokumentacja i linki:
+- <a href="https://support.google.com/a/answer/612003" target="_blank">Google Cloud Directory Sync (GCDS) overview</a>
+- <a href="https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction" target="_blank">Federating Google Cloud with Active Directory</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -115,11 +117,10 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> GCDS to narzędzie działające w modelu 'state comparison'. Przed każdą synchronizacją generuje raport zmian, który administrator musi zatwierdzić.</p></p>
+<p><b>Głęboka analiza:</b> To zadanie sprawdza znajomość narzędzi hybrydowych. GCDS to standardowe rozwiązanie dla firm, które chcą zachować zarządzanie tożsamością on-premise. Kluczowym aspektem jest tu jednokierunkowość – zapobiega to powstawaniu konfliktów i gwarantuje, że lokalny katalog pozostaje nadrzędny.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://support.google.com/a/answer/612003" target="_blank">https://support.google.com/a/answer/612003</a></li>
-
+<li><a href="https://support.google.com/a/topic/2679497" target="_blank">GCDS help center</a></li>
 </ul>
 </div>
 </div>

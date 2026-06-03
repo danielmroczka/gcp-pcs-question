@@ -92,23 +92,24 @@ An engineering team is launching a web application that will be public on the in
 Potwierdzona odpowiedź: A (Cloud Armor)
 
 Wyjaśnienie: 
-Cloud Armor to usługa typu WAF (Web Application Firewall) i ochrony przed DDoS, która integruje się z HTTP(S) Load Balancerem. Pozwala na tworzenie czarnych i białych list adresów IP oraz ochronę przed typowymi atakami (OWASP Top 10) na brzegu sieci Google.
+Cloud Armor to usługa Web Application Firewall (WAF) i ochrony przed atakami DDoS, która pozwala na filtrowanie ruchu przychodzącego do HTTP(S) Load Balancera. Dzięki Cloud Armor można tworzyć polityki bezpieczeństwa, które blokują ruch z określonych adresów IP (IP Blacklisting) lub całych zakresów, zanim dotrze on do backendów aplikacji.
 
-Dlaczego pozostałe są błędne:
-B. Network LB działa w warstwie 4 i nie oferuje zaawansowanego filtrowania IP na poziomie aplikacji.
-C. SSL Proxy LB również nie posiada wbudowanych funkcji WAF/IP Blacklisting w taki sposób jak Cloud Armor.
-D. NAT Gateway służy do ruchu wychodzącego, a nie ochrony ruchu przychodzącego do aplikacji.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- B. Network Load Balancing: Działa w warstwie 4 (TCP/UDP) i nie oferuje zaawansowanych funkcji WAF ani filtrowania IP na poziomie, o który pyta zadanie w kontekście aplikacji webowej.
+- C. SSL Proxy Load Balancing: Chociaż terminuje SSL, nie posiada wbudowanych reguł Cloud Armor do filtrowania warstwy 7 (HTTP/HTTPS) w taki sam sposób jak External HTTP(S) Load Balancer.
+- D. NAT Gateway: Służy do umożliwienia instancjom bez publicznego adresu IP komunikacji WYCHODZĄCEJ do internetu, nie służy do ochrony ruchu przychodzącego.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-Blokowanie IP dla stron WWW / Load Balancera = Cloud Armor.
+Wskazówki i triki (Tips & Tricks):
+- Jeśli pytanie wspomina o "web application", "deny traffic from specific IP" i "public internet", Cloud Armor jest niemal zawsze poprawną odpowiedzią.
+- Cloud Armor działa na "brzegu" (edge) sieci Google, blokując złośliwy ruch jak najdalej od Twoich zasobów.
 
-Kluczowe zagadnienia do powtórzenia:
-- Cloud Armor
-- WAF (Web Application Firewall)
-- Global HTTP(S) Load Balancing security
+Praktyczne informacje na egzamin:
+- Zapamiętaj, że Cloud Armor wymaga External HTTP(S) Load Balancera (lub Proxy Load Balancera).
+- Cloud Armor chroni przed atakami OWASP Top 10 (np. SQLi, XSS) przy użyciu predefiniowanych reguł.
 
-Dokumentacja:
-<a href="https://cloud.google.com/armor/docs/cloud-armor-overview" target="_blank">https://cloud.google.com/armor/docs/cloud-armor-overview</a>
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/armor/docs/cloud-armor-overview" target="_blank">Google Cloud Armor overview</a>
+- <a href="https://cloud.google.com/load-balancing/docs/https" target="_blank">External HTTP(S) Load Balancing</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -116,11 +117,10 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Cloud Armor pozwala również na stosowanie list IP od dostawców trzecich oraz automatyczne blokowanie adresów na podstawie geolokalizacji.</p></p>
+<p><b>Głęboka analiza:</b> Cloud Armor to kluczowy element obrony "Edge". Pozwala na stosowanie list reputacyjnych i automatyczne wykrywanie anomalii. W architekturze wieloregionalnej jedna polityka Cloud Armor może chronić backendy rozsiane po całym świecie, co upraszcza zarządzanie bezpieczeństwem.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/armor" target="_blank">https://cloud.google.com/armor</a></li>
-
+<li><a href="https://cloud.google.com/armor" target="_blank">Cloud Armor product page</a></li>
 </ul>
 </div>
 </div>

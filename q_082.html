@@ -92,23 +92,24 @@ A customer wants to run a batch processing system on VMs and store the output fi
 Potwierdzona odpowiedź: C (Enable Private Google Access)
 
 Wyjaśnienie: 
-Private Google Access pozwala instancjom w podsieciach VPC na łączenie się z API i usługami Google (takimi jak Cloud Storage) przy użyciu ich wewnętrznych adresów IP, nawet jeśli instancje nie mają dostępu do publicznego internetu.
+Private Google Access (PGA) pozwala instancjom maszyn wirtualnych, które mają tylko wewnętrzne (prywatne) adresy IP, na komunikowanie się z publicznymi adresami IP interfejsów API i usług Google. Jest to idealne rozwiązanie w sytuacji, gdy polityka bezpieczeństwa zabrania maszynom dostępu do publicznego internetu, ale nadal muszą one przesyłać dane do Cloud Storage.
 
-Dlaczego pozostałe są błędne:
-A. Reguły firewalla mogą blokować ruch, ale nie umożliwią komunikacji z publicznymi API Google bez trasy/adresu.
-B. NAT Gateway umożliwia dostęp DO internetu, co narusza wymóg izolacji.
-D. Montowanie bucketu (gcsfuse) i tak wymaga połączenia sieciowego z API Google pod spodem.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A. Create a firewall rule to block internet traffic from the VM: Sama reguła firewalla zablokuje ruch, ale nie umożliwi maszynie bez publicznego IP komunikacji z publicznym API Cloud Storage. Potrzebny jest mechanizm routingu taki jak PGA.
+- B. Provision a NAT Gateway to access the Cloud Storage API endpoint: NAT Gateway (Cloud NAT) służy do umożliwienia maszynom bez publicznego IP dostępu DO internetu. Chociaż pozwoliłoby to na dostęp do Cloud Storage, narusza to wymóg "no VMs may reach the public internet".
+- D. Mount a Cloud Storage bucket as a local filesystem on every VM: Montowanie bucketu (np. przez Cloud Storage FUSE) pod spodem i tak wykorzystuje te same API, więc bez zapewnienia łączności sieciowej (poprzez PGA) montowanie się nie powiedzie.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-Jeśli widzisz 'no public internet' i 'Cloud Storage/BigQuery', odpowiedzią prawie zawsze jest PGA.
+Wskazówki i triki (Tips & Tricks):
+- Jeśli widzisz "no public internet access" oraz potrzebę korzystania z usług takich jak BigQuery, GCS czy Pub/Sub, szukaj w odpowiedziach "Private Google Access".
+- Pamiętaj, że PGA jest darmowe, co czyni je bardziej opłacalnym niż Cloud NAT.
 
-Kluczowe zagadnienia do powtórzenia:
-- Private Google Access
-- Service Endpoints
-- VPC Security
+Praktyczne informacje na egzamin:
+- Zrozum różnicę: Cloud NAT = Dostęp do całego internetu. Private Google Access = Dostęp TYLKO do usług Google.
+- PGA włącza się dla podsieci (Subnet), a nie dla całej sieci VPC naraz.
 
-Dokumentacja:
-<a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">https://cloud.google.com/vpc/docs/private-google-access</a>
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">Private Google Access documentation</a>
+- <a href="https://cloud.google.com/storage/docs/gcsfuse" target="_blank">Cloud Storage FUSE</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -116,11 +117,10 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Private Google Access jest włączane na poziomie podsieci (Subnet). Wszystkie maszyny w tej podsieci zyskują wtedy możliwość odpytywania API Google bez posiadania External IP.</p></p>
+<p><b>Głęboka analiza:</b> To zadanie jest klasycznym przykładem scenariusza izolacji sieciowej. W prawdziwych środowiskach produkcyjnych, maszyny przetwarzające dane (batch processing) rzadko potrzebują pełnego dostępu do internetu. Private Google Access jest kluczowym narzędziem do zapewnienia bezpieczeństwa bez utraty funkcjonalności integracji z usługami natywnymi Google Cloud.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">https://cloud.google.com/vpc/docs/private-google-access</a></li>
-
+<li><a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">Private Google Access configuration guide</a></li>
 </ul>
 </div>
 </div>
