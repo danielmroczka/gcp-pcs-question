@@ -93,25 +93,25 @@ You are setting up a CI/CD pipeline to deploy containerized applications to your
 Potwierdzona odpowiedź: AE (A. Create a Cloud Build pipeline... analyze Container Analysis results, E. In your CI/CD pipeline, add an attestation... Use a Binary Authorization policy)
 
 Wyjaśnienie:
-- Container Analysis (A): Jest to natywna usługa Google Cloud, która automatycznie skanuje obrazy kontenerów w poszukiwaniu znanych luk w zabezpieczeniach (CVE) w momencie ich przesyłania do Artifact Registry lub Container Registry. Integracja z Cloud Build pozwala na przerwanie procesu budowania, jeśli zostaną wykryte krytyczne podatności.
-- Binary Authorization (E): To mechanizm kontroli wdrożeń (deployment-time security). GKE sprawdza politykę Binary Authorization przed uruchomieniem kontenera. Jeśli obraz nie posiada "atestacji" (cyfrowego podpisu) potwierdzającego, że przeszedł pomyślnie skanowanie w pipeline CI/CD, wdrożenie zostanie zablokowane.
-- Synergia: Połączenie skanowania (Analysis) z egzekwowaniem (Authorization) tworzy bezpieczny łańcuch dostaw oprogramowania (Secure Software Supply Chain) przy minimalnym nakładzie operacyjnym, ponieważ obie usługi są w pełni zarządzane (serverless).
+Aby zapewnić bezpieczeństwo łańcucha dostaw oprogramowania w GKE, należy połączyć dwa mechanizmy:
+1. Container Analysis (A): Natywna usługa, która automatycznie skanuje obrazy w Artifact Registry/Container Registry pod kątem luk CVE. Integracja z Cloud Build pozwala na automatyczną analizę wyników skanowania jeszcze w fazie budowania.
+2. Binary Authorization (E): Mechanizm egzekwowania zasad w czasie wdrażania (deployment-time enforcement). Pozwala on na uruchomienie w GKE tylko tych obrazów, które posiadają cyfrowy podpis (atestację) potwierdzający pomyślne przejście skanowania bezpieczeństwa.
+Połączenie tych usług minimalizuje narzut operacyjny (zarządzane usługi Google) i jest najbardziej kosztowo efektywne (płacisz za skanowanie/użytkowanie).
 
-Dlaczego pozostałe są błędne:
-- B: Cloud Functions wyzwalane logami to rozwiązanie "reaktywne" (skanowanie po fakcie), które jest trudniejsze do wdrożenia i zarządzania niż wbudowana Container Analysis.
-- C: Użycie instancji Compute Engine i zadań cron wprowadza niepotrzebny "operational overhead" (zarządzanie systemem operacyjnym, patchowanie samej VM) i nie jest rozwiązaniem natywnym dla chmury (cloud-native).
-- D: Jenkins wymaga samodzielnego hostowania, zarządzania i skalowania. Cloud Build (A) jako usługa zarządzana znacznie lepiej spełnia wymóg minimalizacji narzutu operacyjnego.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- B: Cloud Functions wyzwalane logami to rozwiązanie reaktywne i trudniejsze w utrzymaniu niż wbudowana automatyzacja w Cloud Build i Container Analysis.
+- C: Użycie crona na maszynie VM wprowadza zbędny narzut operacyjny (zarządzanie systemem operacyjnym) i nie jest rozwiązaniem typu cloud-native.
+- D: Jenkins wymaga samodzielnego hostowania i zarządzania, co jest sprzeczne z wymogiem minimalizacji narzutu operacyjnego w porównaniu do w pełni zarządzanego Cloud Build.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Bezpieczeństwo kontenerów w GCP = Container Analysis (Skanowanie) + Binary Authorization (Blokowanie).
-- Słowo klucz "prevent containers from being deployed" zawsze wskazuje na Binary Authorization.
+Wskazówki i triki (Tips & Tricks):
+- "Prevent deployment of vulnerable containers" = Zawsze myśl o Binary Authorization + Container Analysis.
+- Atestacja (Attestation) to cyfrowy dowód, że dany obraz spełnia Twoje standardy bezpieczeństwa.
 
-Kluczowe zagadnienia do powtórzenia:
-- Jak działa Binary Authorization (Attestors, Attestations, Policy).
-- Automatyczne skanowanie podatności w Artifact Registry.
-- Budowanie bezpiecznych rurociągów CI/CD w Cloud Build.
+Praktyczne informacje na egzamin:
+- Binary Authorization działa jako kontroler przyjęć (Admission Controller) w Kubernetes.
+- Container Analysis oferuje dwa rodzaje skanowania: On-Push (automatyczne) i On-Demand.
 
-Dokumentacja:
+Dokumentacja i linki:
 - <a href="https://cloud.google.com/binary-authorization/docs/overview" target="_blank">Omówienie Binary Authorization</a>
 - <a href="https://cloud.google.com/container-analysis/docs/container-analysis-overview" target="_blank">Omówienie Container Analysis</a>
 </pre>
@@ -121,11 +121,10 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: AE</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Ten proces tworzy tzw. 'zaufany łańcuch dostaw'. Nawet jeśli haker ręcznie wypchnie złośliwy obraz do Twojego rejestru, Binary Authorization nie pozwoli mu się uruchomić, bo nie będzie miał podpisu z Twojego pipeline'u CI/CD.</p></p>
+<p><b>Głęboka analiza:</b> Ten proces tworzy tzw. <b>zaufany łańcuch dostaw (Trusted Software Supply Chain)</b>. Nawet jeśli napastnik ręcznie wypchnie złośliwy obraz do Twojego rejestru obrazów, Binary Authorization zablokuje jego uruchomienie na klastrze GKE, ponieważ obraz ten nie będzie posiadał podpisu (atestacji) wygenerowanego wyłącznie przez Twój autoryzowany rurociąg CI/CD.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/binary-authorization" target="_blank">https://cloud.google.com/binary-authorization</a></li>
-
+<li><a href="https://cloud.google.com/docs/security/binary-authorization-with-cloud-build" target="_blank">Binary Authorization z Cloud Build</a></li>
 </ul>
 </div>
 </div>

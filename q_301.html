@@ -88,12 +88,12 @@ Your organization is implementing separation of duties in a Google Cloud project
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Create and assign two custom IAM roles. Assign the deployer role to control Compute Engine and deployment-related permissions. Assign the network administrator role to manage firewall permissions.)
+Potwierdzona odpowiedź: C (Create and assign two custom IAM roles. Assign the deployer role to control Compute Engine and deployment-related permissions. Assign the network administrator role to manage firewall permissions.)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Granular Roles: Aby wymusić separację obowiązków (Separation of Duties), należy użyć ról o wąskich uprawnieniach. Deweloper dostaje rolę `compute.instanceAdmin` (bez uprawnień sieciowych), a zespół sieciowy rolę `compute.networkAdmin`. To jedyna metoda gwarantująca techniczne wymuszenie blokady zmian sieci przez programistów.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Verbal instruction: Błąd. Bezpieczeństwo musi być wymuszone systemowo, a nie tylko proceduralnie.
 - B. CAA: Kontroluje lokalizację logowania, a nie uprawnienia do edycji zasobów.
 - D. Editor + Deny: IAM Deny Policies są trudniejsze w zarządzaniu niż proste nadanie tylko niezbędnych ról (C).

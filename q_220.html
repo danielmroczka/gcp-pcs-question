@@ -64,7 +64,7 @@
 <h2>Question 220 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You manage one of your organization's Google Cloud projects (Project A). A VPC Service Control (SC) perimeter is blocking API access requests to this project, including Pub/Sub. A resource running under a service account in another project (Project B) needs to collect messages from a Pub/Sub topic in your project. Project B is not included in a VPC SC perimeter. You need to provide access from Project B to the Pub/Sub topic in Project A using the principle of least privilege.<br/>What should you do?
+You manage one of your organization's Google Cloud projects (Project A). A VPC Service Control (SC) perimeter is blocking API access requests to this project, including Pub/Sub. A resource running under a service account in another project (Project B) needs to collect messages from a Pub/Sub topic in your project. Project B is not included in a VPC SC perimeter. You need to provide access from Project B to the Pub/Sub topic in Project A using the principle of least privilege. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,14 +89,14 @@ You manage one of your organization's Google Cloud projects (Project A). A VPC S
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Configure an ingress policy for the perimeter in Project A, and allow access for the service account in Project B to collect messages)
+Potwierdzona odpowiedź: A (Configure an ingress policy for the perimeter in Project A, and allow access for the service account in Project B to collect messages)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - VPC Service Controls (VPC SC): Chroni zasoby (jak temat Pub/Sub w Projekcie A) przed eksfiltracją i nieautoryzowanym dostępem. Perymetr domyślnie blokuje dostęp z zewnątrz.
 - Ingress Rule (Reguła przychodząca): Aby umożliwić dostęp z Projeku B (który jest poza perymetrem) do zasobu w Projekcie A (wewnątrz perymetru), należy skonfigurować regułę Ingress dla perymetru w Projekcie A.
 - Zasada najniższych uprawnień: Reguła Ingress pozwala precyzyjnie wskazać "kto" (konto serwisowe z Projektu B) i "jaki zasób" (temat Pub/Sub w Projekcie A) mogą się komunikować, co jest zgodne z zasadą najniższych uprawnień.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - B. Access level: Poziomy dostępu (Access Levels) definiują kontekst (np. IP, certyfikat), ale same w sobie nie dają uprawnień do przełamania blokady perymetru. Muszą być powiązane z regułą Ingress, aby zadziałały w tym kontekście.
 - C. Perimeter bridge: Most (bridge) łączy dwa perymetry. W tym przypadku Projekt B NIE jest w perymetrze, więc bridge nie ma zastosowania (nie ma czego łączyć).
 - D. Remove Pub/Sub API: To podejście "wszystko albo nic". Usunięcie usługi z listy restricted wyłącza ochronę dla tej usługi w całym projekcie, co narusza zasady bezpieczeństwa (otwierasz dostęp dla każdego, zamiast precyzyjnie dla konta serwisowego).

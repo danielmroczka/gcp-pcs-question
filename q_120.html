@@ -92,24 +92,22 @@ You need to enable VPC Service Controls and allow changes to perimeters in exist
 Potwierdzona odpowiedź: D (Dry run)
 
 Wyjaśnienie:
-- Tryb Dry run: Jest to tryb pracy VPC Service Controls, który pozwala administratorom na testowanie konfiguracji perymetru bez faktycznego blokowania jakiegokolwiek ruchu.
-- Bezpieczeństwo wdrażania: W tym trybie każde naruszenie zasad perymetru jest rejestrowane w logach audytowych jako "dryRun: true". Pozwala to na dokładną analizę, które żądania zostałyby zablokowane w trybie rzeczywistym, bez wpływu na działające aplikacje (without preventing access).
-- Najlepsza praktyka: Zawsze używaj trybu Dry run przy modyfikowaniu istniejących perymetrów w środowiskach produkcyjnych.
+Tryb Dry run (symulacja) w VPC Service Controls pozwala administratorom na testowanie i monitorowanie wpływu perymetrów bezpieczeństwa bez faktycznego blokowania ruchu. Jest to kluczowe przy wdrażaniu VPC SC w istniejących środowiskach, aby uniknąć przypadkowych przestojów. W tym trybie naruszenia są rejestrowane w logach audytowych (AuditData) z flagą dryRun: true.
 
-Dlaczego pozostałe są błędne:
-- A: Cloud Run to usługa typu serverless do uruchamiania kontenerów, nie ma związku z trybami pracy VPC Service Controls.
-- B: Native nie jest poprawnym terminem określającym tryb pracy perymetru w VPC SC.
-- C: Tryb Enforced (Wymuszony) natychmiast blokuje ruch naruszający politykę perymetru. Użycie go w istniejącym środowisku bez wcześniejszych testów grozi przerwaniem działania usług.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A. Cloud Run: To usługa do uruchamiania kontenerów (PaaS/Serverless), a nie tryb działania VPC Service Controls.
+- B. Native: Nie istnieje taki tryb w konfiguracji VPC Service Controls.
+- C. Enforced: W tym trybie VPC Service Controls aktywnie blokuje każdy ruch naruszający zasady perymetru. Użycie go bez wcześniejszych testów w trybie Dry run mogłoby spowodować natychmiastowe odcięcie dostępu do zasobów.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Enable without preventing access" = Dry run mode.
-- Logi z trybu Dry run są zapisywane w Cloud Audit Logs (AuditData).
+Wskazówki i triki (Tips & Tricks):
+- Jeśli widzisz w pytaniu "enable without preventing access" lub "test before enforcement", odpowiedzią prawie zawsze jest "Dry run".
+- Analizuj logi Dry run przed przełączeniem na tryb Enforced, aby zidentyfikować legalne przepływy, które wymagają dodania do reguł Ingress/Egress.
 
-Kluczowe zagadnienia do powtórzenia:
-- Różnica między trybem Dry run a Enforced w VPC Service Controls.
-- Korzystanie z Logs Explorer do analizy naruszeń Dry run.
+Praktyczne informacje na egzamin:
+- VPC Service Controls chroni przed eksfiltracją danych przez złośliwych pracowników lub przejęte konta.
+- Tryb Dry run jest najlepszą praktyką przy modyfikacji perymetrów w produkcji.
 
-Dokumentacja:
+Dokumentacja i linki:
 - <a href="https://cloud.google.com/vpc-service-controls/docs/dry-run-mode" target="_blank">Tryb Dry run w VPC Service Controls</a>
 </pre>
 </div>
@@ -118,11 +116,10 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Wiele osób myli KMS i HSM. Eksperci wyjaśniają: KMS to interfejs (API). HSM to miejsce, gdzie klucz fizycznie 'mieszka'. Wybierając Cloud HSM, decydujesz, że operacje kryptograficzne Twoich kluczy w KMS będą wykonywane na certyfikowanym sprzęcie, a nie w oprogramowaniu.</p></p>
+<p><b>Głęboka analiza:</b> VPC Service Controls (VPC SC) tworzy perymetr bezpieczeństwa wokół usług Google Cloud (np. S3, BigQuery). Tryb <b>Dry run</b> jest niezbędny, ponieważ pozwala na zidentyfikowanie wszystkich wymaganych połączeń (np. od systemów zewnętrznych lub innych projektów), które inaczej zostałyby zablokowane po włączeniu wymuszania. Analiza logów z tego trybu pozwala na precyzyjne dostrojenie reguł Ingress i Egress.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/hsm" target="_blank">https://cloud.google.com/hsm</a></li>
-
+<li><a href="https://cloud.google.com/vpc-service-controls/docs/overview" target="_blank">Omówienie VPC Service Controls</a></li>
 </ul>
 </div>
 </div>

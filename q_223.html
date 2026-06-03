@@ -64,7 +64,7 @@
 <h2>Question 223 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-After completing a security vulnerability assessment, you learned that cloud administrators leave Google Cloud CLI sessions open for days. You need to reduce the risk of attackers who might exploit these open sessions by setting these sessions to the minimum duration.<br/>What should you do?
+After completing a security vulnerability assessment, you learned that cloud administrators leave Google Cloud CLI sessions open for days. You need to reduce the risk of attackers who might exploit these open sessions by setting these sessions to the minimum duration. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,14 +89,14 @@ After completing a security vulnerability assessment, you learned that cloud adm
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Set the reauthentication frequency for the Google Cloud Session Control to one hour)
+Potwierdzona odpowiedź: B (Set the reauthentication frequency for the Google Cloud Session Control to one hour)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Google Cloud Session Control: Jest to funkcja w Cloud Identity / Google Workspace, która pozwala administratorom definiować zasady sesji dla konsoli Google Cloud oraz narzędzi CLI (jak `gcloud`).
 - Reauthentication frequency (częstotliwość ponownego uwierzytelniania): Ustawienie tego parametru wymusza na użytkowniku ponowne podanie poświadczeń (i MFA) po upływie określonego czasu (np. 1 godziny). Nawet jeśli atakujący przejmie sesję (np. token sesji), po godzinie sesja wygaśnie i wymagane będzie ponowne logowanie, co zablokuje dalszy dostęp.
 - Minimalizacja ryzyka: To podejście "twarde" w odpowiedzi na zagrożenie eksploatacji sesji (np. przez kradzież plików cookie).
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Session duration: Określa całkowity czas życia sesji. Reauthentication frequency jest bardziej precyzyjnym mechanizmem, ponieważ wymusza na użytkowniku potwierdzenie tożsamości (MFA) w trakcie trwania sesji, co jest bezpieczniejsze.
 - C. AllowServiceAccountCredentialLifetimeExtension: To zaawansowane ustawienie dotyczy kont serwisowych i możliwości wydłużenia życia ich tokenów. Nie ma związku z czasem sesji logowania administratorów (użytkowników ludzkich).
 - D. serviceAccountKeyExpiryHours: Ta polityka dotyczy wyłącznie kluczy JSON (statycznych poświadczeń). Pytanie dotyczy sesji "logowania" (użytkownicy w CLI/konsoli), a nie kluczy JSON.

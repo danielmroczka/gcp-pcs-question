@@ -72,6 +72,7 @@ You are managing data in your organization's Cloud Storage buckets and are requi
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Set up a CloudRun Job with Cloud Scheduler to execute a script that searches for and removes files older than 365 days from your Cloud Storage.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Enable the Autoclass feature to manage all aspects of bucket storage classes.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Define a lifecycle policy JSON with an action on SetStorageClass to COLDLINE with an age condition of 365 and matchStorageClass STANDARD.</li>
+
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -88,13 +89,13 @@ You are managing data in your organization's Cloud Storage buckets and are requi
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (Define a lifecycle policy JSON with an action on SetStorageClass to COLDLINE with an age condition of 365 and matchStorageClass STANDARD)
+Potwierdzona odpowiedź: D (Define a lifecycle policy JSON with an action on SetStorageClass to COLDLINE with an age condition of 365 and matchStorageClass STANDARD)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Object Lifecycle Management: Jest to wbudowana funkcja GCS do automatycznej zmiany klasy storage (np. Standard -> Coldline) bez pisania kodu.
 - Wydajność: Jest to rozwiązanie natywne, w pełni zarządzane przez Google, które działa automatycznie w tle.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Cloud Asset Inventory: Służy do inwentaryzacji (przeglądu konfiguracji), a nie do automatycznego wprowadzania zmian w klasach storage.
 - B. CloudRun Job + Script: Pisanie własnych skryptów do zarządzania cyklem życia jest nieefektywne, kosztowne i trudne w utrzymaniu. Zawsze używaj wbudowanych funkcji platformy.
 - C. Autoclass: Ta funkcja służy do automatycznego optymalizowania kosztów poprzez przenoszenie rzadziej używanych plików do tańszych klas storage na podstawie wzorców dostępu (access patterns), a nie sztywnego wymogu "starsze niż 365 dni".

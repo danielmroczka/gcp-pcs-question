@@ -64,7 +64,7 @@
 <h2>Question 216 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization wants to be continuously evaluated against CIS Google Cloud Computing Foundations Benchmark v1.3.0 (CIS Google Cloud Foundation 1.3). Some of the controls are irrelevant to your organization and must be disregarded in evaluation. You need to create an automated system or process to ensure that only the relevant controls are evaluated.<br/>What should you do?
+Your organization wants to be continuously evaluated against CIS Google Cloud Computing Foundations Benchmark v1.3.0 (CIS Google Cloud Foundation 1.3). Some of the controls are irrelevant to your organization and must be disregarded in evaluation. You need to create an automated system or process to ensure that only the relevant controls are evaluated. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,14 +89,14 @@ Your organization wants to be continuously evaluated against CIS Google Cloud Co
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Activate Security Command Center (SCC) Premium. Create a rule to mute the security findings in SCC so they are not evaluated)
+Potwierdzona odpowiedź: B (Activate Security Command Center (SCC) Premium. Create a rule to mute the security findings in SCC so they are not evaluated)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - SCC Premium: Jest to kluczowa usługa Google Cloud do ciągłej oceny bezpieczeństwa, która automatycznie sprawdza konfigurację Twojego środowiska pod kątem standardów takich jak CIS Benchmark (w tym CIS v1.3).
 - Mute Rules (Reguły wyciszania): To funkcjonalność SCC, która pozwala na automatyczne ukrywanie (wyciszanie) znalezisk, które zostały uznane przez zespół bezpieczeństwa za "nieistotne" lub "zaakceptowane ryzyko". Dzięki regułom (muting rules), proces ten jest w pełni zautomatyzowany – gdy SCC ponownie wykryje dany błąd, reguła automatycznie go wyciszy, więc nie wpłynie on na końcowy wynik zgodności (Compliance score).
 - CIS Benchmark: SCC Premium automatycznie mapuje znaleziska na konkretne kontrolki CIS, co pozwala na bieżący monitoring zgodności.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Manual muting: Ręczne wyciszanie (muting) każdego znaleziska z osobna jest niemożliwe do utrzymania w dużej skali. Ponadto, wyciszanie "zawsze, gdy się pojawią" wymaga automatyzacji (reguł), a nie ręcznej pracy.
 - C. CSV Export: Pobieranie danych do pliku CSV jest procesem statycznym i ręcznym. Nie zapewnia ciągłej oceny (continuous evaluation) ani automatyzacji – audytorzy nie będą analizować plików CSV w czasie rzeczywistym.
 - D. External audit: Zewnętrzne audyty są ważne, ale nie rozwiązują problemu "ciągłej oceny" (continuous evaluation) wewnątrz Google Cloud. Pytanie wymaga "automatycznego systemu lub procesu".

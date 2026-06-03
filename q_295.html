@@ -88,12 +88,12 @@ Your organization heavily utilizes serverless applications while prioritizing se
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Create a Binary Authorization attestor that retrieves the Cloud Build build ID of the container image. Configure a policy to allow deployment only if there's a matching build ID attestation.)
+Potwierdzona odpowiedź: C (Create a Binary Authorization attestor that retrieves the Cloud Build build ID of the container image. Configure a policy to allow deployment only if there's a matching build ID attestation.)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Cloud Build Attestation: Cloud Build posiada natywną funkcjonalność generowania podpisanej atestacji (z build ID) po pomyślnym zbudowaniu obrazu. Binary Authorization w klastrze (GKE/Cloud Run) weryfikuje ten podpis. Jest to złoty standard (SLSA) gwarantujący, że wdrożony obraz pochodzi z Twojego zaufanego potoku CI/CD (provenance).
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A, B: Są to opisy ogólne lub nieistniejące funkcjonalności w Binary Authorization.
 - D. Security Health Analytics: Służy do audytu konfiguracji, a nie do "enforcement" (wymuszania) przepływu obrazów w potoku CI/CD.
 

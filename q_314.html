@@ -88,24 +88,28 @@ Your organization operates in a highly regulated environment and has a stringent
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Establish a trusted execution environment with a Confidential VM.)
+Potwierdzona odpowiedź: B (Establish a trusted execution environment with a Confidential VM.)
 
-Dlaczego ta odpowiedź jest poprawna:
-- "Encrypt data while in use": To kluczowe sformułowanie. Confidential Computing (Confidential VMs) pozwala na szyfrowanie danych podczas przetwarzania (w pamięci RAM), co jest jedynym sposobem na zapewnienie ochrony danych "in use" w ramach GCP.
+Wyjaśnienie:
+Szyfrowanie danych "w użyciu" (data in use) odnosi się do ochrony danych w momencie, gdy są one przetwarzane w pamięci RAM procesora. Jedynym rozwiązaniem w Google Cloud, które bezpośrednio adresuje ten wymóg, jest Confidential Computing, realizowane poprzez Confidential VMs. Rozwiązanie to wykorzystuje sprzętowe szyfrowanie pamięci (np. AMD SEV), co tworzy zaufane środowisko wykonawcze (Trusted Execution Environment - TEE), uniemożliwiające dostęp do danych w pamięci nawet przez system operacyjny hosta lub hypervisor Google.
 
-Analiza niepoprawnych odpowiedzi:
-- A. CSEK: Służy do szyfrowania danych "at rest" (na dysku), nie "in use".
-- C. Shielded VM: Zapewnia integralność bootowania (Secure Boot, vTPM), ale nie szyfruje danych w pamięci RAM podczas pracy aplikacji.
-- D. CMEK/KMS: Również szyfrowanie "at rest".
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A. CSEK (Customer-Supplied Encryption Keys) służy do szyfrowania danych "w spoczynku" (data at rest) na dyskach wirtualnych. Chociaż daje organizacji kontrolę nad kluczami, nie chroni danych podczas ich przetwarzania w pamięci RAM.
+- C. Shielded VM zapewnia integralność procesu uruchamiania systemu (Secure Boot, Measured Boot) oraz ochronę przed rootkitami na poziomie jądra, ale nie oferuje szyfrowania pamięci RAM podczas pracy aplikacji (data in use).
+- D. CMEK (Customer-Managed Encryption Keys) i Cloud KMS są używane do szyfrowania danych "w spoczynku" w usługach takich jak Cloud SQL, Cloud Storage czy BigQuery. Nie chronią one danych w stanie "in use".
 
 Wskazówki i triki (Tips & Tricks):
-- Słowa klucze: "in use" = Confidential Computing/Confidential VMs. "At rest" = CMEK/CSEK.
+- Słowo kluczowe "data in use" niemal zawsze oznacza konieczność użycia Confidential VMs / Confidential Computing.
+- Rozróżniaj trzy stany danych: "at rest" (dysk/baza), "in transit" (sieć), "in use" (pamięć RAM/procesor).
 
 Praktyczne informacje na egzamin:
-- Zapamiętaj: Confidential VMs używają bezpiecznych procesorów do szyfrowania pamięci, dzięki czemu nawet Google (jako operator infrastruktury) nie widzi danych w pamięci operacyjnej VM.
+- Zapamiętaj: Confidential Computing to ochrona danych podczas przetwarzania.
+- Confidential VMs są dostępne dla wybranych typów maszyn (np. N2D, C3).
+- Włączenie Confidential Computing wiąże się z niewielkim narzutem wydajnościowym ze względu na sprzętowe szyfrowanie/deszyfrowanie w locie.
 
 Dokumentacja i linki:
-- <a href="https://cloud.google.com/confidential-computing" target="_blank">Confidential Computing</a>
+- https://cloud.google.com/confidential-computing
+- https://cloud.google.com/compute/confidential-vm/docs/about-confidential-vm
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -113,7 +117,7 @@ Dokumentacja i linki:
 <div class="analysis-section">
 <h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie sprawdza znajomość różnych stanów szyfrowania danych. "In use" to specyficzny stan, w którym konwencjonalne metody (CMEK/CSEK) nie działają, wymagane jest Confidential Computing.</p>
+<p><b>Analiza strategiczna:</b> Pytanie sprawdza znajomość różnych stanów szyfrowania danych. "In use" to specyficzny stan, w którym konwencjonalne metody (CMEK/CSEK) nie działają, wymagane jest Confidential Computing (Confidential VMs).</p>
 </div>
 </div>
 <script>

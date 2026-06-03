@@ -64,7 +64,7 @@
 <h2>Question 224 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You have numerous private virtual machines on Google Cloud. You occasionally need to manage the servers through Secure Socket Shell (SSH) from a remote location. You want to configure remote access to the servers in a manner that optimizes security and cost efficiency.<br/>What should you do?
+You have numerous private virtual machines on Google Cloud. You occasionally need to manage the servers through Secure Socket Shell (SSH) from a remote location. You want to configure remote access to the servers in a manner that optimizes security and cost efficiency. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,14 +89,14 @@ You have numerous private virtual machines on Google Cloud. You occasionally nee
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Create a firewall rule to allow access from the Identity-Aware Proxy (IAP) IP range. Grant the role of an IAP-secured Tunnel User to the administrators)
+Potwierdzona odpowiedź: C (Create a firewall rule to allow access from the Identity-Aware Proxy (IAP) IP range. Grant the role of an IAP-secured Tunnel User to the administrators)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - IAP for TCP Forwarding: Jest to mechanizm, który pozwala na bezpieczne tunelowanie ruchu TCP (SSH/RDP) do maszyn wirtualnych bez konieczności nadawania im publicznych adresów IP lub konfigurowania VPN.
 - Bezpieczeństwo: IAP uwierzytelnia użytkownika przez Google Cloud IAM. Ruch jest przesyłany przez infrastrukturę Google, co eliminuje konieczność otwierania portów SSH (22) lub RDP (3389) dla całego internetu.
 - IAP IP Range: Aby IAP mógł komunikować się z Twoimi instancjami, musisz pozwolić na ruch z zakresu IP: `35.235.240.0/20` w regułach firewalla VPC.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Site-to-site VPN: Jest to rozwiązanie do łączenia sieci, a nie do zarządzania konkretnymi maszynami. VPN jest znacznie droższy i trudniejszy w utrzymaniu niż IAP, jeśli potrzebujesz tylko dostępu SSH/RDP.
 - B. Public IP + Firewall: Nadawanie publicznych IP maszynom wirtualnym (nawet z restrykcją firewall) jest przeciwieństwem "optymalizacji bezpieczeństwa" (zwiększa powierzchnię ataku).
 - D. Jump host: Jump host (bramka) z publicznym IP sam w sobie jest punktem, który musisz dodatkowo zabezpieczać, łatać i monitorować. IAP (C) jest usługą zarządzaną przez Google, więc nie musisz dbać o jej infrastrukturę.

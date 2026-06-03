@@ -88,12 +88,12 @@ You work for a banking organization. You are migrating sensitive customer data t
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Implement Cloud External Key Manager (Cloud EKM) with Key Access Justifications to integrate with your existing on-premises key management solution.)
+Potwierdzona odpowiedź: C (Implement Cloud External Key Manager (Cloud EKM) with Key Access Justifications to integrate with your existing on-premises key management solution.)
 
-Dlaczego ta odpowiedź jest poprawna:
-- Cloud EKM + KAJ: To najwyższy poziom suwerenności danych w chmurze. Cloud EKM pozwala na trzymanie klucza szyfrującego poza infrastrukturą Google (w Twoim własnym HSM). Key Access Justifications (KAJ) to mechanizm, w którym każdorazowo przed użyciem klucza Google musi podać uzasadnienie (justification), które jest weryfikowane przez Twój system. Możesz automatycznie odrzucać (deny) żądania, których powód nie zgadza się z Twoją polityką, co daje Ci pełną niezależność od dostawcy (CSP) i realną kontrolę.
+Wyjaśnienie:
+- Cloud EKM + KAJ: To najwyższy poziom suwerenności danych w chmurze. Cloud EKM pozwala na trzymanie klucza szyfrującego poza infrastrukturą Google (w Twoim własnym HSM). Key Access Justifications (KAJ) to mechanizm, w którym każdorazowo przed użyciem klucza Google musi podać uzasadnienie (justification), które jest weryfikowane przez Twój system. Możez automatycznie odrzucać (deny) żądania, których powód nie zgadza się z Twoją polityką, co daje Ci pełną niezależność od dostawcy (CSP) i realną kontrolę.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Default: Klucze zarządzane przez Google – brak kontroli klienta.
 - B. Access Approval: Pozwala zatwierdzić dostęp personelu Google, ale nie daje automatycznej blokady operacji kryptograficznych na poziomie polityki tak jak KAJ.
 - D. CMEK + VM: To błędne połączenie usług. CMEK (Cloud KMS) jest natywną usługą GCP, nie integruje się z zewnętrznymi HSM w sposób opisany w pytaniu (EKM służy do tego celu).

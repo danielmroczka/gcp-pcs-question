@@ -88,25 +88,27 @@ You are developing an application that runs on a Compute Engine VM. The applicat
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Create IAM bindings for the VM's service account and the required buckets that allow appropriate access to the data stored in the buckets.)
+Potwierdzona odpowiedź: B
 
-Dlaczego ta odpowiedź jest poprawna:
-- Least Privilege + IAM: To jedyne poprawne podejście. Service account powiązany z VM powinien mieć bezpośrednio nadane uprawnienia (IAM binding) do konkretnych zasobów (bucketów), do których potrzebuje dostępu.
+Wyjaśnienie: 
+Zgodnie z zasadą najmniejszych uprawnień (Principle of Least Privilege) oraz najlepszymi praktykami Google Cloud, do przyznawania uprawnień aplikacjom działającym na maszynach wirtualnych (Compute Engine) należy używać dedykowanych kont serwisowych (Service Accounts). Nadanie odpowiednich ról IAM bezpośrednio na zasobach (w tym przypadku na konkretnych bucketach Cloud Storage) pozwala na precyzyjną kontrolę nad tym, co dana aplikacja może robić, bez nadawania jej nadmiarowych uprawnień na poziomie całego projektu.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Access Scopes: Są przestarzałą metodą (legacy) ograniczania uprawnień VM. Zawsze używaj IAM Service Accounts, które oferują bardziej granulowaną kontrolę.
-- C. Domain-wide delegation: Służy do impersonacji użytkowników w Google Workspace (np. Gmail, Drive), nie do dostępu do Cloud Storage przez service account z VM.
-- D. Group IAM: Grupy są do zarządzania dostępem użytkowników (ludzi), a nie tożsamościami maszyn (service accounts).
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A. Access Scopes (zakresy dostępu) to starsza metoda ograniczania uprawnień instancji VM. Google obecnie zaleca używanie wyłącznie pełnych uprawnień na poziomie scopes (`https://www.googleapis.com/auth/cloud-platform`) i zarządzanie faktycznym dostępem za pomocą ról IAM nadawanych kontu serwisowemu. Scopes nie są tak granulowane jak IAM.
+- C. Domain-wide delegation (delegowanie uprawnień w całej domenie) służy do impersonacji użytkowników w usłudze Google Workspace (np. Gmail, Drive) przez konto serwisowe. Nie jest to mechanizm przeznaczony do zarządzania dostępem do zasobów GCP takich jak Cloud Storage.
+- D. Choć grupy Google są świetne do zarządzania uprawnieniami *użytkowników* (ludzi), zalecaną praktyką dla aplikacji (maszyn) jest przypisywanie uprawnień bezpośrednio do ich kont serwisowych lub używanie grup kont serwisowych w specyficznych przypadkach, ale opcja B jest bardziej bezpośrednią i standardową odpowiedzią na to pytanie.
 
 Wskazówki i triki (Tips & Tricks):
-- "Compute Engine" + "Access to resources" = Service Account + IAM bindings.
-- Nigdy nie używaj Access Scopes w nowych projektach.
+- Widząc "Compute Engine" i "access to other resources", zawsze myśl o: Service Account + IAM Roles.
+- Unikaj wszystkiego, co brzmi jak "Access Scopes", chyba że pytanie dotyczy bardzo starych (Legacy) systemów.
 
 Praktyczne informacje na egzamin:
-- Zapamiętaj: IAM jest "źródłem prawdy" o dostępach w GCP.
+- Konta serwisowe są tożsamościami dla aplikacji, a nie dla ludzi.
+- Pamiętaj, że uprawnienia IAM mogą być nadawane na różnych poziomach: Organizacji, Folderu, Projektu lub konkretnego Zasobu (np. Bucketu).
 
 Dokumentacja i linki:
-- <a href="https://cloud.google.com/iam/docs/service-accounts" target="_blank">Service accounts overview</a>
+- <a href="https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances" target="_blank">Creating and enabling service accounts for instances</a>
+- <a href="https://cloud.google.com/storage/docs/access-control/iam" target="_blank">Cloud Storage IAM permissions</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -114,7 +116,9 @@ Dokumentacja i linki:
 <div class="analysis-section">
 <h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie o fundamentalną zasadę "najniższych uprawnień" (Least Privilege) w GCP. Użycie Service Account z IAM binding to jedyna poprawna, nowoczesna metoda autoryzacji zasobów dla maszyn wirtualnych.</p>
+<p><b>Analiza strategiczna:</b> Pytanie sprawdza fundamentalną wiedzę o tożsamościach i dostępach (IAM) w chmurze. Kluczem jest zrozumienie, że aplikacja na VM powinna posiadać własną tożsamość (Service Account) i otrzymywać tylko te uprawnienia, które są jej niezbędne do działania.</p>
+<h3>Praktyczny przykład</h3>
+<p>Zamiast nadawać maszynie VM rolę `roles/storage.admin` na poziomie projektu (co dałoby dostęp do wszystkich bucketów), nadajemy jej tożsamość `my-app-sa@project-id.iam.gserviceaccount.com` i przypisujemy jej rolę `roles/storage.objectViewer` tylko na buckecie `my-data-bucket` w innym projekcie.</p>
 </div>
 </div>
 <script>

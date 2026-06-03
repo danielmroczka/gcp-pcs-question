@@ -90,30 +90,29 @@ You are tasked with exporting and auditing security logs for login activity even
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: BC (B. Create a Log Sink at the organization level with the includeChildren parameter, and set the destination to a Pub/Sub topic, C. Enable Data Access audit logs at the organization level to apply to all projects).
+Potwierdzona odpowiedź: BC (B. Create a Log Sink at the organization level with the includeChildren parameter, and set the destination to a Pub/Sub topic, C. Enable Data Access audit logs at the organization level to apply to all projects.)
 
 Wyjaśnienie:
-Aby wyeksportować logi bezpieczeństwa dla całej organizacji w czasie zbliżonym do rzeczywistego do zewnętrznego systemu SIEM, należy:
-1. Włączyć logi audytowe dostępu do danych (Data Access audit logs) na poziomie organizacji (opcja C). Logi te rejestrują m.in. logowania do konsoli oraz wywołania API czytające lub modyfikujące dane (np. konfiguracje). Logi Admin Activity są włączone domyślnie, ale Data Access (szczególnie Administrative Reads) wymagają jawnego włączenia.
-2. Utworzyć zagregowany zlew logów (Aggregated Log Sink) na poziomie organizacji z parametrem `includeChildren` ustawionym na true (opcja B). Pozwala to na zbieranie logów ze wszystkich projektów, folderów i samej organizacji. Najlepszym miejscem docelowym dla SIEM jest Pub/Sub, który zapewnia przesyłanie strumieniowe w czasie rzeczywistym.
+Aby zrealizować eksport logów dla całej organizacji w czasie rzeczywistym do SIEM, należy:
+1. Włączyć logi Data Access (C) na poziomie organizacji. Są one niezbędne do śledzenia logowań (login activity) oraz odczytów konfiguracji, które nie są rejestrowane przez domyślnie włączone logi Admin Activity.
+2. Skonfigurować zagregowany zlew logów (Aggregated Sink) na poziomie organizacji (B). Użycie parametru includeChildren gwarantuje, że logi ze wszystkich projektów i folderów podrzędnych zostaną zebrane w jednym miejscu. Docelowy temat Pub/Sub zapewnia przesyłanie strumieniowe danych do zewnętrznego systemu SIEM w czasie zbliżonym do rzeczywistego.
 
-Dlaczego pozostałe są błędne:
-- A. Create a Log Sink... without includeChildren: Zwykły zlew na poziomie organizacji bez parametru `includeChildren` zbierze tylko logi wygenerowane przez same zasoby organizacji (np. zmiany w politykach IAM organizacji), a nie logi z projektów podrzędnych.
-- D. Enable Google Workspace audit logs...: Choć logi Workspace mogą zawierać informacje o logowaniu użytkowników do ich kont, zadanie wyraźnie prosi o logi aktywności w Google Cloud Console i API GCP, co zapewniają logi audytowe Cloud Audit Logs.
-- E. Ensure that the SIEM processes the AuthenticationInfo field...: Jest to dobra praktyka operacyjna, ale nie jest to krok niezbędny do skonfigurowania samego eksportu logów, o który pyta zadanie.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A: Zwykły Log Sink na poziomie organizacji bez parametru includeChildren zbierze tylko logi wygenerowane przez zasoby samej organizacji, pomijając projekty podrzędne.
+- D: Logi audytowe Google Workspace dotyczą usług SaaS (Drive, Gmail), a pytanie dotyczy zasobów Google Cloud (GCP) i konsoli Google Cloud.
+- E: Analiza pola AuthenticationInfo przez SIEM jest dobrą praktyką analityczną, ale nie jest krokiem konfiguracyjnym w Google Cloud wymaganym do samego eksportu logów.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Słowo klucz "all projects in the organization" = "Aggregated Sink" + "includeChildren".
-- Słowo klucz "near real-time to SIEM" = Pub/Sub jako destination.
-- Logi "Data Access" (Administrative Reads) są niezbędne do śledzenia "kto co widział" w konfiguracjach, a nie są włączone domyślnie.
+Wskazówki i triki (Tips & Tricks):
+- "All projects in organization" = Aggregated Sink + includeChildren: true.
+- "Near real-time" = Pub/Sub topic.
+- Logi Admin Activity są darmowe i zawsze włączone; logi Data Access są płatne i wymagają ręcznego włączenia.
 
-Kluczowe zagadnienia do powtórzenia:
-- Aggregated Log Sinks.
-- Rodzaje Cloud Audit Logs (Admin Activity, Data Access, System Event, Policy Denied).
-- Integracja z SIEM przez Pub/Sub.
+Praktyczne informacje na egzamin:
+- Zagregowane zlewy mogą być tworzone na poziomie organizacji lub folderu.
+- Pamiętaj o nadaniu tożsamości zlewu (Writer Identity) uprawnień do zapisu w temacie Pub/Sub.
 
-Dokumentacja:
-<a href="https://cloud.google.com/logging/docs/export/aggregated_sinks" target="_blank">Zagregowane zlewy logów</a>
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/logging/docs/export/aggregated_sinks" target="_blank">Omówienie zagregowanych zlewów logów</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -121,11 +120,10 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: BC</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Pytanie to testuje świadomość kosztów i retencji. Logi Data Access są płatne, dlatego Google wymaga ich świadomego włączenia. Pamiętaj: włączenie logów TERAZ nie pokaże Ci kto wchodził do bucketu WCZORAJ.</p></p>
+<p><b>Głęboka analiza:</b> Połączenie <b>Aggregated Sinks</b> z <b>Pub/Sub</b> jest złotym standardem dla przedsiębiorstw wymagających centralnego audytu bezpieczeństwa. Pozwala to na uniknięcie ręcznej konfiguracji zlewów w każdym z setek projektów z osobna. Należy jednak uważać na koszty – logi <i>Data Access</i> mogą generować ogromne ilości danych, dlatego warto stosować filtry wykluczające mniej istotne zdarzenia już na poziomie zlewu.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/logging/docs/audit/configure-data-access" target="_blank">https://cloud.google.com/logging/docs/audit/configure-data-access</a></li>
-
+<li><a href="https://cloud.google.com/logging/docs/audit" target="_blank">Rodzaje logów audytowych Cloud Audit Logs</a></li>
 </ul>
 </div>
 </div>

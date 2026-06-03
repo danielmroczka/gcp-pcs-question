@@ -88,26 +88,29 @@ Your organization is worried about recent news headlines regarding application v
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (Enable Binary Authorization and create attestations of scans.)
+Potwierdzona odpowiedź: D (Enable Binary Authorization and create attestations of scans.)
 
-Dlaczego ta odpowiedź jest poprawna:
-- Binary Authorization: To kluczowa usługa w GCP służąca do zapewnienia integralności łańcucha dostaw oprogramowania (Supply Chain Security). Wymusza ona, aby każdy kontener przed uruchomieniem w GKE posiadał podpisane zaświadczenie (attestation) o tym, że został poprawnie przeskanowany pod kątem podatności.
-- "Scanned and verified containers": To definicja działania Binary Authorization. Jeśli kontener nie ma poprawnej atestacji (np. skanowanie nie wyszło czysto lub nie przeszło procesu CI/CD), GKE po prostu go nie uruchomi.
+Wyjaśnienie:
+Binary Authorization to usługa bezpieczeństwa łańcucha dostaw (supply chain security) w Google Cloud, która zapewnia, że tylko zaufane obrazy kontenerów są wdrażane w Google Kubernetes Engine (GKE) lub Cloud Run. Działa ona jako brama (admission controller), która sprawdza, czy obraz posiada wymagane atestacje (podpisy cyfrowe) przed zezwoleniem na jego uruchomienie. W opisanym scenariuszu, automatyczne skanowanie w potoku CI/CD powinno kończyć się utworzeniem atestacji dla obrazów, które przeszły weryfikację. Polityka Binary Authorization w klastrze GKE zostanie następnie skonfigurowana tak, aby wymagała tej konkretnej atestacji, co gwarantuje, że tylko "zeskanowane i zweryfikowane" kontenery będą mogły zostać uruchomione.
 
-Analiza niepoprawnych odpowiedzi:
-- A. RBAC: Zarządza dostępem do klastra, ale nie sprawdza bezpieczeństwa samych obrazów kontenerów.
-- B. Gcloud description: To tylko sprawdzenie podatności. Sama komenda nie 'zablokuje' uruchomienia kontenera w GKE.
-- C. Cloud Code: Zapewnia feedback dla deweloperów (IDE), ale nie gwarantuje wdrożenia bezpiecznego obrazu do produkcji w sposób wymuszony.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A. RBAC (Role-Based Access Control) służy do zarządzania uprawnieniami użytkowników i kont serwisowych wewnątrz klastra (kto co może robić), ale nie posiada mechanizmów weryfikacji integralności ani bezpieczeństwa samych obrazów kontenerów przed ich wdrożeniem.
+- B. Użycie komendy gcloud do sprawdzenia podatności w potoku CI/CD i przerwanie budowania jest dobrą praktyką, ale samo w sobie nie daje gwarancji, że ktoś nie spróbuje wdrożyć innego, niezweryfikowanego obrazu bezpośrednio do klastra, omijając potok. Brakuje tutaj mechanizmu wymuszania (enforcement) na poziomie klastra, który zapewnia Binary Authorization.
+- C. Cloud Code oferuje funkcje skanowania podatności w IDE, co pomaga deweloperom na wczesnym etapie ("shift left"), ale nie stanowi mechanizmu kontroli wdrożeń produkcyjnych. Użytkownicy nadal mogliby wdrażać niebezpieczne kontenery ręcznie lub przez inne narzędzia.
 
 Wskazówki i triki (Tips & Tricks):
-- "Only scanned and verified containers" + "Pipeline enforcement" = Binary Authorization.
-- Zapamiętaj: Binary Authorization to brama bezpieczeństwa dla GKE.
+- Słowa kluczowe "ensure only scanned and verified containers can run" niemal zawsze wskazują na Binary Authorization.
+- Pamiętaj o koncepcji "Attestors" (atestatorów) – są to byty, które poświadczają, że dany krok (np. skanowanie, testy QA) został wykonany pomyślnie.
+- Binary Authorization integruje się z Container Analysis, które automatycznie skanuje obrazy w Artifact Registry.
 
 Praktyczne informacje na egzamin:
-- Zapamiętaj: Binary Authorization sprawdza sygnatury (atestacje) w momencie próby wdrożenia poda do klastra.
+- Binary Authorization działa na poziomie Admission Controller w Kubernetes.
+- Może blokować wdrożenia na podstawie wielu atestacji (np. musi być skanowanie bezpieczeństwa ORAZ zatwierdzenie przez zespół QA).
+- Tryb "Dry run" pozwala testować polityki bez faktycznego blokowania ruchu, co jest przydatne przy wdrażaniu usługi w istniejącym środowisku.
 
 Dokumentacja i linki:
-- <a href="https://cloud.google.com/binary-authorization/docs/overview" target="_blank">Binary Authorization overview</a>
+- https://cloud.google.com/binary-authorization/docs/overview
+- https://cloud.google.com/artifact-analysis/docs/vulnerability-scanning
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -115,7 +118,7 @@ Dokumentacja i linki:
 <div class="analysis-section">
 <h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją wiedzę o zabezpieczaniu łańcucha dostaw oprogramowania (Supply Chain Security). Binary Authorization to "najtwardsza" metoda wymuszania standardów – jeśli obraz nie przejdzie przez bezpieczny proces CI/CD i nie zostanie podpisany, nie ma prawa zaistnieć w Twoim klastrze produkcyjnym.</p>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją wiedzę o zabezpieczaniu łańcucha dostaw oprogramowania (Supply Chain Security). Binary Authorization to "najtwardsza" metoda wymuszania standardów – jeśli obraz nie przejdzie przez bezpieczny proces CI/CD i nie zostanie podpisany, nie zostanie dopuszczony do uruchomienia w środowisku produkcyjnym.</p>
 </div>
 </div>
 <script>

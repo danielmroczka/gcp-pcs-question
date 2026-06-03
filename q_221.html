@@ -64,7 +64,7 @@
 <h2>Question 221 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You define central security controls in your Google Cloud environment. For one of the folders in your organization, you set an organizational policy to deny the assignment of external IP addresses to VMs. Two days later, you receive an alert about a new VM with an external IP address under that folder.<br/>What could have caused this alert?
+You define central security controls in your Google Cloud environment. For one of the folders in your organization, you set an organizational policy to deny the assignment of external IP addresses to VMs. Two days later, you receive an alert about a new VM with an external IP address under that folder. What could have caused this alert?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,14 +89,14 @@ You define central security controls in your Google Cloud environment. For one o
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (A project level, the organizational policy control has been overwritten with an "allow" value)
+Potwierdzona odpowiedź: C (A project level, the organizational policy control has been overwritten with an "allow" value)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Hierarchia polityk (Inheritance): Polityki organizacji w Google Cloud dziedziczą się od poziomu Organizacji w dół (przez foldery do projektów).
 - Nadpisywanie (Override): Jeśli na poziomie projektu zostanie ustawiona polityka z wartością "allow" (jawne zezwolenie), a flaga dziedziczenia (`inheritFromParent`) zostanie wyłączona, to lokalna polityka projektu staje się "Effective Policy". W tym scenariuszu deweloperzy projektu nadpisali restrykcję folderu, co pozwoliło im na stworzenie VM z publicznym IP.
 - Bezpieczeństwo: To jest klasyczny przykład tzw. "policy drift" lub nieautoryzowanego obejścia zabezpieczeń przez użytkowników posiadających uprawnienia `resourcemanager.organizationPolicyAdmin` na poziomie projektu.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Static external IP: Zarezerwowanie statycznego adresu IP w projekcie nie pozwala na jego automatyczne przypisanie do nowej VM, jeśli polityka organizacji zabrania używania zewnętrznych IP. Sama VM nie mogłaby wystartować z tym IP.
 - B. Dry run mode: Polityki organizacji nie działają w trybie "dry run" w taki sposób, że "znikają". Jeśli polityka jest ustawiona, to albo jest egzekwowana, albo nie.
 - D. "Allow" value at org level: Gdyby wartość "allow" była ustawiona na poziomie Organizacji (górze), to nie byłoby problemu – wszystkie projekty miałyby domyślnie zezwolenie. Pytanie wskazuje na sytuację, w której folder blokował, a VM mimo to powstała, co sugeruje lokalne nadpisanie (override).

@@ -88,12 +88,12 @@ Your organization is using Vertex AI Workbench Instances. You must ensure that n
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Enforce the disableRootAccess and requireAutoUpgradeSchedule organization policies for newly deployed Instances.)
+Potwierdzona odpowiedź: A (Enforce the disableRootAccess and requireAutoUpgradeSchedule organization policies for newly deployed Instances.)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Workbench Specific Org Policies: Workbench posiada dedykowane polityki organizacji, które uniemożliwiają użytkownikom (nawet z uprawnieniami dewelopera) uzyskanie dostępu 'root' do systemu operacyjnego instancji analitycznej. Dodatkowo wymuszają one automatyczny harmonogram aktualizacji, co gwarantuje spójność i bezpieczeństwo całego zespołu.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - B. VM Manager: Świetny dla zwykłych VM, ale Workbench jest usługą 'zarządzaną', która posiada własny, lepszy mechanizm aktualizacji wbudowany w platformę.
 - C. Prevent SSH: Uniemożliwiłoby pracę wielu analitykom potrzebującym terminala do zadań niskopoziomowych.
 - D. IAM Roles: Ograniczają co użytkownik może kliknąć w UI, ale nie blokują działań wewnątrz systemu operacyjnego, jeśli deweloper ma tam dostęp (co robi polityka A).

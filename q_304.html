@@ -88,12 +88,12 @@ You are managing a Google Cloud environment that is organized into folders that 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Create an organization-level tag. Attach the tag to relevant folders. Use an IAM condition to restrict the organization policy administrator role to resources with that tag.)
+Potwierdzona odpowiedź: C (Create an organization-level tag. Attach the tag to relevant folders. Use an IAM condition to restrict the organization policy administrator role to resources with that tag.)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Tags + IAM Conditions: To najbardziej nowoczesna i bezpieczna metoda delegacji (least privilege). Pozwala nadać zespołowi uprawnienia administratora polityk organizacji, ale TYLKO pod warunkiem (Condition), że operacja dotyczy folderu oznaczonego konkretnym tagiem. Dzięki temu deweloperzy nie mogą zmienić polityk w cudzych folderach ani na poziomie całej firmy.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Custom role on folder: Choć bliskie prawdy, to Tagi (C) są obecnie silniej promowaną przez Google metodą granularnego ograniczania zasięgu ról administracyjnych.
 - B. Shared credentials: Błąd krytyczny. Nigdy nie udostępniaj poświadczeń kont serwisowych ludziom.
 - D. Org level for all: Skrajne naruszenie izolacji bezpieczeństwa.

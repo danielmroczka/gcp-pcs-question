@@ -89,14 +89,14 @@ During a routine security review, your team discovered a suspicious login attemp
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (Check Event Threat Detection in Security Command Center for any related alerts. Cross-reference your findings with Cloud Audit Logs.)
+Potwierdzona odpowiedź: D (Check Event Threat Detection in Security Command Center for any related alerts. Cross-reference your findings with Cloud Audit Logs.)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Event Threat Detection (ETD): Jest to zaawansowana usługa w ramach Security Command Center (SCC) Premium, która automatycznie monitoruje logi (głównie logi audytowe i logi przepływu VPC) w poszukiwaniu wzorców świadczących o zagrożeniach w czasie rzeczywistym. ETD specjalizuje się w wykrywaniu anomalii, takich jak podejrzane próby logowania (impersonacja), ataki typu brute-force czy komunikacja z złośliwymi adresami IP.
 - Cloud Audit Logs: Są niezbędne do "dochodzenia" (forensics). Po otrzymaniu alertu z ETD, to właśnie w logach audytowych (Data Access / Admin Activity) znajdziesz szczegółowe dowody: kto, kiedy i przy użyciu jakich uprawnień próbował dokonać podejrzanej akcji.
 - Synergia: SCC dostarcza "alert" (sygnał o problemie), a Cloud Audit Logs dostarczają "dowód" (szczegóły zdarzenia).
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Cloud Audit Logs: Choć logi są ważne, przeglądanie ich bez alertu z systemu detekcji (jak ETD) jest nieefektywne ("szukanie igły w stogu siana").
 - B. Security scan: Skaner podatności służy do wykrywania luk konfiguracyjnych lub nieaktualnego oprogramowania, a nie do analizy podejrzanych prób logowania w czasie rzeczywistym.
 - C. Vulnerability scan: Podobnie jak B, skaner podatności nie wykrywa aktywnych prób włamania (impersonacji).

@@ -89,16 +89,16 @@ Your organization has an operational image classification model running on a man
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Explain Google's shared responsibility model. Focus the configuration review on Identity and Access Management (IAM) permissions, secure data upload/download procedures, and monitoring logs for any potential malicious activity.)
+Potwierdzona odpowiedź: C (Explain Google's shared responsibility model. Focus the configuration review on Identity and Access Management (IAM) permissions, secure data upload/download procedures, and monitoring logs for any potential malicious activity.)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Model Współdzielonej Odpowiedzialności (Shared Responsibility Model): To fundamentalna koncepcja chmurowa. Google odpowiada za bezpieczeństwo "chmury" (infrastruktura, sprzęt, hypervisor), natomiast klient odpowiada za bezpieczeństwo "w chmurze" (dane, IAM, konfiguracja aplikacji, logi).
 - Konfiguracja review: Przegląd bezpieczeństwa usługi zarządzanej (PaaS/SaaS) powinien skupiać się na tym, na co klient ma realny wpływ:
     - IAM (kto ma dostęp?)
     - Secure procedures (jak dane są przesyłane?)
     - Monitoring (czy widzimy, że coś złego się dzieje?)
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. PaaS transfers security concerns: To błędne założenie. PaaS zdejmuje z klienta obowiązek zarządzania łatami systemu operacyjnego czy sprzętem, ale NIE zdejmuje odpowiedzialności za bezpieczeństwo danych, konfigurację dostępu (IAM) czy monitorowanie zagrożeń.
 - B. Security aspects of code: Choć bezpieczny kod jest ważny, to przegląd konfiguracji powinien skupiać się na polityce dostępu (IAM) i monitoringu, a nie tylko na samym kodzie.
 - D. Deep intrusion detection at firewall level: Usługi zarządzane (jak AI service) zazwyczaj nie pozwalają na "tworzenie custom firewalls" wokół siebie. To nie jest poziom odpowiedzialności klienta w PaaS.

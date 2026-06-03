@@ -64,7 +64,7 @@
 <h2>Question 237 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization wants full control of the keys used to encrypt data at rest in their Google Cloud environments. Keys must be generated and stored outside of Google and integrate with many Google Services including BigQuery.<br/>What should you do?
+Your organization wants full control of the keys used to encrypt data at rest in their Google Cloud environments. Keys must be generated and stored outside of Google and integrate with many Google Services including BigQuery. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,13 +89,13 @@ Your organization wants full control of the keys used to encrypt data at rest in
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Use Cloud External Key Management (EKM) that integrates with an external Hardware Security Module (HSM) system from supported vendors)
+Potwierdzona odpowiedź: C (Use Cloud External Key Management (EKM) that integrates with an external Hardware Security Module (HSM) system from supported vendors)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Cloud External Key Manager (EKM): Pozwala na przechowywanie klucza w systemie zewnętrznym (zewnętrzny HSM), co w pełni spełnia wymóg posiadania kontroli nad materiałem klucza ("hold the key material... fully under your control") poza infrastrukturą Google.
 - Integracja: EKM zapewnia natywną integrację z usługami Google Cloud (w tym BigQuery), co pozwala na szyfrowanie danych przy jednoczesnym zachowaniu kluczy u zewnętrznego partnera.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Customer-supplied encryption keys (CSEK): Klucze te są dostarczane "w locie" w wywołaniach API. Nie dają one stałej kontroli w ramach zintegrowanego ekosystemu usług (jak BigQuery).
 - B. Cloud HSM (Google-managed): Klucze są przechowywane w sprzętowych modułach bezpieczeństwa Google (HSM), ale są one zarządzane przez Google. Nie spełnia to wymogu generowania i przechowywania kluczy poza Google.
 - D. Imported key material: Klucze zaimportowane do Cloud KMS są przechowywane wewnątrz Google Cloud. Nie zapewnia to wymaganego odizolowania materiału klucza ("stored outside of Google").

@@ -88,12 +88,12 @@ You are responsible for a set of Cloud Functions running on your organization's 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Use Sensitive Data Protection to scan the environment variables multiple times per day, and create a finding in Security Command Center if secrets are discovered.)
+Potwierdzona odpowiedź: C (Use Sensitive Data Protection to scan the environment variables multiple times per day, and create a finding in Security Command Center if secrets are discovered.)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Sensitive Data Protection (DLP): Posiada funkcję skanowania konfiguracji usług Google Cloud. Można zaplanować automatyczny skan (np. codzienny) metadanych Cloud Functions, który wykryje wzorce haseł czy kluczy API w zmiennych środowiskowych i zaraportuje to bezpośrednio do Security Command Center (SCC).
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Peer reviews: Metoda manualna, nie gwarantuje detekcji wszystkich błędów w czasie rzeczywistym, uciążliwa w dużej skali.
 - B. Custom scan: Wymaga pisania kodu (dodatkowy dług techniczny), podczas gdy DLP (C) jest gotową usługą typu "managed".
 - D. DAST: Testuje aplikację "z zewnątrz" (przez HTTP), zazwyczaj nie ma wglądu w zmienne środowiskowe serwera.

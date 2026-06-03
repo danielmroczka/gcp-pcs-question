@@ -64,7 +64,7 @@
 <h2>Question 218 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization uses Google Workspace Enterprise Edition for authentication. You are concerned about employees leaving their laptops unattended for extended periods of time after authenticating into Google Cloud. You must prevent malicious people from using an employee's unattended laptop to modify their environment.<br/>What should you do?
+Your organization uses Google Workspace Enterprise Edition for authentication. You are concerned about employees leaving their laptops unattended for extended periods of time after authenticating into Google Cloud. You must prevent malicious people from using an employee's unattended laptop to modify their environment. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,14 +89,14 @@ Your organization uses Google Workspace Enterprise Edition for authentication. Y
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (Set the session length timeout for Google Cloud services to a shorter duration)
+Potwierdzona odpowiedź: D (Set the session length timeout for Google Cloud services to a shorter duration)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Google Cloud Session Control: Jest to funkcja w Cloud Identity / Google Workspace, która pozwala administratorom na definiowanie maksymalnego czasu trwania sesji logowania do konsoli Google Cloud (oraz sesji gcloud CLI).
 - Redukcja ryzyka: Skrócenie czasu sesji (np. do 1 lub 2 godzin) wymusza na użytkowniku ponowne uwierzytelnienie się po upływie tego czasu. Jeśli pracownik zostawi otwarty laptop, po pewnym czasie sesja wygaśnie, a osoba trzecia nie będzie mogła zmodyfikować środowiska bez posiadania danych logowania (i MFA) pracownika.
 - Najlepsza odpowiedź: To podejście bezpośrednio adresuje problem pozostawienia sesji otwartej, czyniąc ją czasowo ograniczoną.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Create a policy...: Polityki organizacyjne nie wymuszają na użytkownikach "niepozostawiania otwartych sesji". Jest to tylko zalecenie, a nie twarda kontrola techniczna.
 - B. Disable unnecessary Google Cloud APIs: Wyłączanie API jest dobrą praktyką (minimalizacja powierzchni ataku), ale nie rozwiązuje problemu otwartej sesji w konsoli, z której ktoś może korzystać mając dostęp do już zalogowanego przeglądarki.
 - C. Require strong passwords and 2SV: MFA (2SV) jest kluczowe, ale nie chroni przed osobą, która siądzie do JUŻ ZALOGOWANEGO laptopa (sesja już jest ustanowiona). Użytkownik nie będzie musiał podawać 2SV za każdym razem przy zmianie ustawień w już otwartej sesji.

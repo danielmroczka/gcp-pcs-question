@@ -64,7 +64,7 @@
 <h2>Question 219 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You are migrating an on-premises data warehouse to BigQuery, Cloud SQL, and Cloud Storage. You need to configure security services in the data warehouse. Your company compliance policies mandate that the data warehouse must:<br/>• Protect data at rest with full lifecycle management on cryptographic keys.<br/>• Implement a separate key management provider from data management.<br/>• Provide visibility into all encryption key requests.<br/>What services should be included in the data warehouse implementation? (Choose two.)
+You are migrating an on-premises data warehouse to BigQuery, Cloud SQL, and Cloud Storage. You need to configure security services in the data warehouse. Your company compliance policies mandate that the data warehouse must: • Protect data at rest with full lifecycle management on cryptographic keys. • Implement a separate key management provider from data management. • Provide visibility into all encryption key requests. What services should be included in the data warehouse implementation? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
@@ -90,13 +90,13 @@ You are migrating an on-premises data warehouse to BigQuery, Cloud SQL, and Clou
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: CE (C: Key Access Justifications, E: Cloud External Key Manager)
+Potwierdzona odpowiedź: CE (C: Key Access Justifications, E: Cloud External Key Manager)
 
-Dlaczego te odpowiedzi są poprawne:
+Wyjaśnienie:
 - Cloud External Key Manager (EKM): Pozwala na przechowywanie kluczy szyfrujących w systemie zewnętrznym (poza infrastrukturą Google). Spełnia to wymóg "implement a separate key management provider from data management".
 - Key Access Justifications (KAJ): Każde użycie klucza przez Google (np. w celu wsparcia technicznego lub backupu) generuje żądanie, które jest logowane i może wymagać Twojej "uzasadnionej zgody" (Justification). Spełnia to wymóg "visibility into all encryption key requests" oraz "maintain control over access".
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Customer-managed encryption keys (CMEK): Choć daje kontrolę nad cyklem życia klucza, klucz fizycznie znajduje się wewnątrz Cloud KMS (infrastruktura Google). Nie spełnia wymogu separacji dostawcy kluczy.
 - B. Customer-Supplied Encryption Keys (CSEK): CSEK to sposób "dostarczenia" klucza tymczasowo, a nie pełnoprawny model "key management provider". Nie wspiera on pełnej widoczności (visibility) do każdego użycia klucza przez Google w taki sposób jak KAJ.
 - D. Access Transparency and Approval: Ta funkcja zapewnia logi z działań administratorów Google (np. "dostępu do Twoich danych"), ale nie jest bezpośrednio powiązana z "encryption key requests" i zarządzaniem zewnętrznym dostawcą kluczy (EKM).

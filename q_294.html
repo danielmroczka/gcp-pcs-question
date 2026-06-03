@@ -88,12 +88,12 @@ Your organization has an internet-facing application behind a load balancer. You
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Deploy the TLS certificate at Google Cloud Global HTTPs Load Balancer, and submit the user credentials through HTTPs.)
+Potwierdzona odpowiedź: C (Deploy the TLS certificate at Google Cloud Global HTTPs Load Balancer, and submit the user credentials through HTTPs.)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - HTTPS (TLS): To branżowy standard szyfrowania komunikacji sieciowej. Zapewnia ochronę poufności (encryption) oraz integralności danych przesyłanych między klientem a load balancerem. W połączeniu z poprawnie skonfigurowanym TLS między load balancerem a backendem (jeśli wymagane), zapewnia pełną ochronę typu "end-to-end".
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A, D: Szyfrowanie danych po stronie klienta (przeglądarki) przy użyciu kluczy KMS jest technicznie trudne, niepraktyczne i w zupełności zbędne, gdy HTTPS (TLS) rozwiązuje problem szyfrowania kanału transmisyjnego.
 - B: Hashing (haszowanie) nie jest szyfrowaniem. Samo haszowanie danych (np. SHA-256) bez kanału szyfrowanego pozwala na atak typu "Replay Attack" (przejęcie zahaszowanego hasła i jego odtworzenie).
 

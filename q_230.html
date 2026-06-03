@@ -64,7 +64,7 @@
 <h2>Question 230 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-For data residency requirements, you want your secrets in Google Clouds Secret Manager to only have payloads in europe-west1 and europe-west4. Your secrets must be highly available in both regions.<br/>What should you do?
+For data residency requirements, you want your secrets in Google Clouds Secret Manager to only have payloads in europe-west1 and europe-west4. Your secrets must be highly available in both regions. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,14 +89,14 @@ For data residency requirements, you want your secrets in Google Clouds Secret M
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Create your secret with a user managed replication policy, and choose only compliant locations)
+Potwierdzona odpowiedź: A (Create your secret with a user managed replication policy, and choose only compliant locations)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Secret Manager Replication: Domyślnie Secret Manager używa "automatic replication", co oznacza, że sekret jest replikowany w sposób zarządzany przez Google w wielu regionach, aby zapewnić wysoką dostępność. Nie daje to klientowi pełnej kontroli nad tym, w jakich konkretnie regionach dane są składowane.
 - User-managed replication (A): Pozwala na jawne wskazanie konkretnych regionów, w których dany sekret ma być dostępny. Jeśli wymogiem jest rezydencja danych tylko w `europe-west1` i `europe-west4`, to musisz użyć replikacji zarządzanej przez użytkownika, aby wykluczyć wszystkie inne regiony.
 - Wysoka dostępność: Wybierając dwie powyższe lokalizacje, zachowujesz wymóg wysokiej dostępności przy jednoczesnym spełnieniu restrykcyjnych wymogów rezydencji danych.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - B. Automatic replication: To ustawienie nie pozwala na "wykluczenie" niechcianych regionów. Sekret będzie dostępny w wielu regionach, co może naruszać wymagania rezydencji danych.
 - C. Two separate secrets: Zarządzanie dwoma oddzielnymi sekretami o tej samej nazwie w różnych projektach/lokalizacjach jest błędem operacyjnym. Zwiększa narzut zarządzania (musisz aktualizować obie lokalizacje osobno) i nie zapewnia spójności danych.
 - D. Automatic replication + Org Policy: Polityki organizacji nie pozwalają na "przełamanie" polityki automatycznej replikacji sekretu na poziom konkretnych, wybranych regionów. Org Policy może zablokować tworzenie sekretów w regionach, ale nie zdefiniuje precyzyjnie "gdzie dokładnie" automatyczna replikacja ma się odbyć.

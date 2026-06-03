@@ -64,7 +64,7 @@
 <h2>Question 212 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your company is moving to Google Cloud. You plan to sync your users first by using Google Cloud Directory Sync (GCDS). Some employees have already created Google Cloud accounts by using their company email addresses that were created outside of GCDS. You must create your users on Cloud Identity.<br/>What should you do?
+Your company is moving to Google Cloud. You plan to sync your users first by using Google Cloud Directory Sync (GCDS). Some employees have already created Google Cloud accounts by using their company email addresses that were created outside of GCDS. You must create your users on Cloud Identity. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,9 +89,9 @@ Your company is moving to Google Cloud. You plan to sync your users first by usi
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Use the transfer tool to migrate unmanaged users)
+Potwierdzona odpowiedź: B (Use the transfer tool to migrate unmanaged users)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Konta niezarządzane (Unmanaged Users): To konta osobiste Google, które pracownicy założyli samodzielnie przy użyciu służbowych adresów e-mail (np. przed wdrożeniem Cloud Identity w firmie). Gdy firma zaczyna zarządzać swoją domeną w Google, konta te stają się tzw. "kontami konfliktowymi".
 - Transfer Tool for Unmanaged Users (TTUU): Jest to dedykowane narzędzie w konsoli administracyjnej Google, stworzone dokładnie po to, aby:
   1. Odkryć wszystkich pracowników, którzy posiadają takie konta osobiste w domenie firmy.
@@ -99,7 +99,7 @@ Dlaczego ta odpowiedź jest poprawna:
   3. Po zaakceptowaniu przez użytkownika, konto staje się kontem zarządzanym, a administrator zyskuje nad nim pełną kontrolę (hasło, MFA, audyt).
 - Skuteczność: Jest to jedyny zautomatyzowany sposób na migrację istniejących kont osobistych do Cloud Identity przy jednoczesnym zachowaniu danych użytkownika (np. plików na Google Drive).
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. GCDS search rules: Google Cloud Directory Sync (GCDS) służy do tworzenia NOWYCH kont w Google na podstawie danych z Twojego lokalnego katalogu (np. Active Directory). Jeśli GCDS spróbuje stworzyć konto dla adresu, który już istnieje jako konto osobiste, wystąpi błąd konfliktu. GCDS nie potrafi samodzielnie migrować typów kont.
 - C. Custom script and Admin SDK: Choć Admin SDK pozwala na wiele operacji, transfer konta wymaga interakcji z użytkownikiem (zgodna na transfer) ze względów prawnych i prywatności. Pisanie własnego skryptu do tego procesu jest niepotrzebnie skomplikowane i ryzykowne, skoro istnieje gotowe narzędzie (TTUU).
 - D. GCDS exclusion rules: Reguły wykluczenia (exclusion rules) służą jedynie do pomijania pewnych użytkowników podczas synchronizacji (np. aby GCDS ich nie usunął lub nie zawiesił). Nie pomagają w żaden sposób w migracji kont niezarządzanych.

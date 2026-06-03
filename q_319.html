@@ -88,24 +88,28 @@ The InfoSec team has mandated that all new Cloud Run jobs and services in produc
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Configure an organization policy to require Binary Authorization enforcement on images deployed to Cloud Run.)
+Potwierdzona odpowiedź: A
 
-Dlaczego ta odpowiedź jest poprawna:
-- Organization Policy: To jedyny skuteczny sposób na *wymuszenie* (enforcement) pewnych zachowań w skali całej organizacji. Jeśli InfoSec "mandates" (nakazuje), to polityka organizacyjna jest narzędziem, które technicznie uniemożliwi wdrożenie obrazów nieposiadających odpowiednich atestacji w Cloud Run.
+Wyjaśnienie: 
+Organization Policy (Polityka Organizacyjna) jest kluczowym narzędziem w GCP do wymuszania (enforcement) reguł bezpieczeństwa w skali całej organizacji, folderu lub projektu. W przypadku Binary Authorization istnieje dedykowana polityka (constraints/run.binaryAuthorizationEnforcement), która pozwala na zablokowanie wdrożeń obrazów w Cloud Run, które nie spełniają określonych reguł atestacji. Jest to jedyny mechanizm z wymienionych, który aktywnie blokuje niezgodne operacje przed ich wykonaniem, co jest wymagane przez "mandat" zespołu InfoSec.
 
-Analiza niepoprawnych odpowiedzi:
-- B. SHA rule: Security Health Analytics służy do detekcji (monitorowania), a nie do prewencyjnego blokowania (enforcement) akcji w czasie rzeczywistym.
-- C. IAM: Ograniczenie ról nie zapewnia technicznego wymuszenia (Binary Auth) – deweloper nadal mógłby wdrożyć niebezpieczny obraz, jeśli by miał dostęp.
-- D. Custom policy: To opcja konfiguracji samego Binary Auth, ale nie jest to metoda "wymuszenia" (enforcement) dla wszystkich usług w organizacji.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- B. Security Health Analytics (SHA) to funkcja Security Command Center służąca do wykrywania (detekcji) podatności i błędnych konfiguracji. SHA może zaraportować brak Binary Authorization jako "finding", ale nie potrafi samodzielnie zablokować wdrożenia usługi.
+- C. Ograniczenie uprawnień IAM (usunięcie roli admina) to dobra praktyka (zasada najmniejszych uprawnień), ale nie rozwiązuje problemu technicznego wymuszenia Binary Authorization. Nawet użytkownik z ograniczonymi uprawnieniami mógłby wdrożyć obraz bez tej funkcji, jeśli nie jest ona wymuszona systemowo.
+- D. Binary Authorization custom policy to konfiguracja reguł, które mechanizm ma sprawdzać (np. kto musi podpisać obraz). Sama obecność polityki w Binary Auth nie oznacza jej automatycznego wymuszenia na wszystkich usługach Cloud Run w organizacji bez użycia Organization Policy.
 
 Wskazówki i triki (Tips & Tricks):
-- "Mandate" + "All new ... in production" = Organization Policy.
+- Słowo "mandate" (nakaz) lub "enforce" (wymusić) w kontekście całej organizacji lub wielu projektów niemal zawsze wskazuje na użycie Organization Policy.
+- Binary Authorization działa jako "bramkarz" (gatekeeper) sprawdzający atestacje przed uruchomieniem kontenera.
 
 Praktyczne informacje na egzamin:
-- Zapamiętaj: Organization Policy jest używane do narzucania ograniczeń bezpieczeństwa w całej organizacji ("guardrails").
+- Zapamiętaj nazwę ograniczenia: constraints/run.binaryAuthorizationEnforcement.
+- Rozróżniaj detekcję (SHA) od prewencji (Organization Policy).
+- Binary Authorization wspiera GKE, Cloud Run oraz Cloud Functions (2nd gen).
 
 Dokumentacja i linki:
-- <a href="https://cloud.google.com/binary-authorization/docs/policy-enforcement" target="_blank">Binary Authorization policy enforcement</a>
+- <a href="https://cloud.google.com/binary-authorization/docs/run/enforce-org-policy" target="_blank">Enforcing Binary Authorization for Cloud Run with organization policy</a>
+- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/overview" target="_blank">Organization Policy Service overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -113,7 +117,9 @@ Dokumentacja i linki:
 <div class="analysis-section">
 <h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje zrozumienie hierarchii zarządzania bezpieczeństwem w GCP. "Mandat" organizacji wymaga mechanizmów typu "enforcement", a nie tylko detekcji czy ograniczania dostępu przez IAM.</p>
+<p><b>Analiza strategiczna:</b> Pytanie skupia się na zarządzaniu bezpieczeństwem na poziomie korporacyjnym. W architekturze GCP, Organization Policy służy do ustawiania globalnych "guardrails", których nie można obejść lokalnymi uprawnieniami IAM. Integracja Binary Authorization z Organization Policy dla Cloud Run to nowoczesne podejście do zabezpieczania łańcucha dostaw oprogramowania (software supply chain security).</p>
+<h3>Praktyczny przykład</h3>
+<p>Wyobraź sobie, że deweloper próbuje wdrożyć usługę Cloud Run za pomocą `gcloud run deploy`. Jeśli Organization Policy jest włączona, a Binary Authorization nie jest skonfigurowane w definicji usługi lub obraz nie jest podpisany, wdrożenie zostanie odrzucone z błędem 403 Forbidden, zanim jeszcze kontener zostanie pobrany.</p>
 </div>
 </div>
 <script>

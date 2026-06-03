@@ -88,13 +88,13 @@ Your application development team is releasing a new critical feature. To comple
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Scan and redact PII from the records by using the Cloud Data Loss Prevention API. Perform format-preserving encryption on the card PAN.)
+Potwierdzona odpowiedź: B (Scan and redact PII from the records by using the Cloud Data Loss Prevention API. Perform format-preserving encryption on the card PAN.)
 
-Dlaczego ta odpowiedź jest poprawna:
-- Cloud DLP (Sensitive Data Protection): To usługa służąca do odkrywania i ochrony danych wrażliwych. 
+Wyjaśnienie:
+- Cloud DLP (Sensitive Data Protection): To usługa służąca do odkrywania i ochrony danych wrażliwych.
 - FPE (Format-Preserving Encryption): Jest to technika pseudonimizacji oferowana przez DLP API. Pozwala ona zaszyfrować numer (np. karty kredytowej) tak, aby wynik miał ten sam format (np. 16 cyfr) i przeszedł walidację (np. sumę kontrolną Luhna), ale był całkowicie bezpieczny (nieodwracalny dla osób nieuprawnionych). Idealne do testowania logiki aplikacji bez ujawniania rzeczywistych danych.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Confidential Computing: Chroni dane w pamięci przed dostępem z zewnątrz, ale nie usuwa PII z logów, zrzutów pamięci czy baz danych, z którymi pracuje programista.
 - C. Cloud KMS: Standardowe szyfrowanie (np. AES) zmieni format danych (wynikiem będzie długi ciąg base64), co zepsuje testy aplikacji sprawdzające format danych (np. czy numer karty ma 16 cyfr).
 - D. Random values: Może nie spełniać wymogów walidacji (np. algorytmu Luhna), co uniemożliwi poprawne testowanie logiki funkcjonalności.

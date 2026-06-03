@@ -64,7 +64,7 @@
 <h2>Question 213 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization is using GitHub Actions as a continuous integration and delivery (CI/CD) platform. You must enable access to Google Cloud resources from the CI/CD pipelines in the most secure way.<br/>What should you do?
+Your organization is using GitHub Actions as a continuous integration and delivery (CI/CD) platform. You must enable access to Google Cloud resources from the CI/CD pipelines in the most secure way. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,15 +89,15 @@ Your organization is using GitHub Actions as a continuous integration and delive
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (Configure workload identity federation to use GitHub as an identity pool provider)
+Potwierdzona odpowiedź: D (Configure workload identity federation to use GitHub as an identity pool provider)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Workload Identity Federation (WIF): Jest to najbezpieczniejszy i obecnie rekomendowany sposób uwierzytelniania zewnętrznych obciążeń (takich jak GitHub Actions) do Google Cloud. 
 - Eliminacja kluczy: WIF całkowicie eliminuje potrzebę tworzenia, pobierania i rotowania statycznych kluczy JSON kont serwisowych (Service Account Keys). Klucze te są najczęstszą przyczyną wycieków danych (np. poprzez przypadkowe wypchnięcie ich do repozytorium).
 - Mechanizm działania: GitHub Actions generuje krótkotrwały token OIDC (OpenID Connect). Google Cloud weryfikuje ten token i na jego podstawie wydaje krótkotrwały, bezpieczny token dostępu do GCP. Po zakończeniu pipeline'u token wygasa automatycznie.
 - Audytowalność: Każde użycie WIF jest logowane, a dostęp może być precyzyjnie ograniczony do konkretnego repozytorium, a nawet konkretnej gałęzi (branch) lub środowiska w GitHubie.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A i B. Service account keys: Przechowywanie kluczy JSON w plikach konfiguracyjnych lub w repozytorium (nawet jako GitHub Secrets) wiąże się z ryzykiem ich kradzieży. Są to poświadczenia długotrwałe, które wymagają ręcznego zarządzania i rotacji. WIF (D) jest metodą "keyless", czyli bezkluczową.
 - C. GKE cluster with Workload Identity: Choć Workload Identity wewnątrz GKE jest świetnym rozwiązaniem dla podów działających W CHMURZE, nie służy ono do dostarczania poświadczeń dla zewnętrznych systemów takich jak GitHub. To GitHub potrzebuje tożsamości, aby "pukać" do Google Cloud, a nie odwrotnie.
 

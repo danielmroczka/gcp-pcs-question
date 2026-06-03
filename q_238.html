@@ -64,7 +64,7 @@
 <h2>Question 238 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your company is concerned about unauthorized parties gaining access to the Google Cloud environment by using a fake login page. You must implement a solution to protect against person-in-the-middle attacks.<br/>Which security measure should you use?
+Your company is concerned about unauthorized parties gaining access to the Google Cloud environment by using a fake login page. You must implement a solution to protect against person-in-the-middle attacks. Which security measure should you use?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,13 +89,13 @@ Your company is concerned about unauthorized parties gaining access to the Googl
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Security key)
+Potwierdzona odpowiedź: A (Security key)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Phishing-Resistant MFA: Klucze bezpieczeństwa (Security Keys, np. Titan, YubiKey) używają protokołu FIDO2/WebAuthn, który jest sprzętowo powiązany z domeną. Jeśli użytkownik wejdzie na fałszywą stronę logowania (np. g00gle.com), klucz "zorientuje się", że domena jest inna niż oczekiwana i odmówi wygenerowania podpisu.
 - Odporność na Person-in-the-middle: Atakujący, nawet jeśli przechwyci login i hasło, nie może "odtworzyć" (replay) podpisu z klucza sprzętowego, ponieważ klucz jest przypisany do konkretnego originu (domeny).
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - B. Google prompt: Choć wygodne, Google Prompt jest podatne na zaawansowany phishing (np. atakujący może wysłać prompt do użytkownika w nadziei, że ten go kliknie - tzw. "MFA fatigue attack"). Nie jest w pełni odporne na phishing.
 - C. Text message (SMS) or phone call: SMS-y są podatne na ataki typu SIM-swapping i intercepting. W ogóle nie zaleca się ich w nowoczesnym modelu Zero Trust.
 - D. Google Authenticator application: Kody TOTP (6 cyfr) są podatne na phishing – jeśli atakujący stworzy fałszywą stronę i poprosi użytkownika o wpisanie kodu z aplikacji, może go przechwycić i użyć w czasie rzeczywistym.

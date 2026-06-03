@@ -68,7 +68,7 @@ You want to set up a secure, internal network within Google Cloud for database s
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Assign a private IP address to each database server. Use a NAT gateway to allow the backend to communicate with the frontend.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Assign a private IP address to each database server. Use a NAT gateway to provide internet connectivity to the database servers.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Assign a static public IP address to each database server. Use firewall rules to restrict external access.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create a VPC with a private subnet. Assign a private IP address to each database server.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Assign both a private IP address and a public IP address to each database server.</li>
@@ -88,23 +88,28 @@ You want to set up a secure, internal network within Google Cloud for database s
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Create a VPC with a private subnet. Assign a private IP address to each database server.)
+Potwierdzona odpowiedź: C (Create a VPC with a private subnet. Assign a private IP address to each database server.)
 
-Dlaczego ta odpowiedź jest poprawna:
-- Private Subnet: W GCP najbezpieczniejszą metodą izolacji jest umieszczenie zasobów w podsieci, która nie posiada trasy domyślnej (0.0.0.0/0) do internetu przez zewnętrzną bramę. Prywatne IP (RFC 1918) gwarantuje, że serwery są niewidoczne z internetu.
+Wyjaśnienie:
+Najbardziej podstawową i skuteczną metodą zabezpieczenia serwerów baz danych w Google Cloud przed bezpośrednim dostępem z internetu jest umieszczenie ich w podsieci prywatnej (private subnet) i przypisanie im wyłącznie prywatnych adresów IP (RFC 1918). W takim modelu serwery te nie posiadają publicznych adresów IP, co fizycznie uniemożliwia bezpośrednią komunikację przychodzącą z internetu. Dostęp do nich powinien odbywać się wyłącznie za pośrednictwem innych zasobów wewnątrz VPC (np. frontendu aplikacji) lub przez bezpieczne bramy (np. Bastion Host z IAP).
 
-Analiza niepoprawnych odpowiedzi:
-- A. NAT Gateway: NAT służy do *umożliwienia* wyjścia do internetu (z prywatnej sieci), a pytanie wymaga *braku komunikacji* z internetem.
-- B, D. Public IP: Zawsze zwiększa ryzyko (powierzchnia ataku), nawet przy firewallu.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A. Chociaż serwery mają prywatne IP, użycie NAT Gateway (Cloud NAT) służy właśnie do zapewnienia łączności z internetem (dla ruchu wychodzącego). Scenariusz wyraźnie mówi, że serwery nie mogą mieć żadnej bezpośredniej komunikacji z publicznym internetem, więc Cloud NAT jest tu niepożądany lub zbędny.
+- B. Przypisanie publicznego adresu IP (nawet statycznego) i poleganie wyłącznie na regułach firewalla jest mniej bezpieczne. Publiczny adres IP wystawia zasób na potencjalne ataki, a błąd w konfiguracji firewalla może doprowadzić do natychmiastowej ekspozycji bazy danych.
+- D. Przypisanie obu adresów IP (prywatnego i publicznego) wprost narusza wymóg braku komunikacji z internetem, ponieważ publiczny adres IP służy właśnie do takiej komunikacji.
 
 Wskazówki i triki (Tips & Tricks):
-- "No direct communication with public internet" = Private Subnet (brak publicznego IP, brak trasy do internetu).
+- "No direct communication with public internet" = Brak publicznego IP + brak trasy 0.0.0.0/0 do bramy internetowej (Internet Gateway).
+- W GCP "prywatna podsieć" to po prostu podsieć, w której instancje nie mają publicznych adresów IP.
 
 Praktyczne informacje na egzamin:
-- Zapamiętaj: Prywatne podsieci w GCP są bezpieczniejsze, ponieważ domyślnie nie mają trasy do internetu (wymaga to specjalnej konfiguracji Cloud NAT, jeśli dostęp jest potrzebny).
+- Zawsze stosuj zasadę najmniejszych uprawnień również w sieci: jeśli serwer nie musi być w internecie, nie dawaj mu publicznego IP.
+- Cloud NAT jest użyteczny tylko wtedy, gdy serwery w prywatnej podsieci muszą np. pobierać aktualizacje z internetu (ruch inicjowany przez serwer).
+- Private Google Access pozwala instancjom z tylko prywatnym IP na dostęp do API Google (np. Cloud Storage) bez wychodzenia do internetu.
 
 Dokumentacja i linki:
-- <a href="https://cloud.google.com/vpc/docs/subnets#private-subnets" target="_blank">Private subnets overview</a>
+- https://cloud.google.com/vpc/docs/subnets#private-subnets
+- https://cloud.google.com/vpc/docs/configure-private-google-access
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -112,7 +117,7 @@ Dokumentacja i linki:
 <div class="analysis-section">
 <h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją podstawową wiedzę o bezpiecznym projektowaniu sieci. Izolacja baz danych jest "krytycznym punktem" bezpieczeństwa w każdej architekturze.</p>
+<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją podstawową wiedzę o bezpiecznym projektowaniu sieci. Izolacja baz danych w prywatnych podsieciach to "krytyczny punkt" bezpieczeństwa w każdej architekturze chmurowej.</p>
 </div>
 </div>
 <script>

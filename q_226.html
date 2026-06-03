@@ -64,7 +64,7 @@
 <h2>Question 226 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization wants to protect all workloads that run on Compute Engine VM to ensure that the instances weren't compromised by boot-level or kernel-level malware. Also, you need to ensure that data in use on the VM cannot be read by the underlying host system by using a hardware-based solution.<br/>What should you do?
+Your organization wants to protect all workloads that run on Compute Engine VM to ensure that the instances weren't compromised by boot-level or kernel-level malware. Also, you need to ensure that data in use on the VM cannot be read by the underlying host system by using a hardware-based solution. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,14 +89,14 @@ Your organization wants to protect all workloads that run on Compute Engine VM t
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (1. Use Google Shielded VM including secure boot, Virtual Trusted Platform Module (vTPM), and integrity monitoring. 2. Activate Confidential Computing. 3. Enforce these actions by using organization policies)
+Potwierdzona odpowiedź: C (1. Use Google Shielded VM including secure boot, Virtual Trusted Platform Module (vTPM), and integrity monitoring. 2. Activate Confidential Computing. 3. Enforce these actions by using organization policies)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Shielded VM: Zapewnia ochronę przed atakami na etapie uruchamiania systemu (boot-level) oraz wewnątrz jądra (kernel-level). Używa technologii takich jak Secure Boot (sprawdza podpisy cyfrowe bootloadera) oraz vTPM (bezpieczne przechowywanie kluczy/poświadczeń).
 - Confidential Computing: Używa technologii sprzętowej (np. AMD SEV) do szyfrowania danych w pamięci RAM ("data in use"), co chroni przed odczytem pamięci przez hosta/hypervisor.
 - Organizacja polityk (Enforcement): Wymuszenie tych ustawień przez politykę organizacji (np. `constraints/compute.requireConfidentialComputing`) gwarantuje, że każda nowa VM w firmie będzie miała te zabezpieczenia.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Cloud Run function: Cloud Run służy do obsługi żądań HTTP/zdarzeń, nie posiada żadnych uprawnień ani możliwości kontrolowania ustawień bezpieczeństwa VM. To błędna ścieżka.
 - B. VM Threat Detection (SCC): VMTD wykrywa zagrożenia w pamięci RAM, ale NIE zapewnia sprzętowego szyfrowania pamięci ani ochrony procesu bootowania (to robią Shielded VM i Confidential Computing).
 - D. Hardened images: Skanowanie obrazów jest dobrą praktyką (część procesu budowania), ale użycie "zwykłego" twardego obrazu (bez Shielded VM/Confidential Computing) nie daje ochrony sprzętowej na poziomie bootowania czy szyfrowania RAM-u.

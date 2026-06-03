@@ -64,21 +64,16 @@
 <h2>Question 228 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization manages a mission-critical workload in a highly regulated industry. The workload uses Compute Engine VMs to analyze and process sensitive data after it is uploaded to Cloud Storage from endpoint computers. Your compliance team has detected that this workload does not meet data protection requirements. You need to meet these requirements:<br/>
-- Manage the data encryption key (DEK) outside the Google Cloud boundary.<br/>
-- Maintain full control of encryption keys through a third-party provider.<br/>
-- Encrypt sensitive data before uploading to Cloud Storage.<br/>
-- Decrypt sensitive data during processing in Compute Engine VMs.<br/>
-- Encrypt sensitive data in memory while in use in Compute Engine VMs.<br/>
-What should you do? (Choose two.)
+You manage a mission-critical workload for your organization, which is in a highly regulated industry. The workload uses Compute Engine VMs to analyze and process the sensitive data after it is uploaded to Cloud Storage from the endpoint computers. Your compliance team has detected that this workload does not meet the data protection requirements for sensitive data. You need to meet these requirements: - Manage the data encryption key (DEK) outside the Google Cloud boundary. - Maintain full control of encryption keys through a third-party provider. - Encrypt the sensitive data before uploading it to Cloud Storage. - Decrypt the sensitive data during processing in the Compute Engine VMs. - Encrypt the sensitive data in memory while in use in the Compute Engine VMs. What should you do? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure Customer Managed Encryption Keys (CMEK) to encrypt the sensitive data before it is uploaded to Cloud Storage, and decrypt the sensitive data after it is downloaded into your VMs.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure Cloud External Key Manager (EKM) to encrypt the sensitive data before it is uploaded to Cloud Storage, and decrypt the sensitive data after it is downloaded into your VMs.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure Customer Managed Encryption Keys to encrypt the sensitive data before it is uploaded to Cloud Storage, and decrypt the sensitive data after it is downloaded into your VMs.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Configure Cloud External Key Manager to encrypt the sensitive data before it is uploaded to Cloud Storage, and decrypt the sensitive data after it is downloaded into your VMs.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create Confidential VMs to access the sensitive data.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Migrate the Compute Engine VMs to Confidential VMs to access the sensitive data.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="E">E.</span> Create a VPC Service Controls service perimeter across your existing Compute Engine VMs and Cloud Storage buckets.</li>
+
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -95,13 +90,13 @@ What should you do? (Choose two.)
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: BC (B: Configure Cloud External Key Manager, C: Create Confidential VMs)
+Potwierdzona odpowiedź: BC (B: Configure Cloud External Key Manager, C: Create Confidential VMs)
 
-Dlaczego te odpowiedzi są poprawne:
+Wyjaśnienie:
 - Cloud External Key Manager (EKM) (B): Wymóg "Manage the data encryption key (DEK) outside the Google Cloud boundary" oraz "Maintain full control ... through a third-party provider" bezpośrednio wskazuje na usługę Cloud EKM, która integruje KMS z zewnętrznym HSM.
 - Confidential VMs (C): Wymóg "Encrypt the sensitive data in memory while in use in the Compute Engine VMs" wskazuje na Confidential Computing (Confidential VMs), które używają szyfrowania RAM w trakcie przetwarzania danych.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. CMEK: CMEK (Customer Managed Encryption Keys) są zarządzane wewnątrz Cloud KMS (infrastruktura Google). Nie spełnia to wymogu przechowywania kluczy poza "Google Cloud boundary".
 - D. Migrate to Confidential VMs: Tożsama z odpowiedzią C, ale opcja C jest bardziej zwięzła i poprawna w kontekście wyboru usług. (Uwaga: W pytaniu 228 opcje mogą się dublować, ważne jest wskazanie EKM i Confidential VM).
 - E. VPC Service Controls: VPC Service Controls chroni przed eksfiltracją (wynoszeniem danych), ale nie jest technologią szyfrowania danych ("in memory" lub "at rest").

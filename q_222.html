@@ -64,7 +64,7 @@
 <h2>Question 222 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your company recently published a security policy to minimize the usage of service account keys. On-premises Windows-based applications are interacting with Google Cloud APIs. You need to implement Workload Identity Federation (WIF) with your identity provider on-premises.<br/>What should you do?
+Your company recently published a security policy to minimize the usage of service account keys. On-premises Windows-based applications are interacting with Google Cloud APIs. You need to implement Workload Identity Federation (WIF) with your identity provider on-premises. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,14 +89,14 @@ Your company recently published a security policy to minimize the usage of servi
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Set up a workload identity pool with your corporate Active Directory Federation Service (ADFS). Configure a rule to let principals in the pool impersonate the Google Cloud service account)
+Potwierdzona odpowiedź: A (Set up a workload identity pool with your corporate Active Directory Federation Service (ADFS). Configure a rule to let principals in the pool impersonate the Google Cloud service account)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Workload Identity Federation (WIF): Pozwala aplikacjom działającym poza GCP (np. on-premises z Windows) na bezpieczne uwierzytelnianie się w Google Cloud bez potrzeby zarządzania długotrwałymi kluczami (JSON).
 - Integracja z ADFS: ADFS (Active Directory Federation Services) może działać jako Identity Provider (IdP) korzystający z protokołu OIDC/SAML, co jest wspierane przez WIF.
 - Zasada najniższych uprawnień: Opcja A jest lepsza niż B, ponieważ nakazuje "skonfigurowanie reguły" (rule) ograniczającej dostęp, zamiast "pozwolić wszystkim" (let all principals). W bezpieczeństwie chmurowym zawsze dążymy do precyzyjnego ograniczenia dostępu – im mniej podmiotów może przejąć tożsamość konta serwisowego, tym bezpieczniej.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - B. Let all principals in the pool impersonate: Jest to ryzykowne podejście, naruszające zasadę najniższych uprawnień. Każdy użytkownik lub aplikacja w zdefiniowanej puli otrzymałaby dostęp do konta serwisowego, co jest nieakceptowalne w bezpiecznym środowisku.
 - C i D. OIDC service on the same machine: To rozwiązanie jest technicznie niepoprawne w kontekście federacji z korporacyjnym AD/ADFS. WIF wymaga, aby IdP (tutaj ADFS) był zaufanym dostawcą tożsamości. OIDC "na tej samej maszynie" nie rozwiązuje problemu federacji tożsamości z Active Directory.
 

@@ -64,7 +64,7 @@
 <h2>Question 239 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You control network traffic for a folder in your Google Cloud environment. Your folder includes multiple projects and Virtual Private Cloud (VPC) networks. You want to enforce on the folder level that egress connections are limited only to IP range 10.58.5.0/24 and only from the VPC network "dev-vpc". You want to minimize implementation and maintenance effort.<br/>What should you do?
+You control network traffic for a folder in your Google Cloud environment. Your folder includes multiple projects and Virtual Private Cloud (VPC) networks. You want to enforce on the folder level that egress connections are limited only to IP range 10.58.5.0/24 and only from the VPC network "dev-vpc". You want to minimize implementation and maintenance effort. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -72,6 +72,7 @@ You control network traffic for a folder in your Google Cloud environment. Your 
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> 1. Leave the network configuration of the VMs in scope unchanged. 2. Enable Cloud NAT for "dev-vpc" and restrict the target range in Cloud NAT to 10.58.5.0/24.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> 1. Attach external IP addresses to the VMs in scope. 2. Define and apply a hierarchical firewall policy on folder level to deny all egress connections and to allow egress to IP range 10.58.5.0/24 from network dev-vpc.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> 1. Attach external IP addresses to the VMs in scope. 2. Configure a VPC Firewall rule in "dev-vpc" that allows egress connectivity to IP range 10.58.5.0/24 for all source addresses in this network.</li>
+
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -88,14 +89,14 @@ You control network traffic for a folder in your Google Cloud environment. Your 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (1. Attach external IP addresses to the VMs in scope. 2. Define and apply a hierarchical firewall policy on folder level to deny all egress connections and to allow egress to IP range 10.58.5.0/24 from network dev-vpc)
+Potwierdzona odpowiedź: C (1. Attach external IP addresses to the VMs in scope. 2. Define and apply a hierarchical firewall policy on folder level to deny all egress connections and to allow egress to IP range 10.58.5.0/24 from network dev-vpc)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Hierarchiczne polityki firewalla (Hierarchical Firewall Policies): Pozwalają na definiowanie i wymuszanie reguł na poziomie całej organizacji lub folderów. Są one sprawdzane PRZED tradycyjnymi regułami firewalla VPC w poszczególnych projektach, co czyni je doskonałymi "barierami ochronnymi" (guardrails).
 - Kontrola na poziomie folderu: Zastosowanie polityki na poziomie folderu pozwala objąć nią wszystkie projekty wewnątrz folderu ("dev-vpc"), co zapewnia spójność bez ręcznej konfiguracji w każdym projekcie osobno.
 - Precedencja: Reguła "deny all" z wysokim priorytetem, nadpisana przez "allow" dla konkretnego zakresu IP, daje pewność, że żaden inny ruch wychodzący nie opuści sieci.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Network appliance: Stawianie maszyny wirtualnej z oprogramowaniem do filtrowania ruchu (np. Next-Generation Firewall) jest rozwiązaniem bardzo złożonym (wymaga routingu, obsługi awarii, wysokiej dostępności) i trudnym w skalowaniu.
 - B. Cloud NAT: Cloud NAT pozwala na dostęp do internetu, ale nie jest narzędziem do *filtrowania* ruchu do konkretnych adresów IP. Pozwala na wychodzenie w świat, ale nie służy do egzekwowania reguł bezpieczeństwa (to zadanie firewalla).
 - D. VPC Firewall rule in dev-vpc: Reguły wewnątrz VPC mogą być zmieniane przez właścicieli projektów (Owner), co czyni je niepewnymi w kontekście zarządzania na poziomie folderu/organizacji. Wymagają też ręcznej konfiguracji w każdym projekcie osobno.

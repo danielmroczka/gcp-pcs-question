@@ -93,27 +93,23 @@ You manage your organization's Security Operations Center (SOC). You currently m
 Potwierdzona odpowiedź: D (Packet Mirroring)
 
 Wyjaśnienie:
-- Packet Mirroring (Klonowanie pakietów): Jest to jedyna natywna usługa w Google Cloud, która pozwala na kopiowanie PEŁNEGO ruchu sieciowego (w tym zawartości pakietów - payload) z wybranych instancji VM, podsieci lub maszyn oznaczonych konkretnymi tagami.
-- Zastosowanie: Skopiowany ruch jest przesyłany do celu (zazwyczaj kolektora za wewnętrznym Load Balancerem), gdzie może być poddany głębokiej inspekcji (Deep Packet Inspection - DPI) przez systemy IDS/IPS, narzędzia do analizy bezpieczeństwa lub systemy kryminalistyki sieciowej (forensics).
-- Przewaga nad Flow Logs: Podczas gdy VPC Flow Logs rejestrują tylko metadane (nagłówki IP, porty, protokoły), Packet Mirroring pozwala na wgląd w treść przesyłanych danych, co jest kluczowe przy badaniu zaawansowanych ataków.
+Packet Mirroring (Klonowanie pakietów) to usługa pozwalająca na kopiowanie i przesyłanie całego ruchu sieciowego (w tym payloadu) z wybranych zasobów VPC do celu (np. kolektora IDS). Jest to niezbędne, gdy monitoring oparty na metadanych (VPC Flow Logs) jest niewystarczający i wymagana jest głęboka inspekcja pakietów (Deep Packet Inspection - DPI).
 
-Dlaczego pozostałe są błędne:
-- A: Marketplace IDS to kategoria produktów (systemy wykrywania intruzów), które mogą analizować dane, ale same w sobie nie są metodą dostarczania ruchu z sieci VPC. Aby działały, często potrzebują właśnie Packet Mirroring.
-- B: VPC Flow Logs dostarczają jedynie metadane o przepływach (kto, gdzie, kiedy), ale celowo NIE rejestrują payloadu pakietów, co uniemożliwia pełną eksplorację treści ruchu.
-- C: Logi VPC Service Controls dotyczą naruszeń zasad dostępu na poziomie API usług Google (np. Cloud Storage), a nie ruchu sieciowego między maszynami wewnątrz VPC.
-- E: Google Cloud Armor chroni aplikacje webowe na brzegu sieci (przed atakami L7 jak SQLi/XSS), ale nie służy do ogólnego monitorowania i klonowania ruchu sieciowego wewnątrz całej sieci VPC.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A. Marketplace IDS: To kategoria narzędzi zewnętrznych. Choć mogą one analizować ruch, same w sobie nie są mechanizmem klonowania ruchu z sieci VPC – często wymagają Packet Mirroring jako źródła danych.
+- B. VPC Flow Logs: Rejestrują one tylko metadane przepływów (IP, porty, protokoły), ale celowo NIE zawierają payloadu (treści) pakietów, co uniemożliwia pełną analizę zawartości ruchu.
+- C. VPC Service Controls logs: Dotyczą one naruszeń perymetru bezpieczeństwa na poziomie API usług Google (np. dostęp do Cloud Storage), a nie ruchu sieciowego między maszynami wewnątrz VPC.
+- E. Google Cloud Armor Deep Packet Inspection: Cloud Armor chroni aplikacje webowe na brzegu sieci przed atakami L7 (SQLi/XSS), ale nie służy do ogólnego klonowania i monitorowania całego ruchu wewnątrz sieci VPC.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Analyze network flows AND their payload" = Packet Mirroring.
-- "Identify network anomalies (metadata)" = VPC Flow Logs.
-- Pamiętaj, że Packet Mirroring generuje dodatkowe koszty za przesył danych i wymaga własnej infrastruktury analizującej.
+Wskazówki i triki (Tips & Tricks):
+- Pamiętaj: "Packet header only" = VPC Flow Logs. "Full payload / investigative" = Packet Mirroring.
+- Packet Mirroring jest przydatne do wykrywania zagrożeń "East-West" (ruch wewnątrz sieci).
 
-Kluczowe zagadnienia do powtórzenia:
-- Różnica między VPC Flow Logs a Packet Mirroring.
-- Konfiguracja źródeł i celów (collectors) w Packet Mirroring.
-- Zastosowanie zewnętrznych systemów IDS/IPS w GCP.
+Praktyczne informacje na egzamin:
+- Packet Mirroring nie wpływa na wydajność źródłowych maszyn VM (ruch jest kopiowany przez infrastrukturę sieciową).
+- Skopiowany ruch musi trafiać do wewnętrznego Load Balancera (ILB) działającego jako kolektor.
 
-Dokumentacja:
+Dokumentacja i linki:
 - <a href="https://cloud.google.com/vpc/docs/packet-mirroring" target="_blank">Omówienie Packet Mirroring</a>
 </pre>
 </div>
@@ -122,11 +118,10 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Packet Mirroring jest niezbędne dla celów kryminalistyki sieciowej (Forensics) i wykrywania intruzów, którzy przesyłają złośliwe dane wewnątrz dozwolonych sesji TCP.</p></p>
+<p><b>Głęboka analiza:</b> Packet Mirroring jest kluczowym narzędziem dla zespołów SOC w celach <b>kryminalistyki sieciowej (Forensics)</b>. Pozwala na przechwycenie ruchu, który może zawierać złośliwy kod lub próby eksfiltracji danych ukryte wewnątrz standardowych protokołów. W przeciwieństwie do Flow Logs, które są próbkowane, Packet Mirroring może kopiować 100% ruchu, co jest krytyczne podczas dochodzeń po incydentach.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc/docs/packet-mirroring" target="_blank">https://cloud.google.com/vpc/docs/packet-mirroring</a></li>
-
+<li><a href="https://cloud.google.com/vpc/docs/packet-mirroring" target="_blank">Dokumentacja Packet Mirroring</a></li>
 </ul>
 </div>
 </div>

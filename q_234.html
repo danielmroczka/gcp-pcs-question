@@ -64,18 +64,15 @@
 <h2>Question 234 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You have a BigQuery dataset that contains customer information. You have different teams that need access to this data:<br/>
-- Business user: must access curated reports.<br/>
-- Data engineer: must administrate the data lifecycle in the platform.<br/>
-- Security operator: must review user activity on the data platform.<br/>
-What should you do?
+Your organization uses BigQuery to process highly sensitive, structured datasets. Following the "need to know" principle, you need to create the Identity and Access Management (IAM) design to meet the needs of these users: - Business user: must access curated reports. - Data engineer: must administrate the data lifecycle in the platform. - Security operator: must review user activity on the data platform. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Utilize data access logs to restrict user access to the dataset.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Implement row-based access control policies on all BigQuery tables in the dataset.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Configure data access log for BigQuery services, and grant Project Viewer role to security operator.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Set row-based access control based on the "region" column, and filter the record from the United States for data engineers.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create curated tables in a separate dataset and assign the role roles/bigquery.dataViewer.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Export the BigQuery dataset to CSV files and email the files to the different teams.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Generate a CSV data file based on the business user's needs, and send the data to their email addresses.</li>
+
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -92,13 +89,13 @@ What should you do?
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Create curated tables in a separate dataset and assign the role roles/bigquery.dataViewer)
+Potwierdzona odpowiedź: C (Create curated tables in a separate dataset and assign the role roles/bigquery.dataViewer)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Zasada najniższych uprawnień (Least Privilege): Zamiast dawać dostęp do głównej tabeli z surowymi danymi, tworzymy "wyselekcjonowane" (curated) widoki lub tabele zawierające tylko to, co konkretna rola musi widzieć.
 - Separacja danych: Umieszczenie tych tabel w oddzielnym zbiorze danych (dataset) pozwala na łatwe zarządzanie dostępem za pomocą IAM na poziomie zbioru. Rola `roles/bigquery.dataViewer` nadaje uprawnienia tylko do odczytu danych w tym konkretnym zbiorze, co jest klasyczną implementacją zasady "need-to-know".
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Data access logs: Logi dają wgląd w to, kto co robił, ale nie ograniczają dostępu do samych danych.
 - B. Row-based access control: Choć RLS jest świetne, poleganie wyłącznie na nim przy zróżnicowanych potrzebach użytkowników (Business User vs Data Engineer) jest trudniejsze do zarządzania niż logiczna separacja datasetów.
 - D. CSV file email: Wysyłanie danych mailem jest krytycznym błędem bezpieczeństwa (dane przestają być pod kontrolą platformy, nie można ich wycofać).

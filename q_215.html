@@ -64,7 +64,7 @@
 <h2>Question 215 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You are a Cloud Identity administrator for your organization. In your Google Cloud environment, groups are used to manage user permissions. Each application team has a dedicated group. Your team is responsible for creating these groups and the application teams can manage the team members on their own through the Google Cloud console. You must ensure that the application teams can only add users from within your organization to their groups.<br/>What should you do?
+You are a Cloud Identity administrator for your organization. In your Google Cloud environment, groups are used to manage user permissions. Each application team has a dedicated group. Your team is responsible for creating these groups and the application teams can manage the team members on their own through the Google Cloud console. You must ensure that the application teams can only add users from within your organization to their groups. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,13 +89,13 @@ You are a Cloud Identity administrator for your organization. In your Google Clo
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Change the configuration of the relevant groups in the Google Workspace Admin console to prevent external users from being added to the group)
+Potwierdzona odpowiedź: A (Change the configuration of the relevant groups in the Google Workspace Admin console to prevent external users from being added to the group)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Google Workspace Admin Console (Google Workspace Admin): To centralne miejsce zarządzania tożsamościami i grupami w organizacji. Dla każdej grupy utworzonej w Google Cloud / Cloud Identity istnieje ustawienie określające, czy grupa może przyjmować członków spoza organizacji.
 - Kontrola dostępu do grup: Wyłączenie opcji "Allow members outside your organization" (Zezwalaj na członków spoza organizacji) dla konkretnych grup aplikacyjnych gwarantuje, że członkowie mogą pochodzić tylko z Twojego katalogu firmowego. Jest to natywny i najprostszy sposób zarządzania tym wymaganiem.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - B. IAM policy with condition: IAM Conditions służą do ograniczania dostępu do ZASOBÓW (np. GCS, BigQuery) w oparciu o pewne atrybuty. Nie służą one do ograniczania tego, KTO może stać się członkiem GRUPY w Cloud Identity.
 - C. IAM deny policy: Deny Policies w IAM pozwalają na blokowanie określonych ról lub działań dla konkretnych użytkowników/grup, ale nie służą do zarządzania "członkostwem" w grupach Cloud Identity.
 - D. Cloud Identity logs + Cloud Function: Jest to rozwiązanie reaktywne (naprawianie problemu po czasie). Jeśli użytkownik z zewnątrz zostanie dodany, przez pewien czas (do momentu zadziałania funkcji) będzie posiadał uprawnienia, co narusza zasady bezpieczeństwa (tzw. "window of exposure").

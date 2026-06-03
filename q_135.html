@@ -119,11 +119,11 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Dyskusja na Reddit często porównuje ETD i Cloud IDS. ETD jest 'log-based' (analizuje ślady), Cloud IDS jest 'traffic-based' (analizuje pakiety w locie). Do wykrywania znanych adresów C2, ETD jest bardziej efektywne kosztowo i prostsze w konfiguracji.</p></p>
+<p><b>Głęboka analiza:</b> Strategia szyfrowania w Google Cloud opiera się na warstwach. Dla danych mniej wrażliwych (non-sensitive), <b>Google Default Encryption</b> jest najbardziej efektywne, ponieważ nie wymaga od użytkownika żadnych działań i nie wprowadza dodatkowych opóźnień. Dla danych wrażliwych (sensitive), <b>Cloud KMS (CMEK)</b> zapewnia wymaganą kontrolę nad rotacją kluczy i ich lokalizacją geograficzną, zachowując jednocześnie wysoką wydajność. Cloud EKM (External Key Manager) jest zazwyczaj zarezerwowany dla specyficznych wymogów suwerenności danych, ponieważ wiąże się z wyższymi kosztami i opóźnieniami wynikającymi z komunikacji z systemem zewnętrznym.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/security-command-center/docs/concepts-event-threat-detection-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-event-threat-detection-overview</a></li>
-
+<li><a href="https://cloud.google.com/docs/security/encryption-at-rest" target="_blank">Encryption at Rest in Google Cloud</a></li>
+<li><a href="https://cloud.google.com/kms/docs/ekm" target="_blank">Cloud External Key Manager Overview</a></li>
 </ul>
 </div>
 </div>

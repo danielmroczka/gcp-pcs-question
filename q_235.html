@@ -64,14 +64,15 @@
 <h2>Question 235 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You have created a Customer-Managed Encryption Key (CMEK) to encrypt data in a Cloud Storage bucket. When you try to upload data to the bucket, you receive an error message that you do not have permission to access the key. What is the most likely cause?
+You are setting up a new Cloud Storage bucket in your environment that is encrypted with a customer managed encryption key (CMEK). The CMEK is stored in Cloud Key Management Service (KMS), in project "prj-a", and the Cloud Storage bucket will use project "prj-b". The key is backed by a Cloud Hardware Security Module (HSM) and resides in the region europe-west3. Your storage bucket will be located in the region europe-west1. When you create the bucket, you cannot access the key, and you need to troubleshoot why. What has caused the access issue?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> The Cloud Storage service agent lacks the 'Cloud KMS CryptoKey Encrypter/Decrypter' role on the key.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> The firewall rule is blocking access to Cloud KMS.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Cloud HSM is not enabled for the project.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> A firewall rule prevents the key from being accessible.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Cloud HSM does not support Cloud Storage.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> The CMEK is in a different project than the Cloud Storage bucket.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> The CMEK is in a different region than the Cloud Storage bucket.</li>
+
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -79,7 +80,7 @@ You have created a Customer-Managed Encryption Key (CMEK) to encrypt data in a C
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">D</span>
 <br/>
 </span>
 </div>
@@ -88,14 +89,14 @@ You have created a Customer-Managed Encryption Key (CMEK) to encrypt data in a C
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (The Cloud Storage service agent lacks the 'Cloud KMS CryptoKey Encrypter/Decrypter' role on the key)
+Potwierdzona odpowiedź: A (The Cloud Storage service agent lacks the 'Cloud KMS CryptoKey Encrypter/Decrypter' role on the key)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Service Agent: Każda usługa GCP (jak Cloud Storage) działa w ramach specjalnego "Service Agent" (konta serwisowego), które działa w imieniu tej usługi.
 - Uprawnienia KMS: Aby usługa mogła zaszyfrować dane przy użyciu klucza CMEK, musisz nadać odpowiedniemu Service Agentowi uprawnienia do tego klucza w Cloud KMS.
 - Rola: Rola `roles/cloudkms.cryptoKeyEncrypterDecrypter` jest niezbędna, aby usługa mogła użyć klucza do szyfrowania (podczas zapisu) i deszyfrowania (podczas odczytu).
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - B. Firewall: Firewalle sieciowe (VPC) służą do kontrolowania ruchu między instancjami/sieciami. Nie mają wpływu na komunikację między usługami Google wewnątrz ich infrastruktury.
 - C. Cloud HSM: To sprzętowy moduł bezpieczeństwa. Nie ma wpływu na dostępność klucza w kontekście uprawnień.
 - D. Region: Choć zgodność regionów jest ważna, najczęstszą przyczyną błędu "permission denied" przy użyciu CMEK jest brak nadania uprawnień dla Service Agenta usługi.

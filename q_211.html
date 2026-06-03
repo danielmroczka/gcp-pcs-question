@@ -64,7 +64,7 @@
 <h2>Question 211 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization wants to be compliant with the General Data Protection Regulation (GDPR) on Google Cloud. You must implement data residency and operational sovereignty in the EU.<br/>What should you do? (Choose two.)
+Your organization wants to be compliant with the General Data Protection Regulation (GDPR) on Google Cloud. You must implement data residency and operational sovereignty in the EU. What should you do? (Choose two.)
 </p>
 <div class="question-choices-container">
 <ul>
@@ -90,13 +90,13 @@ Your organization wants to be compliant with the General Data Protection Regulat
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: AC (A: Organization Policy "resource locations", C: Key Access Justifications)
+Potwierdzona odpowiedź: AC (A: Organization Policy "resource locations", C: Key Access Justifications)
 
-Dlaczego te odpowiedzi są poprawne:
+Wyjaśnienie:
 - Rezydencja Danych (A): Wymóg składowania danych wewnątrz UE (Data Residency) realizuje się najskuteczniej za pomocą polityki organizacji `constraints/gcp.resourceLocations`. Pozwala ona na zdefiniowanie listy dozwolonych regionów (np. `europe-west3`, `europe-west4`), co uniemożliwia użytkownikom tworzenie zasobów (bucketów, dysków, baz danych) poza granicami Europy.
 - Suwerenność Operacyjna (C): Wymóg kontroli nad dostępem personelu Google (Operational Sovereignty) realizuje się za pomocą usługi Key Access Justifications (KAJ). KAJ dostarcza uzasadnienie dla każdego żądania użycia klucza kryptograficznego przez Google (np. w celach wsparcia technicznego). W połączeniu z Cloud EKM, KAJ pozwala na automatyczne odrzucenie żądania, jeśli personel Google nie spełnia określonych kryteriów (np. nie znajduje się fizycznie w UE lub nie ma odpowiedniego obywatelstwa), co jest kluczowe dla pełnej zgodności z GDPR.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - B. Cloud IDS: Służy do wykrywania zagrożeń w ruchu sieciowym (L3-L7). Choć pomaga w ogólnym bezpieczeństwie, nie jest narzędziem do wymuszania rezydencji danych ani suwerenności operacyjnej wymaganej przez GDPR.
 - D. Identity Federation: Służy do łączenia zewnętrznych systemów tożsamości z GCP. Choć pozwala na kontrolę dostępu, samo w sobie nie zapewnia rezydencji danych ani suwerenności nad kluczami szyfrującymi.
 - E. VPC Flow Logs: Rejestrują metadane o ruchu sieciowym. Są użyteczne do audytu, ale podobnie jak Cloud IDS, nie stanowią mechanizmu wymuszania lokalizacji zasobów czy suwerenności operacyjnej.

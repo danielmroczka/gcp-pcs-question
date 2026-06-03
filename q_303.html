@@ -88,12 +88,12 @@ There is a threat actor that is targeting organizations like yours. Attacks are 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Create a Cloud Armor policy with a deny-rule for the known IP address range. Attach the policy to the backend of the Application Load Balancer.)
+Potwierdzona odpowiedź: A (Create a Cloud Armor policy with a deny-rule for the known IP address range. Attach the policy to the backend of the Application Load Balancer.)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Cloud Armor: Jest to jedyna usługa w GCP, która pozwala na blokowanie adresów IP na brzegu sieci Google (Edge), ZANIM trafią one do Load Balancera i Twojej sieci. Jest to najbardziej efektywne i skalowalne rozwiązanie dla aplikacji webowych.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - B. IAP: Służy do uwierzytelniania osób, nie do masowego blokowania zakresów IP agresorów.
 - D. VPC Firewall: Działa głęboko w sieci, blisko VM. W przypadku dużego ataku, Twoja sieć VPC musiałaby procesować te pakiety tylko po to, by je odrzucić, co marnuje zasoby. Armor robi to 'przed drzwiami'.
 

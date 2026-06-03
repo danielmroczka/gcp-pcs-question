@@ -92,25 +92,21 @@ Your organization acquired a new workload. The Web and Application (App) servers
 Potwierdzona odpowiedź: D (1. Re-deploy the Web and App servers with instance templates configured with respective service accounts. 2. Create an allow VPC firewall rule that specifies the target/source with respective service accounts.)
 
 Wyjaśnienie:
-- Service Accounts (Konta serwisowe): Użycie kont serwisowych zamiast tagów sieciowych w regułach firewalla jest zalecaną praktyką bezpieczeństwa (identity-based firewalls). Tożsamość konta serwisowego jest trwale przypisana do instancji i znacznie trudniejsza do nieautoryzowanej zmiany niż proste tagi tekstowe.
-- Instance Templates (Szablony instancji): Zapewniają one spójność konfiguracji podczas autoskalowania. Każda nowa instancja utworzona przez mechanizm automatycznego skalowania otrzyma identyczną tożsamość (konto serwisowe), co gwarantuje poprawne działanie reguł sieciowych bez ręcznej interwencji.
-- Separation of Duties: "Compute Engine Instance Admins" zazwyczaj mogą edytować tagi sieciowe na VM, ale zmiana konta serwisowego wymaga znacznie wyższych uprawnień (`iam.serviceAccounts.actAs`). Dzięki temu administratorzy maszyn nie mogą łatwo omijać restrykcji sieciowych poprzez zmianę tagów.
+Użycie kont serwisowych (Service Accounts) zamiast tagów sieciowych w regułach firewalla jest zalecaną praktyką bezpieczeństwa (tzw. identity-based firewalls). Tożsamość konta serwisowego jest trwale przypisana do instancji i trudniejsza do nieautoryzowanej zmiany przez administratorów maszyn wirtualnych (wymaga uprawnienia iam.serviceAccounts.actAs). Wykorzystanie szablonów instancji (Instance Templates) gwarantuje spójność tej konfiguracji podczas autoskalowania.
 
-Dlaczego pozostałe są błędne:
-- A i C: Tagi sieciowe (network tags) są mniej bezpieczne, ponieważ mogą być swobodnie modyfikowane przez osoby z uprawnieniami do edycji metadanych maszyn wirtualnych, co umożliwia nieautoryzowaną zmianę priorytetów lub obejście reguł firewalla.
-- B: Sama konfiguracja kont serwisowych na już działających serwerach nie zapewnia skalowalności i konsystencji (wymóg autoskalowania) – tylko użycie szablonów (D) gwarantuje, że nowe maszyny będą od razu bezpieczne.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A i C: Tagi sieciowe (network tags) są mniej bezpieczne, ponieważ mogą być swobodnie edytowane przez osoby z uprawnieniami do zarządzania instancjami (Compute Admin), co pozwala na łatwe obejście reguł firewalla.
+- B: Sama konfiguracja kont serwisowych na działających maszynach nie spełnia wymogu konsystencji przy autoskalowaniu. Tylko szablony (D) gwarantują, że każda nowa instancja otrzyma właściwą tożsamość automatycznie.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Consistent network security when autoscaling" = Instance Templates.
-- "Prevent admins from altering traffic" = Użyj Service Accounts zamiast Network Tags w regułach firewalla.
-- Reguły oparte na kontach serwisowych działają niezależnie od adresów IP.
+Wskazówki i triki (Tips & Tricks):
+- Jeśli w pytaniu mowa o "autoscaling" i "consistency", szukaj odpowiedzi z "Instance Templates".
+- Jeśli mowa o "prevent admins from altering security", wybierz "Service Accounts" zamiast "Network Tags".
 
-Kluczowe zagadnienia do powtórzenia:
-- Reguły firewalla VPC oparte na kontach serwisowych.
-- Rola `iam.serviceAccounts.actAs` w bezpieczeństwie.
-- Korzystanie z szablonów instancji w Managed Instance Groups (MIG).
+Praktyczne informacje na egzamin:
+- Reguły firewalla oparte na kontach serwisowych są bardziej skalowalne w dużych środowiskach.
+- Pamiętaj o zasadzie najniższych uprawnień: każde konto serwisowe powinno mieć tylko te uprawnienia, których faktycznie potrzebuje.
 
-Dokumentacja:
+Dokumentacja i linki:
 - <a href="https://cloud.google.com/vpc/docs/firewalls#service-accounts" target="_blank">Reguły firewalla oparte na kontach serwisowych</a>
 </pre>
 </div>
@@ -119,11 +115,10 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Reguła firewalla typu: 'Zezwól na port 8080 z SA-WEB do SA-APP' jest niezależna od adresów IP i tagów, co czyni ją odporną na błędy konfiguracyjne deweloperów.</p></p>
+<p><b>Głęboka analiza:</b> Najbezpieczniejsza metoda izolacji warstw aplikacji (np. Web od App) polega na powiązaniu reguł firewalla z tożsamością (Service Account), a nie z ulotnymi atrybutami jak tagi czy adresy IP. Dzięki temu, nawet jeśli adresy IP ulegną zmianie podczas skalowania, reguły bezpieczeństwa pozostają nienaruszone i skuteczne.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc/docs/firewalls#service-accounts" target="_blank">https://cloud.google.com/vpc/docs/firewalls#service-accounts</a></li>
-
+<li><a href="https://cloud.google.com/vpc/docs/firewalls" target="_blank">Dokumentacja Firewalla VPC</a></li>
 </ul>
 </div>
 </div>

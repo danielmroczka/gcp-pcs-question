@@ -64,14 +64,14 @@
 <h2>Question 300 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization has recently deployed a new web application on Compute Engine. You need to provide users with access to the application while minimizing exposure to the public internet. Furthermore, you need to provide the internal backend services with secure connectivity to the database while keeping them isolated from public access. What should you do?
+You work for an ecommerce company that stores sensitive customer data across multiple Google Cloud regions. The development team has built a new 3-tier application to process orders and must integrate the application into the production environment. You must design the network architecture to ensure strong security boundaries and isolation for the new application, facilitate secure remote maintenance by authorized third-party vendors, and follow the principle of least privilege. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Place the frontend instances in a public subnet with external IP addresses and the backend services in a private subnet. Use a NAT gateway to allow the backend to communicate with the frontend.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Place the frontend instances in a public subnet with external IP addresses and use a Cloud Load Balancer with Google Cloud Armor for security. Place the backend services in a private subnet and use Internal HTTP(S) Load Balancing.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Place all instances in a single public subnet. Use Identity-Aware Proxy (IAP) to restrict access to the frontend instances and use firewall rules to block access to backend instances.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Place all instances in a single private subnet. Use a load balancer to expose both the frontend and backend instances to the internet, and configure firewall rules to secure the services.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create separate VPC networks for each tier. Use VPC peering between application tiers and other required VPCs. Provide vendors with SSH keys and root access only to the instances within the VPC for maintenance purposes.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a single VPC network and create different subnets for each tier. Create a new Google project specifically for the third-party vendors and grant the network admin role to the vendors. Deploy a VPN appliance and rely on the vendors' configurations to secure third-party access.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create separate VPC networks for each tier. Use VPC peering between application tiers and other required VPCs. Enable Identity-Aware Proxy (IAP) for remote access to management resources, limiting access to authorized vendors.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Create a single VPC network and create different subnets for each tier. Create a new Google project specifically for the third-party vendors. Grant the vendors ownership of that project and the ability to modify the Shared VPC configuration.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -79,7 +79,7 @@ Your organization has recently deployed a new web application on Compute Engine.
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">C</span>
 <br/>
 </span>
 </div>
@@ -88,33 +88,33 @@ Your organization has recently deployed a new web application on Compute Engine.
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Place the frontend instances in a public subnet with external IP addresses and use a Cloud Load Balancer with Google Cloud Armor for security. Place the backend services in a private subnet and use Internal HTTP(S) Load Balancing.)
+Potwierdzona odpowiedź: C (Create separate VPC networks for each tier. Use VPC peering between application tiers and other required VPCs. Enable Identity-Aware Proxy (IAP) for remote access to management resources, limiting access to authorized vendors.)
 
-Dlaczego ta odpowiedź jest poprawna:
-- Architektura warstwowa (Tiered Architecture): Frontend jest dostępny przez Load Balancer (który chroni go przez Cloud Armor – WAF). Backend jest w pełni odizolowany w prywatnej podsieci i komunikuje się z frontendem tylko przez wewnętrzny Load Balancer (Internal LB), co zapewnia brak publicznej widoczności dla wrażliwych usług backendowych.
+Wyjaśnienie:
+- Separate VPCs per tier: To najbardziej restrykcyjna forma izolacji sieciowej ("micro-segmentation"), zapobiegająca przemieszczaniu się atakującego między warstwami (lateral movement) w razie włamania.
+- IAP (Identity-Aware Proxy): Pozwala na bezpieczny dostęp zdalny (SSH/RDP) dla vendorów bez konieczności wystawiania maszyn na publiczne IP czy konfigurowania skomplikowanych VPNów. Dostęp jest autoryzowany tożsamością i kontekstem.
 
-Analiza niepoprawnych odpowiedzi:
-- A. NAT gateway: NAT pozwala na wyjście do internetu, ale nie zastępuje Load Balancera jako punktu wejścia do aplikacji.
-- C. Single subnet: To brak poprawnej izolacji sieciowej (brak separacji frontend/backend).
-- D. All in private + Load Balancer to public: Jeśli wstawisz wszystkie w prywatnej sieci, Load Balancer nie może do nich 'dosięgnąć' (chyba że przez zaawansowaną konfigurację, ale A/B są lepszymymi wzorcami).
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A. SSH keys/Root access: Udostępnianie kluczy SSH i uprawnień roota jest mniej bezpieczne i trudniejsze do audytu niż IAP, który wymusza MFA i autoryzację przez Google IAM.
+- B, D. Single VPC/Subnets: Podsieci (subnets) nie stanowią twardej granicy izolacji tak silnej jak osobne sieci VPC (chyba że z bardzo rygorystycznymi regułami firewall, ale pytanie prosi o "strong boundaries"). Przyznawanie vendorom roli Network Admin (B) lub Ownera (D) to rażące naruszenie zasady najmniejszych uprawnień.
 
 Wskazówki i triki (Tips & Tricks):
-- "Frontend public" + "Backend private" + "Secure connectivity" = Tiered Architecture z Load Balancerami.
-- Publiczna widoczność (public subnets) jest tylko dla LB i Frontendu.
+- "Strong security boundaries" = Separate VPCs (warstwa 3).
+- "Secure remote maintenance" = Identity-Aware Proxy (IAP).
 
 Praktyczne informacje na egzamin:
-- Zapamiętaj: Internal Load Balancing (ILB) to klucz do bezpiecznej komunikacji "wschód-zachód" wewnątrz VPC.
+- Zapamiętaj: IAP TCP Forwarding to standardowy sposób na bezpieczne zarządzanie maszynami bez publicznych adresów IP.
 
 Dokumentacja i linki:
-- <a href="https://cloud.google.com/architecture/best-practices-vpc-design" target="_blank">VPC design best practices</a>
+- <a href="https://cloud.google.com/iap/docs/tcp-forwarding-overview" target="_blank">IAP for TCP forwarding</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
 <h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do projektowania bezpiecznych sieci "od zera". Warstwowa architektura z użyciem zewnętrznego Load Balancera (z WAF) dla frontendu i wewnętrznego Load Balancera dla backendu to standardowy, bezpieczny model w chmurze.</p>
+<p><b>Sugerowana odpowiedź: C</b></p>
+<p><b>Analiza strategiczna:</b> Pytanie prosi o projekt sieciowy o maksymalnym bezpieczeństwie. Podejście "VPC per tier" z peeringiem i ochroną punktów wejścia przez IAP to wzorcowy model Zero Trust, w którym dostęp jest weryfikowany na każdym etapie, a zaufanie do sieci jest minimalne.</p>
 </div>
 </div>
 <script>

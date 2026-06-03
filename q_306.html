@@ -88,12 +88,12 @@ You must ensure that the keys used for at-rest encryption of your data are compl
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (Identify keys that have not been rotated by using Security Health Analytics. If a key is not rotated after 90 days, a finding in Security Command Center is raised.)
+Potwierdzona odpowiedź: D (Identify keys that have not been rotated by using Security Health Analytics. If a key is not rotated after 90 days, a finding in Security Command Center is raised.)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Security Health Analytics (SHA): To moduł SCC Premium dedykowany do zarządzania posturą bezpieczeństwa (posture management). Posiada on wbudowany, automatyczny detektor o nazwie `KMS_KEY_NOT_ROTATED`. Automatycznie skanuje on wszystkie klucze KMS w Twojej organizacji i generuje znalezisko (finding) w SCC, jeśli klucz nie był rotowany zgodnie z polityką.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Cloud Asset Inventory: Służy do inwentaryzacji zasobów. Można z niego wyciągnąć dane o kluczach, ale nie posiada on wbudowanego systemu alertowania o braku rotacji.
 - B. Cloud Run: Wymagałoby to pisania i utrzymywania dodatkowego kodu (dług techniczny), podczas gdy SHA robi to "out-of-the-box".
 - C. Cloud Logging metric: Bardzo trudne do poprawnego zaimplementowania. Logi rejestrują rotację, ale nie jest łatwo "odwrócić" to zdarzenie do wykrywania braku rotacji w czasie.

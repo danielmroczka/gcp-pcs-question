@@ -92,27 +92,24 @@ You need to connect your organization's on-premises network with an existing Goo
 Potwierdzona odpowiedź: D (1. Set up a Dedicated Interconnect link between the on-premises environment and Google Cloud. 2. Configure private access using the restricted.googleapis.com domains in on-premises DNS configurations.)
 
 Wyjaśnienie:
-- Dedicated Interconnect: Jest to jedyne rozwiązanie zapewniające bezpośrednie, fizyczne i prywatne łącze transportowe (private transport link) między infrastrukturą on-premises a Google Cloud, co gwarantuje najwyższą wydajność i brak kontaktu z publicznym internetem.
-- restricted.googleapis.com: Jest to kluczowy element dla wymogu VPC Service Controls. Tylko domena `restricted` (z adresem IP `199.36.153.4/30`) ogranicza dostęp wyłącznie do usług wspieranych przez VPC Service Controls. Zapobiega to exfiltracji danych do usług, które nie są objęte Twoim perymetrem bezpieczeństwa.
-- Private Access z on-premises: Skonfigurowanie DNS na miejscu, aby mapował zapytania API Google na adresy VIP domeny `restricted`, pozwala na bezpieczną komunikację z usługami (np. BigQuery, GCS) bez wychodzenia do internetu.
+Dedicated Interconnect to fizyczne, prywatne połączenie o wysokiej przepustowości między siecią on-premises a Google Cloud, spełniające wymóg "private transport link". Aby zapewnić, że usługi API Google są konsumowane wyłącznie przez VPC Service Controls, należy użyć domeny restricted.googleapis.com (IP 199.36.153.4/30). Ta domena ogranicza dostęp tylko do usług wspieranych przez VPC SC, co zapobiega eksfiltracji danych do innych usług Google poza perymetrem.
 
-Dlaczego pozostałe są błędne:
-- A: Cloud VPN zapewnia szyfrowane połączenie, ale odbywa się ono przez publiczny internet. Dedicated Interconnect (D) jest preferowany przy wymogu dedykowanego, prywatnego łącza fizycznego.
-- B: Domena `private.googleapis.com` (199.36.153.8/30) pozwala na dostęp do WSZYSTKICH API Google (w tym Gmail, YouTube, Maps), co nie spełnia wymogu ograniczenia dostępu tylko do usług objętych VPC Service Controls.
-- C: Direct Peering to publiczny peering z Google dla usług API; nie zapewnia on prywatnego łącza do Twojej sieci VPC (Shared VPC).
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A: Cloud VPN działa przez publiczny internet, co nie spełnia wymogu dedykowanego "private transport link" w kontekście wysokiej wydajności i izolacji fizycznej.
+- B: Domena private.googleapis.com (IP 199.36.153.8/30) pozwala na dostęp do większości usług Google (w tym Gmail czy YouTube), co nie spełnia wymogu ograniczenia dostępu tylko do usług objętych perymetrem VPC Service Controls.
+- C: Direct Peering to publiczny peering z Google, który nie zapewnia prywatnej łączności z siecią VPC (Shared VPC).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
+Wskazówki i triki (Tips & Tricks):
 - "Private transport link" = Dedicated Interconnect.
-- "Consume Google APIs via VPC Service Controls" = `restricted.googleapis.com`.
-- Pamiętaj, że dla `restricted.googleapis.com` musisz również skonfigurować trasy BGP dla zakresu `199.36.153.4/30`.
+- "VPC Service Controls only" = restricted.googleapis.com.
+- "All Google APIs" = private.googleapis.com.
 
-Kluczowe zagadnienia do powtórzenia:
-- Private Google Access for on-premises hosts.
-- Różnice między `private.googleapis.com` a `restricted.googleapis.com`.
-- Łączność hybrydowa (VPN vs Interconnect).
+Praktyczne informacje na egzamin:
+- Pamiętaj o konieczności skonfigurowania tras BGP dla adresów IP restricted/private VIP w sieci on-premises.
+- VPC Service Controls jest kluczowy dla zgodności z regulacjami dotyczącymi ochrony danych (np. HIPAA, PCI DSS).
 
-Dokumentacja:
-- <a href="https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity" target="_blank">Konfiguracja prywatnej łączności dla VPC SC</a>
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity" target="_blank">Prywatna łączność dla VPC Service Controls</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -120,11 +117,10 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Użycie 'restricted' VIP zapobiega wyciekowi danych do usług Google, które nie są objęte perymetrem bezpieczeństwa Twojej firmy.</p></p>
+<p><b>Głęboka analiza:</b> Połączenie <b>Dedicated Interconnect</b> z <b>restricted.googleapis.com</b> tworzy najbezpieczniejszą możliwą ścieżkę dla danych wrażliwych. Rozwiązanie to eliminuje ryzyko ataku Man-in-the-Middle z internetu publicznego oraz drastycznie ogranicza "powierzchnię ataku" API Google tylko do tych usług, które Twoja firma faktycznie autoryzowała wewnątrz perymetru bezpieczeństwa.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity" target="_blank">https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity</a></li>
-
+<li><a href="https://cloud.google.com/interconnect/docs/how-to/dedicated/configuring-macsec" target="_blank">Bezpieczeństwo Interconnect (MACsec)</a></li>
 </ul>
 </div>
 </div>

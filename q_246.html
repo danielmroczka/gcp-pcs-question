@@ -89,14 +89,14 @@ Your organization relies heavily on Cloud Run for its containerized applications
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Configure Binary Authorization on Cloud Run to enforce image signatures. Create policies to allow deployment only for images passing a defined vulnerability threshold)
+Potwierdzona odpowiedź: C (Configure Binary Authorization on Cloud Run to enforce image signatures. Create policies to allow deployment only for images passing a defined vulnerability threshold)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Binary Authorization (BinAuthz): To usługa bezpieczeństwa działająca jako "strażnik" (gatekeeper) przy wdrażaniu kontenerów. Pozwala zdefiniować polityki sprawdzające, czy obraz spełnia wymogi (np. atestacje, brak podatności).
 - Automatyczne skanowanie podatności: BinAuthz integruje się z Artifact Registry. Jeśli włączysz skanowanie podatności w Artifact Registry, BinAuthz może w polityce wymusić, aby obrazy nie zawierały podatności o poziomie "medium" lub wyższym (lub spełniały inne kryteria).
 - Enforce (Wymuszenie): BinAuthz blokuje wdrożenie (deployment) na Cloud Run, jeśli obraz nie przejdzie pozytywnie testów zdefiniowanych w polityce.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Manual rebuild: To proces ręczny, nieefektywny i podatny na błędy. Nie zapewnia automatycznego wymuszenia (enforcement).
 - B. Manual checks: Proces ręczny, całkowicie nieadekwatny dla systemów produkcyjnych.
 - D. Artifact Registry permissions: Skanowanie jest pasywne (informuje o lukach), ale nie blokuje wdrożenia na Cloud Run. Uprawnienia rejestru nie kontrolują tego, co Cloud Run wdraża.

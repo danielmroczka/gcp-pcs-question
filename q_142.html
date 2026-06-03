@@ -89,29 +89,42 @@ You have noticed an increased number of phishing attacks across your enterprise 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Titan Security Keys).
+Potwierdzona odpowiedź: A (Titan Security Keys)
 
 Wyjaśnienie:
-- Klucze bezpieczeństwa Titan (Titan Security Keys): Wykorzystują standardy FIDO (Fast Identity Online), w tym U2F (Universal 2nd Factor) i FIDO2. Są to jedyne opcje 2-stopniowej weryfikacji (2SV), które zapewniają kryptograficzną weryfikację adresu URL strony logowania. Oznacza to, że klucz nie wyśle podpisu kryptograficznego, jeśli strona logowania jest fałszywa (phishingowa), nawet jeśli wygląda identycznie jak prawdziwa strona Google.
-- Kryptograficzny podpis: Klucz generuje podpis unikalny dla danej sesji logowania, którego nie da się przejąć ani wykorzystać powtórnie przez atakującego.
+Klucze bezpieczeństwa Titan (Titan Security Keys) wykorzystują standardy FIDO (Fast Identity Online), w tym U2F (Universal 2nd Factor) i FIDO2. Są to jedyne opcje 2-stopniowej weryfikacji (2SV) w ekosystemie Google, które zapewniają kryptograficzną weryfikację adresu URL strony logowania. Oznacza to, że klucz nie wyśle podpisu kryptograficznego, jeśli strona logowania jest fałszywa (phishingowa), nawet jeśli wygląda identycznie jak prawdziwa strona Google. Klucz generuje podpis unikalny dla danej sesji logowania, którego nie da się przejąć ani wykorzystać powtórnie przez atakującego.
 
 Dlaczego pozostałe są błędne:
-- B. Google prompt: Przesyła powiadomienie "Czy to Ty?" na urządzenie mobilne. Chociaż jest bezpieczniejszy niż SMS, nie oferuje sprzętowej weryfikacji adresu URL strony logowania i może być podatny na błąd użytkownika (przypadkowe kliknięcie "Tak").
-- C. Google Authenticator app: Generuje kody czasowe (TOTP). Użytkownik musi ręcznie przepisać kod na stronę. Nie ma tu mechanizmu sprawdzającego, czy strona, na której wpisywany jest kod, nie jest stroną phishingową.
-- D. Cloud HSM keys: Służą do przechowywania kluczy szyfrujących dane w chmurze (np. dla KMS), a nie do uwierzytelniania użytkowników podczas logowania do konta Google.
+B. Google prompt: Przesyła powiadomienie "Czy to Ty?" na urządzenie mobilne. Chociaż jest znacznie bezpieczniejszy niż SMS, nie oferuje sprzętowej weryfikacji adresu URL strony logowania i może być podatny na błąd użytkownika (przypadkowe kliknięcie "Tak" przy zmęczeniu decyzją/spamowaniu powiadomieniami).
+C. Google Authenticator app: Generuje kody czasowe (TOTP). Użytkownik musi ręcznie przepisać kod na stronę. Nie ma tu mechanizmu sprawdzającego, czy strona, na której wpisywany jest kod, nie jest stroną phishingową – atakujący może natychmiast użyć przechwyconego kodu na prawdziwej stronie Google.
+D. Cloud HSM keys: Służą do przechowywania kluczy szyfrujących dane w chmurze (np. dla usługi Cloud KMS), a nie do uwierzytelniania użytkowników podczas logowania do konta Google. To usługa infrastrukturalna, a nie metoda 2SV dla personelu.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli w pytaniu pojawia się "phishing protection" + "cryptographic signature" + "verify URL" = Zawsze wybieraj Security Keys (Titan, FIDO/U2F).
-- Klucze sprzętowe są uważane za najmocniejszą formę 2FA/2SV dostępną na rynku.
+- Słowa kluczowe: "phishing protection", "cryptographic signature", "verify URL". Jeśli je widzisz, odpowiedzią prawie zawsze są Klucze Bezpieczeństwa (Security Keys).
+- Program Ochrony Zaawansowanej (Advanced Protection Program) Google wymaga właśnie użycia kluczy bezpieczeństwa jako najmocniejszej formy ochrony.
 
 Kluczowe zagadnienia do powtórzenia:
-- Metody 2-stopniowej weryfikacji (2SV) w Google Cloud/Cloud Identity.
-- Standardy FIDO/U2F.
-- Program ochrony zaawansowanej (Advanced Protection Program).
+- Metody 2-stopniowej weryfikacji (2SV) w Cloud Identity.
+- Różnica między TOTP (aplikacje), Push (Prompt) a FIDO/U2F (Security Keys).
+- Cloud Identity Advanced Protection.
 
 Dokumentacja:
-<a href="https://support.google.com/titansecuritykey/answer/9111684" target="_blank">Informacje o kluczach bezpieczeństwa Titan</a>
+<a href="https://cloud.google.com/identity-platform/docs/mfa" target="_blank">Multi-factor authentication (MFA) in Google Cloud</a>
+<a href="https://support.google.com/titansecuritykey/answer/9111684" target="_blank">Titan Security Keys overview</a>
 </pre>
+</div>
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
+<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
+<div class="analysis-section">
+<h3>Analiza i Wyjaśnienie</h3>
+<p><b>Sugerowana odpowiedź: A</b></p>
+<p><b>Analiza spornych kwestii (AI):</b> W dyskusjach często pojawia się pytanie, czy "Google prompt" (B) nie jest wystarczający. Choć Google Prompt jest rekomendowany dla większości użytkowników ze względu na wygodę, w scenariuszach o wysokim ryzyku phishingu tylko klucze sprzętowe (Titan) zapewniają odporność na ataki typu "Man-in-the-Middle" dzięki bezpośredniej weryfikacji pochodzenia żądania (URL) przez sprzęt, co eliminuje czynnik błędu ludzkiego.</p>
+<h3>Dodatkowe Zasoby (Linki)</h3>
+<ul>
+<li><a href="https://cloud.google.com/identity/docs/how-to/setup-mfa" target="_blank">https://cloud.google.com/identity/docs/how-to/setup-mfa</a></li>
+</ul>
+</div>
+</div>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {

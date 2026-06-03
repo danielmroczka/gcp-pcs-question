@@ -89,28 +89,26 @@ You are a security administrator at your company. Per Google-recommended best pr
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Turn off the domain restricted sharing organization policy. Set the policy value to "Custom." Add each external partner's Cloud Identity or Google Workspace customer ID as an exception under the organization policy, and then turn the policy back on).
+Potwierdzona odpowiedź: D (Turn off the domain restricted sharing organization policy. Set the policy value to "Custom." Add each external partner's Cloud Identity or Google Workspace customer ID as an exception under the organization policy, and then turn the policy back on.)
 
 Wyjaśnienie:
-Polityka organizacji "Domain restricted sharing" (iam.allowedPolicyMemberDomains) służy do ograniczania tożsamości, którym można nadawać role IAM, tylko do tych należących do określonych organizacji (identyfikowanych przez Customer ID). Jeśli musisz współpracować z zewnętrznym partnerem, najlepszą praktyką (zgodną z modelem Least Privilege i zapobieganiem exfiltracji danych do prywatnych kont) jest dodanie identyfikatora klienta (Customer ID) tego partnera do listy dozwolonych domen w Twojej polityce organizacji. Wybranie opcji "Custom" pozwala na wskazanie wielu dozwolonych organizacji obok Twojej własnej.
+Polityka organizacji "Domain restricted sharing" (iam.allowedPolicyMemberDomains) ogranicza zestaw tożsamości, którym można nadawać role IAM, do określonych organizacji. Aby zezwolić na dostęp partnerowi zewnętrznemu, należy dodać jego unikalny identyfikator klienta (Customer ID) do listy dozwolonych domen w tej polityce. Jest to zgodne z najlepszymi praktykami, ponieważ precyzyjnie definiuje zaufane domeny, zamiast całkowicie wyłączać zabezpieczenie.
 
-Dlaczego pozostałe są błędne:
-- A. Set the policy value to "Allow All": To całkowicie wyłącza zabezpieczenie, pozwalając na dodawanie dowolnych tożsamości (np. prywatnych kont @gmail.com), co narusza zasady bezpieczeństwa i best practices.
-- B. Turn off... Provide... using IAM: Wyłączenie polityki otwiera lukę bezpieczeństwa. Nawet jeśli nadasz uprawnienia tylko partnerom, brak wymuszenia domenowego pozwoli innym administratorom na dodawanie nieautoryzowanych kont w przyszłości.
-- C. Add... to a Google group... add group as exception: To technicznie niemożliwe w ten sposób. Polityka "Domain restricted sharing" nie obsługuje grup jako wyjątków – sprawdza ona domenę/organizację każdego indywidualnego członka dodawanego do IAM. Jeśli członek grupy pochodzi z niedozwolonej domeny, próba nadania uprawnień grupie zawierającej taką osobę lub dodania takiej osoby do zasobu zostanie zablokowana.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A: Ustawienie polityki na "Allow All" całkowicie wyłącza to zabezpieczenie, co pozwala na dodawanie dowolnych kont (w tym prywatnych kont @gmail.com), co jest niezgodne z best practices bezpieczeństwa.
+- B: Samo nadanie uprawnień IAM po wyłączeniu polityki nie rozwiąże problemu na przyszłość – brak wymuszenia domenowego stworzy lukę, którą mogą wykorzystać inni administratorzy.
+- C: Polityka "Domain restricted sharing" nie obsługuje grup dyskusyjnych (Google Groups) jako wyjątków w samej definicji polityki. Sprawdza ona przynależność domenową konkretnych użytkowników dodawanych do ról IAM.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Domain restricted sharing" działa na poziomie identyfikatora organizacji (Customer ID), a nie nazwy domeny (choć potocznie tak się o tym mówi).
-- Customer ID to unikalny identyfikator zaczynający się zazwyczaj od litery 'C' (np. C0123abcd).
-- Pamiętaj: Ta polityka blokuje dodawanie nowych tożsamości do IAM, nie usuwa tych już istniejących (chyba że zostaną one zmodyfikowane).
+Wskazówki i triki (Tips & Tricks):
+- Pamiętaj: Polityka ta operuje na identyfikatorach "Customer ID" (np. C01234567), a nie na nazwach domen tekstowych (jak @example.com).
+- Zawsze wybieraj opcję "Custom", aby dodać wielu partnerów bez rezygnacji z ochrony własnej domeny.
 
-Kluczowe zagadnienia do powtórzenia:
-- iam.allowedPolicyMemberDomains (Organization Policy).
-- Cloud Identity Customer ID.
-- Bezpieczeństwo tożsamości w relacjach B2B.
+Praktyczne informacje na egzamin:
+- Ta polityka zapobiega przypadkowemu udostępnieniu zasobów kontom spoza organizacji (np. prywatnym kontom pracowników).
+- Zmiana polityki nie usuwa wstecznie uprawnień już nadanych – dotyczy tylko nowych powiązań IAM.
 
-Dokumentacja:
-<a href="https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains" target="_blank">Ograniczanie współdzielenia zasobów według domeny</a>
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains" target="_blank">Ograniczanie współdzielenia zasobów według domeny</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -118,11 +116,10 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Customer ID partnera znajdziesz w ich konsoli Admin lub otrzymasz od ich administratora. Wygląda on zazwyczaj jak `C01234567`.</p></p>
+<p><b>Głęboka analiza:</b> Mechanizm <b>Domain Restricted Sharing</b> jest jednym z najskuteczniejszych sposobów walki z wyciekiem danych do nieautoryzowanych organizacji. Kluczowym wyzwaniem jest współpraca B2B – w takich przypadkach jedyną bezpieczną ścieżką jest biała lista zaufanych identyfikatorów <i>Customer ID</i> partnerów. Jeśli partner nie posiada Cloud Identity, musi je założyć (nawet w wersji darmowej), aby otrzymać unikalny identyfikator organizacji.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains</a></li>
-
+<li><a href="https://cloud.google.com/iam/docs/understanding-custom-roles" target="_blank">Zrozumienie ról niestandardowych IAM</a></li>
 </ul>
 </div>
 </div>

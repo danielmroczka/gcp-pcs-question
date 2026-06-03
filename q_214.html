@@ -64,7 +64,7 @@
 <h2>Question 214 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization processes sensitive health information. You want to ensure that data is encrypted while in use by the virtual machines (VMs). You must create a policy that is enforced across the entire organization.<br/>What should you do?
+Your organization processes sensitive health information. You want to ensure that data is encrypted while in use by the virtual machines (VMs). You must create a policy that is enforced across the entire organization. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,14 +89,14 @@ Your organization processes sensitive health information. You want to ensure tha
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Implement an organization policy that ensures all VM resources created across your organization are Confidential VM instances)
+Potwierdzona odpowiedź: B (Implement an organization policy that ensures all VM resources created across your organization are Confidential VM instances)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Szyfrowanie "In Use" (podczas przetwarzania): Tradycyjne metody szyfrowania chronią dane na dysku (at rest) lub w sieci (in transit). Confidential VMs (Instancje Poufne) to technologia Google Cloud, która chroni dane w momencie ich przetwarzania w procesorze i pamięci RAM.
 - Mechanizm sprzętowy: Confidential VMs wykorzystują funkcje procesorów (takie jak AMD SEV), aby szyfrować zawartość pamięci RAM kluczem generowanym sprzętowo dla każdej instancji. Dzięki temu dane są nieczytelne dla innych VM-ów, a nawet dla systemu operacyjnego hosta (hypervisora) zarządzanego przez Google.
 - Polityka Organizacji (Enforcement): Aby wymusić ten standard w całej firmie, należy zastosować politykę organizacji `constraints/compute.requireConfidentialComputing`. Po jej włączeniu, każda próba stworzenia "zwykłej" instancji VM, która nie posiada włączonej funkcji poufnego przetwarzania, zostanie zablokowana.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A i C. CMEK / EKM: Te rozwiązania służą do zarządzania kluczami szyfrującymi dane "at rest" (na dyskach persistent disk, w Cloud Storage itp.). Choć dają kontrolę nad kluczem, nie chronią danych w pamięci RAM podczas pracy maszyny.
 - D. No action necessary: To nieprawda. Choć Google domyślnie szyfruje dane "at rest" i "in transit", dane "in use" w pamięci RAM standardowych instancji technicznie mogą być odczytane przez hypervisor w sytuacjach takich jak zrzuty pamięci (memory dumps). Confidential Computing jest dodatkową, wymaganą w tym scenariuszu warstwą ochrony.
 

@@ -64,7 +64,7 @@
 <h2>Question 217 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You are routing all your internet facing traffic from Google Cloud through your on-premises internet connection. You want to accomplish this goal securely and with the highest bandwidth possible.<br/>What should you do?
+You are routing all your internet facing traffic from Google Cloud through your on-premises internet connection. You want to accomplish this goal securely and with the highest bandwidth possible. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,14 +89,14 @@ You are routing all your internet facing traffic from Google Cloud through your 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (Configure Cloud Interconnect and route traffic through an on-premises firewall)
+Potwierdzona odpowiedź: D (Configure Cloud Interconnect and route traffic through an on-premises firewall)
 
 Dlaczego ta odpowiedź jest poprawnie:
 - Cloud Interconnect: Jest to rozwiązanie dedykowane dla scenariuszy wymagających "najwyższej przepustowości" (highest bandwidth), znacznie przewyższającej możliwości tuneli VPN (które są ograniczane przez przepustowość internetu i limity tunelu).
 - Forced Tunneling: Kierowanie całego ruchu internetowego (0.0.0.0/0) przez on-premises wymaga bezpiecznego i wydajnego kanału (Interconnect) oraz centralnego punktu inspekcji (Firewall on-premises), gdzie ruch może zostać przefiltrowany przez korporacyjne systemy bezpieczeństwa.
 - Bezpieczeństwo: Przekierowanie ruchu przez on-premises firewall pozwala na stosowanie korporacyjnych standardów bezpieczeństwa (np. DLP, IDS/IPS, WAF) dla całego ruchu wychodzącego z chmury.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. HA VPN: VPN jest świetnym rozwiązaniem dla średnich wymagań, ale nie zapewnia najwyższej dostępnej przepustowości (Interconnect jest szybszy i bardziej przewidywalny).
 - B. Routing VM: Używanie maszyny wirtualnej (NAT/Gateway VM) jako routera dla całego ruchu w organizacji jest wąskim gardłem, trudne w skalowaniu i nieefektywne kosztowo. W GCP należy używać natywnych usług sieciowych (Cloud NAT/Interconnect).
 - C. Cloud Interconnect with HA VPN: Choć można łączyć te technologie, samo "replacing the default route to an on-premises destination" nie opisuje pełnego procesu kontroli ruchu. Opcja D jest bardziej kompletna, wspominając o Firewallu jako punkcie decyzyjnym.

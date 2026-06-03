@@ -89,32 +89,26 @@ Your company's Chief Information Security Officer (CISO) creates a requirement t
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Project).
+Potwierdzona odpowiedź: C (Project)
 
 Wyjaśnienie:
-Ograniczenie lokalizacji zasobów (Resource Location Restriction) to polityka organizacji (`gcp.resourceLocations`), która pozwala na zdefiniowanie listy dozwolonych regionów i stref dla nowo tworzonych zasobów. Zgodnie z wymaganiami CISO:
-1. Dane muszą być w konkretnych lokalizacjach (wymóg regulacyjny).
-2. Struktura folderów może zawierać wiele różnych lokalizacji (co sugeruje, że nie można narzucić jednej lokalizacji na poziomie całej organizacji lub wysokiego folderu, bo pod spodem potrzebna jest różnorodność).
-3. Dane biznesowe pozostają w specyficznych lokalizacjach w ramach tej samej organizacji.
-Ustawienie tego ograniczenia na poziomie Projektu (C) pozwala na najbardziej precyzyjne dopasowanie lokalizacji do konkretnego projektu, który może mieć inne wymagania rezydencji danych niż projekt sąsiedni w tym samym folderze. Jest to zgodne z zasadą, że projekty są jednostkami "wyrównanymi" do specyficznych lokalizacji.
+Polityka organizacji Resource Location Restriction (gcp.resourceLocations) pozwala na zdefiniowanie dopuszczalnych regionów dla nowo tworzonych zasobów. Zgodnie z wymaganiami CISO, struktura folderów musi obsługiwać wiele różnych lokalizacji rezydencji danych, a projekty są dopasowane do konkretnych miejsc. Ustawienie ograniczenia na poziomie Projektu (C) zapewnia najbardziej precyzyjną (granularną) kontrolę, pozwalając każdemu projektowi na posiadanie własnej, specyficznej listy dozwolonych regionów, niezależnie od innych projektów w tym samym folderze.
 
-Dlaczego pozostałe są błędne:
-- A. Folder: Choć możliwe, ustawienie polityki na poziomie folderu wymusiłoby tę samą lokalizację dla wszystkich projektów wewnątrz. Pytanie zaznacza, że struktura folderów może zawierać wiele lokalizacji, co czyni Folder mniej optymalnym niż Projekt dla "granulowanej" kontroli.
-- B. Resource: Polityki organizacji nie są ustawiane na poziomie pojedynczych zasobów (np. konkretnego dysku), lecz na węzłach hierarchii zasobów (Org, Folder, Project).
-- D. Organization: Ustawienie wymuszenia lokalizacji na poziomie całej organizacji zablokowałoby możliwość elastycznego wyboru różnych lokalizacji dla różnych projektów/zespołów, co kłóci się z informacją o różnorodności potrzeb wewnątrz struktury folderów.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A. Folder: Chociaż ustawienie polityki na folderze jest możliwe, wymusiłoby ono tę samą lokalizację dla wszystkich projektów wewnątrz. Pytanie zaznacza, że foldery mogą zawierać projekty z różnymi wymaganiami, więc poziom folderu jest zbyt ogólny.
+- B. Resource: Polityki organizacji nie są ustawiane bezpośrednio na pojedynczych zasobach (np. dyskach), lecz na węzłach hierarchii (Org, Folder, Project).
+- D. Organization: Ustawienie wymuszenia lokalizacji na poziomie całej organizacji uniemożliwiłoby różnicowanie lokalizacji dla różnych zespołów/projektów, co kłóci się z informacją o potrzebie elastyczności wewnątrz struktury folderów.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli w pytaniu pojawia się wymóg "granular control" lub informacja, że różne części organizacji mają różne potrzeby lokalizacyjne, celuj w poziom Projektu.
-- `gcp.resourceLocations` to najczęstsza polityka dotycząca rezydencji danych (Data Residency).
-- Pamiętaj o hierarchii: polityki są dziedziczone, ale mogą być nadpisywane na niższych poziomach (chyba że dziedziczenie zostanie zablokowane).
+Wskazówki i triki (Tips & Tricks):
+- Jeśli w pytaniu widzisz "very granular control" lub "projects aligned to specific locations", wybieraj najniższy możliwy poziom zarządzania polityką, czyli Projekt.
+- Pamiętaj, że polityki organizacji dotyczą tylko nowych zasobów i nie zmieniają lokalizacji tych już istniejących.
 
-Kluczowe zagadnienia do powtórzenia:
-- Hierarchia zasobów Google Cloud (Organization -> Folder -> Project -> Resource).
-- Polityki organizacji (Organization Policy Service).
-- Data Residency (Rezydencja danych).
+Praktyczne informacje na egzamin:
+- gcp.resourceLocations to kluczowe narzędzie do zapewnienia zgodności z regulacjami takimi jak RODO (GDPR).
+- Polityki mogą być dziedziczone, ale poziom Projektu pozwala na najdokładniejsze nadpisanie (override) ustawień nadrzędnych.
 
-Dokumentacja:
-<a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">Ograniczanie lokalizacji zasobów</a>
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">Ograniczanie lokalizacji zasobów</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -122,11 +116,10 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> W nowszych wersjach GCP do takich zadań używa się również **Policy Controller** lub **Terraform Validator**. Jednak w ramach standardowych narzędzi GCP, polityki organizacji (B) są podstawową odpowiedzią na wymóg 'compliance enforcement' u źródła.</p></p>
+<p><b>Głęboka analiza:</b> Wybór poziomu <b>Projektu</b> jest jedynym logicznym rozwiązaniem w scenariuszu, gdzie "folder structure can contain multiple data residency locations". Gdybyśmy ustawili politykę na poziomie folderu, wszystkie projekty pod nim musiałyby współdzielić tę samą konfigurację lokalizacji. Dopiero poziom projektu pozwala na odseparowanie np. projektu analitycznego w regionie europe-west3 od projektu deweloperskiego w us-central1 wewnątrz tego samego folderu "Global-App".</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints</a></li>
-
+<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">Lista ograniczeń polityki organizacji</a></li>
 </ul>
 </div>
 </div>

@@ -92,25 +92,23 @@ You are working with protected health information (PHI) for an electronic health
 Potwierdzona odpowiedź: C (Cloud Data Loss Prevention with cryptographic hashing)
 
 Wyjaśnienie:
-- Cryptographic Hashing (Haszowanie kryptograficzne): Jest to proces jednokierunkowy i nieodwracalny (non-reversible). Po zastąpieniu danych wrażliwych (np. ID pacjenta) ich haszem, nie można odzyskać pierwotnej wartości bez znajomości klucza/soli i przeprowadzenia ataku siłowego.
-- Zmiana formatu i długości: Haszowanie generuje ciąg znaków o stałej długości (np. 64 znaki dla SHA-256) i zestawie znaków (hex), który nie zachowuje cech danych wejściowych. Spełnia to wymóg "do not preserve character set and length".
-- Zastosowanie w analityce: Pozwala na zachowanie unikalności rekordów (jeśli to samo wejście daje ten sam hasz), co umożliwia agregację danych bez ujawniania tożsamości osób.
+Haszowanie kryptograficzne (Cryptographic Hashing) w usłudze Cloud DLP to proces jednokierunkowy i nieodwracalny, co spełnia wymóg "not reversible". Ponadto funkcja ta generuje skrót o stałej długości i określonym zestawie znaków (zazwyczaj hex), który nie zachowuje formatu, długości ani zestawu znaków danych wejściowych (spełnia wymóg "do not preserve character set and length"). Pozwala to na unikalną identyfikację rekordów (np. dla potrzeb agregacji w analityce) bez ujawniania rzeczywistych danych PHI.
 
-Dlaczego pozostałe są błędne:
-- A: Deterministic encryption (szyfrowanie deterministyczne) jest procesem odwracalnym (reversible) przy użyciu klucza deszyfrującego, co jest sprzeczne z wymogiem zadania.
-- B: Format-preserving encryption (szyfrowanie zachowujące format) celowo ZACHOWUJE długość i zestaw znaków danych wejściowych (np. 16-cyfrowy numer karty pozostaje 16-cyfrowym ciągiem), co jest dokładnym przeciwieństwem wymogu "do not preserve".
-- D: Sama technika "wrapped cryptographic keys" odnosi się do sposobu zarządzania kluczami w Cloud KMS, a nie do samej metody przekształcania danych (anonymizacji).
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A: Szyfrowanie deterministyczne (Deterministic encryption) jest procesem odwracalnym (reversible) przy użyciu klucza, co jest sprzeczne z wymaganiami zadania.
+- B: Szyfrowanie zachowujące format (Format-preserving encryption - FPE) jest zaprojektowane tak, aby ZACHOWAĆ długość i zestaw znaków danych wejściowych (np. numer telefonu pozostaje numerem telefonu), co wprost łamie wymóg "do not preserve".
+- D: Cloud Key Management Service (KMS) służy do zarządzania kluczami szyfrującymi (owijania ich), a nie do samej metody transformacji danych (haszowania/szyfrowania) w celu anonimizacji.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli anonimizacja ma być NIEODWRACALNA = wybierz Hashing (Haszowanie).
-- Jeśli anonimizacja ma ZACHOWAĆ FORMAT (np. dla potrzeb starej bazy danych) = wybierz Format-Preserving Encryption (FPE).
-- Jeśli anonimizacja ma być ODWRACALNA dla uprawnionych użytkowników = wybierz Szyfrowanie (Encryption).
+Wskazówki i triki (Tips & Tricks):
+- Jeśli anonimizacja ma być NIEODWRACALNA = Haszowanie (Hashing).
+- Jeśli anonimizacja ma ZACHOWAĆ FORMAT = Format-Preserving Encryption (FPE).
+- Jeśli anonimizacja ma być ODWRACALNA (np. tokenizacja) = Szyfrowanie (Encryption).
 
-Kluczowe zagadnienia do powtórzenia:
-- Metody transformacji w Cloud DLP (Masking, Hashing, FPE, Bucketing, Tokenization).
-- Różnica między de-identyfikacją a anonimizacją.
+Praktyczne informacje na egzamin:
+- Cloud DLP oferuje wiele technik de-identyfikacji: od prostego maskowania znaków, przez kategoryzację (bucketing), po zaawansowane szyfrowanie kryptograficzne.
+- Wybór metody zależy od tego, czy dane muszą być później przywrócone (odwracalność) i czy systemy analityczne wymagają zachowania formatu danych.
 
-Dokumentacja:
+Dokumentacja i linki:
 - <a href="https://cloud.google.com/dlp/docs/transformations-reference#hashing" target="_blank">Transformacje de-identyfikacji w DLP</a>
 </pre>
 </div>
@@ -119,11 +117,10 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Jeśli potrzebowałbyś łączyć te dane w przyszłości (referential integrity), musiałbyś użyć tej samej soli (salt) przy haszowaniu każdego rekordu.</p></p>
+<p><b>Głęboka analiza:</b> W scenariuszach analitycznych dla służby zdrowia (PHI), <b>haszowanie</b> jest często wybierane zamiast maskowania, ponieważ pozwala na zachowanie relacji między danymi. Jeśli ten sam pacjent pojawi się w dwóch różnych zbiorach danych, po haszowaniu z użyciem tej samej soli (salt), jego rekordy będą miały ten sam identyfikator, co umożliwi ich złączenie bez naruszania prywatności.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/dlp/docs/transformations-reference#hashing" target="_blank">https://cloud.google.com/dlp/docs/transformations-reference#hashing</a></li>
-
+<li><a href="https://cloud.google.com/dlp/docs/concepts-deidentification" target="_blank">Koncepcje de-identyfikacji danych</a></li>
 </ul>
 </div>
 </div>

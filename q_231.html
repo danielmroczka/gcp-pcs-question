@@ -64,7 +64,7 @@
 <h2>Question 231 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You are migrating an application into the cloud. The application will need to read data from a Cloud Storage bucket. Due to local regulatory requirements, you need to hold the key material used for encryption fully under your control and you require a valid rationale for accessing the key material.<br/>What should you do?
+You are migrating an application into the cloud. The application will need to read data from a Cloud Storage bucket. Due to local regulatory requirements, you need to hold the key material used for encryption fully under your control and you require a valid rationale for accessing the key material. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,14 +89,14 @@ You are migrating an application into the cloud. The application will need to re
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (Generate a key in your on-premises environment and store it in a Hardware Security Module (HSM) that is managed on-premises. Use this key as an external key in the Cloud Key Management Service (KMS). Activate Key Access Justifications (KAJ) and set the external key system to reject unauthorized accesses)
+Potwierdzona odpowiedź: D (Generate a key in your on-premises environment and store it in a Hardware Security Module (HSM) that is managed on-premises. Use this key as an external key in the Cloud Key Management Service (KMS). Activate Key Access Justifications (KAJ) and set the external key system to reject unauthorized accesses)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Cloud External Key Manager (EKM): Pozwala na przechowywanie klucza w systemie zewnętrznym (on-premises HSM), co w pełni spełnia wymóg posiadania kontroli nad materiałem klucza ("hold the key material... fully under your control").
 - Key Access Justifications (KAJ): To usługa, która wymusza uzasadnienie dla każdego żądania użycia klucza przez Google (np. wsparcie techniczne), co spełnia wymóg "valid rationale for accessing the key material".
 - Połączenie: EKM + KAJ to standard "Sovereign Cloud" w Google Cloud.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Customer Managed Encryption Keys (CMEK): Klucze te są zarządzane przez Google wewnątrz Cloud KMS (infrastruktura Google). Nie spełnia to wymogu trzymania materiału klucza "fully under your control" poza GCP.
 - B. Upload key to Cloud KMS: Przesłanie własnego klucza (nawet z on-prem) do Cloud KMS oznacza, że staje się on kluczem zarządzanym przez Google (importowanym). Nie spełnia to wymogu "hold the key material fully under your control".
 - C. Cloud HSM: Cloud HSM to usługa sprzętowa Google Cloud. Klucze są w niej przechowywane, ale są one pod kontrolą Google (jako dostawcy usługi).

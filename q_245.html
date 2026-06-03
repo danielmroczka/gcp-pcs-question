@@ -89,14 +89,14 @@ You have placed several Compute Engine instances in a private subnet. You want t
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Enable Private Google Access for the private subnet)
+Potwierdzona odpowiedź: A (Enable Private Google Access for the private subnet)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Private Google Access (PGA): Pozwala instancjom Compute Engine, które nie posiadają publicznych adresów IP (są w prywatnej podsieci), na bezpieczne łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery) poprzez sieć wewnętrzną Google.
 - Wymaganie: Instancje w prywatnej podsieci muszą mieć włączoną opcję PGA na poziomie podsieci, aby mogły wysyłać zapytania do API Google.
 - Zaletą jest to, że dane nigdy nie wychodzą do publicznego internetu.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - B. Private Service Connect (PSC): PSC służy do uzyskiwania dostępu do konkretnych usług zarządzanych przez Google lub partnerów (np. konkretnego instancji bazy danych) poprzez dedykowany endpoint w VPC. Jest zbyt specyficzne dla tego ogólnego przypadku.
 - C. Static external IP: Wymuszenie nadania publicznego adresu IP łamie zasady bezpieczeństwa (dostęp do internetu) i jest sprzeczne z wymaganiem użycia prywatnej podsieci.
 - D. Cloud NAT: Cloud NAT pozwala instancjom na dostęp do INTERNETU (np. pobranie aktualizacji), ale nie służy do bezpośredniego dostępu do usług Google Cloud przez ich wewnętrzne adresy – od tego jest PGA.

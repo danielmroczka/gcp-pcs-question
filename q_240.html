@@ -64,14 +64,14 @@
 <h2>Question 240 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization has an on-premises public key infrastructure (PKI) and you want to use it to issue certificates for Google Cloud HTTP(S) load balancers. You want to automate the certificate issuance process to avoid manual processes. What should you do?
+Your customer has an on-premises Public Key Infrastructure (PKI) with a certificate authority (CA). You need to issue certificates for many HTTP load balancer frontends. The on-premises PKI should be minimally affected due to many manual processes, and the solution needs to scale. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use Certificate Manager with Google-managed public certificates.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Use Certificate Manager to issue Google managed public certificates and configure it at HTTP the load balancers in your infrastructure as code (IaC).</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use a subordinate CA in the Google Certificate Authority Service from the on-premises PKI system to issue certificates for the load balancers.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Import the certificates issued by your on-premises PKI into Certificate Manager.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use an external TCP/UDP Network Load Balancer, and import the certificates on the backend instances.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use Certificate Manager to import certificates issued from on-premises PKI and for the frontends. Leverage the gcloud tool for importing.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use the web applications with PKCS12 certificates issued from subordinate CA based on OpenSSL on-premises. Use the gcloud tool for importing. Use the External TCP/UDP Network load balancer instead of an external HTTP Load Balancer.</li>
 
 </ul>
 </div>
@@ -89,14 +89,14 @@ Your organization has an on-premises public key infrastructure (PKI) and you wan
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Use a subordinate CA in the Google Certificate Authority Service from the on-premises PKI system to issue certificates for the load balancers)
+Potwierdzona odpowiedź: B (Use a subordinate CA in the Google Certificate Authority Service from the on-premises PKI system to issue certificates for the load balancers)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Certificate Authority Service (CAS): Jest to w pełni zarządzana usługa Google Cloud do tworzenia i zarządzania urzędami certyfikacji (CA).
 - Subordinate CA (Podległy CA): Pozwala na stworzenie CA wewnątrz chmury, które jest technicznie "podległe" (zaufane przez) Twojemu głównemu urzędowi CA on-premises. Jest to najbardziej skalowalne i natywne rozwiązanie: certyfikaty wystawiane w chmurze są automatycznie zaufane w sieci firmowej, ponieważ główny klucz CA jest w on-premises.
 - Integracja z Load Balancerem: Certyfikaty wystawione przez podległy CA w chmurze można bezpośrednio przypisać do Load Balancera HTTP/S, co rozwiązuje problem skali i automatyzacji.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Certificate Manager z Google managed public certificates: Te certyfikaty są wydawane przez publiczne CA Google. Nie będą zaufane przez Twoją wewnętrzną PKI, chyba że wgrasz certyfikat CA Google do każdego zaufanego systemu on-prem, co jest operacyjnie trudne.
 - C. Import certificates: Ręczne importowanie certyfikatów wystawionych przez on-prem PKI jest procesem manualnym, który trudno skalować (wymaga częstego odświeżania, importowania do Certificate Manager, etc.). Nie rozwiązuje to problemu "manual processes".
 - D. External TCP/UDP Network LB: Zmiana typu Load Balancera (z HTTP na TCP) jest nieuzasadniona i pozbawia Cię funkcji L7 (WAF, SSL termination), co jest niedopuszczalne dla aplikacji webowej.

@@ -88,25 +88,29 @@ A team at your organization collects logs in an on-premises security information
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Create a log sink for the relevant logs. Send the logs to Pub/Sub. Retrieve the logs from Pub/Sub and push the logs to the SIEM by using Dataflow.)
+Potwierdzona odpowiedź: C (Create a log sink for the relevant logs. Send the logs to Pub/Sub. Retrieve the logs from Pub/Sub and push the logs to the SIEM by using Dataflow.)
 
-Dlaczego ta odpowiedź jest poprawna:
-- Log Sinks + Pub/Sub + Dataflow: Jest to standardowa, rekomendowana architektura dla "log ingestion" do zewnętrznych systemów SIEM (np. Splunk, QRadar). Log Sink pozwala wyfiltrować tylko pożądany podzbiór logów, Pub/Sub zapewnia buforowanie (jeśli SIEM ma chwilową przerwę w dostępności), a Dataflow przetwarza i dostarcza logi w czasie rzeczywistym.
+Wyjaśnienie:
+Architektura polegająca na przekazywaniu logów przez Log Sink do Pub/Sub, a następnie ich przetwarzaniu i wypychaniu do zewnętrznego systemu SIEM (np. Splunk, QRadar) za pomocą Dataflow, jest standardem i rekomendowaną praktyką Google Cloud dla integracji z systemami SIEM. Log Sink pozwala precyzyjnie określić podzbiór logów (subset), który ma zostać przesłany, co minimalizuje ekspozycję danych. Pub/Sub służy jako bufor, zapewniając trwałość wiadomości, a Dataflow może wykonywać dodatkowe transformacje (np. anonimizację lub wzbogacanie danych) przed wysłaniem ich do on-premises SIEM.
 
-Analiza niepoprawnych odpowiedzi:
-- A. BigQuery: To świetne miejsce do analizy logów wewnątrz GCP, ale nie jest to mechanizm dostarczania logów w czasie rzeczywistym do SIEM (wymagałoby ciągłego odpytywania bazy przez SIEM).
-- B. Log view: Służy do ograniczania widoczności logów wewnątrz interfejsu GCP, a nie do ich eksportu.
-- D. Storage + Keys: Skrajnie niebezpieczne. Udostępnianie kluczy serwisowych (keys) ludziom i zewnętrznym systemom to największy błąd bezpieczeństwa w GCP.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A. Przesyłanie wszystkich logów do BigQuery i udostępnianie całego zestawu zespołowi SIEM narusza zasadę minimalizacji ryzyka ekspozycji danych (przesyłamy "all logs" zamiast "subset"). Ponadto, SIEM musiałby odpytywać BigQuery (pull model), co nie jest tak efektywne jak wypychanie danych (push model) w czasie rzeczywistym.
+- B. Log Views (widoki logów) służą do ograniczania dostępu do logów wewnątrz interfejsu Cloud Logging dla użytkowników GCP. Nie jest to mechanizm służący do eksportu danych do zewnętrznych systemów on-premises.
+- D. Przechowywanie logów w Cloud Storage i przekazywanie kluczy kont serwisowych (Service Account Keys) zewnętrznemu zespołowi jest skrajnie niebezpieczne i narusza najlepsze praktyki bezpieczeństwa. Klucze SA są trudne do rotowania i stanowią duże ryzyko w przypadku wycieku.
 
 Wskazówki i triki (Tips & Tricks):
-- "Cloud logs to SIEM" + "Real-time" + "Security" = Log Sink -> Pub/Sub -> Dataflow.
-- Zapamiętaj: Klucze serwisowe (SA keys) są wrogiem numer jeden. NIGDY ich nie eksportuj, jeśli istnieje alternatywa (Workload Identity).
+- Widzisz "SIEM" + "logs export" -> szukaj "Log Sink" i "Pub/Sub".
+- Połączenie Pub/Sub + Dataflow to standardowy wzorzec dla integracji typu "Push" do systemów trzecich.
+- Pamiętaj, że Google oferuje gotowe szablony Dataflow (Dataflow templates) dla popularnych systemów SIEM.
 
 Praktyczne informacje na egzamin:
-- Zapamiętaj: Google udostępnia gotowe, zarządzane szablony Dataflow (Pub/Sub to Splunk/Elasticsearch).
+- Eksport logów (Exporting/Routing logs) zawsze zaczyna się od Log Sink.
+- Log Sink może kierować dane do: Cloud Storage (archiwizacja), BigQuery (analiza), Pub/Sub (streaming/SIEM) lub innego Log Bucket.
+- Nigdy nie wybieraj odpowiedzi sugerującej pobieranie lub udostępnianie kluczy kont serwisowych (SA keys), jeśli istnieje inna metoda autoryzacji.
 
 Dokumentacja i linki:
-- <a href="https://cloud.google.com/logging/docs/routing/overview" target="_blank">Cloud Logging sinks overview</a>
+- https://cloud.google.com/logging/docs/routing/overview
+- https://cloud.google.com/architecture/exporting-stackdriver-logs-to-splunk
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

@@ -89,28 +89,26 @@ You perform a security assessment on a customer architecture and discover that m
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Cloud NAT).
+Potwierdzona odpowiedź: B (Cloud NAT)
 
 Wyjaśnienie:
-Cloud NAT (Network Address Translation) to usługa zarządzana, która pozwala instancjom maszyn wirtualnych (VM) bez publicznych adresów IP na bezpieczne nawiązywanie połączeń wychodzących do internetu. Dzięki Cloud NAT, maszyny posiadają jedynie prywatne adresy IP, co znacznie zmniejsza powierzchnię ataku (są niewidoczne i niedostępne bezpośrednio z zewnątrz), a jednocześnie zachowują możliwość pobierania aktualizacji czy komunikacji z zewnętrznymi API. Cloud NAT obsługuje zarówno Compute Engine, jak i węzły GKE.
+Cloud NAT (Network Address Translation) to usługa zarządzana, która pozwala instancjom maszyn wirtualnych (VM) bez publicznych adresów IP na bezpieczne nawiązywanie połączeń wychodzących do internetu. Dzięki Cloud NAT maszyny posiadają jedynie prywatne adresy IP, co znacznie zmniejsza powierzchnię ataku (są niewidoczne bezpośrednio z zewnątrz), a jednocześnie zachowują możliwość pobierania aktualizacji czy komunikacji z zewnętrznymi API.
 
-Dlaczego pozostałe są błędne:
-- A. Google Cloud Armor: Jest to usługa WAF i ochrony przed DDoS dla ruchu przychodzącego (ingress) przez load balancery. Nie służy do zapewniania łączności wychodzącej dla maszyn z prywatnymi IP.
-- C. Cloud Router: Cloud Router odpowiada za dynamiczną wymianę tras (BGP) pomiędzy siecią VPC a siecią on-premises (przez VPN lub Interconnect). Sam w sobie nie zapewnia translacji adresów NAT dla ruchu internetowego. Cloud NAT wymaga Cloud Routera do działania, ale to NAT realizuje funkcję wyjścia do internetu.
-- D. Cloud VPN: Służy do bezpiecznego łączenia sieci VPC z innymi sieciami (np. biurem lub inną chmurą) przez tunel IPsec. Nie jest to rozwiązanie przeznaczone do ogólnej komunikacji VM z publicznymi stronami internetowymi w celu redukcji publicznych IP.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A. Google Cloud Armor: To usługa ochrony przed atakami DDoS i WAF dla ruchu przychodzącego przez load balancery, a nie mechanizm łączności wychodzącej dla maszyn z prywatnymi IP.
+- C. Cloud Router: Cloud Router odpowiada za dynamiczną wymianę tras (BGP), ale sam w sobie nie zapewnia translacji adresów NAT. Cloud NAT wymaga Cloud Routera do działania, ale to NAT realizuje funkcję wyjścia do internetu.
+- D. Cloud VPN: Służy do łączenia sieci VPC z biurem lub inną chmurą, a nie do ogólnej komunikacji wychodzącej do publicznego internetu w celu zastąpienia publicznych IP na maszynach.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Słowo klucz "reduce/remove public IP" + "communicate to external sites" = zawsze Cloud NAT.
-- Cloud NAT jest usługą typu "egress-only" – pozwala na wyjście do internetu, ale nie pozwala internetowi na zainicjowanie połączenia z maszyną.
-- Pamiętaj, że Cloud NAT jest powiązany z Cloud Routerem, ale to dwie różne funkcje.
+Wskazówki i triki (Tips & Tricks):
+- "Remove public IPs" + "need internet access" = Cloud NAT.
+- Cloud NAT jest usługą "egress-only" – internet nie może zainicjować połączenia z Twoją maszyną.
 
-Kluczowe zagadnienia do powtórzenia:
-- Cloud NAT i jego architektura.
-- Bezpieczeństwo sieci VPC (brak publicznych adresów IP).
-- Private Google Access (komunikacja z API Google bez publicznego IP).
+Praktyczne informacje na egzamin:
+- Cloud NAT nie wymaga publicznego adresu IP na żadnej z maszyn w podsieci.
+- Usługa jest wysoce dostępna i skalowalna (nie musisz zarządzać klastrem maszyn NAT).
 
-Dokumentacja:
-<a href="https://cloud.google.com/nat/docs/overview" target="_blank">Cloud NAT Overview</a>
+Dokumentacja i linki:
+- <a href="https://cloud.google.com/nat/docs/overview" target="_blank">Omówienie Cloud NAT</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -118,11 +116,10 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Wiele osób zapomina o roli `serviceAccountUser` (C). Dyskusja na Reddit przypomina: w Google Cloud samo prawo do 'tworzenia' czegoś nie wystarczy, jeśli to 'coś' potrzebuje tożsamości do działania. Deweloper musi mieć prawo do 'podpięcia' konta serwisowego do nowej infrastruktury.</p></p>
+<p><b>Głęboka analiza:</b> <b>Cloud NAT</b> jest fundamentalnym elementem architektury "Private-First" w Google Cloud. Pozwala na całkowite usunięcie publicznych adresów IP z maszyn backendowych, co jest jedną z najskuteczniejszych metod ograniczania wektorów ataku. Należy jednak pamiętać, że Cloud NAT przydziela określony zakres portów na każdą instancję (domyślnie 64), co przy bardzo dużej liczbie jednoczesnych połączeń wychodzących może wymagać dostrojenia (dynamic port allocation).</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/iam" target="_blank">https://cloud.google.com/kubernetes-engine/docs/how-to/iam</a></li>
-
+<li><a href="https://cloud.google.com/nat/docs/ports-and-addresses" target="_blank">Zarządzanie portami i adresami w Cloud NAT</a></li>
 </ul>
 </div>
 </div>

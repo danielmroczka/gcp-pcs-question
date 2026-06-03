@@ -64,14 +64,18 @@
 <h2>Question 289 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization has recently deployed a new web application on Compute Engine. You need to provide users with access to the application while minimizing exposure to the public internet. Furthermore, you need to provide the internal backend services with secure connectivity to the database while keeping them isolated from public access. What should you do?
+You work for an organization that handles sensitive customer data. You must secure a series of Google Cloud Storage buckets housing this data and meet these requirements:<br/>
+- Multiple teams need varying access levels (some read-only, some read-write).<br/>
+- Data must be protected in storage and at rest.<br/>
+- It's critical to track file changes and audit access for compliance purposes.<br/>
+- For compliance purposes, the organization must have control over the encryption keys.
 </p>
 <div class="question-choices-container">
 <ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Place the frontend instances in a public subnet with external IP addresses and the backend services in a private subnet. Use a NAT gateway to allow the backend to communicate with the frontend.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Place the frontend instances in a public subnet with external IP addresses and use a Cloud Load Balancer with Google Cloud Armor for security. Place the backend services in a private subnet and use Internal HTTP(S) Load Balancing.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Place all instances in a single public subnet. Use Identity-Aware Proxy (IAP) to restrict access to the frontend instances and use firewall rules to block access to backend instances.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Place all instances in a single private subnet. Use a load balancer to expose both the frontend and backend instances to the internet, and configure firewall rules to secure the services.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create IAM groups for each team and manage permissions at the group level. Employ server-side encryption and Object Versioning by Google Cloud Storage. Configure cloud monitoring tools to alert on anomalous data access patterns.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Set individual permissions for each team and apply access control lists (ACLs) to each bucket and file. Enforce TLS encryption for file transfers. Enable Object Versioning and Cloud Audit Logs for the storage buckets.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use predefined IAM roles tailored to each team's access needs, such as Storage Object Viewer and Storage Object User. Utilize customer-supplied encryption keys (CSEK) and enforce TLS encryption. Turn on both Object Versioning and Cloud Audit Logs for the storage buckets.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Assign IAM permissions for all teams at the object level. Implement third-party software to encrypt data at rest. Track data access by using network logs.</li>
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -79,7 +83,7 @@ Your organization has recently deployed a new web application on Compute Engine.
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">C</span>
 <br/>
 </span>
 </div>
@@ -88,33 +92,36 @@ Your organization has recently deployed a new web application on Compute Engine.
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Place the frontend instances in a public subnet with external IP addresses and use a Cloud Load Balancer with Google Cloud Armor for security. Place the backend services in a private subnet and use Internal HTTP(S) Load Balancing.)
+Potwierdzona odpowiedź: C (Use predefined IAM roles tailored to each team's access needs, such as Storage Object Viewer and Storage Object User. Utilize customer-supplied encryption keys (CSEK) and enforce TLS encryption. Turn on both Object Versioning and Cloud Audit Logs for the storage buckets.)
 
-Dlaczego ta odpowiedź jest poprawna:
-- Architektura warstwowa (Tiered Architecture): Frontend jest dostępny przez Load Balancer (który chroni go przez Cloud Armor – WAF). Backend jest w pełni odizolowany w prywatnej podsieci i komunikuje się z frontendem tylko przez wewnętrzny Load Balancer (Internal LB), co zapewnia brak publicznej widoczności dla wrażliwych usług backendowych.
+Wyjaśnienie:
+- CSEK (Customer-Supplied Encryption Keys): Spełnia wymóg "pełnej kontroli nad kluczami" (organizacja dostarcza własny klucz przy każdej operacji).
+- IAM Predefined Roles: Spełnia wymóg różnych poziomów dostępu (Viewer vs User).
+- Object Versioning: Pozwala śledzić zmiany i odzyskiwać poprzednie wersje plików.
+- Cloud Audit Logs: Zapewnia ścieżkę audytu (kto i kiedy uzyskał dostęp).
 
-Analiza niepoprawnych odpowiedzi:
-- A. NAT gateway: NAT pozwala na wyjście do internetu, ale nie zastępuje Load Balancera jako punktu wejścia do aplikacji.
-- C. Single subnet: To brak poprawnej izolacji sieciowej (brak separacji frontend/backend).
-- D. All in private + Load Balancer to public: Jeśli wstawisz wszystkie w prywatnej sieci, Load Balancer nie może do nich 'dosięgnąć' (chyba że przez zaawansowaną konfigurację, ale A/B są lepszymi wzorcami).
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- A. Server-side encryption: Zazwyczaj odnosi się do kluczy zarządzanych przez Google (Google-managed), co nie daje organizacji pełnej kontroli wymaganej w pytaniu.
+- B. ACLs: Są mniej wydajne i trudniejsze w audycie niż IAM; ACL nie są zalecane jako główny mechanizm kontroli w skali enterprise.
+- D. Third-party software: GCP posiada natywne mechanizmy (CSEK/CMEK), które są preferowane i łatwiejsze w integracji niż oprogramowanie zewnętrzne.
 
 Wskazówki i triki (Tips & Tricks):
-- "Frontend public" + "Backend private" + "Secure connectivity" = Tiered Architecture z Load Balancerami.
-- Publiczna widoczność (public subnets) jest tylko dla LB i Frontendu.
+- "Organization must have control over the encryption keys" = Szukaj CSEK (najwyższa kontrola) lub CMEK.
+- "Audit access" = Zawsze Cloud Audit Logs.
 
 Praktyczne informacje na egzamin:
-- Zapamiętaj: Internal Load Balancing (ILB) to klucz do bezpiecznej komunikacji "wschód-zachód" wewnątrz VPC.
+- Zapamiętaj różnicę: CSEK (Klucz dostarczasz Ty), CMEK (Klucz w Cloud KMS, Ty nim zarządzasz), Google-managed (Wszystko robi Google).
 
 Dokumentacja i linki:
-- <a href="https://cloud.google.com/architecture/best-practices-vpc-design" target="_blank">VPC design best practices</a>
+- <a href="https://cloud.google.com/storage/docs/encryption" target="_blank">Cloud Storage encryption options</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
 <h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do projektowania bezpiecznych sieci "od zera". Warstwowa architektura z użyciem zewnętrznego Load Balancera (z WAF) dla frontendu i wewnętrznego Load Balancera dla backendu to standardowy, bezpieczny model w chmurze.</p>
+<p><b>Sugerowana odpowiedź: C</b></p>
+<p><b>Analiza strategiczna:</b> Pytanie to agreguje kilka kluczowych obszarów bezpieczeństwa Cloud Storage: kontrolę dostępu (IAM), suwerenność danych (klucze szyfrujące) oraz audytowalność (logi i wersjonowanie).</p>
 </div>
 </div>
 <script>

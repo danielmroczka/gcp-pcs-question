@@ -64,7 +64,7 @@
 <h2>Question 229 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization wants to be General Data Protection Regulation (GDPR) compliant. You want to ensure that your DevOps teams can only create Google Cloud resources in the Europe regions.<br/>What should you do?
+Your organization wants to be General Data Protection Regulation (GDPR) compliant. You want to ensure that your DevOps teams can only create Google Cloud resources in the Europe regions. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -72,6 +72,7 @@ Your organization wants to be General Data Protection Regulation (GDPR) complian
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use the org policy constraint 'Google Cloud Platform - Resource Location Restriction' on your Google Cloud organization node.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Use the org policy constraint 'Restrict Resource Service Usage' on your Google Cloud organization node.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Use Identity and Access Management (IAM) custom roles to ensure that your DevOps team can only create resources in the Europe regions.</li>
+
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -88,13 +89,13 @@ Your organization wants to be General Data Protection Regulation (GDPR) complian
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Use the org policy constraint 'Google Cloud Platform - Resource Location Restriction' on your Google Cloud organization node)
+Potwierdzona odpowiedź: B (Use the org policy constraint 'Google Cloud Platform - Resource Location Restriction' on your Google Cloud organization node)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Resource Location Restriction: To dedykowana polityka organizacji (`constraints/gcp.resourceLocations`), która pozwala na zdefiniowanie geograficznego obszaru (np. tylko regiony europejskie), w którym mogą być tworzone zasoby GCP. 
 - Compliance: Wiele regulacji (np. RODO/GDPR w UE) wymaga, aby dane użytkowników nie opuszczały terytorium UE. Polityka ta blokuje API przed tworzeniem VM, dysków czy baz danych w regionach spoza zdefiniowanej listy (np. w USA), co jest jedynym "twardym" mechanizmem prewencyjnym w GCP.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. IAP z Access Context Manager: Służy do kontrolowania dostępu UŻYTKOWNIKÓW do aplikacji/konsoli w oparciu o ich lokalizację IP. Nie blokuje to możliwości tworzenia zasobów (VM) przez deweloperów w innych regionach.
 - C. Restrict Resource Service Usage: Służy do blokowania możliwości włączenia/używania konkretnych usług (np. wyłączenie BigQuery w organizacji), ale nie ogranicza ich lokalizacji.
 - D. IAM custom roles: Role IAM zarządzają uprawnieniami, ale nie są w stanie wymusić lokalizacji geograficznej dla nowo tworzonych zasobów w sposób, w jaki robi to polityka organizacji.

@@ -64,7 +64,7 @@
 <h2>Question 244 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your company's users access data in a BigQuery table. You want to ensure they can only access the data during working hours.<br/>What should you do?
+Your company's users access data in a BigQuery table. You want to ensure they can only access the data during working hours. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,14 +89,14 @@ Your company's users access data in a BigQuery table. You want to ensure they ca
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Assign a BigQuery Data Viewer role along with an IAM condition that limits the access to specified working hours)
+Potwierdzona odpowiedź: A (Assign a BigQuery Data Viewer role along with an IAM condition that limits the access to specified working hours)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - IAM Conditions (Warunki IAM): Pozwalają na stosowanie bardziej precyzyjnych zasad przyznawania uprawnień. Zamiast nadawać dostęp "na zawsze", możesz określić warunki, w których uprawnienie jest aktywne.
 - Time-based access: Za pomocą atrybutu `request.time` w warunkach IAM możesz określić przedział czasowy, w którym dany użytkownik może wykonywać operacje (np. tylko w godzinach pracy zespołu). Poza tym przedziałem, nawet jeśli użytkownik ma przypisaną rolę, dostęp zostanie odrzucony.
 - Bezpieczeństwo: Jest to realizacja zasady najmniejszych przywilejów (Least Privilege) w wymiarze czasowym – dostęp jest możliwy tylko wtedy, gdy jest potrzebny.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - B. Run a gsutil script: Ręczne usuwanie i dodawanie uprawnień każdego dnia jest nieefektywne, podatne na błędy i uniemożliwia automatyzację.
 - C. Service account script: Podobnie jak w przypadku skryptu manualnego (B), jest to rozwiązanie niestabilne i trudne do zarządzania.
 - D. Cloud Scheduler + Cloud Functions: To rozwiązanie jest reaktywne (naprawianie konfiguracji zasobów po czasie) i skrajnie nieadekwatne do zadania. Policy organizacji (Org Policy) służy do globalnych restrykcji, a nie do zarządzania dostępem użytkowników.

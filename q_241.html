@@ -64,7 +64,7 @@
 <h2>Question 241 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-You are developing a new application that uses exclusively Compute Engine VMs. Once a day, this application will execute five different batch jobs. Each of the batch jobs requires a dedicated set of permissions on Google Cloud resources outside of your application. You need to design a secure access concept for the batch jobs that adheres to the least-privilege principle.<br/>What should you do?
+You are developing a new application that uses exclusively Compute Engine VMs. Once a day, this application will execute five different batch jobs. Each of the batch jobs requires a dedicated set of permissions on Google Cloud resources outside of your application. You need to design a secure access concept for the batch jobs that adheres to the least-privilege principle. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -89,14 +89,14 @@ You are developing a new application that uses exclusively Compute Engine VMs. O
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (1. Create two service accounts, one for the infrastructure and one for the application deployment. 2. Use workload identities to let the pods run the two pipelines and authenticate with the service accounts. 3. Run the infrastructure and application pipelines in separate namespaces)
+Potwierdzona odpowiedź: D (1. Create two service accounts, one for the infrastructure and one for the application deployment. 2. Use workload identities to let the pods run the two pipelines and authenticate with the service accounts. 3. Run the infrastructure and application pipelines in separate namespaces)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Workload Identity: To najbezpieczniejszy i zalecany przez Google sposób uwierzytelniania aplikacji działających w GKE (w tym pipeline'ów CI/CD) do usług Google Cloud. Eliminuje potrzebę generowania, pobierania i przechowywania statycznych kluczy JSON kont serwisowych (Service Account Keys), które są częstym źródłem wycieków danych.
 - Mapowanie Tożsamości: Workload Identity wiąże konto serwisowe Kubernetes (KSA) z kontem serwisowym Google Cloud (GSA). Dzięki temu pod działający w klastrze automatycznie otrzymuje tokeny tożsamości GSA z serwera metadanych.
 - Separacja Obowiązków (Separation of Duties): Użycie dwóch osobnych kont serwisowych (dla infrastruktury i dla aplikacji) oraz odrębnych przestrzeni nazw (namespaces) zapewnia silną izolację. Pipeline infrastrukturalny (wymagający wyższych uprawnień) jest odseparowany od pipeline'u aplikacyjnego.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A, B, C: Opcje te sugerują użycie ręcznie zarządzanych kluczy JSON (service account keys), co jest praktyką niebezpieczną i niezgodną z modelem "keyless" promowanym przez Workload Identity.
 
 Wskazówki i triki (Tips & Tricks):

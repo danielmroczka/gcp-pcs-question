@@ -89,26 +89,29 @@ Your organization strives to be a market leader in software innovation. You prov
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: AD (A: Apply organization policy constraints. Detect and monitor drifts by using Security Health Analytics. D: Apply a predefined AI-recommended security posture template for Gemini in Vertex AI in Security Command Center Enterprise or Premium tiers.)
+Potwierdzona odpowiedź: AD
 
-Dlaczego ta odpowiedź jest poprawna:
-- Org Policies + SHA: Polityki organizacji blokują niebezpieczne akcje (Prevent), a Security Health Analytics wykrywa zmiany w konfiguracji (Detect), które mogłyby osłabić bezpieczeństwo.
-- Security Posture templates: To nowoczesne narzędzie w SCC, które dostarcza gotowe, zdefiniowane przez Google szablony bezpieczeństwa dla usług AI. Pozwala na szybkie wdrożenie setek reguł specyficznych dla ochrony modeli i danych w Vertex AI.
+Wyjaśnienie: 
+W dużych organizacjach (200 deweloperów vs 5-osobowy zespół security) zarządzanie bezpieczeństwem musi być zautomatyzowane i oparte na gotowych wzorcach. 
+- Opcja A (Organization Policy + SHA): Polityki organizacji pozwalają na prewencyjne blokowanie niebezpiecznych akcji (np. zakaz tworzenia publicznych IP), a Security Health Analytics (SHA) w ramach SCC monitoruje środowisko w czasie rzeczywistym i wykrywa wszelkie odstępstwa (drift) od ustalonych standardów.
+- Opcja D (Security Posture templates): To nowoczesna funkcja SCC, która oferuje dedykowane, przygotowane przez ekspertów Google szablony dla specyficznych usług, takich jak Gemini w Vertex AI. Pozwala to na szybkie i bezbłędne wdrożenie kompletu reguł ochronnych specyficznych dla technologii AI.
 
-Analiza niepoprawnych odpowiedzi:
-- B. Guidelines: Dokumentacja papierowa nie jest technicznym mechanizmem zapobiegania (prevent) ani detekcji.
-- C. Cloud Run: Gemini w Vertex AI ne ma bezpośredniego związku z Cloud Run w kontekście polityk bezpieczeństwa platformy.
-- E. Least privileged IAM: To fundament, ale przy 200 deweloperach i nowych usługach AI, samo IAM nie wystarczy do pełnej ochrony i detekcji 'driftu' konfiguracji tak dobrze jak zestaw AD.
+Dlaczego pozostałe odpowiedzi są niepoprawne:
+- B. Publikowanie wytycznych (guidelines) to ważny element kultury bezpieczeństwa, ale nie jest to mechanizm techniczny, który "zapobiega i wykrywa" błędy w sposób zautomatyzowany.
+- C. Budowanie własnych filtrów logów i funkcji Cloud Run do remediacji jest czasochłonne, trudne w utrzymaniu i podatne na błędy, szczególnie przy małym zespole security. GCP oferuje natywne rozwiązania (SHA, Postures), które są bardziej efektywne.
+- E. Least Privilege (Zasada najmniejszych uprawnień) jest fundamentem bezpieczeństwa, ale samo IAM nie wykrywa zmian w konfiguracji infrastruktury (config drift), do czego służy SHA.
 
 Wskazówki i triki (Tips & Tricks):
-- "Prevent and detect" + "GCP environments" = Org Policy + Security Health Analytics.
-- Posture Management (szablony SCC) = Klucz do ochrony nowych technologii AI.
+- "Prevent and detect" w skali organizacji = Organization Policy (Prewencja) + Security Command Center / SHA (Detekcja).
+- Security Posture Service to "nowy hit" w GCP SCC, który łączy w sobie wiele mechanizmów (Org Policies, SHA detectors) w jeden zarządzalny szablon.
 
 Praktyczne informacje na egzamin:
-- Zapamiętaj: SCC to Twoje centrum dowodzenia bezpieczeństwem. SHA wspiera standardy takie jak CIS, NIST i PCI DSS.
+- Zapamiętaj, że szablony postur bezpieczeństwa (Security Postures) są dostępne w warstwach Premium i Enterprise SCC.
+- Gemini w Vertex AI wymaga specyficznych zabezpieczeń (np. kontrola nad danymi treningowymi, dostęp do modeli), które szablony Google pokrywają automatycznie.
 
 Dokumentacja i linki:
 - <a href="https://cloud.google.com/security-command-center/docs/concepts-security-postures-overview" target="_blank">Security Command Center postures overview</a>
+- <a href="https://cloud.google.com/vertex-ai/docs/generative-ai/learn/overview" target="_blank">Vertex AI Generative AI overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -116,7 +119,9 @@ Dokumentacja i linki:
 <div class="analysis-section">
 <h3>Kluczowe zagadnienia</h3>
 <p><b>Sugerowana odpowiedź: AD</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją wiedzę o utrzymaniu spójności bezpieczeństwa (Compliance) w skali. Prewencja (Org Policy) + Detekcja (SHA) + Automatyczne Szablony (Posture Management) to optymalny zestaw do zarządzania złożonymi środowiskami AI.</p>
+<p><b>Analiza strategiczna:</b> Pytanie kładzie nacisk na skalowalność operacji bezpieczeństwa (SecOps). Przy tak dużej dysproporcji między liczbą deweloperów a zespołem bezpieczeństwa, jedynym wyjściem jest "Security as Code" i automatyzacja poprzez natywne narzędzia takie jak SCC Security Postures.</p>
+<h3>Praktyczny przykład</h3>
+<p>Zamiast ręcznie sprawdzać 200 projektów, zespół security aktywuje posture "Gemini/Vertex AI security" na poziomie folderu. Jeśli deweloper spróbuje wyłączyć audytowanie danych w jednym z projektów, SHA natychmiast wyśle powiadomienie o "posture violation".</p>
 </div>
 </div>
 <script>

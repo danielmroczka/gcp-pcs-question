@@ -64,7 +64,7 @@
 <h2>Question 232 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">
-Your organization uses the top-tier folder to separate application environments (prod and dev). The developers need to see all application development audit logs, but they are not permitted to review production logs. Your security team can review all logs in production and development environments. You must grant Identity and Access Management (IAM) roles at the right resource level for the developers and security team while you ensure least privilege.<br/>What should you do?
+Your organization uses the top-tier folder to separate application environments (prod and dev). The developers need to see all application development audit logs, but they are not permitted to review production logs. Your security team can review all logs in production and development environments. You must grant Identity and Access Management (IAM) roles at the right resource level for the developers and security team while you ensure least privilege. What should you do?
 </p>
 <div class="question-choices-container">
 <ul>
@@ -72,6 +72,7 @@ Your organization uses the top-tier folder to separate application environments 
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> 1. Grant logging.viewer role to the security team at the organization resource level. 2. Grant logging.admin role to the developer team at the organization resource level.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> 1. Grant logging.admin role to the security team at the organization resource level. 2. Grant logging.viewer role to the developer team at the folder resource level that contains all the dev projects.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> 1. Grant logging.admin role to the security team at the organization resource level. 2. Grant logging.admin role to the developer team at the organization resource level.</li>
+
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -88,13 +89,13 @@ Your organization uses the top-tier folder to separate application environments 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (1. Grant logging.viewer role to the security team at the organization resource level. 2. Grant logging.viewer role to the developer team at the folder resource level that contains all the dev projects)
+Potwierdzona odpowiedź: A (1. Grant logging.viewer role to the security team at the organization resource level. 2. Grant logging.viewer role to the developer team at the folder resource level that contains all the dev projects)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Zasada najniższych uprawnień (Least Privilege): Zespół bezpieczeństwa (Security team) musi mieć wgląd w logi CAŁEJ organizacji (prod + dev), dlatego rola `logging.viewer` powinna być nadana na poziomie organizacji.
 - Separacja środowisk: Zespół deweloperski (Developer team) ma dostęp tylko do środowiska deweloperskiego. Nadanie roli `logging.viewer` na poziomie folderu "Dev" automatycznie dziedziczy dostęp do wszystkich projektów wewnątrz tego folderu, ale blokuje dostęp do folderu produkcyjnego. To idealnie realizuje wymóg "least privilege".
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - B, C, D: Nadawanie ról admina (`logging.admin`) deweloperom na poziomie organizacji lub folderów produkcyjnych jest błędem operacyjnym – mogliby oni usuwać logi lub zmieniać konfigurację zbierania logów w całej firmie, co narusza bezpieczeństwo i wymogi audytowe.
 
 Wskazówki i triki (Tips & Tricks):

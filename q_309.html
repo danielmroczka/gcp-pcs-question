@@ -88,12 +88,12 @@ Your development team is launching a new application. The new application has a 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Enable Confidential VM instances for Compute Engine, and ensure that relevant Cloud Functions can leverage hardware-based memory isolation.)
+Potwierdzona odpowiedź: A (Enable Confidential VM instances for Compute Engine, and ensure that relevant Cloud Functions can leverage hardware-based memory isolation.)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Confidential Computing: To jedyna technologia chroniąca dane 'w użyciu' (in memory). Dla CE są to Confidential VMs (AMD SEV). Dla Cloud Functions Google zapewnia sprzętową izolację pamięci na poziomie mikro-VM (gVisor) w swojej infrastrukturze, co minimalizuje ryzyko nieuprawnionego odczytu RAM.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - B, C: Chronią treść danych logicznie, ale nie zapobiegają technicznemu odczytowi pamięci RAM przez złośliwy proces na hoście.
 - D. GCS CMEK: Chroni dane na dysku, nie ma wpływu na bezpieczeństwo pamięci RAM procesora.
 

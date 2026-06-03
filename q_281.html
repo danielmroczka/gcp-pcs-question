@@ -88,12 +88,12 @@ You just implemented a Secure Web Proxy instance on Google Cloud for your organi
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Ensure that the developers have explicitly configured the proxy address on their instance.)
+Potwierdzona odpowiedź: C (Ensure that the developers have explicitly configured the proxy address on their instance.)
 
-Dlaczego ta odpowiedź jest poprawna:
+Wyjaśnienie:
 - Proxy configuration: Secure Web Proxy (SWP) działa zazwyczaj jako proxy jawne (explicit). System operacyjny Linux nie kieruje automatycznie ruchu do proxy - musi zostać o tym "poinformowany" przez zmienne środowiskowe (np. `export http_proxy=...`). Bez tej konfiguracji pakiety próbują iść bezpośrednio do internetu, co kończy się błędem.
 
-Analiza niepoprawnych odpowiedzi:
+Dlaczego pozostałe odpowiedzi są niepoprawne:
 - A. Cloud NAT: Służy do omijania proxy, co jest sprzeczne z celem wdrożenia SWP (kontrolą ruchu).
 - B. Restart: Nie zmieni konfiguracji sieciowej aplikacji.
 - D. Firewall rule: SWP ma własne mechanizmy dopuszczania ruchu; problemem jest tu brak "styku" klienta z proxy, a nie blokada na poziomie portów IP.
