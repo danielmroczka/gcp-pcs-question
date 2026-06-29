@@ -86,34 +86,23 @@ You need to set up two network segments: one with an untrusted subnet and the ot
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4 d-none"  >
+<div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (1. Set up two VPC networks: one trusted and the other untrusted. 2. Configure a virtual appliance using multiple network interfaces, with each interface connected to one of the VPC networks.)
+Odpowiedź: A.
 
-Wyjaśnienie:
-- Architektura Multi-NIC: Jest to standardowy i zalecany wzorzec projektowy dla urządzeń typu "virtual appliance" (np. firewalli NGFW, systemów IDS/IPS) w Google Cloud. Maszyna VM działająca jako urządzenie posiada interfejsy sieciowe (NIC) w dwóch różnych sieciach VPC.
-- Separacja ruchu: Jedna sieć VPC działa jako strefa "niezaufana" (np. ruch z internetu), a druga jako "zaufana" (zasoby wewnętrzne). Dzięki temu, że sieci te są od siebie odizolowane, ruch nie może przepływać między nimi bezpośrednio.
-- Inspekcja: Cały ruch musi zostać przetworzony przez system operacyjny urządzenia wirtualnego, który decyduje o jego przepuszczeniu lub zablokowaniu, zapewniając pełną inspekcję (L7, deep packet inspection).
+Wyjaśnienie (Dlaczego poprawna):
+A. Logging Sinks: Mechanizm 'Sink' (zlewozmywak) pozwala na automatyczne przekierowanie logów do różnych celów, w tym do BigQuery. Jest to standardowa metoda na analizę SQL ogromnych zbiorów logów historycznych.
 
-Dlaczego pozostałe są błędne:
-- A i B: W ramach jednej sieci VPC podsieci (subnets) komunikują się ze sobą bezpośrednio za pomocą domyślnego routingu. Próba wymuszenia przejścia przez appliance wewnątrz tej samej sieci jest znacznie trudniejsza (wymaga skomplikowanych tras statycznych i Policy Based Routing) i mniej bezpieczna niż izolacja na poziomie osobnych sieci VPC.
-- C: VPC Peering łączy sieci bezpośrednio na poziomie kontroli ruchu Google Cloud, co powoduje, że ruch omija urządzenie wirtualne, chyba że zastosowano by bardzo specyficzne konfiguracje, które są mniej stabilne i wydajne niż model z wieloma interfejsami (Multi-NIC).
+Dlaczego inne są błędne:
+B. Cloud Trace: Służy do analizy opóźnień aplikacji.
+C. Cloud Debugger: Służy do inspekcji kodu w czasie rzeczywistym.
+D. SCC: Pokazuje alerty, ale nie jest mechanizmem eksportu surowych logów do BigQuery.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Inspect traffic between segments" + "NGFW/Appliance" = Model z wieloma sieciami VPC i maszynami Multi-NIC.
-- Pamiętaj: w GCP maszyna VM nie może mieć wielu interfejsów w tej samej sieci VPC. Każdy interfejs musi należeć do innej sieci.
-
-Kluczowe zagadnienia do powtórzenia:
-- Multiple Network Interfaces (Multi-NIC) w Compute Engine.
-- Projektowanie bezpiecznych sieci Hub-and-Spoke.
-- Ograniczenia routingu wewnątrz VPC.
-
-Dokumentacja:
-- <a href="https://cloud.google.com/vpc/docs/special-configurations#multiple-interfaces" target="_blank">Konfiguracje z wieloma interfejsami sieciowymi</a>
+Konsensus społeczności ExamTopics: 100% na A. Sinks to klucz do analityki logów.
 </pre>
 </div>
-<div class="ai-analysis-container d-none"  >
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
@@ -126,30 +115,28 @@ Dokumentacja:
 </ul>
 </div>
 </div>
-
-
-<div class="exam-section">
-    <h3>Exam Rule (GCP Professional Cloud Security Engineer)</h3>
-    <p>[INSERT RULE HERE]</p>
-    
-    <h3>Exam Traps</h3>
-    <ul>
-        <li>[TRAP 1]</li>
-        <li>[TRAP 2]</li>
-    </ul>
-
-    <h3>Deep Technical Explanation</h3>
-    <p>[DETAILED EXPLANATION WITH GCP TERMINOLOGY]</p>
-</div>
-
-
-
-
-
-
-
-
-<script src="navigation.js"></script></body>
-
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
+        let isVisible = false;
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+</body>
 </html>

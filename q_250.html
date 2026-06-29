@@ -87,29 +87,29 @@ You are managing data in your organization's Cloud Storage buckets and are requi
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Define a lifecycle policy JSON with an action on SetStorageClass to COLDLINE with an age condition of 365 and matchStorageClass STANDARD)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Object Lifecycle Management: Jest to wbudowana funkcja GCS do automatycznej zmiany klasy storage (np. Standard -> Coldline) bez pisania kodu.
-- Wydajność: Jest to rozwiązanie natywne, w pełni zarządzane przez Google, które działa automatycznie w tle.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Cloud Asset Inventory: Służy do inwentaryzacji (przeglądu konfiguracji), a nie do automatycznego wprowadzania zmian w klasach storage.
-- B. CloudRun Job + Script: Pisanie własnych skryptów do zarządzania cyklem życia jest nieefektywne, kosztowne i trudne w utrzymaniu. Zawsze używaj wbudowanych funkcji platformy.
-- C. Autoclass: Ta funkcja służy do automatycznego optymalizowania kosztów poprzez przenoszenie rzadziej używanych plików do tańszych klas storage na podstawie wzorców dostępu (access patterns), a nie sztywnego wymogu "starsze niż 365 dni".
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Automatically downgrade/change storage class" = Object Lifecycle Management.
-- "Age condition" = Lifecycle policy.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Lifecycle policy to "JSON" (lub YAML), które definiuje, co ma się stać z obiektami po spełnieniu warunku (wiek, utworzenie wersji itp.).
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/storage/docs/lifecycle" target="_blank">Cloud Storage Object Lifecycle Management</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

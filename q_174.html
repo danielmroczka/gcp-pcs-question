@@ -88,34 +88,29 @@ You manage your organization's Security Operations Center (SOC). You currently m
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Cloud IDS)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- Cloud IDS (Intrusion Detection System): Jest to w pełni zarządzana usługa bezpieczeństwa sieciowego w Google Cloud, która umożliwia wykrywanie zagrożeń, takich jak malware, spyware, command-and-control (C2) oraz ataki typu exploit.
-- Analiza Payload i Headerów: W przeciwieństwie do logów przepływu (Flow Logs), Cloud IDS wykonuje głęboką inspekcję pakietów (Deep Packet Inspection), analizując nie tylko nagłówki, ale i samą zawartość (payload) ruchu sieciowego. Wykorzystuje do tego zaawansowane silniki analizy zagrożeń (partnerstwo z Palo Alto Networks).
-- Scenariusz SOC: Dla Security Operations Center (SOC), Cloud IDS dostarcza wysokiej jakości alerty o konkretnych zagrożeniach, co pozwala na znacznie skuteczniejszą "eksplorację środowiska" pod kątem bezpieczeństwa niż analiza surowych metadanych.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- B. VPC Service Controls logs: Logi te informują jedynie o naruszeniach perymetru (kto próbował dostać się do API Google poza dozwoloną regułą). Nie zawierają one payloadu ruchu IP między maszynami wewnątrz VPC.
-- C. VPC Flow Logs: Zawierają tylko metadane połączeń (IP, porty, protokół). Nie pozwalają na analizę zawartości pakietów (payload), o którą pyta scenariusz.
-- D. Google Cloud Armor: Chroni głównie przed atakami na warstwę aplikacji (WAF/DDoS) dla ruchu HTTP/S przychodzącego przez Load Balancer. Nie służy do inspekcji ogólnego ruchu wewnątrz sieci VPC (ruch East-West).
-- E. Packet Mirroring: Jest to technologia "podkładowa", która dostarcza ruch do systemu analizującego. Choć pozwala na dostęp do payloadu, samo w sobie nie jest "produktem do eksploracji" ani systemem detekcji – wymagałoby wdrożenia własnego oprogramowania (np. Zeek, Suricata). Cloud IDS (A) jest gotowym, zarządzanym rozwiązaniem spełniającym ten wymóg.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Explore environment using network payloads" + "Google Cloud product" = Cloud IDS.
-- "Threat detection" + "Managed service" = Cloud IDS.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Cloud IDS jest zintegrowany z konsolą Google Cloud i wysyła alerty bezpośrednio do Cloud Logging oraz Security Command Center.
-- Pamiętaj: Cloud IDS to system DETEKCJI (IDS), a nie prewencji (IPS). Nie blokuje on automatycznie ruchu, a jedynie o nim informuje.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/ids/docs/overview" target="_blank">Cloud IDS overview</a>
-- <a href="https://cloud.google.com/ids/docs/threat-categories" target="_blank">Cloud IDS threat categories</a>
-- <a href="https://cloud.google.com/ids/docs/how-cloud-ids-works" target="_blank">How Cloud IDS works</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

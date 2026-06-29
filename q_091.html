@@ -88,20 +88,29 @@ You need to provide a corporate user account in Google Cloud for each of your de
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong>
-W scenariuszach migracji "Unmanaged Users" (użytkownicy korzystający z firmowej domeny do prywatnych kont Google) jedyną wspieraną ścieżką jest użycie narzędzia <em>Transfer Tool for Unmanaged Users (TTUU)</em>. Synchronizacja tożsamości (GCDS lub Cloud Identity) stanowi fundament, ale nie rozwiązuje problemu konfliktów kont osobistych.
+**Potwierdzona odpowiedź: AC**
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <em>Opcja C</em> jest pułapką: administrator nie ma uprawnień do "wymuszenia" zmiany adresu w koncie prywatnym użytkownika; proces musi odbyć się za zgodą użytkownika.
-- <em>Opcja E</em> sugeruje działania manualne, które nie są zalecaną ścieżką techniczną w GCP.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Proces konwersji kont opiera się na mechanizmie <em>Conflict Resolution</em>.
-1. <strong>GCDS (Google Cloud Directory Sync):</strong> Synchronizuje źródło prawdy (np. Active Directory) z Cloud Identity, tworząc tożsamości w GCP.
-2. <strong>TTUU (Transfer Tool):</strong> Pozwala wysłać zaproszenie do użytkownika posiadającego konto "unmanaged". Jeśli użytkownik zaakceptuje, konto staje się zarządzane. Jeśli nie (lub zignoruje), po 30 dniach administrator może dokonać <em>forced account rename</em>, co przemianuje konto prywatne na <em>użytkownik%domena.com@gtempaccount.com</em>, zwalniając adres w domenie firmowej. To kluczowy proces dla zapewnienia zgodności (Compliance) i bezpieczeństwa (Data Leakage Prevention).
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
+
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

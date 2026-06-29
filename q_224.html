@@ -87,32 +87,29 @@ You have numerous private virtual machines on Google Cloud. You occasionally nee
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Create a firewall rule to allow access from the Identity-Aware Proxy (IAP) IP range. Grant the role of an IAP-secured Tunnel User to the administrators)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- IAP for TCP Forwarding: Jest to mechanizm, który pozwala na bezpieczne tunelowanie ruchu TCP (SSH/RDP) do maszyn wirtualnych bez konieczności nadawania im publicznych adresów IP lub konfigurowania VPN.
-- Bezpieczeństwo: IAP uwierzytelnia użytkownika przez Google Cloud IAM. Ruch jest przesyłany przez infrastrukturę Google, co eliminuje konieczność otwierania portów SSH (22) lub RDP (3389) dla całego internetu.
-- IAP IP Range: Aby IAP mógł komunikować się z Twoimi instancjami, musisz pozwolić na ruch z zakresu IP: `35.235.240.0/20` w regułach firewalla VPC.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Site-to-site VPN: Jest to rozwiązanie do łączenia sieci, a nie do zarządzania konkretnymi maszynami. VPN jest znacznie droższy i trudniejszy w utrzymaniu niż IAP, jeśli potrzebujesz tylko dostępu SSH/RDP.
-- B. Public IP + Firewall: Nadawanie publicznych IP maszynom wirtualnym (nawet z restrykcją firewall) jest przeciwieństwem "optymalizacji bezpieczeństwa" (zwiększa powierzchnię ataku).
-- D. Jump host: Jump host (bramka) z publicznym IP sam w sobie jest punktem, który musisz dodatkowo zabezpieczać, łatać i monitorować. IAP (C) jest usługą zarządzaną przez Google, więc nie musisz dbać o jej infrastrukturę.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Manage VMs via SSH/RDP" + "No public IP" + "Secure & Cost efficient" = IAP-secured Tunnel User.
-- Zakres IP IAP: `35.235.240.0/20` (konieczne zapamiętanie na egzamin!).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Aby użyć IAP TCP forwarding, musisz mieć zainstalowany `gcloud` i skonfigurowany dostęp do tunelu (np. `gcloud compute ssh ... --tunnel-through-iap`).
-- Użytkownik musi mieć rolę `IAP-Secured Tunnel User` (nie `Web App User`!).
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/iap/docs/tcp-forwarding-overview" target="_blank">IAP for TCP forwarding overview</a>
-- <a href="https://cloud.google.com/iap/docs/using-tcp-forwarding" target="_blank">How to set up IAP TCP forwarding</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

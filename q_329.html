@@ -86,28 +86,29 @@ Your organization is implementing a new Python application that will be deployed
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Enable the Cloud SQL Auth Proxy on a sidecar container in Cloud Run and use the Unix socket to connect to the database.)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- Cloud SQL Auth Proxy: To "bezpieczny i najmniej zarządzalny" (minimizing management overhead) sposób połączenia z Cloud SQL.
-- Sidecar container: W Cloud Run, Cloud SQL Auth Proxy może działać jako sidecar, co bezpiecznie tuneluje połączenie (z automatycznym szyfrowaniem TLS i autoryzacją IAM) bez konieczności otwierania instancji bazy na świat lub konfigurowania skomplikowanych połączeń sieciowych (VPN/Peering).
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- A, C: Konfiguracja VPN lub VPC peering w celu połączenia Cloud Run z Cloud SQL to "overkill" (niepotrzebny narzut administracyjny), gdy mamy dedykowane narzędzie w postaci Auth Proxy.
-- D: Whitelisting IP to metoda mniej bezpieczna niż Auth Proxy, a SSL/TLS to tylko szyfrowanie transportu, nie załatwia kwestii autoryzacji IAM.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Cloud Run" + "Cloud SQL" + "Secure connection" + "Minimize management overhead" = Cloud SQL Auth Proxy (sidecar).
-- Pamiętaj: Auth Proxy zarządza szyfrowaniem i autoryzacją IAM za Ciebie.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Cloud SQL Auth Proxy to "złoty standard" bezpiecznego łączenia aplikacji z bazami danych w GCP.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/sql/docs/mysql/connect-run" target="_blank">Connecting Cloud Run to Cloud SQL</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

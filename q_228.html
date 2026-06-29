@@ -88,32 +88,29 @@ You manage a mission-critical workload for your organization, which is in a high
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: BC (B: Configure Cloud External Key Manager, C: Create Confidential VMs)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Cloud External Key Manager (EKM) (B): Wymóg "Manage the data encryption key (DEK) outside the Google Cloud boundary" oraz "Maintain full control ... through a third-party provider" bezpośrednio wskazuje na usługę Cloud EKM, która integruje KMS z zewnętrznym HSM.
-- Confidential VMs (C): Wymóg "Encrypt the sensitive data in memory while in use in the Compute Engine VMs" wskazuje na Confidential Computing (Confidential VMs), które używają szyfrowania RAM w trakcie przetwarzania danych.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. CMEK: CMEK (Customer Managed Encryption Keys) są zarządzane wewnątrz Cloud KMS (infrastruktura Google). Nie spełnia to wymogu przechowywania kluczy poza "Google Cloud boundary".
-- D. Migrate to Confidential VMs: Tożsama z odpowiedzią C, ale opcja C jest bardziej zwięzła i poprawna w kontekście wyboru usług. (Uwaga: W pytaniu 228 opcje mogą się dublować, ważne jest wskazanie EKM i Confidential VM).
-- E. VPC Service Controls: VPC Service Controls chroni przed eksfiltracją (wynoszeniem danych), ale nie jest technologią szyfrowania danych ("in memory" lub "at rest").
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "External key provider" = EKM.
-- "Encrypt memory" / "Data in use" = Confidential VMs.
-- "Regulatory compliance" = EKM + KAJ + Confidential Computing.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: EKM to separacja kluczy od chmury, a Confidential Computing to separacja danych w RAM od hypervisora.
-- Razem tworzą najwyższy możliwy poziom suwerenności danych w GCP.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/kms/docs/ekm" target="_blank">Cloud EKM overview</a>
-- <a href="https://cloud.google.com/confidential-computing" target="_blank">Confidential Computing overview</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

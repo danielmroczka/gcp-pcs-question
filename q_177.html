@@ -87,34 +87,29 @@ Your company requires the security and network engineering teams to identify all
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Configure packet mirroring policies)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- Packet Mirroring: Jest to usługa Google Cloud, która umożliwia klonowanie ruchu sieciowego (zarówno przychodzącego, jak i wychodzącego) z wybranych instancji VM, podsieci lub tagów i przesyłanie go do wybranego celu w celu analizy.
-- Przechwytywanie Payloadu: W przeciwieństwie do logów przepływu (Flow Logs), Packet Mirroring klonuje całe pakiety IP, w tym ich zawartość (payload). Jest to niezbędne do wykrywania zaawansowanych anomalii sieciowych, które nie są widoczne w samych metadanych (np. sygnatury malware wewnątrz ruchu HTTP).
-- Wymaganie: Pytanie jawnie wspomina o potrzebie "identyfikacji anomalii" ORAZ "przechwytywania payloadu" (capture payloads), co bezpośrednio wskazuje na Packet Mirroring.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Organization policy constraint: Polityki organizacji służą do narzucania ograniczeń konfiguracyjnych (np. "nie twórz zewnętrznych IP"), ale nie służą do monitorowania ruchu sieciowego ani przechwytywania danych.
-- C. VPC Flow Logs: Logi przepływu są bardzo użyteczne, ale zawierają jedynie metadane o połączeniach (IP źródłowe/docelowe, porty, protokół, bajty, czas). NIE zawierają one payloadu pakietów, więc nie spełniają wymogu pytania.
-- D. Cloud Audit Logs: Logi audytowe rejestrują działania administracyjne (kto stworzył VM, kto zmienił firewall) oraz dostęp do danych przez API. Nie monitorują one surowego ruchu sieciowego między maszynami wewnątrz sieci VPC.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Capture payloads" / "Inspect packet content" = Packet Mirroring.
-- "Metadata" / "Connection statistics" = VPC Flow Logs.
-- Pamiętaj: Packet Mirroring przesyła ruch do Load Balancera (ILB), za którym musi stać oprogramowanie analizujące (np. Cloud IDS lub własne maszyny z IDS).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Packet Mirroring nie wprowadza opóźnień (latency) do oryginalnego ruchu, ponieważ klonowanie odbywa się na poziomie wirtualnego przełącznika infrastruktury Google.
-- Możesz mirrorować tylko ruch TCP, UDP i ICMP.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/vpc/docs/packet-mirroring" target="_blank">Packet Mirroring overview</a>
-- <a href="https://cloud.google.com/vpc/docs/using-packet-mirroring" target="_blank">Using Packet Mirroring</a>
-- <a href="https://cloud.google.com/blog/products/networking/using-packet-mirroring-for-security-and-network-analysis" target="_blank">Security analysis with Packet Mirroring</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

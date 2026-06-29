@@ -88,17 +88,29 @@ A workforce needs to access a CRM hosted on GCP. It requires an authentication l
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
 
+
 <h2>Wyjaśnienie</h2>
 <pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong>
-Zawsze stosuj zasadę najmniejszych przywilejów (PoLP). W GCP wybieraj role Custom nad rolami Viewer/Editor, jeśli wymóg jest precyzyjnie określony.
+**Potwierdzona odpowiedź: AC**
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-Nie myl Access Scopes (legacy) z IAM Roles (nowoczesne). Nie wybieraj ról typu Viewer/Editor, jeśli potrzebujesz tylko jednego, konkretnego uprawnienia.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-IAM pozwala na precyzyjne definiowanie ról za pomocą `permissions` (np. `compute.instances.list`). W modelu współdzielonej odpowiedzialności (Shared Responsibility), za konfigurację dostępu i sieci odpowiada klient.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
+
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

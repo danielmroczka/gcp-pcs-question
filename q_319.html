@@ -86,31 +86,29 @@ The InfoSec team has mandated that all new Cloud Run jobs and services in produc
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A
+**Potwierdzona odpowiedź: AC**
 
 Wyjaśnienie: 
-Organization Policy (Polityka Organizacyjna) jest kluczowym narzędziem w GCP do wymuszania (enforcement) reguł bezpieczeństwa w skali całej organizacji, folderu lub projektu. W przypadku Binary Authorization istnieje dedykowana polityka (constraints/run.binaryAuthorizationEnforcement), która pozwala na zablokowanie wdrożeń obrazów w Cloud Run, które nie spełniają określonych reguł atestacji. Jest to jedyny mechanizm z wymienionych, który aktywnie blokuje niezgodne operacje przed ich wykonaniem, co jest wymagane przez "mandat" zespołu InfoSec.
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- B. Security Health Analytics (SHA) to funkcja Security Command Center służąca do wykrywania (detekcji) podatności i błędnych konfiguracji. SHA może zaraportować brak Binary Authorization jako "finding", ale nie potrafi samodzielnie zablokować wdrożenia usługi.
-- C. Ograniczenie uprawnień IAM (usunięcie roli admina) to dobra praktyka (zasada najmniejszych uprawnień), ale nie rozwiązuje problemu technicznego wymuszenia Binary Authorization. Nawet użytkownik z ograniczonymi uprawnieniami mógłby wdrożyć obraz bez tej funkcji, jeśli nie jest ona wymuszona systemowo.
-- D. Binary Authorization custom policy to konfiguracja reguł, które mechanizm ma sprawdzać (np. kto musi podpisać obraz). Sama obecność polityki w Binary Auth nie oznacza jej automatycznego wymuszenia na wszystkich usługach Cloud Run w organizacji bez użycia Organization Policy.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- Słowo "mandate" (nakaz) lub "enforce" (wymusić) w kontekście całej organizacji lub wielu projektów niemal zawsze wskazuje na użycie Organization Policy.
-- Binary Authorization działa jako "bramkarz" (gatekeeper) sprawdzający atestacje przed uruchomieniem kontenera.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj nazwę ograniczenia: constraints/run.binaryAuthorizationEnforcement.
-- Rozróżniaj detekcję (SHA) od prewencji (Organization Policy).
-- Binary Authorization wspiera GKE, Cloud Run oraz Cloud Functions (2nd gen).
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/binary-authorization/docs/run/enforce-org-policy" target="_blank">Enforcing Binary Authorization for Cloud Run with organization policy</a>
-- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/overview" target="_blank">Organization Policy Service overview</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

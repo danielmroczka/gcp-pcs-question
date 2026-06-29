@@ -87,28 +87,29 @@ You are working with protected health information (PHI) for an electronic health
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Perform de-identification with the Cloud Data Loss Prevention API, using the CryptoHashConfig transformation.)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- CryptoHashConfig (Hashing): Jest to proces jednostronny (nieodwracalny), więc spełnia wymóg "not reversible". Dodatkowo wynik hashowania jest ciągiem znaków o stałej długości (hex), który nie przypomina ani formatem, ani długością danych oryginalnych (nie zachowuje charakterystyki zestawu znaków/długości).
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- CryptoReplaceFfxFpeConfig: Jest odwracalne i zachowuje format (format-preserving).
-- CharacterMaskConfig: Zachowuje długość (maskuje tylko część znaków).
-- FixedSizeBucketingConfig: Służy do generalizacji (np. grupowanie wieku), nie do całkowitej anonimizacji nieodwracalnej.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Not reversible" + "Not preserve character set and length" = Hashing (CryptoHashConfig).
-- "Reversible" + "Preserve format/length" = Format-Preserving Encryption (FFX/FPE).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: DLP API to najważniejsze narzędzie do pracy z PII/PHI w GCP.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/dlp/docs/concepts-deidentification" target="_blank">De-identification techniques</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

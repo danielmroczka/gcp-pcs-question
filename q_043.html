@@ -86,34 +86,29 @@ While migrating your organization's infrastructure to GCP, a large number of use
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Google Cloud Directory Sync - GCDS)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-Gdy organizacja posiada już własne źródło tożsamości (Active Directory lub LDAP) i chce zachować istniejące procesy zarządzania użytkownikami podczas migracji do GCP, standardowym rozwiązaniem jest Google Cloud Directory Sync (GCDS).
-1. Synchronizacja (Provisioning): GCDS to narzędzie działające lokalnie (on-premises), które jednostronnie synchronizuje dane z AD/LDAP do Cloud Identity lub Google Workspace. Synchronizuje użytkowników, grupy i aliasy.
-2. SSO (Single Sign-On): Choć GCDS dba o to, by konta istniały w chmurze, federacja (np. przez SAML 2.0) pozwala użytkownikom na logowanie się przy użyciu ich obecnego hasła z AD.
-3. Automatyzacja: GCDS eliminuje konieczność ręcznego tworzenia kont w GCP i zapewnia, że gdy pracownik odejdzie z firmy (zostanie usunięty z AD), jego dostęp do GCP również zostanie automatycznie zablokowany.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
 Dlaczego pozostałe są błędne:
-A. Manualna synchronizacja: Przy "dużej liczbie użytkowników" jest to niewykonalne, podatne na błędy i niebezpieczne (brak automatycznego deprovisioningu).
-C. Kerberos: GCP Console nie wspiera bezpośredniego logowania za pomocą biletów Kerberos on-premises bez dodatkowej warstwy federacyjnej.
-D. OpenID Connect (OIDC): Choć OIDC jest wspierane, to samo otrzymanie tokena nie wystarczy do zalogowania się do Konsoli GCP bez wcześniejszego istnienia (provisioningu) tożsamości użytkownika w Cloud Identity. Opcja B jest kompletnym rozwiązaniem adresującym potrzebę "zarządzania użytkownikami" (management).
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- "Active Directory/LDAP" + "GCP Identity" = zawsze najpierw myśl o "GCDS".
-- GCDS synchronizuje tożsamość, ale NIE synchronizuje haseł (do haseł służy SSO/Federacja lub Google Password Sync).
-- Pamiętaj, że GCDS jest procesem jednokierunkowym (AD -> Google).
-
-Kluczowe zagadnienia do powtórzenia:
-- Google Cloud Directory Sync (GCDS) architertura.
-- SAML 2.0 Federation vs. GCDS.
-- Managed vs. Unmanaged users.
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://cloud.google.com/architecture/identity/syncing-active-directory-to-cloud-identity" target="_blank">Synchronizacja AD do Cloud Identity (GCDS)</a>
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

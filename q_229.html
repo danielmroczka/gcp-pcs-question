@@ -87,30 +87,29 @@ Your organization wants to be General Data Protection Regulation (GDPR) complian
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Use the org policy constraint 'Google Cloud Platform - Resource Location Restriction' on your Google Cloud organization node)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Resource Location Restriction: To dedykowana polityka organizacji (`constraints/gcp.resourceLocations`), która pozwala na zdefiniowanie geograficznego obszaru (np. tylko regiony europejskie), w którym mogą być tworzone zasoby GCP. 
-- Compliance: Wiele regulacji (np. RODO/GDPR w UE) wymaga, aby dane użytkowników nie opuszczały terytorium UE. Polityka ta blokuje API przed tworzeniem VM, dysków czy baz danych w regionach spoza zdefiniowanej listy (np. w USA), co jest jedynym "twardym" mechanizmem prewencyjnym w GCP.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. IAP z Access Context Manager: Służy do kontrolowania dostępu UŻYTKOWNIKÓW do aplikacji/konsoli w oparciu o ich lokalizację IP. Nie blokuje to możliwości tworzenia zasobów (VM) przez deweloperów w innych regionach.
-- C. Restrict Resource Service Usage: Służy do blokowania możliwości włączenia/używania konkretnych usług (np. wyłączenie BigQuery w organizacji), ale nie ogranicza ich lokalizacji.
-- D. IAM custom roles: Role IAM zarządzają uprawnieniami, ale nie są w stanie wymusić lokalizacji geograficznej dla nowo tworzonych zasobów w sposób, w jaki robi to polityka organizacji.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Restrict location" / "Data residency" + "Organization-wide enforcement" = Organization Policy (Resource Location Restriction).
-- Pamiętaj: Ta polityka działa na zasadzie "Deny everything except...".
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Warto pamiętać o regionach "Multi-region" – jeśli zablokujesz jakiś region, możesz zablokować też tworzenie zasobów w "Multi-regionach" (np. EU), które korzystają z zablokowanych lokalizacji.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">Resource location restriction overview</a>
-- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">Organization Policy constraints reference</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

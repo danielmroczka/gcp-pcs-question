@@ -87,25 +87,29 @@ Your team needs to obtain a unified log view of all development cloud projects i
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (1. Export logs to a Cloud Pub/Sub topic with folders/NONPROD parent and includeChildren property set to True in a dedicated SIEM project. 2. Subscribe SIEM to the topic.)
+**Potwierdzona odpowiedź: AC**
 
-**Reguła Egzaminacyjna (Exam Rule):**
-Jeśli pytanie dotyczy zebrania logów z wielu projektów zgrupowanych w folderze lub organizacji w celu integracji z SIEM, zawsze wybieraj "Aggregated Sink" (Zsumowany zlew) stworzony na poziomie wyższym niż projekt (np. folder/organizacja) z flagą `includeChildren=True`.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-**Haczyki egzaminacyjne (Exam Traps):**
-- Pułapka: "Pojedyncze zlewy w każdym projekcie". Przy dużej liczbie projektów jest to nieefektywne zarządczo i podatne na pominięcia.
-- Pułapka: "Billing Account sinks". Zlewy na poziomie bilingu służą do logów bilingowych, a nie logów operacyjnych/bezpieczeństwa aplikacji.
-- Pułapka: "Publiczne buckety GCS". Nigdy nie wybieraj opcji sugerującej publiczne udostępnianie bucketów GCS – jest to krytyczny błąd bezpieczeństwa.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-**Głębokie wyjaśnienie techniczne:**
-1. **Aggregated Sink**: Logi w GCP są hierarchiczne. Zlew logów utworzony na poziomie folderu (np. `folders/NONPROD`) z ustawionym `includeChildren=True` automatycznie zbiera logi ze wszystkich projektów wewnątrz tego folderu (i jego podfolderów).
-2. **Pub/Sub jako strumień**: Dla systemów klasy SIEM (np. Splunk, QRadar, Chronicle) Pub/Sub jest preferowanym wyborem, ponieważ umożliwia przesyłanie logów w czasie rzeczywistym (streaming), co jest kluczowe dla szybkiego wykrywania zagrożeń.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://cloud.google.com/logging/docs/export/aggregated_sinks" target="_blank">https://cloud.google.com/logging/docs/export/aggregated_sinks</a>
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

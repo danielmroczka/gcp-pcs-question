@@ -86,31 +86,29 @@ You want to set up a secure, internal network within Google Cloud for database s
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Create a VPC with a private subnet. Assign a private IP address to each database server.)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-Najbardziej podstawową i skuteczną metodą zabezpieczenia serwerów baz danych w Google Cloud przed bezpośrednim dostępem z internetu jest umieszczenie ich w podsieci prywatnej (private subnet) i przypisanie im wyłącznie prywatnych adresów IP (RFC 1918). W takim modelu serwery te nie posiadają publicznych adresów IP, co fizycznie uniemożliwia bezpośrednią komunikację przychodzącą z internetu. Dostęp do nich powinien odbywać się wyłącznie za pośrednictwem innych zasobów wewnątrz VPC (np. frontendu aplikacji) lub przez bezpieczne bramy (np. Bastion Host z IAP).
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Chociaż serwery mają prywatne IP, użycie NAT Gateway (Cloud NAT) służy właśnie do zapewnienia łączności z internetem (dla ruchu wychodzącego). Scenariusz wyraźnie mówi, że serwery nie mogą mieć żadnej bezpośredniej komunikacji z publicznym internetem, więc Cloud NAT jest tu niepożądany lub zbędny.
-- B. Przypisanie publicznego adresu IP (nawet statycznego) i poleganie wyłącznie na regułach firewalla jest mniej bezpieczne. Publiczny adres IP wystawia zasób na potencjalne ataki, a błąd w konfiguracji firewalla może doprowadzić do natychmiastowej ekspozycji bazy danych.
-- D. Przypisanie obu adresów IP (prywatnego i publicznego) wprost narusza wymóg braku komunikacji z internetem, ponieważ publiczny adres IP służy właśnie do takiej komunikacji.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "No direct communication with public internet" = Brak publicznego IP + brak trasy 0.0.0.0/0 do bramy internetowej (Internet Gateway).
-- W GCP "prywatna podsieć" to po prostu podsieć, w której instancje nie mają publicznych adresów IP.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zawsze stosuj zasadę najmniejszych uprawnień również w sieci: jeśli serwer nie musi być w internecie, nie dawaj mu publicznego IP.
-- Cloud NAT jest użyteczny tylko wtedy, gdy serwery w prywatnej podsieci muszą np. pobierać aktualizacje z internetu (ruch inicjowany przez serwer).
-- Private Google Access pozwala instancjom z tylko prywatnym IP na dostęp do API Google (np. Cloud Storage) bez wychodzenia do internetu.
-
-Dokumentacja i linki:
-- https://cloud.google.com/vpc/docs/subnets#private-subnets
-- https://cloud.google.com/vpc/docs/configure-private-google-access
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

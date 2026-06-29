@@ -87,33 +87,29 @@ You have placed several Compute Engine instances in a private subnet. You want t
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Enable Private Google Access for the private subnet)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Private Google Access (PGA): Pozwala instancjom Compute Engine, które nie posiadają publicznych adresów IP (są w prywatnej podsieci), na bezpieczne łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery) poprzez sieć wewnętrzną Google.
-- Wymaganie: Instancje w prywatnej podsieci muszą mieć włączoną opcję PGA na poziomie podsieci, aby mogły wysyłać zapytania do API Google.
-- Zaletą jest to, że dane nigdy nie wychodzą do publicznego internetu.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- B. Private Service Connect (PSC): PSC służy do uzyskiwania dostępu do konkretnych usług zarządzanych przez Google lub partnerów (np. konkretnego instancji bazy danych) poprzez dedykowany endpoint w VPC. Jest zbyt specyficzne dla tego ogólnego przypadku.
-- C. Static external IP: Wymuszenie nadania publicznego adresu IP łamie zasady bezpieczeństwa (dostęp do internetu) i jest sprzeczne z wymaganiem użycia prywatnej podsieci.
-- D. Cloud NAT: Cloud NAT pozwala instancjom na dostęp do INTERNETU (np. pobranie aktualizacji), ale nie służy do bezpośredniego dostępu do usług Google Cloud przez ich wewnętrzne adresy – od tego jest PGA.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Private Subnet" + "Access Cloud Storage/GCP Services" = Private Google Access (PGA).
-- "Private Subnet" + "Access Internet" = Cloud NAT.
-- Zapamiętaj: PGA to prosta flaga do włączenia na poziomie podsieci.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- PGA jest bezpłatne i łatwe w konfiguracji.
-- PGA jest niezbędne w architekturach, gdzie instancje nie mogą mieć dostępu do internetu, ale muszą używać narzędzi takich jak `gsutil`, `bq` czy klientów API Google.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">Private Google Access overview</a>
-- <a href="https://cloud.google.com/vpc/docs/configure-private-google-access" target="_blank">Configuring Private Google Access</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

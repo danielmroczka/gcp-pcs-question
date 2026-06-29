@@ -86,33 +86,29 @@ A DevOps team will create a new container to run on Google Kubernetes Engine. As
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Build small containers using small base images)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-Minimalizacja powierzchni ataku (attack surface) w kontenerach polega na usunięciu wszystkiego, co nie jest niezbędne do działania aplikacji.
-1. Małe obrazy bazowe (Small base images): Używanie minimalistycznych obrazów (np. Alpine Linux, Distroless) zamiast pełnych dystrybucji (np. Ubuntu, Debian) znacząco redukuje liczbę zainstalowanych pakietów, powłok (shells) i narzędzi systemowych.
-2. Korzyści: Mniej zainstalowanego oprogramowania oznacza mniej potencjalnych podatności (CVE), które haker może wykorzystać po przejęciu kontenera. Obrazy "Distroless" nie zawierają nawet managera pakietów ani powłoki sh/bash, co dramatycznie utrudnia życie napastnikowi.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
 Dlaczego pozostałe są błędne:
-A. Cloud Build: To usługa do budowania obrazów (CI). Sam wybór narzędzia do budowania nie wpływa bezpośrednio na zawartość obrazu i jego powierzchnię ataku. Można zbudować "ciężki" i niebezpieczny obraz za pomocą Cloud Build.
-C. Usuwanie starych wersji: To dobra praktyka porządkowa i oszczędność miejsca, ale nie minimalizuje powierzchni ataku kontenera, który jest aktualnie uruchomiony w GKE.
-D. Continuous Delivery: Narzędzia CD służą do automatyzacji wdrożeń. Podobnie jak w przypadku Cloud Build, samo zautomatyzowanie wdrożenia nie zmienia struktury bezpieczeństwa wnętrza kontenera.
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- "Minimize attack surface" w kontekście kontenerów = "Lean images", "Small base images", "Distroless".
-- Pamiętaj o "Multi-stage builds" w Dockerze – to technika pozwalająca na użycie ciężkich narzędzi w fazie budowania i skopiowanie tylko binarnego pliku do finalnego, małego obrazu.
-- Szukaj odpowiedzi, które promują usunięcie zbędnych narzędzi (np. SSH, curl, ping) z obrazu produkcyjnego.
-
-Kluczowe zagadnienia do powtórzenia:
-- Container security best practices.
-- Distroless images.
-- Multi-stage Docker builds.
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://cloud.google.com/architecture/best-practices-for-building-containers#optimize_for_security" target="_blank">Best practices for building containers - GCP</a>
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

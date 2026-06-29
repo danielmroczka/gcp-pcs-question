@@ -87,68 +87,58 @@ You manage your organization's Security Operations Center (SOC). You currently m
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4 d-none"  >
+<div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Packet Mirroring)
+Odpowiedź: D.
 
-Wyjaśnienie:
-Packet Mirroring (Klonowanie pakietów) to usługa pozwalająca na kopiowanie i przesyłanie całego ruchu sieciowego (w tym payloadu) z wybranych zasobów VPC do celu (np. kolektora IDS). Jest to niezbędne, gdy monitoring oparty na metadanych (VPC Flow Logs) jest niewystarczający i wymagana jest głęboka inspekcja pakietów (Deep Packet Inspection - DPI).
+Wyjaśnienie (Dlaczego poprawna):
+D. Packet Mirroring: Jest to jedyna natywna usługa w GCP, która pozwala na klonowanie PEŁNEGO ruchu sieciowego (w tym zawartości pakietów - payload) z wybranych instancji VM lub całych podsieci. Skopiowany ruch można wysłać do urządzenia trzeciego (np. IDS/IPS w Marketplace) w celu głębokiej inspekcji (Deep Packet Inspection).
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Marketplace IDS: To kategoria narzędzi zewnętrznych. Choć mogą one analizować ruch, same w sobie nie są mechanizmem klonowania ruchu z sieci VPC – często wymagają Packet Mirroring jako źródła danych.
-- B. VPC Flow Logs: Rejestrują one tylko metadane przepływów (IP, porty, protokoły), ale celowo NIE zawierają payloadu (treści) pakietów, co uniemożliwia pełną analizę zawartości ruchu.
-- C. VPC Service Controls logs: Dotyczą one naruszeń perymetru bezpieczeństwa na poziomie API usług Google (np. dostęp do Cloud Storage), a nie ruchu sieciowego między maszynami wewnątrz VPC.
-- E. Google Cloud Armor Deep Packet Inspection: Cloud Armor chroni aplikacje webowe na brzegu sieci przed atakami L7 (SQLi/XSS), ale nie służy do ogólnego klonowania i monitorowania całego ruchu wewnątrz sieci VPC.
+Dlaczego inne są błędne:
+A. Marketplace IDS: To oprogramowanie (cel), ale potrzebuje ono METODY dostarczenia pakietów, którą jest właśnie Packet Mirroring.
+B. VPC Flow Logs: Rejestrują tylko metadane (nagłówki: skąd, dokąd, ile danych), ale celowo NIE rejestrują payloadu (treści pakietu).
+C. VPC SC logs: Dotyczą blokad na poziomie API usług Google (np. GCS), a nie ruchu sieciowego między maszynami VM.
+E. Cloud Armor DPI: Cloud Armor zajmuje się filtrowaniem ruchu HTTP(S) na brzegu sieci, nie jest narzędziem do ogólnej eksploracji payloadu wewnątrz VPC.
 
-Wskazówki i triki (Tips & Tricks):
-- Pamiętaj: "Packet header only" = VPC Flow Logs. "Full payload / investigative" = Packet Mirroring.
-- Packet Mirroring jest przydatne do wykrywania zagrożeń "East-West" (ruch wewnątrz sieci).
-
-Praktyczne informacje na egzamin:
-- Packet Mirroring nie wpływa na wydajność źródłowych maszyn VM (ruch jest kopiowany przez infrastrukturę sieciową).
-- Skopiowany ruch musi trafiać do wewnętrznego Load Balancera (ILB) działającego jako kolektor.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/vpc/docs/packet-mirroring" target="_blank">Omówienie Packet Mirroring</a>
+Konsensus społeczności ExamTopics: 100% na D. Payload = Packet Mirroring w terminologii GCP.
 </pre>
 </div>
-<div class="ai-analysis-container d-none"  >
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Packet Mirroring jest kluczowym narzędziem dla zespołów SOC w celach <b>kryminalistyki sieciowej (Forensics)</b>. Pozwala na przechwycenie ruchu, który może zawierać złośliwy kod lub próby eksfiltracji danych ukryte wewnątrz standardowych protokołów. W przeciwieństwie do Flow Logs, które są próbkowane, Packet Mirroring może kopiować 100% ruchu, co jest krytyczne podczas dochodzeń po incydentach.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Packet Mirroring jest niezbędne dla celów kryminalistyki sieciowej (Forensics) i wykrywania intruzów, którzy przesyłają złośliwe dane wewnątrz dozwolonych sesji TCP.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc/docs/packet-mirroring" target="_blank">Dokumentacja Packet Mirroring</a></li>
+<li><a href="https://cloud.google.com/vpc/docs/packet-mirroring" target="_blank">https://cloud.google.com/vpc/docs/packet-mirroring</a></li>
+
 </ul>
 </div>
 </div>
-
-
-<div class="exam-section">
-    <h3>Exam Rule (GCP Professional Cloud Security Engineer)</h3>
-    <p>[INSERT RULE HERE]</p>
-    
-    <h3>Exam Traps</h3>
-    <ul>
-        <li>[TRAP 1]</li>
-        <li>[TRAP 2]</li>
-    </ul>
-
-    <h3>Deep Technical Explanation</h3>
-    <p>[DETAILED EXPLANATION WITH GCP TERMINOLOGY]</p>
-</div>
-
-
-
-
-
-
-
-
-<script src="navigation.js"></script></body>
-
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
+        let isVisible = false;
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+</body>
 </html>

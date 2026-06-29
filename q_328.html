@@ -86,28 +86,29 @@ Your organization's application is being integrated with a partner application t
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (Implement a secret management service. Configure the service to frequently rotate the service account key. Configure proper access control to the key, and restrict who can create service account keys.)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- Service Account Keys: Są niebezpieczne, ponieważ jeśli zostaną skradzione, dają dostęp do zasobów aż do momentu ich unieważnienia. Jeśli musisz ich używać (np. przy integracjach zewnętrznych), kluczową praktyką jest **częsta rotacja** (rotation) oraz **ścisła kontrola** tego, kto może takie klucze tworzyć i używać (IAM policies). Sekret manager zapewnia bezpieczne przechowywanie i rotację.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- A. DLP scan: Służy do ochrony danych przed wyciekiem (maskowanie), ale nie chroni przed skradzionym kluczem, który daje dostęp do *już* odmaskowanych danych.
-- B. VPC Service Controls: Jest potężne, ale w przypadku "service account key compromised", klucz nadal będzie działał wewnątrz lub w połączeniu z perimetrem. Nie rozwiązuje to problemu samego klucza.
-- C. CMEK: Szyfrowanie "at rest" nie chroni przed dostępem "read access" (autoryzowany dostęp), a klucze serwisowe właśnie autoryzują odczyt danych.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Compromised service account key" + "Minimize risk" = Rotation + Strict access control.
-- Pamiętaj: Jeśli używasz SA Keys – rotuj je!
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Secret Manager to standardowe miejsce do przechowywania kluczy/haseł w GCP.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/iam/docs/best-practices-for-managing-service-account-keys" target="_blank">Best practices for service account keys</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

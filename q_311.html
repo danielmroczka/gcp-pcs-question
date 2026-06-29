@@ -86,32 +86,29 @@ Your organization is worried about recent news headlines regarding application v
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Enable Binary Authorization and create attestations of scans.)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-Binary Authorization to usługa bezpieczeństwa łańcucha dostaw (supply chain security) w Google Cloud, która zapewnia, że tylko zaufane obrazy kontenerów są wdrażane w Google Kubernetes Engine (GKE) lub Cloud Run. Działa ona jako brama (admission controller), która sprawdza, czy obraz posiada wymagane atestacje (podpisy cyfrowe) przed zezwoleniem na jego uruchomienie. W opisanym scenariuszu, automatyczne skanowanie w potoku CI/CD powinno kończyć się utworzeniem atestacji dla obrazów, które przeszły weryfikację. Polityka Binary Authorization w klastrze GKE zostanie następnie skonfigurowana tak, aby wymagała tej konkretnej atestacji, co gwarantuje, że tylko "zeskanowane i zweryfikowane" kontenery będą mogły zostać uruchomione.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. RBAC (Role-Based Access Control) służy do zarządzania uprawnieniami użytkowników i kont serwisowych wewnątrz klastra (kto co może robić), ale nie posiada mechanizmów weryfikacji integralności ani bezpieczeństwa samych obrazów kontenerów przed ich wdrożeniem.
-- B. Użycie komendy gcloud do sprawdzenia podatności w potoku CI/CD i przerwanie budowania jest dobrą praktyką, ale samo w sobie nie daje gwarancji, że ktoś nie spróbuje wdrożyć innego, niezweryfikowanego obrazu bezpośrednio do klastra, omijając potok. Brakuje tutaj mechanizmu wymuszania (enforcement) na poziomie klastra, który zapewnia Binary Authorization.
-- C. Cloud Code oferuje funkcje skanowania podatności w IDE, co pomaga deweloperom na wczesnym etapie ("shift left"), ale nie stanowi mechanizmu kontroli wdrożeń produkcyjnych. Użytkownicy nadal mogliby wdrażać niebezpieczne kontenery ręcznie lub przez inne narzędzia.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- Słowa kluczowe "ensure only scanned and verified containers can run" niemal zawsze wskazują na Binary Authorization.
-- Pamiętaj o koncepcji "Attestors" (atestatorów) – są to byty, które poświadczają, że dany krok (np. skanowanie, testy QA) został wykonany pomyślnie.
-- Binary Authorization integruje się z Container Analysis, które automatycznie skanuje obrazy w Artifact Registry.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Binary Authorization działa na poziomie Admission Controller w Kubernetes.
-- Może blokować wdrożenia na podstawie wielu atestacji (np. musi być skanowanie bezpieczeństwa ORAZ zatwierdzenie przez zespół QA).
-- Tryb "Dry run" pozwala testować polityki bez faktycznego blokowania ruchu, co jest przydatne przy wdrażaniu usługi w istniejącym środowisku.
-
-Dokumentacja i linki:
-- https://cloud.google.com/binary-authorization/docs/overview
-- https://cloud.google.com/artifact-analysis/docs/vulnerability-scanning
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

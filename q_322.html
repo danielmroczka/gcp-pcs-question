@@ -86,27 +86,29 @@ You are responsible for managing identities in your company's Google Cloud organ
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Create a Google Cloud identity for all users in your organization. Ensure that new users are added automatically.)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- Provision all identities: Jeśli stworzysz (sprovisionujesz) konta dla wszystkich pracowników w Cloud Identity (np. przez synchronizację z AD przez Google Cloud Directory Sync - GCDS), to gdy użytkownik spróbuje założyć konto 'osobiste' na swój firmowy adres, system mu to uniemożliwi (bo adres jest już zajęty przez konto zarządzane). To najbardziej 'efficient' metoda zapobiegająca powstawaniu 'Shadow IT'.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- B. Scan and disable: Google nie pozwala administratorowi firmy na 'wyłączenie' prywatnego konta użytkownika, dopóki ten nie przejdzie przez proces Transfer Tool.
-- C, D: To unikanie problemu poprzez uciążliwą zmianę domeny, co nie jest rozwiązaniem merytorycznym.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Employees" + "Unmanaged accounts" + "Prevent" = Provision all identities (Cloud Identity).
-- Pamiętaj: Rezerwacja tożsamości w Cloud Identity blokuje możliwość rejestracji kont prywatnych na ten sam adres e-mail.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Najlepiej połączyć to z włączeniem SSO (Single Sign-On). Wtedy użytkownik nawet nie zna swojego hasła Google i nie ma jak 'założyć' konta poza Twoją kontrolą.
-
-Dokumentacja i linki:
-- <a href="https://support.google.com/cloudidentity/answer/175367" target="_blank">Cloud Identity: Provisioning users</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

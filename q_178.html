@@ -87,34 +87,29 @@ An organization wants to track how bonus compensations have changed over time to
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Format-preserving encryption)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- Format-preserving encryption (FPE): Jest to technika kryptograficzna, która szyfruje dane w taki sposób, że wynik (ciphertext) ma taki sam format jak dane wejściowe (np. zaszyfrowany 16-cyfrowy numer karty kredytowej wciąż jest 16-cyfrowym ciągiem cyfr).
-- Zachowanie trendów: Ponieważ FPE jest metodą deterministyczną (dla tego samego klucza), pozwala na zachowanie relacji między danymi. Można analizować zmiany w bonusach w czasie, widząc "zaszyfrowane" wartości, które rosną lub maleją proporcjonalnie do oryginałów (jeśli użyto odpowiedniego trybu).
-- Odwracalność: FPE jest w pełni odwracalne przy użyciu klucza kryptograficznego. Spełnia to wymóg "reversible to identify the outlier" – gdy analityk znajdzie anomalię, uprawniona osoba może odszyfrować konkretny rekord, aby dowiedzieć się, o którego pracownika chodzi.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Cryptographic hashing: Hashing (skrót) jest procesem jednostronnym. Choć pozwala na porównywanie wartości (determinizm), uniemożliwia proste odszyfrowanie danych z powrotem do formy czytelnej, co narusza wymóg odwracalności.
-- B. Redaction: Polega na całkowitym usunięciu wrażliwych danych (np. zastąpienie tekstu czarnym blokiem). Jest to proces nieodwracalny i uniemożliwia jakąkolwiek analizę wartości (bo ich nie ma).
-- D. Generalization: Polega na zmniejszeniu precyzji danych (np. zamiast dokładnej kwoty bonusu podajemy przedział "5000-10000"). Utrudnia to precyzyjną analizę statystyczną i jest bardzo trudne do odwrócenia do dokładnej, pierwotnej wartości.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Reversible" + "DLP" = Szukaj opcji związanych z Encryption (FPE lub Deterministic Encryption).
-- "Same format" = Format-preserving encryption (FPE).
-- Jeśli dane mają być używane w bazach danych bez zmiany schematu (np. kolumna typu Integer musi zostać Integerem) -> FPE.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Cloud DLP oferuje trzy główne techniki pseudonimizacji: FPE, Deterministic Encryption (AES-SIV) oraz Date Shifting.
-- FPE w Cloud DLP często wykorzystuje tryb FFX.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/dlp/docs/pseudonymization#fpe" target="_blank">Format-preserving encryption in Cloud DLP</a>
-- <a href="https://cloud.google.com/dlp/docs/concepts-deidentification" target="_blank">DLP de-identification techniques</a>
-- <a href="https://cloud.google.com/dlp/docs/transformations-reference" target="_blank">DLP Transformations reference</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

@@ -87,26 +87,29 @@ You are responsible for protecting highly sensitive data in BigQuery. Your opera
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Tokenization for Pseudonymization (DLP))
+**Potwierdzona odpowiedź: AC**
 
-<b>Reguła Egzaminacyjna (Exam Rule):</b>
-W scenariuszach wymagających ochrony danych PII (Personally Identifiable Information) w BigQuery, gdzie zachodzi potrzeba analityki na poziomie indywidualnych rekordów przy jednoczesnym ukryciu tożsamości, właściwym wyborem jest "Pseudonymization" (za pomocą tokenizacji).
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-<b>Haczyki egzaminacyjne (Exam Traps):</b>
-- "Data masking" (A) lub "redaction" (B) są często wskazywane jako poprawne, ale w kontekście analitycznym są "niszczące". Pamiętaj: jeśli dane mają służyć do analizy (np. liczenie unikalnych klientów), maskowanie jest nieużyteczne, bo zamienia unikalne wartości na stały ciąg znaków (np. wszystkie e-maile na '****').
-- Cloud DLP "Inspection" (C) służy wyłącznie do skanowania (discovery) wrażliwych danych, nie do ich modyfikacji czy ochrony w storage'u.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-<b>Głębokie wyjaśnienie techniczne:</b>
-Pseudonimizacja (Pseudonymization) w Google Cloud DLP to technika transformacji danych polegająca na zastąpieniu wartości wrażliwych (PII) ich odpowiednikami (tokenami) w sposób odwracalny, ALE tylko dla podmiotów posiadających odpowiedni klucz kryptograficzny.
-1. Tokenizacja (Tokenization) przy użyciu Cloud DLP API: Wartość wejściowa (np. e-mail) jest przekształcana przy użyciu klucza (np. HMAC lub algorytm deterministyczny).
-2. Użyteczność analityczna: Ponieważ token jest deterministyczny (ten sam e-mail zawsze wygeneruje ten sam token), analitycy mogą wykonywać operacje `GROUP BY`, `JOIN` czy `COUNT DISTINCT` na tokenach bez poznania rzeczywistych adresów e-mail.
-3. Kontrola dostępu: Dostęp do klucza użytego do tokenizacji (przechowywanego w Cloud KMS) jest ściśle ograniczony za pomocą IAM, dzięki czemu tylko wyznaczone zespoły (np. HR) mogą dokonać detokenizacji (odtworzenia PII).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://cloud.google.com/dlp/docs/pseudonymization" target="_blank">https://cloud.google.com/dlp/docs/pseudonymization</a>
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

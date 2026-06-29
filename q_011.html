@@ -87,41 +87,29 @@ A customer needs to prevent attackers from hijacking their domain/IP and redirec
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (DNS Security Extensions - DNSSEC)
+**Potwierdzona odpowiedź: AC**
 
 Wyjaśnienie: 
-Aby zapobiec przejęciu domeny/IP (hijacking) i atakom typu man-in-the-middle polegającym na fałszowaniu odpowiedzi DNS (np. DNS cache poisoning), należy zastosować DNSSEC. DNSSEC dodaje cyfrowe podpisy do rekordów DNS, co pozwala serwerom rozwiązującym nazwy (resolvers) na zweryfikowanie, czy odpowiedź pochodzi z autentycznego źródła i nie została zmodyfikowana w trakcie przesyłania.
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
 Dlaczego pozostałe są błędne:
-A. VPC Flow Logs: Służą do monitorowania i rejestrowania ruchu IP w sieciach VPC. Pomagają w analizie incydentów, ale nie zapobiegają fałszowaniu rekordów DNS na poziomie publicznego internetu.
-B. Cloud Armor: Jest to WAF (Web Application Firewall) i ochrona przed DDoS. Chroni aplikacje przed atakami L7 (np. SQLi, XSS), ale nie zabezpiecza integralności samego protokołu DNS.
-D. Cloud Identity-Aware Proxy: Zarządza dostępem do aplikacji na podstawie tożsamości użytkownika. Nie chroni infrastruktury DNS przed atakami typu spoofing czy hijacking.
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- "Hijacking domain/IP" + "Man-in-the-middle" + "DNS context" = DNSSEC.
-- Pamiętaj, że DNSSEC zapewnia integralność i autentyczność, ale NIE zapewnia poufności (dane DNS wciąż są jawne, tylko podpisane).
-
-Kluczowe zagadnienia do powtórzenia:
-- DNSSEC (Domain Name System Security Extensions)
-- DNS Cache Poisoning / Spoofing
-- Cloud DNS security features
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://cloud.google.com/dns/docs/dnssec" target="_blank">https://cloud.google.com/dns/docs/dnssec</a>
-
-**Reguła Egzaminacyjna (Exam Rule):**
-Zawsze identyfikuj warstwę modelu OSI, na której operuje atak oraz rozwiązanie. DNSSEC działa na poziomie warstwy aplikacji dla DNS, zapobiegając zatruwaniu pamięci podręcznej (Cache Poisoning).
-
-**Haczyki egzaminacyjne (Exam Traps):**
-- Mylenie Cloud Armor (WAF - L7) z zabezpieczeniami DNS (DNSSEC - integralność danych DNS).
-- Zakładanie, że TLS/SSL wystarczy do ochrony przed przekierowaniem całego ruchu DNS (DNSSEC zabezpiecza sam proces rezolucji, zanim nawiążesz bezpieczne połączenie TLS).
-
-**Głębokie wyjaśnienie techniczne:**
-DNSSEC wykorzystuje kryptografię klucza publicznego (RRSIG, DNSKEY, DS) do cyfrowego podpisywania rekordów DNS w strefach (Zone Signing). Dzięki temu resolver DNS może zweryfikować łańcuch zaufania aż do punktu głównego (root zone) bez konieczności polegania wyłącznie na adresie IP serwera autorytatywnego, co drastycznie ogranicza skuteczność ataków typu MITM i cache poisoning.
-
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

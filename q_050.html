@@ -86,34 +86,29 @@ Your company has deployed an application on Compute Engine. The application is a
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (SSL Proxy Load Balancing)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-Mamy tutaj specyficzne wymagania dotyczące równoważenia obciążenia: ruch inny niż HTTP (port 587 - SMTP/TLS), konieczność terminacji sesji SSL/TLS na Load Balancerze oraz potrzebę globalnego równoważenia ruchu.
-1. SSL Proxy Load Balancing: Jest to globalny load balancer dla ruchu TCP zabezpieczonego protokołem SSL/TLS. Pozwala on na zakończenie sesji SSL na samym LB (terminacja), co odciąża serwery backendowe. Jest idealny dla ruchu, który nie jest protokołem HTTP(S), ale wymaga szyfrowania (np. poczta e-mail, bazy danych).
-2. Port 587: Choć ten port jest standardowo kojarzony z protokołem SMTP, w kontekście GCP i wyboru Load Balancera, kluczowe jest to, że wymaga on terminacji SSL/TLS dla ruchu TCP niebędącego HTTP.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
 Dlaczego pozostałe są błędne:
-A. Network Load Balancing: Działa w warstwie 4 (L4) i jest pasywny (pass-through). Nie wspiera terminacji SSL/TLS – pakiety są przesyłane bezpośrednio do instancji w niezmienionej formie.
-B. HTTP(S) Load Balancing: Jest przeznaczony wyłącznie dla ruchu HTTP i HTTPS (porty 80 i 443). Nie obsłuży ruchu na porcie 587.
-C. TCP Proxy Load Balancing: Jest bardzo podobny do SSL Proxy, ale służy do równoważenia czystego ruchu TCP bez wbudowanej funkcji terminacji SSL/TLS (choć technicznie mogą współdzielić infrastrukturę, to dla ruchu szyfrowanego z terminacją na LB poprawną odpowiedzią egzaminacyjną jest SSL Proxy).
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- "Terminated by the Load Balancer" + "SSL/TLS" + "Non-HTTP port" = SSL Proxy Load Balancing.
-- Jeśli port to 80/443 = HTTP(S) LB.
-- Jeśli port to cokolwiek innego i NIE ma terminacji SSL = Network LB (regional) lub TCP Proxy (global).
-- Pamiętaj, że SSL Proxy i TCP Proxy są dostępne tylko dla określonych portów (GCP ma ich listę, 587 jest na niej wspierany przez SSL Proxy).
-
-Kluczowe zagadnienia do powtórzenia:
-- Porównanie typów Cloud Load Balancing.
-- SSL termination vs. Pass-through.
-- Wspierane porty dla Proxy Load Balancers.
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://cloud.google.com/load-balancing/docs/ssl" target="_blank">SSL Proxy Load Balancing overview</a>
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

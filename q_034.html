@@ -87,32 +87,29 @@ Your company is using Cloud Dataproc for its Spark and Hadoop jobs. You want to 
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Use the Cloud Key Management Service to manage the key encryption key (KEK).)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-Aby zarządzać cyklem życia kluczy (tworzenie, rotacja, niszczenie) przechowywanych w chmurze Google, należy użyć usługi Cloud Key Management Service (KMS). W modelu szyfrowania kopertowego (envelope encryption) stosowanym w GCP, użytkownik zarządza kluczem szyfrującym klucze (KEK - Key Encryption Key), który chroni (szyfruje) klucze danych (DEK - Data Encryption Key). Cloud KMS pozwala na pełną kontrolę nad KEK, w tym na automatyczną rotację i definiowanie polityk dostępu IAM.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
 Dlaczego pozostałe są błędne:
-A. Use the Cloud Key Management Service to manage the data encryption key (DEK): W modelu GCP to system automatycznie zarządza kluczami DEK. Użytkownik zarządza kluczami KEK w KMS, które z kolei szyfrują DEK-i. Nie zarządza się DEK-ami bezpośrednio w KMS.
-C. Use customer-supplied encryption keys to manage the data encryption key (DEK): CSEK (Customer-Supplied Encryption Keys) oznacza, że klucze są dostarczane przez użytkownika z zewnątrz przy każdej operacji i nie są trwale przechowywane w chmurze. Pytanie mówi o kluczach, które mogą być przechowywane w chmurze. Dodatkowo, użytkownik nie zarządza bezpośrednio DEK-ami w tym modelu.
-D. Use customer-supplied encryption keys to manage the key encryption key (KEK): CSEK nie służy do zarządzania KEK w taki sposób, jak opisano w pytaniu (tworzenie, rotacja, niszczenie wewnątrz infrastruktury chmurowej). Do tego celu służy Cloud KMS (CMEK - Customer-Managed Encryption Keys).
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o "zarządzaniu cyklem życia" (create, rotate, destroy) i "kluczach w chmurze", prawie zawsze chodzi o Cloud KMS.
-- Pamiętaj o hierarchii: Użytkownik (KMS) -> KEK -> DEK -> Dane.
-- "Symmetric encryption keys" w kontekście zarządzania przez użytkownika w chmurze to domyślnie KEK w KMS.
-
-Kluczowe zagadnienia do powtórzenia:
-- Szyfrowanie kopertowe (Envelope Encryption)
-- Różnica między CMEK (Cloud KMS) a CSEK (Customer-Supplied)
-- Zarządzanie kluczami w Cloud KMS
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://cloud.google.com/kms/docs/envelope-encryption" target="_blank">https://cloud.google.com/kms/docs/envelope-encryption</a>
-<a href="https://cloud.google.com/dataproc/docs/concepts/configuring-clusters/customer-managed-encryption" target="_blank">https://cloud.google.com/dataproc/docs/concepts/configuring-clusters/customer-managed-encryption</a>
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

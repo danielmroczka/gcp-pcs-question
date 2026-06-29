@@ -86,67 +86,56 @@ You are a security administrator at your company. Per Google-recommended best pr
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4 d-none"  >
+<div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Turn off the domain restricted sharing organization policy. Set the policy value to "Custom." Add each external partner's Cloud Identity or Google Workspace customer ID as an exception under the organization policy, and then turn the policy back on.)
+Odpowiedź: D.
 
-Wyjaśnienie:
-Polityka organizacji "Domain restricted sharing" (iam.allowedPolicyMemberDomains) ogranicza zestaw tożsamości, którym można nadawać role IAM, do określonych organizacji. Aby zezwolić na dostęp partnerowi zewnętrznemu, należy dodać jego unikalny identyfikator klienta (Customer ID) do listy dozwolonych domen w tej polityce. Jest to zgodne z najlepszymi praktykami, ponieważ precyzyjnie definiuje zaufane domeny, zamiast całkowicie wyłączać zabezpieczenie.
+Wyjaśnienie (Dlaczego poprawna):
+D. Custom Policy with Customer ID: Polityka 'Domain Restricted Sharing' pozwala na zdefiniowanie wyjątków dla konkretnych identyfikatorów klientów Google Cloud (Customer ID). Jest to najbezpieczniejsza metoda, ponieważ dopuszczasz TYLKO wybraną firmę partnerską, zachowując blokadę dla całego reszty świata.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A: Ustawienie polityki na "Allow All" całkowicie wyłącza to zabezpieczenie, co pozwala na dodawanie dowolnych kont (w tym prywatnych kont @gmail.com), co jest niezgodne z best practices bezpieczeństwa.
-- B: Samo nadanie uprawnień IAM po wyłączeniu polityki nie rozwiąże problemu na przyszłość – brak wymuszenia domenowego stworzy lukę, którą mogą wykorzystać inni administratorzy.
-- C: Polityka "Domain restricted sharing" nie obsługuje grup dyskusyjnych (Google Groups) jako wyjątków w samej definicji polityki. Sprawdza ona przynależność domenową konkretnych użytkowników dodawanych do ról IAM.
+Dlaczego inne są błędne:
+A, B. Turn off / Allow All: Całkowicie niweluje sens posiadania polityki bezpieczeństwa i naraża firmę na wyciek danych do prywatnych kont pracowników.
+C. Google Group: Grupy służą do IAM, ale 'Domain Restricted Sharing' to polityka organizacji, która blokuje nadanie uprawnienia IAM komukolwiek spoza listy dozwolonych domen, nawet jeśli jest w Twojej grupie. Musisz dodać domenę/ID partnera do samej polityki (D).
 
-Wskazówki i triki (Tips & Tricks):
-- Pamiętaj: Polityka ta operuje na identyfikatorach "Customer ID" (np. C01234567), a nie na nazwach domen tekstowych (jak @example.com).
-- Zawsze wybieraj opcję "Custom", aby dodać wielu partnerów bez rezygnacji z ochrony własnej domeny.
-
-Praktyczne informacje na egzamin:
-- Ta polityka zapobiega przypadkowemu udostępnieniu zasobów kontom spoza organizacji (np. prywatnym kontom pracowników).
-- Zmiana polityki nie usuwa wstecznie uprawnień już nadanych – dotyczy tylko nowych powiązań IAM.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains" target="_blank">Ograniczanie współdzielenia zasobów według domeny</a>
+Konsensus społeczności ExamTopics: 100% na D. To standardowy sposób współpracy B2B w GCP.
 </pre>
 </div>
-<div class="ai-analysis-container d-none"  >
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Mechanizm <b>Domain Restricted Sharing</b> jest jednym z najskuteczniejszych sposobów walki z wyciekiem danych do nieautoryzowanych organizacji. Kluczowym wyzwaniem jest współpraca B2B – w takich przypadkach jedyną bezpieczną ścieżką jest biała lista zaufanych identyfikatorów <i>Customer ID</i> partnerów. Jeśli partner nie posiada Cloud Identity, musi je założyć (nawet w wersji darmowej), aby otrzymać unikalny identyfikator organizacji.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Customer ID partnera znajdziesz w ich konsoli Admin lub otrzymasz od ich administratora. Wygląda on zazwyczaj jak `C01234567`.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/iam/docs/understanding-custom-roles" target="_blank">Zrozumienie ról niestandardowych IAM</a></li>
+<li><a href="https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains</a></li>
+
 </ul>
 </div>
 </div>
-
-
-<div class="exam-section">
-    <h3>Exam Rule (GCP Professional Cloud Security Engineer)</h3>
-    <p>[INSERT RULE HERE]</p>
-    
-    <h3>Exam Traps</h3>
-    <ul>
-        <li>[TRAP 1]</li>
-        <li>[TRAP 2]</li>
-    </ul>
-
-    <h3>Deep Technical Explanation</h3>
-    <p>[DETAILED EXPLANATION WITH GCP TERMINOLOGY]</p>
-</div>
-
-
-
-
-
-
-
-
-<script src="navigation.js"></script></body>
-
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
+        let isVisible = false;
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+</body>
 </html>

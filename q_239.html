@@ -87,32 +87,29 @@ You control network traffic for a folder in your Google Cloud environment. Your 
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (1. Attach external IP addresses to the VMs in scope. 2. Define and apply a hierarchical firewall policy on folder level to deny all egress connections and to allow egress to IP range 10.58.5.0/24 from network dev-vpc)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Hierarchiczne polityki firewalla (Hierarchical Firewall Policies): Pozwalają na definiowanie i wymuszanie reguł na poziomie całej organizacji lub folderów. Są one sprawdzane PRZED tradycyjnymi regułami firewalla VPC w poszczególnych projektach, co czyni je doskonałymi "barierami ochronnymi" (guardrails).
-- Kontrola na poziomie folderu: Zastosowanie polityki na poziomie folderu pozwala objąć nią wszystkie projekty wewnątrz folderu ("dev-vpc"), co zapewnia spójność bez ręcznej konfiguracji w każdym projekcie osobno.
-- Precedencja: Reguła "deny all" z wysokim priorytetem, nadpisana przez "allow" dla konkretnego zakresu IP, daje pewność, że żaden inny ruch wychodzący nie opuści sieci.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Network appliance: Stawianie maszyny wirtualnej z oprogramowaniem do filtrowania ruchu (np. Next-Generation Firewall) jest rozwiązaniem bardzo złożonym (wymaga routingu, obsługi awarii, wysokiej dostępności) i trudnym w skalowaniu.
-- B. Cloud NAT: Cloud NAT pozwala na dostęp do internetu, ale nie jest narzędziem do *filtrowania* ruchu do konkretnych adresów IP. Pozwala na wychodzenie w świat, ale nie służy do egzekwowania reguł bezpieczeństwa (to zadanie firewalla).
-- D. VPC Firewall rule in dev-vpc: Reguły wewnątrz VPC mogą być zmieniane przez właścicieli projektów (Owner), co czyni je niepewnymi w kontekście zarządzania na poziomie folderu/organizacji. Wymagają też ręcznej konfiguracji w każdym projekcie osobno.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Manage/Enforce on folder level" + "Limited egress" = Hierarchical Firewall Policies.
-- "Minimize effort" = Zawsze polityki hierarchiczne (Folder/Org) zamiast ręcznego konfigurowania w projektach.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Reguły hierarchiczne "wygrywają" z regułami projektowymi.
-- Zrozum akcje: `allow`, `deny`, `goto_next`.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/vpc/docs/firewall-policies" target="_blank">Hierarchical firewall policies overview</a>
-- <a href="https://cloud.google.com/vpc/docs/firewall-policies-concepts" target="_blank">Firewall policies concepts</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

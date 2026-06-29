@@ -86,28 +86,29 @@ You work at a company in a regulated industry and are responsible for ongoing se
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Create a Posture file by using custom and predefined SHA or organization policies. Enforce the posture on the folder level.)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- Security Command Center (SCC) Posture Management: To natywna usługa Google do "prevent and detect misconfigurations". Pozwala zdefiniować *Posture* (stan docelowy bezpieczeństwa) jako plik, który zawiera definicje (SHA - Security Health Analytics) oraz polityki (Org Policies).
-- "Enforce the posture on the folder level": Posture management pozwala na egzekwowanie tego stanu na poziomie folderu lub projektu.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- B. Custom org policies: Same polityki (org policies) pozwalają tylko na prewencję, a nie na *detekcję* (a pytanie wymaga "prevent AND detect").
-- C. Assured Workloads: Służy do automatycznego wdrażania środowisk zgodnych z konkretnymi *regulacjami* (np. FedRAMP, HIPAA), ale nie jest to narzędzie do "prevent AND detect" w istniejących zasobach.
-- D. Workload Manager: Służy do weryfikacji konfiguracji (np. zgodności z ISO/NIST) i raportowania, ale to "Posture Management" w SCC jest obecnie rekomendowanym narzędziem do zarządzania "prevent and detect" w czasie rzeczywistym.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Prevent and detect misconfigurations" + "Specific compliance policies" = Security Command Center Posture Management.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Posture Management w SCC pozwala na zdefiniowanie "jak ma wyglądać bezpieczeństwo" (pożądany stan) i automatyczne wymuszanie tego stanu.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/security-command-center/docs/concepts-security-postures-overview" target="_blank">Security Command Center postures overview</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

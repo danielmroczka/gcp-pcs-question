@@ -86,67 +86,57 @@ You want to prevent users from accidentally deleting a Shared VPC host project. 
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4 d-none"  >
+<div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (compute.restrictXpnProjectLienRemoval)
+Odpowiedź: B.
 
-Wyjaśnienie:
-Gdy projekt zostaje skonfigurowany jako host dla Shared VPC (XPN), Google Cloud automatycznie nakłada na niego tzw. "Lien" (zastaw), który uniemożliwia usunięcie projektu tak długo, jak długo pełni on funkcję hosta. Ograniczenie polityki organizacji compute.restrictXpnProjectLienRemoval blokuje możliwość usuwania tych automatycznych zastawów przez użytkowników, co stanowi krytyczne zabezpieczenie przed przypadkowym lub złośliwym usunięciem infrastruktury sieciowej całej organizacji.
+Wyjaśnienie (Dlaczego poprawna):
+B. compute.restrictXpnProjectLienRemoval: GCP automatycznie nakłada 'Lien' (zastaw) na projekt hosta Shared VPC, co uniemożliwia jego usunięcie. To konkretne ograniczenie polityki organizacji blokuje użytkownikom możliwość usunięcia tego zastawu, co jest jedynym sposobem na 'skuteczną' obronę przed skasowaniem hosta sieci.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. compute.restrictSharedVpcHostProjects: To ograniczenie służy do zdefiniowania listy projektów, które MOGĄ zostać włączone jako hosty Shared VPC. Nie chroni ono przed usunięciem projektu, który już jest hostem.
-- C. compute.restrictSharedVpcSubnetworks: To ograniczenie pozwala kontrolować, które konkretne podsieci z projektu hosta mogą być udostępniane poszczególnym projektom usługowym (Service Projects).
-- D. compute.sharedReservationsOwnerProjects: Dotyczy udostępniania rezerwacji zasobów Compute Engine pomiędzy projektami, co nie ma związku z ochroną projektu hosta przed usunięciem.
+Dlaczego inne są błędne:
+A. restrictSharedVpcHostProjects: Służy do ograniczenia listy projektów, które MOGĄ stać się hostami, a nie chroni przed usunięciem już istniejących.
+C. restrictSharedVpcSubnetworks: Kontroluje, które podsieci są udostępniane projektom usługowym.
+D. sharedReservations: Dotyczy rezerwacji zasobów (compute reservations), a nie ochrony sieci Shared VPC.
 
-Wskazówki i triki (Tips & Tricks):
-- Słowo klucz "prevent accidental deletion" + "Shared VPC host" = zawsze szukaj odpowiedzi z "Lien" (zastaw).
-- Pamiętaj, że nawet z uprawnieniami Owner, nie można usunąć projektu z aktywnym Lienem bez jego uprzedniego zdjęcia.
-
-Praktyczne informacje na egzamin:
-- Zastawy (Liens) można nakładać również ręcznie na dowolne ważne zasoby w GCP.
-- Organization Policy pozwala na wymuszenie standardów bezpieczeństwa w całej hierarchii zasobów (Org -> Folders -> Projects).
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/vpc/docs/shared-vpc#liens" target="_blank">Shared VPC Liens (Zastawy)</a>
+Konsensus społeczności ExamTopics: 100% poparcia dla B. Słowo 'Lien' jest kluczem do ochrony przed usunięciem w GCP.
 </pre>
 </div>
-<div class="ai-analysis-container d-none"  >
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> Mechanizm <b>Lien</b> jest fundamentalnym zabezpieczeniem w Google Cloud. Próba usunięcia projektu z aktywnym zastawem (Lien) zakończy się błędem API (400 Bad Request). Polityka organizacji <i>compute.restrictXpnProjectLienRemoval</i> dodaje kolejną warstwę bezpieczeństwa, uniemożliwiając nawet osobom z wysokimi uprawnieniami (np. Project Editor) zdjęcie tego zastawu bez zmiany samej polityki organizacji.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Zastawy (Liens) to potężny mechanizm bezpieczeństwa. Jeśli spróbujesz usunąć projekt z aktywnym lienem, operacja zostanie odrzucona przez API z błędem 400.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/resource-manager/docs/project-liens" target="_blank">Dokumentacja Project Liens</a></li>
+<li><a href="https://cloud.google.com/resource-manager/docs/project-liens" target="_blank">https://cloud.google.com/resource-manager/docs/project-liens</a></li>
+
 </ul>
 </div>
 </div>
-
-
-<div class="exam-section">
-    <h3>Exam Rule (GCP Professional Cloud Security Engineer)</h3>
-    <p>[INSERT RULE HERE]</p>
-    
-    <h3>Exam Traps</h3>
-    <ul>
-        <li>[TRAP 1]</li>
-        <li>[TRAP 2]</li>
-    </ul>
-
-    <h3>Deep Technical Explanation</h3>
-    <p>[DETAILED EXPLANATION WITH GCP TERMINOLOGY]</p>
-</div>
-
-
-
-
-
-
-
-
-<script src="navigation.js"></script></body>
-
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
+        let isVisible = false;
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+</body>
 </html>

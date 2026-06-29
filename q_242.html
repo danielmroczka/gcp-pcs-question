@@ -87,35 +87,29 @@ Your Google Cloud environment has one organization node, one folder named "Apps"
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (The action fails because a constraints/iam.allowedPolicyMemberDomains organization policy is in place and only members from the flowlogistic.com organization are allowed)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Hierarchia polityk (Inheritance): Polityki organizacji w Google Cloud dziedziczą się od poziomu Organizacji w dół. Jednakże, każdy poziom (np. Folder) może mieć własną politykę, która całkowicie nadpisuje (override) politykę nadrzędną, jeśli ustawiona jest flaga `inheritFromParent: false`.
-- Sytuacja w pytaniu: 
-    1. Organizacja (poziom najwyższy) zezwala na `terramearth.com`.
-    2. Folder "Apps" ma własną politykę `iam.allowedPolicyMemberDomains` zezwalającą TYLKO na `flowlogistic.com` oraz ma ustawione `inheritFromParent: false`.
-    3. Flaga `false` oznacza: "Ignoruj wszystkie polityki z góry, obowiązywać ma tylko to, co zdefiniowałem tutaj".
-- Wynik: W folderze "Apps" jedyną dozwoloną domeną jest `flowlogistic.com`. Próba dodania użytkownika z `terramearth.com` kończy się błędem (Permission Denied / Policy Violation), ponieważ lokalna polityka folderu blokuje tę domenę.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Success: Błędne założenie, że polityka nadrzędna łączy się z podrzędną. W przypadku ustawienia `inheritFromParent: false`, polityki nie są sumowane, lecz podrzędna zastępuje nadrzędną.
-- B. Success/Inheritance: Polityki organizacji nie zawsze są dziedziczone (istnieje opcja wyłączenia dziedziczenia).
-- C. Project level policy: Nie ma potrzeby definiowania polityki na poziomie projektu, aby "dezaktywować" politykę folderu. Folder już posiada najbardziej restrykcyjne ustawienia dla swoich dzieci.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "inheritFromParent: false" = "Zapomnij o wszystkim, co było powyżej, teraz liczy się tylko to, co zdefiniowałem tutaj".
-- "Allowed domain" + "Conflict" = Sprawdź czy dziedziczenie (inheritance) nie zostało przerwane.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Polityki typu "List constraint" (lista dozwolonych) najczęściej podlegają dziedziczeniu lub nadpisaniu.
-- `Effective Policy` to wynikowa konfiguracja – zawsze sprawdzaj ją w konsoli, aby uniknąć takich pułapek.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/understanding-hierarchy" target="_blank">Organization policy hierarchy</a>
-- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/creating-managing-policies" target="_blank">Organization policy concepts</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

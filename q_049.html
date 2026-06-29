@@ -86,33 +86,29 @@ You are in charge of migrating a legacy application from your company datacenter
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Isolated project + Lift & Shift + VPC Flow Logs)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-Mamy tutaj scenariusz z silną presją czasu (wygasający kontrakt) oraz brakiem wiedzy o aplikacji (brak dokumentacji portów).
-1. Izolowany projekt: Przeniesienie aplikacji do osobnego, dedykowanego projektu GCP minimalizuje ryzyko dla reszty środowiska firmowego (blast radius), nawet jeśli reguły firewall w tym konkretnym projekcie będą tymczasowo zbyt luźne.
-2. Lift & Shift: To najszybsza metoda migracji ("as-is"), polegająca na przeniesieniu maszyn wirtualnych bez zmiany ich architektury. Jest to jedyna realna opcja przy goniących terminach.
-3. VPC Flow Logs: Włączając logi przepływów VPC, możemy monitorować, na jakich portach aplikacja faktycznie próbuje się komunikować. Pozwala to na późniejsze "zacieśnienie" reguł firewall do tylko niezbędnego minimum, bazując na empirycznych danych z działającej aplikacji.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
 Dlaczego pozostałe są błędne:
-B. Disable all traffic: Jeśli wyłączymy cały ruch, aplikacja nie będzie działać, a my nie dowiemy się, jakie porty są jej potrzebne do poprawnej pracy. Firewall logs pokazałyby tylko próby połączeń (denied), ale aplikacja mogłaby zachowywać się nieprzewidywalnie.
-C i D. Refactoring: Refaktoryzacja do mikrousług (GKE) lub Cloud Functions to proces długotrwały i skomplikowany. Przy braku dokumentacji i goniącym terminie wygaśnięcia kontraktu, jest to przepis na porażkę projektu migracyjnego.
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- "Contract expires soon" = szukaj "Lift & Shift" lub "Rehost". Odrzuć "Refactor" lub "Rewrite".
-- "Unknown ports" = szukaj "VPC Flow Logs" do analizy ruchu.
-- Izolacja projektu to standardowa metoda ograniczania ryzyka przy migracjach "legacy".
-
-Kluczowe zagadnienia do powtórzenia:
-- Strategie migracji (Lift & Shift, Improve & Move, Rip & Replace).
-- VPC Flow Logs - co rejestrują i jak je analizować.
-- Zasady projektowania izolowanych środowisk w GCP.
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://cloud.google.com/vpc/docs/using-flow-logs" target="_blank">Korzystanie z VPC Flow Logs</a>
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

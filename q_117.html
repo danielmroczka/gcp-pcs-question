@@ -86,34 +86,23 @@ You plan to deploy your cloud infrastructure using a CI/CD cluster hosted on Com
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4 d-none"  >
+<div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Create a custom service account for the cluster. Enable the constraints/iam.disableServiceAccountKeyCreation organization policy at the project level)
+Odpowiedź: B.
 
-Wyjaśnienie:
-- Custom Service Account (Niestandardowe konto serwisowe): Zgodnie z zasadą najniższych uprawnień (Least Privilege), klaster CI/CD powinien używać dedykowanego konta serwisowego z ograniczonymi uprawnieniami, zamiast domyślnego konta Compute Engine, które jest zbyt uprzywilejowane.
-- disableServiceAccountKeyCreation: Jest to jedna z najskuteczniejszych metod ograniczania ryzyka kradzieży poświadczeń. Klucze kont serwisowych w formie plików JSON są "wieczne" i ich wyciek jest najczęstszą przyczyną włamań. Wyłączenie możliwości ich tworzenia wymusza stosowanie bezpieczniejszych, krótkotrwałych metod uwierzytelniania (np. Workload Identity lub bezpośrednie użycie tożsamości maszyny VM).
+Wyjaśnienie (Dlaczego poprawna):
+B. Cloud Armor: Posiada predefiniowane reguły WAF (Web Application Firewall), które są specjalnie zaprojektowane do wykrywania i blokowania ataków L7, takich jak XSS i SQLi, zanim dotrą one do serwera aplikacji.
 
-Dlaczego pozostałe są błędne:
-- A: "Cloud Identity user account" to konto przeznaczone dla człowieka (z hasłem). Używanie go do procesów automatycznych (CI/CD) jest niezgodne z praktykami bezpieczeństwa GCP i trudniejsze w zarządzaniu niż Service Account.
-- B: `constraints/iam.disableServiceAccountCreation` całkowicie zablokowałoby możliwość tworzenia nowych kont serwisowych, co uniemożliwiłoby realizację pierwszej części poprawnego rozwiązania (stworzenia dedykowanego konta).
-- D: `constraints/iam.allowServiceAccountCredentialLifetimeExtension` pozwala na WYDŁUŻENIE czasu życia tokenów, co zwiększa ryzyko w przypadku ich przejęcia. Bezpieczeństwo polega na skracaniu, a nie wydłużaniu ważności poświadczeń.
+Dlaczego inne są błędne:
+A. Firewall: Działa na warstwach 3/4 (IP/Port), nie rozumie treści HTTP.
+C. IAP: Zarządza dostępem osób, nie chroni przed błędami w kodzie dla osób już zalogowanych.
+D. DNS: Tylko tłumaczy nazwy na IP.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Słowo klucz "Minimize risk of credentials stolen" + "Service Account" = Zablokuj tworzenie kluczy JSON (Key Creation).
-- Zawsze wybieraj konta serwisowe (Service Accounts) dla maszyn i procesów, a nie konta użytkowników (User Accounts).
-
-Kluczowe zagadnienia do powtórzenia:
-- Najlepsze praktyki zarządzania kontami serwisowymi.
-- Ograniczenia polityki organizacji (Organization Policy Service).
-- Ryzyka związane z statycznymi kluczami kont serwisowych.
-
-Dokumentacja:
-- <a href="https://cloud.google.com/iam/docs/best-practices-for-managing-service-account-keys" target="_blank">Zarządzanie kluczami kont serwisowych</a>
+Konsensus społeczności ExamTopics: 100% poparcia dla B. Cloud Armor to definicja WAF w GCP.
 </pre>
 </div>
-<div class="ai-analysis-container d-none"  >
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
@@ -126,30 +115,28 @@ Dokumentacja:
 </ul>
 </div>
 </div>
-
-
-<div class="exam-section">
-    <h3>Exam Rule (GCP Professional Cloud Security Engineer)</h3>
-    <p>[INSERT RULE HERE]</p>
-    
-    <h3>Exam Traps</h3>
-    <ul>
-        <li>[TRAP 1]</li>
-        <li>[TRAP 2]</li>
-    </ul>
-
-    <h3>Deep Technical Explanation</h3>
-    <p>[DETAILED EXPLANATION WITH GCP TERMINOLOGY]</p>
-</div>
-
-
-
-
-
-
-
-
-<script src="navigation.js"></script></body>
-
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
+        let isVisible = false;
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+</body>
 </html>

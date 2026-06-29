@@ -87,29 +87,29 @@ You perform a security assessment on a customer architecture and discover that m
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Cloud NAT)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-Cloud NAT (Network Address Translation) to usługa zarządzana, która pozwala instancjom maszyn wirtualnych (VM) bez publicznych adresów IP na bezpieczne nawiązywanie połączeń wychodzących do internetu. Dzięki Cloud NAT maszyny posiadają jedynie prywatne adresy IP, co znacznie zmniejsza powierzchnię ataku (są niewidoczne bezpośrednio z zewnątrz), a jednocześnie zachowują możliwość pobierania aktualizacji czy komunikacji z zewnętrznymi API.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Google Cloud Armor: To usługa ochrony przed atakami DDoS i WAF dla ruchu przychodzącego przez load balancery, a nie mechanizm łączności wychodzącej dla maszyn z prywatnymi IP.
-- C. Cloud Router: Cloud Router odpowiada za dynamiczną wymianę tras (BGP), ale sam w sobie nie zapewnia translacji adresów NAT. Cloud NAT wymaga Cloud Routera do działania, ale to NAT realizuje funkcję wyjścia do internetu.
-- D. Cloud VPN: Służy do łączenia sieci VPC z biurem lub inną chmurą, a nie do ogólnej komunikacji wychodzącej do publicznego internetu w celu zastąpienia publicznych IP na maszynach.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Remove public IPs" + "need internet access" = Cloud NAT.
-- Cloud NAT jest usługą "egress-only" – internet nie może zainicjować połączenia z Twoją maszyną.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Cloud NAT nie wymaga publicznego adresu IP na żadnej z maszyn w podsieci.
-- Usługa jest wysoce dostępna i skalowalna (nie musisz zarządzać klastrem maszyn NAT).
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/nat/docs/overview" target="_blank">Omówienie Cloud NAT</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

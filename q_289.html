@@ -90,31 +90,29 @@ You work for an organization that handles sensitive customer data. You must secu
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Use predefined IAM roles tailored to each team's access needs, such as Storage Object Viewer and Storage Object User. Utilize customer-supplied encryption keys (CSEK) and enforce TLS encryption. Turn on both Object Versioning and Cloud Audit Logs for the storage buckets.)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- CSEK (Customer-Supplied Encryption Keys): Spełnia wymóg "pełnej kontroli nad kluczami" (organizacja dostarcza własny klucz przy każdej operacji).
-- IAM Predefined Roles: Spełnia wymóg różnych poziomów dostępu (Viewer vs User).
-- Object Versioning: Pozwala śledzić zmiany i odzyskiwać poprzednie wersje plików.
-- Cloud Audit Logs: Zapewnia ścieżkę audytu (kto i kiedy uzyskał dostęp).
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Server-side encryption: Zazwyczaj odnosi się do kluczy zarządzanych przez Google (Google-managed), co nie daje organizacji pełnej kontroli wymaganej w pytaniu.
-- B. ACLs: Są mniej wydajne i trudniejsze w audycie niż IAM; ACL nie są zalecane jako główny mechanizm kontroli w skali enterprise.
-- D. Third-party software: GCP posiada natywne mechanizmy (CSEK/CMEK), które są preferowane i łatwiejsze w integracji niż oprogramowanie zewnętrzne.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Organization must have control over the encryption keys" = Szukaj CSEK (najwyższa kontrola) lub CMEK.
-- "Audit access" = Zawsze Cloud Audit Logs.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj różnicę: CSEK (Klucz dostarczasz Ty), CMEK (Klucz w Cloud KMS, Ty nim zarządzasz), Google-managed (Wszystko robi Google).
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/storage/docs/encryption" target="_blank">Cloud Storage encryption options</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

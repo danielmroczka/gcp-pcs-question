@@ -86,42 +86,29 @@ A company migrated their entire data/center to Google Cloud Platform. It is runn
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Use Security Command Center to view all assets across the organization.)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Security Command Center (SCC) jest centralnym narzędziem Google Cloud do zarządzania bezpieczeństwem i inwentaryzacją zasobów w całej organizacji. Posiada natywny moduł "Asset Inventory", który pozwala na przeglądanie stanu zasobów w różnych projektach oraz korzystanie z funkcji "Time Travel" (zobacz zasoby tak, jak wyglądały w przeszłości).
-- Jest to rozwiązanie w pełni zarządzane i skalowalne, co czyni je obecnie standardem "best practice" w GCP.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
 Dlaczego pozostałe są błędne:
-- A: Resource Manager służy do strukturyzacji, nie do inwentaryzacji historycznej.
-- B: Forseti Security to narzędzie open-source, które historycznie wypełniało tę lukę, ale obecnie jest wypierane przez natywne usługi Google, takie jak SCC.
-- C: Cloud Monitoring służy do metryk, nie do historycznej inwentaryzacji konfiguracji zasobów.
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli widzisz pytanie o inwentaryzację/widoczność zasobów w "skali organizacji" -> wybierz Security Command Center (SCC).
-- "Time Travel" zasobów = Cloud Asset Inventory (wbudowane w SCC).
-
-Kluczowe zagadnienia do powtórzenia:
-- Security Command Center (Assets, Threats, Vulnerabilities).
-- Cloud Asset Inventory i funkcja Time Travel.
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://cloud.google.com/security-command-center/docs/concepts" target="_blank">Security Command Center Overview</a>
-<a href="https://cloud.google.com/asset-inventory/docs/time-travel" target="_blank">Cloud Asset Inventory: Time Travel</a>
-
-**Reguła Egzaminacyjna (Exam Rule):**
-Zawsze identyfikuj warstwę modelu OSI, na której operuje atak oraz rozwiązanie. DNSSEC działa na poziomie warstwy aplikacji dla DNS, zapobiegając zatruwaniu pamięci podręcznej (Cache Poisoning).
-
-**Haczyki egzaminacyjne (Exam Traps):**
-- Mylenie Cloud Armor (WAF - L7) z zabezpieczeniami DNS (DNSSEC - integralność danych DNS).
-- Zakładanie, że TLS/SSL wystarczy do ochrony przed przekierowaniem całego ruchu DNS (DNSSEC zabezpiecza sam proces rezolucji, zanim nawiążesz bezpieczne połączenie TLS).
-
-**Głębokie wyjaśnienie techniczne:**
-DNSSEC wykorzystuje kryptografię klucza publicznego (RRSIG, DNSKEY, DS) do cyfrowego podpisywania rekordów DNS w strefach (Zone Signing). Dzięki temu resolver DNS może zweryfikować łańcuch zaufania aż do punktu głównego (root zone) bez konieczności polegania wyłącznie na adresie IP serwera autorytatywnego, co drastycznie ogranicza skuteczność ataków typu MITM i cache poisoning.
-
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

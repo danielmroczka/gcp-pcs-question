@@ -86,28 +86,29 @@ A batch job running on Compute Engine needs temporary write access to a Cloud St
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Create a service account with the storage.objectCreator role. Use service account impersonation in the batch job's code.)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- Least Privilege: `storage.objectCreator` (daje uprawnienia tylko do *tworzenia* obiektów, czyli zapisywania) to mniejszy zakres uprawnień niż "full admin".
-- Service Account Impersonation: To nowoczesna i bezpieczna metoda (zamiast kluczy), pozwalająca na przejmowanie tożsamości (impersonation) konta serwisowego przez kod uruchomiony na VM.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Administrator role: Zbyt szerokie uprawnienia (łamie zasadę Least Privilege).
-- B. Long-lived key: Klucze (JSON keys) to najgorsza praktyka – jeśli wyciekną, są ważne dopóki nie zostaną usunięte.
-- D. Default service account: Nigdy nie przypisuj ról do domyślnego konta serwisowego ("Compute Engine default service account"), ponieważ jest ono używane przez system do wielu zadań – zawsze twórz dedykowane (custom) konta dla swoich aplikacji.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Minimum permissions" + "Compute Engine" = Custom Service Account + granulowana rola IAM (storage.objectCreator) + Impersonation (brak kluczy!).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: IAM Roles są lepsze niż ACLs, a Service Accounts są lepsze niż klucze (keys).
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/iam/docs/service-account-impersonation" target="_blank">Service account impersonation</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

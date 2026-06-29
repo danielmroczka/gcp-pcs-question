@@ -86,28 +86,29 @@ You manage the security logs within your cloud environment. You have configured 
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Use the data in the Cloud Storage bucket as an external table in BigQuery. Provide the auditors access to the BigQuery dataset.)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- BigQuery External Table: Pozwala na wykonywanie zapytań SQL bezpośrednio na plikach (np. JSON, CSV) znajdujących się w Cloud Storage, bez konieczności ich kopiowania/importowania (tzw. "zero-copy").
-- "Cost-effective" + "Quickly implemented": Jest to najtańsza i najszybsza metoda analizy ogromnych zbiorów danych logów (log files) w Cloud Storage.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- A. VM + analytics toolset: Bardzo czasochłonne, drogie (koszty utrzymania VM) i wymagające ręcznego kopiowania danych.
-- C. Dataflow + Elasticsearch: Bardzo kosztowne (Dataflow + licencja/utrzymanie Elasticsearch) i wymagające dużo czasu na konfigurację.
-- D. Cloud Run job + Cloud Logging: Cloud Logging nie jest narzędziem do analizy dużych zbiorów danych (BigQuery jest).
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Logs in Cloud Storage" + "Auditors need to analyze" + "Cost-effective/Quickly" = BigQuery (External Table).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: BigQuery to "złoty standard" analityki w GCP.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/bigquery/docs/external-data-cloud-storage" target="_blank">Querying data from Cloud Storage</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

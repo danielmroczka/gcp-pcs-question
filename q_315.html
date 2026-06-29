@@ -86,33 +86,29 @@ Your organization is building a real-time recommendation engine using ML models 
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Enable container image vulnerability scanning during development and pre-deployment. Enforce Binary Authorization on images deployed from Artifact Registry to your continuous integration and continuous deployment (CI/CD) pipeline.)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-Aby zabezpieczyć łańcuch dostaw modeli ML (ML model supply chain) przed atakami, kluczowe jest zapewnienie integralności i bezpieczeństwa artefaktów (obrazów kontenerów) od momentu ich utworzenia do momentu wdrożenia. Włączenie automatycznego skanowania podatności (Vulnerability Scanning) w Artifact Registry pozwala na wczesne wykrycie zagrożeń w obrazach. Wymuszenie Binary Authorization na klastrach GKE gwarantuje, że tylko te obrazy, które przeszły pomyślnie proces weryfikacji i posiadają odpowiednie atestacje (np. brak krytycznych podatności, zatwierdzenie przez potok CI/CD), będą mogły zostać uruchomione w środowisku produkcyjnym.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- B. Sanityzacja danych treningowych (data sanitization) i restrykcje IAM są ważnymi elementami bezpieczeństwa ML (ochrona przed poisoning attacks), ale nie adresują bezpośrednio ryzyka związanego z potokiem wdrożeniowym (deployment pipeline), o który pyta scenariusz. Binary Authorization jest bardziej specyficznym rozwiązaniem dla bezpieczeństwa "supply chain".
-- C. Ograniczanie zewnętrznych bibliotek i rotacja kluczy szyfrujących to ogólne dobre praktyki bezpieczeństwa, ale nie stanowią kompleksowego rozwiązania dla ochrony łańcucha dostaw kontenerów w środowisku GKE.
-- D. Reguły zapory ogniowej (firewall rules) i systemy IDS chronią infrastrukturę przed atakami sieciowymi i anomaliami w przepływie wiadomości, ale nie weryfikują, czy kod/model wewnątrz kontenera jest bezpieczny i pochodzi z zaufanego źródła.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Supply chain attacks" + "pipeline" + "containers" = Skanowanie podatności + Binary Authorization.
-- Pamiętaj, że w Google Cloud atestacje są przechowywane jako metadane w Container Analysis.
-- Model ML w kontenerze traktujemy tak samo jak każdą inną aplikację kontenerową z punktu widzenia bezpieczeństwa potoku.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Binary Authorization integruje się z Cloud Build, umożliwiając automatyczne podpisywanie obrazów (atestację) po pomyślnym zbudowaniu i przetestowaniu.
-- Vulnerability scanning w Artifact Registry może być skanowaniem przy przesyłaniu (on-upload) lub ciągłym (continuous).
-- Zwróć uwagę na "Binary Authorization" jako kluczowy mechanizm wymuszania (enforcement).
-
-Dokumentacja i linki:
-- https://cloud.google.com/binary-authorization/docs/overview
-- https://cloud.google.com/artifact-analysis/docs/vulnerability-scanning
-- https://cloud.google.com/architecture/software-supply-chain-security
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

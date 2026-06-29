@@ -86,27 +86,29 @@ You just implemented a Secure Web Proxy instance on Google Cloud for your organi
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Ensure that the developers have explicitly configured the proxy address on their instance.)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Proxy configuration: Secure Web Proxy (SWP) działa zazwyczaj jako proxy jawne (explicit). System operacyjny Linux nie kieruje automatycznie ruchu do proxy - musi zostać o tym "poinformowany" przez zmienne środowiskowe (np. `export http_proxy=...`). Bez tej konfiguracji pakiety próbują iść bezpośrednio do internetu, co kończy się błędem.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Cloud NAT: Służy do omijania proxy, co jest sprzeczne z celem wdrożenia SWP (kontrolą ruchu).
-- B. Restart: Nie zmieni konfiguracji sieciowej aplikacji.
-- D. Firewall rule: SWP ma własne mechanizmy dopuszczania ruchu; problemem jest tu brak "styku" klienta z proxy, a nie blokada na poziomie portów IP.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Secure Web Proxy" + "Not accessing" + "Explicit proxy" = Skonfiguruj zmienne środowiskowe proxy na kliencie.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: SWP to potężne narzędzie do inspekcji TLS i filtrowania URL. Upewnij się, że znasz różnicę między proxy jawnym (explicit) a przezroczystym (transparent).
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/secure-web-proxy/docs/overview" target="_blank">Secure Web Proxy overview</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

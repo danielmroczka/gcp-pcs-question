@@ -88,19 +88,29 @@ In order to meet PCI DSS requirements, a customer wants to ensure that all outbo
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: CD**
+**Potwierdzona odpowiedź: AC**
 
-**Reguła Egzaminacyjna (Exam Rule):**
-PCI DSS wymaga ścisłej kontroli ruchu sieciowego (segmentacja, firewalle). Usługi typu IaaS w GCP oferują pełną kontrolę nad firewallami VPC, w przeciwieństwie do usług serverless.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-**Haczyki egzaminacyjne (Exam Traps):**
-- A, B, E: App Engine, Cloud Functions i Cloud Storage są usługami zarządzanymi (PaaS/Serverless), gdzie klient ma ograniczone możliwości konfigurowania firewalli dla ruchu wychodzącego na poziomie sieci VPC w taki sam sposób jak dla maszyn wirtualnych.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-**Głębokie wyjaśnienie techniczne:**
-Compute Engine (VMs) oraz GKE (kontenery w ramach VM) działają w ramach VPC. Klient jest odpowiedzialny za reguły firewall VPC (egress rules), co pozwala na precyzyjne autoryzowanie ruchu wychodzącego zgodnie z PCI DSS. W usługach zarządzanych, klient nie ma takiej kontroli nad warstwą sieciową, co wymusza stosowanie dodatkowych "compensating controls" (np. VPC Service Controls, proxy).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
+
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

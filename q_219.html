@@ -88,32 +88,29 @@ You are migrating an on-premises data warehouse to BigQuery, Cloud SQL, and Clou
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: CE (C: Key Access Justifications, E: Cloud External Key Manager)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Cloud External Key Manager (EKM): Pozwala na przechowywanie kluczy szyfrujących w systemie zewnętrznym (poza infrastrukturą Google). Spełnia to wymóg "implement a separate key management provider from data management".
-- Key Access Justifications (KAJ): Każde użycie klucza przez Google (np. w celu wsparcia technicznego lub backupu) generuje żądanie, które jest logowane i może wymagać Twojej "uzasadnionej zgody" (Justification). Spełnia to wymóg "visibility into all encryption key requests" oraz "maintain control over access".
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Customer-managed encryption keys (CMEK): Choć daje kontrolę nad cyklem życia klucza, klucz fizycznie znajduje się wewnątrz Cloud KMS (infrastruktura Google). Nie spełnia wymogu separacji dostawcy kluczy.
-- B. Customer-Supplied Encryption Keys (CSEK): CSEK to sposób "dostarczenia" klucza tymczasowo, a nie pełnoprawny model "key management provider". Nie wspiera on pełnej widoczności (visibility) do każdego użycia klucza przez Google w taki sposób jak KAJ.
-- D. Access Transparency and Approval: Ta funkcja zapewnia logi z działań administratorów Google (np. "dostępu do Twoich danych"), ale nie jest bezpośrednio powiązana z "encryption key requests" i zarządzaniem zewnętrznym dostawcą kluczy (EKM).
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "External key management provider" + "Visibility into encryption requests" = EKM + KAJ.
-- Pamiętaj: KAJ to "strażnik" Twoich kluczy, który pozwala Ci powiedzieć "TAK" lub "NIE" na prośbę Google o dostęp do klucza EKM.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- KAJ jest krytycznym elementem dla organizacji wymagających tzw. "Sovereign Cloud".
-- KAJ działa tylko z EKM i wybranymi usługami Cloud HSM.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/kms/docs/ekm" target="_blank">Cloud EKM overview</a>
-- <a href="https://cloud.google.com/key-access-justifications/docs/overview" target="_blank">Key Access Justifications overview</a>
-- <a href="https://cloud.google.com/security/sovereign-cloud" target="_blank">Google Cloud Sovereign Solutions</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

@@ -86,32 +86,29 @@ Your company is using GSuite and has developed an application meant for internal
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Enforce 2-factor authentication in GSuite)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-Głównym problemem opisanym w pytaniu jest ryzyko przejęcia konta wynikające z kradzieży hasła ("password compromised").
-1. 2-Step Verification (MFA/2FA): Jest to najskuteczniejszy mechanizm obronny przed kradzieżą poświadczeń. Nawet jeśli haker pozna hasło pracownika, nie będzie w stanie zalogować się do konta GSuite (a tym samym uzyskać dostępu do aplikacji w App Engine), ponieważ nie posiada drugiego składnika (np. klucza bezpieczeństwa Titan, kodu z aplikacji czy potwierdzenia na telefonie).
-2. Ochrona tożsamości: Ponieważ aplikacja w App Engine korzysta z tożsamości GSuite/Cloud Identity, zabezpieczenie samego procesu logowania do ekosystemu Google chroni wszystkie usługi podpięte pod to konto.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
 Dlaczego pozostałe są błędne:
-B. Cloud Identity-Aware Proxy (IAP): IAP jest świetnym narzędziem do kontroli dostępu do aplikacji bez konieczności używania VPN, ale IAP polega na uwierzytelnieniu przez Google. Jeśli hasło użytkownika zostanie skradzione, a MFA nie jest wymuszone, haker przejdzie przez IAP tak samo jak legalny użytkownik. IAP "sprawdza kim jesteś", ale 2FA "potwierdza, że Ty to naprawdę Ty".
-C. Password Sync: To narzędzie do synchronizacji haseł z AD do Google, co ułatwia życie użytkownikom, ale w żaden sposób nie chroni przed skutkami kradzieży tego zsynchronizowanego hasła.
-D. Cloud VPN: VPN zabezpiecza tunel sieciowy, ale aplikacje App Engine są domyślnie dostępne przez publiczne punkty końcowe Google. Sam VPN nie uniemożliwi komuś zalogowania się do aplikacji przez przeglądarkę z dowolnego miejsca na świecie przy użyciu skradzionego hasła.
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o "compromised password" lub "stolen credentials", poprawną odpowiedzią niemal zawsze jest "MFA", "2FA" lub "Security Keys".
-- Zrozum różnicę między IAP (autoryzacja na podstawie tożsamości) a MFA (wzmocnienie procesu uwierzytelniania).
-
-Kluczowe zagadnienia do powtórzenia:
-- 2-Step Verification (2SV) w Google Workspace/Cloud Identity.
-- Rola Cloud IAP w architekturze Zero Trust.
-- Ochrona przed phishingiem i przejęciem kont.
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://support.google.com/a/answer/175197" target="_blank">Wymuszanie weryfikacji dwuetapowej w Google Workspace</a>
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

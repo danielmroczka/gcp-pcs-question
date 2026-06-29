@@ -87,19 +87,29 @@ An organization adopts Google Cloud Platform (GCP) for application hosting servi
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: C**
+**Potwierdzona odpowiedź: AC**
 
-**Reguła Egzaminacyjna (Exam Rule):**
-Zgodnie z najlepszymi praktykami Google Cloud Identity oraz standardami bezpieczeństwa NIST, hasła muszą być wystarczająco długie, aby zapobiec atakom typu brute-force.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-**Haczyki egzaminacyjne (Exam Traps):**
-- A, B, D: Częstym błędem jest myślenie, że krótsze hasła (6-10 znaków) są wystarczające. Współczesne standardy (np. rekomendacje Google) wymagają minimum 12 znaków dla zwiększenia odporności na ataki słownikowe.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-**Głębokie wyjaśnienie techniczne:**
-Cloud Identity zarządza tożsamością i dostępem. Odpowiedzialność klienta ("in the cloud") obejmuje egzekwowanie polityk bezpieczeństwa kont użytkowników. Google narzuca minimalne standardy, ale klient musi skonfigurować politykę haseł zgodnie ze swoimi wymogami bezpieczeństwa, gdzie 12 znaków jest uznawane za "gold standard" dla ochrony przed współczesnymi metodami łamania haseł.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
+
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

@@ -86,66 +86,56 @@ Your organization acquired a new workload. The Web and Application (App) servers
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4 d-none"  >
+<div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (1. Re-deploy the Web and App servers with instance templates configured with respective service accounts. 2. Create an allow VPC firewall rule that specifies the target/source with respective service accounts.)
+Odpowiedź: D.
 
-Wyjaśnienie:
-Użycie kont serwisowych (Service Accounts) zamiast tagów sieciowych w regułach firewalla jest zalecaną praktyką bezpieczeństwa (tzw. identity-based firewalls). Tożsamość konta serwisowego jest trwale przypisana do instancji i trudniejsza do nieautoryzowanej zmiany przez administratorów maszyn wirtualnych (wymaga uprawnienia iam.serviceAccounts.actAs). Wykorzystanie szablonów instancji (Instance Templates) gwarantuje spójność tej konfiguracji podczas autoskalowania.
+Wyjaśnienie (Dlaczego poprawna):
+D. Instance templates with service accounts: Użycie Kont Serwisowych (SA) w regułach firewalla jest bezpieczniejsze niż tagów, ponieważ Instance Admin nie może zmienić SA przypisanego do maszyny bez posiadania uprawnienia `iam.serviceAccounts.actAs`. Szablon instancji (Instance Template) gwarantuje, że każda nowa maszyna utworzona przez autoskalowanie automatycznie otrzyma właściwe konto SA.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A i C: Tagi sieciowe (network tags) są mniej bezpieczne, ponieważ mogą być swobodnie edytowane przez osoby z uprawnieniami do zarządzania instancjami (Compute Admin), co pozwala na łatwe obejście reguł firewalla.
-- B: Sama konfiguracja kont serwisowych na działających maszynach nie spełnia wymogu konsystencji przy autoskalowaniu. Tylko szablony (D) gwarantują, że każda nowa instancja otrzyma właściwą tożsamość automatycznie.
+Dlaczego inne są błędne:
+A, C. Tags: Tagi sieciowe są mniej bezpieczne, ponieważ każdy `Compute Instance Admin` może je dowolnie modyfikować na działającej maszynie, omijając w ten sposób restrykcje firewalla.
+B. Service accounts: Sama tożsamość jest poprawna, ale bez użycia szablonów (D) trudniej o 'konsystencję przy autoskalowaniu'.
 
-Wskazówki i triki (Tips & Tricks):
-- Jeśli w pytaniu mowa o "autoscaling" i "consistency", szukaj odpowiedzi z "Instance Templates".
-- Jeśli mowa o "prevent admins from altering security", wybierz "Service Accounts" zamiast "Network Tags".
-
-Praktyczne informacje na egzamin:
-- Reguły firewalla oparte na kontach serwisowych są bardziej skalowalne w dużych środowiskach.
-- Pamiętaj o zasadzie najniższych uprawnień: każde konto serwisowe powinno mieć tylko te uprawnienia, których faktycznie potrzebuje.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/vpc/docs/firewalls#service-accounts" target="_blank">Reguły firewalla oparte na kontach serwisowych</a>
+Konsensus społeczności ExamTopics: Zdecydowana większość na D. SA to tożsamość, której nie da się łatwo 'podrobić' jak tagu.
 </pre>
 </div>
-<div class="ai-analysis-container d-none"  >
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Najbezpieczniejsza metoda izolacji warstw aplikacji (np. Web od App) polega na powiązaniu reguł firewalla z tożsamością (Service Account), a nie z ulotnymi atrybutami jak tagi czy adresy IP. Dzięki temu, nawet jeśli adresy IP ulegną zmianie podczas skalowania, reguły bezpieczeństwa pozostają nienaruszone i skuteczne.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Reguła firewalla typu: 'Zezwól na port 8080 z SA-WEB do SA-APP' jest niezależna od adresów IP i tagów, co czyni ją odporną na błędy konfiguracyjne deweloperów.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc/docs/firewalls" target="_blank">Dokumentacja Firewalla VPC</a></li>
+<li><a href="https://cloud.google.com/vpc/docs/firewalls#service-accounts" target="_blank">https://cloud.google.com/vpc/docs/firewalls#service-accounts</a></li>
+
 </ul>
 </div>
 </div>
-
-
-<div class="exam-section">
-    <h3>Exam Rule (GCP Professional Cloud Security Engineer)</h3>
-    <p>[INSERT RULE HERE]</p>
-    
-    <h3>Exam Traps</h3>
-    <ul>
-        <li>[TRAP 1]</li>
-        <li>[TRAP 2]</li>
-    </ul>
-
-    <h3>Deep Technical Explanation</h3>
-    <p>[DETAILED EXPLANATION WITH GCP TERMINOLOGY]</p>
-</div>
-
-
-
-
-
-
-
-
-<script src="navigation.js"></script></body>
-
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
+        let isVisible = false;
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+</body>
 </html>

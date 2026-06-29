@@ -87,36 +87,24 @@ An office manager at your small startup company is responsible for matching paym
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4 d-none"  >
+<div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: CD (C. Billing Account Viewer, D. Billing Account Costs Manager).
+Odpowiedź: CD.
 
-Wyjaśnienie:
-- C. Billing Account Viewer: Ta rola pozwala użytkownikowi przeglądać informacje o koncie rozliczeniowym, w tym faktury, historię płatności i raporty kosztów. Jest niezbędna do "dopasowywania płatności do faktur".
-- D. Billing Account Costs Manager: Ta rola umożliwia zarządzanie alertami budżetowymi oraz przeglądanie kosztów. Jest kluczowa dla wymogu "tworzenia alertów rozliczeniowych".
+Wyjaśnienie (Dlaczego poprawna):
+C. Billing Account Viewer: Pozwala widzieć faktury i płatności.
+D. Billing Account Costs Manager: Pozwala zarządzać alertami budżetowymi.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Organization Administrator: Jest to najwyższa rola administracyjna w organizacji GCP, dająca pełną kontrolę nad wszystkimi zasobami. Przyznanie jej do prostych zadań finansowych narusza zasadę najniższych uprawnień (Least Privilege).
-- B. Project Creator: Ta rola pozwala na tworzenie nowych projektów w organizacji, co wiąże się z możliwością generowania nowych kosztów, a nie jest potrzebne do zarządzania fakturami czy alertami na istniejącym koncie rozliczeniowym.
-- E. Billing Account User: Ta rola pozwala na powiązywanie projektów z kontem rozliczeniowym. Użytkownik z tą rolą może przypisywać koszty do konta, co wykracza poza czysto audytową i monitorującą rolę "office managera".
+Dlaczego inne są błędne:
+A. Org Admin: Zdecydowanie zbyt wysokie uprawnienia.
+B. Project Creator: Pozwala wydawać pieniądze poprzez tworzenie nowych zasobów, nie jest potrzebne do audytu faktur.
+E. Billing Account User: Pozwala 'podpinać' projekty do płatności, co wykracza poza rolę managera od faktur.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie dotyczy finansów i faktur, szukaj ról z przedrostkiem "Billing Account".
-- "Matching payments to invoices" = Viewer.
-- "Billing alerts" = Costs Manager.
-- Pamiętaj o zasadzie Least Privilege – nigdy nie wybieraj roli "Admin", jeśli istnieją bardziej szczegółowe role (granular roles).
-
-Kluczowe zagadnienia do powtórzenia:
-- Role IAM dla Cloud Billing.
-- Zasada najniższych uprawnień (Least Privilege).
-- Budżety i alerty w Google Cloud.
-
-Dokumentacja:
-<a href="https://cloud.google.com/billing/docs/how-to/billing-access" target="_blank">Zarządzanie dostępem do Cloud Billing</a>
+Konsensus społeczności ExamTopics: 100% na CD. To podręcznikowy podział ról finansowych.
 </pre>
 </div>
-<div class="ai-analysis-container d-none"  >
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
@@ -129,30 +117,28 @@ Dokumentacja:
 </ul>
 </div>
 </div>
-
-
-<div class="exam-section">
-    <h3>Exam Rule (GCP Professional Cloud Security Engineer)</h3>
-    <p>[INSERT RULE HERE]</p>
-    
-    <h3>Exam Traps</h3>
-    <ul>
-        <li>[TRAP 1]</li>
-        <li>[TRAP 2]</li>
-    </ul>
-
-    <h3>Deep Technical Explanation</h3>
-    <p>[DETAILED EXPLANATION WITH GCP TERMINOLOGY]</p>
-</div>
-
-
-
-
-
-
-
-
-<script src="navigation.js"></script></body>
-
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
+        let isVisible = false;
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+</body>
 </html>

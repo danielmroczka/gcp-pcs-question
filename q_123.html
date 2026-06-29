@@ -86,68 +86,57 @@ You need to connect your organization's on-premises network with an existing Goo
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4 d-none"  >
+<div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (1. Set up a Dedicated Interconnect link between the on-premises environment and Google Cloud. 2. Configure private access using the restricted.googleapis.com domains in on-premises DNS configurations.)
+Odpowiedź: D.
 
-Wyjaśnienie:
-Dedicated Interconnect to fizyczne, prywatne połączenie o wysokiej przepustowości między siecią on-premises a Google Cloud, spełniające wymóg "private transport link". Aby zapewnić, że usługi API Google są konsumowane wyłącznie przez VPC Service Controls, należy użyć domeny restricted.googleapis.com (IP 199.36.153.4/30). Ta domena ogranicza dostęp tylko do usług wspieranych przez VPC SC, co zapobiega eksfiltracji danych do innych usług Google poza perymetrem.
+Wyjaśnienie (Dlaczego poprawna):
+D. Dedicated Interconnect + restricted.googleapis.com: Dedicated Interconnect zapewnia fizyczne, prywatne łącze (Private transport link). Domena `restricted.googleapis.com` (199.36.153.4/30) jest jedyną domeną VIP, która wymusza obsługę wyłącznie usług wspieranych przez VPC Service Controls, co spełnia wymóg 'APIs only via VPC SC'.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A: Cloud VPN działa przez publiczny internet, co nie spełnia wymogu dedykowanego "private transport link" w kontekście wysokiej wydajności i izolacji fizycznej.
-- B: Domena private.googleapis.com (IP 199.36.153.8/30) pozwala na dostęp do większości usług Google (w tym Gmail czy YouTube), co nie spełnia wymogu ograniczenia dostępu tylko do usług objętych perymetrem VPC Service Controls.
-- C: Direct Peering to publiczny peering z Google, który nie zapewnia prywatnej łączności z siecią VPC (Shared VPC).
+Dlaczego inne są błędne:
+A. Cloud VPN: Choć bezpieczny, nie jest to 'dedykowane łącze fizyczne' (Interconnect jest wyżej w hierarchii wymagań 'transport link').
+B. private.googleapis.com: Ta domena (199.36.153.8/30) daje dostęp do WSZYSTKICH API Google (w tym YouTube, Gmail), a nie tylko tych chronionych przez VPC SC.
+C. Direct Peering: To peering publiczny dla API, nie zapewnia prywatnego łącza transportowego do sieci VPC.
 
-Wskazówki i triki (Tips & Tricks):
-- "Private transport link" = Dedicated Interconnect.
-- "VPC Service Controls only" = restricted.googleapis.com.
-- "All Google APIs" = private.googleapis.com.
-
-Praktyczne informacje na egzamin:
-- Pamiętaj o konieczności skonfigurowania tras BGP dla adresów IP restricted/private VIP w sieci on-premises.
-- VPC Service Controls jest kluczowy dla zgodności z regulacjami dotyczącymi ochrony danych (np. HIPAA, PCI DSS).
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity" target="_blank">Prywatna łączność dla VPC Service Controls</a>
+Konsensus społeczności ExamTopics: 100% na D.restricted VIP to standard dla VPC SC i łączności hybrydowej.
 </pre>
 </div>
-<div class="ai-analysis-container d-none"  >
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Połączenie <b>Dedicated Interconnect</b> z <b>restricted.googleapis.com</b> tworzy najbezpieczniejszą możliwą ścieżkę dla danych wrażliwych. Rozwiązanie to eliminuje ryzyko ataku Man-in-the-Middle z internetu publicznego oraz drastycznie ogranicza "powierzchnię ataku" API Google tylko do tych usług, które Twoja firma faktycznie autoryzowała wewnątrz perymetru bezpieczeństwa.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Użycie 'restricted' VIP zapobiega wyciekowi danych do usług Google, które nie są objęte perymetrem bezpieczeństwa Twojej firmy.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/interconnect/docs/how-to/dedicated/configuring-macsec" target="_blank">Bezpieczeństwo Interconnect (MACsec)</a></li>
+<li><a href="https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity" target="_blank">https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity</a></li>
+
 </ul>
 </div>
 </div>
-
-
-<div class="exam-section">
-    <h3>Exam Rule (GCP Professional Cloud Security Engineer)</h3>
-    <p>[INSERT RULE HERE]</p>
-    
-    <h3>Exam Traps</h3>
-    <ul>
-        <li>[TRAP 1]</li>
-        <li>[TRAP 2]</li>
-    </ul>
-
-    <h3>Deep Technical Explanation</h3>
-    <p>[DETAILED EXPLANATION WITH GCP TERMINOLOGY]</p>
-</div>
-
-
-
-
-
-
-
-
-<script src="navigation.js"></script></body>
-
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
+        let isVisible = false;
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+</body>
 </html>

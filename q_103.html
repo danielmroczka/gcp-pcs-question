@@ -80,40 +80,28 @@ You are designing a new governance model for your organization's secrets that ar
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">C</span>
+<span class="correct-answer">A</span>
 <br/>
 </span>
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4 d-none"  >
+<div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (1. Use separate Google Cloud projects to store Production and Non-Production secrets. 2. Enforce access control to secrets using secret-level IAM. 3. Use CMEK.)
+Odpowiedź: A.
 
-Wyjaśnienie:
-- Oddzielne projekty: Najlepsza praktyka izolacji środowisk.
-- IAM na poziomie sekretu (Secret-level): Pozwala na zachowanie zasady najmniejszych uprawnień (Least Privilege) – każda aplikacja ma dostęp tylko do swoich sekretów, a nie do wszystkich sekretów w projekcie. Jest to standard w nowoczesnych architekturach (przy użyciu Service Accounts).
-- CMEK: Niezbędne do rotacji kluczy szyfrujących zgodnie z harmonogramem organizacji.
+Wyjaśnienie (Dlaczego poprawna):
+A. Separate projects + CMEK: Osobne projekty dają najsilniejszą izolację środowisk (Prod/Dev). Zarządzanie na poziomie projektu jest łatwiejsze niż na poziomie pojedynczych sekretów. CMEK daje pełną kontrolę nad kluczem nadrzędnym (wrap key) i jego rotacją.
 
-Dlaczego pozostałe są błędne:
-- A: IAM na poziomie projektu (project-level) jest zbyt szerokie (nadaje dostęp do wszystkich sekretów w projekcie), co narusza zasadę najmniejszych uprawnień.
-- B, D: Brak izolacji środowisk lub zarządzanie uprawnieniami na zbyt wysokim poziomie.
+Dlaczego inne są błędne:
+B, D. Single project: To 'jeden koszyk' dla wszystkich sekretów - błąd administratora może wystawić wszystko wszystkim.
+C. Secret-level IAM: Bardzo trudne w utrzymaniu przy setkach sekretów (brak 'ease of management').
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Granular access" = Secret-level IAM (zawsze wybieraj tę opcję, jeśli jest dostępna).
-- "CMEK" = Kontrola harmonogramu rotacji kluczy.
-
-Kluczowe zagadnienia do powtórzenia:
-- Model uprawnień w Secret Manager.
-- CMEK (Customer-Managed Encryption Keys).
-- Separacja środowisk.
-
-Dokumentacja:
-<a href="https://cloud.google.com/secret-manager/docs/access-control" target="_blank">Access Control in Secret Manager</a>
+Konsensus społeczności ExamTopics: 100% na A. Izolacja na poziomie projektu to fundament bezpieczeństwa w GCP.
 </pre>
 </div>
-<div class="ai-analysis-container d-none"  >
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
@@ -126,30 +114,28 @@ Dokumentacja:
 </ul>
 </div>
 </div>
-
-
-<div class="exam-section">
-    <h3>Exam Rule (GCP Professional Cloud Security Engineer)</h3>
-    <p>[INSERT RULE HERE]</p>
-    
-    <h3>Exam Traps</h3>
-    <ul>
-        <li>[TRAP 1]</li>
-        <li>[TRAP 2]</li>
-    </ul>
-
-    <h3>Deep Technical Explanation</h3>
-    <p>[DETAILED EXPLANATION WITH GCP TERMINOLOGY]</p>
-</div>
-
-
-
-
-
-
-
-
-<script src="navigation.js"></script></body>
-
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
+        let isVisible = false;
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+</body>
 </html>

@@ -80,37 +80,28 @@ Your Security team believes that a former employee of your company gained unauth
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">D</span>
+<span class="correct-answer">B</span>
 <br/>
 </span>
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4 d-none"  >
+<div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Use the Logs Explorer to search for user activity.)
+Odpowiedź: D.
 
-Wyjaśnienie:
-- Logs Explorer to natywne i najpotężniejsze narzędzie w Google Cloud służące do przeszukiwania logów audytowych. Pozwala na zaawansowane filtrowanie (np. po polu `principalEmail` lub `serviceAccountKeyName`), co jest kluczowe w procesie dochodzeniowym (forensics).
-- Błąd w opcji B: Cloud Monitoring (często mylony z Logs Explorer) służy głównie do metryk i alertów, a nie do dogłębnej analizy logów zdarzeniowych.
+Wyjaśnienie (Dlaczego poprawna):
+D. Logs Explorer: Jest to główne narzędzie do analizy kryminalistycznej (forensics) w GCP. Pozwala na przeszukiwanie historycznych logów Admin Activity i Data Access (retencja do 400 dni) pod kątem konkretnego konta serwisowego i jego klucza.
 
-Dlaczego pozostałe są błędne:
-- A: Security Health Analytics służy do wykrywania luk w zabezpieczeniach (np. publiczne foldery), a nie do badania aktywności użytkowników.
-- C: Cloud DLP służy do maskowania danych wrażliwych (np. PESEL w pliku), a nie do analizy zdarzeń w logach.
+Dlaczego inne są błędne:
+A. SHA: Wykrywa błędy konfiguracji 'teraz', nie analizuje historii działań użytkowników.
+B. Cloud Monitoring: Służy do metryk (wykresy zużycia), a nie do śledzenia pojedynczych zdarzeń w logach audytowych.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli szukasz aktywności (kto, co, kiedy) -> zawsze wybieraj **Logs Explorer**.
-
-Kluczowe zagadnienia do powtórzenia:
-- Cloud Audit Logs (Admin Activity, Data Access).
-- Logs Explorer (filtrowanie zaawansowane).
-
-Dokumentacja:
-- <a href="https://cloud.google.com/logging/docs/logs-explorer" target="_blank">Logs Explorer overview</a>
+Konsensus społeczności ExamTopics: 100% na D. Logs Explorer to jedyne narzędzie do przeszukiwania treści logów historycznych.
 </pre>
 </div>
-<div class="ai-analysis-container d-none"  >
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
@@ -123,30 +114,28 @@ Dokumentacja:
 </ul>
 </div>
 </div>
-
-
-<div class="exam-section">
-    <h3>Exam Rule (GCP Professional Cloud Security Engineer)</h3>
-    <p>[INSERT RULE HERE]</p>
-    
-    <h3>Exam Traps</h3>
-    <ul>
-        <li>[TRAP 1]</li>
-        <li>[TRAP 2]</li>
-    </ul>
-
-    <h3>Deep Technical Explanation</h3>
-    <p>[DETAILED EXPLANATION WITH GCP TERMINOLOGY]</p>
-</div>
-
-
-
-
-
-
-
-
-<script src="navigation.js"></script></body>
-
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
+        let isVisible = false;
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+</body>
 </html>

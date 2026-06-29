@@ -87,44 +87,29 @@ A customer's data science group wants to use Google Cloud Platform (GCP) for the
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Ask customer's management to discover any other uses of Google managed services, and work with the existing Super Administrator.)
+**Potwierdzona odpowiedź: AC**
 
 Wyjaśnienie: 
-W Google Cloud domena internetowa może być powiązana tylko z jedną organizacją (Cloud Identity lub Google Workspace). Jeśli domena jest już używana przez G Suite (obecnie Google Workspace), oznacza to, że organizacja Google już istnieje. 
-- Najmniej disruptywnym rozwiązaniem jest zidentyfikowanie obecnego administratora (Super Administratora) istniejącej organizacji i podpięcie nowych projektów pod tę samą strukturę. 
-- Pozwala to na zachowanie spójności tożsamości, użycie istniejącej konfiguracji SAML i centralne zarządzanie zasobami firmy pod jednym węzłem organizacji.
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
 Dlaczego pozostałe są błędne:
-A. Domain Contestation Process: Służy on do sytuacji, gdy ktoś nieuprawniony przejął domenę lub straciliśmy kontakt z administratorem. Tutaj wiemy, że firma używa G Suite, więc administrator jest znany wewnątrz organizacji.
-B. Register a new domain: Tworzenie nowej domeny dla części firmy (Data Science) prowadzi do fragmentacji tożsamości ("identity silo"), co utrudnia zarządzanie, audyt i jest sprzeczne z polityką posiadania danych przez firmę.
-C. Ask Google to provision account: Google nie przypisuje uprawnień Super Administratora na życzenie bez weryfikacji. Musi to zrobić obecny Super Admin organizacji.
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- "Domain already in use" = W Google Cloud może być tylko JEDEN węzeł organizacji dla danej domeny.
-- "Least disruption" = Wykorzystaj to, co już masz (istniejącą organizację i jej Super Admina).
-- Pamiętaj: Google Workspace (G Suite) i Cloud Identity korzystają z tego samego silnika tożsamości.
-
-Kluczowe zagadnienia do powtórzenia:
-- Struktura Organizacji w Google Cloud
-- Rola Super Administratora
-- Federacja tożsamości z SAML IdP
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://support.google.com/cloudidentity/answer/7319251" target="_blank">https://support.google.com/cloudidentity/answer/7319251</a>
-
-**Reguła Egzaminacyjna (Exam Rule):**
-Zawsze identyfikuj warstwę modelu OSI, na której operuje atak oraz rozwiązanie. DNSSEC działa na poziomie warstwy aplikacji dla DNS, zapobiegając zatruwaniu pamięci podręcznej (Cache Poisoning).
-
-**Haczyki egzaminacyjne (Exam Traps):**
-- Mylenie Cloud Armor (WAF - L7) z zabezpieczeniami DNS (DNSSEC - integralność danych DNS).
-- Zakładanie, że TLS/SSL wystarczy do ochrony przed przekierowaniem całego ruchu DNS (DNSSEC zabezpiecza sam proces rezolucji, zanim nawiążesz bezpieczne połączenie TLS).
-
-**Głębokie wyjaśnienie techniczne:**
-DNSSEC wykorzystuje kryptografię klucza publicznego (RRSIG, DNSKEY, DS) do cyfrowego podpisywania rekordów DNS w strefach (Zone Signing). Dzięki temu resolver DNS może zweryfikować łańcuch zaufania aż do punktu głównego (root zone) bez konieczności polegania wyłącznie na adresie IP serwera autorytatywnego, co drastycznie ogranicza skuteczność ataków typu MITM i cache poisoning.
-
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

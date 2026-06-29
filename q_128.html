@@ -86,67 +86,57 @@ Users are reporting an outage on your public-facing application that is hosted o
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4 d-none"  >
+<div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Enable Firewall Rules Logging on the latest rules that were changed. Use Logs Explorer to analyze whether the rules are working correctly.)
+Odpowiedź: A.
 
-Wyjaśnienie:
-Firewall Rules Logging to funkcja pozwalająca na rejestrowanie każdego przypadku dopasowania pakietu do reguły firewalla (zarówno zezwalającej, jak i blokującej). Jest to najszybsza i najdokładniejsza metoda na sprawdzenie, czy nowo wprowadzone zmiany w regułach blokują pożądany ruch. Dzięki Logs Explorerowi można dokładnie zidentyfikować identyfikator reguły, która podjęła decyzję o losie konkretnego pakietu.
+Wyjaśnienie (Dlaczego poprawna):
+A. Firewall Rules Logging: To najszybsza i najdokładniejsza metoda diagnozy. Rejestruje ona każdy pakiet, który został dopuszczony lub odrzucony przez konkretną regułę. W Logs Explorerze zobaczysz dokładnie nazwę reguły, która 'zabiła' ruch aplikacji.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- B: Bastion host i analizatory ruchu (np. tcpdump) mogą potwierdzić brak łączności, ale nieskażą one przyczyny leżącej po stronie konfiguracji firewalla VPC (nie pokażą, która reguła blokuje ruch).
-- C: Wyłączanie reguł pojedynczo w środowisku pre-produkcyjnym jest czasochłonne, nieefektywne i nie gwarantuje odtworzenia identycznych warunków ruchu co w produkcji.
-- D: VPC Flow Logs rejestrują metadane przepływów (próbki ruchu), co jest przydatne do ogólnej analizy, ale logi reguł firewalla (Firewall Logging) są znacznie bardziej precyzyjne w diagnozowaniu problemów z konkretnymi regułami.
+Dlaczego inne są błędne:
+B. Bastion host: Analiza z poziomu bastionu nie powie Ci, co dzieje się na interfejsach innych maszyn chronionych przez rozproszony firewall GCP.
+C. Disable rules: Bardzo ryzykowne i czasochłonne. Może pogorszyć sytuację bezpieczeństwa na produkcji.
+D. VPC Flow Logs: Rejestrują przepływy, ale nie zawsze precyzują nazwę reguły firewalla, która spowodowała blokadę tak czytelnie jak dedykowane logi firewalla.
 
-Wskazówki i triki (Tips & Tricks):
-- "Test firewall rules" lub "debug connection issues" = Zawsze najpierw szukaj "Firewall Rules Logging" lub "Connectivity Tests".
-- Pamiętaj, że logi firewalla można filtrować po akcji: `jsonPayload.action="DENY"`.
-
-Praktyczne informacje na egzamin:
-- Firewall Rules Logging jest opcjonalny i może generować koszty (warto go włączać tylko dla podejrzanych reguł podczas debugowania).
-- Connectivity Tests to alternatywne narzędzie (symulacja), które pozwala sprawdzić ścieżkę pakietu bez generowania rzeczywistego ruchu.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/vpc/docs/firewall-rules-logging" target="_blank">Korzystanie z logów reguł firewalla</a>
+Konsensus społeczności ExamTopics: Zdecydowana większość na A. To standardowe narzędzie do debugowania sieci w GCP.
 </pre>
 </div>
-<div class="ai-analysis-container d-none"  >
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> Najczęstszym błędem przy zmianie firewalli w GCP jest nieumyślne dopasowanie ruchu do reguły o wyższym priorytecie (niższa liczba). <b>Firewall Logging</b> pozwala na natychmiastowe wykrycie takich konfliktów, pokazując dokładnie, która reguła "przejęła" pakiet.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Firewall Logging pozwala również na audytowanie reguł, które nie są używane (brak trafień w logach), co pomaga w optymalizacji polityk.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/network-intelligence-center/docs/connectivity-tests/concepts/overview" target="_blank">Connectivity Tests w GCP</a></li>
+<li><a href="https://cloud.google.com/vpc/docs/firewall-rules-logging" target="_blank">https://cloud.google.com/vpc/docs/firewall-rules-logging</a></li>
+
 </ul>
 </div>
 </div>
-
-
-<div class="exam-section">
-    <h3>Exam Rule (GCP Professional Cloud Security Engineer)</h3>
-    <p>[INSERT RULE HERE]</p>
-    
-    <h3>Exam Traps</h3>
-    <ul>
-        <li>[TRAP 1]</li>
-        <li>[TRAP 2]</li>
-    </ul>
-
-    <h3>Deep Technical Explanation</h3>
-    <p>[DETAILED EXPLANATION WITH GCP TERMINOLOGY]</p>
-</div>
-
-
-
-
-
-
-
-
-<script src="navigation.js"></script></body>
-
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
+        let isVisible = false;
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+</body>
 </html>

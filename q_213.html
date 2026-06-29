@@ -87,34 +87,29 @@ Your organization is using GitHub Actions as a continuous integration and delive
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Configure workload identity federation to use GitHub as an identity pool provider)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Workload Identity Federation (WIF): Jest to najbezpieczniejszy i obecnie rekomendowany sposób uwierzytelniania zewnętrznych obciążeń (takich jak GitHub Actions) do Google Cloud. 
-- Eliminacja kluczy: WIF całkowicie eliminuje potrzebę tworzenia, pobierania i rotowania statycznych kluczy JSON kont serwisowych (Service Account Keys). Klucze te są najczęstszą przyczyną wycieków danych (np. poprzez przypadkowe wypchnięcie ich do repozytorium).
-- Mechanizm działania: GitHub Actions generuje krótkotrwały token OIDC (OpenID Connect). Google Cloud weryfikuje ten token i na jego podstawie wydaje krótkotrwały, bezpieczny token dostępu do GCP. Po zakończeniu pipeline'u token wygasa automatycznie.
-- Audytowalność: Każde użycie WIF jest logowane, a dostęp może być precyzyjnie ograniczony do konkretnego repozytorium, a nawet konkretnej gałęzi (branch) lub środowiska w GitHubie.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A i B. Service account keys: Przechowywanie kluczy JSON w plikach konfiguracyjnych lub w repozytorium (nawet jako GitHub Secrets) wiąże się z ryzykiem ich kradzieży. Są to poświadczenia długotrwałe, które wymagają ręcznego zarządzania i rotacji. WIF (D) jest metodą "keyless", czyli bezkluczową.
-- C. GKE cluster with Workload Identity: Choć Workload Identity wewnątrz GKE jest świetnym rozwiązaniem dla podów działających W CHMURZE, nie służy ono do dostarczania poświadczeń dla zewnętrznych systemów takich jak GitHub. To GitHub potrzebuje tożsamości, aby "pukać" do Google Cloud, a nie odwrotnie.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "GitHub Actions" / "External CI/CD" + "Securely" = Workload Identity Federation.
-- Pamiętaj: WIF jest zawsze lepsze niż Service Account Keys.
-- Zapamiętaj frazę: "Keyless authentication".
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zrozum terminologię: **Identity Pool** (grupa zewnętrznych tożsamości), **Provider** (konkretny system, np. GitHub).
-- WIF wspiera standardy OIDC i SAML 2.0.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/blog/products/identity-security/enabling-keyless-authentication-from-github-actions" target="_blank">Keyless authentication from GitHub Actions</a>
-- <a href="https://github.com/google-github-actions/auth" target="_blank">Official Google GitHub Action for Auth</a>
-- <a href="https://cloud.google.com/iam/docs/workload-identity-federation" target="_blank">Workload Identity Federation documentation</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

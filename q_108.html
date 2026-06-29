@@ -86,35 +86,22 @@ An organization is moving applications to Google Cloud while maintaining a few m
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4 d-none"  >
+<div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Dedicated Interconnect)
+Odpowiedź: A.
 
-Wyjaśnienie:
-- Przepustowość 50 Gbps: Dedicated Interconnect to jedyne rozwiązanie w Google Cloud, które pozwala na uzyskanie tak wysokiej przepustowości dla pojedynczego połączenia hybrydowego (możliwość agregacji wielu portów 10 Gbps lub użycia portów 100 Gbps).
-- Mission-critical: Zapewnia bezpośrednie, fizyczne połączenie o wysokiej dostępności i niskich opóźnieniach, co jest niezbędne dla aplikacji krytycznych dla biznesu.
-- Bezpieczeństwo: Połączenie jest prywatne (ruch nie przechodzi przez publiczny internet), co stanowi warstwę bezpieczeństwa fizycznego i izolacji sieciowej.
+Wyjaśnienie (Dlaczego poprawna):
+A. Dedicated Interconnect: Jedyny sposób na uzyskanie 50 Gbps stabilnego, prywatnego łącza. Możesz zagregować 5 łączy po 10 Gbps lub użyć łączy 100 Gbps.
 
-Dlaczego pozostałe są błędne:
-- B: Cloud Router służy do dynamicznego routingu (BGP) między sieciami, ale nie zapewnia fizycznego medium transmisyjnego ani tak wysokiej przepustowości jak fizyczny Interconnect.
-- C: Cloud VPN jest ograniczony przez publiczny internet. Nawet przy użyciu High Availability VPN, osiągnięcie stabilnego 50 Gbps wymagałoby dziesiątek tuneli, co jest niezarządzalne i nieefektywne.
-- D: Partner Interconnect zazwyczaj oferuje prędkości do 10 Gbps na połączenie. Przy wymaganiu 50 Gbps, Dedicated Interconnect jest bardziej opłacalnym i skalowalnym wyborem.
+Dlaczego inne są błędne:
+C. Cloud VPN: Tunel ma limit ~3Gbps. 50Gbps wymagałoby absurdalnej liczby tuneli.
+D. Partner Interconnect: Zazwyczaj do 10Gbps. Dla tak dużych potrzeb (50G) Dedicated jest jedynym logicznym wyborem Enterprise.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli widzisz przepustowość > 10 Gbps, prawie zawsze odpowiedzią jest Dedicated Interconnect.
-- "Mission-critical" w kontekście sieci hybrydowej sugeruje Dedicated Interconnect ze względu na przewidywalność i wysoką dostępność (99.9% lub 99.99%).
-
-Kluczowe zagadnienia do powtórzenia:
-- Różnice między Dedicated a Partner Interconnect.
-- Limity przepustowości poszczególnych metod łączności hybrydowej.
-- Modele wysokiej dostępności (HA) dla Cloud Interconnect.
-
-Dokumentacja:
-- <a href="https://cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview" target="_blank">Omówienie Dedicated Interconnect</a>
+Konsensus społeczności ExamTopics: 100% na A. 50 Gbps = Dedicated Interconnect.
 </pre>
 </div>
-<div class="ai-analysis-container d-none"  >
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
@@ -127,30 +114,28 @@ Dokumentacja:
 </ul>
 </div>
 </div>
-
-
-<div class="exam-section">
-    <h3>Exam Rule (GCP Professional Cloud Security Engineer)</h3>
-    <p>[INSERT RULE HERE]</p>
-    
-    <h3>Exam Traps</h3>
-    <ul>
-        <li>[TRAP 1]</li>
-        <li>[TRAP 2]</li>
-    </ul>
-
-    <h3>Deep Technical Explanation</h3>
-    <p>[DETAILED EXPLANATION WITH GCP TERMINOLOGY]</p>
-</div>
-
-
-
-
-
-
-
-
-<script src="navigation.js"></script></body>
-
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
+        let isVisible = false;
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+</body>
 </html>

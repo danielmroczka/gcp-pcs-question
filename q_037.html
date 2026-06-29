@@ -87,32 +87,29 @@ A company allows every employee to use Google Cloud Platform. Each department ha
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Create a Folder per department under the Organization. For each department's Folder, assign the Project Viewer role to the Google Group related to that department.)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-Najlepszym sposobem na zarządzanie uprawnieniami w dużej organizacji z wieloma departamentami jest wykorzystanie hierarchii zasobów (Resource Hierarchy) w Google Cloud. Foldery pozwalają na logiczne grupowanie projektów. Uprawnienia IAM nadane na poziomie folderu są automatycznie dziedziczone przez wszystkie projekty znajdujące się w tym folderze (zarówno obecne, jak i nowo utworzone). Przypisanie roli `Project Viewer` odpowiedniej grupie Google na poziomie folderu departamentu zapewnia, że każdy nowy projekt stworzony w tym folderze będzie automatycznie dostępny (tylko do odczytu) dla członków tego departamentu.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
 Dlaczego pozostałe są błędne:
-B. Create a Folder per department... assign the Project Browser role: Rola `Project Browser` (roles/browser) pozwala jedynie na przeglądanie hierarchii zasobów (widzenie nazw projektów), ale nie daje uprawnień do przeglądania samych zasobów wewnątrz projektu (np. nie można zobaczyć listy instancji VM).
-C. Create a Project per department... assign the Project Viewer role: To podejście zakłada, że uprawnienia są nadawane na poziomie pojedynczego projektu. Nie spełnia to wymogu automatycznego nadawania uprawnień dla "wszystkich nowych projektów" (all new project resources), ponieważ każdy nowy projekt wymagałby ręcznej konfiguracji IAM.
-D. Create a Project per department... assign the Project Browser role: Podobnie jak w opcji C, jest to nieefektywne, a dodatkowo rola `Project Browser` jest niewystarczająca do przeglądania zasobów.
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- Słowo klucz: "Automatically" + "new projects" -> prawie zawsze wskazuje na dziedziczenie uprawnień przez Foldery lub Organizację.
-- Pamiętaj o hierarchii: Organizacja > Foldery > Projekty > Zasoby.
-- Rola `Viewer` daje wgląd w zasoby, rola `Browser` daje wgląd w strukturę (nazwy projektów).
-
-Kluczowe zagadnienia do powtórzenia:
-- Google Cloud Resource Hierarchy
-- IAM Role Inheritance (Dziedziczenie ról)
-- Różnice między Project Viewer a Project Browser
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy" target="_blank">https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy</a>
-<a href="https://cloud.google.com/resource-manager/docs/creating-managing-folders" target="_blank">https://cloud.google.com/resource-manager/docs/creating-managing-folders</a>
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

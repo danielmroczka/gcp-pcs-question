@@ -87,32 +87,29 @@ A retail customer allows users to upload comments and product reviews. The custo
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Cloud Data Loss Prevention API)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-Cloud Data Loss Prevention (DLP) API (część pakietu Sensitive Data Protection) jest usługą zaprojektowaną specjalnie do wykrywania, klasyfikowania i maskowania (redakcji) danych wrażliwych w tekstach, obrazach i bazach danych. W opisanym scenariuszu, gdzie użytkownicy przesyłają recenzje, DLP API może automatycznie przeskanować tekst przed jego publikacją, identyfikując takie informacje jak numery kart kredytowych, adresy, numery telefonów czy inne dane osobowe (PII), a następnie pozwolić na ich usunięcie lub zamaskowanie.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
 Dlaczego pozostałe są błędne:
-A. Cloud Key Management Service: KMS służy do zarządzania kluczami szyfrującymi. Pozwala na szyfrowanie danych "w spoczynku", ale nie posiada funkcji analizy treści tekstu w celu wykrywania konkretnych typów informacji (jak PII).
-C. BigQuery: Jest to hurtownia danych analitycznych. Choć można w niej przechowywać recenzje i integrować ją z DLP, sama usługa BigQuery nie służy do skanowania treści pod kątem danych wrażliwych w locie przed publikacją.
-D. Web Security Scanner: Jest to narzędzie do skanowania aplikacji webowych pod kątem luk technicznych (np. XSS, SQL Injection). Nie służy do analizy merytorycznej treści wprowadzanych przez użytkowników pod kątem ochrony prywatności.
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- Słowa klucze: "sensitive data", "PII", "redact", "mask", "classify text" -> zawsze wskazują na Cloud DLP API.
-- Cloud DLP może działać na danych nieustrukturyzowanych (tekst, obrazy) oraz ustrukturyzowanych (bazy danych).
-- Pamiętaj, że DLP to "content awareness" (świadomość treści), a KMS to "encryption" (szyfrowanie).
-
-Kluczowe zagadnienia do powtórzenia:
-- Typy infoTypes w Cloud DLP (Globalne i regionalne)
-- Techniki de-identyfikacji (masking, tokenization, bucketing)
-- Integracja DLP z innymi usługami GCP
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://cloud.google.com/dlp" target="_blank">https://cloud.google.com/dlp</a>
-<a href="https://cloud.google.com/dlp/docs/inspecting-text" target="_blank">https://cloud.google.com/dlp/docs/inspecting-text</a>
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

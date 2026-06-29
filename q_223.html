@@ -87,32 +87,29 @@ After completing a security vulnerability assessment, you learned that cloud adm
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Set the reauthentication frequency for the Google Cloud Session Control to one hour)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Google Cloud Session Control: Jest to funkcja w Cloud Identity / Google Workspace, która pozwala administratorom definiować zasady sesji dla konsoli Google Cloud oraz narzędzi CLI (jak `gcloud`).
-- Reauthentication frequency (częstotliwość ponownego uwierzytelniania): Ustawienie tego parametru wymusza na użytkowniku ponowne podanie poświadczeń (i MFA) po upływie określonego czasu (np. 1 godziny). Nawet jeśli atakujący przejmie sesję (np. token sesji), po godzinie sesja wygaśnie i wymagane będzie ponowne logowanie, co zablokuje dalszy dostęp.
-- Minimalizacja ryzyka: To podejście "twarde" w odpowiedzi na zagrożenie eksploatacji sesji (np. przez kradzież plików cookie).
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Session duration: Określa całkowity czas życia sesji. Reauthentication frequency jest bardziej precyzyjnym mechanizmem, ponieważ wymusza na użytkowniku potwierdzenie tożsamości (MFA) w trakcie trwania sesji, co jest bezpieczniejsze.
-- C. AllowServiceAccountCredentialLifetimeExtension: To zaawansowane ustawienie dotyczy kont serwisowych i możliwości wydłużenia życia ich tokenów. Nie ma związku z czasem sesji logowania administratorów (użytkowników ludzkich).
-- D. serviceAccountKeyExpiryHours: Ta polityka dotyczy wyłącznie kluczy JSON (statycznych poświadczeń). Pytanie dotyczy sesji "logowania" (użytkownicy w CLI/konsoli), a nie kluczy JSON.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Reduce risk of open sessions" / "Session hijacking" + "Session control" = Reauthentication frequency.
-- Pamiętaj: Reauthentication (MFA) jest zawsze bezpieczniejsze niż zwykły timeout sesji.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Session Control chroni zarówno użytkowników przeglądarkowych (konsola), jak i użytkowników narzędzi wiersza poleceń (gcloud SDK).
-- Skrócenie sesji to podstawowy element "Security Hygiene" w organizacjach wysokiego ryzyka.
-
-Dokumentacja i linki:
-- <a href="https://support.google.com/cloudidentity/answer/9366694" target="_blank">Google Cloud session control overview</a>
-- <a href="https://support.google.com/a/answer/9128526" target="_blank">Set session duration/frequency for Google services</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

@@ -86,20 +86,29 @@ Your team needs to configure their Google Cloud Platform (GCP) environment so th
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: A**
+**Potwierdzona odpowiedź: AC**
 
-**Reguła Egzaminacyjna (Exam Rule):**
-Shared VPC (VPC współdzielone) umożliwia scentralizowane zarządzanie zasobami sieciowymi w jednym projekcie hosta (Host Project) i udostępnianie ich do projektów usługowych (Service Projects).
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-**Haczyki egzaminacyjne (Exam Traps):**
-- B: Przyznanie zbyt szerokich uprawnień (Compute Admin) każdemu projektowi łamie zasadę "least privilege".
-- C, D: Peering i VPN zwiększają złożoność zarządzania (zarządzanie wieloma firewallami w wielu projektach) i nie zapewniają tak spójnego scentralizowanego sterowania jak Shared VPC.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-**Głębokie wyjaśnienie techniczne:**
-Shared VPC pozwala zespołowi sieciowemu (Network Security Team) na scentralizowaną konfigurację (firewalle, subnety, trasy) w projekcie hosta. W modelu współdzielonej odpowiedzialności, klient jest odpowiedzialny za poprawne zaprojektowanie architektury sieciowej. Shared VPC minimalizuje ryzyko błędów konfiguracji (np. niespójne reguły firewall) poprzez wprowadzenie jednego punktu kontroli, zachowując jednocześnie separację środowisk (projektów).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
+
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

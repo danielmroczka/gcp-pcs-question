@@ -86,29 +86,29 @@ Your company has deployed an artificial intelligence model in a central project.
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Within the model project, create an internal Application Load Balancer that points to the model endpoint. Expose this load balancer with Private Service Connect to a configured list of projects.)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- Private Service Connect (PSC): To najbezpieczniejszy (prywatny) sposób wystawiania usług (np. za Load Balancerem) do innych projektów (service consumption) bez konieczności zestawiania sieci typu VPC Peering czy Shared VPC.
-- "Expose ... to a defined list of projects": PSC pozwala na precyzyjne określenie, *które* projekty mogą połączyć się z usługą.
-- "Isolated from the internet": Użycie Internal Application Load Balancer w połączeniu z PSC gwarantuje brak publicznego dostępu.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- B: Private Google Access pozwala na dostęp do usług *Google* (API), a nie do Twojego własnego endpointu usługi.
-- C: Shared VPC to zmiana całej architektury sieciowej, a nie rozwiązanie problemu ekspozycji endpointu.
-- D: External Load Balancer = publiczny dostęp. Nie spełnia wymogu "strictly isolated from the internet".
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Expose ... to a defined list of projects" + "Isolated from internet" + "Private" = Private Service Connect (PSC).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: PSC to standard dla bezpiecznego, prywatnego "service consumption" w GCP.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/vpc/docs/private-service-connect" target="_blank">Private Service Connect overview</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

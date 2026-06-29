@@ -86,28 +86,29 @@ Your organization is developing an application that will have both corporate and
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Use a customer identity and access management tool (CIAM) like Identity Platform.)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Identity Platform (CIAM): Jest to rozwiązanie klasy Customer Identity and Access Management (CIAM) w Google Cloud. Pozwala na centralne zarządzanie tożsamościami klientów zewnętrznych (public end-users) oraz integrację z korporacyjnymi systemami tożsamości (SAML/OIDC), co spełnia wymóg obsługi obu grup użytkowników w jednej aplikacji.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Domain restricted sharing: To polityka ograniczająca udostępnianie zasobów wewnątrz organizacji, nie służy do zarządzania użytkownikami aplikacji.
-- B. Workforce Identity Federation: Służy do dawania pracownikom (workforce) dostępu do zasobów Google Cloud (np. Konsoli, gcloud), a nie do uwierzytelniania klientów zewnętrznych w aplikacji SaaS.
-- C. Google Workspace: Nie zapewnia elastyczności potrzebnej do zarządzania dużą liczbą publicznych użytkowników końcowych i ich profilami.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Public end-users" + "Corporate users" + "App authentication" = CIAM / Identity Platform.
-- Pamiętaj: Identity Platform wspiera logowanie przez social media (Google, Facebook) oraz standardy korporacyjne (SAML/OIDC).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Identity Platform to de facto Firebase Authentication rozszerzone o funkcje enterprise (SLA, multi-tenancy).
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/identity-platform" target="_blank">Google Cloud Identity Platform</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

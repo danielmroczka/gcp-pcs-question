@@ -86,32 +86,29 @@ You work for a large organization that recently implemented a 100GB Cloud Interc
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Ensure that the active pre-shared key matches on both the on-premises and Google edge routers.)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-MACsec (Media Access Control Security) to standard IEEE (802.1AE), który zapewnia bezpieczeństwo warstwy 2 (Layer 2) na połączeniach ethernetowych, w tym autentykację, integralność i szyfrowanie danych. W przypadku Dedicated Interconnect, MACsec wymaga użycia kluczy wstępnie współdzielonych (Pre-Shared Keys - PSK), zwanych Connectivity Association Keys (CAK). Aby sesja MACsec została pomyślnie zestawiona, klucze te muszą być identyczne po obu stronach połączenia: na routerze brzegowym klienta (on-premises) oraz na routerze brzegowym Google. Jeśli połączenie fizyczne działa ("operational"), ale MACsec jest "down", najczęstszą przyczyną jest właśnie niezgodność (mismatch) kluczy lub nazw kluczy (CKN).
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Skoro połączenie MACsec jest już skonfigurowane i zgłasza błąd "operationally down", oznacza to, że usługa została uruchomiona. Sprawdzanie wsparcia po fakcie jest spóźnione (MACsec jest wspierany tylko na dedykowanych łączach 10 Gbps lub 100 Gbps).
-- B. Informacja w pytaniu mówi, że "connection is operational" (połączenie działa), co wyklucza całkowitą awarię routera on-premises. Problem dotyczy konkretnie warstwy zabezpieczeń MACsec.
-- C. Choć wygaśnięcie klucza jest możliwe, zazwyczaj systemy zarządzania kluczami informują o tym wcześniej. Scenariusz sugeruje problem z bieżącym działaniem ("operationally down") po wdrożeniu lub zmianie, gdzie najczęstszym błędem ludzkim jest literówka w kluczu lub jego ID po jednej ze stron.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- MACsec = Szyfrowanie Warstwy 2 (Layer 2 encryption).
-- PSK / CAK / CKN to terminy nierozerwalnie związane z konfiguracją MACsec.
-- Jeśli "Link is UP" ale "MACsec is DOWN", zawsze najpierw sprawdź spójność kluczy (Shared Key Mismatch).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: MACsec jest dostępny tylko dla Dedicated Interconnect.
-- MACsec chroni dane między routerem on-premises a routerem Google (Edge). Nie jest to szyfrowanie end-to-end do samej maszyny wirtualnej.
-- Google Cloud używa MKA (MACsec Key Agreement) do negocjacji kluczy.
-
-Dokumentacja i linki:
-- https://cloud.google.com/network-connectivity/docs/interconnect/concepts/macsec
-- https://cloud.google.com/network-connectivity/docs/interconnect/how-to/dedicated/using-macsec
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

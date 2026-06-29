@@ -84,27 +84,29 @@ Your organization is storing regulated data in Cloud Storage. Data in Cloud Stor
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Identify which projects contain Cloud Storage buckets with regulated data. Apply the restrictNonCmekServices organization policy constraint to the identified projects or parent folder.)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- Pytanie dotyczy zgodności (compliance) i *wymuszenia* użycia CMEK dla *istniejących* lub nowych danych.
-- Organization Policy constraint `restrictNonCmekServices` jest mechanizmem, który *wymusza* użycie CMEK w usługach (w tym Cloud Storage).
-- Wersja A mówi o zmianie "konfiguracji bucketu" (zmiana typu szyfrowania w bucketach nie powoduje automatycznego przesyfrowania *istniejących* danych). Aby wymusić zgodność w skali organizacji/projektu, stosuje się politykę (Constraint), która odrzuca operacje zapisu, jeśli dane nie są szyfrowane przez CMEK.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Zmiana konfiguracji w bucketach: Nie rozwiązuje problemu w sposób zautomatyzowany i wymuszony (enforcement). To podejście manualne i podatne na błędy.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Meet compliance requirements" + "Update existing data to use CMEK" + "Enforcement" = Organization Policy constraint (`restrictNonCmekServices`).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: W GCP, gdy widzisz pytanie o wymuszanie określonego standardu bezpieczeństwa na poziomie projektów/folderów, odpowiedzią niemal zawsze jest "Organization Policy".
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/restricting-service-usage" target="_blank">Organization policy constraints</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

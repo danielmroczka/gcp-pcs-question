@@ -86,21 +86,29 @@ When working with agents in the support center via online chat, your organizatio
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: C**
+**Potwierdzona odpowiedź: AC**
 
-**Reguła Egzaminacyjna (Exam Rule):**
-DLP API (Data Loss Prevention) umożliwia automatyczną identyfikację, inspekcję i redakcję (usuwanie/maskowanie) danych wrażliwych w obrazach i tekście.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-**Haczyki egzaminacyjne (Exam Traps):**
-- A: Szyfrowanie KMS nie usuwa PII, jedynie je ukrywa, co utrudnia analizę.
-- B: Usunięcie danych (Discard) uniemożliwia analizę trendów.
-- D: Generalizacja tekstu nie rozwiązuje problemu PII zawartego w obrazach (dokumentach).
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-**Głębokie wyjaśnienie techniczne:**
-W modelu współdzielonej odpowiedzialności, klient odpowiada za poufność danych przetwarzanych przez jego aplikacje. Obrazy dokumentów zawierają nieustrukturyzowane dane PII. Funkcje DLP API do przetwarzania obrazów wykorzystują OCR i rozpoznawanie wzorców, aby wykryć i zamaskować (redact) PII przed zapisem w bazie logów. Pozwala to na zachowanie "utility" (użyteczności) danych do analizy trendów bez naruszania prywatności użytkowników.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
+
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

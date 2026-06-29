@@ -86,29 +86,29 @@ You work for a banking organization. You are migrating sensitive customer data t
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Implement Cloud External Key Manager (Cloud EKM) with Key Access Justifications to integrate with your existing on-premises key management solution.)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Cloud EKM + KAJ: To najwyższy poziom suwerenności danych w chmurze. Cloud EKM pozwala na trzymanie klucza szyfrującego poza infrastrukturą Google (w Twoim własnym HSM). Key Access Justifications (KAJ) to mechanizm, w którym każdorazowo przed użyciem klucza Google musi podać uzasadnienie (justification), które jest weryfikowane przez Twój system. Możez automatycznie odrzucać (deny) żądania, których powód nie zgadza się z Twoją polityką, co daje Ci pełną niezależność od dostawcy (CSP) i realną kontrolę.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Default: Klucze zarządzane przez Google – brak kontroli klienta.
-- B. Access Approval: Pozwala zatwierdzić dostęp personelu Google, ale nie daje automatycznej blokady operacji kryptograficznych na poziomie polityki tak jak KAJ.
-- D. CMEK + VM: To błędne połączenie usług. CMEK (Cloud KMS) jest natywną usługą GCP, nie integruje się z zewnętrznymi HSM w sposób opisany w pytaniu (EKM służy do tego celu).
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "External HSM" + "Audit key usage" + "Deny decrypt requests" = Cloud EKM (External Key Manager) + Key Access Justifications (KAJ).
-- Pamiętaj: KAJ to Twój "twardy" hamulec dla dostawcy chmury.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: EKM to najlepszy sposób na uzyskanie pełnej kontroli nad kluczami szyfrującymi (i podpisującymi), gdy prawo wymusza trzymanie ich poza chmurą.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/kms/docs/ekm" target="_blank">Cloud External Key Manager (Cloud EKM)</a>
-- <a href="https://cloud.google.com/key-access-justifications/docs/overview" target="_blank">Key Access Justifications overview</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

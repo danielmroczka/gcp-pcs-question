@@ -86,29 +86,29 @@ You are creating an internal App Engine application that needs to access a user'
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Create a new service account, and grant it G Suite domain-wide delegation. Have the application use it to impersonate the user.)
+**Potwierdzona odpowiedź: AC**
 
 Wyjaśnienie: 
-Domain-wide delegation (delegacja na całą domenę) to mechanizm w Google Workspace (dawniej G Suite), który pozwala kontu serwisowemu (Service Account) na uzyskanie dostępu do danych użytkowników w całej organizacji bez konieczności ich interaktywnego logowania się czy wyrażania zgody przy każdym zapytaniu. Jest to oficjalna i zalecana praktyka Google dla aplikacji serwerowych (np. działających na App Engine), które muszą wykonywać operacje "w imieniu" użytkownika (tzw. impersonacja), takie jak odczyt lub zapis plików na Dysku Google. Wymaga to autoryzacji konta serwisowego przez administratora Workspace z określeniem konkretnych zakresów (OAuth Scopes).
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
 Dlaczego pozostałe są błędne:
-A, B. Service Account User: Rola `roles/iam.serviceAccountUser` pozwala użytkownikowi IAM na używanie konta serwisowego do uruchamiania zasobów (np. VM, klastrów GKE). Nie daje ona jednak mechanizmu do impersonowania użytkownika Workspace w celu dostępu do jego prywatnych danych (np. plików na Drive czy maili).
-C. G Suite Admin credentials: Używanie haseł administratora (lub jakichkolwiek kont użytkowników) bezpośrednio w kodzie aplikacji jest krytycznym błędem bezpieczeństwa (hardcoding credentials) i jest całkowicie niezgodne z najlepszymi praktykami Google Cloud.
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- "Access on user's behalf" + "Google Workspace / G Suite": To najsilniejszy sygnał, by szukać odpowiedzi z "Domain-wide delegation".
-- Impersonacja (impersonation): To kluczowy termin techniczny opisujący sytuację, w której konto serwisowe działa jako konkretny użytkownik.
-
-Kluczowe zagadnienia do powtórzenia:
-- Domain-wide delegation (DWD) w Workspace
-- OAuth 2.0 Scopes i ich ograniczanie (Least Privilege)
-- Różnica między IAM (GCP) a delegacją uprawnień (Workspace)
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority" target="_blank">https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority</a>
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

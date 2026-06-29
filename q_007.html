@@ -88,27 +88,29 @@ A company is running workloads in a dedicated server room. They must only be acc
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: AC (Configure the project with Cloud VPN oraz Configure the project with Cloud Interconnect.)
+**Potwierdzona odpowiedź: AC**
 
-**Reguła Egzaminacyjna (Exam Rule):**
-Jeśli pytanie dotyczy łączenia sieci prywatnej ("on-premises") z Google Cloud VPC, jedynymi poprawnymi odpowiedziami są "Cloud VPN" lub "Cloud Interconnect". Są to natywne rozwiązania Google dla łączności hybrydowej.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-**Haczyki egzaminacyjne (Exam Traps):**
-- Pułapka: "VPC Peering". Peering łączy ze sobą dwie sieci VPC *wewnątrz* chmury Google (lub między organizacjami w chmurze), a nie z fizyczną serwerownią klienta.
-- Pułapka: "Shared VPC". Służy do współdzielenia sieci VPC między projektami w chmurze, a nie do łączności zewnętrznej.
-- Pułapka: "Private Access". Umożliwia dostęp z prywatnej instancji do *usług publicznych Google* (np. Storage, BigQuery), a nie do własnych zasobów w serwerowni klienta.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-**Głębokie wyjaśnienie techniczne:**
-1. **Cloud VPN**: Tworzy bezpieczny tunel IPsec przez publiczny internet. Jest rozwiązaniem elastycznym, szybkim do wdrożenia i opłacalnym dla mniejszych wolumenów ruchu.
-2. **Cloud Interconnect**: Zapewnia bezpośrednie, fizyczne połączenie (Dedicated) lub przez partnera (Partner). Jest to rozwiązanie dedykowane dla dużych transferów danych, wysokiej wydajności i rygorystycznych wymogów dotyczących opóźnień (latency). 
-
-Oba rozwiązania pozwalają na prywatny dostęp do serwerowni bez wystawiania zasobów na publiczny internet.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://cloud.google.com/network-connectivity/docs/how-to/choose-product" target="_blank">https://cloud.google.com/network-connectivity/docs/how-to/choose-product</a>
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

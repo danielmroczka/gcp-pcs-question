@@ -87,36 +87,24 @@ You want to use the gcloud command-line tool to authenticate using a third-party
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4 d-none"  >
+<div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: AE (A. SSO SAML as a third-party IdP, E. Cloud Identity)
+Odpowiedź: AE.
 
-Wyjaśnienie:
-- Cloud Identity (E): Jest to fundament tożsamości w Google Cloud. Nawet jeśli używasz zewnętrznego dostawcy tożsamości (IdP), musisz mieć instancję Cloud Identity (lub Google Workspace), aby reprezentować te tożsamości w Google Cloud i zarządzać ich uprawnieniami IAM.
-- SSO SAML as a third-party IdP (A): Aby uwierzytelnić się za pomocą zewnętrznego dostawcy przez gcloud, musisz skonfigurować federację SAML. gcloud obsługuje przepływ przeglądarkowy, który przekierowuje użytkownika do zewnętrznego IdP w celu zalogowania.
+Wyjaśnienie (Dlaczego poprawna):
+A. SSO SAML: Niezbędny komponent IdP.
+E. Cloud Identity: To domena Google, która musi być skonfigurowana, aby przekierować proces logowania gcloud do Twojego IdP.
 
-Dlaczego pozostałe są błędne:
-- B: Identity Platform służy do dodawania uwierzytelniania do własnych aplikacji (B2C/B2B), a nie do zarządzania tożsamościami pracowników uzyskujących dostęp do zasobów GCP przez gcloud.
-- C: OpenID Connect (OIDC) to inny protokół federacji. Chociaż Google go obsługuje, pytanie wyraźnie wskazuje na dostawcę SAML.
-- D: Identity-Aware Proxy (IAP) służy do kontrolowania dostępu do aplikacji i zasobów (np. SSH/RDP), a nie do uwierzytelniania samego narzędzia gcloud u dostawcy tożsamości.
+Dlaczego inne są błędne:
+B. Identity Platform: Dla klientów Twojej aplikacji, nie dla adminów gcloud.
+C. OIDC: Alternatywa dla SAML, ale pytanie precyzuje SAML IdP.
+D. IAP: Chroni dostęp do zasobów, nie proces logowania administratora do CLI.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Aby używać zewnętrznego IdP z Google Cloud, zawsze potrzebujesz Cloud Identity jako "mostu".
-- SAML 2.0 to standardowy protokół używany przez przedsiębiorstwa do SSO z Google Cloud.
-- Polecenie `gcloud auth login` inicjuje przepływ OAuth2, który w przypadku federacji przekierowuje do IdP skonfigurowanego w Cloud Identity.
-
-Kluczowe zagadnienia do powtórzenia:
-- Konfiguracja SSO SAML w Cloud Identity.
-- Rola Cloud Identity w federacji tożsamości.
-- Przepływy uwierzytelniania w gcloud CLI.
-
-Dokumentacja:
-- <a href="https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction" target="_blank">Federowanie GCP z Active Directory (SAML)</a>
-- <a href="https://cloud.google.com/identity/docs/how-to/setup-sso" target="_blank">Konfiguracja SSO w Cloud Identity</a>
+Konsensus społeczności ExamTopics: 100% na AE. Podstawy federacji tożsamości.
 </pre>
 </div>
-<div class="ai-analysis-container d-none"  >
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
@@ -129,30 +117,28 @@ Dokumentacja:
 </ul>
 </div>
 </div>
-
-
-<div class="exam-section">
-    <h3>Exam Rule (GCP Professional Cloud Security Engineer)</h3>
-    <p>[INSERT RULE HERE]</p>
-    
-    <h3>Exam Traps</h3>
-    <ul>
-        <li>[TRAP 1]</li>
-        <li>[TRAP 2]</li>
-    </ul>
-
-    <h3>Deep Technical Explanation</h3>
-    <p>[DETAILED EXPLANATION WITH GCP TERMINOLOGY]</p>
-</div>
-
-
-
-
-
-
-
-
-<script src="navigation.js"></script></body>
-
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
+        let isVisible = false;
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+</body>
 </html>

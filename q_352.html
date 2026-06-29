@@ -86,31 +86,29 @@ Your company hosts a critical web application on Google Cloud. The application i
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (Configure a Cloud Armor security policy with customized and pre-configured WAF rules for OWASP Top 10 vulnerabilities at the load balancer.)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- Cloud Armor: To usługa WAF (Web Application Firewall) w GCP.
-- "Pre-configured WAF rules for OWASP Top 10": To kluczowa funkcja Cloud Armor, która automatycznie chroni przed atakami takimi jak SQLi i XSS.
-- "At the load balancer": Polityki Cloud Armor są przypisywane do backendu load balancera (HTTP(S) LB).
-- Odpowiedź D jest precyzyjniejsza niż C, ponieważ wspomina o "customized AND pre-configured rules", co jest pełniejszym opisem zabezpieczeń Cloud Armor.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Adaptive Protection/throttling: Chroni przed atakami DDoS, ale nie przed XSS/SQLi (do tego trzeba reguł WAF).
-- B. Firewall: Chroni sieć (IP/port), a nie warstwę aplikacji (L7).
-- C. At the backend service: Jest technicznie poprawna, ale D jest dokładniejsza, bo Cloud Armor definiuje politykę ("security policy"), która jest przypisana do LB.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Web attacks" + "XSS/SQLi" + "Robust perimeter" = Cloud Armor WAF rules (OWASP Top 10).
-- Pamiętaj: WAF = WAF rules, nie Firewall Rules.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Google Cloud Armor chroni aplikacje webowe przed atakami na poziomie aplikacji.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/armor/docs/waf-rules" target="_blank">Cloud Armor WAF rules</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

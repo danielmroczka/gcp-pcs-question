@@ -86,29 +86,29 @@ A security audit uncovered several inconsistencies in your project's Identity an
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Use Cloud Audit Logs. Create log export sinks to send these logs to a security information and event management (SIEM) solution for correlation with other event sources.)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Cloud Audit Logs: To fundament audytu w GCP. Admin Activity logs rejestrują wszystkie zmiany w politykach IAM, a Data Access logs rejestrują dostęp do danych. Jest to jedyne źródło prawdy o tym "kto, co, kiedy i gdzie" zrobił w konfiguracji chmury.
-- SIEM Export: Przesłanie tych logów do zewnętrznego systemu SIEM (np. Chronicle, Splunk) pozwala na zaawansowaną korelację zdarzeń i długoterminową analitykę bezpieczeństwa, co jest wymagane przy poważnych audytach.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Cloud Functions + Policy Simulator: To rozwiązanie doraźne (reactive/proactive), które nie zastępuje kompletnego audytu historycznego (logs). Simulator służy do sprawdzania skutków, a nie do rejestrowania faktów.
-- B. Cloud Monitoring Metrics: Metryki są agregatami liczbowymi i nie zawierają szczegółowych informacji o tym, KTÓRY konkretnie użytkownik dokonał ZMIANY w IAM.
-- D. OS Config Management: To narzędzie do zarządzania systemem operacyjnym wewnątrz VM (patchowanie itp.), nie ma ono żadnego wglądu w polityki IAM na poziomie platformy Google Cloud.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Detailed visibility into IAM changes" + "Audit" = Cloud Audit Logs.
-- Audyt w GCP = Logi Audytowe.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Admin Activity logs są włączone domyślnie i bezpłatne. Data Access logs wymagają ręcznego włączenia (z wyjątkiem BigQuery).
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/logging/docs/audit" target="_blank">Cloud Audit Logs overview</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

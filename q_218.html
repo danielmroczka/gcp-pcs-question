@@ -87,32 +87,29 @@ Your organization uses Google Workspace Enterprise Edition for authentication. Y
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Set the session length timeout for Google Cloud services to a shorter duration)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Google Cloud Session Control: Jest to funkcja w Cloud Identity / Google Workspace, która pozwala administratorom na definiowanie maksymalnego czasu trwania sesji logowania do konsoli Google Cloud (oraz sesji gcloud CLI).
-- Redukcja ryzyka: Skrócenie czasu sesji (np. do 1 lub 2 godzin) wymusza na użytkowniku ponowne uwierzytelnienie się po upływie tego czasu. Jeśli pracownik zostawi otwarty laptop, po pewnym czasie sesja wygaśnie, a osoba trzecia nie będzie mogła zmodyfikować środowiska bez posiadania danych logowania (i MFA) pracownika.
-- Najlepsza odpowiedź: To podejście bezpośrednio adresuje problem pozostawienia sesji otwartej, czyniąc ją czasowo ograniczoną.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Create a policy...: Polityki organizacyjne nie wymuszają na użytkownikach "niepozostawiania otwartych sesji". Jest to tylko zalecenie, a nie twarda kontrola techniczna.
-- B. Disable unnecessary Google Cloud APIs: Wyłączanie API jest dobrą praktyką (minimalizacja powierzchni ataku), ale nie rozwiązuje problemu otwartej sesji w konsoli, z której ktoś może korzystać mając dostęp do już zalogowanego przeglądarki.
-- C. Require strong passwords and 2SV: MFA (2SV) jest kluczowe, ale nie chroni przed osobą, która siądzie do JUŻ ZALOGOWANEGO laptopa (sesja już jest ustanowiona). Użytkownik nie będzie musiał podawać 2SV za każdym razem przy zmianie ustawień w już otwartej sesji.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Employees leave laptops unattended" + "Modify environment" = Session length timeout.
-- Pamiętaj: Sesja Google Cloud jest powiązana z sesją Google Workspace/Cloud Identity.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Skrócenie sesji jest "trade-offem" między bezpieczeństwem a wygodą użytkownika.
-- Warto wspomnieć o "Context-Aware Access" – można wymusić ponowną autentykację (re-authentication) przy próbie dostępu do konkretnych, bardzo wrażliwych zasobów.
-
-Dokumentacja i linki:
-- <a href="https://support.google.com/cloudidentity/answer/9366694" target="_blank">Google Cloud session control overview</a>
-- <a href="https://support.google.com/a/answer/9128526" target="_blank">Set session duration for Google services</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

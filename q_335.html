@@ -86,27 +86,29 @@ You are responsible for configuring Identity and Access Management in your organ
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Set a principal access boundary policy with the appropriate enforcement version. Bind the policy to the principals of your organization.)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- Principal Access Boundary (PAB): To zaawansowana funkcja, która definiuje granice (boundaries) dla tożsamości (principals). Pozwala ona ograniczyć, do których *zasobów* (np. bucketów) w organizacji mogą uzyskiwać dostęp tożsamości z Twojej organizacji. Jest to rozwiązanie stworzone dokładnie do scenariuszy zapobiegania "data exfiltration to outside organizations".
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- B. Organization restriction headers: Służy do blokowania *logowania* do obcych organizacji (np. w przeglądarce), a nie do ograniczania dostępu do zasobów (bucketów) przez API.
-- C. IAM deny policy: IAM Deny nie ma takiego zasięgu, by skutecznie blokować dostęp do *zewnętrznych* organizacji na poziomie API (deny dotyczy zasobów wewnątrz Twojej organizacji).
-- D. Domain restricted sharing: Służy do ograniczania tego, *komu* można udostępnić zasoby (czyli czy mogę wysłać e-mail do kogoś spoza domeny), a nie *czy użytkownik* może sięgnąć do obcego bucketa.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Restrict ... users from accessing Cloud Storage buckets in OTHER Google Cloud organizations" = Principal Access Boundary (PAB).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: PAB to najsilniejsza forma ochrony przed "insider threat" (wyciekiem do obcych organizacji).
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/iam/docs/principal-access-boundaries-overview" target="_blank">Principal Access Boundary overview</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

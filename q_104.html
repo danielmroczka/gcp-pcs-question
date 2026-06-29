@@ -86,36 +86,23 @@ You are a security engineer at a finance company. Your organization plans to sto
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4 d-none"  >
+<div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Enable Access Transparency logs with Access Approval requests for Google employees.)
+Odpowiedź: D.
 
-Wyjaśnienie:
-- Access Transparency: Ta usługa zapewnia logi w czasie rzeczywistym, gdy pracownicy Google uzyskują dostęp do Twoich treści. Rozwiązuje to problem widoczności działań dostawcy chmury.
-- Access Approval: To kluczowy element rozwiązania. Pozwala on na zatwierdzanie lub odrzucanie próśb pracowników Google o dostęp do Twoich danych lub konfiguracji. Pracownik Google nie może uzyskać dostępu, dopóki uprawniony użytkownik w Twojej organizacji nie wyrazi na to wyraźnej zgody. Jest to najwyższy poziom kontroli nad dostępem wewnętrznym dostawcy (insider access).
+Wyjaśnienie (Dlaczego poprawna):
+D. Access Transparency + Approval: Access Transparency daje logi z działań personelu Google. Access Approval idzie krok dalej – inżynier Google NIE MOŻE dotknąć Twoich danych, dopóki Ty nie klikniesz 'Zatwierdzam' w odpowiedzi na jego prośbę. To rozwiązuje obawy liderów o niekontrolowany dostęp zewnętrzny.
 
-Dlaczego pozostałe są błędne:
-- A: Customer-managed encryption keys (CMEK) chronią dane w spoczynku, ale w niektórych przypadkach wsparcia technicznego pracownicy Google mogą potrzebować dostępu do danych "w locie" lub metadanych. Same klucze nie dają kontroli nad tym, *kto* z Google prosi o dostęp i *dlaczego*.
-- B: Google Cloud IAM służy do zarządzania uprawnieniami użytkowników wewnątrz Twojej organizacji, a nie do kontrolowania dostępu pracowników Google Cloud Support czy Engineering.
-- C: Admin Activity logs rejestrują działania Twoich administratorów (np. tworzenie VM, zmiana ustawień sieci), a nie działania pracowników Google w infrastrukturze backendowej.
+Dlaczego inne są błędne:
+A. CMEK: Szyfruje, ale personel Google z uprawnieniami systemowymi mógłby teoretycznie mieć dostęp 'w locie' (bez EKM/KAJ). Opcja D jest bardziej trafną odpowiedzią na 'obawy o ludzi'.
+B. IAM: Zarządza Twoimi ludźmi, nie pracownikami Google.
+C. Admin activity logs: Rejestrują Twoje działania, nie działania administratorów platformy Google.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Internal Google employees access" = Access Transparency + Access Approval.
-- Access Transparency to "widzieć", Access Approval to "zezwalać".
-- To rozwiązanie jest często wymagane w sektorze finansowym i regulowanym (suwerenność danych).
-
-Kluczowe zagadnienia do powtórzenia:
-- Różnica między Access Transparency a Access Approval.
-- Model współdzielonej odpowiedzialności (Shared Responsibility Model).
-- Logi audytowe (Audit Logs) vs Access Transparency logs.
-
-Dokumentacja:
-- <a href="https://cloud.google.com/access-approval/docs/overview" target="_blank">Omówienie Access Approval</a>
-- <a href="https://cloud.google.com/logging/docs/audit/access-transparency-overview" target="_blank">Omówienie Access Transparency</a>
+Konsensus społeczności ExamTopics: 100% poparcia dla D. To flagowe rozwiązanie dla suwerenności danych.
 </pre>
 </div>
-<div class="ai-analysis-container d-none"  >
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
@@ -128,30 +115,28 @@ Dokumentacja:
 </ul>
 </div>
 </div>
-
-
-<div class="exam-section">
-    <h3>Exam Rule (GCP Professional Cloud Security Engineer)</h3>
-    <p>[INSERT RULE HERE]</p>
-    
-    <h3>Exam Traps</h3>
-    <ul>
-        <li>[TRAP 1]</li>
-        <li>[TRAP 2]</li>
-    </ul>
-
-    <h3>Deep Technical Explanation</h3>
-    <p>[DETAILED EXPLANATION WITH GCP TERMINOLOGY]</p>
-</div>
-
-
-
-
-
-
-
-
-<script src="navigation.js"></script></body>
-
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
+        let isVisible = false;
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+</body>
 </html>

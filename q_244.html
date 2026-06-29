@@ -87,32 +87,29 @@ Your company's users access data in a BigQuery table. You want to ensure they ca
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Assign a BigQuery Data Viewer role along with an IAM condition that limits the access to specified working hours)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- IAM Conditions (Warunki IAM): Pozwalają na stosowanie bardziej precyzyjnych zasad przyznawania uprawnień. Zamiast nadawać dostęp "na zawsze", możesz określić warunki, w których uprawnienie jest aktywne.
-- Time-based access: Za pomocą atrybutu `request.time` w warunkach IAM możesz określić przedział czasowy, w którym dany użytkownik może wykonywać operacje (np. tylko w godzinach pracy zespołu). Poza tym przedziałem, nawet jeśli użytkownik ma przypisaną rolę, dostęp zostanie odrzucony.
-- Bezpieczeństwo: Jest to realizacja zasady najmniejszych przywilejów (Least Privilege) w wymiarze czasowym – dostęp jest możliwy tylko wtedy, gdy jest potrzebny.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- B. Run a gsutil script: Ręczne usuwanie i dodawanie uprawnień każdego dnia jest nieefektywne, podatne na błędy i uniemożliwia automatyzację.
-- C. Service account script: Podobnie jak w przypadku skryptu manualnego (B), jest to rozwiązanie niestabilne i trudne do zarządzania.
-- D. Cloud Scheduler + Cloud Functions: To rozwiązanie jest reaktywne (naprawianie konfiguracji zasobów po czasie) i skrajnie nieadekwatne do zadania. Policy organizacji (Org Policy) służy do globalnych restrykcji, a nie do zarządzania dostępem użytkowników.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Access valid only during working hours" / "Temporary access" = IAM Conditions (request.time).
-- Zapamiętaj: IAM Conditions zawsze łączą się z "Warunkiem logicznym" (JEŚLI warunek spełniony, TO rola aktywna).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- IAM Conditions wspierają atrybuty takie jak: czas, nazwa zasobu, typ zasobu, czy tagi.
-- Warunki są oceniane przy każdym żądaniu do API Google.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/iam/docs/conditions-overview" target="_blank">IAM Conditions overview</a>
-- <a href="https://cloud.google.com/iam/docs/conditions-attribute-reference" target="_blank">IAM conditions attribute reference</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

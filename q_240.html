@@ -87,31 +87,29 @@ Your customer has an on-premises Public Key Infrastructure (PKI) with a certific
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Use a subordinate CA in the Google Certificate Authority Service from the on-premises PKI system to issue certificates for the load balancers)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Certificate Authority Service (CAS): Jest to w pełni zarządzana usługa Google Cloud do tworzenia i zarządzania urzędami certyfikacji (CA).
-- Subordinate CA (Podległy CA): Pozwala na stworzenie CA wewnątrz chmury, które jest technicznie "podległe" (zaufane przez) Twojemu głównemu urzędowi CA on-premises. Jest to najbardziej skalowalne i natywne rozwiązanie: certyfikaty wystawiane w chmurze są automatycznie zaufane w sieci firmowej, ponieważ główny klucz CA jest w on-premises.
-- Integracja z Load Balancerem: Certyfikaty wystawione przez podległy CA w chmurze można bezpośrednio przypisać do Load Balancera HTTP/S, co rozwiązuje problem skali i automatyzacji.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Certificate Manager z Google managed public certificates: Te certyfikaty są wydawane przez publiczne CA Google. Nie będą zaufane przez Twoją wewnętrzną PKI, chyba że wgrasz certyfikat CA Google do każdego zaufanego systemu on-prem, co jest operacyjnie trudne.
-- C. Import certificates: Ręczne importowanie certyfikatów wystawionych przez on-prem PKI jest procesem manualnym, który trudno skalować (wymaga częstego odświeżania, importowania do Certificate Manager, etc.). Nie rozwiązuje to problemu "manual processes".
-- D. External TCP/UDP Network LB: Zmiana typu Load Balancera (z HTTP na TCP) jest nieuzasadniona i pozbawia Cię funkcji L7 (WAF, SSL termination), co jest niedopuszczalne dla aplikacji webowej.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "On-premises PKI integration" + "Scale" + "HTTP Load Balancer" = Subordinate CA w Cloud CAS.
-- Jeśli chcesz automatyzacji i skali wewnątrz chmury, używaj Google CAS.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Google CAS to usługa klasy Enterprise. Subordinate CA to idealny wzorzec dla architektury hybrydowej (zaufanie z on-prem -> wydawanie w chmurze).
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/certificate-authority-service/docs/overview" target="_blank">Certificate Authority Service overview</a>
-- <a href="https://cloud.google.com/certificate-authority-service/docs/creating-subordinate-cas" target="_blank">Creating subordinate CAs</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

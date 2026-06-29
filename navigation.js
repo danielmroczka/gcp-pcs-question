@@ -27,30 +27,41 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// 3. Robust Swipe navigation for mobile
-let touchStartX = 0;
-let touchEndX = 0;
+// 3. Pointer events for robust swipe detection (replaces touch events)
+let pointerStartX = 0;
+let pointerEndX = 0;
 const minSwipeDistance = 50;
 
-document.addEventListener('touchstart', e => {
-    touchStartX = e.changedTouches[0].screenX;
+document.addEventListener('pointerdown', e => {
+    pointerStartX = e.clientX;
+    // Log for debugging (open console to check)
+    console.log("Pointer down at:", pointerStartX);
 }, { passive: true });
 
-document.addEventListener('touchend', e => {
-    touchEndX = e.changedTouches[0].screenX;
+document.addEventListener('pointerup', e => {
+    pointerEndX = e.clientX;
+    console.log("Pointer up at:", pointerEndX);
     handleSwipe();
 }, { passive: true });
 
 function handleSwipe() {
-    const swipeDistance = touchEndX - touchStartX;
+    const swipeDistance = pointerEndX - pointerStartX;
+    
+    console.log("Swipe attempt, distance:", swipeDistance);
     
     if (Math.abs(swipeDistance) < minSwipeDistance) return;
 
     if (swipeDistance < 0) { // Swipe Left (Next)
         const next = document.querySelector('.q-nav a[href*="Następne"]');
-        if (next) next.click();
+        if (next) {
+            console.log("Navigating to next question");
+            next.click();
+        }
     } else { // Swipe Right (Previous)
         const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
-        if (prev) prev.click();
+        if (prev) {
+            console.log("Navigating to previous question");
+            prev.click();
+        }
     }
 }

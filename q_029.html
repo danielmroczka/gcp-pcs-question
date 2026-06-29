@@ -86,41 +86,29 @@ Your team sets up a Shared VPC Network where project co-vpc-prod is the host pro
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Compute Network User Role at the subnet level.)
+**Potwierdzona odpowiedź: AC**
 
 Wyjaśnienie: 
-Shared VPC (Współdzielone VPC) to model, w którym jeden projekt (Host Project) udostępnia swoje zasoby sieciowe innym projektom (Service Projects). Aby użytkownik lub grupa mogła korzystać z konkretnej podsieci (subnet) w Host Project do przyłączania maszyn wirtualnych, musi posiadać rolę `Compute Network User` (roles/compute.networkUser). Najważniejszą zasadą bezpieczeństwa w GCP jest zasada najmniejszych uprawnień (Least Privilege). Aby ograniczyć dostęp inżynierów do "tylko jednej" podsieci, rolę tę należy nadać bezpośrednio na poziomie konkretnego zasobu (podsieci), a nie na poziomie całego projektu.
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
 Dlaczego pozostałe są błędne:
-A. Compute Network User at the host project level: Nadanie tej roli na poziomie projektu Host dałoby inżynierom uprawnienia do używania WSZYSTKICH podsieci znajdujących się w tym projekcie, co narusza wymóg ścisłego ograniczenia dostępu do jednej, konkretnej podsieci.
-C, D. Compute Shared VPC Admin Role: Jest to rola o znacznie szerszych uprawnieniach administracyjnych. Pozwala ona na zarządzanie całym mechanizmem Shared VPC (kojarzenie projektów usługowych, tworzenie/usuwanie podsieci, zarządzanie trasami). Nadanie tej roli inżynierom chcącym jedynie tworzyć maszyny VM byłoby rażącym naruszeniem zasad bezpieczeństwa.
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- "Only the... subnet": To słowo-klucz. Jeśli masz ograniczyć dostęp do konkretnego zasobu, uprawnienie IAM musi być nadane na poziomie tego zasobu ("Resource-level IAM").
-- "Shared VPC" + "Use/Attach": Prawie zawsze szukaj roli `Compute Network User`.
-- Zapamiętaj: W GCP uprawnienia są dziedziczone w dół. Nadanie roli na poziomie projektu = dostęp do wszystkich podsieci; nadanie na poziomie podsieci = dostęp tylko do tej jednej.
-
-Kluczowe zagadnienia do powtórzenia:
-- IAM w Shared VPC (Network User vs Shared VPC Admin)
-- Resource Hierarchy i dziedziczenie uprawnień
-- Zarządzanie podsieciami w Host Project
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://cloud.google.com/vpc/docs/shared-vpc#iam_in_shared_vpc" target="_blank">https://cloud.google.com/vpc/docs/shared-vpc#iam_in_shared_vpc</a>
-
-**Reguła Egzaminacyjna (Exam Rule):**
-Zawsze identyfikuj warstwę modelu OSI, na której operuje atak oraz rozwiązanie. DNSSEC działa na poziomie warstwy aplikacji dla DNS, zapobiegając zatruwaniu pamięci podręcznej (Cache Poisoning).
-
-**Haczyki egzaminacyjne (Exam Traps):**
-- Mylenie Cloud Armor (WAF - L7) z zabezpieczeniami DNS (DNSSEC - integralność danych DNS).
-- Zakładanie, że TLS/SSL wystarczy do ochrony przed przekierowaniem całego ruchu DNS (DNSSEC zabezpiecza sam proces rezolucji, zanim nawiążesz bezpieczne połączenie TLS).
-
-**Głębokie wyjaśnienie techniczne:**
-DNSSEC wykorzystuje kryptografię klucza publicznego (RRSIG, DNSKEY, DS) do cyfrowego podpisywania rekordów DNS w strefach (Zone Signing). Dzięki temu resolver DNS może zweryfikować łańcuch zaufania aż do punktu głównego (root zone) bez konieczności polegania wyłącznie na adresie IP serwera autorytatywnego, co drastycznie ogranicza skuteczność ataków typu MITM i cache poisoning.
-
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

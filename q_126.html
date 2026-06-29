@@ -86,66 +86,56 @@ Which type of load balancer should you use to maintain client IP by default whil
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4 d-none"  >
+<div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (TCP/UDP Network)
+Odpowiedź: D.
 
-Wyjaśnienie:
-Zewnętrzny passthrough Network Load Balancer (TCP/UDP Network) działa na warstwie 4 modelu OSI i nie kończy sesji TCP/UDP na samym load balancerze. Zamiast tego pakiety są przekazywane bezpośrednio do instancji backendowych (pass-through). Dzięki temu adres źródłowy IP w pakiecie docierającym do maszyny wirtualnej pozostaje adresem IP klienta (Client IP preservation). Jest to domyślne zachowanie tego typu load balancera, również w Standard Network Tier.
+Wyjaśnienie (Dlaczego poprawna):
+D. TCP/UDP Network Load Balancer: Jest to Load Balancer 'pass-through'. Nie kończy on połączenia TCP/UDP, tylko przekazuje pakiety bezpośrednio do VM. Dzięki temu docelowa maszyna widzi oryginalny adres IP klienta w nagłówkach IP bez żadnej dodatkowej konfiguracji.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A i B (SSL/TCP Proxy): Są to load balancery typu proxy. Kończą one połączenie klienta na brzegowym systemie Google i nawiązują nowe połączenie z backendem. W rezultacie backend widzi adres IP load balancera, a nie klienta (chyba że użyje się protokołu PROXY).
-- C (Internal TCP/UDP): Jest to load balancer wewnętrzny, używany do ruchu wewnątrz sieci VPC. Chociaż również jest typu pass-through, nie jest przeznaczony do obsługi ruchu z publicznego internetu w kontekście Standard Network Tier.
+Dlaczego inne są błędne:
+A, B. Proxy LBs: Są to urządzenia typu proxy, które kończą połączenie u siebie i nawiązują nowe do VM. Aby zobaczyć IP klienta, wymagają użycia nagłówków PROXY protocol.
+C. Internal TCP/UDP: Choć zachowuje IP, działa tylko wewnątrz sieci VPC, nie jest dostępny dla użytkowników zewnętrznych w Standard Tierze.
 
-Wskazówki i triki (Tips & Tricks):
-- "Maintain client IP by default" = Network Load Balancer (passthrough).
-- Load balancery typu Proxy (HTTP, SSL, TCP) zawsze maskują adres IP klienta (wymagają nagłówka X-Forwarded-For lub PROXY protocol).
-
-Praktyczne informacje na egzamin:
-- Network Load Balancer jest wybierany, gdy liczy się wydajność i niskie koszty (brak inspekcji warstwy 7).
-- Standard Network Tier jest dostępny tylko dla wybranych typów zasobów zewnętrznych, w tym dla Network LB.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/load-balancing/docs/network#client-ip-address" target="_blank">Zachowywanie adresu IP klienta w Network LB</a>
+Konsensus społeczności ExamTopics: 100% na D. Network LB = IP visibility by default.
 </pre>
 </div>
-<div class="ai-analysis-container d-none"  >
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Wybór <b>Network Load Balancera</b> jest kluczowy, gdy aplikacja backendowa musi samodzielnie analizować źródłowe adresy IP (np. dla celów geolokalizacji lub logowania bezpieczeństwa bez dodatkowych nagłówków). Należy jednak pamiętać, że w przeciwieństwie do Load Balancerów HTTP(S), Network LB nie oferuje zaawansowanych funkcji Cloud Armor (WAF) w warstwie 7.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Network LB jest tańszy i prostszy, ale nie wspiera zaawansowanych funkcji L7 (jak URL routing czy Cloud Armor).</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/load-balancing/docs/network" target="_blank">Dokumentacja Network Load Balancing</a></li>
+<li><a href="https://cloud.google.com/load-balancing/docs/network" target="_blank">https://cloud.google.com/load-balancing/docs/network</a></li>
+
 </ul>
 </div>
 </div>
-
-
-<div class="exam-section">
-    <h3>Exam Rule (GCP Professional Cloud Security Engineer)</h3>
-    <p>[INSERT RULE HERE]</p>
-    
-    <h3>Exam Traps</h3>
-    <ul>
-        <li>[TRAP 1]</li>
-        <li>[TRAP 2]</li>
-    </ul>
-
-    <h3>Deep Technical Explanation</h3>
-    <p>[DETAILED EXPLANATION WITH GCP TERMINOLOGY]</p>
-</div>
-
-
-
-
-
-
-
-
-<script src="navigation.js"></script></body>
-
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
+        let isVisible = false;
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+</body>
 </html>

@@ -86,28 +86,29 @@ Your organization is using AI to improve products through innovation. The develo
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Deploy Model Armor to protect the Vertex AI endpoint. Review Security Command Center findings to detect information leakages.)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- Model Armor: To specjalistyczne narzędzie Google do ochrony modeli AI (np. Vertex AI/Gemini). Służy do filtrowania niebezpiecznych treści (zarówno wejściowych "jailbreak", jak i wyjściowych - wyciek PII/danych wrażliwych).
-- Security Command Center (SCC): Jest głównym narzędziem do detekcji zagrożeń i wycieków danych wewnątrz organizacji.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- A. VPC SC + DLP API: VPC SC chroni przed eksfiltracją przez sieć, ale nie rozumie "treści" generowanej przez model AI. DLP API wymagałoby skomplikowanej integracji "w locie" z endpointem modelu.
-- B. Vertex AI User + Logging: IAM daje dostęp, a logowanie pozwala *po fakcie* (reaktywnie) sprawdzić co się stało, ale nie zapobiega wyciekom w czasie rzeczywistym.
-- D. Firewall: Nie ma zastosowania – Vertex AI to usługa API, firewall nie ma wglądu w payloady API.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Gemini in Vertex AI" + "Prevent and detect information leakages" = Model Armor + Security Command Center.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Model Armor to "WAF" dla modeli językowych AI.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/model-armor/docs/overview" target="_blank">Model Armor overview</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

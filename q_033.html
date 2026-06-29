@@ -86,31 +86,29 @@ A customer wants to move their sensitive workloads to a Compute Engine-based clu
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Customer-managed encryption keys (CMEK) using Cloud Key Management Service (KMS))
+**Potwierdzona odpowiedź: AC**
 
 Wyjaśnienie: 
-Customer-Managed Encryption Keys (CMEK) to rozwiązanie w Google Cloud, które daje administratorowi pełną kontrolę nad cyklem życia kluczy szyfrujących (tworzenie, rotacja, wyłączanie, niszczenie) za pośrednictwem usługi Cloud KMS. CMEK jest w pełni zintegrowany z Managed Instance Groups (MIG). W Instance Template (szablonie instancji) można wskazać klucz KMS, a Google automatycznie użyje go do zaszyfrowania dysków systemowych (boot disks) każdej nowo powstającej instancji w ramach grupy. Jest to kluczowe przy obciążeniach typu "bursty", gdzie skalowanie (tworzenie nowych VM) musi odbywać się całkowicie automatycznie i bez opóźnień.
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
 Dlaczego pozostałe są błędne:
-A. Customer-supplied encryption keys (CSEK): Rozwiązanie to wymaga podania surowego klucza (raw key) w każdym żądaniu utworzenia dysku lub startu maszyny. Ponieważ MIG-i zarządzają instancjami automatycznie (Google samo tworzy VM w odpowiedzi na obciążenie), system nie miałby dostępu do Twojego klucza CSEK bez Twojej ręcznej interwencji przy każdym skalowaniu, co uniemożliwia automatyzację procesów.
-C. Encryption by default: To szyfrowanie przy użyciu kluczy zarządzanych przez Google (GMEK). W tym modelu klient nie ma żadnej kontroli nad kluczem (nie może go rotować, unieważnić ani usunąć), co bezpośrednio narusza wymóg "control the key lifecycle".
-D. Pre-encrypting files: Szyfrowanie plików przed ich wysłaniem chroni jedynie dane, a nie całe dyski systemowe maszyn wirtualnych. Nie rozwiązuje problemu bezpieczeństwa infrastruktury Compute Engine i jest trudne w zarządzaniu przy skalowaniu.
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- "MIG" / "Autoscaling" + "Control key lifecycle": To zawsze wskazuje na CMEK (KMS).
-- "Control" = CMEK (Twoje klucze w KMS). "Supply" = CSEK (Twoje klucze poza chmurą). "Default" = GMEK (Klucze Google).
-- Zapamiętaj: CSEK i automatyczne skalowanie (MIG/GKE) nie są ze sobą kompatybilne w pełni zautomatyzowany sposób.
-
-Kluczowe zagadnienia do powtórzenia:
-- Różnice między GMEK, CMEK i CSEK
-- Integracja Cloud KMS z zasobami Compute Engine
-- Działanie Instance Templates w grupach MIG
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://cloud.google.com/compute/docs/disks/customer-managed-encryption" target="_blank">https://cloud.google.com/compute/docs/disks/customer-managed-encryption</a>
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

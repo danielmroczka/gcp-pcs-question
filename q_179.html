@@ -87,35 +87,29 @@ You need to set up a Cloud Interconnect connection between your company's on-pre
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (Use restricted.googleapis.com to access Google APIs using a set of IP addresses only routable from within Google Cloud, which are advertised as routes over the Cloud Interconnect connection)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- restricted.googleapis.com: Jest to specjalna domena Google Cloud przeznaczona dla organizacji korzystających z VPC Service Controls (VPC SC). Kluczową cechą tej domeny jest to, że rozwiązuje się ona na zakres adresów IP (199.36.153.4/30), który obsługuje TYLKO te API Google, które są wspierane przez VPC SC.
-- Zapobieganie eksfiltracji: Używając `restricted.googleapis.com`, masz pewność, że ruch z on-premises nie trafi do uslug, które nie są objęte perymetrem bezpieczeństwa (np. osobiste konta Gmail czy dyski GDrive), co spełnia wymóg "mitigate against exfiltration risk to non-supported APIs".
-- Łączność hybrydowa: Rekordy A dla tej domeny muszą zostać rozpropagowane przez BGP (Cloud Router) do Twojej sieci on-premises, aby ruch mógł płynąć przez Cloud Interconnect bez wychodzenia do publicznego internetu.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Private Google Access on regional subnets: Private Google Access (PGA) pozwala VM-om wewnątrz Google Cloud (które nie mają publicznych IP) na łączenie się z API. Nie rozwiązuje to problemu dostępu z sieci on-premises (do tego służy PGA for On-Premises, ale wymaga odpowiedniej domeny DNS).
-- B. CNAME and A records: Choć opisuje mechanizm techniczny DNS, opcja D jest bardziej kompletna, ponieważ wspomina o rozgłaszaniu tras (advertised as routes), co jest niezbędne, aby adresy IP 199.36.153.8/30 były osiągalne z on-premises. Ponadto IP 199.36.153.8/30 to zakres dla `private.googleapis.com`, a nie `restricted`.
-- C. private.googleapis.com: Ta domena obsługuje większość usług Google, w tym te, które NIE są wspierane przez VPC Service Controls. Użycie jej nie spełnia więc wymogu ograniczenia dostępu tylko do usług wspieranych przez VPC SC w celu ochrony przed eksfiltracją.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "VPC Service Controls" + "On-premises" = `restricted.googleapis.com`.
-- "Most Google APIs" + "On-premises" = `private.googleapis.com`.
-- Zakres `restricted`: 199.36.153.4/30.
-- Zakres `private`: 199.36.153.8/30.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: `restricted` jest bardziej bezpieczne (węższy zakres usług), `private` jest bardziej elastyczne (szerszy zakres usług).
-- Konfiguracja wymaga trzech kroków: (1) Konfiguracja DNS on-prem, (2) Konfiguracja Cloud Routera do rozgłaszania tras, (3) Konfiguracja Firewalli.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity" target="_blank">Set up private connectivity for Google APIs</a>
-- <a href="https://cloud.google.com/vpc/docs/configure-private-google-access-hybrid" target="_blank">Configure Private Google Access for on-premises hosts</a>
-- <a href="https://cloud.google.com/vpc-service-controls/docs/supported-products" target="_blank">VPC Service Controls supported products</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

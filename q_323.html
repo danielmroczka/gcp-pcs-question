@@ -86,27 +86,29 @@ Your organization leverages folders to represent different teams within your Goo
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Grant each service account the project creator role at the organization level and use folder-level IAM conditions to restrict project creation to specific folders.)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- Project Creator + IAM Conditions: To najlepsza praktyka ("Effective way") dla IaC. Daje service account uprawnienie do tworzenia projektów (Organization level), ale warunek (IAM Condition) ogranicza to tworzenie tylko do konkretnego folderu przypisanego do zespołu. Zapewnia to separację przy zachowaniu "Least Privilege".
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Folder Administrator: Daje zbyt szerokie uprawnienia (nie tylko tworzenie projektów, ale zarządzanie całą strukturą folderu, co może łamać Least Privilege).
-- C. Project Editor at Org: Zbyt szerokie uprawnienia – projekt editor na poziomie organizacji to ogromne ryzyko bezpieczeństwa (masz dostęp do WSZYSTKICH projektów w organizacji).
-- D. Folder IAM Administrator: Daje możliwość zmiany polityk IAM, co jest zbyt ryzykowne dla automatycznych service accounts.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "IaC" + "Least Privilege" + "Folder-based delegation" = Project Creator + IAM Conditions (na folder).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: IAM Conditions pozwalają na definiowanie "gdzie" (zasób) i "kiedy" (czas/atrybuty) rola ma zastosowanie.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/iam/docs/conditions-overview" target="_blank">IAM conditions overview</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

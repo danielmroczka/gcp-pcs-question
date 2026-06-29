@@ -86,33 +86,22 @@ You recently joined the networking team supporting your company's Google Cloud i
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4 d-none"  >
+<div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Firewall Insights)
+Odpowiedź: D.
 
-Wyjaśnienie:
-- Firewall Insights: Jest to dedykowane narzędzie w ramach Network Intelligence Center, które służy do optymalizacji i audytu reguł zapory ogniowej. Automatycznie wykrywa reguły typu "Shadowed" (przykryte przez inne reguły o wyższym lub równym priorytecie) oraz reguły nakładające się (Overlapping).
-- Cele: Narzędzie to pomaga zmniejszyć powierzchnię ataku i uprościć konfigurację sieci poprzez usuwanie nieużywanych lub zbędnych reguł.
+Wyjaśnienie (Dlaczego poprawna):
+D. Firewall Insights: Narzędzie analityczne stworzone dokładnie do tego celu. Potrafi ono wskazać reguły 'shadowed' (przykryte przez inne), reguły nieużywane oraz sugerować optymalizacje.
 
-Dlaczego pozostałe są błędne:
-- A: Security Command Center (SCC) może zgłaszać luki w konfiguracji (np. "port SSH otwarty dla wszystkich"), ale nie analizuje logicznych powiązań i konfliktów priorytetów między wieloma regułami firewall w sieci VPC.
-- B: Firewall Rules Logging rejestruje, która reguła została zastosowana do konkretnego przepływu ruchu, ale nie analizuje statycznie konfiguracji pod kątem reguł, które nigdy nie zadziałają, bo są przykryte przez inne.
-- C: VPC Flow Logs monitorują ruch sieciowy, ale nie posiadają logiki analizy "cienia" (shadowing) reguł zapory.
+Dlaczego inne są błędne:
+A. SCC: Może zgłosić, że port jest otwarty, ale nie analizuje logiki 'nakładania się' reguł między sobą.
+B. Logging: Powie Ci która reguła zadziałała, ale nie powie Ci, że 10 innych reguł pod nią jest martwych.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Słowa klucze: "Overlapped", "Shadowed", "Unused firewall rules" = Firewall Insights.
-- Firewall Insights pomaga w zachowaniu "higieny" reguł sieciowych.
-
-Kluczowe zagadnienia do powtórzenia:
-- Priorytety reguł firewalla (0 to najwyższy, 65535 to najniższy).
-- Funkcjonalności Firewall Insights (shadowing detection, hit counting).
-
-Dokumentacja:
-- <a href="https://cloud.google.com/firewall-insights/docs/overview" target="_blank">Omówienie Firewall Insights</a>
+Konsensus społeczności ExamTopics: 100% poparcia dla D. To jedyne narzędzie do higieny logicznej firewalli.
 </pre>
 </div>
-<div class="ai-analysis-container d-none"  >
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
@@ -125,30 +114,28 @@ Dokumentacja:
 </ul>
 </div>
 </div>
-
-
-<div class="exam-section">
-    <h3>Exam Rule (GCP Professional Cloud Security Engineer)</h3>
-    <p>[INSERT RULE HERE]</p>
-    
-    <h3>Exam Traps</h3>
-    <ul>
-        <li>[TRAP 1]</li>
-        <li>[TRAP 2]</li>
-    </ul>
-
-    <h3>Deep Technical Explanation</h3>
-    <p>[DETAILED EXPLANATION WITH GCP TERMINOLOGY]</p>
-</div>
-
-
-
-
-
-
-
-
-<script src="navigation.js"></script></body>
-
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
+        let isVisible = false;
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+</body>
 </html>

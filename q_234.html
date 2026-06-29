@@ -87,31 +87,29 @@ Your organization uses BigQuery to process highly sensitive, structured datasets
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Create curated tables in a separate dataset and assign the role roles/bigquery.dataViewer)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Zasada najniższych uprawnień (Least Privilege): Zamiast dawać dostęp do głównej tabeli z surowymi danymi, tworzymy "wyselekcjonowane" (curated) widoki lub tabele zawierające tylko to, co konkretna rola musi widzieć.
-- Separacja danych: Umieszczenie tych tabel w oddzielnym zbiorze danych (dataset) pozwala na łatwe zarządzanie dostępem za pomocą IAM na poziomie zbioru. Rola `roles/bigquery.dataViewer` nadaje uprawnienia tylko do odczytu danych w tym konkretnym zbiorze, co jest klasyczną implementacją zasady "need-to-know".
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Data access logs: Logi dają wgląd w to, kto co robił, ale nie ograniczają dostępu do samych danych.
-- B. Row-based access control: Choć RLS jest świetne, poleganie wyłącznie na nim przy zróżnicowanych potrzebach użytkowników (Business User vs Data Engineer) jest trudniejsze do zarządzania niż logiczna separacja datasetów.
-- D. CSV file email: Wysyłanie danych mailem jest krytycznym błędem bezpieczeństwa (dane przestają być pod kontrolą platformy, nie można ich wycofać).
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Curated data" / "Different user roles" = Separate datasets + Granular IAM.
-- Nigdy nie wybieraj opcji z ręcznym przesyłaniem danych mailem (CSV/Excel).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: IAM jest pierwszym poziomem obrony w BigQuery. RLS/CLS to warstwa dodatkowa (fine-grained control).
-- Zawsze wybieraj rozwiązanie natywne wewnątrz BigQuery (IAM), a nie eksport danych na zewnątrz.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/bigquery/docs/access-control" target="_blank">Access control in BigQuery</a>
-- <a href="https://cloud.google.com/bigquery/docs/best-practices-security" target="_blank">BigQuery security best practices</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

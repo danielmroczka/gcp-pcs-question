@@ -86,29 +86,29 @@ Your financial services company needs to process customer personally identifiabl
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (Configure Sensitive Data Protection (SDP) to de-identify PII using format-preserving encryption (FPE).)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- Sensitive Data Protection (wcześniej Cloud DLP): Jest to główna usługa GCP do transformacji wrażliwych danych.
-- "Format-preserving encryption" (FPE): Spełnia wymóg "retains its original format and consistency" (dane po transformacji wyglądają jak dane oryginalne, np. ciągle wyglądają jak numer karty kredytowej) oraz pozwala na operacje analityczne (analytical integrity), jednocześnie chroniąc prywatność.
-- "Avoid full irreversible deletion": FPE jest procesem *odwracalnym* (re-identifiable), jeśli posiada się klucz, w przeciwieństwie do haszowania.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- A. CMEK: Szyfrowanie całego zbioru danych (at rest) nie pozwala na analitykę na poziomie poszczególnych pól bez deszyfrowania całości.
-- B. VPC SC/Row-level encryption: VPC SC chroni przed eksfiltracją (sieć), a nie transformuje danych. Row-level encryption to skomplikowany sposób implementacji tego, co DLP oferuje natywnie.
-- C. Hashing: Haszowanie jest *nieodwracalne* (wymóg mówił o "avoid full irreversible deletion", co sugeruje potrzebę odwracalności w przyszłości).
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Original format and consistency" + "Analytical integrity" + "Not irreversible" = Format-Preserving Encryption (FPE).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Sensitive Data Protection (SDP/DLP) to narzędzie do anonimizacji/pseudonimizacji.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/sensitive-data-protection/docs/deidentification-techniques" target="_blank">De-identification techniques</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

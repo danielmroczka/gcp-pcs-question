@@ -86,29 +86,29 @@ You are implementing a new web application on Google Cloud that will be accessed
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Configure a hierarchical firewall policy. Enable TLS interception by using Cloud Next Generation Firewall (NGFW) Enterprise.)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Cloud NGFW Enterprise: Jest to jedyna usługa w Google Cloud, która oferuje natywną inspekcję TLS (TLS interception) na poziomie warstwy sieciowej (firewalla). Pozwala ona na deszyfrowanie ruchu, przeskanowanie go pod kątem zagrożeń (malware, exploity) przez silnik IDS/IPS i ponowne zaszyfrowanie przed wysłaniem do celu.
-- Hierarchical firewall policy: Inspekcję TLS konfiguruje się zazwyczaj w politykach hierarchicznych (na poziomie organizacji lub folderu), aby wymusić standardy bezpieczeństwa w całej infrastrukturze.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Secure Web Proxy: Służy do kontroli ruchu WYCHODZĄCEGO (egress) do internetu, a nie wchodzącego do aplikacji webowej.
-- B. Load Balancer offloading: Load Balancer może "odbić" (terminate) TLS, ale nie oferuje zaawansowanej inspekcji pod kątem malware (IDS/IPS) w sposób, w jaki robi to NGFW Enterprise.
-- D. VPC firewall rule: Standardowe reguły firewall VPC działają w warstwach 3/4 i nie obsługują inspekcji TLS. Funkcjonalność ta wymaga NGFW Enterprise i polityk hierarchicznych.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "TLS interception" + "Malware protection" = Cloud NGFW Enterprise.
-- Inspekcja TLS = Otwieranie "koperty" pakietu, żeby zobaczyć co jest w środku.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Cloud NGFW występuje w dwóch wersjach: Standard (warstwy 3/4) i Enterprise (warstwa 7, TLS inspection, IDS/IPS).
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/firewall/docs/about-firewall-plus" target="_blank">Cloud NGFW Enterprise overview</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

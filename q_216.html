@@ -87,33 +87,29 @@ Your organization wants to be continuously evaluated against CIS Google Cloud Co
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Activate Security Command Center (SCC) Premium. Create a rule to mute the security findings in SCC so they are not evaluated)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- SCC Premium: Jest to kluczowa usługa Google Cloud do ciągłej oceny bezpieczeństwa, która automatycznie sprawdza konfigurację Twojego środowiska pod kątem standardów takich jak CIS Benchmark (w tym CIS v1.3).
-- Mute Rules (Reguły wyciszania): To funkcjonalność SCC, która pozwala na automatyczne ukrywanie (wyciszanie) znalezisk, które zostały uznane przez zespół bezpieczeństwa za "nieistotne" lub "zaakceptowane ryzyko". Dzięki regułom (muting rules), proces ten jest w pełni zautomatyzowany – gdy SCC ponownie wykryje dany błąd, reguła automatycznie go wyciszy, więc nie wpłynie on na końcowy wynik zgodności (Compliance score).
-- CIS Benchmark: SCC Premium automatycznie mapuje znaleziska na konkretne kontrolki CIS, co pozwala na bieżący monitoring zgodności.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Manual muting: Ręczne wyciszanie (muting) każdego znaleziska z osobna jest niemożliwe do utrzymania w dużej skali. Ponadto, wyciszanie "zawsze, gdy się pojawią" wymaga automatyzacji (reguł), a nie ręcznej pracy.
-- C. CSV Export: Pobieranie danych do pliku CSV jest procesem statycznym i ręcznym. Nie zapewnia ciągłej oceny (continuous evaluation) ani automatyzacji – audytorzy nie będą analizować plików CSV w czasie rzeczywistym.
-- D. External audit: Zewnętrzne audyty są ważne, ale nie rozwiązują problemu "ciągłej oceny" (continuous evaluation) wewnątrz Google Cloud. Pytanie wymaga "automatycznego systemu lub procesu".
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Continuous evaluation" + "CIS Benchmark" + "Ignore irrelevant controls" = SCC Premium + Mute Rules.
-- "Automated" = Mute Rules (nie ręczne klikanie).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Wyciszenie znaleziska w SCC usuwa je z dashboardów zgodności (Compliance dashboards), co wpływa na statystyki, ale nie usuwa faktycznego zagrożenia z platformy.
-- Reguły wyciszania można tworzyć przy użyciu filtrów (np. wycisz wszystkie znaleziska typu X w projekcie Y).
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/security-command-center/docs/how-to-mute-findings" target="_blank">Muting security findings in SCC</a>
-- <a href="https://cloud.google.com/security-command-center/docs/concepts-cis-benchmarks" target="_blank">CIS benchmarks in SCC</a>
-- <a href="https://cloud.google.com/security-command-center/docs/concepts-security-command-center-overview" target="_blank">Security Command Center overview</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

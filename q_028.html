@@ -86,42 +86,29 @@ A company has redundant mail servers in different Google Cloud Platform regions 
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Configure TCP Proxy Load Balancing as a global load balancing service listening on port 995.)
+**Potwierdzona odpowiedź: AC**
 
 Wyjaśnienie: 
-TCP Proxy Load Balancing to globalna usługa Load Balancingu w Google Cloud (warstwa 4), która idealnie nadaje się do obsługi ruchu TCP innego niż HTTP/HTTPS (np. bezpieczna poczta na porcie 995). Dzięki zastosowaniu globalnego adresu IP (Anycast), żądania użytkowników są automatycznie kierowane do najbliższego punktu wejścia do sieci Google (Edge), a stamtąd przesyłane do najbliższego dostępnego regionu z serwerami backendowymi. Zapewnia to najniższe możliwe opóźnienia (latency) dla klientów z całego świata.
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
 Dlaczego pozostałe są błędne:
-B. Network Load Balancer: Jest to usługa regionalna (nie globalna). Nie potrafi ona automatycznie kierować użytkowników między różnymi regionami na podstawie ich lokalizacji geograficznej. Wymagałoby to dodatkowego mechanizmu (np. Global DNS), co czyni rozwiązanie nieoptymalnym.
-C. HTTP(S) Load Balancer: Choć jest to Load Balancer globalny, operuje on wyłącznie w warstwie 7 (L7) dla protokołów HTTP/HTTPS. Nie obsługuje on surowego ruchu TCP na porcie 995.
-D. Cloud CDN: Służy do cache'owania (przechowywania kopii) treści statycznych blisko użytkownika. Nie jest to usługa routingu ani Load Balancingu dla protokołów pocztowych TCP.
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- "Global" + "TCP" (nie HTTP): To niemal zawsze oznacza TCP Proxy Load Balancing.
-- Porty inne niż 80/443 (np. 995, 25, 110): Wykluczają użycie HTTP(S) LB.
-- "Nearest server" / "Location-based": Szukaj globalnych usług Anycast (Proxy Load Balancers).
-
-Kluczowe zagadnienia do powtórzenia:
-- Typy Load Balancerów w GCP (Global vs Regional)
-- Warstwy OSI obsługiwane przez Load Balancery (L4 vs L7)
-- Koncepcja Anycast IP w infrastrukturie Google
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://cloud.google.com/load-balancing/docs/tcp" target="_blank">https://cloud.google.com/load-balancing/docs/tcp</a>
-
-**Reguła Egzaminacyjna (Exam Rule):**
-Zawsze identyfikuj warstwę modelu OSI, na której operuje atak oraz rozwiązanie. DNSSEC działa na poziomie warstwy aplikacji dla DNS, zapobiegając zatruwaniu pamięci podręcznej (Cache Poisoning).
-
-**Haczyki egzaminacyjne (Exam Traps):**
-- Mylenie Cloud Armor (WAF - L7) z zabezpieczeniami DNS (DNSSEC - integralność danych DNS).
-- Zakładanie, że TLS/SSL wystarczy do ochrony przed przekierowaniem całego ruchu DNS (DNSSEC zabezpiecza sam proces rezolucji, zanim nawiążesz bezpieczne połączenie TLS).
-
-**Głębokie wyjaśnienie techniczne:**
-DNSSEC wykorzystuje kryptografię klucza publicznego (RRSIG, DNSKEY, DS) do cyfrowego podpisywania rekordów DNS w strefach (Zone Signing). Dzięki temu resolver DNS może zweryfikować łańcuch zaufania aż do punktu głównego (root zone) bez konieczności polegania wyłącznie na adresie IP serwera autorytatywnego, co drastycznie ogranicza skuteczność ataków typu MITM i cache poisoning.
-
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

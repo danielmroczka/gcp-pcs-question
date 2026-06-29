@@ -86,26 +86,29 @@ Your organization is developing a new SaaS application on Google Cloud. Stringen
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Enable Event Threat Detection and Security Health Analytics in Security Command Center. Set up detailed logging for IAM-related activity and relevant project resources by deploying Cloud Audit Logs.)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- SCC Suite: Zestaw ETD (wykrywanie włamań), SHA (wykrywanie błędów konfiguracji) oraz Cloud Audit Logs (ślad zmian IAM) pokrywa wszystkie wymogi monitoringu compliance dla aplikacji SaaS.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A, B, C: Są to rozwiązania fragmentaryczne, skupiające się tylko na sieci lub samej archiwizacji logów, bez inteligentnej analizy zagrożeń tożsamościowych i konfiguracyjnych.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Visibility into privileged account activity" + "Unauthorized changes" + "Compliance" = Security Command Center (SCC) Suite + Cloud Audit Logs.
-- Pamiętaj: SCC jest scentralizowanym hubem bezpieczeństwa w GCP.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Integracja SCC z Audit Logs pozwala na korelację zdarzeń - np. "ktoś z IP z Chin (ETD) zmienił rolę IAM (Audit Logs) na uprzywilejowaną".
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/security-command-center" target="_blank">Security Command Center overview</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

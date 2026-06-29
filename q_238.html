@@ -87,30 +87,29 @@ Your company is concerned about unauthorized parties gaining access to the Googl
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Security key)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Phishing-Resistant MFA: Klucze bezpieczeństwa (Security Keys, np. Titan, YubiKey) używają protokołu FIDO2/WebAuthn, który jest sprzętowo powiązany z domeną. Jeśli użytkownik wejdzie na fałszywą stronę logowania (np. g00gle.com), klucz "zorientuje się", że domena jest inna niż oczekiwana i odmówi wygenerowania podpisu.
-- Odporność na Person-in-the-middle: Atakujący, nawet jeśli przechwyci login i hasło, nie może "odtworzyć" (replay) podpisu z klucza sprzętowego, ponieważ klucz jest przypisany do konkretnego originu (domeny).
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- B. Google prompt: Choć wygodne, Google Prompt jest podatne na zaawansowany phishing (np. atakujący może wysłać prompt do użytkownika w nadziei, że ten go kliknie - tzw. "MFA fatigue attack"). Nie jest w pełni odporne na phishing.
-- C. Text message (SMS) or phone call: SMS-y są podatne na ataki typu SIM-swapping i intercepting. W ogóle nie zaleca się ich w nowoczesnym modelu Zero Trust.
-- D. Google Authenticator application: Kody TOTP (6 cyfr) są podatne na phishing – jeśli atakujący stworzy fałszywą stronę i poprosi użytkownika o wpisanie kodu z aplikacji, może go przechwycić i użyć w czasie rzeczywistym.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Phishing-resistant" / "MitM-resistant" = Zawsze wybieraj Security Key (FIDO).
-- Pamiętaj: Security Keys to najwyższy poziom MFA.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj, że dla "High-privilege" kont (jak Super Admin) klucze bezpieczeństwa są obowiązkowe w każdej profesjonalnej organizacji.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/security/phishing-resistant-mfa" target="_blank">Why Security Keys are phish-proof</a>
-- <a href="https://support.google.com/accounts/answer/185839" target="_blank">About 2-Step Verification</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

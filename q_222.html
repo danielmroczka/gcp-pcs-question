@@ -87,31 +87,29 @@ Your company recently published a security policy to minimize the usage of servi
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Set up a workload identity pool with your corporate Active Directory Federation Service (ADFS). Configure a rule to let principals in the pool impersonate the Google Cloud service account)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Workload Identity Federation (WIF): Pozwala aplikacjom działającym poza GCP (np. on-premises z Windows) na bezpieczne uwierzytelnianie się w Google Cloud bez potrzeby zarządzania długotrwałymi kluczami (JSON).
-- Integracja z ADFS: ADFS (Active Directory Federation Services) może działać jako Identity Provider (IdP) korzystający z protokołu OIDC/SAML, co jest wspierane przez WIF.
-- Zasada najniższych uprawnień: Opcja A jest lepsza niż B, ponieważ nakazuje "skonfigurowanie reguły" (rule) ograniczającej dostęp, zamiast "pozwolić wszystkim" (let all principals). W bezpieczeństwie chmurowym zawsze dążymy do precyzyjnego ograniczenia dostępu – im mniej podmiotów może przejąć tożsamość konta serwisowego, tym bezpieczniej.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- B. Let all principals in the pool impersonate: Jest to ryzykowne podejście, naruszające zasadę najniższych uprawnień. Każdy użytkownik lub aplikacja w zdefiniowanej puli otrzymałaby dostęp do konta serwisowego, co jest nieakceptowalne w bezpiecznym środowisku.
-- C i D. OIDC service on the same machine: To rozwiązanie jest technicznie niepoprawne w kontekście federacji z korporacyjnym AD/ADFS. WIF wymaga, aby IdP (tutaj ADFS) był zaufanym dostawcą tożsamości. OIDC "na tej samej maszynie" nie rozwiązuje problemu federacji tożsamości z Active Directory.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Least privilege" + "Workload Identity Federation" = Ograniczona reguła (konkretne principal) zamiast "All principals".
-- WIF + ADFS = Bezpieczna tożsamość hybrydowa bez kluczy.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: WIF to "Keyless Authentication".
-- Zawsze wybieraj opcje, które sugerują granulację i ograniczenia, zamiast "wszyscy mają dostęp".
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/iam/docs/workload-identity-federation" target="_blank">Workload Identity Federation overview</a>
-- <a href="https://cloud.google.com/iam/docs/best-practices-for-using-workload-identity-federation" target="_blank">Best practices for WIF</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

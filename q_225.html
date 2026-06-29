@@ -87,31 +87,29 @@ Your organization's record data exists in Cloud Storage. You must retain all rec
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (1. Identify buckets with record data. 2. Apply a retention policy and set it to retain for seven years. 3. Enable bucket lock)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Retention Policy (Polityka retencji): Pozwala określić, jak długo obiekty w buckecie muszą być przechowywane, zanim będzie można je usunąć (np. 7 lat).
-- Bucket Lock (Blokada bucketu): Jest to kluczowy mechanizm, który sprawia, że polityka retencji staje się PERMANENTNA. Po zablokowaniu (Lock) polityki, nikt – nawet administrator organizacji – nie może usunąć ani zmodyfikować tej polityki na krótszy czas trwania. Jest to wymóg konieczny dla wielu regulacji prawnych (np. SEC w finansach), aby zapobiec usuwaniu dowodów przez administratorów.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Log-based alerts: Alerty oparte na logach (np. gdy ktoś próbuje zmienić politykę) są dobrą praktyką monitorowania, ale nie stanowią "twardego" mechanizmu wymuszającego retencję. Jeśli administrator zmieni politykę, alert może przyjść za późno, aby zapobiec usunięciu danych.
-- B. Remove IAM roles: Usunięcie uprawnień do zmiany polityki jest dobrym dodatkowym zabezpieczeniem, ale nie daje takiej gwarancji jak "Bucket Lock", który działa bezpośrednio na poziomie serwisu GCS i jest "nieodwracalny" w sensie administracyjnym.
-- C. Bucket policy only: Sam bucket policy (bez operacji "Lock") można łatwo zmienić. Samo włączenie polityki retencji bez jej zablokowania nie spełnia wymogu "permanentności".
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Permanent retention" + "Regulatory compliance" = Retention Policy + Bucket Lock.
-- Zawsze szukaj połączenia: "Retention Policy" (czas) + "Bucket Lock" (blokada zmiany czasu).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Zablokowana polityka retencji (Bucket Lock) jest nieodwracalna. Nie można jej wyłączyć ani skrócić.
-- Retencja w GCS działa na poziomie całego bucketu.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/storage/docs/bucket-lock" target="_blank">Bucket Lock overview</a>
-- <a href="https://cloud.google.com/storage/docs/bucket-lock#retention-policies" target="_blank">Retention policies guide</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

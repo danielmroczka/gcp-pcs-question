@@ -86,32 +86,29 @@ You want to evaluate your organization's Google Cloud instance for PCI complianc
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Google Cloud Platform: Customer Responsibility Matrix)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-W modelu współdzielonej odpowiedzialności (Shared Responsibility Model), dostawcy usług chmurowych tacy jak Google Cloud publikują dokumenty określające, które zabezpieczenia (kontrole) są realizowane przez dostawcę, a które przez klienta.
-1. Customer Responsibility Matrix (Macierz Odpowiedzialności Klienta): Jest to kluczowy dokument przy audytach PCI DSS. Precyzuje on, które wymagania standardu PCI są "inherentne" (zapewnione przez infrastrukturę Google, np. fizyczna ochrona centrum danych), które są współdzielone, a które leżą wyłącznie po stronie klienta (np. konfiguracja firewalli wewnątrz VPC).
-2. "Inherent controls": To te mechanizmy, które klient otrzymuje "w pakiecie" z usługą chmurową i za które odpowiada Google.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
 Dlaczego pozostałe są błędne:
-B. PCI DSS Requirements and Security Assessment Procedures to ogólny standard wydany przez PCI SSC, który opisuje wymagania dla wszystkich firm, ale nie zawiera specyficznych informacji o tym, co konkretnie Google robi dla swoich klientów.
-C. PCI SSC Cloud Computing Guidelines to ogólny przewodnik dobrych praktyk dotyczący chmury, nie jest to specyficzny dokument techniczny/audytowy Google Cloud.
-D. Dokumentacja produktu (np. Compute Engine) opisuje jak korzystać z usługi, ale nie jest oficjalnym dokumentem audytowym PCI mapującym odpowiedzialność w zakresie kontroli bezpieczeństwa.
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- Słowa klucze: "PCI compliance", "Shared Responsibility", "Inherent controls" = szukaj "Customer Responsibility Matrix".
-- Pamiętaj, że Google udostępnia te raporty (np. SOC 3, PCI Attestation of Compliance) przez "Compliance Reports Manager".
-
-Kluczowe zagadnienia do powtórzenia:
-- Shared Responsibility Model (Model Współdzielonej Odpowiedzialności).
-- PCI DSS w chmurze.
-- Inherent vs. Shared vs. Customer controls.
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://cloud.google.com/architecture/framework/security/shared-responsibility-google-cloud" target="_blank">Współdzielona odpowiedzialność w Google Cloud</a>
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

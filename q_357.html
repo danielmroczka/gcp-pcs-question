@@ -86,29 +86,29 @@ Your company is developing a new application for your organization. The applicat
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Create two separate service accounts. Grant one service account the permissions to execute service A, and grant the other service account the permissions to execute service B. Require authentication for service B. Permit only the service account for service A to call the backend.)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- Least Privilege: Każdy serwis powinien mieć własne, odseparowane konto serwisowe (Identity per workload). To zapobiega sytuacji, w której kompromitacja jednego serwisu pozwala na nieograniczone operacje w innym.
-- "Require authentication for service B": W Cloud Run, aby zabezpieczyć backend, należy ustawić "Require authentication" (wymaga tokena ID).
-- IAM Permit: Service account dla serwisu A uzyskuje rolę `Cloud Run Invoker` dla serwisu B. Dzięki temu tylko A może wywołać B.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- B: Zbyt skomplikowane (trzy SA), użycie kluczy (service account keys) jest ryzykowne (zła praktyka).
-- C: Łamanie Least Privilege (jedno SA dla dwóch serwisów).
-- D: Domyślne SA to zła praktyka (często zbyt szerokie uprawnienia).
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Least privilege" + "Cloud Run services communication" = Dedykowane SA dla każdego serwisu + IAM Invoker role (na backendzie).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Dostęp między serwisami Cloud Run realizuje się przez IAM (rola Invoker) na serwisie docelowym.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/run/docs/authenticating/service-to-service" target="_blank">Service-to-service authentication</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

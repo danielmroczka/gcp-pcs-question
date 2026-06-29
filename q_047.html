@@ -86,32 +86,29 @@ A large e-retailer is moving to Google Cloud Platform with its ecommerce website
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (L7 Load Balancer + SSL Certificate)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-Aby zabezpieczyć dane płatnicze przesyłane przez stronę e-commerce (ruch HTTPS), konieczne jest zastosowanie szyfrowania TLS/SSL pomiędzy przeglądarką klienta a infrastrukturą GCP.
-1. L7 Load Balancer (HTTP(S) Load Balancer): Jest to load balancer warstwy aplikacji, który natywnie wspiera "SSL Termination" (zakończenie sesji SSL). Pozwala on na zainstalowanie certyfikatu SSL na samym LB, co odciąża serwery backendowe z procesu szyfrowania/deszyfrowania.
-2. Require encryption: Można skonfigurować LB tak, aby wymuszał ruch HTTPS (np. przekierowując cały ruch z HTTP na HTTPS) oraz używał nowoczesnych zestawów szyfrów (Cipher Suites). Jest to standardowe rozwiązanie dla aplikacji webowych.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
 Dlaczego pozostałe są błędne:
-B. Network TCP Load Balancer: Działa w warstwie 4 (transportowej). Choć może on przekazywać ruch SSL do backendów (SSL pass-through), to zazwyczaj nie on służy do "zarządzania certyfikatem" i terminacji sesji dla aplikacji webowych w sposób tak zintegrowany jak L7 LB. L7 oferuje dodatkowe funkcje jak Cloud Armor, które są kluczowe dla e-commerce.
-C i D. Firewall rules: Same reguły firewall otwierające port 443 pozwalają jedynie na przepływ pakietów, ale NIE zapewniają szyfrowania ani nie zarządzają certyfikatami SSL. Firewall to warstwa kontroli dostępu, a nie mechanizm szyfrowania sesji.
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- Strona internetowa + szyfrowanie = HTTP(S) Load Balancer (L7).
-- "SSL Termination" na Load Balancerze to najlepsza praktyka (best practice) pozwalająca na centralne zarządzanie certyfikatami (np. Google-managed SSL certificates).
-- Pamiętaj, że do spełnienia wymagań PCI DSS konieczne jest użycie TLS 1.2+.
-
-Kluczowe zagadnienia do powtórzenia:
-- Typy Load Balancerów w GCP (Global vs Regional, L4 vs L7).
-- SSL Termination vs SSL Pass-through.
-- Google-managed SSL certificates.
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://cloud.google.com/load-balancing/docs/https" target="_blank">HTTP(S) Load Balancing overview</a>
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

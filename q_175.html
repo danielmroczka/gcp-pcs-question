@@ -88,37 +88,29 @@ You are consulting with a client that requires end-to-end encryption of applicat
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: DE (D: Confidential Computing and Istio, E: Client-side encryption)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego te odpowiedzi są poprawne:
-- Kluczowe wymaganie: Szyfrowanie danych w trzech stanach: "in transit" (w ruchu), "in use" (podczas przetwarzania) oraz "at rest" (podczas przechowywania).
-- D. Confidential Computing i Istio:
-    - Confidential Computing: Rozwiązuje problem szyfrowania danych "in use". Dzięki technologii TEE (Trusted Execution Environment) dane są szyfrowane bezpośrednio w pamięci RAM, co chroni je nawet przed administratorem hosta lub samym Google.
-    - Istio: Jest to service mesh, który automatycznie zapewnia szyfrowanie "in transit" między mikroserwisami za pomocą Mutual TLS (mTLS). Szyfrowanie "at rest" w GCP jest domyślne dla wszystkich usług.
-- E. Client-side encryption: Jest to alternatywne podejście, w którym dane są szyfrowane jeszcze zanim trafią do Google Cloud. Dzięki temu są one zaszyfrowane "at rest" (na dyskach Google), "in transit" (podczas przesyłania) oraz "in use" (z punktu widzenia Google, ponieważ platforma widzi tylko zaszyfrowane bloki danych i nie może ich przetworzyć bez klucza klienta).
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- A. External Key Manager (EKM): EKM pomaga zarządzać kluczami do szyfrowania danych "at rest" poza infrastrukturą Google, ale sam w sobie nie zapewnia szyfrowania danych "in use".
-- B. Customer-supplied encryption keys (CSEK): Podobnie jak EKM i CMEK, CSEK służy głównie do ochrony danych "at rest". Dane muszą zostać odszyfrowane w pamięci RAM, aby procesor mógł na nich operować, więc nie chroni to stanu "in use".
-- C. Hardware Security Module (HSM): HSM to urządzenie sprzętowe do bezpiecznego przechowywania kluczy i wykonywania operacji kryptograficznych. Nie jest to technologia służąca do szyfrowania danych aplikacyjnych "in use" czy "in transit" w skali całej platformy.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Data in use" = Confidential Computing (AMD SEV / Intel TDX).
-- "Data in transit" (Internal) = Istio / Anthos Service Mesh.
-- "Data at rest" = CMEK / CSEK / Default encryption.
-- Jeśli widzisz "End-to-end" i masz opcję Client-side encryption – zazwyczaj jest ona poprawna, bo daje największą kontrolę.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj, że domyślnie Google szyfruje dane "at rest" (AES-256) oraz "in transit" (TLS) na swoich łączach, ale klient może chcieć dodatkowych warstw kontroli.
-- Confidential Computing jest dostępne na instancjach N2D oraz C3 (z AMD SEV).
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/confidential-computing" target="_blank">Confidential Computing overview</a>
-- <a href="https://cloud.google.com/security/encryption-in-transit" target="_blank">Encryption in transit in Google Cloud</a>
-- <a href="https://istio.io/latest/docs/concepts/security/" target="_blank">Istio security and mTLS</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

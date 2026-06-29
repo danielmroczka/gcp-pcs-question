@@ -86,29 +86,29 @@ Your organization has established a highly sensitive project within a VPC Servic
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Establish a Context-Aware Access policy that specifies the required contextual attributes, and associate the policy with the VPC Service Controls perimeter in dry run mode.)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- Context-Aware Access (Access Context Manager): To narzędzie, które pozwala definiować polityki dostępu oparte na kontekście (np. czy urządzenie jest zarządzane, lokalizacja użytkownika, IP).
-- Association with VPC SC: Polityki kontekstowe są łączone (associating) z perimetrem VPC Service Controls, aby ograniczyć dostęp do chronionych zasobów.
-- "Evaluate the impact ... without blocking": "Dry run mode" to kluczowa funkcjonalność, która pozwala logować naruszenia bez faktycznego blokowania ruchu ("audit-only"), co pozwala na bezpieczną walidację nowych zasad przed ich egzekucją.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- B: Dashboard loguje *istniejące* naruszenia, nie służy do ewaluacji nowych polityk przed ich wdrożeniem.
-- C: Dry run mode dla perimetru nie wystarczy – trzeba jeszcze zdefiniować *polityki kontekstowe* (Access Levels), a firewall rules nie sprawdzają "company-managed device".
-- D: Cloud Audit Logs służy do reaktywnej analizy, a nie proaktywnej ewaluacji przed wdrożeniem.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Specific contextual requirements" + "Evaluate impact without blocking" = Context-Aware Access (Access Policy) + Dry run mode.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Zawsze testuj restrykcyjne polityki bezpieczeństwa w trybie "dry run" przed ich pełnym wymuszeniem (enforcement).
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/access-context-manager/docs/overview" target="_blank">Access Context Manager overview</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

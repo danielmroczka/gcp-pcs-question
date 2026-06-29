@@ -87,31 +87,29 @@ You run a web application on top of Cloud Run that is exposed to the internet wi
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Identify the users who will migrate the application, revoke the default user roles and assign the users with purposely created custom roles)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Zasada najniższych uprawnień (Least Privilege): Role podstawowe (Basic Roles: Owner, Editor, Viewer) są zbyt szerokie. W środowisku produkcyjnym i skomplikowanych migracjach należy używać ról predefiniowanych lub niestandardowych (Custom Roles), które dają dokładnie takie uprawnienia, jakich użytkownik potrzebuje do konkretnych zadań.
-- Separacja obowiązków (Separation of Duties): Pozwala na podział zadań między administratorów, deweloperów i operatorów security, tak aby żadna osoba nie miała pełnej kontroli nad wszystkim ("God mode").
-- Custom Roles: Pozwalają na stworzenie precyzyjnego zestawu uprawnień, który ogranicza ryzyko błędów ludzkich podczas migracji.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- B. Multiple IdPs: To skomplikowanie zarządzania tożsamością, nie ma nic wspólnego z "authorization scheme" (uprawnieniami).
-- C. MFA: To mechanizm uwierzytelniania (Authentication), a nie autoryzacji (Authorization).
-- D. No action needed: To skrajnie niebezpieczne założenie. Domyślne uprawnienia w nowej organizacji nie spełniają wymogów "least privilege".
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Least privilege" + "Separation of duties" = Zawsze Custom Roles lub Predefined Roles (nigdy Basic Roles).
-- Jeśli widzisz "No action needed" / "Automatic" w kontekście uprawnień -> odrzuć to w 99% przypadków.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Rola Owner posiada uprawnienia do zarządzania IAM, co jest naruszeniem zasady separacji obowiązków w większości scenariuszy audytowych.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/iam/docs/understanding-roles" target="_blank">Understanding IAM roles</a>
-- <a href="https://cloud.google.com/iam/docs/creating-custom-roles" target="_blank">Creating custom roles</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

@@ -86,26 +86,29 @@ Your organization is implementing a Zero Trust security model and using Chrome E
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Create an access level in Access Context Manager that requires a device policy. Create a Context-Aware Access policy using this access level. Apply the policy to the VPC Service Controls perimeter that includes the Cloud Storage buckets.)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- Access Context Manager + Device Policy: To jedyny sposób na implementację wymogów "device security posture" (sprawdzenie OS patches, antivirus).
-- Context-Aware Access + VPC SC: To standard w modelu Zero Trust w GCP – łączysz warstwę tożsamości z warstwą kontekstu urządzenia (device posture) i perimetrem sieciowym (VPC SC).
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- A, B, D: Brak mechanizmu "device security posture" (sprawdzania, czy urządzenie ma łatki, AV, itp.). VPN czy IP-based filtering to nie jest Zero Trust oparty na tożsamości i urządzeniu.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Zero Trust" + "Managed devices" + "Device security posture" = Access Context Manager (Access Level).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Access Context Manager pozwala definiować atrybuty, które muszą być spełnione, aby uzyskać dostęp (np. urządzenie musi być firmowe, zaszyfrowane, z aktualnym OS).
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/access-context-manager/docs/overview" target="_blank">Access Context Manager overview</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

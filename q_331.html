@@ -86,29 +86,29 @@ Your organization uses a microservices architecture based on Google Kubernetes E
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Enforce Binary Authorization in your GKE clusters. Integrate container image vulnerability scanning into the CI/CD pipeline and require vulnerability scan results to be used for Binary Authorization policy decisions.)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- Binary Authorization: To standardowa usługa w GCP służąca do wymuszania wdrożeń tylko zweryfikowanych obrazów w GKE.
-- "Automated system" + "Managed services" + "Only approved images": Binary Authorization w połączeniu ze skanerem podatności (Artifact Analysis) to rozwiązanie w pełni zarządzane i automatyczne.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Custom Org Policies: Nie pozwalają na tak szczegółową kontrolę nad tym *czy obraz przeszedł skanowanie*. Org Policy ogranicza *skąd* (z jakiego projektu/registry), ale nie *czy* obraz jest bezpieczny.
-- C. Cloud Build/Firewall: To narzędzia CI/CD i sieciowe – nie zapewniają wymuszenia (enforcement) na poziomie GKE.
-- D. Third-party/Custom scripts: To podejście "manualne" i "niemanaged", co stoi w sprzeczności z wymaganiem "automated system by using managed services".
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Only approved container images" + "GKE" = Binary Authorization.
-- Unikaj "custom scripts" na egzaminie.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Binary Authorization to kluczowy element "Software Supply Chain Security".
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/binary-authorization/docs/overview" target="_blank">Binary Authorization overview</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

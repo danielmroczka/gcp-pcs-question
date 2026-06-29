@@ -86,68 +86,57 @@ You are working with protected health information (PHI) for an electronic health
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4 d-none"  >
+<div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Cloud Data Loss Prevention with cryptographic hashing)
+Odpowiedź: C.
 
-Wyjaśnienie:
-Haszowanie kryptograficzne (Cryptographic Hashing) w usłudze Cloud DLP to proces jednokierunkowy i nieodwracalny, co spełnia wymóg "not reversible". Ponadto funkcja ta generuje skrót o stałej długości i określonym zestawie znaków (zazwyczaj hex), który nie zachowuje formatu, długości ani zestawu znaków danych wejściowych (spełnia wymóg "do not preserve character set and length"). Pozwala to na unikalną identyfikację rekordów (np. dla potrzeb agregacji w analityce) bez ujawniania rzeczywistych danych PHI.
+Wyjaśnienie (Dlaczego poprawna):
+C. Cryptographic hashing: Haszowanie jest procesem jednokierunkowym (nieodwracalnym). Całkowicie zmienia ono format i długość danych (np. SHA-256 zawsze daje 64 znaki hex), co spełnia wymóg 'do not preserve character set and length'.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A: Szyfrowanie deterministyczne (Deterministic encryption) jest procesem odwracalnym (reversible) przy użyciu klucza, co jest sprzeczne z wymaganiami zadania.
-- B: Szyfrowanie zachowujące format (Format-preserving encryption - FPE) jest zaprojektowane tak, aby ZACHOWAĆ długość i zestaw znaków danych wejściowych (np. numer telefonu pozostaje numerem telefonu), co wprost łamie wymóg "do not preserve".
-- D: Cloud Key Management Service (KMS) służy do zarządzania kluczami szyfrującymi (owijania ich), a nie do samej metody transformacji danych (haszowania/szyfrowania) w celu anonimizacji.
+Dlaczego inne są błędne:
+A. Deterministic encryption: Jest odwracalna (reversible) przy użyciu klucza.
+B. Format-preserving encryption: Z założenia zachowuje format i długość (np. numer telefonu po zaszyfrowaniu nadal ma 9 cyfr) - przeciwieństwo wymogu.
+D. Wrapped keys: To mechanizm zarządzania kluczami, a nie technika transformacji danych (anonymizacji).
 
-Wskazówki i triki (Tips & Tricks):
-- Jeśli anonimizacja ma być NIEODWRACALNA = Haszowanie (Hashing).
-- Jeśli anonimizacja ma ZACHOWAĆ FORMAT = Format-Preserving Encryption (FPE).
-- Jeśli anonimizacja ma być ODWRACALNA (np. tokenizacja) = Szyfrowanie (Encryption).
-
-Praktyczne informacje na egzamin:
-- Cloud DLP oferuje wiele technik de-identyfikacji: od prostego maskowania znaków, przez kategoryzację (bucketing), po zaawansowane szyfrowanie kryptograficzne.
-- Wybór metody zależy od tego, czy dane muszą być później przywrócone (odwracalność) i czy systemy analityczne wymagają zachowania formatu danych.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/dlp/docs/transformations-reference#hashing" target="_blank">Transformacje de-identyfikacji w DLP</a>
+Konsensus społeczności ExamTopics: 100% na C. Hashing = non-reversible i zmiana formatu.
 </pre>
 </div>
-<div class="ai-analysis-container d-none"  >
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> W scenariuszach analitycznych dla służby zdrowia (PHI), <b>haszowanie</b> jest często wybierane zamiast maskowania, ponieważ pozwala na zachowanie relacji między danymi. Jeśli ten sam pacjent pojawi się w dwóch różnych zbiorach danych, po haszowaniu z użyciem tej samej soli (salt), jego rekordy będą miały ten sam identyfikator, co umożliwi ich złączenie bez naruszania prywatności.</p>
+<p><b>Głęboka analiza:</b> <p><b>Głęboka analiza:</b> Jeśli potrzebowałbyś łączyć te dane w przyszłości (referential integrity), musiałbyś użyć tej samej soli (salt) przy haszowaniu każdego rekordu.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/dlp/docs/concepts-deidentification" target="_blank">Koncepcje de-identyfikacji danych</a></li>
+<li><a href="https://cloud.google.com/dlp/docs/transformations-reference#hashing" target="_blank">https://cloud.google.com/dlp/docs/transformations-reference#hashing</a></li>
+
 </ul>
 </div>
 </div>
-
-
-<div class="exam-section">
-    <h3>Exam Rule (GCP Professional Cloud Security Engineer)</h3>
-    <p>[INSERT RULE HERE]</p>
-    
-    <h3>Exam Traps</h3>
-    <ul>
-        <li>[TRAP 1]</li>
-        <li>[TRAP 2]</li>
-    </ul>
-
-    <h3>Deep Technical Explanation</h3>
-    <p>[DETAILED EXPLANATION WITH GCP TERMINOLOGY]</p>
-</div>
-
-
-
-
-
-
-
-
-<script src="navigation.js"></script></body>
-
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
+        let isVisible = false;
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+</body>
 </html>

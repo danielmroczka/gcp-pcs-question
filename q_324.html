@@ -86,27 +86,29 @@ Your organization has a workload that is regulated by European laws. You must re
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (Implement an organization policy that only allows the EU as the location for your workload's project or folder.)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- Organization Policy (Resource Location Restriction): Jest to natywny, najskuteczniejszy sposób w GCP na ograniczenie lokalizacji, w których mogą być tworzone zasoby. Można ją zastosować na poziomie folderu lub projektu, co spełnia wymóg "without disrupting the other global applications" (inne foldery/projekty pozostają globalne).
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Cloud Function: To reaktywne rozwiązanie (po fakcie), a nie prewencyjne. Zawsze istnieje okno czasowe, w którym niebezpieczny zasób istnieje i może zostać użyty.
-- B. Regional subnet: Ogranicza lokalizację sieciową, ale nie uniemożliwia utworzenia zasobów (np. GCS buckets, BigQuery datasets, Cloud SQL instances) w innym regionie.
-- C. VPC Service Controls: Służy do ograniczenia eksfiltracji danych, a nie do blokowania możliwości tworzenia zasobów w określonych regionach.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Restrict the creation of resources" + "Specific region" = Organization Policy constraint (Resource Location Restriction).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Organization Policy to "Guardrails" – techniczne ograniczenia, których nie da się obejść (nawet z rolą admina), jeśli zostaną poprawnie skonfigurowane.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/restricting-resources-locations" target="_blank">Restricting resource locations</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

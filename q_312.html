@@ -86,32 +86,29 @@ A team at your organization collects logs in an on-premises security information
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Create a log sink for the relevant logs. Send the logs to Pub/Sub. Retrieve the logs from Pub/Sub and push the logs to the SIEM by using Dataflow.)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-Architektura polegająca na przekazywaniu logów przez Log Sink do Pub/Sub, a następnie ich przetwarzaniu i wypychaniu do zewnętrznego systemu SIEM (np. Splunk, QRadar) za pomocą Dataflow, jest standardem i rekomendowaną praktyką Google Cloud dla integracji z systemami SIEM. Log Sink pozwala precyzyjnie określić podzbiór logów (subset), który ma zostać przesłany, co minimalizuje ekspozycję danych. Pub/Sub służy jako bufor, zapewniając trwałość wiadomości, a Dataflow może wykonywać dodatkowe transformacje (np. anonimizację lub wzbogacanie danych) przed wysłaniem ich do on-premises SIEM.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Przesyłanie wszystkich logów do BigQuery i udostępnianie całego zestawu zespołowi SIEM narusza zasadę minimalizacji ryzyka ekspozycji danych (przesyłamy "all logs" zamiast "subset"). Ponadto, SIEM musiałby odpytywać BigQuery (pull model), co nie jest tak efektywne jak wypychanie danych (push model) w czasie rzeczywistym.
-- B. Log Views (widoki logów) służą do ograniczania dostępu do logów wewnątrz interfejsu Cloud Logging dla użytkowników GCP. Nie jest to mechanizm służący do eksportu danych do zewnętrznych systemów on-premises.
-- D. Przechowywanie logów w Cloud Storage i przekazywanie kluczy kont serwisowych (Service Account Keys) zewnętrznemu zespołowi jest skrajnie niebezpieczne i narusza najlepsze praktyki bezpieczeństwa. Klucze SA są trudne do rotowania i stanowią duże ryzyko w przypadku wycieku.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- Widzisz "SIEM" + "logs export" -> szukaj "Log Sink" i "Pub/Sub".
-- Połączenie Pub/Sub + Dataflow to standardowy wzorzec dla integracji typu "Push" do systemów trzecich.
-- Pamiętaj, że Google oferuje gotowe szablony Dataflow (Dataflow templates) dla popularnych systemów SIEM.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Eksport logów (Exporting/Routing logs) zawsze zaczyna się od Log Sink.
-- Log Sink może kierować dane do: Cloud Storage (archiwizacja), BigQuery (analiza), Pub/Sub (streaming/SIEM) lub innego Log Bucket.
-- Nigdy nie wybieraj odpowiedzi sugerującej pobieranie lub udostępnianie kluczy kont serwisowych (SA keys), jeśli istnieje inna metoda autoryzacji.
-
-Dokumentacja i linki:
-- https://cloud.google.com/logging/docs/routing/overview
-- https://cloud.google.com/architecture/exporting-stackdriver-logs-to-splunk
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

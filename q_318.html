@@ -86,26 +86,29 @@ Your organization must store highly sensitive data within Google Cloud. You need
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Use Cloud Storage with client-side encryption, Cloud KMS for key management, and Cloud HSM for cryptographic operations.)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- Client-side encryption: To najsilniejszy poziom ochrony. Dane są szyfrowane po stronie klienta (przed wysłaniem do chmury), więc Google nigdy nie ma dostępu do surowych danych w formie niezaszyfrowanej.
-- Cloud HSM (Hardware Security Module): Zapewnia najwyższy poziom sprzętowej ochrony kluczy (FIPS 140-2 Level 3), znacznie wyższy niż standardowy KMS oparty na oprogramowaniu.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- A, B, D: Są to bezpieczne rozwiązania (CSEK, CMEK, Server-side), ale z punktu widzenia "najsilniejszego poziomu kontroli" (dane nigdy nie docierają do Google w formie jawnej), szyfrowanie po stronie klienta w połączeniu z Cloud HSM jest bezkonkurencyjne.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Strongest level of security and control" + "Highly sensitive data" = Client-side encryption + Cloud HSM.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Client-side encryption oznacza, że Google Cloud Storage "widzi" tylko zaszyfrowane bajty (blob), co gwarantuje pełną prywatność.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/kms/docs/hsm" target="_blank">Cloud HSM overview</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

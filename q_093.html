@@ -87,31 +87,29 @@ You are part of a security team that wants to ensure that a Cloud Storage bucket
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (VPC Service Controls (Perimeter))
+**Potwierdzona odpowiedź: AC**
 
-<b>Reguła Egzaminacyjna (Exam Rule):</b>
-Jeśli scenariusz egzaminacyjny wymaga zapobiegania eksfiltracji danych między projektami (nawet przy poprawnych uprawnieniach IAM) lub zabezpieczenia zasobów przed dostępem spoza zdefiniowanego perymetru (tzw. "data boundary"), jedynym rozwiązaniem natywnym GCP jest VPC Service Controls.
-
-<b>Haczyki egzaminacyjne (Exam Traps):</b>
-- Często pojawia się odpowiedź sugerująca tylko IAM (np. "Bucket Policy Only" lub "IAM conditions"). Pamiętaj: IAM reguluje TOŻSAMOŚĆ (kto?), a VPC SC reguluje KONTEKST (skąd/dokąd?).
-- "Network peering" lub "VPC Peering" to dystraktory dotyczące routingu sieciowego, które NIE zapewniają izolacji na poziomie warstwy aplikacyjnej API Google Cloud.
-
-<b>Głębokie wyjaśnienie techniczne:</b>
-VPC Service Controls (VPC SC) tworzy logiczny "perymetr bezpieczeństwa" wokół usług Google Cloud (takich jak Cloud Storage, BigQuery, Cloud SQL). 
-Mechanizm ten działa jako warstwa pośrednicząca w żądaniach API:
-1. Gdy żądanie dociera do usługi (np. GCS), VPC SC sprawdza, czy żądanie pochodzi z autoryzowanego VPC (via VPC Service Controls ingress) lub czy jest wewnątrz tego samego Service Perimeter.
-2. VPC SC ignoruje uprawnienia IAM, jeśli żądanie wykracza poza granice perymetru. W ten sposób, nawet użytkownik z rolą 'Storage Object Admin' w Projekcie A nie będzie w stanie skopiować danych do bucketa w Projekcie C, jeśli Projekt C nie znajduje się w tym samym perymetrze VPC SC co Projekt A.
-3. Usługi (jak Cloud Storage) stają się "świadome" perymetru, blokując wywołania API przy próbach kopiowania danych poza zdefiniowane VPC/projekty.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
 Dlaczego pozostałe są błędne:
-B. Bucket Policy Only (Uniform bucket access) zarządza tylko IAM, nie zapobiega eksfiltracji.
-C, D. Prywatny dostęp lub Peering ułatwiają routing, ale nie nakładają blokad eksfiltracji na poziomie API Google.
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://cloud.google.com/vpc-service-controls/docs/overview" target="_blank">https://cloud.google.com/vpc-service-controls/docs/overview</a>
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

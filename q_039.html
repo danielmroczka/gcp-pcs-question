@@ -87,33 +87,29 @@ A customer has 300 engineers. The company wants to grant different levels of acc
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: BC (Foldery dla środowisk oraz Grupy Google)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-Efektywne zarządzanie uprawnieniami w dużej organizacji (300 inżynierów) wymaga zastosowania hierarchii zasobów oraz abstrakcji tożsamości:
-1. Foldery (Folders): Pozwalają na logiczne pogrupowanie projektów należących do tego samego środowiska (np. Dev, Prod). Uprawnienia nadane na poziomie folderu są dziedziczone przez wszystkie projekty wewnątrz niego, co eliminuje konieczność konfigurowania każdego projektu z osobna.
-2. Grupy Google (Google Groups): Zamiast nadawać uprawnienia 300 inżynierom indywidualnie, należy stworzyć grupę (np. engineers-prod@company.com), nadać jej odpowiednie role w IAM na poziomie folderu i zarządzać dostępem poprzez dodawanie/usuwanie członków grupy. Jest to zgodne z zasadą "best practice" w GCP.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
 Dlaczego pozostałe są błędne:
-A. VPC to warstwa sieciowa, a nie narzędzie do zarządzania uprawnieniami IAM. Chociaż separacja sieciowa jest ważna, nie rozwiązuje problemu zarządzania dostępem użytkowników.
-D. Organizational Policy (polityki organizacji) służą do nakładania restrykcji na zasoby (np. zakaz tworzenia zewnętrznych IP), a nie do nadawania uprawnień użytkownikom (IAM).
-E. Nadawanie uprawnień każdemu użytkownikowi z osobna ("per user") przy 300 osobach jest skrajnie nieefektywne, podatne na błędy i trudne do audytowania.
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- Widząc "large number of users" i "IAM management", zawsze szukaj odpowiedzi zawierającej "Google Groups".
-- Foldery są kluczowym elementem skalowalnego zarządzania uprawnieniami w GCP.
-- "Assign permissions at the folder level" to najszybszy sposób na zapewnienie spójnego dostępu w wielu projektach.
-
-Kluczowe zagadnienia do powtórzenia:
-- Hierarchia zasobów GCP (Organization -> Folders -> Projects -> Resources).
-- IAM Best Practices (używanie grup, zasada najmniejszych uprawnień).
-- Dziedziczenie uprawnień w GCP.
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://cloud.google.com/iam/docs/groups-in-iam" target="_blank">https://cloud.google.com/iam/docs/groups-in-iam</a>
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

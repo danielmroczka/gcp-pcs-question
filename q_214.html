@@ -87,33 +87,29 @@ Your organization processes sensitive health information. You want to ensure tha
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Implement an organization policy that ensures all VM resources created across your organization are Confidential VM instances)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Szyfrowanie "In Use" (podczas przetwarzania): Tradycyjne metody szyfrowania chronią dane na dysku (at rest) lub w sieci (in transit). Confidential VMs (Instancje Poufne) to technologia Google Cloud, która chroni dane w momencie ich przetwarzania w procesorze i pamięci RAM.
-- Mechanizm sprzętowy: Confidential VMs wykorzystują funkcje procesorów (takie jak AMD SEV), aby szyfrować zawartość pamięci RAM kluczem generowanym sprzętowo dla każdej instancji. Dzięki temu dane są nieczytelne dla innych VM-ów, a nawet dla systemu operacyjnego hosta (hypervisora) zarządzanego przez Google.
-- Polityka Organizacji (Enforcement): Aby wymusić ten standard w całej firmie, należy zastosować politykę organizacji `constraints/compute.requireConfidentialComputing`. Po jej włączeniu, każda próba stworzenia "zwykłej" instancji VM, która nie posiada włączonej funkcji poufnego przetwarzania, zostanie zablokowana.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A i C. CMEK / EKM: Te rozwiązania służą do zarządzania kluczami szyfrującymi dane "at rest" (na dyskach persistent disk, w Cloud Storage itp.). Choć dają kontrolę nad kluczem, nie chronią danych w pamięci RAM podczas pracy maszyny.
-- D. No action necessary: To nieprawda. Choć Google domyślnie szyfruje dane "at rest" i "in transit", dane "in use" w pamięci RAM standardowych instancji technicznie mogą być odczytane przez hypervisor w sytuacjach takich jak zrzuty pamięci (memory dumps). Confidential Computing jest dodatkową, wymaganą w tym scenariuszu warstwą ochrony.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Data in use" / "Encrypt memory" = Confidential VMs.
-- "Enforce across organization" = Organization Policy.
-- Zapamiętaj: Confidential VMs wymagają specyficznych typów maszyn (np. N2D, C3).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zrozum termin TEE (Trusted Execution Environment) – to ogólna nazwa środowiska, które tworzą Confidential VMs.
-- Confidential VMs są kluczowe w branżach takich jak bankowość (dane transakcyjne) czy medycyna (dane pacjentów), gdzie suwerenność danych w każdym stanie jest wymogiem prawnym.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/confidential-computing/confidential-vm/docs/introduction" target="_blank">Confidential VM introduction</a>
-- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">Organization Policy constraints list</a>
-- <a href="https://cloud.google.com/compute/confidential-vm/docs/enforce-confidential-vm" target="_blank">Enforcing Confidential VMs</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

@@ -86,67 +86,57 @@ You need to enable VPC Service Controls and allow changes to perimeters in exist
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4 d-none"  >
+<div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Dry run)
+Odpowiedź: B.
 
-Wyjaśnienie:
-Tryb Dry run (symulacja) w VPC Service Controls pozwala administratorom na testowanie i monitorowanie wpływu perymetrów bezpieczeństwa bez faktycznego blokowania ruchu. Jest to kluczowe przy wdrażaniu VPC SC w istniejących środowiskach, aby uniknąć przypadkowych przestojów. W tym trybie naruszenia są rejestrowane w logach audytowych (AuditData) z flagą dryRun: true.
+Wyjaśnienie (Dlaczego poprawna):
+B. Cloud HSM: To dedykowana usługa Google, która pozwala na przechowywanie kluczy w fizycznych urządzeniach HSM certyfikowanych wg standardu FIPS 140-2 Level 3. Usługa jest w pełni zarządzana przez Google, więc nie musisz dbać o sprzęt.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Cloud Run: To usługa do uruchamiania kontenerów (PaaS/Serverless), a nie tryb działania VPC Service Controls.
-- B. Native: Nie istnieje taki tryb w konfiguracji VPC Service Controls.
-- C. Enforced: W tym trybie VPC Service Controls aktywnie blokuje każdy ruch naruszający zasady perymetru. Użycie go bez wcześniejszych testów w trybie Dry run mogłoby spowodować natychmiastowe odcięcie dostępu do zasobów.
+Dlaczego inne są błędne:
+A. Cloud KMS: To ogólna usługa zarządzania kluczami. Może używać HSM jako backendu, ale to Cloud HSM (B) precyzuje wymóg sprzętowy.
+C. Cloud EKM: Służy do łączenia się z TWOIM HSM-em poza Google.
+D. Secret Manager: Służy do haseł, nie jest usługą HSM.
 
-Wskazówki i triki (Tips & Tricks):
-- Jeśli widzisz w pytaniu "enable without preventing access" lub "test before enforcement", odpowiedzią prawie zawsze jest "Dry run".
-- Analizuj logi Dry run przed przełączeniem na tryb Enforced, aby zidentyfikować legalne przepływy, które wymagają dodania do reguł Ingress/Egress.
-
-Praktyczne informacje na egzamin:
-- VPC Service Controls chroni przed eksfiltracją danych przez złośliwych pracowników lub przejęte konta.
-- Tryb Dry run jest najlepszą praktyką przy modyfikacji perymetrów w produkcji.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/vpc-service-controls/docs/dry-run-mode" target="_blank">Tryb Dry run w VPC Service Controls</a>
+Konsensus społeczności ExamTopics: 100% poparcia dla B. Pytanie o definicję usługi.
 </pre>
 </div>
-<div class="ai-analysis-container d-none"  >
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> VPC Service Controls (VPC SC) tworzy perymetr bezpieczeństwa wokół usług Google Cloud (np. S3, BigQuery). Tryb <b>Dry run</b> jest niezbędny, ponieważ pozwala na zidentyfikowanie wszystkich wymaganych połączeń (np. od systemów zewnętrznych lub innych projektów), które inaczej zostałyby zablokowane po włączeniu wymuszania. Analiza logów z tego trybu pozwala na precyzyjne dostrojenie reguł Ingress i Egress.</p>
+<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Wiele osób myli KMS i HSM. Eksperci wyjaśniają: KMS to interfejs (API). HSM to miejsce, gdzie klucz fizycznie 'mieszka'. Wybierając Cloud HSM, decydujesz, że operacje kryptograficzne Twoich kluczy w KMS będą wykonywane na certyfikowanym sprzęcie, a nie w oprogramowaniu.</p></p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://cloud.google.com/vpc-service-controls/docs/overview" target="_blank">Omówienie VPC Service Controls</a></li>
+<li><a href="https://cloud.google.com/hsm" target="_blank">https://cloud.google.com/hsm</a></li>
+
 </ul>
 </div>
 </div>
-
-
-<div class="exam-section">
-    <h3>Exam Rule (GCP Professional Cloud Security Engineer)</h3>
-    <p>[INSERT RULE HERE]</p>
-    
-    <h3>Exam Traps</h3>
-    <ul>
-        <li>[TRAP 1]</li>
-        <li>[TRAP 2]</li>
-    </ul>
-
-    <h3>Deep Technical Explanation</h3>
-    <p>[DETAILED EXPLANATION WITH GCP TERMINOLOGY]</p>
-</div>
-
-
-
-
-
-
-
-
-<script src="navigation.js"></script></body>
-
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
+        let isVisible = false;
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+</body>
 </html>

@@ -88,27 +88,29 @@ How should your team design this network?
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A
+**Potwierdzona odpowiedź: AC**
 
-<b>Reguła Egzaminacyjna (Exam Rule):</b>
-W Google Cloud podsieci <b>nie zapewniają izolacji sieciowej</b>. Aby uzyskać izolację między warstwami wewnątrz jednej sieci VPC, należy stosować <b>VPC Firewall Rules</b> oparte na tagach sieciowych (network tags) lub, co jest jeszcze bezpieczniejsze, na kontach usług (Service Accounts).
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-<b>Haczyki egzaminacyjne (Exam Traps):</b>
-- Zmylenie podsieciami: Opcja B (różne podsieci) sugeruje, że to izoluje ruch – jest to mit często sprawdzany na egzaminie.
-- Nadmiarowa złożoność: Opcje C i D (wiele sieci VPC + łączenie) są niepotrzebnie kosztowne i skomplikowane dla prostego wymogu segmentacji wewnątrz aplikacji.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-<b>Głębokie wyjaśnienie techniczne:</b>
-Reguły firewall w GCP są globalne dla danej sieci VPC i pozwalają na definiowanie reguł "Ingress" (przychodzących) na podstawie tagów. Właściwa konfiguracja to:
-1. Nadanie tagu (np. `frontend`) wszystkim maszynom aplikacji.
-2. Nadanie tagu (np. `database`) wszystkim maszynom bazy danych.
-3. Utworzenie reguły Ingress: <i>Allow</i> traffic from <i>Source Tag: frontend</i> to <i>Target Tag: database</i>.
-Dzięki temu, nawet jeśli maszyny znajdują się w tej samej podsieci, ruch między nimi jest ograniczony zgodnie z zasadą najniższych uprawnień (Least Privilege).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://cloud.google.com/vpc/docs/firewalls" target="_blank">https://cloud.google.com/vpc/docs/firewalls</a>
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie (Egzamin)</h2>

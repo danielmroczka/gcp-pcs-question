@@ -86,27 +86,29 @@ There is a threat actor that is targeting organizations like yours. Attacks are 
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Create a Cloud Armor policy with a deny-rule for the known IP address range. Attach the policy to the backend of the Application Load Balancer.)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Cloud Armor: Jest to jedyna usługa w GCP, która pozwala na blokowanie adresów IP na brzegu sieci Google (Edge), ZANIM trafią one do Load Balancera i Twojej sieci. Jest to najbardziej efektywne i skalowalne rozwiązanie dla aplikacji webowych.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- B. IAP: Służy do uwierzytelniania osób, nie do masowego blokowania zakresów IP agresorów.
-- D. VPC Firewall: Działa głęboko w sieci, blisko VM. W przypadku dużego ataku, Twoja sieć VPC musiałaby procesować te pakiety tylko po to, by je odrzucić, co marnuje zasoby. Armor robi to 'przed drzwiami'.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Threat actor" / "Known IP range" + "Web application" + "Block" = Cloud Armor (Security Policy).
-- Zapamiętaj: Cloud Armor to standardowy WAF/IP-filter w GCP.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj, że Cloud Armor wspiera również gotowe listy IP od Google (Threat Intelligence), co pozwala na automatyczne blokowanie znanych botnetów.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/armor/docs/security-policy-concepts" target="_blank">Cloud Armor security policy concepts</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

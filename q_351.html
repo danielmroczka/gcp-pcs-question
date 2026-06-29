@@ -86,28 +86,29 @@ You are managing a set of Google Cloud projects that are contained in a folder n
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Grant the BigQuery Data Viewer role at the Data Warehouse folder.)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- Hierarchia zasobów + IAM: Uprawnienia IAM dziedziczą się w dół hierarchii. Jeśli nadasz rolę `BigQuery Data Viewer` na poziomie folderu "Data Warehouse", wszyscy członkowie zespołu automatycznie otrzymają te uprawnienia do wszystkich projektów i zbiorów danych (datasetów) wewnątrz tego folderu.
-- "Reduce operational overhead": Jest to najwydajniejsza metoda, ponieważ nie wymaga przypisywania ról osobno dla każdego projektu czy zbioru danych.
-- Least Privilege: Rola `Data Viewer` jest rolą typu "read-only", więc spełnia wymóg "read and not modify/delete".
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- A, C: Są poprawne pod kątem uprawnień, ale wymagają zarządzania wieloma przypisaniami (wysoki "operational overhead").
-- D: `Metadata Viewer` daje dostęp tylko do schematu/metadanych, nie do danych w tabelach (nie spełnia wymogu "perform data analysis").
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Reduce operational overhead" + "Adhere to least privilege" + "Folder hierarchy" = Grant IAM role at the folder level.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Zawsze szukaj przypisania roli na najwyższym możliwym poziomie hierarchii (folder), aby uprościć zarządzanie, jeśli pozwala na to zasada najniższych uprawnień.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/iam/docs/resource-hierarchy-access-control" target="_blank">Resource hierarchy and access control</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

@@ -87,33 +87,29 @@ Applications often require access to `secrets` - small pieces of sensitive data 
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: AC (Admin Activity logs oraz Data Access logs)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-W Google Cloud to "Cloud Audit Logs" są kluczowym źródłem informacji o tym "kto, co, gdzie i kiedy" zrobił w projekcie. Składają się one z kilku strumieni:
-1. Admin Activity logs (A): Rejestrują operacje zapisu lub zmiany konfiguracji (np. utworzenie nowego sekretu, zmiana uprawnień IAM do sekretu, usunięcie sekretu). Są one włączone domyślnie i darmowe.
-2. Data Access logs (C): Rejestrują operacje odczytu danych (np. pobranie wartości sekretu przez aplikację lub użytkownika). Są one niezwykle ważne dla sekretów, ale domyślnie wyłączone (z wyjątkiem BigQuery), ponieważ mogą generować duże ilości logów i wiążą się z kosztami. Aby śledzić, kto odczytał sekret, administrator musi je ręcznie włączyć.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
 Dlaczego pozostałe są błędne:
-B. System Event logs: Rejestrują zdarzenia systemowe Google (np. restart instancji przez system w celu utrzymania infrastruktury), a nie akcje użytkowników związane z zarządzaniem danymi.
-D. VPC Flow logs: Rejestrują ruch sieciowy (IP, porty, bajty) w sieci VPC. Nie zawierają informacji o tym, jakie konkretne API (np. Secret Manager) było wywoływane ani przez kogo (na poziomie tożsamości IAM).
-E. Agent logs: To logi pochodzące z oprogramowania zainstalowanego wewnątrz VM (np. Ops Agent). Nie służą one do audytowania operacji na poziomie API Google Cloud Platform.
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- Pamiętaj mantrę audytową GCP: "Admin Activity = Changes/Write", "Data Access = Reading/Accessing data".
-- Jeśli pytanie pyta o "audit trails" lub "compliance", Cloud Audit Logs (Admin + Data Access) to zawsze właściwa ścieżka.
-- Zapamiętaj, że Data Access logs muszą być jawnie włączone dla większości usług (np. Secret Manager, Cloud Storage).
-
-Kluczowe zagadnienia do powtórzenia:
-- Typy Cloud Audit Logs.
-- Retencja logów audytowych.
-- Różnica między logami włączonymi domyślnie a konfigurowalnymi.
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://cloud.google.com/logging/docs/audit" target="_blank">Cloud Audit Logs overview</a>
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

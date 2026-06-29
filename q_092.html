@@ -87,20 +87,29 @@ You are on your company's development team. You noticed that your web applicatio
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong>
-Podatności wewnątrz kodu aplikacji (takie jak XSS - Cross-Site Scripting) muszą być rozwiązane na poziomie kodu (App Code), a nie poprzez mechanizmy brzegowe (WAF/Cloud Armor), które jedynie ograniczają ryzyko, ale nie usuwają przyczyny źródłowej (root cause).
+**Potwierdzona odpowiedź: AC**
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <em>Opcja A</em>: Cloud IAP (Identity-Aware Proxy) służy do uwierzytelniania, a nie do poprawy bezpieczeństwa kodu aplikacji.
-- <em>Opcja B</em>: Cloud Armor pomaga w mitigacji XSS na poziomie WAF (Edge Security), ale nie jest "naprawą" luki w aplikacji. Egzamin wymaga wyboru "naprawy" (fix).
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Luka XSS wynika z braku poprawnego sanitizowania (sanitization) lub ucieczkowania (escaping) danych wejściowych przed wyświetleniem ich w przeglądarce.
-1. <strong>Web Security Scanner:</strong> Narzędzie Google, które automatycznie skanuje aplikację (w tym staging) w poszukiwaniu typowych podatności OWASP (w tym XSS).
-2. <strong>Contextual Auto-escaping:</strong> Najlepsza praktyka inżynierska. Templating system (np. Jinja2, Go templates) automatycznie dobiera metodę maskowania znaków specjalnych w zależności od kontekstu (czy dane wchodzą do atrybutu HTML, czy do wnętrza tagu). Jest to znacznie bezpieczniejsze niż ręczne czyszczenie danych.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
+
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

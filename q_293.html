@@ -86,28 +86,29 @@ Your organization has hired a small, temporary partner team for 18 months. The t
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Create a workforce identity pool and federate the identity pool with the identity provider (IdP) of the temporary partner team.)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Workforce Identity Federation: To rozwiązanie stworzone do tego, aby "zewnętrzni użytkownicy" (np. vendorzy, partnerzy) mogli logować się do GCP za pomocą swojego zewnętrznego IdP.
-- Nie zarządza cyklem życia: Użytkownicy vendorzy nie muszą mieć kont w Google (brak konieczności *provisioning* w Google Workspace/Cloud Identity). Zarządzanie tożsamością pozostaje po stronie vendora (w jego IdP), co w pełni realizuje wymóg "ensure that partner employees lose access if they are removed from their employer's organization".
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Temporary password: Bardzo słabe bezpieczeństwo, brak automatyzacji wygaśnięcia.
-- C. JIT: Ogranicza uprawnienia, ale nie rozwiązuje problemu tożsamości użytkownika zewnętrznego.
-- D. Add to own IdP: Wymaga od Ciebie manualnego zarządzania obcymi kontami, co jest błędotwórcze i uciążliwe.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "External partner team" + "No lifecycle management" = Workforce Identity Federation.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Workforce Identity Federation (dla użytkowników/partnerów) vs Workload Identity Federation (dla usług/maszyn).
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/iam/docs/workforce-identity-federation" target="_blank">Workforce Identity Federation overview</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

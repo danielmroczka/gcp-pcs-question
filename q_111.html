@@ -86,35 +86,22 @@ Your company requires the security and network engineering teams to identify all
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4 d-none"  >
+<div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Enable VPC Flow Logs on the subnet.)
+Odpowiedź: C.
 
-Wyjaśnienie:
-- Monitorowanie anomalii: VPC Flow Logs to standardowe narzędzie do monitorowania ruchu sieciowego w Google Cloud. Rejestrują one metadane o przepływach IP (źródło, cel, porty, protokół, liczba pakietów/bajtów), co pozwala na statystyczną analizę i wykrywanie anomalii (nietypowych wzorców ruchu).
-- Szeroki zakres: Flow Logi rejestrują ruch wewnątrz VPC (VM do VM), między różnymi VPC, ruch do/z internetu oraz ruch do usług Google Cloud. Jest to najbardziej skalowalne rozwiązanie dla środowisk produkcyjnych.
-- Integracja: Dane te są przesyłane do Cloud Logging i mogą być analizowane w czasie rzeczywistym lub eksportowane do systemów SIEM.
+Wyjaśnienie (Dlaczego poprawna):
+C. VPC Flow Logs: Rejestrują pakiety IP przepływające przez interfejsy sieciowe. Są najbardziej wydajną i skalowalną metodą na wykrywanie nietypowych wzorców ruchu (anomalii) bez zbierania pełnej zawartości pakietów.
 
-Dlaczego pozostałe są błędne:
-- A: Organization policy constraints służą do wymuszania konfiguracji (np. zakaz przypisywania publicznych IP), ale nie monitorują bieżącego ruchu sieciowego i nie wykrywają anomalii w przepływach danych.
-- B: Packet Mirroring służy do kopiowania pełnej zawartości pakietów (payload) w celach głębokiej inspekcji (IDS/IPS). Jest to rozwiązanie znacznie droższe i generujące ogromne ilości danych, zazwyczaj stosowane punktowo, a nie jako główna metoda wykrywania anomalii w całej sieci produkcyjnej.
-- D: Cloud Audit Logs rejestrują zmiany w konfiguracji zasobów (np. "kto dodał regułę firewalla"), ale nie widzą samego ruchu sieciowego przepływającego przez te zasoby.
+Dlaczego inne są błędne:
+B. Packet mirroring: Kopiuje pełne pakiety (łącznie z treścią). Jest to bardzo drogie i zazwyczaj używane do IDS, a nie do ogólnej identyfikacji anomalii przepływów, gdzie Flow Logi (C) są wystarczające i tańsze.
+D. Audit Logs: Widzą kto zmienił konfigurację, ale nie widzą samego ruchu sieciowego.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Identify network anomalies" + "Production" = VPC Flow Logs (skalowalność i efektywność kosztowa).
-- Flow Logi są domyślnie próbkowane (sampling), co jest wystarczające do wykrywania większości anomalii sieciowych.
-
-Kluczowe zagadnienia do powtórzenia:
-- Zastosowania VPC Flow Logs w bezpieczeństwie.
-- Różnica między Flow Logs (metadane) a Packet Mirroring (pełne pakiety).
-- Analiza logów w Cloud Logging.
-
-Dokumentacja:
-- <a href="https://cloud.google.com/vpc/docs/using-flow-logs" target="_blank">Korzystanie z VPC Flow Logs</a>
+Konsensus społeczności ExamTopics: 100% poparcia dla C. Flow Logi to standardowy sensor sieciowy.
 </pre>
 </div>
-<div class="ai-analysis-container d-none"  >
+<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
@@ -127,30 +114,28 @@ Dokumentacja:
 </ul>
 </div>
 </div>
-
-
-<div class="exam-section">
-    <h3>Exam Rule (GCP Professional Cloud Security Engineer)</h3>
-    <p>[INSERT RULE HERE]</p>
-    
-    <h3>Exam Traps</h3>
-    <ul>
-        <li>[TRAP 1]</li>
-        <li>[TRAP 2]</li>
-    </ul>
-
-    <h3>Deep Technical Explanation</h3>
-    <p>[DETAILED EXPLANATION WITH GCP TERMINOLOGY]</p>
-</div>
-
-
-
-
-
-
-
-
-<script src="navigation.js"></script></body>
-
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButton = document.querySelectorAll('.reveal-solution');
+    revealButton.forEach(button => {
+        let isVisible = false;
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+</body>
 </html>

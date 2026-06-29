@@ -87,31 +87,29 @@ A customer's internal security team must manage its own encryption keys for encr
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Use the gsutil command line tool to upload the object to Cloud Storage, and specify the location of the encryption key.)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-Customer-Supplied Encryption Keys (CSEK) to model szyfrowania, w którym to użytkownik całkowicie odpowiada za generowanie i przechowywanie kluczy szyfrujących poza infrastrukturą Google. Google używa klucza dostarczonego przez użytkownika tylko tymczasowo w pamięci RAM do zaszyfrowania danych podczas ich zapisu (lub odszyfrowania przy odczycie), a następnie natychmiast go usuwa. Aby przesłać obiekt zaszyfrowany kluczem CSEK, należy użyć narzędzia `gsutil` i wskazać lokalizację klucza (np. w pliku konfiguracyjnym `.boto` lub za pomocą flagi), ponieważ konsola GCP nie wspiera operacji z użyciem CSEK ze względu na fakt, że Google nie może mieć dostępu do tych kluczy.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
 Dlaczego pozostałe są błędne:
-A. Upload the encryption key to a Cloud Storage bucket...: Przechowywanie klucza w tym samym miejscu co zaszyfrowane dane jest skrajnie niebezpieczne (to tak, jakby zostawić klucz w zamku do sejfu). Dodatkowo, mechanizm CSEK nie polega na pobieraniu klucza z innego bucketu przez Google.
-C. Generate an encryption key in the Google Cloud Platform Console...: Konsola GCP nie pozwala na generowanie kluczy CSEK. Klucze CSEK z definicji powstają poza kontrolą Google. W Konsoli można zarządzać jedynie kluczami CMEK (Cloud KMS).
-D. Encrypt the object, then use the gsutil...: To opisuje szyfrowanie po stronie klienta (Client-Side Encryption). W przypadku CSEK to Google wykonuje szyfrowanie po swojej stronie (Server-Side Encryption), ale używa do tego klucza dostarczonego przez klienta w locie.
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- CSEK = Klucz dostarczany w locie przez `gsutil` (plik `.boto`). Brak wsparcia w Konsoli GCP dla zapisu/odczytu takich obiektów.
-- CMEK = Klucz zarządzany w Cloud KMS (Google go przechowuje, ale Ty nim zarządzasz).
-- Jeśli zgubisz klucz CSEK, dane są bezpowrotnie stracone – Google nie ma ich kopii.
-
-Kluczowe zagadnienia do powtórzenia:
-- Różnice między GMEK, CMEK i CSEK
-- Konfiguracja `gsutil` (sekcja `encryption_key` w `.boto`)
-- Ograniczenia Konsoli GCP w kontekście CSEK
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://cloud.google.com/storage/docs/encryption/customer-supplied-keys" target="_blank">https://cloud.google.com/storage/docs/encryption/customer-supplied-keys</a>
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

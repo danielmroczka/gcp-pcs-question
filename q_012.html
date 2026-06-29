@@ -87,46 +87,29 @@ A customer deploys an application to App Engine and needs to check for Open Web 
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Web Security Scanner)
+**Potwierdzona odpowiedź: AC**
 
 Wyjaśnienie: 
-Web Security Scanner to dedykowane narzędzie w Google Cloud przeznaczone do identyfikowania luk w zabezpieczeniach aplikacji internetowych (App Engine, GKE, Compute Engine). Skaner automatycznie sprawdza aplikację pod kątem typowych podatności z listy OWASP Top 10, takich jak:
-- Cross-Site Scripting (XSS)
-- Flash injection
-- Mixed content (HTTP in HTTPS)
-- Outdated / insecure libraries (użycie niebezpiecznych bibliotek)
-Jest to narzędzie typu DAST (Dynamic Application Security Testing).
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
 Dlaczego pozostałe są błędne:
-A. Cloud Armor: Jest to Web Application Firewall (WAF). Służy do ochrony aplikacji w czasie rzeczywistym przed atakami (np. filtrowanie ruchu, ochrona DDoS), ale nie służy do skanowania i wykrywania podatności w kodzie/konfiguracji samej aplikacji.
-B. Google Cloud Audit Logs: Rejestrują one, "kto zrobił co i kiedy" w infrastrukturze GCP. Są niezbędne do analizy po incydencie, ale nie potrafią wykryć luk OWASP wewnątrz aplikacji.
-D. Anomaly Detection: To ogólny termin dotyczący wykrywania nietypowych wzorców zachowań (np. w logach lub ruchu sieciowym), często realizowany przez Security Command Center lub Cloud Monitoring, ale nie jest to skaner podatności OWASP.
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- Słowo klucz: "Check for OWASP vulnerabilities" = Web Security Scanner.
-- Pamiętaj: Web Security Scanner jest narzędziem "skanującym" (proaktywnym), a Cloud Armor jest narzędziem "blokującym" (reaktywnym).
-
-Kluczowe zagadnienia do powtórzenia:
-- Web Security Scanner - funkcje i zakres działania
-- OWASP Top 10
-- Różnice między WAF (Cloud Armor) a Skanerem Podatności
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
 Dokumentacja:
-<a href="https://cloud.google.com/security-command-center/docs/concepts-web-security-scanner-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-web-security-scanner-overview</a>
-
-**Reguła Egzaminacyjna (Exam Rule):**
-Zawsze identyfikuj warstwę modelu OSI, na której operuje atak oraz rozwiązanie. DNSSEC działa na poziomie warstwy aplikacji dla DNS, zapobiegając zatruwaniu pamięci podręcznej (Cache Poisoning).
-
-**Haczyki egzaminacyjne (Exam Traps):**
-- Mylenie Cloud Armor (WAF - L7) z zabezpieczeniami DNS (DNSSEC - integralność danych DNS).
-- Zakładanie, że TLS/SSL wystarczy do ochrony przed przekierowaniem całego ruchu DNS (DNSSEC zabezpiecza sam proces rezolucji, zanim nawiążesz bezpieczne połączenie TLS).
-
-**Głębokie wyjaśnienie techniczne:**
-DNSSEC wykorzystuje kryptografię klucza publicznego (RRSIG, DNSKEY, DS) do cyfrowego podpisywania rekordów DNS w strefach (Zone Signing). Dzięki temu resolver DNS może zweryfikować łańcuch zaufania aż do punktu głównego (root zone) bez konieczności polegania wyłącznie na adresie IP serwera autorytatywnego, co drastycznie ogranicza skuteczność ataków typu MITM i cache poisoning.
-
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

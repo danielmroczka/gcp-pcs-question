@@ -88,31 +88,29 @@ You are migrating your users to Google Cloud. There are cookie replay attacks wi
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: AE (A: Configure Google session control to a shorter duration, E: Enforce Security Key Authentication with 2SV)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Session duration (A): Skrócenie czasu trwania sesji (Session duration) oznacza, że sesja wygasa szybciej. Wymusza to na użytkowniku ponowne logowanie, co unieważnia skradzione pliki cookie sesji po upływie czasu.
-- Security Key Authentication (2SV) (E): Klucze bezpieczeństwa (np. FIDO2/WebAuthn) są jedyną metodą MFA całkowicie odporną na ataki typu "man-in-the-middle" (MITM) oraz "cookie replay". Nawet jeśli atakujący zdobędzie sesję, nie będzie mógł "odtworzyć" (replay) procesu logowania z kluczem fizycznym, ponieważ klucz jest przypisany do konkretnego originu (domeny).
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- B. OAuth 2.0 access token: To ustawienie dotyczy technicznych tokenów dostępu używanych przez aplikacje (np. z gcloud), a nie sesji użytkownika w przeglądarce. Nie chroni przed przejęciem sesji webowych.
-- C. Reauthentication policy: (Opcja zamienna z A). Choć "reauthentication frequency" jest również bardzo dobrą metodą, "session control duration" w połączeniu z Security Keys (E) jest klasyczną odpowiedzią egzaminacyjną na problem cookie replay.
-- D. Third-party identity provider: Federacja z zewnętrznym IdP sama w sobie nie chroni przed przejęciem sesji Google, jeśli po zalogowaniu do IdP nie zostaną wdrożone odpowiednie mechanizmy po stronie Google (session management).
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Cookie replay" / "Session hijacking" = Zawsze Security Key (E) + skrócenie czasu sesji (A lub C).
-- Pamiętaj: Security Key (MFA) to najlepsza ochrona przed phishingiem i przejęciem sesji.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zrozum: Skrócenie czasu sesji to podstawowy element "Security Hygiene" w organizacjach wysokiego ryzyka.
-- Współczesne ataki na sesje często wykorzystują "session proxy" (np. Evilginx), co sprawia, że Security Keys są absolutnie niezbędne dla ochrony sesji.
-
-Dokumentacja i linki:
-- <a href="https://support.google.com/cloudidentity/answer/9366694" target="_blank">Google Cloud session control overview</a>
-- <a href="https://cloud.google.com/security/phishing-resistant-mfa" target="_blank">Why Security Keys are phish-proof</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

@@ -87,32 +87,29 @@ Your organization relies heavily on Cloud Run for its containerized applications
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Configure Binary Authorization on Cloud Run to enforce image signatures. Create policies to allow deployment only for images passing a defined vulnerability threshold)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- Binary Authorization (BinAuthz): To usługa bezpieczeństwa działająca jako "strażnik" (gatekeeper) przy wdrażaniu kontenerów. Pozwala zdefiniować polityki sprawdzające, czy obraz spełnia wymogi (np. atestacje, brak podatności).
-- Automatyczne skanowanie podatności: BinAuthz integruje się z Artifact Registry. Jeśli włączysz skanowanie podatności w Artifact Registry, BinAuthz może w polityce wymusić, aby obrazy nie zawierały podatności o poziomie "medium" lub wyższym (lub spełniały inne kryteria).
-- Enforce (Wymuszenie): BinAuthz blokuje wdrożenie (deployment) na Cloud Run, jeśli obraz nie przejdzie pozytywnie testów zdefiniowanych w polityce.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Manual rebuild: To proces ręczny, nieefektywny i podatny na błędy. Nie zapewnia automatycznego wymuszenia (enforcement).
-- B. Manual checks: Proces ręczny, całkowicie nieadekwatny dla systemów produkcyjnych.
-- D. Artifact Registry permissions: Skanowanie jest pasywne (informuje o lukach), ale nie blokuje wdrożenia na Cloud Run. Uprawnienia rejestru nie kontrolują tego, co Cloud Run wdraża.
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Medium vulnerabilities" + "Not deployed" + "Production" = Binary Authorization.
-- BinAuthz sprawdza obraz w momencie wdrożenia.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Binary Authorization to kluczowy element bezpieczeństwa łańcucha dostaw (SLSA).
-- Aby to działało, musisz mieć włączone skanowanie obrazów w Artifact Registry.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/binary-authorization/docs/vulnerability-checks" target="_blank">Binary Authorization vulnerability checks</a>
-- <a href="https://cloud.google.com/artifact-registry/docs/analysis/vulnerability-scanning" target="_blank">Artifact Registry scanning</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

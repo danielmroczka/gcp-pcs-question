@@ -87,34 +87,29 @@ You manage one of your organization's Google Cloud projects (Project A). A VPC S
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Configure an ingress policy for the perimeter in Project A, and allow access for the service account in Project B to collect messages)
+**Potwierdzona odpowiedź: AC**
 
-Wyjaśnienie:
-- VPC Service Controls (VPC SC): Chroni zasoby (jak temat Pub/Sub w Projekcie A) przed eksfiltracją i nieautoryzowanym dostępem. Perymetr domyślnie blokuje dostęp z zewnątrz.
-- Ingress Rule (Reguła przychodząca): Aby umożliwić dostęp z Projeku B (który jest poza perymetrem) do zasobu w Projekcie A (wewnątrz perymetru), należy skonfigurować regułę Ingress dla perymetru w Projekcie A.
-- Zasada najniższych uprawnień: Reguła Ingress pozwala precyzyjnie wskazać "kto" (konto serwisowe z Projektu B) i "jaki zasób" (temat Pub/Sub w Projekcie A) mogą się komunikować, co jest zgodne z zasadą najniższych uprawnień.
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- B. Access level: Poziomy dostępu (Access Levels) definiują kontekst (np. IP, certyfikat), ale same w sobie nie dają uprawnień do przełamania blokady perymetru. Muszą być powiązane z regułą Ingress, aby zadziałały w tym kontekście.
-- C. Perimeter bridge: Most (bridge) łączy dwa perymetry. W tym przypadku Projekt B NIE jest w perymetrze, więc bridge nie ma zastosowania (nie ma czego łączyć).
-- D. Remove Pub/Sub API: To podejście "wszystko albo nic". Usunięcie usługi z listy restricted wyłącza ochronę dla tej usługi w całym projekcie, co narusza zasady bezpieczeństwa (otwierasz dostęp dla każdego, zamiast precyzyjnie dla konta serwisowego).
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Cross-perimeter access" / "Access from outside perimeter" = Ingress Rule.
-- "Project B is outside" = Ingress rule on A's perimeter.
-- Pamiętaj: Ingress rule definiuje, kto z zewnątrz może pukać do wnętrza perymetru.
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Reguły Ingress działają na poziomie API. Musisz podać `serviceName` (np. `pubsub.googleapis.com`) i konkretną metodę (jeśli potrzeba).
-- Zawsze weryfikuj, czy konto serwisowe w Projekcie B ma też nadane uprawnienia IAM (np. `roles/pubsub.subscriber`), ponieważ VPC SC tylko "pozwala" na żądanie API, ale IAM wciąż decyduje, czy użytkownik ma uprawnienia do wykonania operacji.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules" target="_blank">Ingress and egress rules overview</a>
-- <a href="https://cloud.google.com/vpc-service-controls/docs/service-perimeters" target="_blank">Service perimeters guide</a>
-- <a href="https://cloud.google.com/vpc-service-controls/docs/troubleshoot-security-policies" target="_blank">Troubleshooting VPC SC policies</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>

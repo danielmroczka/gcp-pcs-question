@@ -87,35 +87,29 @@ Your organization develops software involved in many open source projects and is
 </div>
 
 <div class="q-card q-answer mb-4 d-none" >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (1. Generate Supply Chain Levels for Software Artifacts (SLSA) level 3 assurance by using Cloud Build. 2. View the build provenance in the Security insights side panel within the Google Cloud console)
+**Potwierdzona odpowiedź: AC**
 
-Dlaczego ta odpowiedź jest poprawna:
-- SLSA (Supply-chain Levels for Software Artifacts): Jest to standard branżowy (framework) stworzony m.in. przez Google, który definiuje poziomy bezpieczeństwa łańcucha dostaw oprogramowania. Poziom 3 (SLSA Level 3) gwarantuje, że proces budowania jest odporny na próby manipulacji i dostarcza wiarygodnych danych o pochodzeniu artefaktu (provenance).
-- Cloud Build Provenance: Cloud Build natywnie generuje dane o pochodzeniu dla obrazów kontenerów. Są to podpisane cyfrowo metadane, które opisują: skąd pochodzi kod źródłowy, jakie kroki zostały wykonane podczas budowania i jakie artefakty powstały. Ponieważ metadane te są generowane automatycznie przez usługę Google, są one trudne do sfałszowania (untampered).
-- Security Insights: Google Cloud Console posiada dedykowany panel "Security insights", który pozwala na łatwą weryfikację poziomu SLSA i danych provenance dla poszczególnych obrazów, co spełnia wymóg "demonstrate the software is untampered".
+Wyjaśnienie: 
+Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
+1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
+2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
 
-Analiza niepoprawnych odpowiedzi:
-- A. External auditor: Audyt zewnętrzny jest kosztowny, powolny i nie zapewnia technicznej ciągłości provenance dla każdego pojedynczego buildu w dynamicznym środowisku CI/CD.
-- B. Manual PGP signing: Ręczne podpisywanie artefaktów kluczami PGP jest trudne do skalowania i nie gwarantuje nienaruszalności samego *procesu* budowania (ktoś mógł podmienić kod przed podpisaniem). SLSA Level 3 skupia się na bezpieczeństwie całego procesu, a nie tylko finalnego pliku.
-- C. GitHub open source + bug bounty: To dobre praktyki dla bezpieczeństwa kodu, ale nie dostarczają one technicznych dowodów na to, że konkretny binarny plik lub obraz kontenera został zbudowany dokładnie z tego konkretnego kodu bez modyfikacji "w locie".
+Dlaczego pozostałe są błędne:
+B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
+D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
 
-Wskazówki i triki (Tips & Tricks):
-- "Software supply chain" + "Provenance" = SLSA (Supply-chain Levels for Software Artifacts).
-- "Untampered build" = Cloud Build SLSA Level 3.
-- Szukaj odpowiedzi wykorzystujących natywne, zautomatyzowane narzędzia Google (Cloud Build, Binary Authorization, Artifact Registry).
+Wskazówki egzaminacyjne (Tips & Tricks):
+- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
+- VPC Networking - Public vs Private IP
+- Zasady routingu w GCP
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj, że SLSA skupia się na trzech filarach: Source (kod), Build (proces) i Provenance (dowód).
-- Cloud Build jest jednym z pierwszych systemów CI/CD na świecie, który natywnie wspiera SLSA Level 3.
-- Dane provenance są przechowywane w formacie In-toto.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/build/docs/securing-builds/generate-build-provenance" target="_blank">Generating build provenance in Cloud Build</a>
-- <a href="https://slsa.dev/" target="_blank">SLSA Official Website</a>
-- <a href="https://cloud.google.com/security/binary-authorization" target="_blank">Binary Authorization and SLSA</a>
+Dokumentacja:
+<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
 </pre>
+
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
