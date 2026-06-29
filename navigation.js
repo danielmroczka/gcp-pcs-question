@@ -27,41 +27,42 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// 3. Pointer events for robust swipe detection (replaces touch events)
+// 3. Robust Swipe navigation (Pointer events + touch-action fix)
+document.body.style.touchAction = 'pan-y';
+
 let pointerStartX = 0;
 let pointerEndX = 0;
 const minSwipeDistance = 50;
 
 document.addEventListener('pointerdown', e => {
     pointerStartX = e.clientX;
-    // Log for debugging (open console to check)
-    console.log("Pointer down at:", pointerStartX);
 }, { passive: true });
 
 document.addEventListener('pointerup', e => {
     pointerEndX = e.clientX;
-    console.log("Pointer up at:", pointerEndX);
     handleSwipe();
+}, { passive: true });
+
+// Handle cases where the browser cancels the pointer gesture (e.g., scroll started)
+document.addEventListener('pointercancel', e => {
+    pointerStartX = 0;
+    pointerEndX = 0;
 }, { passive: true });
 
 function handleSwipe() {
     const swipeDistance = pointerEndX - pointerStartX;
     
-    console.log("Swipe attempt, distance:", swipeDistance);
-    
+    // Reset after calculation
+    pointerStartX = 0;
+    pointerEndX = 0;
+
     if (Math.abs(swipeDistance) < minSwipeDistance) return;
 
     if (swipeDistance < 0) { // Swipe Left (Next)
         const next = document.querySelector('.q-nav a[href*="Następne"]');
-        if (next) {
-            console.log("Navigating to next question");
-            next.click();
-        }
+        if (next) next.click();
     } else { // Swipe Right (Previous)
         const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
-        if (prev) {
-            console.log("Navigating to previous question");
-            prev.click();
-        }
+        if (prev) prev.click();
     }
 }
