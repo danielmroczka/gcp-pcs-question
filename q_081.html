@@ -88,29 +88,17 @@ A customer is running an analytics workload on Google Cloud Platform (GCP) where
 </div>
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: AB (Configure Private Google Access, Avoid assigning public IP addresses)
+<strong>Reguła Egzaminacyjna (Exam Rule):</strong>
+Zawsze stosuj zasadę najmniejszych przywilejów (PoLP). W GCP wybieraj role Custom nad rolami Viewer/Editor, jeśli wymóg jest precyzyjnie określony.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować obciążenia analityczne od internetu (zarówno przychodzącego, jak i wychodzącego), instancje Compute Engine nie powinny mieć przypisanych publicznych adresów IP. Ponieważ jednak instancje te muszą uzyskać dostęp do danych w Cloud Storage (usługa Google z publicznymi punktami końcowymi API), konieczne jest włączenie funkcji Private Google Access (PGA) w podsieci, w której znajdują się te instancje. PGA umożliwia maszynom z tylko prywatnymi adresami IP komunikację z usługami Google przez sieć Google.
+<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
+Nie myl Access Scopes (legacy) z IAM Roles (nowoczesne). Nie wybieraj ról typu Viewer/Editor, jeśli potrzebujesz tylko jednego, konkretnego uprawnienia.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- C. Make sure that the Compute Engine cluster is running on a separate subnet: Sama separacja podsieci nie blokuje dostępu do internetu, jeśli podsieć ma trasę do bramy internetowej i instancje mają publiczne IP.
-- D. Turn off IP forwarding on the Compute Engine instances: Przekazywanie IP (IP forwarding) jest wymagane tylko wtedy, gdy instancja ma działać jako router/NAT; jego wyłączenie nie izoluje instancji od internetu.
-- E. Configure a Cloud NAT gateway: Cloud NAT umożliwiłby instancjom WYJŚCIE do internetu (np. w celu pobrania poprawek), co jest sprzeczne z wymogiem, aby workload NIE mógł uzyskać dostępu do internetu.
-
-Wskazówki i triki (Tips & Tricks):
-- Słowo klucz: "not able to access internet" + "access Cloud Storage/BigQuery" = Private Google Access + No Public IP.
-- Private Google Access włącza się na poziomie PODSIECI (Subnet).
-
-Praktyczne informacje na egzamin:
-- Zapamiętaj, że Private Google Access dotyczy usług Google dostępnych przez publiczne adresy IP (jak GCS, BigQuery).
-- Private Service Connect to alternatywa dla nowszych i bardziej złożonych scenariuszy, ale PGA to podstawa egzaminu.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">Private Google Access overview</a>
-- <a href="https://cloud.google.com/compute/docs/ip-addresses" target="_blank">Compute Engine IP addresses</a>
+<strong>Głębokie wyjaśnienie techniczne:</strong>
+IAM pozwala na precyzyjne definiowanie ról za pomocą `permissions` (np. `compute.instances.list`). W modelu współdzielonej odpowiedzialności (Shared Responsibility), za konfigurację dostępu i sieci odpowiada klient.
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

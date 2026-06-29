@@ -89,26 +89,17 @@ You are on your company's development team. You noticed that your web applicatio
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Web Security Scanner + Contextual auto-escaping)
+<strong>Reguła Egzaminacyjna (Exam Rule):</strong>
+Podatności wewnątrz kodu aplikacji (takie jak XSS - Cross-Site Scripting) muszą być rozwiązane na poziomie kodu (App Code), a nie poprzez mechanizmy brzegowe (WAF/Cloud Armor), które jedynie ograniczają ryzyko, ale nie usuwają przyczyny źródłowej (root cause).
 
-Wyjaśnienie: 
-Problem dotyczy podatności Cross-Site Scripting (XSS). Aby go rozwiązać, należy: 1. Wykryć go automatycznie w środowisku staging za pomocą Web Security Scanner. 2. Zastosować poprawkę w kodzie używając systemu szablonów z automatycznym ucieczkowaniem kontekstowym (contextual auto-escaping), co zneutralizuje złośliwe skrypty.
+<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
+- <em>Opcja A</em>: Cloud IAP (Identity-Aware Proxy) służy do uwierzytelniania, a nie do poprawy bezpieczeństwa kodu aplikacji.
+- <em>Opcja B</em>: Cloud Armor pomaga w mitigacji XSS na poziomie WAF (Edge Security), ale nie jest "naprawą" luki w aplikacji. Egzamin wymaga wyboru "naprawy" (fix).
 
-Dlaczego pozostałe są błędne:
-A. IAP służy do kontroli dostępu (uwierzytelnienia), a nie do naprawy luk typu XSS w kodzie.
-B. Cloud Armor może blokować niektóre ataki XSS na brzegu sieci, ale nie 'naprawia' luki w samej aplikacji.
-C. Problem dotyczy sposobu renderowania danych użytkownika, a niekoniecznie biblioteki (choć aktualizacja bibliotek jest ważna, D jest bardziej precyzyjne dla tego scenariusza).
-
-Wskazówki egzaminacyjne (Tips & Tricks):
-XSS w kodzie = Web Security Scanner (wykrywanie) + Auto-escaping (rozwiązanie).
-
-Kluczowe zagadnienia do powtórzenia:
-- Cross-Site Scripting (XSS)
-- Web Security Scanner
-- Secure Coding practices
-
-Dokumentacja:
-<a href="https://cloud.google.com/security-command-center/docs/concepts-web-security-scanner-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-web-security-scanner-overview</a>
+<strong>Głębokie wyjaśnienie techniczne:</strong>
+Luka XSS wynika z braku poprawnego sanitizowania (sanitization) lub ucieczkowania (escaping) danych wejściowych przed wyświetleniem ich w przeglądarce.
+1. <strong>Web Security Scanner:</strong> Narzędzie Google, które automatycznie skanuje aplikację (w tym staging) w poszukiwaniu typowych podatności OWASP (w tym XSS).
+2. <strong>Contextual Auto-escaping:</strong> Najlepsza praktyka inżynierska. Templating system (np. Jinja2, Go templates) automatycznie dobiera metodę maskowania znaków specjalnych w zależności od kontekstu (czy dane wchodzą do atrybutu HTML, czy do wnętrza tagu). Jest to znacznie bezpieczniejsze niż ręczne czyszczenie danych.
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -116,11 +107,10 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Debata na Reddit skupia się na 'Context-aware escaping'. Inżynierowie podkreślają, że samo 'zwykłe' escapowanie to za mało – system musi wiedzieć, czy dane trafiają do atrybutu HTML, tagu `<script>` czy CSS, aby dobrać odpowiednią metodę maskowania.</p></p>
+<p><b>Głęboka analiza:</b> Analiza spornych kwestii (AI): Debata na Reddit skupia się na 'Context-aware escaping'. Inżynierowie podkreślają, że samo 'zwykłe' escapowanie to za mało – system musi wiedzieć, czy dane trafiają do atrybutu HTML, tagu `<script>` czy CSS, aby dobrać odpowiednią metodę maskowania.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://cloud.google.com/security-command-center/docs/concepts-web-security-scanner-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-web-security-scanner-overview</a></li>
-
 </ul>
 </div>
 </div>

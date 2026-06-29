@@ -92,25 +92,17 @@ When creating a secure container image, which two items should you incorporate i
 <pre>
 Potwierdzona odpowiedź: BC (Package a single app as a container oraz Remove any unnecessary tools not needed by the app.)
 
-Wyjaśnienie: 
-Bezpieczeństwo kontenerów opiera się na zasadzie minimalizacji powierzchni ataku oraz izolacji procesów:
-1. Package a single app as a container (B): Kontener powinien być dedykowany jednej funkcji/aplikacji. Ułatwia to zarządzanie, ograniczanie uprawnień i zapobiega sytuacji, w której błąd w jednej aplikacji kompromituje inne procesy w tym samym kontenerze.
-2. Remove any unnecessary tools (C): Obrazy kontenerów powinny zawierać tylko te pliki i biblioteki, które są niezbędne do uruchomienia aplikacji. Usunięcie narzędzi takich jak shell (np. bash), menedżery pakietów (np. apt) czy narzędzia sieciowe utrudnia potencjalnemu atakującemu poruszanie się wewnątrz systemu po przejęciu aplikacji.
+**Reguła Egzaminacyjna (Exam Rule):**
+Przy tworzeniu bezpiecznych obrazów kontenerów, zawsze kieruj się zasadą minimalizmu i separacji: "Jeden kontener = jedna aplikacja" oraz "Minimalna powierzchnia ataku" (usuwanie zbędnych narzędzi).
 
-Dlaczego pozostałe są błędne:
-A. Ensure that the app does not run as PID 1: Jest to błąd – zaleca się, aby główny proces aplikacji (lub proces init) działał jako PID 1, aby poprawnie obsługiwać sygnały systemowe (np. SIGTERM).
-D. Use public container images: Publiczne obrazy mogą zawierać luki lub złośliwe oprogramowanie. Najbezpieczniejszą praktyką jest budowanie własnych obrazów na bazie zaufanych, minimalnych obrazów bazowych.
-E. Use many container image layers to hide sensitive information: Warstwy obrazu Docker są kumulatywne. Jeśli dodasz sekret w jednej warstwie, a usuniesz go w następnej, sekret ten wciąż pozostanie w historii obrazu i może zostać łatwo wydobyty. Sekretów nigdy nie należy umieszczać w warstwach obrazu.
+**Haczyki egzaminacyjne (Exam Traps):**
+- Pułapka: "Warstwy jako ukrywanie sekretów". Nigdy nie używaj warstw obrazu (Docker layers) do maskowania sekretów – zostają one w historii obrazu i są łatwe do wyciągnięcia.
+- Pułapka: "Publiczne obrazy bazowe". Zawsze używaj zaufanych i zminimalizowanych obrazów (np. Distroless). Publiczne obrazy często zawierają luki lub złośliwe komponenty.
+- Pułapka: PID 1. Proces główny powinien zazwyczaj być PID 1, aby poprawnie obsługiwać sygnały systemowe (np. `SIGTERM` dla bezpiecznego zamykania).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Minimal surface of attack" = Usuwanie niepotrzebnych narzędzi (Distroless images).
-- Jeden kontener = jedna usługa.
-- Pamiętaj: Warstwy Docker NIE SĄ bezpiecznym sposobem na ukrywanie danych.
-
-Kluczowe zagadnienia do powtórzenia:
-- Container Security Best Practices
-- Distroless Images
-- Docker Layer Security
+**Głębokie wyjaśnienie techniczne:**
+1. **Package a single app as a container (B)**: Separacja usług w osobnych kontenerach pozwala na niezależne skalowanie, zarządzanie cyklem życia i *izolację zabezpieczeń* (jeśli jedna usługa zostanie przejęta, nie oznacza to automatycznego przejęcia całego systemu).
+2. **Remove any unnecessary tools (C)**: Zastosowanie tzw. "Distroless images" lub obrazów zminimalizowanych (np. Alpine) drastycznie zmniejsza powierzchnię ataku. Brak shella (bash/sh), menedżerów pakietów czy narzędzi sieciowych (curl/wget) wewnątrz kontenera uniemożliwia intruzowi łatwe pobranie i uruchomienie złośliwego kodu po zainfekowaniu aplikacji.
 
 Dokumentacja:
 <a href="https://cloud.google.com/architecture/best-practices-for-building-containers" target="_blank">https://cloud.google.com/architecture/best-practices-for-building-containers</a>

@@ -90,26 +90,17 @@ You need to provide a corporate user account in Google Cloud for each of your de
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: AD (GCDS + Transfer Tool for Unmanaged Users (TTUU))
+<strong>Reguła Egzaminacyjna (Exam Rule):</strong>
+W scenariuszach migracji "Unmanaged Users" (użytkownicy korzystający z firmowej domeny do prywatnych kont Google) jedyną wspieraną ścieżką jest użycie narzędzia <em>Transfer Tool for Unmanaged Users (TTUU)</em>. Synchronizacja tożsamości (GCDS lub Cloud Identity) stanowi fundament, ale nie rozwiązuje problemu konfliktów kont osobistych.
 
-Wyjaśnienie: 
-Aby uporządkować konta osobiste używające domen firmowych: 1. Używamy GCDS do stworzenia oficjalnych kont w Cloud Identity. 2. Używamy narzędzia Transfer Tool (TTUU), aby zidentyfikować konflikty i poprosić użytkowników o przeniesienie ich kont pod kontrolę organizacji.
+<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
+- <em>Opcja C</em> jest pułapką: administrator nie ma uprawnień do "wymuszenia" zmiany adresu w koncie prywatnym użytkownika; proces musi odbyć się za zgodą użytkownika.
+- <em>Opcja E</em> sugeruje działania manualne, które nie są zalecaną ścieżką techniczną w GCP.
 
-Dlaczego pozostałe są błędne:
-B. Recovery email nie jest metodą identyfikacji kont unmanaged.
-C. Nie można 'wymusić' zmiany adresu w koncie osobistym bez udziału użytkownika (wymagane jest zaproszenie do transferu).
-E. Prośba o usunięcie kont jest mało profesjonalna i trudna do wyegzekwowania w dużej skali.
-
-Wskazówki egzaminacyjne (Tips & Tricks):
-Unmanaged users / Personal accounts with company email = Transfer Tool (TTUU).
-
-Kluczowe zagadnienia do powtórzenia:
-- Unmanaged accounts
-- Transfer Tool for Unmanaged Users
-- Cloud Identity adoption
-
-Dokumentacja:
-<a href="https://cloud.google.com/architecture/identity/migrating-consumer-accounts" target="_blank">https://cloud.google.com/architecture/identity/migrating-consumer-accounts</a>
+<strong>Głębokie wyjaśnienie techniczne:</strong>
+Proces konwersji kont opiera się na mechanizmie <em>Conflict Resolution</em>.
+1. <strong>GCDS (Google Cloud Directory Sync):</strong> Synchronizuje źródło prawdy (np. Active Directory) z Cloud Identity, tworząc tożsamości w GCP.
+2. <strong>TTUU (Transfer Tool):</strong> Pozwala wysłać zaproszenie do użytkownika posiadającego konto "unmanaged". Jeśli użytkownik zaakceptuje, konto staje się zarządzane. Jeśli nie (lub zignoruje), po 30 dniach administrator może dokonać <em>forced account rename</em>, co przemianuje konto prywatne na <em>użytkownik%domena.com@gtempaccount.com</em>, zwalniając adres w domenie firmowej. To kluczowy proces dla zapewnienia zgodności (Compliance) i bezpieczeństwa (Data Leakage Prevention).
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -117,11 +108,10 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: AD</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Wiele dyskusji dotyczy tego, co się dzieje, gdy użytkownik odrzuci zaproszenie. Eksperci przypominają: po 30 dniach odrzucenia, jeśli administrator stworzy konto zarządzane, stare konto osobiste użytkownika zostanie przemianowane na `@gtempaccount.com`, co wymusza na użytkowniku zmianę adresu, ale chroni domenę firmy.</p></p>
+<p><b>Głęboka analiza:</b> Analiza spornych kwestii: Wiele dyskusji dotyczy tego, co się dzieje, gdy użytkownik odrzuci zaproszenie. Eksperci przypominają: po 30 dniach odrzucenia, jeśli administrator stworzy konto zarządzane, stare konto osobiste użytkownika zostanie przemianowane na `@gtempaccount.com`, co wymusza na użytkowniku zmianę adresu, ale chroni domenę firmy.</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
 <li><a href="https://support.google.com/cloudidentity/answer/7062710" target="_blank">https://support.google.com/cloudidentity/answer/7062710</a></li>
-
 </ul>
 </div>
 </div>

@@ -86,28 +86,17 @@ What are the steps to encrypt data using envelope encryption?
 </div>
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (DEK locally -> Data encryption -> KEK wrap DEK -> Store)
+<strong>Reguła Egzaminacyjna (Exam Rule):</strong>
+Zawsze stosuj zasadę najmniejszych przywilejów (PoLP). W GCP wybieraj role Custom nad rolami Viewer/Editor, jeśli wymóg jest precyzyjnie określony.
 
-Wyjaśnienie: 
-Szyfrowanie kopertowe (Envelope Encryption) polega na: 1. Wygenerowaniu klucza DEK (Data Encryption Key) lokalnie. 2. Zaszyfrowaniu danych tym kluczem. 3. Użyciu klucza KEK (Key Encryption Key) z KMS do zaszyfrowania ('owinięcia') klucza DEK. 4. Przechowywaniu zaszyfrowanych danych razem z zaszyfrowanym kluczem DEK.
+<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
+Nie myl Access Scopes (legacy) z IAM Roles (nowoczesne). Nie wybieraj ról typu Viewer/Editor, jeśli potrzebujesz tylko jednego, konkretnego uprawnienia.
 
-Dlaczego pozostałe są błędne:
-A. Dane szyfruje się kluczem DEK, a nie KEK. KEK służy tylko do ochrony DEK.
-B. KEK zazwyczaj rezyduje w KMS i nie powinien być generowany 'lokalnie' w aplikacji w sposób niebezpieczny.
-D. Kolejność działań jest nielogiczna.
-
-Wskazówki egzaminacyjne (Tips & Tricks):
-DEK szyfruje Dane. KEK szyfruje DEK (koperta). Nigdy na odwrót.
-
-Kluczowe zagadnienia do powtórzenia:
-- Envelope Encryption
-- DEK (Data Encryption Key) vs KEK (Key Encryption Key)
-- Cloud KMS
-
-Dokumentacja:
-<a href="https://cloud.google.com/kms/docs/envelope-encryption" target="_blank">https://cloud.google.com/kms/docs/envelope-encryption</a>
+<strong>Głębokie wyjaśnienie techniczne:</strong>
+IAM pozwala na precyzyjne definiowanie ról za pomocą `permissions` (np. `compute.instances.list`). W modelu współdzielonej odpowiedzialności (Shared Responsibility), za konfigurację dostępu i sieci odpowiada klient.
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

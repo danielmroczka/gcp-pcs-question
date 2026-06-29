@@ -93,27 +93,18 @@ Which two tasks should your team perform to handle this request? (Choose two.)
 <pre>
 Potwierdzona odpowiedź: AD
 
-Wyjaśnienie:
-Domyślnie w Google Cloud każdy użytkownik w domenie posiada uprawnienie do tworzenia projektów, ponieważ rola `resourcemanager.projectCreator` jest przypisana do całej domeny na poziomie organizacji. Aby ograniczyć tę możliwość:
-1. (Krok A) Należy usunąć domyślne przypisanie roli `Project Creator` dla wszystkich użytkowników na poziomie węzła organizacji.
-2. (Krok D) Należy jawnie nadać rolę `Project Creator` (roles/resourcemanager.projectCreator) tylko wybranej grupie osób (w tym przypadku zespołowi DevOps) na poziomie organizacji.
+<b>Reguła Egzaminacyjna (Exam Rule):</b>
+Tworzenie projektów to uprawnienie zarządzane przez <b>IAM</b> (rola `roles/resourcemanager.projectCreator`), a nie przez politykę organizacji (Org Policy). Aby ograniczyć to uprawnienie, należy wykonać operacje na poziomie węzła organizacji (Organization Node).
 
-Dzięki temu tylko osoby z zespołu DevOps będą widzieć przycisk "New Project" i będą mogły go skutecznie użyć.
+<b>Haczyki egzaminacyjne (Exam Traps):</b>
+- Zmylenie mechanizmów: Opcja B (Org Policy) sugeruje, że to polityka organizacji ogranicza tworzenie projektów, co jest błędne – to IAM zarządza tym uprawnieniem.
+- Mylenie ról: Opcja C sugeruje `Project Editor` – ta rola pozwala zarządzać zasobami <i>wewnątrz</i> projektu, a nie tworzyć <i>nowe projekty</i>.
 
-Dlaczego pozostałe opcje są niepoprawne:
-- B: Chociaż polityki organizacji mogą nakładać ograniczenia na to, co można robić *wewnątrz* projektów, to uprawnienie do samego *tworzenia* projektu jest zarządzane przez IAM i rolę Project Creator.
-- C: Rola `Project Editor` (roles/editor) daje uprawnienia do zarządzania zasobami *wewnątrz* istniejącego projektu, ale nie daje uprawnień do tworzenia nowych projektów na poziomie organizacji.
-- E: Rola `Billing Account Creator` pozwala na tworzenie nowych kont rozliczeniowych (billing accounts), co jest procesem niezależnym od tworzenia projektów (choć projekty muszą być podpięte do konta rozliczeniowego, aby mogły w pełni działać).
-
-Tips & Tricks:
-- Tworzenie projektów to uprawnienie na poziomie **Organizacji**, a nie projektu.
-- Pamiętaj zasadę "Least Privilege": najpierw zabierasz szerokie uprawnienia (A), potem nadajesz wąskie (D).
-- Szukaj roli `resourcemanager.projectCreator` w pytaniach o kontrolę cyklu życia projektów.
-
-Zagadnienia:
-- IAM (Identity and Access Management)
-- Resource Hierarchy (Hierarchia zasobów - Organization node)
-- Project Lifecycle Management (Zarządzanie cyklem życia projektu)
+<b>Głębokie wyjaśnienie techniczne:</b>
+Domyślnie rola `resourcemanager.projectCreator` jest przypisana do grupy "All users in the organization". Aby przejąć kontrolę, musisz:
+1. Usunąć to domyślne przypisanie (tzw. "revoke"), aby zablokować tworzenie projektów wszystkim.
+2. Nadać tę samą rolę (Project Creator) tylko konkretnej grupie (np. "devops-team@example.com") na poziomie organizacji.
+Proces ten jest fundamentalny dla utrzymania higieny zasobów (Resource Governance) i kontroli budżetowej w GCP.
 
 Dokumentacja:
 <a href="https://cloud.google.com/resource-manager/docs/creating-managing-projects#restricting_project_creation" target="_blank">https://cloud.google.com/resource-manager/docs/creating-managing-projects#restricting_project_creation</a>
@@ -124,12 +115,7 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Kluczowe wnioski</h3>
 <p><b>Potwierdzona odpowiedź: A, D</b></p>
-<p>W dużych przedsiębiorstwach niekontrolowane tworzenie projektów (Project Sprawl) prowadzi do bałaganu w kosztach i luk w bezpieczeństwie. Centralizacja tworzenia projektów poprzez zespół DevOps to standardowa praktyka (Landing Zone pattern).</p>
-<h3>Praktyczne wskazówki</h3>
-<ul>
-<li>Na egzaminie zawsze rozważaj użycie grup Google (Google Groups) zamiast dodawania pojedynczych użytkowników do ról – to najlepsza praktyka Google.</li>
-<li>Jeśli pytanie pyta o "wyeliminowanie" domyślnego zachowania, szukaj opcji "Remove" lub "Disable" dla szerokiej grupy użytkowników.</li>
-</ul>
+<p>Centralizacja tworzenia projektów poprzez zespół DevOps to standardowa praktyka (Landing Zone pattern) dla poprawy ładu korporacyjnego.</p>
 </div>
 </div>
 </div>

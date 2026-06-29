@@ -86,27 +86,17 @@ Last week, a company deployed a new App Engine application that writes logs to B
 </div>
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Filter BigQuery jobs, Hide Matching App Engine SA)
+<strong>Reguła Egzaminacyjna (Exam Rule):</strong>
+Zawsze stosuj zasadę najmniejszych przywilejów (PoLP). W GCP wybieraj role Custom nad rolami Viewer/Editor, jeśli wymóg jest precyzyjnie określony.
 
-Wyjaśnienie: 
-W Logs Explorerze najskuteczniejszą metodą audytu jest odfiltrowanie wszystkich poprawnych (oczekiwanych) zdarzeń. Jeśli po ukryciu ('Hide Matching') logów wygenerowanych przez App Engine Default Service Account na liście nie pozostaną żadne wpisy, oznacza to, że nikt inny nie wykonywał operacji zapisu.
+<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
+Nie myl Access Scopes (legacy) z IAM Roles (nowoczesne). Nie wybieraj ról typu Viewer/Editor, jeśli potrzebujesz tylko jednego, konkretnego uprawnienia.
 
-Dlaczego pozostałe są błędne:
-B. Pokazanie tylko pasujących wpisów ('Show Matching') nie wyklucza istnienia innych wpisów, których nie widzimy.
-C, D. Przegląd uprawnień IAM mówi o tym, co MOŻE się stać, a audyt musi sprawdzać to, co się STAŁO (logi).
-
-Wskazówki egzaminacyjne (Tips & Tricks):
-Audyt przeszłości = Cloud Logging. Wykrywanie anomalii = Filter + Hide expected.
-
-Kluczowe zagadnienia do powtórzenia:
-- Cloud Audit Logs
-- Logs Explorer techniques
-- BigQuery audit logs
-
-Dokumentacja:
-<a href="https://cloud.google.com/logging/docs/audit" target="_blank">https://cloud.google.com/logging/docs/audit</a>
+<strong>Głębokie wyjaśnienie techniczne:</strong>
+IAM pozwala na precyzyjne definiowanie ról za pomocą `permissions` (np. `compute.instances.list`). W modelu współdzielonej odpowiedzialności (Shared Responsibility), za konfigurację dostępu i sieci odpowiada klient.
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

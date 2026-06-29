@@ -70,7 +70,7 @@ A customer implements Cloud Identity-Aware Proxy for their ERP system hosted on 
 <ul>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Make sure that the ERP system can validate the JWT assertion in the HTTP requests.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Make sure that the ERP system can validate the identity headers in the HTTP requests.</li>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C.</span> Make sure that the ERP system can validate the x-forwarded-for headers in the HTTP requests.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Make sure that the ERP system can validate the x-forwarded-for headers in the HTTP requests.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Make sure that the ERP system can validate the user's unique identifier headers in the HTTP requests.</li>
 
 </ul>
@@ -91,23 +91,21 @@ A customer implements Cloud Identity-Aware Proxy for their ERP system hosted on 
 <pre>
 Potwierdzona odpowiedź: A (Make sure that the ERP system can validate the JWT assertion in the HTTP requests.)
 
-Wyjaśnienie: 
-Aby zapewnić, że aplikacja (ERP) akceptuje ruch wyłącznie z Cloud IAP i nie można jej oszukać (np. wysyłając żądanie bezpośrednio do serwera, omijając proxy IAP), aplikacja musi weryfikować nagłówek `x-goog-iap-jwt-assertion`. Nagłówek ten zawiera podpisany cyfrowo token JWT, który zawiera tożsamość użytkownika. Weryfikacja podpisu tego tokenu za pomocą kluczy publicznych Google daje pewność, że żądanie przeszło przez IAP i nie zostało sfałszowane.
+**Reguła Egzaminacyjna (Exam Rule):**
+Jeśli pytanie dotyczy zabezpieczenia aplikacji przed ruchem bezpośrednim (omijającym IAP), jedyną poprawną metodą jest weryfikacja podpisanego nagłówka JWT (Signed Header) przesyłanego przez IAP. Nagłówek ten nazywa się `x-goog-iap-jwt-assertion`.
 
-Dlaczego pozostałe są błędne:
-B. Nagłówki tożsamości (np. `x-goog-authenticated-user-email`) są przesyłane przez IAP, ale bez weryfikacji podpisu JWT mogą zostać łatwo sfałszowane przez napastnika, który uzyska bezpośredni dostęp sieciowy do serwera ERP.
-C. Nagłówek `x-forwarded-for` zawiera adres IP klienta, ale nie służy do uwierzytelniania źródła ruchu jako zaufanego proxy Google.
-D. Unikalne identyfikatory użytkowników bez podpisu kryptograficznego są tak samo podatne na manipulację jak adresy email (opcja B).
+**Haczyki egzaminacyjne (Exam Traps):**
+- Pułapka: "Identity headers". Są one wysyłane przez IAP, ale nie są podpisane kryptograficznie, więc napastnik z dostępem sieciowym może je łatwo sfałszować.
+- Pułapka: "x-forwarded-for". Służy do identyfikacji IP klienta, a nie do uwierzytelnienia faktu przejścia przez proxy IAP.
+- Pułapka: "Unikalne identyfikatory". Bez podpisu cyfrowego nie zapewniają one integralności ani pewności co do źródła ruchu.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Słowo klucz: "Only accept traffic from IAP" = Weryfikacja podpisu JWT (JWT assertion).
-- Zapamiętaj nazwę nagłówka: `x-goog-iap-jwt-assertion`.
-- Sama obecność IAP w projekcie nie blokuje ruchu bezpośredniego na adres IP instancji – to aplikacja lub firewall musi o to zadbać.
+**Głębokie wyjaśnienie techniczne:**
+Cloud IAP wstawia do każdego żądania HTTP nagłówek `x-goog-iap-jwt-assertion`. Jest to token JWT podpisany cyfrowo przez Google. Weryfikacja podpisu tego tokenu przez aplikację przy użyciu publicznych kluczy Google daje pewność, że:
+1. Ruch faktycznie przeszedł przez IAP.
+2. Token nie został sfałszowany.
+3. Informacje o tożsamości użytkownika są wiarygodne.
 
-Kluczowe zagadnienia do powtórzenia:
-- Cloud Identity-Aware Proxy (IAP) - mechanizm działania
-- Weryfikacja podpisanych nagłówków (Signed Headers)
-- JSON Web Token (JWT) w Google Cloud
+Bez weryfikacji JWT, aplikacja jest narażona na ataki omijające IAP (tzw. bypassing IAP).
 
 Dokumentacja:
 <a href="https://cloud.google.com/iap/docs/signed-headers-howto" target="_blank">https://cloud.google.com/iap/docs/signed-headers-howto</a>

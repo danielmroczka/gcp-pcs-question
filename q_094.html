@@ -91,20 +91,18 @@ You are responsible for protecting highly sensitive data in BigQuery. Your opera
 <pre>
 Potwierdzona odpowiedź: D (Tokenization for Pseudonymization (DLP))
 
-Wyjaśnienie: 
-Tokenizacja (lub Pseudonimizacja) za pomocą Cloud DLP API pozwala na zastąpienie wrażliwych danych (jak e-mail) unikalnym tokenem. Dane zachowują swoją użyteczność analityczną (można łączyć rekordy po tokenach), ale są nieczytelne dla osób postronnych. Tylko uprawniony zespół (HR) może posiadać klucz do 'odkodowania' tokenów.
+<b>Reguła Egzaminacyjna (Exam Rule):</b>
+W scenariuszach wymagających ochrony danych PII (Personally Identifiable Information) w BigQuery, gdzie zachodzi potrzeba analityki na poziomie indywidualnych rekordów przy jednoczesnym ukryciu tożsamości, właściwym wyborem jest "Pseudonymization" (za pomocą tokenizacji).
 
-Dlaczego pozostałe są błędne:
-A, B. Maskowanie (masking) lub Redakcja (redaction) zazwyczaj niszczą dane bezpowrotnie lub czynią je bezużytecznymi dla referencyjnej analizy (np. zastąpienie wszystkiego znakiem X).
-C. Inspekcja (inspection) to tylko proces wykrywania, a nie zabezpieczania danych.
+<b>Haczyki egzaminacyjne (Exam Traps):</b>
+- "Data masking" (A) lub "redaction" (B) są często wskazywane jako poprawne, ale w kontekście analitycznym są "niszczące". Pamiętaj: jeśli dane mają służyć do analizy (np. liczenie unikalnych klientów), maskowanie jest nieużyteczne, bo zamienia unikalne wartości na stały ciąg znaków (np. wszystkie e-maile na '****').
+- Cloud DLP "Inspection" (C) służy wyłącznie do skanowania (discovery) wrażliwych danych, nie do ich modyfikacji czy ochrony w storage'u.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-Ukrywanie danych przy zachowaniu ich użyteczności (referential integrity) = Tokenization / Pseudonymization.
-
-Kluczowe zagadnienia do powtórzenia:
-- Cloud DLP Tokenization
-- Pseudonymization vs Anonymization
-- BigQuery Data Security
+<b>Głębokie wyjaśnienie techniczne:</b>
+Pseudonimizacja (Pseudonymization) w Google Cloud DLP to technika transformacji danych polegająca na zastąpieniu wartości wrażliwych (PII) ich odpowiednikami (tokenami) w sposób odwracalny, ALE tylko dla podmiotów posiadających odpowiedni klucz kryptograficzny.
+1. Tokenizacja (Tokenization) przy użyciu Cloud DLP API: Wartość wejściowa (np. e-mail) jest przekształcana przy użyciu klucza (np. HMAC lub algorytm deterministyczny).
+2. Użyteczność analityczna: Ponieważ token jest deterministyczny (ten sam e-mail zawsze wygeneruje ten sam token), analitycy mogą wykonywać operacje `GROUP BY`, `JOIN` czy `COUNT DISTINCT` na tokenach bez poznania rzeczywistych adresów e-mail.
+3. Kontrola dostępu: Dostęp do klucza użytego do tokenizacji (przechowywanego w Cloud KMS) jest ściśle ograniczony za pomocą IAM, dzięki czemu tylko wyznaczone zespoły (np. HR) mogą dokonać detokenizacji (odtworzenia PII).
 
 Dokumentacja:
 <a href="https://cloud.google.com/dlp/docs/pseudonymization" target="_blank">https://cloud.google.com/dlp/docs/pseudonymization</a>

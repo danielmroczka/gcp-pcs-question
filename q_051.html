@@ -92,23 +92,15 @@ What should you do?
 <pre>
 Potwierdzona odpowiedź: A
 
-Wyjaśnienie:
-Ograniczenie polityki organizacji (Organization Policy) o nazwie `compute.trustedimageProjects` jest dedykowanym mechanizmem do kontrolowania, z których projektów mogą pochodzić obrazy używane jako dyski rozruchowe (boot disks) w Twojej organizacji. Konfigurując to ograniczenie na poziomie organizacji i definiując listę "allow" (whitelist), wymuszasz, aby każdy nowy dysk rozruchowy w dowolnym projekcie wewnątrz organizacji korzystał wyłącznie z obrazów przechowywanych w jawnie wskazanych, zaufanych projektach.
+<b>Reguła Egzaminacyjna (Exam Rule):</b>
+Gdy wymagane jest narzucenie ograniczeń na poziomie organizacji dla całej hierarchii (np. "limitowanie obrazów", "blokowanie publicznych IP"), pierwszym i jedynym słusznym wyborem w Google Cloud jest <b>Organization Policy Service</b> (polityka organizacji).
 
-Dlaczego pozostałe opcje są niepoprawne:
-- B: Choć technicznie można używać reguł "deny", w przypadku `compute.trustedimageProjects` standardową i zalecaną praktyką jest whitelisting (lista allow). Podejście z listą wyjątków w operacji deny jest bardziej skomplikowane w utrzymaniu i mniej bezpieczne (domyślnie pozwala na wszystko, co nie jest zablokowane).
-- C: Nadanie roli `Compute Image User` (roles/compute.imageUser) na poziomie projektu pozwala użytkownikom na korzystanie z obrazów w tym projekcie, ale NIE blokuje im możliwości korzystania z obrazów z innych projektów (np. publicznych obrazów Google lub ich własnych projektów). Nie realizuje więc wymogu "ograniczenia" (limit) źródeł.
-- D: Dodanie projektu jako członka organizacji z rolą `Compute Image User` nie jest poprawnym sposobem konfiguracji dostępu do obrazów ani nie służy do ograniczania wyboru obrazów dla użytkowników w całej organizacji.
+<b>Haczyki egzaminacyjne (Exam Traps):</b>
+- Zmylenie kandydatów rolami IAM: Opcje C i D sugerują użycie ról IAM (np. Compute Image User) do "ograniczania". Role IAM służą do <i>nadawania uprawnień</i> (autoryzacja), a nie do <i>blokowania/ograniczania wyboru</i> zasobów na poziomie organizacji.
+- Zmylenie mechanizmem "deny": Opcja B sugeruje "deny", podczas gdy standardem dla `trustedimageProjects` jest whitelisting (allow), co zapewnia tzw. "default-deny posture" (bezpieczniejszy model).
 
-Tips & Tricks:
-- Gdy widzisz "limit images" + "boot disks" + "central/organization level", Twoją pierwszą myślą powinno być `compute.trustedimageProjects`.
-- Zapamiętaj, że whitelisting (Allow) jest preferowaną metodą dla tej polityki.
-- Organization Policy służy do narzucania ograniczeń (constraints), podczas gdy IAM służy do nadawania uprawnień (permissions). Jeśli celem jest zabronienie czegoś (ograniczenie wyboru), używamy Organization Policy.
-
-Zagadnienia:
-- Organization Policy Service (Więzy/Constraints)
-- Resource Hierarchy (Hierarchia zasobów)
-- Trusted Images (Zaufane obrazy)
+<b>Głębokie wyjaśnienie techniczne:</b>
+Ograniczenie `compute.trustedimageProjects` (Constraint) działa poprzez wstrzyknięcie kontroli w warstwę API Google Compute Engine. Kiedy użytkownik próbuje utworzyć instancję (VM) i wskazuje obraz, Compute Engine sprawdza, czy projekt, w którym znajduje się obraz, znajduje się na dozwolonej liście w polityce. Jeśli nie – operacja zostaje odrzucona przez system. Jest to mechanizm <b>Guardrail</b>, który działa niezależnie od uprawnień IAM użytkownika (nawet jeśli użytkownik ma `Owner`, polityka organizacji zablokuje użycie obrazu z niedozwolonego projektu).
 
 Dokumentacja:
 <a href="https://cloud.google.com/compute/docs/images/restricting-image-access" target="_blank">https://cloud.google.com/compute/docs/images/restricting-image-access</a>
@@ -119,12 +111,7 @@ Dokumentacja:
 <div class="analysis-section">
 <h3>Kluczowe wnioski</h3>
 <p><b>Potwierdzona odpowiedź: A</b></p>
-<p>W egzaminie Google Cloud Security Professional kluczowe jest rozróżnienie między przyznawaniem dostępu (IAM) a narzucaniem ograniczeń (Organization Policy). To pytanie testuje znajomość konkretnego ograniczenia <code>compute.trustedimageProjects</code>, które jest krytyczne dla zapewnienia, że w środowisku uruchamiane są tylko sprawdzone i bezpieczne systemy operacyjne.</p>
-<h3>Praktyczne wskazówki</h3>
-<ul>
-<li>Zawsze szukaj słów kluczowych takich jak "enforce", "limit", "restrict" na poziomie "Organization" lub "Folder" – to sygnały dla Organization Policy.</li>
-<li>Pamiętaj, że polityka <code>trustedimageProjects</code> może być dziedziczona, więc ustawienie jej na górze hierarchii zabezpiecza wszystkie podległe projekty.</li>
-</ul>
+<p>Kluczowe jest rozróżnienie: IAM = kto może zrobić, Org Policy = co może zostać zrobione.</p>
 </div>
 </div>
 </div>

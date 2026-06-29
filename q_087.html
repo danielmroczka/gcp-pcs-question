@@ -87,27 +87,17 @@ You have an application where the frontend is deployed on a managed instance gro
 </div>
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Service Account based firewall rules)
+<strong>Reguła Egzaminacyjna (Exam Rule):</strong>
+Zawsze stosuj zasadę najmniejszych przywilejów (PoLP). W GCP wybieraj role Custom nad rolami Viewer/Editor, jeśli wymóg jest precyzyjnie określony.
 
-Wyjaśnienie: 
-Zalecaną praktyką w GCP jest stosowanie reguł firewalla opartych na kontach serwisowych (Service Accounts). Pozwala to na precyzyjne określenie, że tylko maszyny uruchomione z tożsamością 'frontend-sa' mogą łączyć się z maszynami o tożsamości 'mysql-sa'. Jest to bezpieczniejsze niż tagi sieciowe, ponieważ tożsamość konta serwisowego jest silniej kontrolowana (IAM).
+<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
+Nie myl Access Scopes (legacy) z IAM Roles (nowoczesne). Nie wybieraj ról typu Viewer/Editor, jeśli potrzebujesz tylko jednego, konkretnego uprawnienia.
 
-Dlaczego pozostałe są błędne:
-A. Filtrowanie po IP jest trudne w utrzymaniu przy autoskalowaniu.
-C, D. Tagi sieciowe (Network Tags) są mniej bezpieczne, ponieważ każdy użytkownik z rolą Instance Admin może je zmienić na dowolnej maszynie, omijając intencję reguły firewalla.
-
-Wskazówki egzaminacyjne (Tips & Tricks):
-Dla separacji warstw (tier separation) wewnątrz VPC: Najlepiej używać Service Accountów w regułach firewalla.
-
-Kluczowe zagadnienia do powtórzenia:
-- VPC Firewall Rules
-- SA-based filtering
-- Network Tags vs Service Accounts
-
-Dokumentacja:
-<a href="https://cloud.google.com/vpc/docs/firewalls#service-accounts" target="_blank">https://cloud.google.com/vpc/docs/firewalls#service-accounts</a>
+<strong>Głębokie wyjaśnienie techniczne:</strong>
+IAM pozwala na precyzyjne definiowanie ról za pomocą `permissions` (np. `compute.instances.list`). W modelu współdzielonej odpowiedzialności (Shared Responsibility), za konfigurację dostępu i sieci odpowiada klient.
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

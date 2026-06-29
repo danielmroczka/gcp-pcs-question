@@ -92,42 +92,25 @@ You have created an OS image that is hardened per your organization's security s
 <pre>
 Poprawna odpowiedź: BD (B: Grant users the compute.imageUser role in the OS image project, D: Set up an image access organization policy constraint)
 
-Dlaczego te odpowiedzi są poprawne:
-- Centralizacja obrazów: Zapisanie utwardzonego (hardened) obrazu w jednym, dedykowanym projekcie zarządzanym przez zespół security jest najlepszą praktyką (Single Source of Truth).
-- B. Rola compute.imageUser: Aby użytkownicy w innych projektach mogli stworzyć VM na podstawie obrazu z Twojego projektu, muszą posiadać rolę `compute.imageUser` nadaną im w projekcie, w którym znajduje się obraz. Pozwala to na "wykorzystanie" obrazu bez dawania dostępu do innych zasobów projektu security.
-- D. Trusted Image Organization Policy: Sama dostępność obrazu nie zmusza użytkowników do jego użycia (mogliby wybrać obrazy publiczne Google). Aby WYMUSIĆ użycie tylko Twojego obrazu, musisz zastosować politykę organizacji `constraints/compute.trustedImageProjects`. Pozwala ona na zdefiniowanie białej listy projektów, z których można pobierać obrazy. Jeśli lista zawiera tylko Twój projekt security, użytkownicy nie będą mogli uruchomić VM z żadnego innego źródła.
+<strong>Reguła Egzaminacyjna (Exam Rule):</strong>
+Zasada "najmniejszego przywileju" (Principle of Least Privilege) w parze z centralnym zarządzaniem (Centralized Governance). 
+1. Użytkownik potrzebuje uprawnień w projekcie, w którym znajduje się zasób (Compute Engine Image). 
+2. Polityki organizacji (Org Policies) stosowane na poziomie organizacji/folderu/projektu są jedynym skutecznym mechanizmem wymuszania zgodności dla całej floty maszyn.
+
+<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
+- Mylenie uprawnień: Rola `compute.imageUser` nadana w projekcie użytkownika nie daje dostępu do obrazów w innym projekcie. Musi być nadana w projekcie, w którym obraz jest "zestorowany".
+- Złudne bezpieczeństwo: Sama rola `compute.imageUser` pozwala na użycie obrazu, ale NIE zabrania użycia innych, nieautoryzowanych obrazów publicznych. Dopiero Organization Policy (`constraints/compute.trustedImageProjects`) domyka ten scenariusz.
+
+<strong>Głębokie wyjaśnienie techniczne:</strong>
+- <strong>compute.trustedImageProjects</strong>: Jest to constraint typu "list constraint". Działa na zasadzie białej listy. Jeśli polityka jest włączona, użytkownik może użyć tylko obrazów (w tym custom images) z projektów jawnie wymienionych na liście.
+- <strong>compute.imageUser</strong>: Wymagane uprawnienie (IAM role), aby wykonać operację `compute.images.useReadOnly`. Działa w relacji: Użytkownik (Principal) -> Projekt z Obrazem (Resource).
+- <strong>Operational Overhead</strong>: Rozwiązanie BD jest skalowalne. Nowy projekt w organizacji automatycznie podlega pod Org Policy, a uprawnienia mogą być zarządzane przez grupy (np. Google Groups przypisane do roli `imageUser` w projekcie security), co eliminuje konieczność ręcznej rekonfiguracji przy każdym nowym projekcie.
 
 Analiza niepoprawnych odpowiedzi:
-- A. imageUser in their own projects: Nadanie tej roli w ich własnych projektach nie da im uprawnień do obrazów znajdujących się w Twoim projekcie security. Uprawnienie musi być nadane tam, gdzie znajduje się zasób (obraz).
-- C. Store image in every project: To generuje ogromny narzut operacyjny (aktualizacje obrazu musiałyby być kopiowane do setek projektów) i zwiększa koszy przechowywania. Przeczy to wymogowi "minimizing operational overhead".
-- E. Remove VM creation permission: To podejście paraliżuje pracę deweloperów. Administratorzy staliby się wąskim gardłem (bottleneck), co jest zaprzeczeniem idei chmury (self-service).
-
-Wskazówki i triki (Tips & Tricks):
-- "Hardened OS image" + "Enforce" = Organization Policy (Trusted Image Projects).
-- Pamiętaj o kierunku uprawnień: imageUser nadajesz W PROJEKCIE ŹRÓDŁOWYM (tam gdzie jest obraz).
-
-Praktyczne informacje na egzamin:
-- Zapamiętaj nazwę constraintu: `compute.trustedImageProjects`.
-- Utwardzanie (Hardening) obrazu zazwyczaj polega na usuwaniu zbędnych pakietów, wyłączaniu niepotrzebnych usług i stosowaniu standardów takich jak CIS Benchmark.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/compute/docs/images/restricting-image-access" target="_blank">Restricting image access with organization policies</a>
-- <a href="https://cloud.google.com/compute/docs/images/sharing-images-across-projects" target="_blank">Sharing images across projects</a>
-- <a href="https://cloud.google.com/compute/docs/images/create-delete-deprecate-private-images" target="_blank">Managing private images</a>
+- A. imageUser in their own projects: Nie działa w GCP – uprawnienia IAM na zasób (obraz) muszą być zdefiniowane w projekcie, gdzie zasób mieszka.
+- C. Store image in every project: Narusza zasady czystości i łatwości zarządzania (operacyjny koszmar przy aktualizacjach obrazu).
+- E. Remove VM creation permission: Niezgodne z modelem Cloud-native (decentralizacja/self-service).
 </pre>
-</div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: BD</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie dotyczy zachowania "Compliance" w warstwie systemowej. Zespół security przygotowuje bezpieczny fundament (Golden Image), a administratorzy za pomocą polityk organizacji dbają o to, by nikt nie budował infrastruktury na "piasku" (niezabezpieczonych obrazach). To modelowy przykład automatyzacji bezpieczeństwa w GCP.</p>
-<h3>Dodatkowe wskazówki</h3>
-<ul>
-<li>Warto wspomnieć o narzędziach takich jak "Image Bakery" (np. użycie Packera w Cloud Build), które automatyzują proces tworzenia i aktualizacji takich obrazów.</li>
-<li>Obrazy można oznaczać jako "Deprecated", aby zachęcić użytkowników do migracji na nowsze, bezpieczniejsze wersje.</li>
-</ul>
-</div>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -137,14 +120,11 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', function(e) {
             e.preventDefault();
             const answerSection = document.querySelector('.q-answer');
-            const aiSection = document.querySelector('.ai-analysis-container');
             if (isVisible) {
                 if (answerSection) answerSection.style.display = 'none';
-                if (aiSection) aiSection.style.display = 'none';
                 this.textContent = 'Show Suggested Answer';
             } else {
                 if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
                 this.textContent = 'Hide Suggested Answer';
             }
             isVisible = !isVisible;

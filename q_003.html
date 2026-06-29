@@ -91,24 +91,18 @@ A customer needs an alternative to storing their plain text secrets in their sou
 <pre>
 Potwierdzona odpowiedź: B (Encrypt the secrets with a Customer-Managed Encryption Key (CMEK), and store them in Cloud Storage.)
 
-Wyjaśnienie: 
-Przechowywanie haseł i kluczy w formie jawnej (plain text) w systemach kontroli wersji (SCM) jest poważnym błędem bezpieczeństwa. Rekomendowanym podejściem w Google Cloud jest użycie dedykowanego rozwiązania. W kontekście dostępnych opcji (gdzie nie wymieniono Secret Manager):
-- Szyfrowanie sekretów za pomocą CMEK (Customer-Managed Encryption Keys) zarządzanych w Cloud KMS i przechowywanie ich w Cloud Storage zapewnia kontrolę nad cyklem życia klucza oraz bezpieczne miejsce składowania. Dostęp do sekretu wymaga wtedy uprawnień zarówno do obiektu w Storage, jak i do klucza deszyfrującego w KMS.
+**Reguła Egzaminacyjna (Exam Rule):**
+Jeśli widzisz pytanie o bezpieczne przechowywanie sekretów (takich jak hasła, klucze API) i nie ma dostępnej opcji "Secret Manager", zawsze szukaj rozwiązania opartego na Cloud KMS (dla szyfrowania) w połączeniu z bezpiecznym składowaniem (np. Cloud Storage).
 
-Dlaczego pozostałe są błędne:
-A. Use Cloud Source Repositories, and store secrets in Cloud SQL: Cloud SQL nie jest usługą przeznaczoną do bezpiecznego przechowywania sekretów aplikacji. Chociaż dane są tam szyfrowane w spoczynku, nie rozwiązuje to problemu zarządzania dostępem do pojedynczych sekretów tak skutecznie jak KMS/Secret Manager.
-C. Run the Cloud Data Loss Prevention API to scan the secrets, and store them in Cloud SQL: DLP służy do wykrywania i maskowania danych wrażliwych (np. numerów kart kredytowych) w dokumentach lub bazach, a nie do bezpiecznego przechowywania haseł systemowych.
-D. Deploy the SCM to a Compute Engine VM with local SSDs, and enable preemptible VMs: Ta opcja jest całkowicie błędna pod kątem bezpieczeństwa i dostępności. Local SSD są efemeryczne (dane znikają po zatrzymaniu instancji), a instancje Preemptible mogą zostać wyłączone w dowolnym momencie przez Google.
+**Haczyki egzaminacyjne (Exam Traps):**
+- Pułapka: "Cloud SQL" jako miejsce na sekrety. Bazy danych nie są dedykowanym narzędziem do zarządzania sekretami.
+- Pułapka: "DLP API". Służy ono do wykrywania i maskowania danych wrażliwych (PII), a nie do zarządzania sekretami aplikacji.
+- Pułapka: "Local SSD/Preemptible VMs". To rozwiązanie zwiększa ryzyko utraty danych (ephemeral) i nie rozwiązuje problemu bezpieczeństwa.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli w opcjach pojawia się "Secret Manager", zazwyczaj jest to najlepsza odpowiedź dla sekretów aplikacji.
-- Jeśli Secret Managera nie ma, szukaj kombinacji KMS (szyfrowanie) + Storage (składowanie).
-- Nigdy nie wybieraj opcji sugerujących przechowywanie sekretów w kodzie lub "zwykłych" bazach danych bez dodatkowego szyfrowania warstwy aplikacji.
-
-Kluczowe zagadnienia do powtórzenia:
-- Cloud KMS (Key Management Service) i CMEK
-- Secret Manager vs. Cloud KMS
-- Bezpieczeństwo w procesach CI/CD
+**Głębokie wyjaśnienie techniczne:**
+W GCP zarządzanie sekretami powinno być realizowane poprzez dedykowane usługi. 
+1. **Cloud KMS (Key Management Service)**: Pozwala na tworzenie kluczy szyfrujących (CMEK - Customer-Managed Encryption Keys). Szyfrowanie danych kluczem CMEK przed zapisem w Cloud Storage (Encryption at rest) zapewnia, że nawet w przypadku wycieku danych z bucketu (Storage), są one bezużyteczne bez klucza z KMS.
+2. **Separacja obowiązków (SoD)**: Dostęp do obiektu w Storage oraz dostęp do klucza w KMS są kontrolowane przez oddzielne uprawnienia IAM, co zwiększa bezpieczeństwo.
 
 Dokumentacja:
 <a href="https://cloud.google.com/kms/docs/envelope-encryption" target="_blank">https://cloud.google.com/kms/docs/envelope-encryption</a>

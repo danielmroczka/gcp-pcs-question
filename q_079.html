@@ -87,29 +87,17 @@ An organization's security and risk management teams are concerned about where t
 </div>
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Defending against XSS and SQLi attacks)
+<strong>Reguła Egzaminacyjna (Exam Rule):</strong>
+Zawsze stosuj zasadę najmniejszych przywilejów (PoLP). W GCP wybieraj role Custom nad rolami Viewer/Editor, jeśli wymóg jest precyzyjnie określony.
 
-Wyjaśnienie: 
-W modelu PaaS (Platform as a Service), takim jak App Engine, Google odpowiada za zarządzanie infrastrukturą, systemem operacyjnym i runtime'em. Klient jest odpowiedzialny za bezpieczeństwo samej aplikacji, co obejmuje ochronę przed atakami warstwy aplikacji, takimi jak Cross-Site Scripting (XSS) i SQL Injection (SQLi).
+<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
+Nie myl Access Scopes (legacy) z IAM Roles (nowoczesne). Nie wybieraj ról typu Viewer/Editor, jeśli potrzebujesz tylko jednego, konkretnego uprawnienia.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Configuring and monitoring VPC Flow Logs: W App Engine Standard sieć jest zarządzana przez Google. Chociaż logi przepływu są ważne, nie są one głównym obszarem odpowiedzialności klienta w PaaS.
-- C. Managing the latest updates and security patches for the Guest OS: To jest klasyczny przykład odpowiedzialności dostawcy w modelu PaaS. W IaaS (Compute Engine) byłoby to zadanie klienta.
-- D. Encrypting all stored data: Google Cloud domyślnie szyfruje dane w spoczynku (at rest). Klient może zarządzać własnymi kluczami (CMEK), ale podstawowe szyfrowanie jest zapewnione przez Google.
-
-Wskazówki i triki (Tips & Tricks):
-- Pamiętaj zasadę: Im więcej "as a Service", tym mniej Twojej odpowiedzialności za infrastrukturę, a więcej za kod i dane.
-- PaaS = Twoja aplikacja (kod) i Twoje dane.
-
-Praktyczne informacje na egzamin:
-- Zrozum model współdzielonej odpowiedzialności (Shared Responsibility Model) dla IaaS, PaaS i SaaS.
-- W PaaS (App Engine, Cloud Functions) zawsze skupiaj się na bezpieczeństwie kodu i sanitizacji danych wejściowych.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/security/shared-responsibility-model" target="_blank">Google Cloud Shared Responsibility Model</a>
-- <a href="https://cloud.google.com/appengine/docs/standard/security" target="_blank">App Engine Security</a>
+<strong>Głębokie wyjaśnienie techniczne:</strong>
+IAM pozwala na precyzyjne definiowanie ról za pomocą `permissions` (np. `compute.instances.list`). W modelu współdzielonej odpowiedzialności (Shared Responsibility), za konfigurację dostępu i sieci odpowiada klient.
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

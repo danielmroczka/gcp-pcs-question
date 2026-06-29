@@ -91,20 +91,23 @@ You are part of a security team that wants to ensure that a Cloud Storage bucket
 <pre>
 Potwierdzona odpowiedź: A (VPC Service Controls (Perimeter))
 
-Wyjaśnienie: 
-VPC Service Controls pozwala na zdefiniowanie perymetru bezpieczeństwa, który obejmuje zasoby w różnych projektach. Dodając Projekt A (z bucketem) i Projekt B do jednego perymetru i ograniczając dostęp do usługi Cloud Storage, gwarantujemy, że dane nie mogą 'wyciec' poza te projekty, nawet jeśli użytkownik ma wysokie uprawnienia IAM.
+<b>Reguła Egzaminacyjna (Exam Rule):</b>
+Jeśli scenariusz egzaminacyjny wymaga zapobiegania eksfiltracji danych między projektami (nawet przy poprawnych uprawnieniach IAM) lub zabezpieczenia zasobów przed dostępem spoza zdefiniowanego perymetru (tzw. "data boundary"), jedynym rozwiązaniem natywnym GCP jest VPC Service Controls.
+
+<b>Haczyki egzaminacyjne (Exam Traps):</b>
+- Często pojawia się odpowiedź sugerująca tylko IAM (np. "Bucket Policy Only" lub "IAM conditions"). Pamiętaj: IAM reguluje TOŻSAMOŚĆ (kto?), a VPC SC reguluje KONTEKST (skąd/dokąd?).
+- "Network peering" lub "VPC Peering" to dystraktory dotyczące routingu sieciowego, które NIE zapewniają izolacji na poziomie warstwy aplikacyjnej API Google Cloud.
+
+<b>Głębokie wyjaśnienie techniczne:</b>
+VPC Service Controls (VPC SC) tworzy logiczny "perymetr bezpieczeństwa" wokół usług Google Cloud (takich jak Cloud Storage, BigQuery, Cloud SQL). 
+Mechanizm ten działa jako warstwa pośrednicząca w żądaniach API:
+1. Gdy żądanie dociera do usługi (np. GCS), VPC SC sprawdza, czy żądanie pochodzi z autoryzowanego VPC (via VPC Service Controls ingress) lub czy jest wewnątrz tego samego Service Perimeter.
+2. VPC SC ignoruje uprawnienia IAM, jeśli żądanie wykracza poza granice perymetru. W ten sposób, nawet użytkownik z rolą 'Storage Object Admin' w Projekcie A nie będzie w stanie skopiować danych do bucketa w Projekcie C, jeśli Projekt C nie znajduje się w tym samym perymetrze VPC SC co Projekt A.
+3. Usługi (jak Cloud Storage) stają się "świadome" perymetru, blokując wywołania API przy próbach kopiowania danych poza zdefiniowane VPC/projekty.
 
 Dlaczego pozostałe są błędne:
-B. Bucket Policy Only (Uniform bucket access) zarządza tylko IAM, nie zapobiega przesyłaniu danych między różnymi autoryzowanymi lokalizacjami.
-C, D. Prywatny dostęp (Private Access) lub Peering ułatwiają routing, ale nie nakładają blokad eksfiltracji na poziomie API Google (jak Cloud Storage).
-
-Wskazówki egzaminacyjne (Tips & Tricks):
-Izolacja danych na poziomie API (nie sieci) = VPC Service Controls.
-
-Kluczowe zagadnienia do powtórzenia:
-- VPC Service Controls
-- Service Perimeters
-- Prevention of Data Exfiltration
+B. Bucket Policy Only (Uniform bucket access) zarządza tylko IAM, nie zapobiega eksfiltracji.
+C, D. Prywatny dostęp lub Peering ułatwiają routing, ale nie nakładają blokad eksfiltracji na poziomie API Google.
 
 Dokumentacja:
 <a href="https://cloud.google.com/vpc-service-controls/docs/overview" target="_blank">https://cloud.google.com/vpc-service-controls/docs/overview</a>

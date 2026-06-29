@@ -86,28 +86,17 @@ An organization wants to migrate its ongoing data backup and disaster recovery s
 </div>
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Cloud Storage via Cloud Interconnect)
+<strong>Reguła Egzaminacyjna (Exam Rule):</strong>
+Zawsze stosuj zasadę najmniejszych przywilejów (PoLP). W GCP wybieraj role Custom nad rolami Viewer/Editor, jeśli wymóg jest precyzyjnie określony.
 
-Wyjaśnienie: 
-Dla stabilnego, dedykowanego i szybkiego przesyłu dużych ilości danych (backupy) z on-premises do GCP, najlepszym rozwiązaniem jest Cloud Interconnect. Dane backupowe powinny być składowane w Cloud Storage ze względu na jego skalowalność i niski koszt w porównaniu do dysków VM.
+<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
+Nie myl Access Scopes (legacy) z IAM Roles (nowoczesne). Nie wybieraj ról typu Viewer/Editor, jeśli potrzebujesz tylko jednego, konkretnego uprawnienia.
 
-Dlaczego pozostałe są błędne:
-A. BigQuery nie jest optymalnym miejscem do przechowywania surowych kopii zapasowych systemów plików czy obrazów dysków.
-C. Persistent Disks na VM są droższe i mniej elastyczne jako główne rozwiązanie backupowe dla środowiska on-premises.
-D. Cloud Datastore to baza NoSQL, nie służy do ogólnych backupów infrastruktury.
-
-Wskazówki egzaminacyjne (Tips & Tricks):
-Dla dużych backupów: Cloud Interconnect (sieć) + Cloud Storage (składowanie).
-
-Kluczowe zagadnienia do powtórzenia:
-- Cloud Interconnect vs Cloud VPN
-- Backup and Disaster Recovery in GCP
-- Cloud Storage classes
-
-Dokumentacja:
-<a href="https://cloud.google.com/architecture/disaster-recovery" target="_blank">https://cloud.google.com/architecture/disaster-recovery</a>
+<strong>Głębokie wyjaśnienie techniczne:</strong>
+IAM pozwala na precyzyjne definiowanie ról za pomocą `permissions` (np. `compute.instances.list`). W modelu współdzielonej odpowiedzialności (Shared Responsibility), za konfigurację dostępu i sieci odpowiada klient.
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

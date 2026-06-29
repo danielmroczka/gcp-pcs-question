@@ -92,25 +92,19 @@ Which two implied firewall rules are defined on a VPC network? (Choose two.)
 <pre>
 Potwierdzona odpowiedź: AB (A rule that allows all outbound connections oraz A rule that denies all inbound connections)
 
-Wyjaśnienie: 
-Każda sieć VPC w Google Cloud posiada dwie domyślne reguły zapory sieciowej (implied firewall rules), których nie można usunąć (można je jedynie nadpisać regułami o wyższym priorytecie). Są to:
-1. Implied allow egress rule: Reguła o priorytecie 65535, która zezwala na cały ruch wychodzący z dowolnej instancji do dowolnego miejsca docelowego (0.0.0.0/0).
-2. Implied deny ingress rule: Reguła o priorytecie 65535, która blokuje cały ruch przychodzący do wszystkich instancji z dowolnego źródła (0.0.0.0/0).
+**Reguła Egzaminacyjna (Exam Rule):**
+Jeśli widzisz pytanie o "implied firewall rules" w VPC, zawsze szukaj pary: {Allow Egress, Deny Ingress}. "Implied" oznacza reguły wbudowane w każde VPC, nieusuwalne, o najniższym priorytecie (65535).
 
-Dlaczego pozostałe są błędne:
-C. A rule that blocks all inbound port 25 connections: Chociaż Google Cloud blokuje port 25 (SMTP) dla ruchu wychodzącego, nie jest to część "implied firewall rules" widocznych w konfiguracji VPC. Jest to ograniczenie platformy.
-D. A rule that blocks all outbound connections: Jest to błędne stwierdzenie, ponieważ domyślna reguła "implied" zezwala na ruch wychodzący (Allow Egress).
-E. A rule that allows all inbound port 80 connections: Taka reguła nie istnieje domyślnie w mechanizmie "implied". Ruch na port 80 musi zostać jawnie zezwolony przez administratora (lub istnieje w sieci o nazwie 'default', ale nie jest to reguła 'implied').
+**Haczyki egzaminacyjne (Exam Traps):**
+- Pułapka: Mylenie "Implied firewall rules" z regułami sieci "default" (np. allow-ssh, allow-rdp). Reguły w sieci "default" są usuwalne i NIE są regułami "implied".
+- Pułapka: Wybór blokady portu 25. Jest to ograniczenie platformy na poziomie dostawcy chmury (GCP platform-level restriction), a nie reguła zdefiniowana wewnątrz firewallu VPC.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Słowo "implied" jest kluczowe. Oznacza reguły wbudowane na stałe, z najniższym priorytetem 65535.
-- Pamiętaj: Domyślnie wszystko wychodzi (Allow Egress), nic nie wchodzi (Deny Ingress).
-- Nie myl "implied rules" z regułami w sieci "default". Sieć "default" to tylko gotowiec od Google, który ma dodane kilka zwykłych reguł (np. allow-ssh).
+**Głębokie wyjaśnienie techniczne:**
+Każda sieć VPC w GCP posiada dwie automatycznie zdefiniowane reguły o priorytecie 65535:
+1. **Implied allow egress**: Zezwala na cały ruch wychodzący (egress) z instancji, chyba że zostanie on zablokowany przez bardziej specyficzną regułę o wyższym priorytecie (niższym numerze).
+2. **Implied deny ingress**: Blokuje cały ruch przychodzący (ingress) do instancji, chyba że zostanie on zezwolony przez bardziej specyficzną regułę o wyższym priorytecie.
 
-Kluczowe zagadnienia do powtórzenia:
-- Implied firewall rules vs. Default firewall rules
-- Priorytety reguł zapory (0-65535)
-- Egress vs Ingress
+Te reguły pełnią rolę "bezpiecznika" (fail-safe) dla bezpieczeństwa sieci.
 
 Dokumentacja:
 <a href="https://cloud.google.com/vpc/docs/firewalls#implied_rules" target="_blank">https://cloud.google.com/vpc/docs/firewalls#implied_rules</a>

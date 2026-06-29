@@ -87,29 +87,17 @@ A customer wants to run a batch processing system on VMs and store the output fi
 </div>
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Enable Private Google Access)
+<strong>Reguła Egzaminacyjna (Exam Rule):</strong>
+Zawsze stosuj zasadę najmniejszych przywilejów (PoLP). W GCP wybieraj role Custom nad rolami Viewer/Editor, jeśli wymóg jest precyzyjnie określony.
 
-Wyjaśnienie: 
-Private Google Access (PGA) pozwala instancjom maszyn wirtualnych, które mają tylko wewnętrzne (prywatne) adresy IP, na komunikowanie się z publicznymi adresami IP interfejsów API i usług Google. Jest to idealne rozwiązanie w sytuacji, gdy polityka bezpieczeństwa zabrania maszynom dostępu do publicznego internetu, ale nadal muszą one przesyłać dane do Cloud Storage.
+<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
+Nie myl Access Scopes (legacy) z IAM Roles (nowoczesne). Nie wybieraj ról typu Viewer/Editor, jeśli potrzebujesz tylko jednego, konkretnego uprawnienia.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Create a firewall rule to block internet traffic from the VM: Sama reguła firewalla zablokuje ruch, ale nie umożliwi maszynie bez publicznego IP komunikacji z publicznym API Cloud Storage. Potrzebny jest mechanizm routingu taki jak PGA.
-- B. Provision a NAT Gateway to access the Cloud Storage API endpoint: NAT Gateway (Cloud NAT) służy do umożliwienia maszynom bez publicznego IP dostępu DO internetu. Chociaż pozwoliłoby to na dostęp do Cloud Storage, narusza to wymóg "no VMs may reach the public internet".
-- D. Mount a Cloud Storage bucket as a local filesystem on every VM: Montowanie bucketu (np. przez Cloud Storage FUSE) pod spodem i tak wykorzystuje te same API, więc bez zapewnienia łączności sieciowej (poprzez PGA) montowanie się nie powiedzie.
-
-Wskazówki i triki (Tips & Tricks):
-- Jeśli widzisz "no public internet access" oraz potrzebę korzystania z usług takich jak BigQuery, GCS czy Pub/Sub, szukaj w odpowiedziach "Private Google Access".
-- Pamiętaj, że PGA jest darmowe, co czyni je bardziej opłacalnym niż Cloud NAT.
-
-Praktyczne informacje na egzamin:
-- Zrozum różnicę: Cloud NAT = Dostęp do całego internetu. Private Google Access = Dostęp TYLKO do usług Google.
-- PGA włącza się dla podsieci (Subnet), a nie dla całej sieci VPC naraz.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">Private Google Access documentation</a>
-- <a href="https://cloud.google.com/storage/docs/gcsfuse" target="_blank">Cloud Storage FUSE</a>
+<strong>Głębokie wyjaśnienie techniczne:</strong>
+IAM pozwala na precyzyjne definiowanie ról za pomocą `permissions` (np. `compute.instances.list`). W modelu współdzielonej odpowiedzialności (Shared Responsibility), za konfigurację dostępu i sieci odpowiada klient.
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

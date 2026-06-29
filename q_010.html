@@ -91,25 +91,17 @@ Your team needs to obtain a unified log view of all development cloud projects i
 <pre>
 Potwierdzona odpowiedź: A (1. Export logs to a Cloud Pub/Sub topic with folders/NONPROD parent and includeChildren property set to True in a dedicated SIEM project. 2. Subscribe SIEM to the topic.)
 
-Wyjaśnienie: 
-Najbardziej skalowalnym i rekomendowanym sposobem na zbieranie logów z wielu projektów znajdujących się w strukturze folderów jest użycie zsumowanego zlewu logów (Aggregated Sink). 
-- Tworząc zlew na poziomie folderu (folders/NONPROD) i ustawiając flagę `includeChildren` na True, automatycznie zbierasz logi ze wszystkich projektów znajdujących się w tym folderze, jak również z tych, które zostaną tam dodane w przyszłości. 
-- Eksport do Cloud Pub/Sub jest standardem przy integracji z systemami SIEM, ponieważ umożliwia przesyłanie logów w czasie rzeczywistym (streaming).
+**Reguła Egzaminacyjna (Exam Rule):**
+Jeśli pytanie dotyczy zebrania logów z wielu projektów zgrupowanych w folderze lub organizacji w celu integracji z SIEM, zawsze wybieraj "Aggregated Sink" (Zsumowany zlew) stworzony na poziomie wyższym niż projekt (np. folder/organizacja) z flagą `includeChildren=True`.
 
-Dlaczego pozostałe są błędne:
-B. Konto bilingowe (`billingAccounts`) zbiera logi dotyczące płatności, a nie logi operacyjne czy auditowe ze wszystkich projektów w folderze. Dodatkowo flaga `includeChildren=False` wykluczyłaby logi z projektów potomnych.
-C. Tworzenie eksportu w każdym projekcie z osobna (individual sinks) jest nieefektywne zarządczo, zwłaszcza przy setkach projektów, i podatne na błędy (np. pominięcie nowego projektu).
-D. Tworzenie publicznie współdzielonych bucketów GCS jest krytycznym błędem bezpieczeństwa, który naraża dane auditowe na wyciek.
+**Haczyki egzaminacyjne (Exam Traps):**
+- Pułapka: "Pojedyncze zlewy w każdym projekcie". Przy dużej liczbie projektów jest to nieefektywne zarządczo i podatne na pominięcia.
+- Pułapka: "Billing Account sinks". Zlewy na poziomie bilingu służą do logów bilingowych, a nie logów operacyjnych/bezpieczeństwa aplikacji.
+- Pułapka: "Publiczne buckety GCS". Nigdy nie wybieraj opcji sugerującej publiczne udostępnianie bucketów GCS – jest to krytyczny błąd bezpieczeństwa.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Unified log view" + "Folders/Organization" = Aggregated Sink (Zsumowany zlew).
-- SIEM integration = Zazwyczaj Pub/Sub (dla real-time) lub Cloud Storage (dla batch).
-- Pamiętaj o hierarchii zasobów: zlew można stworzyć na poziomie projektu, folderu, organizacji lub konta bilingowego.
-
-Kluczowe zagadnienia do powtórzenia:
-- Cloud Logging Aggregated Sinks
-- Hierarchia zasobów w Google Cloud
-- Integracja z SIEM przez Pub/Sub
+**Głębokie wyjaśnienie techniczne:**
+1. **Aggregated Sink**: Logi w GCP są hierarchiczne. Zlew logów utworzony na poziomie folderu (np. `folders/NONPROD`) z ustawionym `includeChildren=True` automatycznie zbiera logi ze wszystkich projektów wewnątrz tego folderu (i jego podfolderów).
+2. **Pub/Sub jako strumień**: Dla systemów klasy SIEM (np. Splunk, QRadar, Chronicle) Pub/Sub jest preferowanym wyborem, ponieważ umożliwia przesyłanie logów w czasie rzeczywistym (streaming), co jest kluczowe dla szybkiego wykrywania zagrożeń.
 
 Dokumentacja:
 <a href="https://cloud.google.com/logging/docs/export/aggregated_sinks" target="_blank">https://cloud.google.com/logging/docs/export/aggregated_sinks</a>

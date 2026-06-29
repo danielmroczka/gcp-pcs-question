@@ -87,29 +87,17 @@ You are the Security Admin in your company. You want to synchronize all security
 </div>
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Configure Google Cloud Directory Sync to sync security groups using LDAP search rules that have "user email address" as the attribute to facilitate one-way sync.)
+<strong>Reguła Egzaminacyjna (Exam Rule):</strong>
+Zawsze stosuj zasadę najmniejszych przywilejów (PoLP). W GCP wybieraj role Custom nad rolami Viewer/Editor, jeśli wymóg jest precyzyjnie określony.
 
-Wyjaśnienie: 
-Google Cloud Directory Sync (GCDS) to narzędzie służące do synchronizacji użytkowników i grup z lokalnego katalogu LDAP (np. Active Directory) do Cloud Identity lub Google Workspace. Synchronizacja ta jest zawsze jednokierunkowa (one-way sync), co oznacza, że źródłem prawdy (source of truth) pozostaje katalog lokalny. Aby grupy mogły być używane w IAM do nadawania uprawnień, muszą posiadać atrybut adresu e-mail, który jest unikalny w skali organizacji Google.
+<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
+Nie myl Access Scopes (legacy) z IAM Roles (nowoczesne). Nie wybieraj ról typu Viewer/Editor, jeśli potrzebujesz tylko jednego, konkretnego uprawnienia.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- B. ...to facilitate bidirectional sync: GCDS nie wspiera synchronizacji dwukierunkowej. Zmiany wprowadzone ręcznie w konsoli Google nie zostaną przeniesione z powrotem do LDAP.
-- C. ...A group created in a Google domain will automatically have an explicit Google Cloud Identity and Access Management (IAM) role: To stwierdzenie jest nieprawdziwe. Grupy po zsynchronizowaniu do Google nie posiadają domyślnie żadnych ról IAM. Role te muszą zostać nadane ręcznie lub poprzez skrypty na poziomie organizacji, folderu lub projektu.
-- D. ...sync the subset based on group object class attribute: Chociaż filtrowanie po klasie obiektu jest możliwe, pytanie precyzuje potrzebę synchronizacji grup posiadających adres e-mail, co czyni atrybut e-mail kluczowym elementem reguł wyszukiwania (LDAP search rules).
-
-Wskazówki i triki (Tips & Tricks):
-- GCDS = One-way sync (LDAP -> Cloud).
-- Grupa w Google Cloud musi mieć e-mail, aby być "widoczną" dla IAM.
-
-Praktyczne informacje na egzamin:
-- Zapamiętaj: Google Cloud Directory Sync (GCDS) synchronizuje tożsamości, a nie uprawnienia (role).
-- Zrozum proces: GCDS odczytuje dane z LDAP, porównuje je ze stanem w Google i wykonuje operacje dodawania/usuwania/aktualizacji, aby stan w chmurze odpowiadał lokalnemu.
-
-Dokumentacja i linki:
-- <a href="https://support.google.com/a/answer/612003" target="_blank">Google Cloud Directory Sync (GCDS) overview</a>
-- <a href="https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction" target="_blank">Federating Google Cloud with Active Directory</a>
+<strong>Głębokie wyjaśnienie techniczne:</strong>
+IAM pozwala na precyzyjne definiowanie ról za pomocą `permissions` (np. `compute.instances.list`). W modelu współdzielonej odpowiedzialności (Shared Responsibility), za konfigurację dostępu i sieci odpowiada klient.
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

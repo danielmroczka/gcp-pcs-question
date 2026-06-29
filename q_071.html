@@ -87,28 +87,17 @@ You need to create a Service Account that can list Compute Engine instances. You
 </div>
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Custom role with compute.instances.list)
+<strong>Reguła Egzaminacyjna (Exam Rule):</strong>
+Zawsze stosuj zasadę najmniejszych przywilejów (PoLP). W GCP wybieraj role Custom nad rolami Viewer/Editor, jeśli wymóg jest precyzyjnie określony.
 
-Wyjaśnienie: 
-Zgodnie z zasadą najmniejszych uprawnień (least privilege), jeśli użytkownik (lub konto serwisowe) potrzebuje tylko jednej konkretnej funkcji (listowania instancji), należy stworzyć rolę customową zawierającą tylko wymagane uprawnienie `compute.instances.list`. Role predefiniowane (jak Viewer) często dają zbyt szeroki dostęp.
+<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
+Nie myl Access Scopes (legacy) z IAM Roles (nowoczesne). Nie wybieraj ról typu Viewer/Editor, jeśli potrzebujesz tylko jednego, konkretnego uprawnienia.
 
-Dlaczego pozostałe są błędne:
-A. Access Scopes to starszy mechanizm (legacy) ograniczający uprawnienia maszyny, ale nie zastępujący uprawnień IAM dla konta serwisowego.
-C. Rola Compute Viewer pozwala nie tylko listować, ale i czytać wszystkie szczegóły konfiguracji instancji, co wykracza poza wymóg.
-D. Project Viewer daje dostęp do odczytu prawie wszystkich zasobów w projekcie, co jest drastycznym naruszeniem zasady least privilege.
-
-Wskazówki egzaminacyjne (Tips & Tricks):
-Jeśli zadanie prosi o 'najmniejsze uprawnienia' dla specyficznej akcji, szukaj roli customowej lub bardzo precyzyjnego uprawnienia.
-
-Kluczowe zagadnienia do powtórzenia:
-- IAM Custom Roles
-- Principle of Least Privilege
-- Compute Engine IAM permissions
-
-Dokumentacja:
-<a href="https://cloud.google.com/iam/docs/creating-custom-roles" target="_blank">https://cloud.google.com/iam/docs/creating-custom-roles</a>
+<strong>Głębokie wyjaśnienie techniczne:</strong>
+IAM pozwala na precyzyjne definiowanie ról za pomocą `permissions` (np. `compute.instances.list`). W modelu współdzielonej odpowiedzialności (Shared Responsibility), za konfigurację dostępu i sieci odpowiada klient.
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
