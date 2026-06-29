@@ -107,36 +107,20 @@ Luka XSS wynika z braku poprawnego sanitizowania (sanitization) lub ucieczkowani
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
 <p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Głęboka analiza:</b> Analiza spornych kwestii (AI): Debata na Reddit skupia się na 'Context-aware escaping'. Inżynierowie podkreślają, że samo 'zwykłe' escapowanie to za mało – system musi wiedzieć, czy dane trafiają do atrybutu HTML, tagu `<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const revealButtons = document.querySelectorAll('.reveal-solution');
-    revealButtons.forEach(button => {
-        let isVisible = false;
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            // Znajdź wszystkie sekcje wewnątrz q-card lub powiązane
-            const container = this.closest('.q-card');
-            const sections = container.parentNode.querySelectorAll('.q-answer, .ai-analysis-container');
-            
-            sections.forEach(sec => {
-                sec.style.display = isVisible ? 'none' : 'block';
-            });
-            this.textContent = isVisible ? 'Show Suggested Answer' : 'Hide Suggested Answer';
-            isVisible = !isVisible;
-        });
-    });
-    });
-</script>
+<p><b>Głęboka analiza:</b> Analiza spornych kwestii (AI): Debata na Reddit skupia się na 'Context-aware escaping'. Inżynierowie podkreślają, że samo 'zwykłe' escapowanie to za mało – system musi wiedzieć, czy dane trafiają do atrybutu HTML, tagu `
+
+
 
 <script>
 // Arrow keys navigation
 document.addEventListener('keydown', function(e) {
+    const navLinks = document.querySelectorAll('.q-nav a');
     if (e.key === 'ArrowLeft') {
-        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
-        if (prev) prev.click();
+        // Prev is usually the first link
+        if (navLinks.length >= 1) navLinks[0].click();
     } else if (e.key === 'ArrowRight') {
-        const next = document.querySelector('.q-nav a[href*="Następne"]');
-        if (next) next.click();
+        // Next is usually the last link
+        if (navLinks.length >= 3) navLinks[2].click();
     }
 });
 
@@ -154,16 +138,16 @@ document.addEventListener('touchend', e => {
 }, false);
 
 function handleSwipe() {
-    if (touchEndX < touchStartX - 50) { // Swipe Left
-        const next = document.querySelector('.q-nav a[href*="Następne"]');
-        if (next) next.click();
+    const navLinks = document.querySelectorAll('.q-nav a');
+    if (touchEndX < touchStartX - 50) { // Swipe Left (Next)
+        if (navLinks.length >= 3) navLinks[2].click();
     }
-    if (touchEndX > touchStartX + 50) { // Swipe Right
-        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
-        if (prev) prev.click();
+    if (touchEndX > touchStartX + 50) { // Swipe Right (Prev)
+        if (navLinks.length >= 1) navLinks[0].click();
     }
 }
 </script>
 </body>
+
 
 </html>

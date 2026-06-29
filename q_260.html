@@ -78,52 +78,20 @@ Usługi GCP (np. VPC Service Controls, DLP) działają na poziomie API platformy
 
 
 </div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.reveal-solution').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            // Show all answer-related sections
-            const qCard = this.closest('.q-card');
-            const answerSection = qCard.querySelector('.question-answer');
-            const explanationSection = document.querySelector('.q-answer');
-            
-            if (answerSection) answerSection.style.display = 'block';
-            if (explanationSection) explanationSection.style.display = 'block';
-            
-            this.style.display = 'none'; // Hide the 'Show' button
-            // If there's a hide button, show it
-            const hideButton = qCard.querySelector('.hide-solution');
-            if (hideButton) hideButton.classList.remove('d-none');
-        });
-    });
-    document.querySelectorAll('.hide-solution').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const qCard = this.closest('.q-card');
-            const answerSection = qCard.querySelector('.question-answer');
-            const explanationSection = document.querySelector('.q-answer');
-            
-            if (answerSection) answerSection.style.display = 'none';
-            if (explanationSection) explanationSection.style.display = 'none';
-            
-            this.classList.add('d-none');
-            const revealButton = qCard.querySelector('.reveal-solution');
-            if (revealButton) revealButton.style.display = 'inline-block';
-        });
-    });
-});
-</script>
+
+
+
 
 <script>
 // Arrow keys navigation
 document.addEventListener('keydown', function(e) {
+    const navLinks = document.querySelectorAll('.q-nav a');
     if (e.key === 'ArrowLeft') {
-        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
-        if (prev) prev.click();
+        // Prev is usually the first link
+        if (navLinks.length >= 1) navLinks[0].click();
     } else if (e.key === 'ArrowRight') {
-        const next = document.querySelector('.q-nav a[href*="Następne"]');
-        if (next) next.click();
+        // Next is usually the last link
+        if (navLinks.length >= 3) navLinks[2].click();
     }
 });
 
@@ -141,16 +109,16 @@ document.addEventListener('touchend', e => {
 }, false);
 
 function handleSwipe() {
-    if (touchEndX < touchStartX - 50) { // Swipe Left
-        const next = document.querySelector('.q-nav a[href*="Następne"]');
-        if (next) next.click();
+    const navLinks = document.querySelectorAll('.q-nav a');
+    if (touchEndX < touchStartX - 50) { // Swipe Left (Next)
+        if (navLinks.length >= 3) navLinks[2].click();
     }
-    if (touchEndX > touchStartX + 50) { // Swipe Right
-        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
-        if (prev) prev.click();
+    if (touchEndX > touchStartX + 50) { // Swipe Right (Prev)
+        if (navLinks.length >= 1) navLinks[0].click();
     }
 }
 </script>
 </body>
+
 
 </html>
