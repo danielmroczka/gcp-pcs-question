@@ -86,33 +86,21 @@ Your team uses a service account to authenticate data transfers from a given Com
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4" style="display:none;">
+<div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Use the undelete command to recover the deleted service account)
+<strong>Reguła Egzaminacyjna (Exam Rule):</strong>
+Zawsze stosuj zasadę najmniejszych przywilejów (PoLP). W GCP wybieraj role Custom nad rolami Viewer/Editor, jeśli wymóg jest precyzyjnie określony.
 
-Wyjaśnienie: 
-Usunięte konto serwisowe (Service Account) można przywrócić w ciągu 30 dni od jego usunięcia. Użycie komendy `gcloud iam service-accounts undelete` jest najszybszym sposobem na przywrócenie funkcjonalności, ponieważ przywraca ona konto z tym samym unikalnym identyfikatorem (Unique ID). Dzięki temu wszystkie wcześniej przypisane role IAM i polityki dostępu (np. do bucketu Cloud Storage) automatycznie znów zaczną obowiązywać bez konieczności ich ponownej konfiguracji.
+<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
+Nie myl Access Scopes (legacy) z IAM Roles (nowoczesne). Nie wybieraj ról typu Viewer/Editor, jeśli potrzebujesz tylko jednego, konkretnego uprawnienia.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Temporarily disable authentication on the Cloud Storage bucket: To działanie drastycznie obniża poziom bezpieczeństwa i jest sprzeczne z wymogiem "without compromising security". Ponadto nie rozwiązuje problemu tożsamości po stronie Compute Engine.
-- C. Create a new service account with the same name as the deleted service account: Chociaż nazwa (e-mail) będzie taka sama, nowe konto otrzyma NOWY Unique ID. Uprawnienia IAM w GCP są powiązane z ID, więc nowe konto nie będzie miało dostępu do zasobów, do których miało dostęp stare, dopóki nie zostaną mu one ręcznie nadane.
-- D. Update the permissions of another existing service account...: Ta metoda wymagałaby zmiany konfiguracji aplikacji lub instancji VM, co jest czasochłonne i nie jest "najszybszym" rozwiązaniem.
-
-Wskazówki i triki (Tips & Tricks):
-- W Google Cloud tożsamości (użytkownicy, grupy, konta serwisowe) są identyfikowane wewnętrznie przez Unique ID, a nie przez adres e-mail. Adres e-mail jest tylko "przyjazną dla człowieka" etykietą.
-- Zawsze najpierw próbuj `undelete`, jeśli konto zostało usunięte niedawno (do 30 dni).
-
-Praktyczne informacje na egzamin:
-- Zapamiętaj: `undelete` = zachowanie tego samego ID = automatyczne przywrócenie uprawnień.
-- Po 30 dniach konto jest usuwane permanentnie i `undelete` nie zadziała.
-
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/iam/docs/creating-managing-service-accounts#undeleting" target="_blank">Undeleting a service account</a>
-- <a href="https://cloud.google.com/iam/docs/service-accounts" target="_blank">Service accounts overview</a>
+<strong>Głębokie wyjaśnienie techniczne:</strong>
+IAM pozwala na precyzyjne definiowanie ról za pomocą `permissions` (np. `compute.instances.list`). W modelu współdzielonej odpowiedzialności (Shared Responsibility), za konfigurację dostępu i sieci odpowiada klient.
 </pre>
 </div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
+<div class="ai-analysis-container" style="display:none;" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
@@ -126,26 +114,23 @@ Dokumentacja i linki:
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelectorAll('.reveal-solution');
-    revealButton.forEach(button => {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
         button.addEventListener('click', function(e) {
             e.preventDefault();
-            const answerSection = document.querySelector('.q-answer');
-            const aiSection = document.querySelector('.ai-analysis-container');
-            if (isVisible) {
-                if (answerSection) answerSection.style.display = 'none';
-                if (aiSection) aiSection.style.display = 'none';
-                this.textContent = 'Show Suggested Answer';
-            } else {
-                if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
-                this.textContent = 'Hide Suggested Answer';
-            }
+            // Znajdź wszystkie sekcje wewnątrz q-card lub powiązane
+            const container = this.closest('.q-card');
+            const sections = container.parentNode.querySelectorAll('.q-answer, .ai-analysis-container');
+            
+            sections.forEach(sec => {
+                sec.style.display = isVisible ? 'none' : 'block';
+            });
+            this.textContent = isVisible ? 'Show Suggested Answer' : 'Hide Suggested Answer';
             isVisible = !isVisible;
         });
     });
-});
+    });
 </script>
 </body>
 </html>

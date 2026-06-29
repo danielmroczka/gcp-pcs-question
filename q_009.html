@@ -86,34 +86,27 @@ A company has been running their application on Compute Engine. A bug in the app
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4" style="display:none;">
+<div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
 Potwierdzona odpowiedź: A (Create an Alerting Policy in Stackdriver using a Process Health condition, checking that the number of executions of the script remains below the desired threshold. Enable notifications.)
 
-Wyjaśnienie: 
-Aby monitorować specyficzne zachowanie aplikacji (jak uruchomienie konkretnego skryptu) i otrzymywać powiadomienia w czasie rzeczywistym, Google Cloud Monitoring (dawniej Stackdriver) oferuje mechanizm Alerting Policies. Warunek "Process Health" pozwala monitorować liczbę instancji danego procesu lub skryptu. Jeśli liczba ta przekroczy zdefiniowany próg, system automatycznie wyśle powiadomienie (np. e-mail, SMS, PagerDuty), co pozwala na natychmiastową reakcję.
+**Reguła Egzaminacyjna (Exam Rule):**
+Jeśli pytanie dotyczy "powiadomienia" (get notified) w czasie rzeczywistym o wystąpieniu specyficznego zdarzenia (np. uruchomienie skryptu), zawsze wybieraj "Alerting Policy". Jeśli dotyczy "monitorowania procesów", szukaj warunku "Process Health".
 
-Dlaczego pozostałe są błędne:
-B. Monitorowanie ogólnego użycia CPU (np. >80%) nie jest specyficzne dla tego ataku. Wysokie użycie CPU może wynikać z normalnego wzrostu ruchu lub innych procesów tła.
-C. Dashboard (Pulpit nawigacyjny) służy do wizualizacji danych, ale sam w sobie nie wysyła powiadomień. Operator musiałby stale patrzeć na ekran, aby zauważyć atak.
-D. Eksport do BigQuery i planowane zapytania (scheduled queries) działają z opóźnieniem i służą raczej do analizy historycznej (post-mortem) niż do natychmiastowego powiadamiania o trwającym incydencie.
+**Haczyki egzaminacyjne (Exam Traps):**
+- Pułapka: "Dashboardy". Służą one do wizualizacji danych, ale nie generują powiadomień (alertów) dla administratorów. 
+- Pułapka: "BigQuery / Log Sink". Eksport logów do BigQuery i analiza za pomocą zapytań jest świetna dla analizy śledczej (post-mortem), ale jest procesem zbyt wolnym, aby pełnić rolę natychmiastowego systemu alarmowego.
+- Pułapka: "CPU Usage". Jest to metryka zbyt ogólna, która nie potwierdza ataku, a jedynie obciążenie maszyny.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Get notified" = Alerting Policy (nie Dashboard, nie BigQuery).
-- "Specific script/process" = Process Health condition.
-- Pamiętaj: Alerting = akcja (powiadomienie), Dashboard = obserwacja (wykres).
-
-Kluczowe zagadnienia do powtórzenia:
-- Cloud Monitoring Alerting Policies
-- Process Health Monitoring
-- Cloud Logging vs Cloud Monitoring
+**Głębokie wyjaśnienie techniczne:**
+Cloud Monitoring (dawniej Stackdriver) pozwala na definiowanie polityk alertów (Alerting Policies). Warunek "Process Health" pozwala monitorować aktywność konkretnych procesów lub skryptów. Gdy monitorowany parametr (np. liczba uruchomień procesu) przekroczy ustalony próg, system automatycznie wyśle alert do skonfigurowanego kanału powiadomień (np. e-mail, PagerDuty, Slack), co jest kluczowe w scenariuszach security response.
 
 Dokumentacja:
 <a href="https://cloud.google.com/monitoring/alerts" target="_blank">https://cloud.google.com/monitoring/alerts</a>
 </pre>
 </div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
+<div class="ai-analysis-container" style="display:none;" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
@@ -133,21 +126,18 @@ document.addEventListener('DOMContentLoaded', function() {
         let isVisible = false;
         button.addEventListener('click', function(e) {
             e.preventDefault();
-            const answerSection = document.querySelector('.q-answer');
-            const aiSection = document.querySelector('.ai-analysis-container');
-            if (isVisible) {
-                if (answerSection) answerSection.style.display = 'none';
-                if (aiSection) aiSection.style.display = 'none';
-                this.textContent = 'Show Suggested Answer';
-            } else {
-                if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
-                this.textContent = 'Hide Suggested Answer';
-            }
+            // Znajdź wszystkie sekcje wewnątrz q-card lub powiązane
+            const container = this.closest('.q-card');
+            const sections = container.parentNode.querySelectorAll('.q-answer, .ai-analysis-container');
+            
+            sections.forEach(sec => {
+                sec.style.display = isVisible ? 'none' : 'block';
+            });
+            this.textContent = isVisible ? 'Show Suggested Answer' : 'Hide Suggested Answer';
             isVisible = !isVisible;
         });
     });
-});
+    });
 </script>
 </body>
 </html>

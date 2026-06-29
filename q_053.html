@@ -87,71 +87,58 @@ How can you work with Infrastructure Operations Engineers to best ensure that Wi
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4" style="display:none;">
+<div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
 Potwierdzona odpowiedź: A
 
-Wyjaśnienie:
-W nowoczesnych środowiskach chmurowych najlepszą praktyką zarządzania aktualizacjami jest stosowanie koncepcji "Immutable Infrastructure" (infrastruktura niezmienna). Zamiast aktualizować (patchować) działające instancje, co może prowadzić do tzw. "configuration drift" (rozbieżności w konfiguracji), tworzy się nowy, zaktualizowany obraz bazowy (tzw. Golden Image). Następnie, za pomocą potoku CI/CD, stare instancje są zastępowane nowymi, utworzonymi z tego obrazu, przy użyciu mechanizmów takich jak "Rolling Updates" w Managed Instance Groups (MIGs). Gwarantuje to spójność, testowalność i szybkość przywracania środowiska.
+<b>Reguła Egzaminacyjna (Exam Rule):</b>
+W chmurze GCP należy dążyć do <b>Immutable Infrastructure</b> (infrastruktury niezmiennej). Zamiast patchować działające instancje ("in-place patching"), należy budować nowe, zaktualizowane obrazy bazowe ("Golden Images") i wdrażać je za pomocą potoków CI/CD.
 
-Dlaczego pozostałe opcje są niepoprawne:
-- B: Stosowanie GPO (Group Policy Objects) to tradycyjne podejście on-premises. W chmurze jest ono trudniejsze do monitorowania, wolniejsze i nie zapewnia, że nowo wyskalowane instancje będą miały poprawki od razu po uruchomieniu (zanim GPO się zaaplikuje).
-- C: Sam Deployment Manager służy do definiowania zasobów (IaC), ale bez integracji z procesem budowania obrazów i automatyzacją wdrożeń (CI/CD) nie stanowi kompletnego rozwiązania problemu regularnego patchowania.
-- D: Pobieranie aktualizacji przez StartUp Script przy każdym starcie instancji drastycznie wydłuża czas jej gotowości do pracy (co psuje zaletę elastyczności/autoskalowania). Ponadto wprowadza ryzyko, że błąd w zewnętrznym repozytorium uniemożliwi uruchomienie nowych serwerów.
+<b>Haczyki egzaminacyjne (Exam Traps):</b>
+- Metody on-premises: Opcje B (GPO) oraz D (StartUp Script patching) to techniki stosowane w tradycyjnych centrach danych. W środowisku elastycznym (autoscaling) są nieefektywne, zawodne i wydłużają czas startu instancji.
+- Zmylenie narzędziami: Opcja C sugeruje tylko Deployment Manager, który jest narzędziem do IaC (Infrastructure as Code), ale samo provisionowanie to za mało bez procesu automatyzacji budowania i testowania obrazów.
 
-Tips & Tricks:
-- Gdy widzisz "latest OS patches" + "elastic/cloud-native", szukaj odpowiedzi promujących automatyzację budowania obrazów (Golden Images) i potoki CI/CD.
-- Unikaj rozwiązań, które aktualizują system "w locie" na działających maszynach (In-place patching).
-- "Immutable Infrastructure" to kluczowe hasło w egzaminach architektonicznych i bezpieczeństwa GCP.
-
-Zagadnienia:
-- Immutable Infrastructure (Infrastruktura niezmienna)
-- Golden Images (Wzorcowe obrazy)
-- Managed Instance Groups (MIGs) Rolling Updates
-- CI/CD dla Infrastruktury
+<b>Głębokie wyjaśnienie techniczne:</b>
+Budowa zaktualizowanego obrazu zapewnia:
+1. <b>Powtarzalność:</b> Każda nowa instancja jest identyczna i zawiera wszystkie poprawki.
+2. <b>Szybkość skalowania:</b> Instancje nie muszą tracić czasu na pobieranie poprawek przy starcie.
+3. <b>Bezpieczeństwo:</b> Eliminuje "configuration drift" – stan, w którym serwery mają różne wersje patchy, co jest częstym powodem podatności.
+W praktyce wykorzystuje się narzędzia takie jak <b>HashiCorp Packer</b> do tworzenia obrazów oraz <b>MIGs Rolling Updates</b> do automatycznej zamiany instancji na nową wersję.
 
 Dokumentacja:
 <a href="https://cloud.google.com/architecture/image-management-best-practices" target="_blank">https://cloud.google.com/architecture/image-management-best-practices</a>
 </pre>
 </div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
+<div class="ai-analysis-container" style="display:none;" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie (Egzamin)</h2>
 <div class="analysis-section">
 <h3>Kluczowe wnioski</h3>
 <p><b>Potwierdzona odpowiedź: A</b></p>
-<p>Zapewnienie bezpieczeństwa na poziomie systemu operacyjnego w chmurze wymaga odejścia od manualnego patchowania. Google promuje automatyzację cyklu życia obrazów, co pozwala na szybką reakcję na nowe podatności (Zero-day vulnerabilities) poprzez szybkie wypchnięcie nowej wersji obrazu do floty serwerów.</p>
-<h3>Praktyczne wskazówki</h3>
-<ul>
-<li>Warto znać narzędzie <b>VM Manager</b> (Cloud OS Config), które w rzeczywistości pomaga zarządzać patchami w GCP, ale w kontekście tego pytania egzaminacyjnego nacisk położony jest na architektoniczną koncepcję niezmienności.</li>
-<li>Jeśli pytanie wspomina o "autoskalowaniu" lub "elastyczności", odrzuć rozwiązania spowalniające start instancji (jak duże skrypty startowe).</li>
-</ul>
+<p>Koncepcja niezmienności infrastruktury jest fundamentem bezpieczeństwa w chmurze.</p>
 </div>
 </div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
-            const answerSection = document.querySelector('.q-answer');
-            const aiSection = document.querySelector('.ai-analysis-container');
-            if (isVisible) {
-                if (answerSection) answerSection.style.display = 'none';
-                if (aiSection) aiSection.style.display = 'none';
-                this.textContent = 'Show Suggested Answer';
-            } else {
-                if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
-                this.textContent = 'Hide Suggested Answer';
-            }
+            // Znajdź wszystkie sekcje wewnątrz q-card lub powiązane
+            const container = this.closest('.q-card');
+            const sections = container.parentNode.querySelectorAll('.q-answer, .ai-analysis-container');
+            
+            sections.forEach(sec => {
+                sec.style.display = isVisible ? 'none' : 'block';
+            });
+            this.textContent = isVisible ? 'Show Suggested Answer' : 'Hide Suggested Answer';
             isVisible = !isVisible;
         });
-    }
-});
+    });
+    });
 </script>
 
 </body>

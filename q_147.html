@@ -86,7 +86,7 @@ You are responsible for managing your company's identities in Google Cloud. Your
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4" style="display:none;">
+<div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
 Potwierdzona odpowiedź: A (On the Google Admin console, select the appropriate user account, and generate a backup code to allow the user to sign in. Ask the user to update their second factor).
@@ -111,41 +111,3 @@ Dokumentacja:
 <a href="https://support.google.com/a/answer/1035070" target="_blank">Recover a user account protected by 2-step verification</a>
 </pre>
 </div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
-<div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Głęboka analiza:</b> <p><b>Analiza spornych kwestii (AI):</b> Cloud EKM często łączy się z **Key Access Justifications (KAJ)**. Dzięki temu nie tylko trzymasz klucz u siebie, ale możesz odrzucić każdą próbę jego użycia, jeśli Google nie poda poprawnego uzasadnienia (np. 'obsługa zgłoszenia serwisowego nr 123').</p></p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/kms/docs/ekm" target="_blank">https://cloud.google.com/kms/docs/ekm</a></li>
-
-</ul>
-</div>
-</div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelectorAll('.reveal-solution');
-    revealButton.forEach(button => {
-        let isVisible = false;
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const answerSection = document.querySelector('.q-answer');
-            const aiSection = document.querySelector('.ai-analysis-container');
-            if (isVisible) {
-                if (answerSection) answerSection.style.display = 'none';
-                if (aiSection) aiSection.style.display = 'none';
-                this.textContent = 'Show Suggested Answer';
-            } else {
-                if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
-                this.textContent = 'Hide Suggested Answer';
-            }
-            isVisible = !isVisible;
-        });
-    });
-});
-</script>
-</body>
-</html>

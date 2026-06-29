@@ -86,7 +86,7 @@ You have been tasked with inspecting IP packet data for invalid or malicious con
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4" style="display:none;">
+<div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
 Poprawna odpowiedź: A (Use Packet Mirroring to mirror traffic to and from particular VM instances)
@@ -116,41 +116,3 @@ Dokumentacja i linki:
 - <a href="https://cloud.google.com/blog/products/networking/using-packet-mirroring-for-security-and-network-analysis" target="_blank">Packet Mirroring for security analysis</a>
 </pre>
 </div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie sprawdza różnicę między monitorowaniem "gdzie idzie ruch" (Flow Logs) a analizowaniem "co jest w środku ruchu" (Packet Mirroring). W nowoczesnych architekturach bezpieczeństwa w GCP, Packet Mirroring jest kluczowym elementem integracji z zewnętrznymi systemami IDS/IPS (np. Palo Alto, Check Point, Suricata).</p>
-<h3>Dodatkowe wskazówki</h3>
-<ul>
-<li>Warto wiedzieć, że Cloud IDS to natywna usługa Google, która "pod spodem" wykorzystuje Packet Mirroring i silnik Palo Alto Networks do automatycznego wykrywania zagrożeń.</li>
-<li>Packet Mirroring może mirrorować zarówno ruch wewnątrz VPC (East-West), jak i ruch wychodzący/przychodzący do internetu (North-South).</li>
-</ul>
-</div>
-</div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelectorAll('.reveal-solution');
-    revealButton.forEach(button => {
-        let isVisible = false;
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const answerSection = document.querySelector('.q-answer');
-            const aiSection = document.querySelector('.ai-analysis-container');
-            if (isVisible) {
-                if (answerSection) answerSection.style.display = 'none';
-                if (aiSection) aiSection.style.display = 'none';
-                this.textContent = 'Show Suggested Answer';
-            } else {
-                if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
-                this.textContent = 'Hide Suggested Answer';
-            }
-            isVisible = !isVisible;
-        });
-    });
-});
-</script>
-</body>
-</html>

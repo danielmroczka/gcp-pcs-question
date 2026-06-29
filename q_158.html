@@ -86,7 +86,7 @@ You are deploying a web application hosted on Compute Engine. A business require
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4" style="display:none;">
+<div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
 Poprawna odpowiedź: B (Configure your Compute Engine instances to use the Google Cloud's operations suite Cloud Logging agent to send application logs to a custom log bucket in the EUROPE-WEST1 region with a custom retention of 12 years)
@@ -116,41 +116,3 @@ Dokumentacja i linki:
 - <a href="https://cloud.google.com/logging/docs/storage" target="_blank">Log storage and retention</a>
 </pre>
 </div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje umiejętność balansu między wymaganiami biznesowymi (12 lat, rezydencja danych) a operacyjnymi (koszt, narzut). Choć istnieje techniczne ograniczenie 10 lat dla Log Bucketów, odpowiedź B jest "najlepsza" wśród dostępnych, ponieważ promuje agenta (niskie overhead) i natywne zarządzanie retencją wewnątrz Logging Suite.</p>
-<h3>Dodatkowe wskazówki</h3>
-<ul>
-<li>Log Buckety są teraz częścią "Log Analytics", co pozwala na zapytania SQL na zebranych logach.</li>
-<li>Jeśli faktycznie potrzebujesz 12 lat, najlepszym (nieobecnym tutaj jako prosty sink) rozwiązaniem jest: Log Sink -> GCS Bucket (Archive Class) z Retention Policy.</li>
-</ul>
-</div>
-</div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelectorAll('.reveal-solution');
-    revealButton.forEach(button => {
-        let isVisible = false;
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const answerSection = document.querySelector('.q-answer');
-            const aiSection = document.querySelector('.ai-analysis-container');
-            if (isVisible) {
-                if (answerSection) answerSection.style.display = 'none';
-                if (aiSection) aiSection.style.display = 'none';
-                this.textContent = 'Show Suggested Answer';
-            } else {
-                if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
-                this.textContent = 'Hide Suggested Answer';
-            }
-            isVisible = !isVisible;
-        });
-    });
-});
-</script>
-</body>
-</html>

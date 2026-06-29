@@ -86,32 +86,21 @@ Your company operates an application instance group that is currently deployed b
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4" style="display:none;">
+<div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Premium Tier network)
+<strong>Reguła Egzaminacyjna (Exam Rule):</strong>
+Zawsze stosuj zasadę najmniejszych przywilejów (PoLP). W GCP wybieraj role Custom nad rolami Viewer/Editor, jeśli wymóg jest precyzyjnie określony.
 
-Wyjaśnienie: 
-Tylko Network Service Tiers w wersji 'Premium' oferuje globalny adres IP Anycast, który pozwala na kierowanie ruchu do najbliższego regionu przez globalną sieć Google. 'Standard Tier' działa regionalnie i wymagałby oddzielnych adresów IP dla każdego regionu.
+<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
+Nie myl Access Scopes (legacy) z IAM Roles (nowoczesne). Nie wybieraj ról typu Viewer/Editor, jeśli potrzebujesz tylko jednego, konkretnego uprawnienia.
 
-Dlaczego pozostałe są błędne:
-A. Network Endpoint Groups (NEG) są przydatne, ale same w sobie nie rozwiązują problemu globalnego adresu IP dla wielu regionów w Standard Tier.
-C. Stworzenie nowego LB w Standard Tier da Ci drugi, oddzielny adres IP, co narusza wymóg 'single external IP'.
-D. Cloud VPN nie służy do dystrybucji publicznego ruchu HTTP do wielu regionów za pomocą jednego IP.
-
-Wskazówki egzaminacyjne (Tips & Tricks):
-Global Load Balancing / Jeden IP dla wielu regionów = Premium Tier.
-
-Kluczowe zagadnienia do powtórzenia:
-- Network Service Tiers (Premium vs Standard)
-- Global HTTP(S) Load Balancing
-- Anycast IP
-
-Dokumentacja:
-<a href="https://cloud.google.com/network-tiers/docs/overview" target="_blank">https://cloud.google.com/network-tiers/docs/overview</a>
+<strong>Głębokie wyjaśnienie techniczne:</strong>
+IAM pozwala na precyzyjne definiowanie ról za pomocą `permissions` (np. `compute.instances.list`). W modelu współdzielonej odpowiedzialności (Shared Responsibility), za konfigurację dostępu i sieci odpowiada klient.
 </pre>
 </div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
+<div class="ai-analysis-container" style="display:none;" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
@@ -126,26 +115,23 @@ Dokumentacja:
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelectorAll('.reveal-solution');
-    revealButton.forEach(button => {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
         button.addEventListener('click', function(e) {
             e.preventDefault();
-            const answerSection = document.querySelector('.q-answer');
-            const aiSection = document.querySelector('.ai-analysis-container');
-            if (isVisible) {
-                if (answerSection) answerSection.style.display = 'none';
-                if (aiSection) aiSection.style.display = 'none';
-                this.textContent = 'Show Suggested Answer';
-            } else {
-                if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
-                this.textContent = 'Hide Suggested Answer';
-            }
+            // Znajdź wszystkie sekcje wewnątrz q-card lub powiązane
+            const container = this.closest('.q-card');
+            const sections = container.parentNode.querySelectorAll('.q-answer, .ai-analysis-container');
+            
+            sections.forEach(sec => {
+                sec.style.display = isVisible ? 'none' : 'block';
+            });
+            this.textContent = isVisible ? 'Show Suggested Answer' : 'Hide Suggested Answer';
             isVisible = !isVisible;
         });
     });
-});
+    });
 </script>
 </body>
 </html>

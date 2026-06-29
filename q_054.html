@@ -87,70 +87,58 @@ How should your team design this network?
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4" style="display:none;">
+<div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
 Potwierdzona odpowiedź: A
 
-Wyjaśnienie:
-W Google Cloud najskuteczniejszym i najbardziej eleganckim sposobem na wymuszenie izolacji między warstwami aplikacji (np. frontend i backend/baza danych) wewnątrz tej samej sieci VPC jest użycie reguł zapory ogniowej (VPC Firewall Rules) opartych na tagach sieciowych (network tags). Dzięki temu możesz zdefiniować regułę, która pozwala na ruch przychodzący (ingress) do instancji z tagiem `database` tylko wtedy, gdy źródłem ruchu są instancje z tagiem `frontend`. Wszystkie inne próby połączenia zostaną odrzucone przez domyślną regułę "deny all ingress". To podejście realizuje koncepcję mikrosegmentacji.
+<b>Reguła Egzaminacyjna (Exam Rule):</b>
+W Google Cloud podsieci <b>nie zapewniają izolacji sieciowej</b>. Aby uzyskać izolację między warstwami wewnątrz jednej sieci VPC, należy stosować <b>VPC Firewall Rules</b> oparte na tagach sieciowych (network tags) lub, co jest jeszcze bezpieczniejsze, na kontach usług (Service Accounts).
 
-Dlaczego pozostałe opcje są niepoprawne:
-- B: Same podsieci w GCP nie zapewniają izolacji ruchu. Domyślnie wszystkie podsieci wewnątrz tej samej sieci VPC mogą się ze sobą komunikować bez ograniczeń (o ile nie ma blokujących reguł firewall). Umieszczenie aplikacji i bazy w różnych podsieciach bez reguł firewall nic nie zmienia w kwestii bezpieczeństwa.
-- C i D: Tworzenie oddzielnych sieci VPC dla frontendu i bazy danych oraz łączenie ich przez Cloud VPN lub VPC Peering jest niepotrzebnie skomplikowane dla tego scenariusza. Wprowadza to dodatkowe koszty i narzut administracyjny, a ten sam (lub lepszy) poziom bezpieczeństwa można osiągnąć prostszą konfiguracją tagów w jednej sieci.
+<b>Haczyki egzaminacyjne (Exam Traps):</b>
+- Zmylenie podsieciami: Opcja B (różne podsieci) sugeruje, że to izoluje ruch – jest to mit często sprawdzany na egzaminie.
+- Nadmiarowa złożoność: Opcje C i D (wiele sieci VPC + łączenie) są niepotrzebnie kosztowne i skomplikowane dla prostego wymogu segmentacji wewnątrz aplikacji.
 
-Tips & Tricks:
-- "Database only by frontend": To klasyczne pytanie o reguły firewall i tagi (lub Service Accounts).
-- Pamiętaj: Podsieci w GCP ≠ Izolacja. Tagi/Service Accounts w Firewall Rules = Izolacja.
-- Na egzaminie preferuj rozwiązania oparte na Service Accounts zamiast Network Tags, jeśli są dostępne (Service Accounts są bardziej bezpieczne, bo są powiązane z tożsamością, a nie tylko z etykietą tekstową maszyny), ale w tym pytaniu tagi są poprawną odpowiedzią.
-
-Zagadnienia:
-- VPC Firewall Rules
-- Network Tags (Tagi sieciowe)
-- Micro-segmentation (Mikrosegmentacja)
-- Principle of Least Privilege (Zasada najniższych uprawnień)
+<b>Głębokie wyjaśnienie techniczne:</b>
+Reguły firewall w GCP są globalne dla danej sieci VPC i pozwalają na definiowanie reguł "Ingress" (przychodzących) na podstawie tagów. Właściwa konfiguracja to:
+1. Nadanie tagu (np. `frontend`) wszystkim maszynom aplikacji.
+2. Nadanie tagu (np. `database`) wszystkim maszynom bazy danych.
+3. Utworzenie reguły Ingress: <i>Allow</i> traffic from <i>Source Tag: frontend</i> to <i>Target Tag: database</i>.
+Dzięki temu, nawet jeśli maszyny znajdują się w tej samej podsieci, ruch między nimi jest ograniczony zgodnie z zasadą najniższych uprawnień (Least Privilege).
 
 Dokumentacja:
 <a href="https://cloud.google.com/vpc/docs/firewalls" target="_blank">https://cloud.google.com/vpc/docs/firewalls</a>
 </pre>
 </div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
+<div class="ai-analysis-container" style="display:none;" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie (Egzamin)</h2>
 <div class="analysis-section">
 <h3>Kluczowe wnioski</h3>
 <p><b>Potwierdzona odpowiedź: A</b></p>
-<p>Zarządzanie bezpieczeństwem sieciowym w GCP opiera się na tożsamościach i tagach, a nie tylko na adresach IP czy podsieciach. Pozwala to na budowanie bardzo dynamicznych i bezpiecznych środowisk, gdzie reguły firewall automatycznie "podążają" za nowo tworzonymi instancjami z odpowiednimi tagami.</p>
-<h3>Praktyczne wskazówki</h3>
-<ul>
-<li>Zwróć uwagę na różnicę między "Network Tags" a "Service Accounts" w regułach firewall. Tagi może zmienić każdy, kto ma uprawnienia <code>compute.instances.setTag</code>, natomiast przypisanie Service Account wymaga uprawnień <code>iam.serviceAccounts.actAs</code>, co czyni to drugie rozwiązanie bezpieczniejszym w dużych zespołach.</li>
-<li>Domyślnie nowa sieć VPC (typu 'default') ma regułę pozwalającą na cały ruch wewnętrzny. W produkcji zawsze należy tę regułę usunąć i stosować podejście "White-listing" (jawne pozwalanie na wymagany ruch).</li>
-</ul>
+<p>Bezpieczeństwo sieciowe w GCP to przede wszystkim odpowiednie zarządzanie regułami Firewall przy użyciu tagów lub kont usług.</p>
 </div>
 </div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelector('.reveal-solution');
-    if (revealButton) {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
         let isVisible = false;
-        revealButton.addEventListener('click', function(e) {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
-            const answerSection = document.querySelector('.q-answer');
-            const aiSection = document.querySelector('.ai-analysis-container');
-            if (isVisible) {
-                if (answerSection) answerSection.style.display = 'none';
-                if (aiSection) aiSection.style.display = 'none';
-                this.textContent = 'Show Suggested Answer';
-            } else {
-                if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
-                this.textContent = 'Hide Suggested Answer';
-            }
+            // Znajdź wszystkie sekcje wewnątrz q-card lub powiązane
+            const container = this.closest('.q-card');
+            const sections = container.parentNode.querySelectorAll('.q-answer, .ai-analysis-container');
+            
+            sections.forEach(sec => {
+                sec.style.display = isVisible ? 'none' : 'block';
+            });
+            this.textContent = isVisible ? 'Show Suggested Answer' : 'Hide Suggested Answer';
             isVisible = !isVisible;
         });
-    }
-});
+    });
+    });
 </script>
 
 </body>

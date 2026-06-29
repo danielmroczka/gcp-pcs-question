@@ -87,7 +87,7 @@ You are a security administrator at your company and are responsible for managin
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4" style="display:none;">
+<div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
 Poprawna odpowiedź: DE (D: Use SSO/SAML integration, E: Provide granular access with predefined roles)
@@ -116,41 +116,3 @@ Dokumentacja i linki:
 - <a href="https://cloud.google.com/iam/docs/understanding-roles" target="_blank">Understanding IAM roles</a>
 </pre>
 </div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: DE</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie uderza w samo serce filozofii bezpieczeństwa Google Cloud. Większość naruszeń bezpieczeństwa wynika ze zbyt szerokich uprawnień lub nieodpowiednio zarządzanych kont. SSO rozwiązuje problem "uśpionych kont" (pracowników, którzy odeszli, ale wciąż mają dostęp), a granularne role ograniczają "promień rażenia" (blast radius) w przypadku przejęcia pojedynczego konta.</p>
-<h3>Dodatkowe wskazówki</h3>
-<ul>
-<li>Warto wspomnieć o roli "IAM Recommender", która automatycznie sugeruje odebranie nieużywanych uprawnień w celu osiągnięcia stanu Least Privilege.</li>
-<li>Pamiętaj, że MFA (Multi-Factor Authentication) powinno być zawsze włączone w dostawcy tożsamości (IdP) używanym przez SSO.</li>
-</ul>
-</div>
-</div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelectorAll('.reveal-solution');
-    revealButton.forEach(button => {
-        let isVisible = false;
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const answerSection = document.querySelector('.q-answer');
-            const aiSection = document.querySelector('.ai-analysis-container');
-            if (isVisible) {
-                if (answerSection) answerSection.style.display = 'none';
-                if (aiSection) aiSection.style.display = 'none';
-                this.textContent = 'Show Suggested Answer';
-            } else {
-                if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
-                this.textContent = 'Hide Suggested Answer';
-            }
-            isVisible = !isVisible;
-        });
-    });
-});
-</script>
-</body>
-</html>

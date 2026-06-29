@@ -87,7 +87,7 @@ You have been tasked with configuring Security Command Center for your organizat
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4" style="display:none;">
+<div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
 Potwierdzona odpowiedź: AC (A. Event Threat Detection, C. Security Health Analytics).
@@ -115,41 +115,3 @@ Dokumentacja:
 <a href="https://cloud.google.com/security-command-center/docs/concepts-security-sources" target="_blank">Źródła detekcji w Security Command Center</a>
 </pre>
 </div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
-<div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: AC</b></p>
-<p><b>Głęboka analiza:</b> Security Command Center (SCC) jest centralnym hubem bezpieczeństwa w GCP. <b>Event Threat Detection (ETD)</b> analizuje logi pod kątem wzorców ataków (np. cryptomining, brute force). <b>Security Health Analytics (SHA)</b> to skaner konfiguracji, który sprawdza, czy Twoje zasoby są zgodne z najlepszymi praktykami bezpieczeństwa (np. czy firewall nie jest zbyt otwarty). Razem tworzą one kompleksowy system monitorowania zarówno aktywnych zagrożeń, jak i słabych punktów w konfiguracji.</p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/security-command-center/docs/concepts-event-threat-detection-overview" target="_blank">Event Threat Detection Overview</a></li>
-<li><a href="https://cloud.google.com/security-command-center/docs/concepts-security-health-analytics-overview" target="_blank">Security Health Analytics Overview</a></li>
-</ul>
-</div>
-</div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelectorAll('.reveal-solution');
-    revealButton.forEach(button => {
-        let isVisible = false;
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const answerSection = document.querySelector('.q-answer');
-            const aiSection = document.querySelector('.ai-analysis-container');
-            if (isVisible) {
-                if (answerSection) answerSection.style.display = 'none';
-                if (aiSection) aiSection.style.display = 'none';
-                this.textContent = 'Show Suggested Answer';
-            } else {
-                if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
-                this.textContent = 'Hide Suggested Answer';
-            }
-            isVisible = !isVisible;
-        });
-    });
-});
-</script>
-</body>
-</html>

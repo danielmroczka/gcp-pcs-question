@@ -86,7 +86,7 @@ Applications often require access to `secrets` - small pieces of sensitive data 
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4" style="display:none;">
+<div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
 Potwierdzona odpowiedź: AC (Admin Activity logs oraz Data Access logs)
@@ -115,7 +115,7 @@ Dokumentacja:
 <a href="https://cloud.google.com/logging/docs/audit" target="_blank">Cloud Audit Logs overview</a>
 </pre>
 </div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
+<div class="ai-analysis-container" style="display:none;" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
@@ -135,21 +135,33 @@ document.addEventListener('DOMContentLoaded', function() {
         let isVisible = false;
         button.addEventListener('click', function(e) {
             e.preventDefault();
-            const answerSection = document.querySelector('.q-answer');
-            const aiSection = document.querySelector('.ai-analysis-container');
-            if (isVisible) {
-                if (answerSection) answerSection.style.display = 'none';
-                if (aiSection) aiSection.style.display = 'none';
-                this.textContent = 'Show Suggested Answer';
-            } else {
-                if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
-                this.textContent = 'Hide Suggested Answer';
-            }
+            // Znajdź wszystkie sekcje wewnątrz q-card lub powiązane
+            const container = this.closest('.q-card');
+            const sections = container.parentNode.querySelectorAll('.q-answer, .ai-analysis-container');
+            
+            sections.forEach(sec => {
+                sec.style.display = isVisible ? 'none' : 'block';
+            });
+            this.textContent = isVisible ? 'Show Suggested Answer' : 'Hide Suggested Answer';
             isVisible = !isVisible;
         });
     });
-});
+    });
 </script>
+<div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
+<h2>Wyjaśnienie Audytowe</h2>
+<pre>
+<strong>Reguła Egzaminacyjna (Exam Rule):</strong>
+Pamiętaj, że w egzaminie Professional Cloud Security Engineer kluczowe jest wybieranie rozwiązań najmniej uprzywilejowanych (Principle of Least Privilege), zoptymalizowanych kosztowo i spełniających wymogi compliancy (np. CMEK, Data Loss Prevention).
+
+<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
+- Wybór rozwiązań, które wydają się wygodne, ale nie spełniają wymogów bezpieczeństwa (np. zbyt szerokie uprawnienia IAM).
+- Mylenie usług: np. Cloud Armor (WAF) z Cloud IAP (Identity-Aware Proxy).
+
+<strong>Głębokie wyjaśnienie techniczne (GCP Professional Cloud Security Engineer):</strong>
+W każdym pytaniu analizuj warstwy: IAM (dostęp), Encryption (at rest/in transit), Logging/Monitoring (Audit Logs, Cloud Logging, Security Command Center) oraz Networking (VPC Service Controls, Firewall Rules). GCP kładzie duży nacisk na współdzieloną odpowiedzialność (Shared Responsibility Model) - klient odpowiada za konfigurację zabezpieczeń wewnątrz usług chmurowych.
+</pre>
+</div>
 </body>
 </html>
+

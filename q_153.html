@@ -86,7 +86,7 @@ You need to use Cloud External Key Manager to create an encryption key to encryp
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4" style="display:none;">
+<div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
 Poprawna odpowiedź: C (1. Create or use an existing key with a unique URI in a supported external key management partner system. 2. In the external key management partner system, grant access for this key to use your Google Cloud project)
@@ -115,41 +115,3 @@ Dokumentacja i linki:
 - <a href="https://cloud.google.com/kms/docs/external-partners" target="_blank">Supported EKM partners</a>
 </pre>
 </div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie sprawdza proces "Onboarding" dla EKM. Najważniejsze jest zrozumienie, że Google Cloud w tym modelu jest "klientem" dla zewnętrznego dostawcy kluczy. Dlatego najpierw musimy przygotować "serwer" (system partnera), a dopiero potem konfigurować "klienta" (GCP).</p>
-<h3>Dodatkowe wskazówki</h3>
-<ul>
-<li>URI klucza EKM wygląda zazwyczaj tak: <code>https://[PARTNER_URL]/[KEY_ID]</code>.</li>
-<li>Pamiętaj, że jeśli połączenie między Google Cloud a partnerem EKM zostanie przerwane, Twoje dane (np. w BigQuery) staną się natychmiast niedostępne.</li>
-</ul>
-</div>
-</div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelectorAll('.reveal-solution');
-    revealButton.forEach(button => {
-        let isVisible = false;
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const answerSection = document.querySelector('.q-answer');
-            const aiSection = document.querySelector('.ai-analysis-container');
-            if (isVisible) {
-                if (answerSection) answerSection.style.display = 'none';
-                if (aiSection) aiSection.style.display = 'none';
-                this.textContent = 'Show Suggested Answer';
-            } else {
-                if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
-                this.textContent = 'Hide Suggested Answer';
-            }
-            isVisible = !isVisible;
-        });
-    });
-});
-</script>
-</body>
-</html>

@@ -87,7 +87,7 @@ You are tasked with exporting and auditing security logs for login activity even
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4" style="display:none;">
+<div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
 Potwierdzona odpowiedź: BC (B. Create a Log Sink at the organization level with the includeChildren parameter, and set the destination to a Pub/Sub topic, C. Enable Data Access audit logs at the organization level to apply to all projects.)
@@ -115,40 +115,3 @@ Dokumentacja i linki:
 - <a href="https://cloud.google.com/logging/docs/export/aggregated_sinks" target="_blank">Omówienie zagregowanych zlewów logów</a>
 </pre>
 </div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
-<div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: BC</b></p>
-<p><b>Głęboka analiza:</b> Połączenie <b>Aggregated Sinks</b> z <b>Pub/Sub</b> jest złotym standardem dla przedsiębiorstw wymagających centralnego audytu bezpieczeństwa. Pozwala to na uniknięcie ręcznej konfiguracji zlewów w każdym z setek projektów z osobna. Należy jednak uważać na koszty – logi <i>Data Access</i> mogą generować ogromne ilości danych, dlatego warto stosować filtry wykluczające mniej istotne zdarzenia już na poziomie zlewu.</p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/logging/docs/audit" target="_blank">Rodzaje logów audytowych Cloud Audit Logs</a></li>
-</ul>
-</div>
-</div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelectorAll('.reveal-solution');
-    revealButton.forEach(button => {
-        let isVisible = false;
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const answerSection = document.querySelector('.q-answer');
-            const aiSection = document.querySelector('.ai-analysis-container');
-            if (isVisible) {
-                if (answerSection) answerSection.style.display = 'none';
-                if (aiSection) aiSection.style.display = 'none';
-                this.textContent = 'Show Suggested Answer';
-            } else {
-                if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
-                this.textContent = 'Hide Suggested Answer';
-            }
-            isVisible = !isVisible;
-        });
-    });
-});
-</script>
-</body>
-</html>

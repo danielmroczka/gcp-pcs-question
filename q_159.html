@@ -87,7 +87,7 @@ You discovered that sensitive personally identifiable information (PII) is being
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4" style="display:none;">
+<div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
 Poprawna odpowiedź: BE (B: Cloud Key Management Service, E: Cloud Data Loss Prevention with deterministic encryption using AES-SIV)
@@ -118,41 +118,3 @@ Dokumentacja i linki:
 - <a href="https://cloud.google.com/dlp/docs/reidentify-content" target="_blank">Re-identifying de-identified content</a>
 </pre>
 </div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: BE</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie łączy dwa potężne narzędzia bezpieczeństwa: DLP do inteligentnego rozpoznawania i przekształcania danych oraz KMS do bezpiecznego zarządzania fundamentem kryptograficznym. W scenariuszach Big Data / Analytics w chmurze, szyfrowanie deterministyczne jest standardem de facto pozwalającym na "bezpieczną analitykę".</p>
-<h3>Dodatkowe wskazówki</h3>
-<ul>
-<li>Możesz użyć DLP do de-identyfikacji danych w locie (podczas ETL w Dataflow) lub bezpośrednio na danych w BigQuery.</li>
-<li>DLP oferuje również "Format-preserving encryption" (FPE), które zachowuje format danych (np. zaszyfrowany numer karty kredytowej wciąż wygląda jak numer karty), co jest przydatne dla starszych systemów.</li>
-</ul>
-</div>
-</div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelectorAll('.reveal-solution');
-    revealButton.forEach(button => {
-        let isVisible = false;
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const answerSection = document.querySelector('.q-answer');
-            const aiSection = document.querySelector('.ai-analysis-container');
-            if (isVisible) {
-                if (answerSection) answerSection.style.display = 'none';
-                if (aiSection) aiSection.style.display = 'none';
-                this.textContent = 'Show Suggested Answer';
-            } else {
-                if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
-                this.textContent = 'Hide Suggested Answer';
-            }
-            isVisible = !isVisible;
-        });
-    });
-});
-</script>
-</body>
-</html>

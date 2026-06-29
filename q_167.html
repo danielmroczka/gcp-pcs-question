@@ -86,7 +86,7 @@ You have the following resource hierarchy. There is an organization policy at ea
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4" style="display:none;">
+<div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
 Poprawna odpowiedź: A (All load balancer types are denied in accordance with the global node's policy)
@@ -113,41 +113,3 @@ Dokumentacja i linki:
 - <a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">List of organization policy constraints</a>
 </pre>
 </div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie sprawdza fundamentalną wiedzę o tym, jak Google Cloud zarządza bezpieczeństwem w skali przedsiębiorstwa. "Centralized Control" oznacza, że administratorzy na poziomie organizacji mogą narzucić standardy, których zespoły projektowe nie mogą samodzielnie poluzować. Zrozumienie, że "najsilniejsza restrykcja z góry wygrywa", jest kluczowe dla inżyniera bezpieczeństwa.</p>
-<h3>Dodatkowe wskazówki</h3>
-<ul>
-<li>W konsoli Google Cloud możesz sprawdzić "Effective Policy" dla każdego zasobu, co pozwala szybko zdiagnozować, dlaczego dana operacja (np. stworzenie LB) jest odrzucana.</li>
-<li>Pamiętaj, że zmiany w polityce organizacji mogą zająć do kilkunastu minut, zanim zaczną obowiązywać w całej strukturze.</li>
-</ul>
-</div>
-</div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelectorAll('.reveal-solution');
-    revealButton.forEach(button => {
-        let isVisible = false;
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const answerSection = document.querySelector('.q-answer');
-            const aiSection = document.querySelector('.ai-analysis-container');
-            if (isVisible) {
-                if (answerSection) answerSection.style.display = 'none';
-                if (aiSection) aiSection.style.display = 'none';
-                this.textContent = 'Show Suggested Answer';
-            } else {
-                if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
-                this.textContent = 'Hide Suggested Answer';
-            }
-            isVisible = !isVisible;
-        });
-    });
-});
-</script>
-</body>
-</html>

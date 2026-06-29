@@ -86,7 +86,7 @@ You want to make sure that your organization's Cloud Storage buckets cannot have
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4" style="display:none;">
+<div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
 Poprawna odpowiedź: C (Configure uniform bucket-level access, and enforce domain restricted sharing in an organization policy)
@@ -115,41 +115,3 @@ Dokumentacja i linki:
 - <a href="https://cloud.google.com/storage/docs/public-access-prevention" target="_blank">Public access prevention</a>
 </pre>
 </div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie uderza w jeden z najczęstszych problemów bezpieczeństwa w chmurze - "wycieki z bucketów". Google promuje podejście warstwowe (Defense in Depth). UBLA zamyka lukę w postaci ACL-i, a DRS zamyka lukę w postaci błędnego przypisania roli w IAM. To najskuteczniejsza metoda prewencji w skali całego przedsiębiorstwa.</p>
-<h3>Dodatkowe wskazówki</h3>
-<ul>
-<li>Włączenie UBLA na istniejącym buckecie może zablokować dostęp użytkownikom, którzy polegali na ACL. Masz 90 dni na cofnięcie tej zmiany, jeśli coś pójdzie nie tak.</li>
-<li>DRS dotyczy tylko NOWYCH przypisań ról. Nie usuwa automatycznie już istniejącego publicznego dostępu.</li>
-</ul>
-</div>
-</div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const revealButton = document.querySelectorAll('.reveal-solution');
-    revealButton.forEach(button => {
-        let isVisible = false;
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const answerSection = document.querySelector('.q-answer');
-            const aiSection = document.querySelector('.ai-analysis-container');
-            if (isVisible) {
-                if (answerSection) answerSection.style.display = 'none';
-                if (aiSection) aiSection.style.display = 'none';
-                this.textContent = 'Show Suggested Answer';
-            } else {
-                if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
-                this.textContent = 'Hide Suggested Answer';
-            }
-            isVisible = !isVisible;
-        });
-    });
-});
-</script>
-</body>
-</html>
