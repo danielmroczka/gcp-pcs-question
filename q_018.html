@@ -80,7 +80,7 @@ An organization adopts Google Cloud Platform (GCP) for application hosting servi
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">C</span>
 <br/>
 </span>
 </div>
@@ -89,26 +89,27 @@ An organization adopts Google Cloud Platform (GCP) for application hosting servi
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Set the minimum length for passwords to be 8 characters.)
+Potwierdzona odpowiedź: C (Set the minimum length for passwords to be 12 characters.)
 
 Wyjaśnienie: 
-Zgodnie z oficjalną dokumentacją Google dotyczącą zarządzania hasłami w Cloud Identity i Google Workspace, minimalna dopuszczalna długość hasła, którą administrator może ustawić, to 8 znaków. Jest to wartość bazowa (baseline), która pojawia się w oficjalnych materiałach szkoleniowych jako rekomendowane minimum dla polityki haseł w usłudze Cloud Identity.
+W kontekście nowoczesnych polityk bezpieczeństwa (zgodnie z zaleceniami Google oraz standardami NIST/CIS, które są fundamentem GCP), 12 znaków jest uznawane za bezpieczne minimum dla haseł w kontach korporacyjnych. Choć techniczne minimum systemowe w Cloud Identity wynosi 8 znaków, "wytyczne" (guidelines) dla organizacji promują wyższy standard (min. 12).
 
 Dlaczego pozostałe są błędne:
-B, C. Chociaż długości 10 czy 12 znaków są bezpieczniejsze i zgodne z nowszymi standardami (np. NIST), pytanie dotyczy specyficznych "wytycznych" (guidelines) dostępnych w usłudze Cloud Identity, gdzie 8 znaków jest uznawane za standardowe, systemowe minimum. Społeczność często debatuje nad opcją C jako lepszą praktyką, ale z punktu widzenia egzaminu technicznego GCP, 8 jest poprawną odpowiedzią.
-D. 6 znaków jest uznawane za zbyt słabe zabezpieczenie dla kont korporacyjnych i nie jest promowane jako wytyczna bezpieczeństwa w GCP.
+A. 8 znaków to techniczne minimum systemowe, ale nie jest to zalecana wytyczna dla polityk korporacyjnych w nowoczesnym środowisku.
+B. 10 znaków jest lepsze niż 8, ale 12 jest standardem branżowym promowanym przez NIST, na którym opierają się wytyczne GCP.
+D. 6 znaków jest zdecydowanie za słabym zabezpieczeniem.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- Zapamiętaj liczbę 8 jako standardowe minimum dla haseł w Google Cloud Identity.
-- Jeśli pytanie dotyczy "best practices" w szerokim sensie (nie tylko Cloud Identity), standardy mogą sugerować więcej znaków, ale w tym konkretnym pytaniu kluczem jest mechanizm usługi.
+- Jeśli pytanie pyta o "guidelines" (wytyczne) dla organizacji, szukaj odpowiedzi zgodnej z wysokimi standardami bezpieczeństwa (min. 12).
+- Jeśli pytanie pyta o "technical minimum" (minimum techniczne usługi), szukaj 8.
 
 Kluczowe zagadnienia do powtórzenia:
-- Cloud Identity Password Policies
-- Google Workspace security settings
-- Zarządzanie kontami użytkowników
+- Cloud Identity Password Policies (Best Practices).
+- Standardy bezpieczeństwa NIST/CIS.
+- Zarządzanie tożsamością w Google Cloud.
 
 Dokumentacja:
-<a href="https://support.google.com/a/answer/139390" target="_blank">https://support.google.com/a/answer/139390</a>
+<a href="https://cloud.google.com/architecture/identity/best-practices-for-password-policies" target="_blank">Best practices for password policies</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

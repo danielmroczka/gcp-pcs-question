@@ -79,7 +79,7 @@ A company migrated their entire data/center to Google Cloud Platform. It is runn
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">D</span>
 <br/>
 </span>
 </div>
@@ -88,27 +88,28 @@ A company migrated their entire data/center to Google Cloud Platform. It is runn
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Use Forseti Security to automate inventory snapshots.)
+Potwierdzona odpowiedź: D (Use Security Command Center to view all assets across the organization.)
 
-Wyjaśnienie: 
-Forseti Security to zaawansowany zestaw narzędzi open-source (wspierany przez Google), dedykowany do audytu, inwentaryzacji i zapewnienia bezpieczeństwa w dużych środowiskach GCP. Jego komponent "Inventory" pozwala na tworzenie regularnych migawek (snapshots) całego stanu zasobów w organizacji. Dzięki temu firma może posiadać pełny, historyczny zapis wszystkich zasobów i ich konfiguracji w dowolnym momencie w przeszłości, co jest kluczowe dla audytów, analizy zmian i dochodzeń śledczych.
+Wyjaśnienie:
+- Security Command Center (SCC) jest centralnym narzędziem Google Cloud do zarządzania bezpieczeństwem i inwentaryzacją zasobów w całej organizacji. Posiada natywny moduł "Asset Inventory", który pozwala na przeglądanie stanu zasobów w różnych projektach oraz korzystanie z funkcji "Time Travel" (zobacz zasoby tak, jak wyglądały w przeszłości).
+- Jest to rozwiązanie w pełni zarządzane i skalowalne, co czyni je obecnie standardem "best practice" w GCP.
 
 Dlaczego pozostałe są błędne:
-A. Resource Manager: Służy do definiowania struktury hierarchicznej (projekty, foldery, organizacja) i zarządzania dostępem, ale nie posiada wbudowanej funkcji tworzenia historycznych migawek (snapshotów) stanu inwentaryzacyjnego wszystkich zasobów.
-C. Stackdriver (obecnie Cloud Monitoring): Służy do zbierania metryk wydajnościowych (CPU, RAM) i logów. Dashboards wyświetlają dane bieżące lub z krótkiego okresu retencji metryk, ale nie służą do inwentaryzacji konfiguracji zasobów "at any point in time".
-D. Security Command Center (SCC): SCC służy do wykrywania zagrożeń i błędów konfiguracji (Findings). Choć posiada widok zasobów (Asset Inventory), to w klasycznych pytaniach egzaminacyjnych "automatyczne inventory snapshots" są domeną Forseti. (W nowoczesnych systemach funkcję tę przejął Cloud Asset Inventory).
+- A: Resource Manager służy do strukturyzacji, nie do inwentaryzacji historycznej.
+- B: Forseti Security to narzędzie open-source, które historycznie wypełniało tę lukę, ale obecnie jest wypierane przez natywne usługi Google, takie jak SCC.
+- C: Cloud Monitoring służy do metryk, nie do historycznej inwentaryzacji konfiguracji zasobów.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- "Historical record" / "Inventory snapshots" + "Any point in time": Szukaj Forseti Security w starszych pytaniach lub Cloud Asset Inventory w nowszych.
-- Forseti jest często poprawną odpowiedzią, gdy mowa o audytowaniu dużych środowisk z wieloma projektami (Governance).
+- Jeśli widzisz pytanie o inwentaryzację/widoczność zasobów w "skali organizacji" -> wybierz Security Command Center (SCC).
+- "Time Travel" zasobów = Cloud Asset Inventory (wbudowane w SCC).
 
 Kluczowe zagadnienia do powtórzenia:
-- Forseti Security (Inventory, Scanner, Enforcer)
-- Cloud Asset Inventory (Time Travel)
-- Różnica między monitorowaniem stanu (Inventory) a monitorowaniem logów (Audit Logs)
+- Security Command Center (Assets, Threats, Vulnerabilities).
+- Cloud Asset Inventory i funkcja Time Travel.
 
 Dokumentacja:
-<a href="https://forsetisecurity.org/docs/latest/concepts/inventory.html" target="_blank">https://forsetisecurity.org/docs/latest/concepts/inventory.html</a>
+<a href="https://cloud.google.com/security-command-center/docs/concepts" target="_blank">Security Command Center Overview</a>
+<a href="https://cloud.google.com/asset-inventory/docs/time-travel" target="_blank">Cloud Asset Inventory: Time Travel</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
