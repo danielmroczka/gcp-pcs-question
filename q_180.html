@@ -85,7 +85,6 @@ Your organization develops software involved in many open source projects and is
 </span>
 </div>
 </div>
-</div>
 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
@@ -101,7 +100,7 @@ Jeśli scenariusz dotyczy zabezpieczania zasobów chmurowych (GCP), zawsze wybie
 Rozwiązanie bazuje na GCP Shared Responsibility Model. Google zarządza bezpieczeństwem infrastruktury (Physical, Network, Host), podczas gdy administrator zarządza tożsamością (IAM), danymi (Encryption, Cloud KMS) i regułami dostępu (VPC Firewall).
 </pre>
 </div>
-<div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
+<div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
 Poprawna odpowiedź: D (1. Generate Supply Chain Levels for Software Artifacts (SLSA) level 3 assurance by using Cloud Build. 2. View the build provenance in the Security insights side panel within the Google Cloud console)
@@ -132,6 +131,23 @@ Dokumentacja i linki:
 - <a href="https://cloud.google.com/security/binary-authorization" target="_blank">Binary Authorization and SLSA</a>
 </pre>
 </div>
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
+<pre>
+<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
+Jeśli scenariusz dotyczy zabezpieczania zasobów chmurowych (GCP), zawsze wybieraj rozwiązanie typu Managed (SCC, Secret Manager, Cloud KMS), a unikaj rozwiązań self-managed, chyba że pytanie wyraźnie wymaga dostosowania niskopoziomowego.
+
+<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
+- <strong>Pułapka IAM:</strong> Pytania o uprawnienia często sugerują 'Project Owner' – zawsze szukaj 'Least Privilege' (np. 'Role: Secret Manager Secret Accessor').
+- <strong>Pułapka Sieciowa:</strong> Często mylone są VPC Peering (wydajność) oraz VPN (szyfrowanie/on-premise).
+
+<strong>Głębokie wyjaśnienie techniczne:</strong>
+Rozwiązanie bazuje na GCP Shared Responsibility Model. Google zarządza bezpieczeństwem infrastruktury (Physical, Network, Host), podczas gdy administrator zarządza tożsamością (IAM), danymi (Encryption, Cloud KMS) i regułami dostępu (VPC Firewall).
+</pre>
+</div>
+</div>
+
+
 <div class="ai-analysis-container" style="display:none;" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie (AI)</h2>
 <div class="analysis-section">
