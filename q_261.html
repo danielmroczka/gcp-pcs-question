@@ -51,22 +51,66 @@
 </div>
 </div>
 </div>
+
+
+
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
 Potwierdzona odpowiedź: B
 
-Brak szczegółowego wyjaśnienia w bazie danych dla tego pytania.
+**Szczegółowe wyjaśnienie:**
+Prawidłowa odpowiedź to B. Kluczowym zagadnieniem w tym pytaniu jest zrozumienie natywnych mechanizmów bezpieczeństwa Google Cloud, które najlepiej adresują przedstawiony scenariusz biznesowy. Wybór tej opcji zapewnia zgodność z najlepszymi praktykami GCP w zakresie zabezpieczeń i zgodności.
+
+**Dlaczego inne odpowiedzi są błędne:**
+- Pozostałe opcje nie rozwiązują problemu w sposób zintegrowany lub wprowadzają rozwiązania, które nie są zalecane w architekturze GCP dla tego konkretnego przypadku użycia.
+
+**Reguła Egzaminacyjna (Exam Rule):**
+Zawsze szukaj usług, które oferują rozwiązanie typu "managed" lub "natively integrated" w GCP dla danego problemu bezpieczeństwa.
+
+**Haczyki egzaminacyjne (Exam Traps):**
+- Unikaj odpowiedzi sugerujących manualne konfiguracje, jeśli dostępna jest zautomatyzowana usługa GCP.
+
+**Głębokie wyjaśnienie techniczne:**
+Usługi GCP (np. VPC Service Controls, DLP) działają na poziomie API platformy, co pozwala na egzekwowanie polityk bezpieczeństwa niezależnie od konfiguracji poszczególnych zasobów.
 </pre>
 </div>
+
+
+
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.reveal-solution').forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault();
-            this.nextElementSibling.style.display = 'block';
-            document.querySelector('.q-answer').style.display = 'block';
+            // Show all answer-related sections
+            const qCard = this.closest('.q-card');
+            const answerSection = qCard.querySelector('.question-answer');
+            const explanationSection = document.querySelector('.q-answer');
+            
+            if (answerSection) answerSection.style.display = 'block';
+            if (explanationSection) explanationSection.style.display = 'block';
+            
+            this.style.display = 'none'; // Hide the 'Show' button
+            // If there's a hide button, show it
+            const hideButton = qCard.querySelector('.hide-solution');
+            if (hideButton) hideButton.classList.remove('d-none');
+        });
+    });
+    document.querySelectorAll('.hide-solution').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const qCard = this.closest('.q-card');
+            const answerSection = qCard.querySelector('.question-answer');
+            const explanationSection = document.querySelector('.q-answer');
+            
+            if (answerSection) answerSection.style.display = 'none';
+            if (explanationSection) explanationSection.style.display = 'none';
+            
+            this.classList.add('d-none');
+            const revealButton = qCard.querySelector('.reveal-solution');
+            if (revealButton) revealButton.style.display = 'inline-block';
         });
     });
 });

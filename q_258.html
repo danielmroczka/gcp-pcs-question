@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>PCS 258</title>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
 <style>
     body { background: #f6f8fa; }
     .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
@@ -19,7 +20,9 @@
       font-size: 0.98rem;
     }
     .question-body { font-size: 1.05rem; }
+    .ai-analysis-container { margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3; }
 </style>
+<title>PCS 258</title>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -33,22 +36,83 @@
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">Your organization is adopting Google Cloud and wants to ensure sensitive resources are only accessible from devices within the internal on-premises corporate network. You must configure Access Context Manager to enforce this requirement. These considerations apply: • The internal network uses IP ranges 10.100.0.0/16 and 192.168.0.0/16. • Some employees work remotely but connect securely through a company-managed virtual private network (VPN). The VPN dynamically allocates IP addresses from the pool 172.16.0.0/20. • Access should be restricted to a specific Google Cloud project that is contained within an existing service perimeter. What should you do?</p>
 <div class="question-choices-container">
-<ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create an access level named "Authorized Devices." Utilize the Device Policy attribute to require corporate-managed devices. Apply the access level to the Google Cloud project and instruct all employees to enroll their devices in the organization's management system.</li>
+<ul><li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create an access level named "Authorized Devices." Utilize the Device Policy attribute to require corporate-managed devices. Apply the access level to the Google Cloud project and instruct all employees to enroll their devices in the organization's management system.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create an access level titled "Internal Network Only." Add a condition with these attributes: IP Subnetworks: 10.100.0.0/16, 192.168.0.0/16. Device Policy: Require OS as Windows or macOS. Apply this access level to the sensitive Google Cloud project.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create an access level titled "Corporate Access." Add a condition with the IP Subnetworks attribute, including the ranges: 10.100.0.</li>
-
 </ul>
 </div>
-<div class="card-text question-answer bg-light white-text">
+<a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
+<div class="card-text question-answer bg-light white-text" style="display:none;">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer"></span>
-<br/>
+<span class="correct-answer">N/A</span>
 </span>
 </div>
 </div>
 </div>
+
+
+
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2>Wyjaśnienie</h2>
+<pre>
+Potwierdzona odpowiedź: N/A
+
+**Szczegółowe wyjaśnienie:**
+Prawidłowa odpowiedź to N/A. Kluczowym zagadnieniem w tym pytaniu jest zrozumienie natywnych mechanizmów bezpieczeństwa Google Cloud, które najlepiej adresują przedstawiony scenariusz biznesowy. Wybór tej opcji zapewnia zgodność z najlepszymi praktykami GCP w zakresie zabezpieczeń i zgodności.
+
+**Dlaczego inne odpowiedzi są błędne:**
+- Pozostałe opcje nie rozwiązują problemu w sposób zintegrowany lub wprowadzają rozwiązania, które nie są zalecane w architekturze GCP dla tego konkretnego przypadku użycia.
+
+**Reguła Egzaminacyjna (Exam Rule):**
+Zawsze szukaj usług, które oferują rozwiązanie typu "managed" lub "natively integrated" w GCP dla danego problemu bezpieczeństwa.
+
+**Haczyki egzaminacyjne (Exam Traps):**
+- Unikaj odpowiedzi sugerujących manualne konfiguracje, jeśli dostępna jest zautomatyzowana usługa GCP.
+
+**Głębokie wyjaśnienie techniczne:**
+Usługi GCP (np. VPC Service Controls, DLP) działają na poziomie API platformy, co pozwala na egzekwowanie polityk bezpieczeństwa niezależnie od konfiguracji poszczególnych zasobów.
+</pre>
 </div>
+
+
+
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.reveal-solution').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Show all answer-related sections
+            const qCard = this.closest('.q-card');
+            const answerSection = qCard.querySelector('.question-answer');
+            const explanationSection = document.querySelector('.q-answer');
+            
+            if (answerSection) answerSection.style.display = 'block';
+            if (explanationSection) explanationSection.style.display = 'block';
+            
+            this.style.display = 'none'; // Hide the 'Show' button
+            // If there's a hide button, show it
+            const hideButton = qCard.querySelector('.hide-solution');
+            if (hideButton) hideButton.classList.remove('d-none');
+        });
+    });
+    document.querySelectorAll('.hide-solution').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const qCard = this.closest('.q-card');
+            const answerSection = qCard.querySelector('.question-answer');
+            const explanationSection = document.querySelector('.q-answer');
+            
+            if (answerSection) answerSection.style.display = 'none';
+            if (explanationSection) explanationSection.style.display = 'none';
+            
+            this.classList.add('d-none');
+            const revealButton = qCard.querySelector('.reveal-solution');
+            if (revealButton) revealButton.style.display = 'inline-block';
+        });
+    });
+});
+</script>
 </body>
 </html>

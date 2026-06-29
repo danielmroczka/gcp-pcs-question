@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>PCS 260</title>
+<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
 <style>
     body { background: #f6f8fa; }
     .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
@@ -19,7 +20,9 @@
       font-size: 0.98rem;
     }
     .question-body { font-size: 1.05rem; }
+    .ai-analysis-container { margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3; }
 </style>
+<title>PCS 260</title>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -33,22 +36,83 @@
 <div class="question-body mt-3 pt-3 border-top">
 <p class="card-text">Your organization uses Google Cloud to process large amounts of location data for analysis and visualization. The location data is potentially sensitive. You must design a solution that allows storing and processing the location data securely, minimizing data exposure risks, and adhering to both regulatory guidelines and your organization's internal data residency policies. What should you do?</p>
 <div class="question-choices-container">
-<ul>
-<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enable location restrictions on Compute Engine instances and virtual disk resources where the data is handled. Apply labels to tag geographic metadata for all stored data.</li>
+<ul><li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Enable location restrictions on Compute Engine instances and virtual disk resources where the data is handled. Apply labels to tag geographic metadata for all stored data.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Use the Cloud Data Loss Prevention (Cloud DLP) API to scan for sensitive location data before any storage or processing. Create Cloud Storage buckets with global availability for optimal performance, relying on Cloud DLP results to filter and control data access.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create regional Cloud Storage buckets with Object</li>
-
 </ul>
 </div>
-<div class="card-text question-answer bg-light white-text">
+<a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
+<div class="card-text question-answer bg-light white-text" style="display:none;">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer"></span>
-<br/>
+<span class="correct-answer">N/A</span>
 </span>
 </div>
 </div>
 </div>
+
+
+
+<div class="q-card q-answer mb-4" style="display:none;">
+<h2>Wyjaśnienie</h2>
+<pre>
+Potwierdzona odpowiedź: N/A
+
+**Szczegółowe wyjaśnienie:**
+Prawidłowa odpowiedź to N/A. Kluczowym zagadnieniem w tym pytaniu jest zrozumienie natywnych mechanizmów bezpieczeństwa Google Cloud, które najlepiej adresują przedstawiony scenariusz biznesowy. Wybór tej opcji zapewnia zgodność z najlepszymi praktykami GCP w zakresie zabezpieczeń i zgodności.
+
+**Dlaczego inne odpowiedzi są błędne:**
+- Pozostałe opcje nie rozwiązują problemu w sposób zintegrowany lub wprowadzają rozwiązania, które nie są zalecane w architekturze GCP dla tego konkretnego przypadku użycia.
+
+**Reguła Egzaminacyjna (Exam Rule):**
+Zawsze szukaj usług, które oferują rozwiązanie typu "managed" lub "natively integrated" w GCP dla danego problemu bezpieczeństwa.
+
+**Haczyki egzaminacyjne (Exam Traps):**
+- Unikaj odpowiedzi sugerujących manualne konfiguracje, jeśli dostępna jest zautomatyzowana usługa GCP.
+
+**Głębokie wyjaśnienie techniczne:**
+Usługi GCP (np. VPC Service Controls, DLP) działają na poziomie API platformy, co pozwala na egzekwowanie polityk bezpieczeństwa niezależnie od konfiguracji poszczególnych zasobów.
+</pre>
 </div>
+
+
+
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.reveal-solution').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Show all answer-related sections
+            const qCard = this.closest('.q-card');
+            const answerSection = qCard.querySelector('.question-answer');
+            const explanationSection = document.querySelector('.q-answer');
+            
+            if (answerSection) answerSection.style.display = 'block';
+            if (explanationSection) explanationSection.style.display = 'block';
+            
+            this.style.display = 'none'; // Hide the 'Show' button
+            // If there's a hide button, show it
+            const hideButton = qCard.querySelector('.hide-solution');
+            if (hideButton) hideButton.classList.remove('d-none');
+        });
+    });
+    document.querySelectorAll('.hide-solution').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const qCard = this.closest('.q-card');
+            const answerSection = qCard.querySelector('.question-answer');
+            const explanationSection = document.querySelector('.q-answer');
+            
+            if (answerSection) answerSection.style.display = 'none';
+            if (explanationSection) explanationSection.style.display = 'none';
+            
+            this.classList.add('d-none');
+            const revealButton = qCard.querySelector('.reveal-solution');
+            if (revealButton) revealButton.style.display = 'inline-block';
+        });
+    });
+});
+</script>
 </body>
 </html>
