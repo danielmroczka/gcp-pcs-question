@@ -3,20 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<link href="https://www.examtopics.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-<link href="https://www.examtopics.com/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
-<link href="https://www.examtopics.com/assets/css/animate.css" rel="stylesheet" type="text/css"/>
-<link href="https://www.examtopics.com/assets/css/owl.carousel.css" rel="stylesheet" type="text/css"/>
-<link href="https://www.examtopics.com/assets/css/slick.css" rel="stylesheet" type="text/css"/>
-<link href="https://www.examtopics.com/assets/css/rsmenu-main.css" rel="stylesheet" type="text/css"/>
-<link href="https://www.examtopics.com/assets/css/rsmenu-transitions.css" rel="stylesheet" type="text/css"/>
-<link href="https://www.examtopics.com/assets/css/magnific-popup.css" rel="stylesheet" type="text/css"/>
-<link href="https://www.examtopics.com/assets/fonts/flaticon.css" rel="stylesheet" type="text/css"/>
-<link href="https://www.examtopics.com/assets/fonts/fonts2/flaticon.css" rel="stylesheet" type="text/css"/>
-<link href="https://www.examtopics.com/assets/css/style.css?ver=1" rel="stylesheet" type="text/css"/>
-<link href="https://www.examtopics.com/assets/css/color/default.css" rel="stylesheet" type="text/css"/>
-<link href="https://www.examtopics.com/assets/css/responsive.css" rel="stylesheet" type="text/css"/>
-<link href="https://www.examtopics.com/assets/css/forum.css" rel="stylesheet" type="text/css"/>
+<title>PCS 258</title>
 <style>
     body { background: #f6f8fa; }
     .q-page { max-width: 1100px; margin: 0 auto; padding: 18px; }
@@ -31,26 +18,8 @@
       line-height: 1.45;
       font-size: 0.98rem;
     }
-    .discussion-header-container { line-height: 1.5; }
     .question-body { font-size: 1.05rem; }
-
-    .discussion-clean { display: flex; flex-direction: column; gap: 14px; }
-    .c-card { background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 10px; padding: 12px 14px; }
-    .c-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
-    .c-user { font-weight: 700; }
-    .c-date { color: #666; font-size: 0.9rem; }
-    .c-badge { background: #fff3cd; border: 1px solid #ffe69c; padding: 2px 8px; border-radius: 999px; font-size: 0.85rem; }
-    .c-upvotes { margin-left: auto; color: #0b5ed7; font-weight: 600; }
-    .c-text { margin: 0 0 10px; line-height: 1.55; }
-    .c-text:last-child { margin-bottom: 0; }
-    
-    .q-page { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
-    .q-card { width: 100% !important; max-width: 100% !important; box-sizing: border-box; }
-    .q-answer { width: 100% !important; max-width: 100% !important; }
-    .q-answer pre { white-space: pre-wrap; word-wrap: break-word; max-width: 100%; overflow-x: auto; }
-
 </style>
-<title>PCS 258</title>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -62,31 +31,23 @@
 <div class="q-card mb-4">
 <h2>Question 258 / 361</h2>
 <div class="question-body mt-3 pt-3 border-top">
-<p class="card-text">A customer implements Cloud Identity-Aware Proxy for their ERP system hosted on Compute Engine. Their security team wants to add a security layer so that the ERP systems only accept traffic from Cloud Identity-Aware Proxy. What should the customer do to meet these requirements?</p>
+<p class="card-text">Your organization is adopting Google Cloud and wants to ensure sensitive resources are only accessible from devices within the internal on-premises corporate network. You must configure Access Context Manager to enforce this requirement. These considerations apply: • The internal network uses IP ranges 10.100.0.0/16 and 192.168.0.0/16. • Some employees work remotely but connect securely through a company-managed virtual private network (VPN). The VPN dynamically allocates IP addresses from the pool 172.16.0.0/20. • Access should be restricted to a specific Google Cloud project that is contained within an existing service perimeter. What should you do?</p>
 <div class="question-choices-container">
-<ul><li class="multi-choice-item">A. Make sure that the ERP system can validate the JWT assertion in the HTTP requests.</li><li class="multi-choice-item">B. Make sure that the ERP system can validate the identity headers in the HTTP requests.</li><li class="multi-choice-item">C. Make sure that the ERP system can validate the x-forwarded-for headers in the HTTP requests.</li><li class="multi-choice-item">D. Make sure that the ERP system can validate the user unique identifier headers in the HTTP requests.</li></ul>
+<ul>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="A">A.</span> Create an access level named "Authorized Devices." Utilize the Device Policy attribute to require corporate-managed devices. Apply the access level to the Google Cloud project and instruct all employees to enroll their devices in the organization's management system.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create an access level titled "Internal Network Only." Add a condition with these attributes: IP Subnetworks: 10.100.0.0/16, 192.168.0.0/16. Device Policy: Require OS as Windows or macOS. Apply this access level to the sensitive Google Cloud project.</li>
+<li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Create an access level titled "Corporate Access." Add a condition with the IP Subnetworks attribute, including the ranges: 10.100.0.</li>
+
+</ul>
 </div>
-<a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
-<a class="btn btn-primary hide-solution d-none" href="#">Hide Answer</a>
+<div class="card-text question-answer bg-light white-text">
+<span class="correct-answer-box">
+<strong>Suggested Answer:</strong>
+<span class="correct-answer"></span>
+<br/>
+</span>
 </div>
 </div>
-<div class="q-card q-answer mb-4" style="display:none;">
-<h2>Wyjaśnienie</h2>
-<pre>
-Potwierdzona odpowiedź: A
-[Merytoryczne wyjaśnienie...]
-</pre>
-</div>
-<div class="q-card q-answer mb-4" style="display:none;">
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
-...
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- ...
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-...
-</pre>
 </div>
 </div>
 </body>
