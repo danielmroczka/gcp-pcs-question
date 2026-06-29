@@ -93,27 +93,23 @@ In order to meet PCI DSS requirements, a customer wants to ensure that all outbo
 Potwierdzona odpowiedź: CD (Compute Engine oraz Google Kubernetes Engine)
 
 Wyjaśnienie: 
-PCI DSS (wymóg 1.2.1) nakłada obowiązek ograniczania ruchu wychodzącego (egress) tylko do niezbędnych, autoryzowanych połączeń. W modelu współdzielonej odpowiedzialności, tylko usługi dające bezpośredni dostęp do warstwy sieciowej VPC pozwalają na pełną kontrolę ruchu wychodzącego bez dodatkowych mechanizmów:
-- Compute Engine (C): Jako rozwiązanie IaaS, umożliwia definiowanie reguł Egress Firewall, które mogą blokować cały ruch wychodzący domyślnie (deny all egress) i zezwalać tylko na specyficzne, autoryzowane cele.
-- Google Kubernetes Engine (D): GKE korzysta z sieci VPC i wspiera Network Policies, co pozwala na granularne ograniczanie ruchu na poziomie podów i węzłów, spełniając wymogi PCI bez dodatkowych kontroli kompensacyjnych.
+Wymóg PCI DSS 1.2.1 nakłada obowiązek ścisłej kontroli ruchu wychodzącego (egress). 
+- Compute Engine (C) oraz Google Kubernetes Engine (D) są usługami typu IaaS/CaaS, które działają wewnątrz sieci VPC. Pozwala to na bezpośrednie stosowanie reguł "VPC Firewall Rules" (Egress Deny All z wyjątkami), co zapewnia pełną kontrolę nad wychodzącym ruchem bez potrzeby wdrażania dodatkowych komponentów.
 
 Dlaczego pozostałe są błędne:
-A. App Engine: To usługa PaaS. Domyślnie ruch wychodzi przez współdzieloną pulę adresów IP Google. Aby go kontrolować zgodnie z PCI, wymagany jest Serverless VPC Access Connector, co stanowi "dodatkową kontrolę kompensacyjną".
-B. Cloud Functions: Podobnie jak App Engine, jest to usługa serverless wymagająca dodatkowych komponentów sieciowych do pełnej kontroli ruchu wychodzącego przez VPC.
-E. Cloud Storage: Jest to usługa typu Storage, a nie środowisko wykonawcze (compute), które inicjuje ruch sieciowy podlegający pod te same wymogi filtrowania egress co serwery.
+- A, B (App Engine, Cloud Functions): Są usługami PaaS (serverless). W standardowej konfiguracji nie oferują bezpośredniej kontroli nad warstwą sieciową VPC. Aby je połączyć z VPC, wymagany jest "Serverless VPC Access Connector", co stanowi dodatkowy komponent sieciowy, a więc "compensating control" (kontrolę kompensacyjną), której pytanie zakazuje.
+- E (Cloud Storage): Jest usługą typu object storage, która sama w sobie nie inicjuje ruchu sieciowego w taki sposób, jak środowiska wykonawcze kodu (Compute).
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- Słowo-klucz "Restrict Egress" + "PCI DSS" w GCP prawie zawsze kieruje w stronę VPC Firewall Rules i usług IaaS/CaaS.
-- "Without additional compensating controls" wyklucza usługi serverless, które do wejścia w VPC potrzebują "VPC Access Connector".
+- Jeśli pytanie o PCI DSS wyklucza "compensating controls", zawsze wybieraj usługi, które natywnie wspierają VPC Firewall Rules (Compute Engine, GKE).
 
 Kluczowe zagadnienia do powtórzenia:
-- PCI DSS Requirement 1.2.1 (Egress control)
-- VPC Firewall Rules (Ingress vs Egress)
-- Network Policies w klastrach GKE
-- Serverless VPC Access Connector
+- PCI DSS w chmurze (Cloud Shared Responsibility Model).
+- VPC Egress Firewall Rules.
+- Ograniczenia usług serverless w kontekście sieciowym.
 
 Dokumentacja:
-<a href="https://cloud.google.com/vpc/docs/firewalls" target="_blank">https://cloud.google.com/vpc/docs/firewalls</a>
+<a href="https://cloud.google.com/vpc/docs/firewalls" target="_blank">VPC Firewall Rules</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

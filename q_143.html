@@ -80,7 +80,7 @@ Your organization hosts a financial services application running on Compute Engi
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">B</span>
 <br/>
 </span>
 </div>
@@ -89,28 +89,28 @@ Your organization hosts a financial services application running on Compute Engi
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Configure a Cloud VPN connection...)
+Potwierdzona odpowiedź: B (Configure a VPC peering connection...)
 
 Wyjaśnienie:
-Cloud VPN umożliwia bezpieczne połączenie dwóch sieci VPC (nawet w różnych organizacjach) za pomocą tunelu IPsec. Spełnia oba kluczowe wymagania zadania: ruch jest szyfrowany (protokół IPsec gwarantuje szyfrowanie w warstwie sieciowej) oraz odbywa się za pomocą prywatnych adresów IP (RFC 1918). Jest to standardowe rozwiązanie w GCP do bezpiecznego łączenia odizolowanych środowisk różnych organizacji, gdzie wymagane jest dodatkowe szyfrowanie tunelu.
+- Szyfrowanie: Cały ruch wewnątrz sieci Google (VPC-to-VPC) jest domyślnie szyfrowany w warstwie fizycznej (MACsec). VPC Peering w pełni spełnia wymóg "encrypted connection" bez konieczności tworzenia dodatkowych tuneli.
+- Prywatne IP: Peering natywnie wspiera routing po prywatnych adresach IP (RFC 1918) między VPC.
+- Wydajność: Peering jest rozwiązaniem o najniższych opóźnieniach (low latency) i najwyższej przepustowości (high bandwidth), co jest kluczowe w architekturze typu "fintech".
 
 Dlaczego pozostałe są błędne:
-B. VPC Peering: Chociaż pozwala na komunikację po prywatnych adresach IP, a Google domyślnie szyfruje ruch wewnątrz swojej sieci (encryption-in-transit), w kontekście egzaminacyjnym Cloud VPN jest wskazywany jako rozwiązanie spełniające wymóg "encrypted connection" w sposób jawny i konfigurowalny przez użytkownika. Peering jest częściej wybierany dla wydajności, ale VPN jest odpowiedzią na wymóg specyficznego "szyfrowanego połączenia" (IPsec).
-C. VPC Service Controls: To rozwiązanie służy do tworzenia obwodów bezpieczeństwa (perimeters) wokół usług zarządzanych (API Google), a nie do nawiązywania bezpośredniej łączności L3 między instancjami Compute Engine.
-D. Apigee proxy: Jest to rozwiązanie warstwy aplikacji (L7). Chociaż obsługuje TLS, nie spełnia wymogu bezpośredniej komunikacji między serwerami po prywatnych adresach IP w sposób natywny dla infrastruktury sieciowej VPC.
+- A: Cloud VPN jest rozwiązaniem "nadmiarowym" wewnątrz sieci Google. Szyfrowanie IPsec generuje niepotrzebny narzut CPU i opóźnienia, skoro sieć Google jest już bezpieczna. VPN stosuje się głównie w połączeniach hybrydowych (z on-premises).
+- C: VPC Service Controls chroni przed eksfiltracją danych, ale nie służy do nawiązywania bezpośredniej łączności sieciowej między instancjami.
+- D: Apigee to rozwiązanie warstwy aplikacji (L7), które służy do udostępniania API, a nie do bezpośredniego łączenia sieci serwerów (L3).
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli widzisz wymagania: "Encrypted" + "Private IP" + "Separate Organizations/Networks" -> najsilniejszym kandydatem jest Cloud VPN.
-- VPC Peering jest zazwyczaj odpowiedzią, gdy nacisk kładzie się na "Performance" lub "Low Latency" i "Private IP".
+- Jeśli wymagane jest "prywatne IP" + "wydajność" + "bezpieczeństwo wewnątrz sieci Google" -> **VPC Peering**.
+- Jeśli wymagane jest "połączenie z on-premises" -> **Cloud VPN**.
 
 Kluczowe zagadnienia do powtórzenia:
-- Różnice między VPC Peering a Cloud VPN.
-- Scenariusze hybrydowe i między-organizacyjne.
-- Szyfrowanie w tranzycie w GCP.
+- Szyfrowanie wewnątrz sieci Google (Encryption-in-transit).
+- VPC Peering vs Cloud VPN.
 
 Dokumentacja:
-<a href="https://cloud.google.com/network-connectivity/docs/vpn/concepts/overview" target="_blank">Cloud VPN overview</a>
-<a href="https://cloud.google.com/vpc/docs/vpc-peering" target="_blank">VPC Network Peering overview</a>
+<a href="https://cloud.google.com/vpc/docs/vpc-peering" target="_blank">VPC Peering</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

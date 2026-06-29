@@ -80,7 +80,7 @@ Your Security team believes that a former employee of your company gained unauth
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">B</span>
+<span class="correct-answer">D</span>
 <br/>
 </span>
 </div>
@@ -89,30 +89,25 @@ Your Security team believes that a former employee of your company gained unauth
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Use the Cloud Monitoring console to filter audit logs by user.)
+Potwierdzona odpowiedź: D (Use the Logs Explorer to search for user activity.)
 
 Wyjaśnienie:
-- Potwierdzenie dostępu: Logi audytowe (Cloud Audit Logs) są podstawowym źródłem informacji o tym, kto (lub co) wykonywało jakie operacje na zasobach. Filtrowanie logów audytowych pozwoli zidentyfikować aktywność związaną z konkretnym kontem serwisowym (service account).
-- Analiza aktywności: Poprzez przejrzenie logów Admin Activity oraz Data Access można dokładnie określić, jakie zasoby zostały utworzone, zmodyfikowane lub odczytane w ciągu ostatnich 2 miesięcy.
-- Cloud Monitoring / Operations: W konsoli Google Cloud, logi są częścią pakietu operacyjnego (Operations Suite), a dostęp do nich jest zintegrowany z interfejsem monitorowania w celu analizy incydentów.
+- Logs Explorer to natywne i najpotężniejsze narzędzie w Google Cloud służące do przeszukiwania logów audytowych. Pozwala na zaawansowane filtrowanie (np. po polu `principalEmail` lub `serviceAccountKeyName`), co jest kluczowe w procesie dochodzeniowym (forensics).
+- Błąd w opcji B: Cloud Monitoring (często mylony z Logs Explorer) służy głównie do metryk i alertów, a nie do dogłębnej analizy logów zdarzeniowych.
 
 Dlaczego pozostałe są błędne:
-- A: Security Health Analytics wykrywa podatności i błędy w konfiguracji "teraz" (np. publicznie dostępny kubełek), ale nie służy do badania historycznej aktywności użytkowników i potwierdzania włamań z przeszłości.
-- C: Cloud Data Loss Prevention (DLP) służy do odkrywania i klasyfikowania wrażliwych danych wewnątrz plików lub baz, a nie do analizy logów systemowych pod kątem aktywności użytkowników.
-- D: Logs Explorer jest w rzeczywistości najbardziej precyzyjnym narzędziem do przeszukiwania logów audytowych w GCP. Jednak w kontekście niektórych pytań egzaminacyjnych, gdzie opcja D może nie być dostępna lub klucz wskazuje na szerszą konsolę "Monitoring/Operations", odpowiedź B jest wskazywana jako poprawna. Uwaga: W praktyce zawsze używaj Logs Explorer do takich zadań.
+- A: Security Health Analytics służy do wykrywania luk w zabezpieczeniach (np. publiczne foldery), a nie do badania aktywności użytkowników.
+- C: Cloud DLP służy do maskowania danych wrażliwych (np. PESEL w pliku), a nie do analizy zdarzeń w logach.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- Do badania incydentów (forensics) zawsze używamy logów audytowych (Audit Logs).
-- Logi "Admin Activity" są zawsze włączone i bezpłatne; logi "Data Access" często wymagają ręcznego włączenia.
-- W logach szukaj pól takich jak `principalEmail` oraz `serviceAccountKeyName`, aby zidentyfikować skradziony klucz.
+- Jeśli szukasz aktywności (kto, co, kiedy) -> zawsze wybieraj **Logs Explorer**.
 
 Kluczowe zagadnienia do powtórzenia:
-- Typy Cloud Audit Logs (Admin Activity, Data Access, System Event, Access Transparency).
-- Retencja logów (standardowo 400 dni dla Admin Activity).
-- Narzędzia do analizy logów (Logs Explorer, Log Analytics).
+- Cloud Audit Logs (Admin Activity, Data Access).
+- Logs Explorer (filtrowanie zaawansowane).
 
 Dokumentacja:
-- <a href="https://cloud.google.com/logging/docs/audit" target="_blank">Cloud Audit Logs - dokumentacja</a>
+- <a href="https://cloud.google.com/logging/docs/logs-explorer" target="_blank">Logs Explorer overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

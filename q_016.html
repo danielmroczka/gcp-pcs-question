@@ -80,7 +80,7 @@ An organization's typical network and security review consists of analyzing appl
 <div class="card-text question-answer bg-light white-text">
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
-<span class="correct-answer">A</span>
+<span class="correct-answer">B</span>
 <br/>
 </span>
 </div>
@@ -89,41 +89,66 @@ An organization's typical network and security review consists of analyzing appl
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Use Forseti with Firewall filters to catch any unwanted configurations in production.)
+Potwierdzona odpowiedź: B (Mandate use of infrastructure as code and provide static analysis in the CI/CD pipelines to enforce policies.)
 
 Wyjaśnienie: 
-Aby umożliwić zespołom deweloperskim szybkie wdrażanie aplikacji przy jednoczesnym zachowaniu bezpieczeństwa bez ręcznego przeglądu każdego wdrożenia, należy zautomatyzować nadzór (governance). Forseti Security to dedykowane narzędzie open-source dla Google Cloud, które stale skanuje zasoby i reguły zapory (Firewall filters). Pozwala ono na automatyczne wykrywanie konfiguracji niezgodnych z polityką firmy (np. zbyt otwarte porty) i ich raportowanie lub naprawę, co zdejmuje ciężar ręcznej kontroli z zespołu bezpieczeństwa.
+Nowoczesnym i rekomendowanym podejściem do zapewnienia bezpieczeństwa w GCP (zgodnie z "Google Cloud Security Best Practices") jest podejście typu "Shift Left" (przesunięcie w lewo). Wymuszenie użycia Infrastructure as Code (IaC) wraz z automatyczną analizą statyczną (np. przy użyciu Terraform Validator, Checkov czy Forseti Policy Library w CI/CD) pozwala na automatyczne odrzucenie wdrożeń niespełniających wymogów bezpieczeństwa przed ich faktycznym uruchomieniem. Eliminuje to potrzebę manualnego przeglądu, przyspieszając pracę deweloperów.
 
 Dlaczego pozostałe są błędne:
-B. Chociaż "Infrastructure as Code" (IaC) i statyczna analiza w CI/CD (np. Terraform Validator) są uznawane za nowoczesny standard ("shift left"), w kontekście egzaminacyjnym Google często promuje Forseti jako główne rozwiązanie do ciągłego monitoringu zgodności (compliance) w środowisku produkcyjnym. Społeczność często uważa B za lepszą odpowiedź, ale A jest bliższa oficjalnym materiałom szkoleniowym Google z okresu powstania pytania.
-C. Kierowanie całego ruchu przez własne routery (NVA) wprowadza ogromny narzut (overhead), utrudnia skalowanie i jest sprzeczne z celem automatyzacji i uproszczenia procesu.
-D. Przeniesienie produkcji on-premises całkowicie neguje korzyści z używania chmury i nie rozwiązuje problemu bezpieczeństwa w GCP, a jedynie go unika.
+A. Forseti Security jest narzędziem "detektywistycznym" (reaktywnym). Służy do wykrywania błędów już po ich wdrożeniu w produkcji, co nie spełnia w pełni celu "uniknięcia ręcznego przeglądu" na etapie wdrażania (lepiej zapobiegać niż wykrywać).
+C. Routing przez routery (NVA) to rozwiązanie o dużej złożoności operacyjnej, nieefektywne w chmurze i utrudniające skalowanie.
+D. Przeniesienie produkcji on-premises jest sprzeczne z celem korzystania z GCP i nie rozwiązuje problemów bezpieczeństwa chmurowego.
 
 Wskazówki egzaminacyjne (Tips & Tricks):
-- "Governance" + "Security Review Automation" + "GCP Native/Open Source" = Forseti Security.
-- Pamiętaj: Forseti służy do wykrywania dryftu konfiguracji (Configuration Drift) w czasie rzeczywistym.
+- Jeśli pytanie promuje "automatyzację wdrożeń bez ręcznego nadzoru" -> szukaj rozwiązań IaC / CI/CD (Shift Left).
+- Forseti jest poprawną odpowiedzią, gdy pytanie pyta o "continuous monitoring" istniejącej infrastruktury.
 
 Kluczowe zagadnienia do powtórzenia:
-- Forseti Security (Inventory, Scanner, Enforcer)
-- Infrastructure as Code (IaC) Security
-- Automatyzacja zgodności (Compliance automation)
+- Shift Left Security (IaC Security).
+- Automatyzacja polityk (Policy as Code).
+- Potoki CI/CD w GCP.
 
 Dokumentacja:
-<a href="https://forsetisecurity.org/docs/latest/concepts/" target="_blank">https://forsetisecurity.org/docs/latest/concepts/</a>
+<a href="https://cloud.google.com/architecture/policy-validation-in-cicd-pipeline" target="_blank">https://cloud.google.com/architecture/policy-validation-in-cicd-pipeline</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza spornych kwestii (AI):</b> To pytanie wywołuje silną debatę. Opcja B (IaC + CI/CD) jest obecnie uważana za 'złoty standard'. Jednak egzamin Google Cloud Security Professional często odnosi się do Forseti jako kluczowego elementu ekosystemu bezpieczeństwa Google. Jeśli na egzaminie nie widzisz opcji B lub pytanie sugeruje ciągły monitoring istniejącej produkcji – wybierz Forseti.</p>
+<p><b>Sugerowana odpowiedź: B</b></p>
+<p><b>Analiza:</b> W nowoczesnych egzaminach GCP (Cloud Security Professional) podejście IaC/CI/CD (B) jest uznawane za nadrzędną metodę "Security by Design" w porównaniu do reaktywnego Forseti (A).</p>
 <h3>Dodatkowe Zasoby (Linki)</h3>
 <ul>
-<li><a href="https://forsetisecurity.org/docs/latest/concepts/" target="_blank">https://forsetisecurity.org/docs/latest/concepts/</a></li>
+<li><a href="https://cloud.google.com/architecture/policy-validation-in-cicd-pipeline" target="_blank">https://cloud.google.com/architecture/policy-validation-in-cicd-pipeline</a></li>
 </ul>
 </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealButtons = document.querySelectorAll('.reveal-solution');
+    revealButtons.forEach(button => {
+        let isVisible = false;
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const answerSection = document.querySelector('.q-answer');
+            const aiSection = document.querySelector('.ai-analysis-container');
+            if (isVisible) {
+                if (answerSection) answerSection.style.display = 'none';
+                if (aiSection) aiSection.style.display = 'none';
+                this.textContent = 'Show Suggested Answer';
+            } else {
+                if (answerSection) answerSection.style.display = 'block';
+                if (aiSection) aiSection.style.display = 'block';
+                this.textContent = 'Hide Suggested Answer';
+            }
+            isVisible = !isVisible;
+        });
+    });
+});
+</script>
+</body>
+</html>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
