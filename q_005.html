@@ -90,22 +90,19 @@ When creating a secure container image, which two items should you incorporate i
 <div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: BC (Package a single app as a container oraz Remove any unnecessary tools not needed by the app.)
+**Potwierdzona odpowiedź: (Wymagane doprecyzowanie)**
 
 **Reguła Egzaminacyjna (Exam Rule):**
 Przy tworzeniu bezpiecznych obrazów kontenerów, zawsze kieruj się zasadą minimalizmu i separacji: "Jeden kontener = jedna aplikacja" oraz "Minimalna powierzchnia ataku" (usuwanie zbędnych narzędzi).
 
 **Haczyki egzaminacyjne (Exam Traps):**
-- Pułapka: "Warstwy jako ukrywanie sekretów". Nigdy nie używaj warstw obrazu (Docker layers) do maskowania sekretów – zostają one w historii obrazu i są łatwe do wyciągnięcia.
-- Pułapka: "Publiczne obrazy bazowe". Zawsze używaj zaufanych i zminimalizowanych obrazów (np. Distroless). Publiczne obrazy często zawierają luki lub złośliwe komponenty.
-- Pułapka: PID 1. Proces główny powinien zazwyczaj być PID 1, aby poprawnie obsługiwać sygnały systemowe (np. `SIGTERM` dla bezpiecznego zamykania).
+- "Warstwy jako ukrywanie sekretów": Nigdy nie używaj warstw obrazu (Docker layers) do maskowania sekretów – zostają one w historii obrazu i są łatwe do wyciągnięcia.
+- "Publiczne obrazy bazowe": Publiczne obrazy często zawierają luki lub złośliwe komponenty.
+- PID 1: Proces główny powinien zazwyczaj być PID 1, aby poprawnie obsługiwać sygnały systemowe.
 
 **Głębokie wyjaśnienie techniczne:**
-1. **Package a single app as a container (B)**: Separacja usług w osobnych kontenerach pozwala na niezależne skalowanie, zarządzanie cyklem życia i *izolację zabezpieczeń* (jeśli jedna usługa zostanie przejęta, nie oznacza to automatycznego przejęcia całego systemu).
-2. **Remove any unnecessary tools (C)**: Zastosowanie tzw. "Distroless images" lub obrazów zminimalizowanych (np. Alpine) drastycznie zmniejsza powierzchnię ataku. Brak shella (bash/sh), menedżerów pakietów czy narzędzi sieciowych (curl/wget) wewnątrz kontenera uniemożliwia intruzowi łatwe pobranie i uruchomienie złośliwego kodu po zainfekowaniu aplikacji.
-
-Dokumentacja:
-<a href="https://cloud.google.com/architecture/best-practices-for-building-containers" target="_blank">https://cloud.google.com/architecture/best-practices-for-building-containers</a>
+1. **Package a single app as a container (B)**: Separacja usług w osobnych kontenerach pozwala na niezależne skalowanie i *izolację zabezpieczeń*.
+2. **Remove any unnecessary tools (C)**: Zastosowanie tzw. "Distroless images" drastycznie zmniejsza powierzchnię ataku. Brak shella, menedżerów pakietów czy narzędzi sieciowych wewnątrz kontenera uniemożliwia intruzowi łatwe pobranie i uruchomienie złośliwego kodu po zainfekowaniu aplikacji, co wspiera model "Defense in Depth".
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none;" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -141,5 +138,43 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     });
 </script>
+
+<script>
+// Arrow keys navigation
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') {
+        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
+        if (prev) prev.click();
+    } else if (e.key === 'ArrowRight') {
+        const next = document.querySelector('.q-nav a[href*="Następne"]');
+        if (next) next.click();
+    }
+});
+
+// Swipe navigation
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+}, false);
+
+document.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+}, false);
+
+function handleSwipe() {
+    if (touchEndX < touchStartX - 50) { // Swipe Left
+        const next = document.querySelector('.q-nav a[href*="Następne"]');
+        if (next) next.click();
+    }
+    if (touchEndX > touchStartX + 50) { // Swipe Right
+        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
+        if (prev) prev.click();
+    }
+}
+</script>
 </body>
+
 </html>

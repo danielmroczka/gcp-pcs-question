@@ -163,5 +163,43 @@ document.addEventListener('DOMContentLoaded', function() {
     <p>[DETAILED EXPLANATION WITH GCP TERMINOLOGY]</p>
 </div>
 
+
+<script>
+// Arrow keys navigation
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') {
+        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
+        if (prev) prev.click();
+    } else if (e.key === 'ArrowRight') {
+        const next = document.querySelector('.q-nav a[href*="Następne"]');
+        if (next) next.click();
+    }
+});
+
+// Swipe navigation
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+}, false);
+
+document.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+}, false);
+
+function handleSwipe() {
+    if (touchEndX < touchStartX - 50) { // Swipe Left
+        const next = document.querySelector('.q-nav a[href*="Następne"]');
+        if (next) next.click();
+    }
+    if (touchEndX > touchStartX + 50) { // Swipe Right
+        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
+        if (prev) prev.click();
+    }
+}
+</script>
 </body>
+
 </html>

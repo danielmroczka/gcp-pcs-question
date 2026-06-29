@@ -88,41 +88,17 @@ A company's application is deployed with a user-managed Service Account key. You
 <div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Create a new key, and use the new key in the application. Delete the old key from the Service Account.)
-
-Wyjaśnienie: 
-Google Cloud nie oferuje automatycznej rotacji dla kluczy serwisowych zarządzanych przez użytkownika (user-managed Service Account keys) w formacie JSON. Zalecaną i najbezpieczniejszą praktyką rotacji, która minimalizuje ryzyko przestojów, jest procedura manualna:
-1. Utworzenie nowego klucza (nowa para publiczny/prywatny).
-2. Zaktualizowanie konfiguracji aplikacji tak, aby korzystała z nowego klucza.
-3. Zweryfikowanie poprawności działania aplikacji (test).
-4. Usunięcie starego klucza z konta serwisowego w IAM, co trwale unieważnia go w całym systemie Google Cloud.
-
-Dlaczego pozostałe są błędne:
-A, B. gcloud commands: Komendy takie jak `enable-auto-rotate` czy `keys rotate` dla kluczy typu "user-managed" (JSON pobrany na dysk) po prostu nie istnieją w narzędziu `gcloud`. Automatyczna rotacja dotyczy wyłącznie kluczy zarządzanych przez Google (Google-managed keys), do których użytkownik nigdy nie ma dostępu.
-D. Store old key as backup: Przechowywanie starych kluczy "na zapas" jest poważnym błędem bezpieczeństwa. Ideą rotacji jest właśnie to, aby stary klucz przestał działać, ograniczając okno czasowe, w którym ewentualnie przejęty przez napastnika klucz mógłby zostać użyty.
-
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "User-managed key" + "Rotate" = Zawsze oznacza procedurę: Nowy klucz -> Update aplikacji -> Usunięcie starego.
-- Pamiętaj: Jeśli możesz pobrać klucz JSON, jest on "user-managed". Google nigdy nie rotuje takich kluczy automatycznie.
-
-Kluczowe zagadnienia do powtórzenia:
-- Zarządzanie kluczami kont serwisowych (Service Account Keys)
-- Najlepsze praktyki rotacji (Zero Downtime Rotation)
-- Google-managed vs User-managed keys
-
-Dokumentacja:
-<a href="https://cloud.google.com/iam/docs/creating-managing-service-account-keys#rotating" target="_blank">https://cloud.google.com/iam/docs/creating-managing-service-account-keys#rotating</a>
+**Potwierdzona odpowiedź: C**
 
 **Reguła Egzaminacyjna (Exam Rule):**
-Zawsze identyfikuj warstwę modelu OSI, na której operuje atak oraz rozwiązanie. DNSSEC działa na poziomie warstwy aplikacji dla DNS, zapobiegając zatruwaniu pamięci podręcznej (Cache Poisoning).
+Klucze kont serwisowych (Service Account Keys) są długowiecznymi poświadczeniami. Najlepszą praktyką rotacji jest stworzenie nowego klucza, zaktualizowanie aplikacji, a następnie usunięcie starego.
 
 **Haczyki egzaminacyjne (Exam Traps):**
-- Mylenie Cloud Armor (WAF - L7) z zabezpieczeniami DNS (DNSSEC - integralność danych DNS).
-- Zakładanie, że TLS/SSL wystarczy do ochrony przed przekierowaniem całego ruchu DNS (DNSSEC zabezpiecza sam proces rezolucji, zanim nawiążesz bezpieczne połączenie TLS).
+- A, B: Nie istnieje w gcloud polecenie enable-auto-rotate ani keys rotate (bezpośrednia zmiana).
+- D: Przechowywanie "starego klucza jako backup" jest błędem bezpieczeństwa, ponieważ klucz pozostaje aktywny i może być wykorzystany przez osobę niepowołaną.
 
 **Głębokie wyjaśnienie techniczne:**
-DNSSEC wykorzystuje kryptografię klucza publicznego (RRSIG, DNSKEY, DS) do cyfrowego podpisywania rekordów DNS w strefach (Zone Signing). Dzięki temu resolver DNS może zweryfikować łańcuch zaufania aż do punktu głównego (root zone) bez konieczności polegania wyłącznie na adresie IP serwera autorytatywnego, co drastycznie ogranicza skuteczność ataków typu MITM i cache poisoning.
-
+W modelu współdzielonej odpowiedzialności, klient zarządza dostępem i poświadczeniami (IAM). Google zaleca unikanie używania kluczy kont serwisowych na rzecz Workload Identity lub innych metod autentykacji (np. OAuth 2.0). Jeśli użycie kluczy jest konieczne, klient jest odpowiedzialny za ich ręczną rotację w celu ograniczenia wpływu ewentualnego wycieku klucza.
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none;" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -160,5 +136,43 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 </script>
 
+
+<script>
+// Arrow keys navigation
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') {
+        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
+        if (prev) prev.click();
+    } else if (e.key === 'ArrowRight') {
+        const next = document.querySelector('.q-nav a[href*="Następne"]');
+        if (next) next.click();
+    }
+});
+
+// Swipe navigation
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+}, false);
+
+document.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+}, false);
+
+function handleSwipe() {
+    if (touchEndX < touchStartX - 50) { // Swipe Left
+        const next = document.querySelector('.q-nav a[href*="Następne"]');
+        if (next) next.click();
+    }
+    if (touchEndX > touchStartX + 50) { // Swipe Right
+        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
+        if (prev) prev.click();
+    }
+}
+</script>
 </body>
+
 </html>

@@ -90,24 +90,20 @@ Which two implied firewall rules are defined on a VPC network? (Choose two.)
 <div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: AB (A rule that allows all outbound connections oraz A rule that denies all inbound connections)
+**Potwierdzona odpowiedź: AB**
 
 **Reguła Egzaminacyjna (Exam Rule):**
 Jeśli widzisz pytanie o "implied firewall rules" w VPC, zawsze szukaj pary: {Allow Egress, Deny Ingress}. "Implied" oznacza reguły wbudowane w każde VPC, nieusuwalne, o najniższym priorytecie (65535).
 
 **Haczyki egzaminacyjne (Exam Traps):**
-- Pułapka: Mylenie "Implied firewall rules" z regułami sieci "default" (np. allow-ssh, allow-rdp). Reguły w sieci "default" są usuwalne i NIE są regułami "implied".
-- Pułapka: Wybór blokady portu 25. Jest to ograniczenie platformy na poziomie dostawcy chmury (GCP platform-level restriction), a nie reguła zdefiniowana wewnątrz firewallu VPC.
+- Mylenie "Implied firewall rules" z regułami sieci "default" (np. allow-ssh, allow-rdp): Reguły w sieci "default" są usuwalne i NIE są regułami "implied".
+- Wybór blokady portu 25: Jest to ograniczenie platformy na poziomie dostawcy chmury (GCP platform-level restriction), a nie reguła zdefiniowana wewnątrz firewallu VPC.
 
 **Głębokie wyjaśnienie techniczne:**
 Każda sieć VPC w GCP posiada dwie automatycznie zdefiniowane reguły o priorytecie 65535:
-1. **Implied allow egress**: Zezwala na cały ruch wychodzący (egress) z instancji, chyba że zostanie on zablokowany przez bardziej specyficzną regułę o wyższym priorytecie (niższym numerze).
-2. **Implied deny ingress**: Blokuje cały ruch przychodzący (ingress) do instancji, chyba że zostanie on zezwolony przez bardziej specyficzną regułę o wyższym priorytecie.
-
-Te reguły pełnią rolę "bezpiecznika" (fail-safe) dla bezpieczeństwa sieci.
-
-Dokumentacja:
-<a href="https://cloud.google.com/vpc/docs/firewalls#implied_rules" target="_blank">https://cloud.google.com/vpc/docs/firewalls#implied_rules</a>
+1. **Implied allow egress**: Zezwala na cały ruch wychodzący z instancji.
+2. **Implied deny ingress**: Blokuje cały ruch przychodzący do instancji, chyba że zostanie on zezwolony przez bardziej specyficzną regułę.
+Reguły te pełnią rolę "bezpiecznika" (fail-safe) dla bezpieczeństwa sieci, co jest kluczowe w modelu współdzielonej odpowiedzialności, gdzie GCP gwarantuje bezpieczne domyślne zachowanie sieci.
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none;" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -143,5 +139,43 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     });
 </script>
+
+<script>
+// Arrow keys navigation
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') {
+        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
+        if (prev) prev.click();
+    } else if (e.key === 'ArrowRight') {
+        const next = document.querySelector('.q-nav a[href*="Następne"]');
+        if (next) next.click();
+    }
+});
+
+// Swipe navigation
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+}, false);
+
+document.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+}, false);
+
+function handleSwipe() {
+    if (touchEndX < touchStartX - 50) { // Swipe Left
+        const next = document.querySelector('.q-nav a[href*="Następne"]');
+        if (next) next.click();
+    }
+    if (touchEndX > touchStartX + 50) { // Swipe Right
+        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
+        if (prev) prev.click();
+    }
+}
+</script>
 </body>
+
 </html>

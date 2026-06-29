@@ -90,37 +90,16 @@ In order to meet PCI DSS requirements, a customer wants to ensure that all outbo
 <div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: CD (Compute Engine oraz Google Kubernetes Engine)
-
-Wyjaśnienie: 
-Wymóg PCI DSS 1.2.1 nakłada obowiązek ścisłej kontroli ruchu wychodzącego (egress). 
-- Compute Engine (C) oraz Google Kubernetes Engine (D) są usługami typu IaaS/CaaS, które działają wewnątrz sieci VPC. Pozwala to na bezpośrednie stosowanie reguł "VPC Firewall Rules" (Egress Deny All z wyjątkami), co zapewnia pełną kontrolę nad wychodzącym ruchem bez potrzeby wdrażania dodatkowych komponentów.
-
-Dlaczego pozostałe są błędne:
-- A, B (App Engine, Cloud Functions): Są usługami PaaS (serverless). W standardowej konfiguracji nie oferują bezpośredniej kontroli nad warstwą sieciową VPC. Aby je połączyć z VPC, wymagany jest "Serverless VPC Access Connector", co stanowi dodatkowy komponent sieciowy, a więc "compensating control" (kontrolę kompensacyjną), której pytanie zakazuje.
-- E (Cloud Storage): Jest usługą typu object storage, która sama w sobie nie inicjuje ruchu sieciowego w taki sposób, jak środowiska wykonawcze kodu (Compute).
-
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie o PCI DSS wyklucza "compensating controls", zawsze wybieraj usługi, które natywnie wspierają VPC Firewall Rules (Compute Engine, GKE).
-
-Kluczowe zagadnienia do powtórzenia:
-- PCI DSS w chmurze (Cloud Shared Responsibility Model).
-- VPC Egress Firewall Rules.
-- Ograniczenia usług serverless w kontekście sieciowym.
-
-Dokumentacja:
-<a href="https://cloud.google.com/vpc/docs/firewalls" target="_blank">VPC Firewall Rules</a>
+**Potwierdzona odpowiedź: CD**
 
 **Reguła Egzaminacyjna (Exam Rule):**
-Zawsze identyfikuj warstwę modelu OSI, na której operuje atak oraz rozwiązanie. DNSSEC działa na poziomie warstwy aplikacji dla DNS, zapobiegając zatruwaniu pamięci podręcznej (Cache Poisoning).
+PCI DSS wymaga ścisłej kontroli ruchu sieciowego (segmentacja, firewalle). Usługi typu IaaS w GCP oferują pełną kontrolę nad firewallami VPC, w przeciwieństwie do usług serverless.
 
 **Haczyki egzaminacyjne (Exam Traps):**
-- Mylenie Cloud Armor (WAF - L7) z zabezpieczeniami DNS (DNSSEC - integralność danych DNS).
-- Zakładanie, że TLS/SSL wystarczy do ochrony przed przekierowaniem całego ruchu DNS (DNSSEC zabezpiecza sam proces rezolucji, zanim nawiążesz bezpieczne połączenie TLS).
+- A, B, E: App Engine, Cloud Functions i Cloud Storage są usługami zarządzanymi (PaaS/Serverless), gdzie klient ma ograniczone możliwości konfigurowania firewalli dla ruchu wychodzącego na poziomie sieci VPC w taki sam sposób jak dla maszyn wirtualnych.
 
 **Głębokie wyjaśnienie techniczne:**
-DNSSEC wykorzystuje kryptografię klucza publicznego (RRSIG, DNSKEY, DS) do cyfrowego podpisywania rekordów DNS w strefach (Zone Signing). Dzięki temu resolver DNS może zweryfikować łańcuch zaufania aż do punktu głównego (root zone) bez konieczności polegania wyłącznie na adresie IP serwera autorytatywnego, co drastycznie ogranicza skuteczność ataków typu MITM i cache poisoning.
-
+Compute Engine (VMs) oraz GKE (kontenery w ramach VM) działają w ramach VPC. Klient jest odpowiedzialny za reguły firewall VPC (egress rules), co pozwala na precyzyjne autoryzowanie ruchu wychodzącego zgodnie z PCI DSS. W usługach zarządzanych, klient nie ma takiej kontroli nad warstwą sieciową, co wymusza stosowanie dodatkowych "compensating controls" (np. VPC Service Controls, proxy).
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none;" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -158,5 +137,43 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 </script>
 
+
+<script>
+// Arrow keys navigation
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') {
+        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
+        if (prev) prev.click();
+    } else if (e.key === 'ArrowRight') {
+        const next = document.querySelector('.q-nav a[href*="Następne"]');
+        if (next) next.click();
+    }
+});
+
+// Swipe navigation
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+}, false);
+
+document.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+}, false);
+
+function handleSwipe() {
+    if (touchEndX < touchStartX - 50) { // Swipe Left
+        const next = document.querySelector('.q-nav a[href*="Następne"]');
+        if (next) next.click();
+    }
+    if (touchEndX > touchStartX + 50) { // Swipe Right
+        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
+        if (prev) prev.click();
+    }
+}
+</script>
 </body>
+
 </html>

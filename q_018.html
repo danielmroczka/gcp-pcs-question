@@ -89,38 +89,16 @@ An organization adopts Google Cloud Platform (GCP) for application hosting servi
 <div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Set the minimum length for passwords to be 12 characters.)
-
-Wyjaśnienie: 
-W kontekście nowoczesnych polityk bezpieczeństwa (zgodnie z zaleceniami Google oraz standardami NIST/CIS, które są fundamentem GCP), 12 znaków jest uznawane za bezpieczne minimum dla haseł w kontach korporacyjnych. Choć techniczne minimum systemowe w Cloud Identity wynosi 8 znaków, "wytyczne" (guidelines) dla organizacji promują wyższy standard (min. 12).
-
-Dlaczego pozostałe są błędne:
-A. 8 znaków to techniczne minimum systemowe, ale nie jest to zalecana wytyczna dla polityk korporacyjnych w nowoczesnym środowisku.
-B. 10 znaków jest lepsze niż 8, ale 12 jest standardem branżowym promowanym przez NIST, na którym opierają się wytyczne GCP.
-D. 6 znaków jest zdecydowanie za słabym zabezpieczeniem.
-
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie pyta o "guidelines" (wytyczne) dla organizacji, szukaj odpowiedzi zgodnej z wysokimi standardami bezpieczeństwa (min. 12).
-- Jeśli pytanie pyta o "technical minimum" (minimum techniczne usługi), szukaj 8.
-
-Kluczowe zagadnienia do powtórzenia:
-- Cloud Identity Password Policies (Best Practices).
-- Standardy bezpieczeństwa NIST/CIS.
-- Zarządzanie tożsamością w Google Cloud.
-
-Dokumentacja:
-<a href="https://cloud.google.com/architecture/identity/best-practices-for-password-policies" target="_blank">Best practices for password policies</a>
+**Potwierdzona odpowiedź: C**
 
 **Reguła Egzaminacyjna (Exam Rule):**
-Zawsze identyfikuj warstwę modelu OSI, na której operuje atak oraz rozwiązanie. DNSSEC działa na poziomie warstwy aplikacji dla DNS, zapobiegając zatruwaniu pamięci podręcznej (Cache Poisoning).
+Zgodnie z najlepszymi praktykami Google Cloud Identity oraz standardami bezpieczeństwa NIST, hasła muszą być wystarczająco długie, aby zapobiec atakom typu brute-force.
 
 **Haczyki egzaminacyjne (Exam Traps):**
-- Mylenie Cloud Armor (WAF - L7) z zabezpieczeniami DNS (DNSSEC - integralność danych DNS).
-- Zakładanie, że TLS/SSL wystarczy do ochrony przed przekierowaniem całego ruchu DNS (DNSSEC zabezpiecza sam proces rezolucji, zanim nawiążesz bezpieczne połączenie TLS).
+- A, B, D: Częstym błędem jest myślenie, że krótsze hasła (6-10 znaków) są wystarczające. Współczesne standardy (np. rekomendacje Google) wymagają minimum 12 znaków dla zwiększenia odporności na ataki słownikowe.
 
 **Głębokie wyjaśnienie techniczne:**
-DNSSEC wykorzystuje kryptografię klucza publicznego (RRSIG, DNSKEY, DS) do cyfrowego podpisywania rekordów DNS w strefach (Zone Signing). Dzięki temu resolver DNS może zweryfikować łańcuch zaufania aż do punktu głównego (root zone) bez konieczności polegania wyłącznie na adresie IP serwera autorytatywnego, co drastycznie ogranicza skuteczność ataków typu MITM i cache poisoning.
-
+Cloud Identity zarządza tożsamością i dostępem. Odpowiedzialność klienta ("in the cloud") obejmuje egzekwowanie polityk bezpieczeństwa kont użytkowników. Google narzuca minimalne standardy, ale klient musi skonfigurować politykę haseł zgodnie ze swoimi wymogami bezpieczeństwa, gdzie 12 znaków jest uznawane za "gold standard" dla ochrony przed współczesnymi metodami łamania haseł.
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none;" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -156,5 +134,43 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     });
 </script>
+
+<script>
+// Arrow keys navigation
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') {
+        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
+        if (prev) prev.click();
+    } else if (e.key === 'ArrowRight') {
+        const next = document.querySelector('.q-nav a[href*="Następne"]');
+        if (next) next.click();
+    }
+});
+
+// Swipe navigation
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+}, false);
+
+document.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+}, false);
+
+function handleSwipe() {
+    if (touchEndX < touchStartX - 50) { // Swipe Left
+        const next = document.querySelector('.q-nav a[href*="Następne"]');
+        if (next) next.click();
+    }
+    if (touchEndX > touchStartX + 50) { // Swipe Right
+        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
+        if (prev) prev.click();
+    }
+}
+</script>
 </body>
+
 </html>

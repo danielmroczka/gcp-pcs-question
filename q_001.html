@@ -89,23 +89,19 @@ Your team needs to make sure that a Compute Engine instance does not have access
 <div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: AC (Public IP oraz Private Google Access)
+**Potwierdzona odpowiedź: AC**
 
 **Reguła Egzaminacyjna (Exam Rule):**
 Jeśli widzisz pytanie o izolację instancji Compute Engine zarówno od publicznego Internetu, JAK I od usług Google API, zawsze wybierz parę: {Public IP disabled, Private Google Access disabled}. Public IP zapewnia dostęp do Internetu, a Private Google Access (nawet bez publicznego IP) zapewnia instancji dostęp do publicznych punktów końcowych API Google poprzez wewnętrzną sieć Google.
 
 **Haczyki egzaminacyjne (Exam Traps):**
-- Pułapka: Wybór "IP Forwarding". Jest to funkcja potrzebna, gdy instancja działa jako brama (np. VPN lub NAT), ale nie wpływa bezpośrednio na dostęp do Google API.
-- Pułapka: Zakładanie, że brak publicznego IP wystarczy. Bez wyłączonego Private Google Access, instancja nadal może "sięgnąć" do API Google.
+- Wybór "IP Forwarding": Jest to funkcja potrzebna, gdy instancja działa jako brama (np. VPN lub NAT), ale nie wpływa bezpośrednio na dostęp do Google API.
+- Zakładanie, że brak publicznego IP wystarczy: Bez wyłączonego Private Google Access, instancja nadal może "sięgnąć" do API Google.
 
 **Głębokie wyjaśnienie techniczne:**
-Compute Engine używa VPC (Virtual Private Cloud). 
+W modelu współdzielonej odpowiedzialności GCP, konfiguracja sieci VPC jest po stronie klienta. 
 1. **Public IP**: Wyłączenie go odcina bezpośredni dostęp do Internetu (egress do publicznych IP).
-2. **Private Google Access (PGA)**: Ta funkcja umożliwia instancjom bez publicznych adresów IP komunikację z API Google (np. Storage, BigQuery) poprzez wewnętrzną sieć Google. Wyłączenie PGA na podsieci (subnet level) wymusza, aby ruch do API Google nie opuszczał prywatnej sieci w sposób niekontrolowany lub w ogóle był blokowany dla instancji bez specjalnych tras. 
-3. **Static routes**: Są elementem routingu warstwy 3 wewnątrz VPC. Wyłączenie ich nie służy do kontroli dostępu do API zewnętrznych usług, lecz do zarządzania ruchem wewnętrznym.
-
-Dokumentacja:
-<a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">https://cloud.google.com/vpc/docs/private-google-access</a>
+2. **Private Google Access (PGA)**: Ta funkcja umożliwia instancjom bez publicznych adresów IP komunikację z API Google poprzez wewnętrzną sieć Google. Wyłączenie PGA na poziomie podsieci (subnet) wymusza, aby ruch do API Google nie opuszczał prywatnej sieci w sposób niekontrolowany.
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none;" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -141,5 +137,43 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     });
 </script>
+
+<script>
+// Arrow keys navigation
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') {
+        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
+        if (prev) prev.click();
+    } else if (e.key === 'ArrowRight') {
+        const next = document.querySelector('.q-nav a[href*="Następne"]');
+        if (next) next.click();
+    }
+});
+
+// Swipe navigation
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+}, false);
+
+document.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+}, false);
+
+function handleSwipe() {
+    if (touchEndX < touchStartX - 50) { // Swipe Left
+        const next = document.querySelector('.q-nav a[href*="Następne"]');
+        if (next) next.click();
+    }
+    if (touchEndX > touchStartX + 50) { // Swipe Right
+        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
+        if (prev) prev.click();
+    }
+}
+</script>
 </body>
+
 </html>

@@ -88,39 +88,17 @@ Your team needs to configure their Google Cloud Platform (GCP) environment so th
 <div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Shared VPC Network with a host project and service projects)
-
-Wyjaśnienie: 
-Shared VPC to zaawansowane rozwiązanie w Google Cloud, które pozwala na centralizację zarządzania zasobami sieciowymi w skali całej organizacji. Polega ono na wyznaczeniu jednego projektu (Host Project) jako centralnego punktu zarządzania siecią (firewalle, podsieci, trasy, bramy VPN). Inne projekty (Service Projects) przyłączają się do tej sieci, mogąc z niej korzystać, ale bez uprawnień do zmiany jej konfiguracji sieciowej. Zapewnia to idealną separację obowiązków (SoD) – zespół sieciowy kontroluje infrastrukturę w Host Project, a deweloperzy budują zasoby w Service Projects.
-
-Dlaczego pozostałe są błędne:
-B. Grant Compute Admin role: Nadanie roli Compute Admin w każdym projekcie inżynieryjnym to decentralizacja, a nie centralizacja. Zespół sieciowy musiałby zarządzać setkami niezależnych projektów, co jest nieefektywne, trudne do audytowania i podatne na błędy konfiguracyjne.
-C. VPC peering hub and spoke: Peering łączy odrębne sieci VPC, ale nie zarządza nimi centralnie. Każda sieć (każdy spoke) nadal posiada własne, niezależne reguły firewalla i tablice routingu, co uniemożliwia spójną kontrolę z jednego miejsca.
-D. Cloud VPN hub and spoke: VPN służy głównie do łączenia odrębnych sieci (np. chmura z on-premises) przez internet. Używanie VPN do łączenia wszystkich projektów wewnątrz chmury jest nieefektywne kosztowo i wydajnościowo w porównaniu do Shared VPC.
-
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Centralize control over networking": To sygnał dla "Shared VPC".
-- "Host project / Service projects": To specyficzna terminologia Shared VPC, którą musisz znać.
-- Shared VPC jest standardem w dużych organizacjach (Enterprise) wymagających wysokiego poziomu bezpieczeństwa i compliance.
-
-Kluczowe zagadnienia do powtórzenia:
-- Shared VPC (Host Project vs Service Project)
-- Separacja obowiązków (Separation of Duties) w sieciach
-- IAM w Shared VPC (Rola Compute Network User)
-
-Dokumentacja:
-<a href="https://cloud.google.com/vpc/docs/shared-vpc" target="_blank">https://cloud.google.com/vpc/docs/shared-vpc</a>
+**Potwierdzona odpowiedź: A**
 
 **Reguła Egzaminacyjna (Exam Rule):**
-Zawsze identyfikuj warstwę modelu OSI, na której operuje atak oraz rozwiązanie. DNSSEC działa na poziomie warstwy aplikacji dla DNS, zapobiegając zatruwaniu pamięci podręcznej (Cache Poisoning).
+Shared VPC (VPC współdzielone) umożliwia scentralizowane zarządzanie zasobami sieciowymi w jednym projekcie hosta (Host Project) i udostępnianie ich do projektów usługowych (Service Projects).
 
 **Haczyki egzaminacyjne (Exam Traps):**
-- Mylenie Cloud Armor (WAF - L7) z zabezpieczeniami DNS (DNSSEC - integralność danych DNS).
-- Zakładanie, że TLS/SSL wystarczy do ochrony przed przekierowaniem całego ruchu DNS (DNSSEC zabezpiecza sam proces rezolucji, zanim nawiążesz bezpieczne połączenie TLS).
+- B: Przyznanie zbyt szerokich uprawnień (Compute Admin) każdemu projektowi łamie zasadę "least privilege".
+- C, D: Peering i VPN zwiększają złożoność zarządzania (zarządzanie wieloma firewallami w wielu projektach) i nie zapewniają tak spójnego scentralizowanego sterowania jak Shared VPC.
 
 **Głębokie wyjaśnienie techniczne:**
-DNSSEC wykorzystuje kryptografię klucza publicznego (RRSIG, DNSKEY, DS) do cyfrowego podpisywania rekordów DNS w strefach (Zone Signing). Dzięki temu resolver DNS może zweryfikować łańcuch zaufania aż do punktu głównego (root zone) bez konieczności polegania wyłącznie na adresie IP serwera autorytatywnego, co drastycznie ogranicza skuteczność ataków typu MITM i cache poisoning.
-
+Shared VPC pozwala zespołowi sieciowemu (Network Security Team) na scentralizowaną konfigurację (firewalle, subnety, trasy) w projekcie hosta. W modelu współdzielonej odpowiedzialności, klient jest odpowiedzialny za poprawne zaprojektowanie architektury sieciowej. Shared VPC minimalizuje ryzyko błędów konfiguracji (np. niespójne reguły firewall) poprzez wprowadzenie jednego punktu kontroli, zachowując jednocześnie separację środowisk (projektów).
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none;" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -158,5 +136,43 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 </script>
 
+
+<script>
+// Arrow keys navigation
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') {
+        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
+        if (prev) prev.click();
+    } else if (e.key === 'ArrowRight') {
+        const next = document.querySelector('.q-nav a[href*="Następne"]');
+        if (next) next.click();
+    }
+});
+
+// Swipe navigation
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+}, false);
+
+document.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+}, false);
+
+function handleSwipe() {
+    if (touchEndX < touchStartX - 50) { // Swipe Left
+        const next = document.querySelector('.q-nav a[href*="Następne"]');
+        if (next) next.click();
+    }
+    if (touchEndX > touchStartX + 50) { // Swipe Right
+        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
+        if (prev) prev.click();
+    }
+}
+</script>
 </body>
+
 </html>

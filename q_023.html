@@ -88,38 +88,18 @@ When working with agents in the support center via online chat, your organizatio
 <div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Use the image inspection and redaction actions of the DLP API to redact PII from the images before storing them for analysis.)
-
-Wyjaśnienie: 
-Cloud Data Loss Prevention (DLP) API to usługa zaprojektowana specjalnie do wykrywania i maskowania danych wrażliwych (PII). W scenariuszu, gdzie klienci przesyłają zdjęcia dokumentów, DLP API wykorzystuje mechanizmy optycznego rozpoznawania znaków (OCR) do odnalezienia tekstu na obrazach, a następnie funkcję "redaction" (redakcja/maskowanie), która pozwala na trwałe zakrycie wykrytych wrażliwych informacji (np. numerów dowodów, nazwisk) na samym obrazie. Pozwala to na zachowanie użyteczności reszty danych (Data Utility) do analizy, jednocześnie eliminując ryzyko przechowywania PII.
-
-Dlaczego pozostałe są błędne:
-A. Cloud KMS: Szyfrowanie przy użyciu KMS zabezpiecza dane przed niepowołanym dostępem, ale nie zmienia ich zawartości. PII nadal znajdowałoby się fizycznie w logach, co nie rozwiązuje problemu "czyszczenia" danych do celów analitycznych bez odszyfrowywania.
-B. Object Lifecycle Management: Ta funkcja służy do automatycznego usuwania lub przenoszenia całych plików (np. po 30 dniach). Usunięcie całego pliku czatu uniemożliwia jakąkolwiek późniejszą analizę trendów, co narusza wymóg "maintaining data utility".
-D. Generalization and bucketing: Są to techniki de-identyfikacji danych ustrukturyzowanych (np. zamiana wieku na zakres "20-30 lat"). Choć to funkcje DLP, nie mają one zastosowania bezpośrednio do procesowania obrazów (zrzutów dokumentów), gdzie wymagana jest redakcja wizualna (maskowanie pikseli).
-
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "PII" + "Images" / "Pictures" + "Analyze": Twoją pierwszą myślą zawsze powinno być DLP API z funkcją Image Redaction.
-- "Maintain data utility" to w języku egzaminacyjnym Google sygnał, że nie wolno usuwać całych rekordów (LifeCycle), lecz trzeba je "oczyścić" (DLP).
-
-Kluczowe zagadnienia do powtórzenia:
-- Możliwości Cloud DLP API w zakresie tekstów i obrazów
-- Różnica między Redaction, Masking i De-identification
-- Integracja Cloud Storage z DLP API
-
-Dokumentacja:
-<a href="https://cloud.google.com/dlp/docs/redacting-sensitive-data-images" target="_blank">https://cloud.google.com/dlp/docs/redacting-sensitive-data-images</a>
+**Potwierdzona odpowiedź: C**
 
 **Reguła Egzaminacyjna (Exam Rule):**
-Zawsze identyfikuj warstwę modelu OSI, na której operuje atak oraz rozwiązanie. DNSSEC działa na poziomie warstwy aplikacji dla DNS, zapobiegając zatruwaniu pamięci podręcznej (Cache Poisoning).
+DLP API (Data Loss Prevention) umożliwia automatyczną identyfikację, inspekcję i redakcję (usuwanie/maskowanie) danych wrażliwych w obrazach i tekście.
 
 **Haczyki egzaminacyjne (Exam Traps):**
-- Mylenie Cloud Armor (WAF - L7) z zabezpieczeniami DNS (DNSSEC - integralność danych DNS).
-- Zakładanie, że TLS/SSL wystarczy do ochrony przed przekierowaniem całego ruchu DNS (DNSSEC zabezpiecza sam proces rezolucji, zanim nawiążesz bezpieczne połączenie TLS).
+- A: Szyfrowanie KMS nie usuwa PII, jedynie je ukrywa, co utrudnia analizę.
+- B: Usunięcie danych (Discard) uniemożliwia analizę trendów.
+- D: Generalizacja tekstu nie rozwiązuje problemu PII zawartego w obrazach (dokumentach).
 
 **Głębokie wyjaśnienie techniczne:**
-DNSSEC wykorzystuje kryptografię klucza publicznego (RRSIG, DNSKEY, DS) do cyfrowego podpisywania rekordów DNS w strefach (Zone Signing). Dzięki temu resolver DNS może zweryfikować łańcuch zaufania aż do punktu głównego (root zone) bez konieczności polegania wyłącznie na adresie IP serwera autorytatywnego, co drastycznie ogranicza skuteczność ataków typu MITM i cache poisoning.
-
+W modelu współdzielonej odpowiedzialności, klient odpowiada za poufność danych przetwarzanych przez jego aplikacje. Obrazy dokumentów zawierają nieustrukturyzowane dane PII. Funkcje DLP API do przetwarzania obrazów wykorzystują OCR i rozpoznawanie wzorców, aby wykryć i zamaskować (redact) PII przed zapisem w bazie logów. Pozwala to na zachowanie "utility" (użyteczności) danych do analizy trendów bez naruszania prywatności użytkowników.
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none;" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
@@ -157,5 +137,43 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 </script>
 
+
+<script>
+// Arrow keys navigation
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') {
+        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
+        if (prev) prev.click();
+    } else if (e.key === 'ArrowRight') {
+        const next = document.querySelector('.q-nav a[href*="Następne"]');
+        if (next) next.click();
+    }
+});
+
+// Swipe navigation
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+}, false);
+
+document.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+}, false);
+
+function handleSwipe() {
+    if (touchEndX < touchStartX - 50) { // Swipe Left
+        const next = document.querySelector('.q-nav a[href*="Następne"]');
+        if (next) next.click();
+    }
+    if (touchEndX > touchStartX + 50) { // Swipe Right
+        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
+        if (prev) prev.click();
+    }
+}
+</script>
 </body>
+
 </html>
