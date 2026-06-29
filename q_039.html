@@ -86,7 +86,7 @@ A customer has 300 engineers. The company wants to grant different levels of acc
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4" style="display:none;">
+<div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
 Potwierdzona odpowiedź: BC (Foldery dla środowisk oraz Grupy Google)
@@ -115,7 +115,7 @@ Dokumentacja:
 <a href="https://cloud.google.com/iam/docs/groups-in-iam" target="_blank">https://cloud.google.com/iam/docs/groups-in-iam</a>
 </pre>
 </div>
-<div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
+<div class="ai-analysis-container" style="display:none;" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
@@ -136,23 +136,20 @@ document.addEventListener('DOMContentLoaded', function() {
         let isVisible = false;
         button.addEventListener('click', function(e) {
             e.preventDefault();
-            const answerSection = document.querySelector('.q-answer');
-            const aiSection = document.querySelector('.ai-analysis-container');
-            if (isVisible) {
-                if (answerSection) answerSection.style.display = 'none';
-                if (aiSection) aiSection.style.display = 'none';
-                this.textContent = 'Show Suggested Answer';
-            } else {
-                if (answerSection) answerSection.style.display = 'block';
-                if (aiSection) aiSection.style.display = 'block';
-                this.textContent = 'Hide Suggested Answer';
-            }
+            // Znajdź wszystkie sekcje wewnątrz q-card lub powiązane
+            const container = this.closest('.q-card');
+            const sections = container.parentNode.querySelectorAll('.q-answer, .ai-analysis-container');
+            
+            sections.forEach(sec => {
+                sec.style.display = isVisible ? 'none' : 'block';
+            });
+            this.textContent = isVisible ? 'Show Suggested Answer' : 'Hide Suggested Answer';
             isVisible = !isVisible;
         });
     });
-});
+    });
 </script>
-<div class="q-card q-answer mb-4" style="display:none;">
+<div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
 <h2>Wyjaśnienie Audytowe</h2>
 <pre>
 <strong>Reguła Egzaminacyjna (Exam Rule):</strong>
