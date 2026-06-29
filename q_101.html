@@ -86,7 +86,7 @@ Your company wants to determine what products they can build to help customers i
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4" style="display:none;" style="display:none;">
+<div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
 Potwierdzona odpowiedź: A.
@@ -106,7 +106,7 @@ Dokumentacja:
 <a href="https://cloud.google.com/dlp/docs/concepts-pseudonymization#deterministic-encryption" target="_blank">Google Cloud DLP - Pseudonimizacja danych</a>
 </pre>
 </div>
-<div class="ai-analysis-container" style="display:none;" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
+<div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
 <div class="analysis-section">
 <h3>Analiza i Wyjaśnienie</h3>
@@ -138,43 +138,11 @@ Dokumentacja:
 
 
 
-<script>
-// Arrow keys navigation
-document.addEventListener('keydown', function(e) {
-    const navLinks = document.querySelectorAll('.q-nav a');
-    if (e.key === 'ArrowLeft') {
-        // Prev is usually the first link
-        if (navLinks.length >= 1) navLinks[0].click();
-    } else if (e.key === 'ArrowRight') {
-        // Next is usually the last link
-        if (navLinks.length >= 3) navLinks[2].click();
-    }
-});
 
-// Swipe navigation
-let touchStartX = 0;
-let touchEndX = 0;
 
-document.addEventListener('touchstart', e => {
-    touchStartX = e.changedTouches[0].screenX;
-}, false);
 
-document.addEventListener('touchend', e => {
-    touchEndX = e.changedTouches[0].screenX;
-    handleSwipe();
-}, false);
 
-function handleSwipe() {
-    const navLinks = document.querySelectorAll('.q-nav a');
-    if (touchEndX < touchStartX - 50) { // Swipe Left (Next)
-        if (navLinks.length >= 3) navLinks[2].click();
-    }
-    if (touchEndX > touchStartX + 50) { // Swipe Right (Prev)
-        if (navLinks.length >= 1) navLinks[0].click();
-    }
-}
-</script>
-</body>
+<script src="navigation.js"></script></body>
 
 
 </html>

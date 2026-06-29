@@ -43,7 +43,7 @@
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
-<div class="card-text question-answer bg-light white-text" style="display:none;">
+<div class="card-text question-answer bg-light white-text" >
 <span class="correct-answer-box">
 <strong>Suggested Answer:</strong>
 <span class="correct-answer">D</span>
@@ -54,7 +54,7 @@
 
 
 
-<div class="q-card q-answer mb-4" style="display:none;">
+<div class="q-card q-answer mb-4 d-none" >
 <h2>Wyjaśnienie</h2>
 <pre>
 Potwierdzona odpowiedź: D
@@ -83,43 +83,11 @@ Usługi GCP (np. VPC Service Controls, DLP) działają na poziomie API platformy
 
 
 
-<script>
-// Arrow keys navigation
-document.addEventListener('keydown', function(e) {
-    const navLinks = document.querySelectorAll('.q-nav a');
-    if (e.key === 'ArrowLeft') {
-        // Prev is usually the first link
-        if (navLinks.length >= 1) navLinks[0].click();
-    } else if (e.key === 'ArrowRight') {
-        // Next is usually the last link
-        if (navLinks.length >= 3) navLinks[2].click();
-    }
-});
 
-// Swipe navigation
-let touchStartX = 0;
-let touchEndX = 0;
 
-document.addEventListener('touchstart', e => {
-    touchStartX = e.changedTouches[0].screenX;
-}, false);
 
-document.addEventListener('touchend', e => {
-    touchEndX = e.changedTouches[0].screenX;
-    handleSwipe();
-}, false);
 
-function handleSwipe() {
-    const navLinks = document.querySelectorAll('.q-nav a');
-    if (touchEndX < touchStartX - 50) { // Swipe Left (Next)
-        if (navLinks.length >= 3) navLinks[2].click();
-    }
-    if (touchEndX > touchStartX + 50) { // Swipe Right (Prev)
-        if (navLinks.length >= 1) navLinks[0].click();
-    }
-}
-</script>
-</body>
+<script src="navigation.js"></script></body>
 
 
 </html>
