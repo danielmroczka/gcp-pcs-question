@@ -90,32 +90,29 @@ You discovered that sensitive personally identifiable information (PII) is being
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: BE (B: Cloud Key Management Service, E: Cloud Data Loss Prevention with deterministic encryption using AES-SIV)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Cloud Key Management Service
+E. Cloud Data Loss Prevention with deterministic encryption using AES-SIV
 
-Dlaczego te odpowiedzi są poprawne:
-- Cloud Data Loss Prevention (DLP) - De-identification: DLP oferuje zaawansowane techniki de-identyfikacji danych, w tym pseudonimizację.
-- Deterministic encryption (AES-SIV): Jest to metoda szyfrowania, która dla tej samej wartości wejściowej zawsze generuje tę samą wartość zaszyfrowaną (przy użyciu tego samego klucza). Dzięki temu analitycy mogą np. łączyć tabele (JOIN) po zaszyfrowanym identyfikatorze użytkownika, nie znając jego prawdziwej tożsamości. Co najważniejsze, proces ten jest odwracalny (re-identification), co pozwala na przywrócenie oryginalnych danych, jeśli zajdzie taka potrzeba.
-- Cloud Key Management Service (KMS): DLP wymaga klucza do wykonania szyfrowania deterministycznego. Najlepszą praktyką bezpieczeństwa w GCP jest przechowywanie i zarządzanie tymi kluczami w Cloud KMS. DLP używa klucza z KMS do "owinięcia" (wrap) klucza kryptograficznego używanego w procesie transformacji.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+W procesie ETL dane PII trafiają do BigQuery. Wymagane jest zaciemnienie (obfuscate) PII w taki sposób, aby proces był odwracalny (re-identify) na potrzeby zaawansowanej analityki danych:
+- E (Szyfrowanie deterministyczne): Szyfrowanie deterministyczne (Deterministic encryption) za pomocą algorytmu AES-SIV w Cloud DLP jest metodą pseudonimizacji, która dla tej samej wartości wejściowej zawsze generuje identyczną wartość wyjściową (surrogate). Pozwala to na wykonywanie zapytań analitycznych (np. JOIN, GROUP BY) bezpośrednio na zaszyfrowanych danych, a co najważniejsze — proces ten jest w pełni odwracalny (można odzyskać oryginalne dane PII).
+- B (Zarządzanie kluczami): Cloud DLP wykorzystuje mechanizmy kryptograficzne, które potrzebują klucza opakowującego (wrapped key). Usługa Cloud KMS (Key Management Service) przechowuje i zarządza kluczem głównym (KEK) użytym w tym procesie, zapewniając kontrolę nad tym, kto ma prawo do odszyfrowania (re-identyfikacji) danych.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Secret Manager: Służy do przechowywania haseł, kluczy API i certyfikatów, ale nie jest natywnie zintegrowany z procesami transformacji de-identyfikacyjnej DLP tak jak KMS.
-- C. Cryptographic hashing: Hashing (skrót kryptograficzny) jest z reguły procesem jednostronnym. Choć DLP go oferuje, re-identyfikacja (odwrócenie procesu) jest bardzo trudna lub niemożliwa bez posiadania oryginalnych danych, co nie spełnia wymogu "need to re-identify it".
-- D. Automatic text redaction: Polega na trwałym usunięciu tekstu (np. zastąpienie go znakiem [REDACTED]). Jest to proces nieodwracalny, więc uniemożliwia re-identyfikację.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Secret Manager: Służy do bezpiecznego przechowywania sekretów aplikacji (haseł, kluczy API), nie posiada funkcji transformacji danych w strumieniach ETL ani integracji z silnikiem deidentyfikacji Cloud DLP.
+- C. Szyfrowanie z haszowaniem kryptograficznym (Cryptographic hashing): Haszowanie jest procesem jednokierunkowym (irreversible). Po zahaszowaniu danych nie ma technicznej możliwości ich ponownej re-identyfikacji, co łamie kluczowy wymóg zadania.
+- D. Automatyczne usuwanie/redagowanie tekstu (automatic text redaction): Trwale zastępuje wrażliwy tekst maską (np. zastępuje nazwisko tekstem `[NAME]`), co jest procesem nieodwracalnym i niszczy spójność referencyjną danych analitycznych.
 
-Wskazówki i triki (Tips & Tricks):
-- "Re-identify" / "Reversible" + "DLP" = Deterministic Encryption (AES-SIV).
-- "Join data without knowing PII" = Deterministic Encryption.
-- Jeśli DLP potrzebuje klucza do operacji kryptograficznych -> KMS.
+4. Wskazówki, hinty, tips and tricks:
+- Kiedy wymagane jest zaciemnienie danych z możliwością ich **późniejszego odczytania/odwrócenia (re-identify)**, poprawnym wyborem jest **Deterministic Encryption (AES-SIV)** z kluczami zarządzanymi w **Cloud KMS**.
+- Haszowanie i klasyczna redakcja (redaction) są nieodwracalne.
 
-Praktyczne informacje na egzamin:
-- Zrozum różnicę między de-identyfikacją (usuwanie PII) a pseudonimizacją (zastępowanie PII tokenem).
-- AES-SIV (Synthetic Initialization Vector) jest specyficznym trybem AES, który zapewnia determinizm przy jednoczesnym zachowaniu wysokiego bezpieczeństwa.
-- Pamiętaj, że do re-identyfikacji potrzebujesz tych samych ustawień DLP oraz dostępu do tego samego klucza w KMS.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Odwracalna deidentyfikacja danych (re-identify) w ETL/BigQuery -> Cloud DLP Deterministic encryption (AES-SIV) + Cloud KMS.
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/dlp/docs/pseudonymization" target="_blank">Pseudonymization in Cloud DLP</a>
-- <a href="https://cloud.google.com/dlp/docs/concepts-deidentification" target="_blank">De-identification techniques</a>
-- <a href="https://cloud.google.com/dlp/docs/reidentify-content" target="_blank">Re-identifying de-identified content</a>
+6. Dodatkowe źródła i dokumentacja:
+- Cloud DLP Pseudonymization: <a href="https://cloud.google.com/dlp/docs/concepts-pseudonymization#deterministic-encryption" target="_blank">https://cloud.google.com/dlp/docs/concepts-pseudonymization#deterministic-encryption</a>
 </pre>
 </div>
 

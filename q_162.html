@@ -89,31 +89,28 @@ Which Identity-Aware Proxy role should you grant to an Identity and Access Manag
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (IAP-Secured Web App User)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. IAP-Secured Web App User
 
-Dlaczego ta odpowiedź jest poprawna:
-- Identity-Aware Proxy (IAP): Pozwala na kontrolowanie dostępu do aplikacji HTTP(S) oraz zasobów TCP (jak SSH/RDP) w oparciu o tożsamość użytkownika, bez konieczności używania VPN.
-- IAP-Secured Web App User: Jest to specyficzna rola IAM wymagana do uzyskania dostępu do zasobów HTTPS chronionych przez IAP (np. aplikacji App Engine, usług Cloud Run lub backendów Load Balancera). Bez tej roli, nawet jeśli użytkownik przejdzie pomyślnie autentykację Google, IAP odrzuci jego żądanie dostępu (autoryzacja).
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Pytanie dotyczy wskazania roli IAM niezbędnej do uzyskania dostępu do zasobów HTTPS (np. aplikacji webowych) chronionych przez Identity-Aware Proxy (IAP):
+- Rola `roles/iap.httpsResourceAccessor` (IAP-Secured Web App User / Użytkownik zabezpieczonej aplikacji internetowej IAP) jest dedykowaną rolą IAM, która pozwala użytkownikom na autoryzację i dostęp do aplikacji HTTPS zabezpieczonych za pomocą IAP (takich jak App Engine, usługi GKE lub Compute Engine wystawione za Load Balancerem L7).
 
-Analiza niepoprawnych odpowiedzi:
-- A. Security Reviewer: Jest to rola ogólna, która pozwala na przeglądanie konfiguracji zabezpieczeń w GCP, ale nie nadaje uprawnień do korzystania z konkretnych aplikacji chronionych przez IAP.
-- B. IAP-Secured Tunnel User: Ta rola służy do korzystania z funkcji "TCP Forwarding" w IAP. Pozwala ona na tunelowanie ruchu (np. SSH lub RDP) do instancji VM, które nie mają publicznych adresów IP. Nie nadaje ona uprawnień do bezpośredniego dostępu do aplikacji webowych HTTPS.
-- D. Service Broker Operator: Jest to rola związana z zarządzaniem Service Brokerami w środowiskach takich jak Anthos lub Kubernetes, nie ma bezpośredniego związku z dostępem użytkowników do aplikacji przez IAP.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Security Reviewer: Jest to rola przeznaczona do audytu ustawień bezpieczeństwa w konsoli GCP, nie nadaje uprawnień dostępu do aplikacji biznesowych chronionych przez IAP.
+- B. IAP-Secured Tunnel User (`roles/iap.tunnelResourceAccessor`): Ta rola jest używana do tunelowania ruchu TCP (np. protokołów SSH na porcie 22 lub RDP na porcie 3389) do maszyn wirtualnych bez publicznych adresów IP. Nie służy do uzyskiwania dostępu do aplikacji HTTP/HTTPS.
+- D. Service Broker Operator: Jest to rola powiązana z integracją usług zewnętrznych, nie ma związku z autoryzacją użytkowników IAP do aplikacji webowych.
 
-Wskazówki i triki (Tips & Tricks):
-- "HTTPS resources" + "IAP" = Web App User.
-- "SSH/RDP" / "TCP Tunneling" + "IAP" = Tunnel User.
-- Zapamiętaj: IAP sprawdza tożsamość (Kim jesteś?) i rolę (Czy masz uprawnienie Web App User?).
+4. Wskazówki, hinty, tips and tricks:
+- Zapamiętaj dwie główne role IAP na egzamin:
+  - Dostęp do stron WWW (HTTPS) -> **IAP-Secured Web App User** (`httpsResourceAccessor`).
+  - Dostęp do konsoli/tunelu (SSH/RDP/TCP) -> **IAP-Secured Tunnel User** (`tunnelResourceAccessor`).
 
-Praktyczne informacje na egzamin:
-- IAP działa na warstwie 7 (HTTP/S) i warstwie 4 (TCP).
-- Aby IAP działał dla aplikacji webowej, musi ona znajdować się za External HTTP(S) Load Balancerem lub być częścią App Engine.
-- Rola 'IAP-Secured Web App User' może być nadana na poziomie projektu, ale dobrą praktyką jest nadawanie jej na poziomie konkretnego zasobu (backendu).
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Dostęp IAP do zasobów HTTPS / aplikacji internetowych -> IAP-Secured Web App User.
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/iap/docs/access-control" target="_blank">IAP Access Control overview</a>
-- <a href="https://cloud.google.com/iap/docs/concepts-overview" target="_blank">How IAP works</a>
-- <a href="https://cloud.google.com/iap/docs/using-tcp-forwarding" target="_blank">IAP for TCP forwarding</a>
+6. Dodatkowe źródła i dokumentacja:
+- IAP IAM roles: <a href="https://cloud.google.com/iap/docs/access-control#roles" target="_blank">https://cloud.google.com/iap/docs/access-control#roles</a>
 </pre>
 </div>
 

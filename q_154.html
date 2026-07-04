@@ -89,31 +89,27 @@ Your company's cloud security policy dictates that VM instances should not have 
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Cloud NAT)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Cloud NAT
 
-Dlaczego ta odpowiedź jest poprawna:
-- Cloud NAT (Network Address Translation): Pozwala instancjom Google Cloud, które nie mają publicznych (zewnętrznych) adresów IP, na łączenie się z internetem. Jest to niezbędne w scenariuszach, gdzie maszyny muszą pobrać aktualizacje systemu, pakiety oprogramowania lub komunikować się z zewnętrznymi API, ale ze względów bezpieczeństwa nie powinny być bezpośrednio dostępne z internetu.
-- Managed Service: Cloud NAT jest usługą w pełni zarządzaną, co oznacza, że jest skalowalna i nie wymaga zarządzania osobnymi instancjami bram NAT (NAT Gateways).
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Polityka bezpieczeństwa zabrania maszynom wirtualnym posiadania publicznych adresów IP. Maszyny muszą jednak pobierać aktualizacje oprogramowania z internetu (ruch wychodzący):
+- Cloud NAT (Network Address Translation) to usługa, która rozwiązuje ten problem. Umożliwia ona instancjom maszyn wirtualnych z adresami wyłącznie prywatnymi bezpieczny dostęp do internetu w celu pobierania aktualizacji, pakietów i wywoływania zewnętrznych API.
+- Ruch jest tłumaczony na bramie Cloud NAT, co zapobiega bezpośredniemu skanowaniu i atakom z internetu na maszyny VM, ponieważ brama nie przepuszcza ruchu przychodzącego inicjowanego z zewnątrz.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Identity-Aware Proxy (IAP): IAP służy głównie do bezpiecznego dostępu PRZYCHODZĄCEGO (inbound) do maszyn (np. przez SSH lub RDP) bez potrzeby posiadania publicznego IP lub VPN. Nie zapewnia on maszynom możliwości inicjowania połączeń WYCHODZĄCYCH do internetu.
-- C. TCP/UDP Load Balancing: Load Balancery służą do rozkładania ruchu PRZYCHODZĄCEGO od użytkowników do grupy maszyn. Nie pomagają maszynom w łączeniu się z internetem w celu pobrania aktualizacji.
-- D. Cloud DNS: Służy do rozwiązywania nazw domenowych na adresy IP. Choć jest potrzebny do działania internetu, sam w sobie nie zapewnia łączności (routingu) dla maszyn bez publicznego IP.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Identity-Aware Proxy (IAP): Służy do bezpiecznego dostępu *przychodzącego* (inbound) dla administratorów (np. tunelowanie SSH/RDP) bez publicznego IP, ale nie umożliwia samej maszynie wirtualnej nawiązywania połączeń *wychodzących* do internetu.
+- C. TCP/UDP Load Balancing: Służy do rozdzielania ruchu *przychodzącego* (inbound) od klientów do maszyn backendowych, nie obsługuje ruchu wychodzącego inicjowanego przez maszyny.
+- D. Cloud DNS: Służy wyłącznie do translacji nazw domenowych na adresy IP, nie trasuje ruchu i nie zapewnia łączności sieciowej z internetem.
 
-Wskazówki i triki (Tips & Tricks):
-- "VM without external IP" + "Connect TO internet" = Cloud NAT.
-- "VM without external IP" + "Access FROM internet (SSH/RDP)" = IAP.
-- Pamiętaj: Cloud NAT działa na poziomie Routera Cloud (Cloud Router). Musisz mieć skonfigurowany Cloud Router, aby włączyć Cloud NAT.
+4. Wskazówki, hinty, tips and tricks:
+- Jeśli maszyny wirtualne w GCP **nie mogą mieć zewnętrznych adresów IP**, a potrzebują dostępu do internetu (outbound internet access) np. po aktualizacje lub pakiety apt/yum, jedynym poprawnym rozwiązaniem systemowym jest **Cloud NAT**.
 
-Praktyczne informacje na egzamin:
-- Cloud NAT obsługuje tylko ruch TCP i UDP (oraz ICMP). 
-- Możesz skonfigurować Cloud NAT tak, aby używał konkretnych, statycznych adresów IP, co jest przydatne, gdy zewnętrzne systemy (np. repozytoria klienta) wymagają białej listy adresów IP (IP whitelisting).
-- Cloud NAT nie zapewnia "Ingress" (ruchu przychodzącego). Jeśli ktoś próbuje połączyć się z publicznym IP NAT-a, połączenie zostanie odrzucone.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Brak zewnętrznych IP na VM + połączenie wychodzące do internetu po aktualizacje -> Cloud NAT.
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/nat/docs/overview" target="_blank">Cloud NAT overview</a>
-- <a href="https://cloud.google.com/iap/docs/using-tcp-forwarding" target="_blank">IAP TCP forwarding</a>
-- <a href="https://cloud.google.com/router/docs/overview" target="_blank">Cloud Router overview</a>
+6. Dodatkowe źródła i dokumentacja:
+- Cloud NAT documentation: <a href="https://cloud.google.com/nat/docs/overview" target="_blank">https://cloud.google.com/nat/docs/overview</a>
 </pre>
 </div>
 

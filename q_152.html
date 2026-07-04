@@ -89,32 +89,30 @@ You need to centralize your team's logs for production projects. You want your t
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (Create an aggregate org sink at the parent folder of the production projects, and set the destination to a logs bucket)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Create an aggregate org sink at the parent folder of the production projects, and set the destination to a logs bucket.
 
-Dlaczego ta odpowiedź jest poprawna:
-- Agregowanie logów (Aggregate Sinks): Pozwala na zbieranie logów z wielu projektów, folderów lub całej organizacji do jednego, centralnego miejsca. 
-- Log Bucket: Jest to natywne miejsce przechowywania logów w Cloud Logging. W przeciwieństwie do Cloud Storage, logi w Log Bucket są indeksowane i można je przeszukiwać bezpośrednio za pomocą narzędzia Logs Explorer.
-- Centralizacja: Przesyłając logi z folderu "production" do centralnego Log Bucketa w dedykowanym projekcie (np. "security-logs-project"), zespół ma jeden punkt dostępu do analizy wszystkich zdarzeń produkcyjnych.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Należy scentralizować logi z projektów produkcyjnych w taki sposób, aby zespół mógł je przeszukiwać i analizować bezpośrednio przy użyciu narzędzia Logs Explorer:
+- Tworząc zlew logów (Log Sink) na poziomie nadrzędnego folderu (parent folder) z flagą `includeChildren=true` (tzw. Aggregate Sink), automatycznie zbieramy logi ze wszystkich projektów produkcyjnych znajdujących się w tym folderze.
+- Aby te logi były przeszukiwalne w Logs Explorerze, celem (destination) agregacji musi być dedykowany kubełek logów (Log Bucket) w centralnym projekcie audytowym. Cloud Logging pozwala na bezpośrednie odpytywanie i przeszukiwanie Log Bucketów za pomocą interfejsu Logs Explorer.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Cloud Monitoring workspace: Cloud Monitoring służy do zbierania metryk, dashboardów i alertów, a nie do centralizacji i przeszukiwania surowych logów (choć oba narzędzia należą do pakietu Operations Suite, ich przeznaczenie jest inne).
-- B. Use Logs Explorer at the organization level: Choć możliwe jest przeglądanie logów na poziomie organizacji, nie zapewnia to fizycznej centralizacji logów w jednym miejscu (np. dla potrzeb retencji lub bezpieczeństwa). Ponadto przeszukiwanie całego orgu bez agregacji może być mniej wydajne i trudniejsze do zarządzania uprawnieniami.
-- C. Aggregate org sink to a Cloud Storage bucket: Cloud Storage jest doskonałym miejscem na długoterminową archiwizację logów (compliance) ze względu na niskie koszty, ale logi tam składowane NIE są bezpośrednio dostępne w Logs Explorerze. Wymagałoby to ich pobrania lub zaimportowania do BigQuery.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Włączenie obszaru roboczego Cloud Monitoring: Cloud Monitoring służy do zbierania i wizualizacji metryk wydajnościowych (CPU, RAM, sieć) oraz ustawiania alertów, a nie do agregowania surowych logów tekstowych do analizy w Logs Explorerze.
+- B. Użycie Logs Explorera na poziomie organizacji: Pozwala na wyszukiwanie logów w locie, ale bez centralizacji logi pozostają rozproszone po projektach, co utrudnia zarządzanie uprawnieniami dostępu do logów audytowych i nie realizuje wymogu centralizacji ("centralize your team's logs").
+- C. Eksport do kubełka Cloud Storage (GCS): Cloud Storage jest świetnym i tanim rozwiązaniem do długoterminowej archiwizacji logów (Cold Storage/Audyt), ale pliki logów są tam zapisywane w formie obiektów JSON/CSV. Nie można ich bezpośrednio przeszukiwać w interaktywnym narzędziu Logs Explorer (wymagałoby to importu do BigQuery lub pobierania plików).
 
-Wskazówki i triki (Tips & Tricks):
-- Słowo klucz "Search and analyze using Logs Explorer" + "Centralize" = Log Bucket.
-- Słowo klucz "Compliance" / "Long-term storage" / "Archival" = Cloud Storage.
-- Słowo klucz "SQL analysis" / "BI tools" = BigQuery.
-- Słowo klucz "Real-time streaming" / "Third-party SIEM (Splunk/Datadog)" = Pub/Sub.
+4. Wskazówki, hinty, tips and tricks:
+- Aby logi były przeszukiwalne w **Logs Explorer**, celem eksportu musi być **Log Bucket** (`logging.googleapis.com/.../buckets/...`).
+- Zlew zagregowany (Aggregate Sink) z opcją `includeChildren` to standardowy sposób zbierania logów z wielu projektów w strukturze folderów/organizacji.
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj, że Log Buckets oferują teraz funkcję "Log Analytics", która pozwala na zapytania SQL bezpośrednio na logach bez przesyłania ich do BigQuery.
-- Zwróć uwagę na zakres (scope) sinka. Jeśli pytanie mówi o projektach produkcyjnych, "parent folder" tych projektów jest idealnym miejscem na umieszczenie sinka agregującego.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Agregacja logów z wielu projektów w strukturze folderu -> Parent folder aggregate sink.
+- Analiza i przeszukiwanie logów w Logs Explorer -> Log Bucket destination.
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/logging/docs/centralize-logs" target="_blank">Centralize logs by using aggregate sinks</a>
-- <a href="https://cloud.google.com/logging/docs/routing/overview" target="_blank">Routing and storage overview</a>
-- <a href="https://cloud.google.com/logging/docs/buckets" target="_blank">Cloud Logging Buckets</a>
+6. Dodatkowe źródła i dokumentacja:
+- Route logs to a log bucket: <a href="https://cloud.google.com/logging/docs/routing/overview#destinations" target="_blank">https://cloud.google.com/logging/docs/routing/overview#destinations</a>
+- Aggregated sinks: <a href="https://cloud.google.com/logging/docs/export/aggregated_sinks" target="_blank">https://cloud.google.com/logging/docs/export/aggregated_sinks</a>
 </pre>
 </div>
 

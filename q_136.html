@@ -90,28 +90,29 @@ Your security team uses encryption keys to ensure confidentiality of user data. 
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: BD (B. Enable automatic key version rotation on a regular schedule, D. Limit the number of messages encrypted with each key version).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Enable automatic key version rotation on a regular schedule.
+D. Limit the number of messages encrypted with each key version.
 
-Wyjaśnienie:
-- B. Automatyczna rotacja kluczy (Automatic key version rotation): Regularna zmiana wersji klucza ogranicza ilość danych zaszyfrowanych tym samym kluczem. W przypadku kompromitacji jednej wersji klucza, tylko dane nią zaszyfrowane są zagrożone, a nie cały zbiór danych historycznych i przyszłych.
-- D. Ograniczenie liczby wiadomości (Limit the number of messages): Jest to dobra praktyka kryptograficzna (limitowanie "key usage"). Ogranicza to ilość materiału dowodowego dla kryptoanalizy oraz zmniejsza "blast radius" w przypadku złamania konkretnej wersji klucza.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Należy wdrożyć procedury zapobiegawcze (proaktywne, przed wystąpieniem incydentu) w celu zmniejszenia wpływu (blast radius) ewentualnego kompromitacji symetrycznego klucza szyfrującego w Cloud KMS:
+- B (Automatyczna rotacja): Regularna i automatyczna rotacja kluczy gwarantuje, że nowy klucz version (Key Version) będzie używany do szyfrowania nowych danych. Jeśli dany klucz zostanie skompromitowany, napastnik uzyska dostęp tylko do danych zaszyfrowanych tą jedną konkretną wersją klucza, a nie do całego zbioru danych.
+- D (Ograniczenie liczby wiadomości): Z perspektywy kryptograficznej, ograniczenie liczby wiadomości szyfrowanych jedną wersją klucza chroni przed atakami kryptoanalitycznymi (np. wyciekiem materiału klucza na podstawie powtarzających się wzorców w szyfrogramach), co minimalizuje ryzyko pomyślnego złamania klucza.
 
-Dlaczego pozostałe są błędne:
-- A. Disable and revoke access to compromised keys: To jest działanie REAKTYWNE (po incydencie), a pytanie pyta o kroki, które należy podjąć PRZED wystąpieniem incydentu (before an incident occurs).
-- C. Manualna rotacja ad hoc: Chociaż rotacja jest dobra, automatyzacja (B) jest zalecaną praktyką w celu zapewnienia regularności i uniknięcia błędów ludzkich. Błąd polega na tym, że automatyczna rotacja jest lepszym procesem "do ustanowienia".
-- E. Wyłączenie API Cloud KMS: Uniemożliwiłoby to korzystanie z kluczy i sparaliżowało aplikacje, nie jest to proces redukcji wpływu kompromitacji klucza.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Wyłączenie i odebranie dostępu do skompromitowanych kluczy: Jest to działanie reaktywne (remedyjne) wykonywane *po* wykryciu incydentu kompromitacji, a nie krok prewencyjny.
+- C. Ręczna rotacja kluczy na żądanie (ad hoc): Ręczne zarządzanie rotacją jest podatne na błędy ludzkie (np. zapomnienie o rotacji) i trudne do egzekwowania w skali przedsiębiorstwa w porównaniu do automatycznego harmonogramu (B).
+- E. Wyłączenie Cloud KMS API: Całkowicie zablokowałoby to działanie chmury i uniemożliwiło aplikacjom szyfrowanie oraz deszyfrowanie jakichkolwiek danych, co jest niedopuszczalne.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Czytaj uważnie: "before an incident occurs" sugeruje działania zapobiegawcze/przygotowawcze (Proactive).
-- "Reduce impact" w kryptografii często oznacza rotację (ograniczenie ilości danych na jeden klucz).
+4. Wskazówki, hinty, tips and tricks:
+- Kluczem do rozwiązania jest słowo **"before an incident occurs"** (zanim dojdzie do incydentu) - szukamy kroków proaktywnych.
+- Zautomatyzowana rotacja kluczy (Automatic Rotation) to podstawowy wymóg bezpieczeństwa systemów kryptograficznych.
 
-Kluczowe zagadnienia do powtórzenia:
-- Zarządzanie cyklem życia kluczy w Cloud KMS.
-- Rotacja kluczy (automatyczna vs manualna).
-- Działania reaktywne vs proaktywne w bezpieczeństwie.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Proaktywne ograniczenie wpływu kompromitacji klucza -> Automatyczna rotacja kluczy (automatic key rotation) + limit wiadomości szyfrowanych jedną wersją klucza.
 
-Dokumentacja:
-<a href="https://cloud.google.com/kms/docs/key-rotation" target="_blank">Rotacja kluczy w Cloud KMS</a>
+6. Dodatkowe źródła i dokumentacja:
+- Cloud KMS Key Rotation: <a href="https://cloud.google.com/kms/docs/key-rotation" target="_blank">https://cloud.google.com/kms/docs/key-rotation</a>
 </pre>
 </div>
 

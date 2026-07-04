@@ -89,26 +89,27 @@ You are responsible for managing your company's identities in Google Cloud. Your
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (On the Google Admin console, select the appropriate user account, and generate a backup code to allow the user to sign in. Ask the user to update their second factor).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. On the Google Admin console, select the appropriate user account, and generate a backup code to allow the user to sign in. Ask the user to update their second factor.
 
-Wyjaśnienie:
-W sytuacji, gdy użytkownik utraci dostęp do swojego urządzenia MFA/2SV, najbezpieczniejszą metodą przywrócenia dostępu przy minimalizacji ryzyka jest wygenerowanie jednorazowego kodu zapasowego (backup code) przez administratora. Pozwala to użytkownikowi na bezpieczne zalogowanie się i natychmiastowe ustawienie nowej metody drugiego składnika. Ta procedura nie wymaga wyłączania ochrony 2SV dla całego konta, co czyni ją najbardziej bezpieczną.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Użytkownik zgubił swój drugi składnik weryfikacji dwuetapowej (2SV), a w firmie obowiązuje wymóg 2SV dla wszystkich kont. Należy zresetować dostęp w sposób bezpieczny i minimalizujący ryzyko:
+- Najbardziej bezpieczną metodą odzyskiwania dostępu w Google Workspace/Cloud Identity jest wygenerowanie jednorazowych kodów zapasowych (backup verification codes) dla konkretnego konta użytkownika w konsoli administratora Google Admin.
+- Kod zapasowy działa jak jednorazowy token drugiego etapu logowania. Pozwala użytkownikowi na bezpieczne zalogowanie się i samodzielne dodanie nowego klucza/telefonu do weryfikacji dwuetapowej. W ten sposób nie wyłączamy zabezpieczeń konta ani nie obniżamy poziomu bezpieczeństwa całej firmy.
 
-Dlaczego pozostałe są błędne:
-- B. Wyłączenie 2SV dla wszystkich: Jest to niedopuszczalne naruszenie bezpieczeństwa całej organizacji z powodu problemu jednego użytkownika.
-- C. Tymczasowe wyłączenie 2SV dla konta: Jest to mniej ryzykowne niż opcja B, ale nadal pozostawia konto całkowicie bez ochrony drugiego składnika na czas logowania. Opcja A (kod zapasowy) jest uważana za "best practice" w Google Workspace/Cloud Identity.
-- D. Reset poświadczeń (hasła): Samo zresetowanie hasła nie pomoże, ponieważ system nadal będzie wymagał drugiego składnika (2SV) podczas próby logowania z nowym hasłem.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Wyłączenie weryfikacji dwuetapowej (2SV) dla wszystkich użytkowników: Tworzy krytyczne zagrożenie bezpieczeństwa w skali całej firmy, pozbawiając wszystkie konta ochrony na czas logowania jednego użytkownika.
+- C. Tymczasowe wyłączenie 2SV dla tego jednego konta: Jest to gorsze i bardziej ryzykowne rozwiązanie. Jeśli użytkownik zaloguje się, ale nie skonfiguruje od razu nowego drugiego składnika, jego konto pozostanie całkowicie bez ochrony 2SV (tylko z hasłem), co stwarza okno podatności na ataki.
+- D. Reset poświadczeń przez super administratora: Reset samego hasła nie omija żądania drugiego składnika (2SV). Przy próbie zalogowania użytkownik nadal zostanie poproszony o zgubiony klucz.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Lost 2SV" + "Minimize risk" -> administrator generuje "backup code".
-- Nigdy nie wybieraj odpowiedzi sugerującej "wyłączenie" (Disable) globalnych zabezpieczeń, jeśli dostępna jest opcja bardziej precyzyjna (jak kod zapasowy).
+4. Wskazówki, hinty, tips and tricks:
+- Generowanie kodów zapasowych (Backup verification codes) to standardowa procedura wsparcia IT dla użytkowników Google Workspace, którzy utracili dostęp do swoich telefonów lub kluczy bezpieczeństwa U2F/MFA.
 
-Kluczowe zagadnienia do powtórzenia:
-- Zarządzanie tożsamościami i 2-Step Verification (2SV) w Cloud Identity.
-- Role Super Admina w Google Workspace/GCP.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Zgubiony klucz 2FA/2SV + bezpieczne przywrócenie dostępu -> Wygenerowanie kodów zapasowych (backup verification codes) w Google Admin console.
 
-Dokumentacja:
-<a href="https://support.google.com/a/answer/1035070" target="_blank">Recover a user account protected by 2-step verification</a>
+6. Dodatkowe źródła i dokumentacja:
+- Generate backup verification codes for a user: <a href="https://support.google.com/a/answer/9211242" target="_blank">https://support.google.com/a/answer/9211242</a>
 </pre>
 </div>
 

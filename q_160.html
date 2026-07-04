@@ -90,31 +90,30 @@ You are working with a client that is concerned about control of their encryptio
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: AD (A: Customer-supplied encryption keys, D: Cloud External Key Manager)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Customer-supplied encryption keys.
+D. Cloud External Key Manager
 
-Dlaczego te odpowiedzi są poprawne:
-- Kluczowe wymaganie: Klient nie chce przechowywać kluczy szyfrujących u tego samego dostawcy chmury (Google), u którego znajdują się dane.
-- A. Customer-supplied encryption keys (CSEK): W tym modelu klient tworzy i zarządza własnymi kluczami poza Google Cloud. Klucz jest przesyłany do Google tylko w momencie wykonywania operacji (np. startu VM lub zapisu do GCS) i jest przechowywany tylko w pamięci ulotnej (RAM) na czas operacji. Google nie przechowuje tego klucza na dysku ("at rest").
-- D. Cloud External Key Manager (EKM): EKM pozwala na przechowywanie kluczy w zewnętrznym systemie zarządzania kluczami (KMS partnera, np. Equinix, Thales, Fortanix), który znajduje się poza infrastrukturą Google. Google Cloud KMS wysyła żądanie do zewnętrznego systemu o użycie klucza, ale sam klucz nigdy nie opuszcza zewnętrznego HSM (Hardware Security Module).
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Klient chce zachować pełną kontrolę nad swoimi kluczami szyfrującymi i kategorycznie nie zgadza się na przechowywanie kluczy w spoczynku (at rest) w tej samej infrastrukturze chmurowej (Google Cloud), w której przechowywane są jego dane:
+- A (CSEK - Customer-Supplied Encryption Keys): W tym modelu klient przesyła klucz szyfrujący bezpośrednio w nagłówkach żądania API (np. przy zapisie/odczycie dysku VM lub obiektu GCS). Klucz jest przechowywany wyłącznie w pamięci ulotnej (RAM) maszyn Google podczas operacji i natychmiast usuwany. Nigdy nie jest zapisywany w spoczynku w infrastrukturze GCP.
+- D (Cloud EKM - External Key Manager): Pozwala na integrację usług GCP (CMEK) z zewnętrznym systemem zarządzania kluczami (on-premises lub u innego dostawcy chmury). Klucze fizyczne (Key Material) pozostają w zewnętrznym systemie klienta, a Google Cloud odpytuje zewnętrzny system o operacje kryptograficzne przez bezpieczne API, spełniając wymaganie separacji lokalizacji kluczy i danych.
 
-Analiza niepoprawnych odpowiedzi:
-- B. Google default encryption: Wszystko (klucze i dane) jest zarządzane przez Google w ich infrastrukturze.
-- C. Secret Manager: Jest to usługa Google Cloud do przechowywania sekretów. Klucze w Secret Manager są przechowywane "at rest" w infrastrukturze Google, co narusza wymaganie klienta.
-- E. Customer-managed encryption keys (CMEK): Choć klient ma kontrolę nad cyklem życia klucza w Cloud KMS, sam klucz fizycznie znajduje się w infrastrukturze Google (w ich HSM-ach). Nie spełnia to warunku przechowywania kluczy poza dostawcą danych.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Google default encryption: Klucze szyfrujące są generowane, rotowane i przechowywane w spoczynku bezpośrednio przez Google Cloud na tej samej platformie, na której leżą dane.
+- C. Secret Manager: Jest to usługa hostowana wewnątrz Google Cloud. Przechowywanie tam kluczy oznaczałoby zapisanie ich w spoczynku w tej samej chmurze co dane aplikacji.
+- E. Customer-managed encryption keys (CMEK): Choć klient zarządza cyklem życia kluczy (KMS), sam surowy materiał kluczy szyfrujących jest przechowywany w spoczynku wewnątrz sprzętowych modułów bezpieczeństwa (HSM) Google Cloud, co łamie wymaganie klienta o zakazie przechowywania kluczy u tego samego dostawcy chmury.
 
-Wskazówki i triki (Tips & Tricks):
-- "Keys NOT in the same CSP" = CSEK lub EKM.
-- Pamiętaj: CMEK (Customer-Managed) to klucze W CHMURZE Google. CSEK (Customer-Supplied) to klucze DOSTARCZANE z zewnątrz. EKM (External) to klucze U PARTNERA.
+4. Wskazówki, hinty, tips and tricks:
+- Zapamiętaj dwie metody na zachowanie suwerenności kluczy poza Google:
+  1. **CSEK** -> Dostarczasz klucz w locie przy każdym zapytaniu API (brak klucza w spoczynku w GCP).
+  2. **EKM** -> Klucz leży fizycznie w zewnętrznym HSM poza infrastrukturą Google Cloud.
 
-Praktyczne informacje na egzamin:
-- CSEK ma bardzo ograniczone wsparcie (tylko Compute Engine i Cloud Storage).
-- EKM jest rozwiązaniem dla przedsiębiorstw wymagających najwyższego poziomu "data sovereignty".
-- Google Cloud KMS to "wskaźnik" w przypadku EKM, a nie samo miejsce przechowywania klucza.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Klucze nie mogą leżeć w spoczynku u dostawcy chmury (GCP) -> Customer-supplied encryption keys (CSEK) + Cloud External Key Manager (EKM).
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/kms/docs/ekm" target="_blank">Cloud EKM overview</a>
-- <a href="https://cloud.google.com/storage/docs/encryption/customer-supplied-keys" target="_blank">Customer-supplied encryption keys (CSEK)</a>
-- <a href="https://cloud.google.com/kms/docs/key-management-service" target="_blank">Cloud KMS vs CSEK vs CMEK</a>
+6. Dodatkowe źródła i dokumentacja:
+- Google Cloud Encryption at Rest options: <a href="https://cloud.google.com/security/encryption-at-rest" target="_blank">https://cloud.google.com/security/encryption-at-rest</a>
 </pre>
 </div>
 

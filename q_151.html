@@ -89,31 +89,28 @@ Your privacy team uses crypto-shredding (deleting encryption keys) as a strategy
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Customer-managed encryption keys - CMEK)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Use customer-managed encryption keys to delete specific encryption keys.
 
-Dlaczego ta odpowiedź jest poprawna:
-- Crypto-shredding to technika polegająca na usuwaniu kluczy szyfrujących zamiast samych danych, co czyni dane nieczytelnymi i technicznie niemożliwymi do odzyskania. 
-- Customer-Managed Encryption Keys (CMEK) w Google Cloud KMS pozwalają na pełną kontrolę nad cyklem życia klucza (tworzenie, rotacja, usuwanie). 
-- Usunięcie klucza CMEK (lub jego wersji) powoduje natychmiastowe "poszatkowanie" danych (crypto-shredding) w usługach zintegrowanych z CMEK (np. GCS, BigQuery, Compute Engine).
-- CMEK minimalizuje narzut operacyjny (operational overhead), ponieważ jest natywnie zintegrowany z większością usług Google Cloud, w przeciwieństwie do rozwiązań zewnętrznych lub po stronie klienta.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Firma stosuje strategię crypto-shreddingu (niszczenia kluczy szyfrujących w celu bezpowrotnego usunięcia powiązanych z nimi danych osobowych PII). Należy to wdrożyć w GCP z minimalnym narzutem i przy zachowaniu pełnej funkcjonalności usług:
+- Customer-Managed Encryption Keys (CMEK) za pośrednictwem Cloud KMS integrują się natywnie z większością usług w Google Cloud (BigQuery, GCS, Compute Engine).
+- W przypadku żądania usunięcia danych PII danego klienta, administrator może zniszczyć wersję klucza (Key Version) przypisaną do tego klienta w Cloud KMS. Po zniszczeniu klucza dane zaszyfrowane za jego pomocą stają się niemożliwe do odczytania (odszyfrowania) przez jakikolwiek system, co realizuje postulat crypto-shreddingu. Wykorzystanie CMEK minimalizuje narzut operacyjny, ponieważ integracja z bazami danych jest obsługiwana automatycznie przez platformę.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Client-side encryption: To podejście wiąże się z bardzo wysokim narzutem operacyjnym. Musisz zarządzać kluczami poza GCP, szyfrować dane przed wysłaniem i deszyfrować po pobraniu. Utrudniasz też korzystanie z wielu usług platformy (np. BigQuery nie będzie mogło przeszukiwać zaszyfrowanych danych).
-- B. Cloud External Key Manager (EKM): EKM pozwala na przechowywanie kluczy w zewnętrznym systemie (poza Google Cloud). Choć pozwala na crypto-shredding, wiąże się z dużym narzutem operacyjnym (konfiguracja połączenia, zarządzanie zewnętrznym KMS, ryzyko niedostępności połączenia). Jest to rozwiązanie stosowane przy skrajnych wymaganiach dotyczących suwerenności danych.
-- D. Google default encryption: Klucze te są zarządzane przez Google. Użytkownik nie ma możliwości ich usunięcia w celu wykonania crypto-shreddingu. Dane są bezpieczne, ale nie masz nad nimi kontroli wymaganej w tym scenariuszu.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Szyfrowanie po stronie klienta (Client-side encryption): Wymaga szyfrowania danych przed ich wysłaniem do chmury. Powoduje to, że usługi GCP (np. BigQuery, Dataflow, AutoML) tracą możliwość analizowania i przetwarzania tych danych w formie strukturalnej, co drastycznie ogranicza użyteczność platformy i generuje ogromny narzut programistyczny.
+- B. Użycie Cloud External Key Manager (EKM): EKM przechowuje klucze na zewnętrznych systemach HSM poza chmurą. Choć umożliwia to niszczenie kluczy, konfiguracja integracji, utrzymanie połączeń i opóźnienia sieciowe generują bardzo duży narzut operacyjny (operational overhead) w porównaniu do natywnego Cloud KMS.
+- D. Użycie Google default encryption: Klucze w szyfrowaniu domyślnym Google są w pełni zarządzane przez systemy wewnętrzne GCP. Klient nie ma do nich dostępu i nie może usunąć ani zniszczyć wybranego klucza w celu przeprowadzenia crypto-shreddingu.
 
-Wskazówki i triki (Tips & Tricks):
-- Jeśli w pytaniu pojawia się "Crypto-shredding" + "Google Cloud" + "Minimize operational overhead", niemal zawsze odpowiedzią będzie CMEK.
-- Pamiętaj o różnicy między "Destroying" a "Disabling" klucza. Zniszczenie klucza w Cloud KMS jest nieodwracalne po upływie okresu oczekiwania (domyślnie 24h lub więcej).
+4. Wskazówki, hinty, tips and tricks:
+- **Crypto-shredding** w GCP polega na zniszczeniu wersji klucza w Cloud KMS (CMEK).
+- Zniszczenie klucza jest procesem nieodwracalnym po upływie okresu zapobiegawczego (domyślnie 24 godziny).
 
-Praktyczne informacje na egzamin:
-- Zwracaj uwagę na frazę "minimizing operational overhead". Google promuje swoje natywne rozwiązania (KMS/CMEK) jako te o najniższym narzucie w porównaniu do EKM czy Client-side encryption.
-- Zrozum hierarchię kluczy: DEK (Data Encryption Key) szyfruje dane, a KEK (Key Encryption Key) szyfruje DEK. CMEK to Twój KEK zarządzany w KMS.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Crypto-shredding + minimalny overhead + integracja z usługami GCP -> CMEK (Customer-Managed Encryption Keys).
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/kms/docs/cmek" target="_blank">https://cloud.google.com/kms/docs/cmek</a>
-- <a href="https://cloud.google.com/kms/docs/crypto-shredding" target="_blank">https://cloud.google.com/kms/docs/crypto-shredding</a>
-- <a href="https://cloud.google.com/architecture/customer-managed-encryption-keys-best-practices" target="_blank">CMEK Best Practices</a>
+6. Dodatkowe źródła i dokumentacja:
+- Crypto-shredding with Cloud KMS: <a href="https://cloud.google.com/kms/docs/crypto-shredding" target="_blank">https://cloud.google.com/kms/docs/crypto-shredding</a>
 </pre>
 </div>
 

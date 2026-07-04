@@ -89,32 +89,28 @@ You need to set up a Cloud interconnect connection between your company's on-pre
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Use restricted googleapis.com to access Google APIs using a set of IP addresses only routable from within Google Cloud, which are advertised as routes over the Cloud Interconnect connection).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Use restricted.googleapis.com to access Google APIs using a set of IP addresses only routable from within Google Cloud, which are advertised as routes over the Cloud Interconnect connection.
 
-Wyjaśnienie:
-Aby umożliwić aplikacjom on-premises dostęp do usług Google Cloud przy jednoczesnym zachowaniu ochrony VPC Service Controls (VPC SC), należy skonfigurować dostęp przez domenę `restricted.googleapis.com`.
-1. `restricted.googleapis.com` rozwiązuje się na zakres adresów IP `199.36.153.4/30`, który nie jest rutowalny w internecie.
-2. Ten zakres musi być rozgłoszony do sieci on-premises przez Cloud Interconnect (BGP).
-3. Kluczową cechą `restricted.googleapis.com` jest to, że obsługuje ona wyłącznie API wspierane przez VPC Service Controls. Jeśli aplikacja spróbuje połączyć się z usługą, która nie jest wspierana (i tym samym mogłaby służyć do exfiltracji danych), połączenie zostanie zablokowane. Jest to wymaganie bezpośrednio wymienione w zadaniu.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymaganiem jest zabezpieczenie dostępu z sieci lokalnej (on-premises) do API Google przez Cloud Interconnect. Ruch nie może iść przez publiczny internet, a dostęp musi być ograniczony wyłącznie do usług wspieranych przez VPC Service Controls w celu ochrony przed wyciekiem danych:
+- Rozwiązanie polega na skierowaniu zapytań DNS do API Google na domenę `restricted.googleapis.com` (IP: 199.36.153.4/30). Zakres ten jest trasowany wyłącznie wewnętrznie przez połączenie Cloud Interconnect.
+- Domena `restricted.googleapis.com` zezwala na komunikację wyłącznie z usługami Google, które są zintegrowane i wspierane przez VPC Service Controls. Zapytania do nieobsługiwanych usług są automatycznie blokowane, co uniemożliwia wyciek danych (exfiltration) np. do prywatnych kont pocztowych czy niezatwierdzonych usług dyskowych.
 
-Dlaczego pozostałe są błędne:
-- A. Enable Private Google Access on the regional subnets...: Private Google Access (PGA) dotyczy instancji wewnątrz VPC, a nie hostów on-premises. Ponadto samo PGA nie wymusza korzystania wyłącznie z API wspieranych przez VPC SC.
-- B. Set up a Private Service Connect endpoint... bundle of "all-apis": Private Service Connect (PSC) to nowoczesna metoda, ale paczka "all-apis" zawiera wszystkie usługi Google, w tym te niewspierane przez VPC SC, co narusza wymóg minimalizacji ryzyka exfiltracji do nieobsługiwanych API.
-- C. Use private.googleapis.com...: Domena `private.googleapis.com` (`199.36.153.8/30`) pozwala na dostęp do większości usług Google (w tym Map, YouTube itp.), które nie są wspierane przez VPC Service Controls. Nie zapewnia więc ochrony przed exfiltracją danych do usług spoza perymetru bezpieczeństwa.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Włączenie Private Google Access: Ta funkcja umożliwia maszynom wirtualnym wewnątrz sieci VPC dostęp do API Google bez publicznych adresów IP, ale nie ma wpływu na konfigurację połączenia dla stacji w sieci lokalnej (on-premises).
+- B. Użycie Private Service Connect z pakietem "all-apis": PSC z pakietem "all-apis" umożliwia dostęp do wszystkich API Google, w tym tych, które nie są chronione i wspierane przez VPC Service Controls, co narusza wymóg ochrony przed eksfiltracją.
+- C. Użycie `private.googleapis.com`: Ta domena (IP: 199.36.153.8/30) daje dostęp do wszystkich usług Google (w tym Gmail, YouTube), również tych niewspieranych przez VPC Service Controls, co stwarza ryzyko wycieku danych.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Słowo klucz "VPC Service Controls" + "on-premises/Interconnect" = zawsze szukaj `restricted.googleapis.com`.
-- `restricted.googleapis.com` = tylko usługi wspierane przez VPC SC.
-- `private.googleapis.com` = prawie wszystkie usługi Google (szerszy zakres, mniejsze bezpieczeństwo).
-- Pamiętaj o konfiguracji DNS w sieci on-premises, aby mapować żądania do API na te specjalne zakresy IP.
+4. Wskazówki, hinty, tips and tricks:
+- W scenariuszach egzaminacyjnych z udziałem **VPC Service Controls** oraz połączeń hybrydowych (Interconnect / VPN) poprawną domeną do routingu API jest zawsze **restricted.googleapis.com**.
+- Zapamiętaj: `restricted.googleapis.com` = tylko usługi wspierane przez VPC Service Controls. `private.googleapis.com` = wszystkie usługi Google Cloud i Workspace.
 
-Kluczowe zagadnienia do powtórzenia:
-- VPC Service Controls (VPC SC).
-- Private Google Access for on-premises hosts.
-- Różnice między `restricted.googleapis.com` a `private.googleapis.com`.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Zabezpieczenie przed eksfiltracją + VPC Service Controls + połączenie hybrydowe -> restricted.googleapis.com.
 
-Dokumentacja:
-<a href="https://cloud.google.com/vpc-service-controls/docs/set-up-private-connectivity" target="_blank">Konfiguracja prywatnej łączności dla VPC Service Controls</a>
+6. Dodatkowe źródła i dokumentacja:
+- Configure private connectivity for on-premises systems: <a href="https://cloud.google.com/vpc-service-controls/docs/private-connectivity" target="_blank">https://cloud.google.com/vpc-service-controls/docs/private-connectivity</a>
 </pre>
 </div>
 

@@ -89,27 +89,27 @@ Your security team wants to reduce the risk of user-managed keys being mismanage
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Enable an organization policy to prevent service account keys from being created).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Enable an organization policy to prevent service account keys from being created.
 
-Wyjaśnienie:
-Klucze kont serwisowych zarządzane przez użytkownika (user-managed keys) stanowią duże ryzyko bezpieczeństwa, ponieważ są plikami tekstowymi, które mogą wyciec (np. zostać przypadkowo dodane do Gituba). Aby centralnie wymusić zakaz ich tworzenia w całej organizacji, należy użyć polityki organizacji (Organization Policy) z ograniczeniem `iam.disableServiceAccountKeyCreation`. Dzięki temu programiści nie będą mogli wygenerować nowych kluczy .json, co zmusza ich do korzystania z bezpieczniejszych metod uwierzytelniania, takich jak Workload Identity lub krótkotrwałe poświadczenia.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Celem jest zminimalizowanie ryzyka związanego z wyciekiem i złym zarządzaniem kluczami kont serwisowych (Service Account Keys) poprzez całkowite zablokowanie możliwości ich tworzenia przez deweloperów:
+- Włączenie polityki organizacji (Organization Policy) z ograniczeniem `constraints/iam.disableServiceAccountKeyCreation` blokuje użytkownikom i administratorom możliwość generowania nowych kluczy kont serwisowych (plików JSON/P12).
+- Zmusza to zespoły do korzystania z bezpieczniejszych, bezkluczowych metod uwierzytelniania, takich jak Workload Identity w GKE, tożsamości dołączone do Compute Engine (maszyny pobierają tokeny z Metadata Server) lub IAM/Service Account impersonation. Jest to najbardziej skuteczna i rekomendowana metoda redukcji powierzchni ataku.
 
-Dlaczego pozostałe są błędne:
-- A. Secret Manager: To usługa do bezpiecznego przechowywania sekretów, ale sama w sobie nie blokuje technicznej możliwości wygenerowania klucza przez programistę w panelu IAM.
-- B. Wyłączenie tworzenia kont serwisowych: To zbyt drastyczne rozwiązanie. Konta serwisowe są niezbędne do poprawnego działania aplikacji i usług GCP; problemem nie jest samo konto, ale posiadanie do niego długoterminowego klucza w pliku zewnętrznym.
-- D. Usunięcie uprawnienia `getAccessToken`: Uniemożliwiłoby to generowanie krótkotrwałych tokenów (impersonation), co jest akurat zalecaną i bezpieczną praktyką (alternatywą dla kluczy). Nie rozwiązuje to jednak problemu tworzenia stałych kluczy .json.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Skonfigurowanie Secret Manager: Secret Manager może przechowywać już utworzone klucze, ale nie zapobiega ich tworzeniu ani nie eliminuje ryzyka ich wycieku w procesie przesyłania.
+- B. Wyłączenie możliwości tworzenia kont serwisowych (`disableServiceAccountCreation`): Konta serwisowe są niezbędne do nadawania tożsamości aplikacjom i procesom chmurowym. Ich zablokowanie uniemożliwiłoby poprawne działanie większości usług chmurowych. Celem jest zablokowanie zewnętrznych *kluczy* (keys), a nie samych kont serwisowych.
+- D. Odebranie uprawnienia `iam.serviceAccounts.getAccessToken`: Uniemożliwiłoby to generowanie krótkotrwałych tokenów dostępowych OAuth 2.0, co pogorszyłoby bezpieczeństwo, zmuszając do stosowania długoterminowych kluczy statycznych (czyli przyniosłoby skutek odwrotny do zamierzonego).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Słowo klucz: "Prevent service account keys from being created" -> Organization Policy `iam.disableServiceAccountKeyCreation`.
-- Zawsze wybieraj opcje promujące "Keyless" (bezkluczykowe) podejście do bezpieczeństwa.
-- Pamiętaj, że klucze zarządzane przez Google (Google-managed keys) są bezpieczne, bo Google dba o ich rotację i nigdy nie udostępnia ich do pobrania.
+4. Wskazówki, hinty, tips and tricks:
+- Klucze kont serwisowych w plikach JSON są uważane za "credentiale o długim czasie życia" i stanowią jedno z największych zagrożeń w chmurze. Blokowanie ich tworzenia za pomocą polityki organizacji to podstawowy krok w hardeningu organizacji GCP.
 
-Kluczowe zagadnienia do powtórzenia:
-- Najważniejsze ograniczenia polityki organizacji (Organization Policy constraints).
-- Metody uwierzytelniania bez użycia kluczy (Workload Identity Federation).
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Zablokowanie tworzenia kluczy kont serwisowych (JSON) -> Organization policy / constraints/iam.disableServiceAccountKeyCreation.
 
-Dokumentacja:
-<a href="https://cloud.google.com/resource-manager/docs/organization-policy/restricting-service-accounts#disable_service_account_key_creation" target="_blank">Disabling service account key creation</a>
+6. Dodatkowe źródła i dokumentacja:
+- Disable service account key creation: <a href="https://cloud.google.com/iam/docs/best-practices-service-accounts#disable-key-creation" target="_blank">https://cloud.google.com/iam/docs/best-practices-service-accounts#disable-key-creation</a>
 </pre>
 </div>
 

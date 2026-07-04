@@ -90,30 +90,31 @@ Your company plans to move most of its IT infrastructure to Google Cloud. They w
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: CE (C: Install GCDS, E: Create IAM groups with permissions)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Install Google Cloud Directory Sync and connect it to Active Directory and Cloud Identity.
+E. Create Identity and Access Management (IAM) groups with permissions corresponding to each Active Directory group.
 
-Dlaczego te odpowiedzi są poprawne:
-- Google Cloud Directory Sync (GCDS): Jest to standardowe narzędzie (agent instalowany lokalnie), które synchronizuje użytkowników i grupy z lokalnego Active Directory do Cloud Identity / Google Workspace. Jest to proces tzw. "Provisioning", czyli zapewnienie, że tożsamości z AD istnieją w Google Cloud.
-- Zarządzanie dostępem przez grupy: Najlepszą praktyką bezpieczeństwa (i standardem w GCP) jest nadawanie uprawnień (ról IAM) całym grupom, a nie pojedynczym użytkownikom. Dzięki synchronizacji grup przez GCDS, administrator może zarządzać dostępem do zasobów chmurowych poprzez zmianę członkostwa w grupach wewnątrz lokalnego Active Directory.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Firma przenosi infrastrukturę do GCP i chce zintegrować lokalne Active Directory w celu zarządzania tożsamościami i dostępem:
+- C (Synchronizacja tożsamości): GCDS (Google Cloud Directory Sync) to darmowe, oficjalne narzędzie instalowane lokalnie, które synchronizuje użytkowników, grupy i członkostwa z lokalnego Active Directory bezpośrednio do Google Cloud Identity w jedną stronę.
+- E (Konfiguracja uprawnień IAM): Najlepszą praktyką bezpieczeństwa (szczególnie przy integracji z AD) jest tworzenie grup w Google Cloud/Cloud Identity odpowiadających grupom w AD, a następnie przypisywanie ról IAM tym grupom. Dzięki temu uprawnienia są automatycznie dziedziczone przez zsynchronizowanych użytkowników na podstawie ich członkostwa w grupach lokalnych.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Identity Platform: Jest to rozwiązanie przeznaczone do zarządzania tożsamościami klientów (B2C/B2B) w Twoich aplikacjach, a nie do integracji pracowniczej (workforce) Active Directory z konsolą Google Cloud.
-- B. Cloud Identity SAML integration: SAML służy do autentykacji (Single Sign-On - SSO), czyli pozwala użytkownikom na logowanie się do Google Cloud za pomocą ich haseł z AD. SAML sam w sobie nie służy do masowego tworzenia (provisioningu) użytkowników i grup (choć istnieje mechanizm Just-in-Time provisioning, nie jest on tak kompletny jak GCDS dla grup).
-- D. Create IAM roles: Role IAM to zestawy uprawnień (np. Storage Admin). Nie tworzysz ról "odpowiadających grupom", lecz przypisujesz istniejące (lub własne) role do zsynchronizowanych grup.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Użycie Identity Platform: Identity Platform służy do uwierzytelniania klientów zewnętrznych (np. użytkowników aplikacji mobilnej/webowej), a nie do synchronizacji tożsamości korporacyjnych pracowników z Active Directory.
+- B. Użycie integracji SAML do provisioningu: SAML (Security Assertion Markup Language) służy do uwierzytelniania jednokrotnego (SSO - Single Sign-On), czyli weryfikacji haseł. Sam protokół SAML nie synchronizuje (nie provisionuje) struktury grup i kont użytkowników do Cloud Identity, co jest wymagane przed przypisaniem uprawnień IAM.
+- D. Tworzenie ról IAM dla każdej grupy AD: Tworzenie niestandardowych ról IAM (Custom Roles) dla każdej grupy jest skomplikowane i nieefektywne. Należy korzystać z ról predefiniowanych (Predefined Roles) i przypisywać je grupom chmurowym (E).
 
-Wskazówki i triki (Tips & Tricks):
-- GCDS = Provisioning (Synchronizacja tożsamości).
-- SAML = Authentication (Logowanie/SSO).
-- Zawsze zarządzaj dostępem przez GRUPY (Groups over Users).
+4. Wskazówki, hinty, tips and tricks:
+- Integracja Active Directory z GCP zawsze wymaga:
+  1. Synchronizacji tożsamości za pomocą **GCDS** (Google Cloud Directory Sync).
+  2. Uwierzytelniania SSO (SAML IdP, np. AD FS).
+  3. Nadawania uprawnień IAM na poziomie **Grup Google** (Google Groups), a nie kont indywidualnych.
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj, że GCDS jest procesem jednokierunkowym (One-way sync). Zmiany dokonane w Google Cloud NIE zostaną przeniesione do Active Directory.
-- Pamiętaj o kolejności: Najpierw synchronizujesz tożsamości (GCDS), a potem konfigurujesz logowanie (SAML/SSO).
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Integracja Active Directory + GCP Access Control -> GCDS (provisioning) + IAM roles assigned to Groups.
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction" target="_blank">Federating Google Cloud with AD</a>
-- <a href="https://support.google.com/a/answer/106368" target="_blank">Google Cloud Directory Sync (GCDS) overview</a>
-- <a href="https://cloud.google.com/iam/docs/groups-in-cloud-console" target="_blank">Managing IAM groups</a>
+6. Dodatkowe źródła i dokumentacja:
+- Federate Active Directory with Cloud Identity: <a href="https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction" target="_blank">https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction</a>
 </pre>
 </div>
 

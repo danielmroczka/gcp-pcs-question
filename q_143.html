@@ -89,28 +89,29 @@ Your organization hosts a financial services application running on Compute Engi
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Configure a VPC peering connection...)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Configure a VPC peering connection between your organization's VPC network and the third party's that is controlled by VPC firewall rules.
 
-Wyjaśnienie:
-- Szyfrowanie: Cały ruch wewnątrz sieci Google (VPC-to-VPC) jest domyślnie szyfrowany w warstwie fizycznej (MACsec). VPC Peering w pełni spełnia wymóg "encrypted connection" bez konieczności tworzenia dodatkowych tuneli.
-- Prywatne IP: Peering natywnie wspiera routing po prywatnych adresach IP (RFC 1918) między VPC.
-- Wydajność: Peering jest rozwiązaniem o najniższych opóźnieniach (low latency) i najwyższej przepustowości (high bandwidth), co jest kluczowe w architekturze typu "fintech".
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Należy połączyć instancje Compute Engine należące do Twojej organizacji z instancjami firmy trzeciej w osobnej organizacji Google Cloud. Wymagania: komunikacja musi być szyfrowana oraz odbywać się przy użyciu prywatnych adresów IP:
+- VPC Network Peering umożliwia bezpieczne, bezpośrednie połączenie sieci VPC w różnych projektach i organizacjach Google Cloud. Ruch sieciowy odbywa się wewnątrz prywatnej sieci Google przy użyciu adresów prywatnych (Internal IP addresses).
+- Co istotne, Google Cloud automatycznie szyfruje cały ruch w sieci fizycznej między maszynami wirtualnymi (VM-to-VM encryption in transit) na poziomie warstwy fizycznej/wirtualizacji, spełniając wymóg szyfrowania bez konieczności wdrażania dodatkowego oprogramowania. Zapewnia to maksymalną wydajność i niskie opóźnienia bez kosztów bramek VPN. Dostęp jest kontrolowany regułami zapory (VPC firewall rules).
 
-Dlaczego pozostałe są błędne:
-- A: Cloud VPN jest rozwiązaniem "nadmiarowym" wewnątrz sieci Google. Szyfrowanie IPsec generuje niepotrzebny narzut CPU i opóźnienia, skoro sieć Google jest już bezpieczna. VPN stosuje się głównie w połączeniach hybrydowych (z on-premises).
-- C: VPC Service Controls chroni przed eksfiltracją danych, ale nie służy do nawiązywania bezpośredniej łączności sieciowej między instancjami.
-- D: Apigee to rozwiązanie warstwy aplikacji (L7), które służy do udostępniania API, a nie do bezpośredniego łączenia sieci serwerów (L3).
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Konfiguracja połączenia Cloud VPN: Cloud VPN zapewnia szyfrowane tunele IPSec po adresach prywatnych, ale wymaga wdrożenia bram VPN, konfiguracji tras i generuje dodatkowe koszty za godzinę działania bramy oraz transfer danych. VPC Peering jest rozwiązaniem natywnym, o wyższej przepustowości i darmowym szyfrowaniu fizycznym wewnątrz infrastruktury Google.
+- C. Konfiguracja perymetru VPC Service Controls z Access Level: VPC Service Controls zabezpiecza interfejsy API usług Google Cloud (np. BigQuery, Storage), a nie bezpośredni ruch sieciowy IP na poziomie maszyn wirtualnych Compute Engine.
+- D. Użycie bramy Apigee z szyfrowaniem TLS: Apigee to platforma do zarządzania API. Wymagałaby wystawienia aplikacji na zewnątrz i komunikacji protokołem HTTPS (często po adresach publicznych), co nie zapewnia bezpośredniego połączenia maszyn po IP prywatnych i jest znacznie bardziej skomplikowane niż proste połączenie sieciowe.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli wymagane jest "prywatne IP" + "wydajność" + "bezpieczeństwo wewnątrz sieci Google" -> **VPC Peering**.
-- Jeśli wymagane jest "połączenie z on-premises" -> **Cloud VPN**.
+4. Wskazówki, hinty, tips and tricks:
+- Zapamiętaj: Google Cloud **automatycznie szyfruje w locie ruch między wszystkimi maszynami wirtualnymi** w sieciach VPC oraz w sieciach połączonych za pomocą VPC Peering. Z tego powodu VPC Network Peering jest bezpiecznym i szyfrowanym połączeniem hybrydowym wewnątrz GCP.
+- Peering działa między różnymi organizacjami GCP bez problemu.
 
-Kluczowe zagadnienia do powtórzenia:
-- Szyfrowanie wewnątrz sieci Google (Encryption-in-transit).
-- VPC Peering vs Cloud VPN.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Prywatne IP + Szyfrowana komunikacja między VM w różnych projektach/org -> VPC Network Peering.
 
-Dokumentacja:
-<a href="https://cloud.google.com/vpc/docs/vpc-peering" target="_blank">VPC Peering</a>
+6. Dodatkowe źródła i dokumentacja:
+- VPC Network Peering overview: <a href="https://cloud.google.com/vpc/docs/vpc-peering" target="_blank">https://cloud.google.com/vpc/docs/vpc-peering</a>
+- Encryption in transit in Google Cloud: <a href="https://cloud.google.com/security/encryption-in-transit" target="_blank">https://cloud.google.com/security/encryption-in-transit</a>
 </pre>
 </div>
 

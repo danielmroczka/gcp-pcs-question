@@ -89,26 +89,27 @@ Your company's Chief Information Security Officer (CISO) creates a requirement t
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Project)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Project
 
-Wyjaśnienie:
-Polityka organizacji Resource Location Restriction (gcp.resourceLocations) pozwala na zdefiniowanie dopuszczalnych regionów dla nowo tworzonych zasobów. Zgodnie z wymaganiami CISO, struktura folderów musi obsługiwać wiele różnych lokalizacji rezydencji danych, a projekty są dopasowane do konkretnych miejsc. Ustawienie ograniczenia na poziomie Projektu (C) zapewnia najbardziej precyzyjną (granularną) kontrolę, pozwalając każdemu projektowi na posiadanie własnej, specyficznej listy dozwolonych regionów, niezależnie od innych projektów w tym samym folderze.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+CISO wymaga, aby dane były przechowywane w określonych lokalizacjach geograficznych (Data Residency). Struktura folderów może zawierać projekty o *różnych* lokalizacjach przechowywania danych. Wymagane jest użycie polityki `Resource Location Restriction` na odpowiednim poziomie hierarchii zasobów:
+- Ponieważ struktura folderów w organizacji jest mieszana i projekty w tym samym folderze mogą wymagać przechowywania danych w zupełnie różnych regionach (np. jeden w UE, inny w USA), nałożenie restrykcji na poziomie Organizacji (D) lub Folderu (A) wymusiłoby dziedziczenie tej samej lokalizacji przez wszystkie projekty podrzędne.
+- Aby umożliwić elastyczność i przypisać konkretne, odmienne lokalizacje rezydencji danych dla poszczególnych systemów, politykę `Resource Location Restriction` należy nałożyć bezpośrednio na poziomie **Projektu** (Project).
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Folder: Chociaż ustawienie polityki na folderze jest możliwe, wymusiłoby ono tę samą lokalizację dla wszystkich projektów wewnątrz. Pytanie zaznacza, że foldery mogą zawierać projekty z różnymi wymaganiami, więc poziom folderu jest zbyt ogólny.
-- B. Resource: Polityki organizacji nie są ustawiane bezpośrednio na pojedynczych zasobach (np. dyskach), lecz na węzłach hierarchii (Org, Folder, Project).
-- D. Organization: Ustawienie wymuszenia lokalizacji na poziomie całej organizacji uniemożliwiłoby różnicowanie lokalizacji dla różnych zespołów/projektów, co kłóci się z informacją o potrzebie elastyczności wewnątrz struktury folderów.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A i D. Poziom Folderu lub Organizacji: Wymusiłyby jednolitą lokalizację dla wszystkich podrzędnych zasobów, uniemożliwiając sytuację, w której ta sama struktura folderów zawiera projekty z różnymi lokalizacjami rezydencji danych.
+- B. Poziom zasobu (Resource): Ograniczenia polityki organizacji (Organization Policies) mogą być nakładane wyłącznie na węzłach hierarchii zasobów (Organizacja, Folder, Projekt). Nie można ich nakładać na pojedyncze zasoby końcowe (np. pojedynczy kubełek Cloud Storage czy bazę danych) bezpośrednio jako polityki organizacji.
 
-Wskazówki i triki (Tips & Tricks):
-- Jeśli w pytaniu widzisz "very granular control" lub "projects aligned to specific locations", wybieraj najniższy możliwy poziom zarządzania polityką, czyli Projekt.
-- Pamiętaj, że polityki organizacji dotyczą tylko nowych zasobów i nie zmieniają lokalizacji tych już istniejących.
+4. Wskazówki, hinty, tips and tricks:
+- Zasada dziedziczenia w GCP: Polityki organizacji nałożone wyżej (np. na folderze) są dziedziczone w dół przez wszystkie projekty. Jeśli projekty w jednym folderze mają mieć różne reguły rezydencji danych, politykę musisz skonfigurować na poziomie **Projektu**.
+- Nazwa ograniczenia to: `gcp.resourceLocations`.
 
-Praktyczne informacje na egzamin:
-- gcp.resourceLocations to kluczowe narzędzie do zapewnienia zgodności z regulacjami takimi jak RODO (GDPR).
-- Polityki mogą być dziedziczone, ale poziom Projektu pozwala na najdokładniejsze nadpisanie (override) ustawień nadrzędnych.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Foldery mogą zawierać projekty o różnych lokalizacjach geograficznych -> Nakładaj politykę Resource Location Restriction na poziomie Projektu (Project).
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">Ograniczanie lokalizacji zasobów</a>
+6. Dodatkowe źródła i dokumentacja:
+- Resource Location Restriction organization policy: <a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations</a>
 </pre>
 </div>
 

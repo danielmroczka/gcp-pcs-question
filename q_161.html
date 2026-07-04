@@ -89,29 +89,26 @@ You are implementing data protection by design and in accordance with GDPR requi
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Customer-managed encryption keys - CMEK)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Customer-managed encryption keys
 
-Dlaczego ta odpowiedź jest poprawna:
-- Kluczowe wymaganie: Zarządzanie kluczem szyfrującym dla szerokiego spektrum usług (Compute Engine, GKE, Cloud Storage, BigQuery i Pub/Sub) w celu spełnienia wymogów GDPR (RODO).
-- Customer-managed encryption keys (CMEK): Jest to jedyne rozwiązanie w Google Cloud, które oferuje tak szerokie wsparcie dla różnych usług (m.in. Pub/Sub, BigQuery, Persistent Disks w GKE). CMEK pozwala na pełne zarządzanie cyklem życia klucza w Cloud KMS, co ułatwia spełnienie wymogów GDPR dotyczących kontroli nad dostępem do danych i ich usuwania (crypto-shredding).
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymaganiem jest zarządzanie kluczami szyfrującymi przez klienta w ramach zgodności z RODO (GDPR) dla zróżnicowanego stosu technologicznego obejmującego: Compute Engine, GKE, Cloud Storage, BigQuery oraz Pub/Sub:
+- Customer-Managed Encryption Keys (CMEK) to jedyne rozwiązanie w GCP, które oferuje natywne wsparcie dla zarządzania kluczami przez klienta (poprzez Cloud KMS) dla **wszystkich** wymienionych w pytaniu usług chmurowych (w tym BigQuery i Pub/Sub). Pozwala to na spójne i centralne zarządzanie uprawnieniami, rotacją oraz audytem użycia kluczy w całej architekturze systemu.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Cloud External Key Manager (EKM): Choć oferuje kontrolę, jest znacznie trudniejszy w implementacji i ma węższe wsparcie niż CMEK. Wybierany zazwyczaj tylko dla najbardziej krytycznych danych przy wymogach suwerenności klucza.
-- C. Customer-supplied encryption keys (CSEK): To rozwiązanie ma bardzo ograniczony zakres usług (tylko Cloud Storage i Compute Engine). Nie wspiera Pub/Sub, GKE ani BigQuery w sposób wymagany w tym pytaniu.
-- D. Google default encryption: Nie daje użytkownikowi możliwości zarządzania kluczami, co jest sprzeczne z wymaganiem "you need to manage the encryption key".
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Cloud External Key Manager (EKM): EKM przechowuje klucze poza chmurą. Jest to rozwiązanie znacznie bardziej skomplikowane i kosztowne, zazwyczaj rezerwowane dla specyficznych wymogów suwerenności kluczy, a nie standardowej zgodności z RODO.
+- C. Customer-supplied encryption keys (CSEK): CSEK (klucze dostarczane w API) mają bardzo ograniczoną kompatybilność w GCP. Są wspierane wyłącznie przez Compute Engine i Cloud Storage. Nie można ich użyć do szyfrowania danych w BigQuery, Pub/Sub czy dysków w GKE, co uniemożliwia zabezpieczenie całego wskazanego stosu technologicznego.
+- D. Google default encryption: Nie pozwala klientowi na samodzielne zarządzanie kluczami (rotacja, wstrzymanie dostępu), co jest niezgodne z wymaganiem "you need to manage the encryption key".
 
-Wskazówki i triki (Tips & Tricks):
-- Jeśli lista usług jest długa i zawiera "Pub/Sub", niemal zawsze poprawną odpowiedzią będzie CMEK.
-- "Data protection by design" (GDPR) + "Manage your own keys" = CMEK (Cloud KMS).
+4. Wskazówki, hinty, tips and tricks:
+- Na egzaminie zwracaj uwagę na listę usług w pytaniu. Jeśli pojawia się **BigQuery** lub **Pub/Sub**, zapomnij o CSEK (Customer-Supplied). Jedynym szeroko wspieranym rozwiązaniem do samodzielnego zarządzania szyfrowaniem jest **CMEK** (Customer-Managed).
 
-Praktyczne informacje na egzamin:
-- CMEK to złoty standard dla przedsiębiorstw w GCP. Zapewnia audytowalność (Cloud Audit Logs pokazują każde użycie klucza) i centralne zarządzanie.
-- Pamiętaj o roli "Cloud KMS CryptoKey Encrypter/Decrypter" – musi być ona nadana kontu serwisowemu danej usługi (Service Agent), aby mogła używać Twojego klucza CMEK.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Szyfrowanie pod kontrolą klienta dla wielu usług (w tym BigQuery, Pub/Sub, GKE) -> CMEK (Customer-managed encryption keys).
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/kms/docs/cmek" target="_blank">CMEK overview and supported services</a>
-- <a href="https://cloud.google.com/kms/docs/cmek-compliance" target="_blank">Compliance with CMEK</a>
-- <a href="https://cloud.google.com/security/gdpr" target="_blank">Google Cloud & GDPR</a>
+6. Dodatkowe źródła i dokumentacja:
+- Services that support CMEK: <a href="https://cloud.google.com/kms/docs/compatible-services" target="_blank">https://cloud.google.com/kms/docs/compatible-services</a>
 </pre>
 </div>
 

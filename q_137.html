@@ -89,27 +89,27 @@ Your company's chief information security officer (CISO) is requiring business d
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Project).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Project
 
-Wyjaśnienie:
-- Granular Control (Szczegółowa kontrola): Pytanie zaznacza, że projekty są dopasowane do konkretnych lokalizacji (Projects are aligned to specific locations), a struktura folderów może zawierać wiele lokalizacji rezydencji danych. Aby zapewnić "bardzo szczegółową kontrolę" (very granular control), politykę ograniczenia lokalizacji zasobów (Resource Location Restriction) należy ustawić na poziomie Projektu. Pozwala to na precyzyjne określenie, w którym regionie mogą powstawać zasoby dla każdego projektu z osobna, nawet jeśli projekty te znajdują się w tym samym folderze.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymagane jest nałożenie restrykcji lokalizacji zasobów (Resource Location Restriction) przy zachowaniu bardzo drobnoziarnistej/granularnej kontroli (very granular control). Struktura folderów zawiera projekty powiązane z różnymi lokalizacjami rezydencji danych:
+- Ponieważ projekty są przypisane do konkretnych lokalizacji geograficznych, a jeden folder może grupować projekty o różnych wymaganiach prawno-geograficznych, nałożenie ograniczenia na poziomie folderu (D) lub całej organizacji (A) uniemożliwiłoby taką separację ze względu na dziedziczenie polityk.
+- Aby zapewnić najbardziej granularną kontrolę, polityka `Resource Location Restriction` (ograniczenie `constraints/gcp.resourceLocations`) musi zostać nałożona na poziomie **Projektu** (Project). Dzięki temu każdy projekt ma ściśle zdefiniowaną i niezależną listę dozwolonych regionów dla nowo tworzonych zasobów.
 
-Dlaczego pozostałe są błędne:
-- A. Organization: Ustawienie na poziomie organizacji wymusiłoby te same lokalizacje dla wszystkich projektów w całej firmie, co nie zapewnia szczegółowej kontroli (granular control).
-- B. Resource: Polityki organizacji (Organization Policies) nie są ustawiane bezpośrednio na poziomie pojedynczych zasobów (takich jak instancja VM czy bucket GCS), lecz na węzłach hierarchii zasobów (Org, Folder, Project).
-- D. Folder: Chociaż folder zapewnia pewien poziom granularności, treść pytania mówi, że foldery mogą zawierać projekty z różnymi wymaganiami co do lokalizacji. Ustawienie na poziomie foldera byłoby zbyt ogólne w tym konkretnym scenariuszu.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A i D. Poziom Organizacji lub Folderu: Te poziomy są zbyt ogólne. Nałożenie tam restrykcji zablokowałoby możliwość elastycznego przypisywania różnych lokalizacji dla poszczególnych projektów w tej samej strukturze.
+- B. Poziom zasobu (Resource): Ograniczenia polityki organizacji (Organization Policies) nie mogą być przypisywane bezpośrednio do zasobów końcowych (np. pojedynczej maszyny VM czy bazy danych). Można je konfigurować wyłącznie na węzłach hierarchii zasobów (Org, Folder, Project).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Hierarchia Org Policy: Org -> Folder -> Project. Najniższy (najbardziej szczegółowy) poziom to Projekt.
-- Jeśli projekty wewnątrz jednego foldera mają inne wymagania (np. jeden musi być w UE, inny w USA), jedynym sposobem na granularną kontrolę jest poziom Projektu.
+4. Wskazówki, hinty, tips and tricks:
+- To pytanie sprawdza zrozumienie dziedziczenia polityk w GCP. Zasada brzmi: im niżej w hierarchii (np. Project vs Folder), tym bardziej granularna kontrola nad zasobami.
+- Jeśli projekty w obrębie tego samego folderu mają mieć różne regiony -> konfiguruj na poziomie projektu.
 
-Kluczowe zagadnienia do powtórzenia:
-- Hierarchia zasobów w Google Cloud.
-- Organization Policy Service i więzy (constraints).
-- Rezydencja danych (Data Residency) i ograniczenia lokalizacji.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Granularna kontrola rezydencji danych w mieszanej strukturze folderów -> Poziom Projektu (Project level).
 
-Dokumentacja:
-<a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">Ograniczanie lokalizacji zasobów w Google Cloud</a>
+6. Dodatkowe źródła i dokumentacja:
+- Resource Location Restriction hierarchy: <a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations</a>
 </pre>
 </div>
 

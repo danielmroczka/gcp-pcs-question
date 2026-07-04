@@ -90,29 +90,31 @@ You are tasked with exporting and auditing security logs for login activity even
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: BC (B. Create a Log Sink at the organization level with the includeChildren parameter, and set the destination to a Pub/Sub topic, C. Enable Data Access audit logs at the organization level to apply to all projects.)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Create a Log Sink at the organization level with the includeChildren parameter, and set the destination to a Pub/Sub topic.
+C. Enable Data Access audit logs at the organization level to apply to all projects.
 
-Wyjaśnienie:
-Aby zrealizować eksport logów dla całej organizacji w czasie rzeczywistym do SIEM, należy:
-1. Włączyć logi Data Access (C) na poziomie organizacji. Są one niezbędne do śledzenia logowań (login activity) oraz odczytów konfiguracji, które nie są rejestrowane przez domyślnie włączone logi Admin Activity.
-2. Skonfigurować zagregowany zlew logów (Aggregated Sink) na poziomie organizacji (B). Użycie parametru includeChildren gwarantuje, że logi ze wszystkich projektów i folderów podrzędnych zostaną zebrane w jednym miejscu. Docelowy temat Pub/Sub zapewnia przesyłanie strumieniowe danych do zewnętrznego systemu SIEM w czasie zbliżonym do rzeczywistego.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymagane jest eksportowanie logów aktywności logowania do konsoli oraz wywołań API modyfikujących konfiguracje dla wszystkich projektów w organizacji, w czasie zbliżonym do rzeczywistego (near real-time) do zewnętrznego systemu SIEM:
+- C (Włączenie logów): Działania użytkowników modyfikujące konfiguracje są rejestrowane w logach Admin Activity (zawsze włączone). Jednak szczegółowa aktywność logowania oraz odczyty konfiguracji wymagają włączenia dzienników Data Access audit logs. Włączenie ich na poziomie organizacji gwarantuje, że będą zbierane dla wszystkich projektów.
+- B (Eksport aggregated w czasie rzeczywistym): Aby eksportować logi ze wszystkich projektów w organizacji, należy utworzyć zlew logów (Log Sink) na poziomie organizacji z parametrem `includeChildren=true` (tzw. Aggregated Sink). Ustawienie celu eksportu na Pub/Sub zapewnia niskie opóźnienia i strumieniowanie logów w czasie rzeczywistym, co jest niezbędnym warunkiem integracji z systemami SIEM.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A: Zwykły Log Sink na poziomie organizacji bez parametru includeChildren zbierze tylko logi wygenerowane przez zasoby samej organizacji, pomijając projekty podrzędne.
-- D: Logi audytowe Google Workspace dotyczą usług SaaS (Drive, Gmail), a pytanie dotyczy zasobów Google Cloud (GCP) i konsoli Google Cloud.
-- E: Analiza pola AuthenticationInfo przez SIEM jest dobrą praktyką analityczną, ale nie jest krokiem konfiguracyjnym w Google Cloud wymaganym do samego eksportu logów.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Log Sink na poziomie organizacji bez `includeChildren`: Taki zlew wyeksportuje wyłącznie logi wygenerowane bezpośrednio przez zasób organizacji (np. zmiany w IAM na poziomie org), ale całkowicie zignoruje logi generowane wewnątrz poszczególnych projektów (child projects).
+- D. Włączenie współdzielenia logów Google Workspace: Dotyczy zdarzeń z pakietu Workspace (np. Gmail, Dysk), a nie logowania do konsoli chmurowej GCP i zmian konfiguracji zasobów GCP.
+- E. Przetwarzanie pola AuthenticationInfo przez SIEM: Jest to operacja po stronie systemu SIEM do interpretacji danych, a nie krok konfiguracyjny w Google Cloud niezbędny do wyeksportowania logów.
 
-Wskazówki i triki (Tips & Tricks):
-- "All projects in organization" = Aggregated Sink + includeChildren: true.
-- "Near real-time" = Pub/Sub topic.
-- Logi Admin Activity są darmowe i zawsze włączone; logi Data Access są płatne i wymagają ręcznego włączenia.
+4. Wskazówki, hinty, tips and tricks:
+- Prawdziwy czas rzeczywisty (near real-time) eksportu logów do systemów trzecich (SIEM, Elasticsearch) w GCP osiąga się wyłącznie za pomocą **Pub/Sub**.
+- Eksport z całej hierarchii (wszystkich projektów) wymaga **Aggregated Sink** na poziomie folderu lub organizacji, co definiuje się za pomocą flagi `includeChildren`.
 
-Praktyczne informacje na egzamin:
-- Zagregowane zlewy mogą być tworzone na poziomie organizacji lub folderu.
-- Pamiętaj o nadaniu tożsamości zlewu (Writer Identity) uprawnień do zapisu w temacie Pub/Sub.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Real-time SIEM integration + cała organizacja -> Pub/Sub destination + Log Sink z includeChildren.
+- Zbieranie logów dostępu/odczytów -> Data Access audit logs.
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/logging/docs/export/aggregated_sinks" target="_blank">Omówienie zagregowanych zlewów logów</a>
+6. Dodatkowe źródła i dokumentacja:
+- Aggregated sinks overview: <a href="https://cloud.google.com/logging/docs/export/aggregated_sinks" target="_blank">https://cloud.google.com/logging/docs/export/aggregated_sinks</a>
+- Configure Data Access audit logs: <a href="https://cloud.google.com/logging/docs/audit/configure-data-access" target="_blank">https://cloud.google.com/logging/docs/audit/configure-data-access</a>
 </pre>
 </div>
 

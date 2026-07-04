@@ -89,16 +89,26 @@ Which type of load balancer should you use to maintain client IP by default whil
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. TCP/UDP Network
 
-Wyjaśnienie (Dlaczego poprawna):
-D. TCP/UDP Network Load Balancer: Jest to Load Balancer 'pass-through'. Nie kończy on połączenia TCP/UDP, tylko przekazuje pakiety bezpośrednio do VM. Dzięki temu docelowa maszyna widzi oryginalny adres IP klienta w nagłówkach IP bez żadnej dodatkowej konfiguracji.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymaganiem jest utrzymanie oryginalnego adresu IP klienta (Client IP) w nagłówkach pakietów bez dodatkowej konfiguracji (by default) przy użyciu standardowej sieci (Standard Network Tier):
+- Zewnętrzny sieciowy Load Balancer TCP/UDP (External passthrough Network Load Balancer) działa jako usługa typu "passthrough". Oznacza to, że nie kończy on (nie terminuje) połączenia TCP na poziomie load balancera. Zamiast tego pakiety sieciowe są przekazywane bezpośrednio do maszyn wirtualnych backendu bez modyfikowania nagłówków IP. W efekcie docelowe maszyny wirtualne widzą oryginalny źródłowy adres IP klienta. Usługa ta jest w pełni wspierana w Standard Network Tier.
 
-Dlaczego inne są błędne:
-A, B. Proxy LBs: Są to urządzenia typu proxy, które kończą połączenie u siebie i nawiązują nowe do VM. Aby zobaczyć IP klienta, wymagają użycia nagłówków PROXY protocol.
-C. Internal TCP/UDP: Choć zachowuje IP, działa tylko wewnątrz sieci VPC, nie jest dostępny dla użytkowników zewnętrznych w Standard Tierze.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A i B. SSL Proxy i TCP Proxy Load Balancer: Są to urządzenia typu reverse proxy, które terminują połączenie klienta na load balancerze i nawiązują nowe, oddzielne połączenie TCP do maszyn backendowych. Domyślnie backend widzi adres IP Load Balancera, a nie klienta (wymaga to wdrożenia protokołu PROXY, co nie dzieje się automatycznie). Ponadto te usługi nie są wspierane w Standard Network Tier.
+- C. Internal TCP/UDP Load Balancer: Jest to wewnętrzny load balancer, który nie jest dostępny dla ruchu z publicznego internetu i nie ma zastosowania przy wdrażaniu zewnętrznych usług w Standard Tier.
 
-Konsensus społeczności ExamTopics: 100% na D. Network LB = IP visibility by default.
+4. Wskazówki, hinty, tips and tricks:
+- "Maintain client IP by default" (utrzymanie adresu IP klienta) wskazuje na passthrough load balancery, czyli **Network Load Balancers**.
+- Proxy Load Balancery (HTTP(S), SSL Proxy, TCP Proxy) zawsze maskują IP klienta adresem load balancera, chyba że włączony jest protokół PROXY lub wstrzykiwane są nagłówki L7 (jak `X-Forwarded-For`).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Zachowanie IP klienta bez konfiguracji + TCP/UDP -> Network Load Balancer (passthrough).
+
+6. Dodatkowe źródła i dokumentacja:
+- Google Cloud Network Load Balancing overview: <a href="https://cloud.google.com/load-balancing/docs/network" target="_blank">https://cloud.google.com/load-balancing/docs/network</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

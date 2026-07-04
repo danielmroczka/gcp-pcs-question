@@ -89,30 +89,30 @@ You want to make sure that your organization's Cloud Storage buckets cannot have
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Configure uniform bucket-level access, and enforce domain restricted sharing in an organization policy)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Configure uniform bucket-level access, and enforce domain restricted sharing in an organization policy.
 
-Dlaczego ta odpowiedź jest poprawna:
-- Domain Restricted Sharing (DRS): Jest to polityka organizacji (Organization Policy), która ogranicza listę tożsamości, którym można nadawać uprawnienia w politykach IAM. Włączenie DRS uniemożliwia dodanie specjalnych identyfikatorów 'allUsers' oraz 'allAuthenticatedUsers', co jest najczęstszą przyczyną publicznego udostępnienia danych.
-- Uniform bucket-level access (UBLA): Ta funkcja wyłącza listy kontroli dostępu (ACL) na poziomie poszczególnych obiektów w buckecie. Dzięki temu dostęp jest zarządzany wyłącznie przez IAM. Jest to kluczowe, ponieważ ACL mogą być używane do udostępniania obiektów publicznie nawet wtedy, gdy polityka IAM projektu na to nie pozwala.
-- Synergia: Połączenie tych dwóch mechanizmów gwarantuje, że (1) nikt nie przypisze publicznego dostępu przez IAM (dzięki DRS) oraz (2) nikt nie obejdzie IAM za pomocą ACL (dzięki UBLA).
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Należy uniemożliwić użytkownikom udostępnianie jakichkolwiek danych z kubłów Cloud Storage publicznie do internetu w skali całej organizacji:
+- Krok 1 (Uniform bucket-level access - UBLA): Włączenie UBLA wyłącza obsługę list kontroli dostępu (ACL) dla obiektów w kubełku. Sprawia to, że uprawnienia można nadawać wyłącznie na poziomie całego kubełka za pomocą polityk IAM, eliminując ryzyko, że użytkownik udostępni pojedynczy plik publicznie poprzez ACL.
+- Krok 2 (Domain Restricted Sharing - DRS): Ta polityka organizacji (`constraints/iam.allowedPolicyMemberDomains`) blokuje możliwość przypisywania ról IAM dla tożsamości spoza dozwolonych domen (np. uniemożliwia dodanie do roli czytelnika tożsamości `allUsers` lub `allAuthenticatedUsers`, które reprezentują cały publiczny internet).
+Połączenie UBLA i DRS całkowicie uniemożliwia publiczne udostępnienie kubełka lub jego zawartości.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Cloud DLP: Służy do skanowania danych w poszukiwaniu wrażliwych informacji (np. PESEL, karty kredytowe) i ich maskowania, ale nie służy do blokowania publicznego dostępu do samych bucketów.
-- B. Remove Owner roles: Odebranie roli Właściciela jest dobrą praktyką (zasada Least Privilege), ale samo w sobie nie uniemożliwia użytkownikom z innymi rolami (np. Storage Admin) na upublicznienie bucketu.
-- D. Remove *.setIamPolicy permissions: To podejście jest zbyt drastyczne i uniemożliwiłoby administratorom jakąkolwiek zmianę uprawnień, co paraliżuje pracę, a i tak nie rozwiązałoby problemu ACL-i, które mogą udostępniać dane bez dotykania polityki IAM.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Usunięcie ról właściciela (Owner) i konfiguracja Cloud DLP: Usunięcie ról Owner jest dobrą praktyką, ale edytorzy (Editors) lub Storage Admini nadal mogliby omyłkowo zmienić politykę IAM na publiczną. Cloud DLP skanuje zawartość w celu wykrycia PII, ale nie blokuje technicznej możliwości upublicznienia plików.
+- B. Brak UBLA: Bez wymuszenia jednolitego dostępu (UBLA), użytkownicy mogą nadal korzystać z drobnoziarnistych list ACL na poszczególnych plikach wewnątrz kubełka. Polityka Domain Restricted Sharing chroni tylko polityki IAM, więc użytkownik mógłby upublicznić plik bezpośrednio za pomocą ACL (np. public-read).
+- D. Odebranie uprawnień `*.setIamPolicy`: Całkowicie uniemożliwiłoby to jakąkolwiek konfigurację uprawnień i zarządzanie dostępem do kubłów dla administratorów, paraliżując pracę firmy.
 
-Wskazówki i triki (Tips & Tricks):
-- "Public access prevention" + "Across organization" = Organization Policy.
-- Zawsze wybieraj Uniform bucket-level access (UBLA) zamiast Fine-grained access, jeśli chcesz mieć spójne i łatwe do audytowania uprawnienia.
+4. Wskazówki, hinty, tips and tricks:
+- Aby skutecznie zablokować publiczny dostęp do Cloud Storage na poziomie organizacji, musisz zamknąć obie drogi udostępniania:
+  1. Wyłącz ACL-e (włącz **Uniform bucket-level access**).
+  2. Zablokuj publiczne tożsamości w IAM (włącz **Domain Restricted Sharing**).
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj, że obecnie Google oferuje również konkretną politykę organizacji o nazwie "Public Access Prevention" (PAP), ale w starszych pytaniach (lub bardziej ogólnych) to "Domain Restricted Sharing" jest kluczem.
-- UBLA jest wymagane przez wiele standardów bezpieczeństwa i compliance.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Całkowita blokada publicznego dostępu do Cloud Storage -> Uniform bucket-level access + Domain Restricted Sharing.
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/storage/docs/uniform-bucket-level-access" target="_blank">Uniform bucket-level access</a>
-- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains" target="_blank">Domain restricted sharing</a>
-- <a href="https://cloud.google.com/storage/docs/public-access-prevention" target="_blank">Public access prevention</a>
+6. Dodatkowe źródła i dokumentacja:
+- Prevent public access to Cloud Storage buckets: <a href="https://cloud.google.com/storage/docs/prevent-public-access" target="_blank">https://cloud.google.com/storage/docs/prevent-public-access</a>
 </pre>
 </div>
 

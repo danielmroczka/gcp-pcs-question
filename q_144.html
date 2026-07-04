@@ -90,29 +90,29 @@ Your company's new CEO recently sold two of the company's divisions. Your Direct
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: CE (Identify inherited IAM roles, Remove from VPC SC perimeters)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Identify inherited Identity and Access Management (IAM) roles on projects to be migrated.
+E. Remove the specific migration projects from any VPC Service Controls perimeters and bridges.
 
-Wyjaśnienie:
-Migracja projektów między organizacjami (Project Migration) to złożona operacja, która wymaga usunięcia powiązań z usługami specyficznymi dla danej hierarchii zasobów.
-- C. Role IAM dziedziczone: Uprawnienia nadane na poziomie organizacji lub folderu w "starej" organizacji nie zostaną przeniesione. Należy je zidentyfikować, aby móc je odtworzyć (np. przypisać odpowiednim grupom) w nowej organizacji po zakończeniu migracji. To kluczowe dla zachowania ciągłości dostępu.
-- E. VPC Service Controls: VPC SC jest usługą na poziomie organizacji. Projekt, który jest częścią obwodu (perimeter) lub mostu (bridge), jest technicznie zablokowany przed opuszczeniem organizacji. Musi zostać z nich usunięty, zanim proces migracji będzie mógł zostać zainicjowany.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Migracja projektów GCP pomiędzy dwoma różnymi węzłami organizacji (Organization Nodes) wymaga odpowiedniego przygotowania ze względów technicznych i polityki bezpieczeństwa:
+- C (Identyfikacja dziedziczonych ról IAM): Uprawnienia IAM przypisane na poziomie starej organizacji lub starych folderów nie są przenoszone wraz z projektem. Po migracji użytkownicy natychmiast stracą dostęp dziedziczony. Zidentyfikowanie tych ról przed migracją pozwala na ich ponowne skonfigurowanie w nowej organizacji.
+- E (Usunięcie z perymetrów VPC SC): Google Cloud blokuje migrację projektów, które są aktualnie przypisane do jakichkolwiek perymetrów bezpieczeństwa lub mostów (bridges) VPC Service Controls. Przed przeniesieniem projektów należy je bezwzględnie usunąć z perymetrów, a po zakończeniu migracji ponownie do nich przypisać w nowej strukturze.
 
-Dlaczego pozostałe są błędne:
-A. Role niestandardowe (Custom roles) na poziomie projektu zostają przeniesione wraz z nim. Tylko role zdefiniowane na poziomie organizacji (Organization-level custom roles) przestałyby działać, ale pytanie mówi o rolach na poziomie projektu.
-B. Polityki organizacji (Organization Policies) dziedziczone z góry i tak przestaną obowiązywać po zmianie "rodzica" (organizacji). Projekt automatycznie zacznie dziedziczyć polityki nowej organizacji.
-D. Stworzenie folderu w nowej organizacji jest dobrą praktyką, ale nie jest to technicznie wymagany "krok przygotowawczy", bez którego migracja nie dojdzie do skutku.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Usunięcie niestandardowych ról IAM na poziomie projektu: Niestandardowe role zdefiniowane na poziomie samego projektu (Project-level Custom IAM Roles) zostaną przeniesione wraz z nim i nie ma potrzeby ich usuwania.
+- B. Zablokowanie dziedziczenia polityk organizacji: Polityki organizacji i tak zostaną zastąpione politykami nowej organizacji po migracji. Blokowanie dziedziczenia w starej organizacji nie jest krokiem przygotowawczym do samej technicznej migracji.
+- D. Utworzenie nowego folderu dla projektów: Tworzenie folderów w starej organizacji jest bezcelowe, ponieważ projekt zmienia całą organizację i docelowo trafi do nowej struktury katalogów.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Zapamiętaj: Przed migracją musisz "odpiąć" projekt od wszystkiego, co należy do starej organizacji: VPC Service Controls, Organization Policies (jeśli są na sztywno ustawione), oraz zidentyfikować dziedziczone role IAM.
-- Konto rozliczeniowe (Billing Account) również musi zostać zweryfikowane i często przepięte po migracji.
+4. Wskazówki, hinty, tips and tricks:
+- Migracja projektu do innej organizacji powoduje całkowite odcięcie dziedziczonych uprawnień IAM (pochodzących z poziomów wyższych niż projekt).
+- Zwróć uwagę, że projekty chronione przez VPC Service Controls muszą zostać z nich wyłączone przed migracją, w przeciwnym razie operacja migracji (project move) zakończy się błędem walidacji.
 
-Kluczowe zagadnienia do powtórzenia:
-- Hierarchia zasobów in GCP (Organization -> Folder -> Project).
-- Ograniczenia i kroki migracji projektów.
-- VPC Service Controls i jego zasięg organizacyjny.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Przygotowanie do migracji projektu między organizacjami -> Sprawdzenie dziedziczonych ról IAM + Usunięcie projektów z perymetrów VPC Service Controls.
 
-Dokumentacja:
-<a href="https://cloud.google.com/resource-manager/docs/project-migration" target="_blank">Migrating projects between organizations</a>
+6. Dodatkowe źródła i dokumentacja:
+- Migrate projects between organizations: <a href="https://cloud.google.com/resource-manager/docs/project-migration" target="_blank">https://cloud.google.com/resource-manager/docs/project-migration</a>
 </pre>
 </div>
 

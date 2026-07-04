@@ -89,30 +89,27 @@ You are creating a new infrastructure CI/CD pipeline to deploy hundreds of ephem
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Enable the constraints/compute.skipDefaultNetworkCreation organization policy constraint at the organization level)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Enable the constraints/compute.skipDefaultNetworkCreation organization policy constraint at the organization level.
 
-Dlaczego ta odpowiedź jest poprawna:
-- Organization Policy: Jest to mechanizm, który pozwala na narzucenie ograniczeń na poziomie całej organizacji, folderu lub projektu. Jest to "source of truth" dla konfiguracji bezpieczeństwa w GCP.
-- compute.skipDefaultNetworkCreation: Ta konkretna reguła (constraint) zapobiega automatycznemu tworzeniu sieci VPC o nazwie 'default' podczas tworzenia nowego projektu. Sieć 'default' jest uważana za niebezpieczną w środowiskach korporacyjnych, ponieważ posiada domyślne reguły firewall typu "allow-all" dla ruchu wewnętrznego oraz przypisuje adresy IP z szerokich zakresów, co utrudnia zarządzanie adresacją i routingiem.
-- Skalowalność: Włączenie tej reguły na poziomie organizacji (Organization level) automatycznie obejmie wszystkie przyszłe projekty (w tym setki projektów efemerycznych wspomnianych w pytaniu), co jest zgodne z najlepszymi praktykami Google.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Budujesz potok CI/CD do wdrażania setek tymczasowych projektów. Wymaganiem jest zablokowanie automatycznego tworzenia domyślnej sieci VPC (Default Network) w nowo tworzonych projektach zgodnie z najlepszymi praktykami:
+- Domyślnie każdy nowy projekt w GCP ma automatycznie tworzoną sieć VPC "default" z podsieciami w każdym regionie oraz szeroko otwartymi regułami zapory (np. zezwalającymi na ruch ping oraz SSH/RDP z całego świata), co stwarza duże ryzyko bezpieczeństwa.
+- Włączenie polityki organizacji (Organization Policy) z ograniczeniem `constraints/compute.skipDefaultNetworkCreation` na poziomie organizacji całkowicie blokuje automatyczne tworzenie sieci default przy inicjalizacji jakiegokolwiek nowego projektu. Zmusza to potoki infrastruktury do jawnego definiowania bezpiecznych sieci VPC (Custom Mode VPC) z kontrolowanymi regułami dostępu. Jest to rozwiązanie w pełni automatyczne i niewymagające żadnego kodu pomocniczego.
 
-Analiza niepoprawnych odpowiedzi:
-- B. Cron job with Cloud Function: Jest to rozwiązanie reaktywne (naprawianie problemu po jego wystąpieniu) i nieefektywne. Wprowadza niepotrzebny narzut operacyjny i kosztowy. Przez pewien czas (do uruchomienia funkcji) sieć 'default' i tak by istniała.
-- C. IAM Owner at org level + VPC Service Controls: Nadawanie roli Owner na poziomie organizacji jest skrajnie niebezpieczne i narusza zasadę Least Privilege. VPC Service Controls służy do zapobiegania eksfiltracji danych, a nie do kontrolowania tworzenia sieci VPC.
-- D. Predefined templates in CI/CD: Choć szablony są dobrą praktyką, nie dają one gwarancji, że ktoś nie stworzy projektu ręcznie (poza pipeline-em). Polityka organizacji (A) działa na poziomie API Google Cloud, więc blokuje tworzenie sieci niezależnie od metody stworzenia projektu.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Cykliczne usuwanie sieci domyślnych za pomocą Cloud Function: Jest to działanie reaktywne. Przez pewien czas (do czasu uruchomienia skryptu) projekty będą posiadały publicznie otwarte sieci domyślne, co stwarza okno podatności na ataki. Ponadto generuje to niepotrzebne koszty i narzut operacyjny.
+- C. Nadanie użytkownikom roli Owner na poziomie organizacji i użycie VPC SC: Nadanie roli Owner (właściciela) na poziomie całej organizacji to krytyczne naruszenie zasady najmniejszych uprawnień. VPC Service Controls chroni interfejsy API, ale nie blokuje tworzenia domyślnych sieci w projektach.
+- D. Użycie szablonów infrastruktury CI/CD bez wymuszenia na poziomie platformy: Deweloperzy wciąż mogliby tworzyć projekty ręcznie (poza potokiem), które posiadałyby niebezpieczne sieci domyślne. Najlepszą praktyką jest egzekwowanie blokady na poziomie polityki chmury (A).
 
-Wskazówki i triki (Tips & Tricks):
-- "Restrict default networks" + "Best practices" = Organization Policy (skipDefaultNetworkCreation).
-- Zawsze wybieraj rozwiązania prewencyjne (Organization Policies) nad reaktywnymi (skrypty/funkcje).
+4. Wskazówki, hinty, tips and tricks:
+- Wyłączenie tworzenia domyślnej sieci w nowych projektach to jeden z pierwszych kroków przy tworzeniu bezpiecznego Landing Zone w GCP. Służy do tego wyłącznie polityka organizacji **`compute.skipDefaultNetworkCreation`**.
 
-Praktyczne informacje na egzamin:
-- Sieć 'default' jest tworzona automatycznie w każdym nowym projekcie, chyba że zostanie to zablokowane polityką organizacji.
-- Zapamiętaj inne ważne polityki: 'constraints/compute.restrictPublicIp', 'constraints/iam.allowedPolicyMemberDomains'.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Zablokowanie tworzenia sieci domyślnej w nowo tworzonych projektach -> Enforce `compute.skipDefaultNetworkCreation` org policy.
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">Organization Policy constraints overview</a>
-- <a href="https://cloud.google.com/vpc/docs/using-default-network" target="_blank">Understanding the default network</a>
-- <a href="https://cloud.google.com/resource-manager/docs/organization-policy/creating-managing-policies" target="_blank">Creating and managing organization policies</a>
+6. Dodatkowe źródła i dokumentacja:
+- Prevent default network creation: <a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints</a>
 </pre>
 </div>
 

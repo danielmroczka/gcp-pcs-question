@@ -89,28 +89,27 @@ You want to update your existing VPC Service Controls perimeter with a new acces
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Enable the dry run mode on your perimeter. Add your new access level to the perimeter dry run configuration. Update the perimeter configuration after the access level has been vetted).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Enable the dry run mode on your perimeter. Add your new access level to the perimeter dry run configuration. Update the perimeter configuration after the access level has been vetted.
 
-Wyjaśnienie:
-VPC Service Controls oferuje tryb "Dry Run", który pozwala administratorom na testowanie zmian w konfiguracji perymetru (takich jak dodanie nowego poziomu dostępu - Access Level) bez faktycznego blokowania ruchu. Logi generowane w tym trybie pokazują, jakie żądania zostałyby zablokowane lub dopuszczone, co pozwala na bezpieczną walidację zmian przed ich wdrożeniem ("enforce"). Jest to najlepsza praktyka zapobiegająca przerwom w działaniu usług produkcyjnych.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Chcesz zaktualizować istniejący perymetr VPC Service Controls o nowy poziom dostępu (Access Level) bez ryzyka zablokowania ruchu produkcyjnego i przy minimalnym narzucie operacyjnym:
+- Tryb "Dry run" (symulacji) w VPC Service Controls pozwala na testowanie zmian w perymetrze równolegle do działających reguł produkcyjnych (Enforced).
+- Skonfigurowanie nowego poziomu dostępu w konfiguracji suchego uruchomienia (dry run configuration) pozwala na weryfikację zachowania perymetru w logach audytowych. System sprawdzi, czy nowe reguły dostępu działają poprawnie i czy nie zablokowałyby prawowitych użytkowników. Po upewnieniu się, że konfiguracja jest poprawna (vetted), można bezpiecznie zapisać zmiany w trybie enforced.
 
-Dlaczego pozostałe są błędne:
-- A. Tworzenie repliki: Jest to proces ręczny, czasochłonny i podatny na błędy. Google Cloud oferuje natywny tryb Dry Run właśnie po to, by uniknąć takich obejść.
-- B. Dodawanie warunków jeden po drugim: Jest ryzykowne i może prowadzić do tymczasowych przerw w dostępie lub luk w bezpieczeństwie na żywym systemie.
-- C. Dodanie do głównej konfiguracji w trybie Dry Run: Ta opcja sugeruje dodanie zmian do sekcji aktywnej (enforced) przy włączonym globalnie trybie Dry Run, co jest mniej precyzyjne niż użycie dedykowanej sekcji "dry run configuration", która pozwala na współistnienie starej i nowej (testowej) konfiguracji równolegle.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Tworzenie repliki perymetru: Projekty w GCP mogą należeć tylko do jednego perymetru bezpieczeństwa w tym samym czasie. Niemożliwe jest stworzenie "kopii" aktywnego perymetru obejmującego te same projekty w celu ich testowania.
+- B. Stopniowa zmiana niedopasowanych reguł na produkcji: Wprowadzanie zmian bezpośrednio na żywym perymetrze "krok po kroku" stwarza ogromne ryzyko awarii i zablokowania użytkowników produkcyjnych.
+- C. Włączenie trybu dry run na całym perymetrze: Spowodowałoby to wyłączenie aktywnej ochrony perymetru (ruch przestałby być blokowany), co narusza zasady bezpieczeństwa produkcji. Nowy poziom dostępu należy dodać do konfiguracji *dry run*, pozostawiając dotychczasowe reguły w trybie *enforced*.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Update VPC SC" + "Least disruptions" -> Dry Run.
-- Pamiętaj, że logi Dry Run trafiają do Cloud Logging i można je filtrować, aby zobaczyć potencjalne naruszenia.
-- Access Context Manager służy do definiowania Access Levels używanych w VPC SC.
+4. Wskazówki, hinty, tips and tricks:
+- W VPC Service Controls zawsze odróżniaj tryb **Enforced** (aktywne blokowanie) od trybu **Dry run** (symulacja i logowanie). Zmiany w istniejących perymetrach zawsze należy najpierw wdrażać w sekcji dry run danej polityki.
 
-Kluczowe zagadnienia do powtórzenia:
-- Tryby pracy VPC Service Controls (Enforced vs Dry Run).
-- Access Context Manager i Access Levels.
-- Analiza logów VPC SC w Logs Explorer.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Aktualizacja/zmiana perymetru VPC SC bez przestojów produkcyjnych -> Konfiguracja zmian w trybie Dry Run (dry run configuration).
 
-Dokumentacja:
-<a href="https://cloud.google.com/vpc-service-controls/docs/dry-run-mode" target="_blank">VPC Service Controls dry run mode</a>
+6. Dodatkowe źródła i dokumentacja:
+- VPC Service Controls Dry Run Mode: <a href="https://cloud.google.com/vpc-service-controls/docs/dry-run-mode" target="_blank">https://cloud.google.com/vpc-service-controls/docs/dry-run-mode</a>
 </pre>
 </div>
 

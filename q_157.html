@@ -90,29 +90,30 @@ You are in charge of creating a new Google Cloud organization for your company. 
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: CE (C: Use a physical token, E: Provide non-privileged identities)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Use a physical token to secure the super admin credentials with multi-factor authentication (MFA).
+E. Provide non-privileged identities to the super admin users for their day-to-day activities.
 
-Dlaczego te odpowiedzi są poprawne:
-- Fizyczny token (Security Key): Klucze sprzętowe (np. Titan Security Key, YubiKey) zapewniają najwyższy poziom bezpieczeństwa MFA (FIDO/WebAuthn), chroniąc konta superadministratorów przed phishingiem i przejęciem sesji.
-- Oddzielenie kont (Separation of Accounts): Osoby posiadające uprawnienia superadministratora powinny mieć drugie, "zwykłe" konto bez wysokich uprawnień do codziennej pracy (e-mail, dokumenty, standardowa praca w chmurze). Używanie konta superadmina powinno być ograniczone tylko do zadań, które tego absolutnie wymagają. Zmniejsza to ryzyko przypadkowego uszkodzenia infrastruktury lub wycieku danych podczas rutynowych czynności.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Tworzysz nową organizację w Google Cloud. Administratorzy posiadają konta Super Administratora (Super Admin) w Google Workspace/Cloud Identity. Należy je maksymalnie zabezpieczyć:
+- C (Zabezpieczenie konta): Konta Super Admin mają nieograniczoną władzę nad domeną tożsamości i organizacją GCP. Muszą być chronione sprzętowym drugim składnikiem (MFA) opartym na kluczu fizycznym (np. Titan Security Key). Klucze fizyczne (FIDO2) chronią przed przejęciem konta w wyniku phishingu.
+- E (Zasada najmniejszych uprawnień): Administratorzy nie powinni używać konta Super Admin do codziennych zadań (takich jak czytanie e-maili, przeglądanie internetu, tworzenie kodu czy administrowanie maszynami VM). Powinni posiadać zwykłe, pozbawione uprawnień administracyjnych konta do codziennej pracy, a z konta Super Admin korzystać wyłącznie w wyjątkowych sytuacjach.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Prevent super admin from logging in to Google Cloud: Superadministrator musi mieć możliwość zalogowania się do konsoli, aby zarządzać organizacją w sytuacjach krytycznych lub przy zmianach wysokiego szczebla. Blokada logowania pozbawiłaby go tej funkcji.
-- B. Disable IAM roles at org level: Superadmin z definicji ma najwyższe uprawnienia. Wyłączenie mu ról IAM w konsoli Cloud utrudniłoby zarządzanie projektami i zasobami bez wpływu na jego uprawnienia w konsoli Admin Google Workspace, co wprowadziłoby niepotrzebny chaos.
-- D. Private connection: Tworzenie kont przez "prywatne połączenie" (np. VPN/Interconnect) nie jest standardowym wymogiem bezpieczeństwa dla samego procesu tworzenia konta. Kluczowe jest zabezpieczenie samych poświadczeń (MFA), a nie tunelu, przez który są przesyłane (który i tak jest szyfrowany przez TLS/HTTPS).
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Zablokowanie logowania do Google Cloud dla Super Admina: Blokada logowania uniemożliwiłaby administratorom wykonywanie działań naprawczych i zarządzanie organizacją GCP w sytuacjach kryzysowych.
+- B. Wyłączenie ról IAM dla Super Admina w konsoli GCP: Konta Super Admin automatycznie posiadają najwyższe uprawnienia w systemie tożsamości i mogą same przypisać sobie dowolne role IAM w GCP. Ręczne wyłączanie ról na poziomie konsoli GCP nie stanowi skutecznej bariery i utrudnia zarządzanie.
+- D. Użycie połączenia prywatnego do zakładania kont: Podczas tworzenia kont w chmurze komunikacja z konsolami Google (Admin Console) i tak musi odbywać się przez internet (protokół HTTPS), co jest w pełni bezpieczne dzięki szyfrowaniu TLS. Prywatne łącze (np. Interconnect) nie jest wymagane ani możliwe do wykorzystania w tym procesie.
 
-Wskazówki i triki (Tips & Tricks):
-- "Super Admin" + "Security" = Physical MFA (Security Keys).
-- Zawsze szukaj odpowiedzi promujących zasadę Least Privilege i rozdzielanie kont służbowych od administracyjnych.
+4. Wskazówki, hinty, tips and tricks:
+- Dobre praktyki bezpieczeństwa kont root/admin w chmurze:
+  1. Zawsze wymuszaj MFA oparte o **klucze sprzętowe** (Hardware Security Keys).
+  2. Stosuj zasadę **"Day-to-day accounts"** — oddzielne konto do pracy, oddzielne (używane rzadko) do administracji globalnej.
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj, że w Google Cloud zaleca się posiadanie co najmniej dwóch (ale nie zbyt wielu) superadministratorów, aby uniknąć sytuacji "lockoutu", gdy jedna osoba straci dostęp.
-- Pamiętaj, że superadministrator to rola w Google Workspace / Cloud Identity, która automatycznie daje ogromne uprawnienia w całej organizacji Google Cloud.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Zabezpieczenie kont super administratora -> Klucz fizyczny (MFA/Titan Key) + osobne konta do codziennej pracy (non-privileged identities).
 
-Dokumentacja i linki:
-- <a href="https://support.google.com/a/answer/9011374" target="_blank">Super admin security best practices</a>
-- <a href="https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#admin-accounts" target="_blank">Best practices for admin accounts</a>
-- <a href="https://cloud.google.com/security/fido-security-keys" target="_blank">FIDO security keys in GCP</a>
+6. Dodatkowe źródła i dokumentacja:
+- Administrator security best practices: <a href="https://support.google.com/a/answer/9005435" target="_blank">https://support.google.com/a/answer/9005435</a>
 </pre>
 </div>
 

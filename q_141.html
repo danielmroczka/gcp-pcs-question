@@ -90,29 +90,32 @@ You have been tasked with configuring Security Command Center for your organizat
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: AC (A. Event Threat Detection, C. Security Health Analytics).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Event Threat Detection
+C. Security Health Analytics
 
-Wyjaśnienie:
-- A. Event Threat Detection (ETD): Jest to funkcja Security Command Center (SCC), która automatycznie skanuje logi (Cloud Audit Logs, VPC Flow Logs itp.) pod kątem znanych zagrożeń. ETD potrafi wykryć ślady kopania kryptowalut (cryptomining), np. komunikację z serwerami mining pools lub adresami C2.
-- C. Security Health Analytics (SHA): Jest to skaner podatności SCC, który automatycznie wykrywa typowe błędy konfiguracji (misconfigurations) w środowisku Google Cloud, takie jak publicznie dostępne buckety GCS, brak włączonego logowania czy słabe reguły firewall.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymagane jest skonfigurowanie usługi Security Command Center (SCC) do wysyłania alertów o: 1) potencjalnym kopaniu kryptowalut (cryptomining) oraz 2) typowych błędach konfiguracyjnych w zasobach GCP:
+- A (Event Threat Detection): ETD to wbudowana usługa SCC, która analizuje strumienie logów (Cloud Audit Logs, VPC Flow Logs itp.) i wykrywa aktywne zagrożenia, takie jak uruchomienie oprogramowania do kopania kryptowalut w środowisku Compute Engine, próby brute-force lub eksfiltracja danych.
+- C (Security Health Analytics): SHA to mechanizm skanowania konfiguracji w SCC. Automatycznie wykrywa typowe luki i błędy konfiguracyjne zasobów GCP (np. publicznie dostępne kubełki GCS, brak włączonej ochrony przed usuwaniem, zbyt szeroko otwarte reguły firewalla).
 
-Dlaczego pozostałe są błędne:
-- B. Container Threat Detection: Chociaż potrafi wykryć kopanie kryptowalut wewnątrz kontenerów GKE, ETD (A) jest rozwiązaniem szerszym, monitorującym całe środowisko compute (VM i kontenery) na poziomie logów zdarzeń. SHA (C) jest niezbędne do spełnienia drugiej części wymagania (misconfigurations).
-- D. Cloud Data Loss Prevention (DLP): Służy do wykrywania i ochrony danych wrażliwych (PII), a nie do wykrywania zagrożeń typu cryptomining czy błędów konfiguracji infrastruktury.
-- E. Google Cloud Armor: Jest to firewall aplikacyjny (WAF) i ochrona przed DDoS. Nie służy do wykrywania kopania kryptowalut ani audytowania konfiguracji zasobów Google Cloud.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Container Threat Detection: Choć potrafi wykryć cryptomining wewnątrz kontenerów GKE na poziomie jądra systemu operacyjnego, nie analizuje i nie wykrywa ogólnych błędów konfiguracyjnych chmury w organizacji.
+- D. Cloud Data Loss Prevention (DLP): Służy do skanowania, wykrywania i maskowania danych wrażliwych (PII) w plikach i bazach danych, nie wykrywa ataków cryptomining ani błędów konfiguracyjnych infrastruktury sieciowej.
+- E. Google Cloud Armor: Jest to zapora sieciowa WAF chroniąca przed atakami internetowymi, nie jest modułem detekcyjnym wewnątrz Security Command Center.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Threats" (zagrożenia, np. mining, malware, phishing) = Event Threat Detection.
-- "Misconfigurations" (błędy konfiguracji, np. public buckets, open ports) = Security Health Analytics.
-- Obie te usługi są częścią Security Command Center (SCC).
+4. Wskazówki, hinty, tips and tricks:
+- Zapamiętaj podział modułów w SCC Premium:
+  - **Security Health Analytics (SHA)** -> Wykrywa błędy konfiguracji (Misconfigurations) chmury.
+  - **Event Threat Detection (ETD)** -> Analizuje logi i wykrywa aktywne zagrożenia (Threats, np. cryptomining, malware).
+  - **Container Threat Detection** -> Analizuje stan wewnątrz uruchomionych kontenerów GKE.
 
-Kluczowe zagadnienia do powtórzenia:
-- Moduły Security Command Center (SHA, ETD, Container Threat Detection, VM Threat Detection).
-- Różnica między detekcją zagrożeń a skanowaniem konfiguracji.
-- Poziomy SCC (Standard vs Premium).
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- SCC + misconfigurations -> Security Health Analytics.
+- SCC + cryptomining / zagrożenia w logach -> Event Threat Detection.
 
-Dokumentacja:
-<a href="https://cloud.google.com/security-command-center/docs/concepts-security-sources" target="_blank">Źródła detekcji w Security Command Center</a>
+6. Dodatkowe źródła i dokumentacja:
+- Security Command Center services overview: <a href="https://cloud.google.com/security-command-center/docs/concepts-security-command-center-overview#built-in-services" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-security-command-center-overview#built-in-services</a>
 </pre>
 </div>
 

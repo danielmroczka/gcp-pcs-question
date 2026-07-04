@@ -89,28 +89,27 @@ You have noticed an increased number of phishing attacks across your enterprise 
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Titan Security Keys)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Titan Security Keys
 
-Wyjaśnienie:
-Klucze bezpieczeństwa Titan (Titan Security Keys) wykorzystują standardy FIDO (Fast Identity Online), w tym U2F (Universal 2nd Factor) i FIDO2. Są to jedyne opcje 2-stopniowej weryfikacji (2SV) w ekosystemie Google, które zapewniają kryptograficzną weryfikację adresu URL strony logowania. Oznacza to, że klucz nie wyśle podpisu kryptograficznego, jeśli strona logowania jest fałszywa (phishingowa), nawet jeśli wygląda identycznie jak prawdziwa strona Google. Klucz generuje podpis unikalny dla danej sesji logowania, którego nie da się przejąć ani wykorzystać powtórnie przez atakującego.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Firma boryka się z atakami phishingowymi. Należy wdrożyć opcję dwuetapowej weryfikacji (2-Step Verification - 2SV), która wykorzystuje podpis kryptograficzny i weryfikuje adres URL strony logowania przed autoryzacją użytkownika:
+- Klucze bezpieczeństwa Titan (Titan Security Keys) wspierają standardy FIDO/WebAuthn. Podczas logowania klucz fizycznie nawiązuje kryptograficzny uścisk dłoni z przeglądarką. System weryfikuje tożsamość klucza oraz powiązanie z konkretnym adresem URL strony logowania Google. Jeśli użytkownik znajdzie się na sfałszowanej stronie phishingowej (która wygląda identycznie jak strona logowania, ale ma inny adres URL), klucz bezpieczeństwa wykryje różnicę w nazwie domeny i odmówi wygenerowania podpisu kryptograficznego, chroniąc poświadczenia przed kradzieżą. Jest to najbardziej odporna na phishing metoda MFA dostępna na rynku.
 
-Dlaczego pozostałe są błędne:
-B. Google prompt: Przesyła powiadomienie "Czy to Ty?" na urządzenie mobilne. Chociaż jest znacznie bezpieczniejszy niż SMS, nie oferuje sprzętowej weryfikacji adresu URL strony logowania i może być podatny na błąd użytkownika (przypadkowe kliknięcie "Tak" przy zmęczeniu decyzją/spamowaniu powiadomieniami).
-C. Google Authenticator app: Generuje kody czasowe (TOTP). Użytkownik musi ręcznie przepisać kod na stronę. Nie ma tu mechanizmu sprawdzającego, czy strona, na której wpisywany jest kod, nie jest stroną phishingową – atakujący może natychmiast użyć przechwyconego kodu na prawdziwej stronie Google.
-D. Cloud HSM keys: Służą do przechowywania kluczy szyfrujących dane w chmurze (np. dla usługi Cloud KMS), a nie do uwierzytelniania użytkowników podczas logowania do konta Google. To usługa infrastrukturalna, a nie metoda 2SV dla personelu.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Google prompt (Powiadomienie Google): Wyświetla komunikat "Czy to Ty logujesz się?" na ekranie telefonu komórkowego. Jest to wygodna metoda, ale nie wykorzystuje weryfikacji adresu URL w sposób odporny na ataki socjotechniczne (użytkownik może kliknąć "Tak" na telefonie, logując się na fałszywej stronie).
+- C. Aplikacja Google Authenticator (TOTP): Generuje jednorazowe kody czasowe. Metoda ta jest podatna na phishing, ponieważ użytkownik może przepisać wygenerowany kod na fałszywej stronie internetowej, a atakujący może go natychmiast przechwycić i wykorzystać.
+- D. Klucze Cloud HSM: Cloud HSM to sprzętowy moduł bezpieczeństwa w chmurze używany do generowania i przechowywania kluczy kryptograficznych dla aplikacji chmurowych (szyfrowanie CMEK). Nie służy do uwierzytelniania logowania użytkowników końcowych do kont.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Słowa kluczowe: "phishing protection", "cryptographic signature", "verify URL". Jeśli je widzisz, odpowiedzią prawie zawsze są Klucze Bezpieczeństwa (Security Keys).
-- Program Ochrony Zaawansowanej (Advanced Protection Program) Google wymaga właśnie użycia kluczy bezpieczeństwa jako najmocniejszej formy ochrony.
+4. Wskazówki, hinty, tips and tricks:
+- W terminologii bezpieczeństwa IT jedyną metodą MFA/2FA w pełni odporną na zaawansowany phishing (phishing-resistant MFA) są **fizyczne klucze bezpieczeństwa U2F/FIDO2** (Titan Security Keys).
+- Powiązanie z domeną i podpis kryptograficzny uniemożliwiają przekazanie poświadczeń oszustowi.
 
-Kluczowe zagadnienia do powtórzenia:
-- Metody 2-stopniowej weryfikacji (2SV) w Cloud Identity.
-- Różnica między TOTP (aplikacje), Push (Prompt) a FIDO/U2F (Security Keys).
-- Cloud Identity Advanced Protection.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Ochrona przed phishingiem + podpis kryptograficzny + weryfikacja URL -> Titan Security Keys.
 
-Dokumentacja:
-<a href="https://cloud.google.com/identity-platform/docs/mfa" target="_blank">Multi-factor authentication (MFA) in Google Cloud</a>
-<a href="https://support.google.com/titansecuritykey/answer/9111684" target="_blank">Titan Security Keys overview</a>
+6. Dodatkowe źródła i dokumentacja:
+- Titan Security Key overview: <a href="https://support.google.com/titansecuritykey/answer/9111608" target="_blank">https://support.google.com/titansecuritykey/answer/9111608</a>
 </pre>
 </div>
 

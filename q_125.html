@@ -90,16 +90,31 @@ You are setting up a CI/CD pipeline to deploy containerized applications to your
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: AE.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Create a Cloud Build pipeline that will monitor changes to your container templates in a Cloud Source Repositories repository. Add a step to analyze Container Analysis results before allowing the build to continue.
+E. In your CI/CD pipeline, add an attestation on your container image when no vulnerabilities have been found. Use a Binary Authorization policy to block deployments of containers with no attestation in your cluster.
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Cloud Build + Container Analysis: To natywne rozwiązanie GCP. Cloud Build automatycznie wywołuje skanowanie obrazów w Artifact Registry (Container Analysis), co identyfikuje luki CVE bez dodatkowych serwerów.
-E. Binary Authorization: Jest to mechanizm 'enforcement'. Zapewnia on, że w klastrze GKE uruchomią się TYLKO te obrazy, które zostały pomyślnie przeskanowane i 'podpisane' (atestowane) w kroku A.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Celem jest stworzenie zabezpieczonego, natywnego i taniego łańcucha dostaw oprogramowania (Supply Chain Security) w GKE, który zapobiega wdrażaniu kontenerów z podatnościami przy minimalnym narzucie operacyjnym:
+- Krok A (Wykrywanie podatności): Użycie Cloud Build i usługi Container Analysis (teraz część Artifact Analysis) jest w pełni chmurowe (cloud-native) i serwerowe. Obrazy są automatycznie skanowane w poszukiwaniu podatności (CVE) po wrzuceniu do rejestru. Krok analizy w potoku Cloud Build blokuje proces budowania, jeśli zostaną wykryte podatności.
+- Krok E (Wymuszenie reguł): Binary Authorization to natywna usługa GKE pełniąca rolę kontrolera przyjęć (Admission Controller). Umożliwia ona weryfikację podpisów (atestacji) na obrazie przed jego uruchomieniem. Jeśli potok CI/CD nie wygeneruje atestacji (ponieważ testy podatności nie przeszły pomyślnie), Binary Authorization zablokuje uruchomienie takiego kontenera na klastrze GKE, zapewniając pełną zgodność i bezpieczeństwo.
 
-Dlaczego inne są błędne:
-B, C, D: Wprowadzają dodatkowy narzut (serwery Jenkins, własne skrypty, VM), co jest sprzeczne z wymogiem 'minimal overhead' i 'cloud-native'.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Użycie Cloud Function wyzwalanego logami: Wprowadza niepotrzebny narzut deweloperski i operacyjny. Container Analysis oferuje natywne skanowanie obrazów przy ich przesyłaniu do Artifact Registry/GCR bez potrzeby pisania i utrzymywania własnych funkcji.
+- C. Cron job na instancji Compute Engine: Utrzymywanie dedykowanej maszyny wirtualnej i pisanie skryptów cron generuje wysokie koszty stałe i duży narzut administracyjny, co jest sprzeczne z celami minimalizacji overheadu.
+- D. Jenkins na klastrze GKE: Jenkins nie jest usługą w pełni zarządzaną (serverless). Wymaga stałego administrowania, aktualizacji, zabezpieczania klastra CI/CD i ponoszenia kosztów stale działających zasobów, co jest gorszym rozwiązaniem w porównaniu do natywnego Cloud Build.
 
-Konsensus społeczności ExamTopics: 100% na AE. To podręcznikowy duet dla 'Supply Chain Security' w GKE.
+4. Wskazówki, hinty, tips and tricks:
+- Standard chmurowego bezpieczeństwa kontenerów w GCP (Secure Kubernetes Supply Chain) opiera się na integracji: **Artifact Registry (przechowywanie) -> Artifact/Container Analysis (skanowanie) -> Cloud Build (potok/atestacja) -> Binary Authorization (kontrola wdrożeń w GKE)**.
+- Atestacja (attestation) to cyfrowy podpis potwierdzający, że obraz przeszedł pomyślnie wymagane kontrole (np. brak podatności).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Zablokowanie nieautoryzowanych wdrożeń kontenerów w GKE -> Binary Authorization.
+- Natywne, bezserwerowe skanowanie obrazów pod kątem CVE -> Container Analysis / Artifact Analysis + Cloud Build.
+
+6. Dodatkowe źródła i dokumentacja:
+- Binary Authorization overview: <a href="https://cloud.google.com/binary-authorization/docs/overview" target="_blank">https://cloud.google.com/binary-authorization/docs/overview</a>
+- Container Analysis documentation: <a href="https://cloud.google.com/container-analysis/docs" target="_blank">https://cloud.google.com/container-analysis/docs</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

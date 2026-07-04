@@ -89,31 +89,30 @@ A database administrator notices malicious activities within their Cloud SQL ins
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Data Access).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Data Access
 
-Wyjaśnienie:
-- Logi dostępu do danych (Data Access audit logs): Rejestrują wywołania API, które tworzą, modyfikują lub odczytują dane dostarczane przez użytkowników, a także wywołania API, które odczytują konfigurację lub metadane zasobów. Wyróżnia się trzy rodzaje tych logów:
-  1. ADMIN_READ: Rejestruje operacje odczytu metadanych lub informacji konfiguracyjnych (to, o co pyta administrator w pytaniu).
-  2. DATA_READ: Rejestruje operacje odczytu danych użytkownika.
-  3. DATA_WRITE: Rejestruje operacje zapisu danych użytkownika.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Administrator bazy danych chce monitorować połączenia/wywołania API, które odczytują konfigurację lub metadane zasobów Cloud SQL (np. operacje typu get lub list):
+- W Google Cloud logi audytowe (Cloud Audit Logs) dzielą się na cztery kategorie. Operacje odczytu metadanych oraz konfiguracji zasobów (np. pobranie szczegółów instancji bazy danych) są rejestrowane w logach **Data Access audit logs** (kategoria: Admin Read). Logi te rejestrują również odczyty i zapisy samych danych użytkownika wewnątrz usług.
 
-Dlaczego pozostałe są błędne:
-- A. Admin Activity: Te logi rejestrują operacje zapisu API lub inne działania administracyjne, które MODYFIKUJĄ konfigurację lub metadane zasobów. Pytanie dotyczy operacji ODCZYTU (read).
-- B. System Event: Logi zdarzeń systemowych rejestrują działania Google Cloud, które zmieniają konfigurację zasobów (np. restart maszyny przez Google). Nie rejestrują odczytów metadanych przez użytkowników.
-- C. Access Transparency: Te logi rejestrują działania podejmowane przez pracowników Google, gdy uzyskują oni dostęp do Twoich treści. Nie służą do monitorowania Twoich własnych wywołań API.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Admin Activity logs: Rejestrują wyłącznie operacje zapisu (modyfikacji, tworzenia, usuwania) metadanych i konfiguracji (np. utworzenie nowej bazy danych Cloud SQL, zmiana typu instancji). Nie logują operacji odczytu (read-only).
+- B. System Event logs: Rejestrują działania administracyjne podejmowane automatycznie przez systemy Google Cloud (np. automatyczna migracja na inny host), a nie działania użytkowników czy administratorów.
+- C. Access Transparency logs: Rejestrują zdarzenia, w których pracownicy wsparcia technicznego Google uzyskiwali dostęp do zasobów klienta w celu rozwiązania zgłoszenia serwisowego.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Słowo klucz "READ configuration/metadata" = Data Access (ADMIN_READ).
-- Słowo klucz "WRITE/MODIFY configuration/metadata" = Admin Activity.
-- Pamiętaj, że logi Data Access (poza BigQuery) są domyślnie wyłączone, bo mogą generować duże koszty.
+4. Wskazówki, hinty, tips and tricks:
+- Zapamiętaj podział logów audytowych:
+  - **Admin Activity** -> Operacje modyfikujące (write) konfigurację zasobów (np. `create`, `update`, `delete`). Zawsze włączone.
+  - **Data Access** -> Operacje odczytujące (read) konfigurację zasobów (np. `get`, `list`) oraz operacje na danych użytkownika. Domyślnie wyłączone (oprócz BigQuery).
+  - **Access Transparency** -> Działania inżynierów Google.
 
-Kluczowe zagadnienia do powtórzenia:
-- Rodzaje logów audytowych w Cloud Audit Logs.
-- Różnica między Admin Activity a Data Access.
-- Konfiguracja logów Data Access (ADMIN_READ, DATA_READ, DATA_WRITE).
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Odczyt konfiguracji / metadanych zasobu -> Data Access logs.
+- Modyfikacja / zapis konfiguracji zasobu -> Admin Activity logs.
 
-Dokumentacja:
-<a href="https://cloud.google.com/logging/docs/audit#data-access" target="_blank">Logi audytowe dostępu do danych</a>
+6. Dodatkowe źródła i dokumentacja:
+- Cloud Audit Logs types: <a href="https://cloud.google.com/logging/docs/audit#types" target="_blank">https://cloud.google.com/logging/docs/audit#types</a>
 </pre>
 </div>
 

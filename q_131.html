@@ -90,24 +90,27 @@ You perform a security assessment on a customer architecture and discover that m
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Cloud NAT
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Audyt wykazał, że maszyny wirtualne posiadają publiczne adresy IP. Maszyny te muszą jednak komunikować się z zewnętrznymi witrynami (ruch wychodzący, np. aktualizacje oprogramowania, zapytania API):
+- Cloud NAT (Network Address Translation) to w pełni zarządzana i bezpieczna usługa, która pozwala instancjom maszyn wirtualnych bez zewnętrznych (publicznych) adresów IP na inicjowanie połączeń z internetem. Ruch wychodzący z maszyn o prywatnych adresach IP jest tłumaczony na bramie Cloud NAT na publiczny adres IP. Pozwala to na bezpieczne usunięcie publicznych adresów IP z maszyn wirtualnych, drastycznie zmniejszając ich powierzchnię ataku (ruch z internetu nie może bezpośrednio dotrzeć do maszyny).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Google Cloud Armor: Służy do ochrony przed atakami DDoS i filtrowania ruchu przychodzącego do Load Balancerów. Nie zapewnia translatora adresów IP dla wychodzącego ruchu maszyn wirtualnych.
+- C. Cloud Router: Sam w sobie odpowiada za wymianę dynamicznych tras routingu przy użyciu protokołu BGP (np. dla Interconnect czy VPN). Cloud NAT wymaga Cloud Routera do działania, ale to sam Cloud NAT realizuje translację adresów i eliminuje potrzebę posiadania publicznych IP.
+- D. Cloud VPN: Tworzy bezpieczny, zaszyfrowany tunel do połączenia z siecią lokalną (on-premises) lub inną siecią VPC. Nie służy do ogólnego wyjścia prywatnych maszyn wirtualnych na publiczne strony internetowe.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+4. Wskazówki, hinty, tips and tricks:
+- Usuwanie publicznych adresów IP z maszyn + potrzeba dostępu maszyn do internetu -> Zawsze wybieraj **Cloud NAT**.
+- Pamiętaj, że bramę Cloud NAT konfiguruje się na poziomie Cloud Routera dla danej sieci VPC i jej podsieci.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Usunięcie zewnętrznych IP z VM + dostęp maszyn do internetu (outbound traffic) -> Cloud NAT.
+
+6. Dodatkowe źródła i dokumentacja:
+- Cloud NAT overview: <a href="https://cloud.google.com/nat/docs/overview" target="_blank">https://cloud.google.com/nat/docs/overview</a>
 </pre>
 
 </div>

@@ -90,31 +90,33 @@ You need to audit the network segmentation for your Google Cloud footprint. You 
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: AD (A: VM instances missing tags, D: Firewall rule based on SA with priority 999)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. All VM instances are missing the respective network tags.
+D. A VPC firewall rule is allowing traffic between source/targets based on the same service account with priority 999.
 
-Dlaczego te odpowiedzi są poprawne:
-- Kontekst: Maszyny komunikują się swobodnie mimo istnienia reguł opartych na tagach (priorytet 1000). Szukamy przyczyn braku segmentacji.
-- A. Missing network tags: Reguły firewall oparte na tagach sieciowych działają TYLKO wtedy, gdy maszyna posiada dany tag. Jeśli zapomniano o nadaniu tagów instancjom, reguły "segmentujące" (blokujące lub zezwalające na podstawie tagów) po prostu ich nie obejmą, co może prowadzić do działania innych, mniej restrykcyjnych reguł.
-- D. Priority 999 rule based on SA: W Google Cloud firewallach, niższa liczba priorytetu oznacza WYŻSZY priorytet (precedencję). Jeśli istnieje reguła o priorytecie 999, która zezwala na ruch między instancjami o tym samym Service Account, zostanie ona zastosowana przed Twoją regułą o priorytecie 1000. Ponieważ pytanie wspomina, że instancje nie mają "customization" kont serwisowych, wszystkie używają domyślnego konta Compute Engine. Jeśli istnieje reguła zezwalająca na ruch "self" dla tego konta, segmentacja tagami zostanie zignorowana.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Audytujesz segmentację sieciową. Maszyny VM zostały wdrożone bez niestandardowych kont serwisowych (co oznacza, że korzystają z domyślnego konta Compute Engine). Zauważyłeś, że wszystkie instancje mogą komunikować się swobodnie, mimo istniejących reguł firewalla opartych na tagach sieciowych (z priorytetem 1000). Szukamy dwóch najbardziej prawdopodobnych przyczyn:
+- A (Brak tagów): Reguły zapory sieciowej oparte na tagach (Target Tags / Source Tags) działają tylko wtedy, gdy maszyny wirtualne mają te tagi przypisane do swoich wirtualnych kart sieciowych. Jeśli administrator zapomniał dodać tagi do maszyn wirtualnych podczas ich tworzenia, reguły segmentujące ruch (priorytet 1000) nie zostaną do nich zastosowane, co pozwoli maszynom na komunikację domyślną.
+- D (Domyślne konto serwisowe + wyższy priorytet): Ponieważ wszystkie maszyny korzystają z tego samego domyślnego konta serwisowego Compute Engine, reguła firewalla zezwalająca na ruch wewnątrz tego samego konta serwisowego z priorytetem 999 (wyższy priorytet niż 1000) nadpisze tagowe reguły blokujące (priorytet 1000) i pozwoli na pełny przepływ ruchu pomiędzy maszynami.
 
-Analiza niepoprawnych odpowiedzi:
-- B. Same network subnet: Podsieci w GCP nie są barierą dla ruchu wewnątrz VPC. Firewall w GCP jest stanowy i działa na poziomie interfejsu VM, a nie podsieci. Sama obecność w jednej podsieci nie sprawia, że reguły firewall są ignorowane.
-- C. Same network route: Trasy (routes) decydują o tym, GDZIE wysłać pakiet, ale to firewall decyduje, CZY pakiet może przejść. Nawet przy identycznych trasach, poprawny firewall powinien zablokować ruch.
-- E. Priority 1001 rule: Reguła o priorytecie 1001 ma NIŻSZY priorytet niż Twoja reguła 1000. Zostałaby ona sprawdzona dopiero wtedy, gdyby reguła 1000 nie pasowała do ruchu. Nie może więc być przyczyną "nadpisania" Twojej segmentacji.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Maszyny znajdują się w tej samej podsieci: Zapora sieciowa GCP (VPC Firewall) działa na poziomie wirtualnych kart sieciowych (NIC) maszyn wirtualnych, a nie na poziomie przełączników podsieci. Reguły firewalla mogą skutecznie blokować ruch nawet pomiędzy maszynami znajdującymi się w tej samej podsieci.
+- C. Maszyny mają skonfigurowaną tę samą trasę sieciową: Trasa (Route) określa, dokąd pakiet ma zostać wysłany, ale to firewall decyduje, czy pakiet zostanie wpuszczony/wypuszczony. Sama trasa nie omija reguł zapory.
+- E. Reguła z priorytetem 1001: W GCP niższy numer priorytetu oznacza ważniejszą regułę (np. 999 nadpisuje 1000). Reguła z priorytetem 1001 jest mniej ważna niż reguły segmentujące o priorytecie 1000, więc nie mogłaby ich nadpisać i spowodować swobodnej komunikacji.
 
-Wskazówki i triki (Tips & Tricks):
-- Priorytety firewall: 0 to najwyższy, 65535 to najniższy.
-- Service Accounts vs Tags: Google zaleca używanie SA w regułach firewall, ponieważ są one bardziej bezpieczne (wymagają uprawnień IAM do przypisania, w przeciwieństwie do tagów, które są zwykłymi metadanymi).
-- Domyślny Service Account: Pamiętaj, że domyślnie każda VM dostaje to samo konto serwisowe, co jest częstą luką w segmentacji.
+4. Wskazówki, hinty, tips and tricks:
+- Zapamiętaj priorytety reguł firewalla w GCP:
+  - **Priorytet 0** -> Najwyższy priorytet.
+  - **Priorytet 65535** -> Najniższy priorytet.
+  - Reguła o priorytecie **999** jest ważniejsza (ma wyższy priorytet) niż reguła o priorytecie **1000**.
+- Domyślne maszyny wirtualne bez przypisanego własnego konta serwisowego współdzielą tę samą tożsamość (`[PROJECT_NUMBER]-compute@developer.gserviceaccount.com`).
 
-Praktyczne informacje na egzamin:
-- Zawsze sprawdzaj priorytety. Jeśli coś "nie działa", szukaj reguły z niższym numerem, która "psuje" zamierzenie.
-- Segmentacja środowisk (Prod/Non-Prod) powinna odbywać się na poziomie osobnych projektów lub sieci VPC, a nie tylko tagami wewnątrz jednej sieci.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Brak działania reguł tagowych -> Maszyny nie posiadają przypisanych tagów (A).
+- Nadpisanie reguły o priorytecie 1000 -> Szukaj reguły o priorytecie wyższym, czyli o numerze mniejszym niż 1000 (np. 999) (D).
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/vpc/docs/firewalls#priority" target="_blank">Firewall rule priority</a>
-- <a href="https://cloud.google.com/vpc/docs/firewalls#service-accounts" target="_blank">Firewall rules and Service Accounts</a>
-- <a href="https://cloud.google.com/vpc/docs/firewalls#tags" target="_blank">Firewall rules and Network Tags</a>
+6. Dodatkowe źródła i dokumentacja:
+- VPC firewall rules priority: <a href="https://cloud.google.com/vpc/docs/firewalls#priority" target="_blank">https://cloud.google.com/vpc/docs/firewalls#priority</a>
 </pre>
 </div>
 

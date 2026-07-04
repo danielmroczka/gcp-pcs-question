@@ -89,28 +89,26 @@ You work for an organization in a regulated industry that has strict data protec
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Store the data in a Cloud Storage bucket, and configure the bucket's Object Lifecycle Management feature).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Store the data in a Cloud Storage bucket, and configure the bucket's Object Lifecycle Management feature.
 
-Wyjaśnienie:
-- Cloud Storage Object Lifecycle Management: Jest to optymalne rozwiązanie dla kopii zapasowych (backups), ponieważ Cloud Storage oferuje najniższe koszty przechowywania (klasy Nearline, Coldline, Archive). Funkcja Lifecycle Management pozwala na automatyczne usuwanie obiektów po określonym czasie (warunek "Age") bez konieczności pisania skryptów, co spełnia wymaganie automatyzacji i minimalizacji kosztów.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymagane jest automatyczne i tanie usuwanie starych kopii zapasowych (backups) po określonym czasie w celu zachowania zgodności z przepisami o ochronie danych:
+- Kopie zapasowe to pliki nieustrukturyzowane (obrazy dysków, dumpy baz danych), dla których najbardziej opłacalnym i standardowym miejscem przechowywania są kubełki Cloud Storage (oferujące tanie klasy archiwalne, np. Coldline lub Archive).
+- Usługa Cloud Storage posiada wbudowaną, bezpłatną funkcję **Object Lifecycle Management** (cykl życia obiektów). Pozwala ona na zdefiniowanie prostej reguły (np. akcja `Delete` dla obiektów o wieku `Age` powyżej X dni). Proces ten zachodzi w pełni automatycznie w tle, bez narzutu operacyjnego i bez konieczności utrzymywania dodatkowych serwerów czy pisania kodu.
 
-Dlaczego pozostałe są błędne:
-- A. Persistent Disk: Dyski trwałe są znacznie droższe niż Cloud Storage i nie oferują natywnej funkcji automatycznego usuwania po określonym czasie bez użycia skryptów lub dodatkowych narzędzi.
-- B. Cloud Bigtable: Jest to baza danych NoSQL o wysokiej wydajności, przeznaczona do dużych obciążeń analitycznych i operacyjnych, a nie do taniego przechowywania kopii zapasowych. Chociaż ma funkcję "garbage collection" (TTL) na poziomie rodzin kolumn, koszty przechowywania danych byłyby nieproporcjonalnie wysokie.
-- C. BigQuery: Jest to magazyn danych (data warehouse). Chociaż pozwala na ustawienie czasu wygaśnięcia tabeli (expiration time), jest droższy od Cloud Storage w scenariuszu czystego backupu danych binarnych lub plików logów.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Przechowywanie na dyskach Persistent Disk i usuwanie dysku: Dyski PD są przeznaczone do wydajnego zapisu blokowego dla działających maszyn VM i są znacznie droższe niż Cloud Storage. Usunięcie całego dysku skasowałoby wszystkie kopie na nim zawarte, w tym te, które jeszcze nie wygasły.
+- B i C. Użycie baz Cloud Bigtable lub tabel BigQuery: Są to zaawansowane systemy bazodanowe i analityczne. Przechowywanie w nich surowych plików kopii zapasowych generowałoby ogromne i nieuzasadnione koszty finansowe, znacznie przewyższające koszt przechowywania w Cloud Storage.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Minimize storage costs" + "Backups" = Zawsze myśl o Cloud Storage (GCS).
-- "Automate deletion after period" = Object Lifecycle Management (GCS) lub TTL (BigQuery/Bigtable).
-- Zwróć uwagę na rodzaj danych – kopie zapasowe rzadko wymagają bazy danych typu Bigtable.
+4. Wskazówki, hinty, tips and tricks:
+- Jeśli w pytaniu o automatyczną retencję i usuwanie starych plików kopii zapasowych pojawia się wymóg minimalizacji kosztów przechowywania ("minimize storage costs"), prawidłową odpowiedzią jest zawsze **Cloud Storage z Object Lifecycle Management**.
 
-Kluczowe zagadnienia do powtórzenia:
-- Klasy przechowywania Cloud Storage (Standard, Nearline, Coldline, Archive).
-- Object Lifecycle Management i dostępne warunki (Age, CreatedBefore, IsLive).
-- Retencja danych i polityki usuwania w różnych usługach GCP.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Tanie przechowywanie kopii zapasowych + automatyczne usuwanie po czasie -> Cloud Storage + Object Lifecycle Management.
 
-Dokumentacja:
-<a href="https://cloud.google.com/storage/docs/lifecycle" target="_blank">Zarządzanie cyklem życia obiektów w Cloud Storage</a>
+6. Dodatkowe źródła i dokumentacja:
+- Cloud Storage Object Lifecycle Management: <a href="https://cloud.google.com/storage/docs/lifecycle" target="_blank">https://cloud.google.com/storage/docs/lifecycle</a>
 </pre>
 </div>
 

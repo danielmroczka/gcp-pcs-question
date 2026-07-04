@@ -89,33 +89,28 @@ You are backing up application logs to a shared Cloud Storage bucket that is acc
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Use Pub/Sub and Cloud Functions to trigger a Cloud Data Loss Prevention scan every time a file is uploaded to the administrator's bucket. If the scan does not detect PII, have the function move the objects into the shared Cloud Storage bucket).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Use Pub/Sub and Cloud Functions to trigger a Cloud Data Loss Prevention scan every time a file is uploaded to the administrator's bucket. If the scan does not detect PII, have the function move the objects into the shared Cloud Storage bucket.
 
-Wyjaśnienie:
-- Bezpieczeństwo przede wszystkim (Security first): Najbezpieczniejszym podejściem jest przesyłanie logów najpierw do bezpiecznego, odizolowanego miejsca (bucket administratora), a dopiero po weryfikacji udostępnianie ich szerszemu gronu (analitykom).
-- Proces automatyzacji:
-  1. Logi trafiają do bucketu administratora.
-  2. Powiadomienie o nowym pliku (Cloud Storage Notification) trafia do Pub/Sub.
-  3. Pub/Sub wyzwala Cloud Function.
-  4. Funkcja wywołuje DLP API w celu przeskanowania pliku pod kątem PII.
-  5. Jeśli wynik skanowania jest negatywny (brak PII), funkcja przenosi plik do współdzielonego bucketu analityków.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymagane jest archiwizowanie logów aplikacji w kubełku Cloud Storage. Analitycy nie mogą mieć dostępu do plików zawierających dane osobowe (PII), natomiast administrator musi mieć dostęp do wszystkich plików (w tym tych z PII):
+- Prawidłowe podejście z punktu widzenia bezpieczeństwa zakłada zasadę "Secure Ingestion". Wszystkie surowe logi są najpierw wysyłane do bezpiecznego kubełka administratora (niedostępnego dla analityków).
+- Powiadomienie o nowym pliku w kubełku administratora jest wysyłane przez Pub/Sub do Cloud Functions. Funkcja ta uruchamia skanowanie pliku za pomocą Cloud DLP API.
+- Jeśli skanowanie wykaże, że plik jest czysty (brak PII), funkcja przenosi go do współdzielonego kubełka dla analityków. W ten sposób analitycy nigdy nie mają kontaktu z surowym plikiem przed weryfikacją, co eliminuje ryzyko przypadkowego wycieku danych.
 
-Dlaczego pozostałe są błędne:
-- A. Upload do obu + usuwanie: To podejście jest niebezpieczne (Race Condition). Istnieje okno czasowe, w którym analitycy mogą odczytać logi z PII zanim DLP zdąży je wykryć i usunąć.
-- B. Object Lifecycle Management: Ta funkcja służy do zarządzania wiekiem obiektów lub ich wersjami (np. przenoszenie do Coldline lub usuwanie po 30 dniach). Nie potrafi ona skanować zawartości plików pod kątem PII.
-- C. Cloud Storage trigger na PII upload: Triggery GCS reagują na zdarzenia techniczne (finalize, delete, metadata update), a nie na zawartość merytoryczną pliku. Trigger sam w sobie nie "wie", czy w pliku jest PII.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Przesyłanie do obu kubełków i usuwanie z PII za pomocą DLP: Stwarza poważne ryzyko bezpieczeństwa (race condition). Plik z danymi PII pojawia się we współdzielonym kubełku i jest tam dostępny dla analityków, dopóki asynchroniczne skanowanie DLP go nie wykryje i nie usunie.
+- B. Użycie Object Lifecycle Management na kubełku: Reguły cyklu życia obiektów w Cloud Storage służą do automatycznej zmiany klas przechowywania (np. na Archive) lub usuwania starych plików na podstawie wieku. Nie posiadają funkcji analizy zawartości plików pod kątem danych osobowych (PII).
+- C. Wyzwalacz Cloud Storage reagujący na PII: Wyzwalacze Cloud Storage (GCS Triggers) reagują na zdarzenia obiektowe (np. utworzenie obiektu, usunięcie), ale nie potrafią badać zawartości plików pod kątem PII bez integracji z zewnętrznym silnikiem skanującym (DLP).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli musisz odfiltrować dane wrażliwe przed ich udostępnieniem, zawsze wybieraj schemat: [Miejsce Bezpieczne] -> [Skanowanie DLP] -> [Miejsce Współdzielone].
-- Unikaj rozwiązań, które udostępniają dane "na chwilę" z zamiarem ich późniejszego usunięcia.
+4. Wskazówki, hinty, tips and tricks:
+- W projektowaniu przepływów danych (Data Pipeline Security): **nigdy nie wrzucaj potencjalnie wrażliwych danych bezpośrednio do strefy publicznej/współdzielonej** z zamiarem ich późniejszego usunięcia. Zawsze filtruj dane w strefie prywatnej przed ich udostępnieniem.
 
-Kluczowe zagadnienia do powtórzenia:
-- Cloud Data Loss Prevention (DLP) API.
-- Integracja Cloud Storage z Cloud Functions i Pub/Sub.
-- Zasada Least Privilege w dostępie do danych.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Blokowanie dostępu analityków do PII przed weryfikacją -> Zapis do bezpiecznego bucketu -> Skan DLP przez Cloud Function -> Przeniesienie czystych plików do shared bucketu.
 
-Dokumentacja:
-<a href="https://cloud.google.com/dlp/docs/inspecting-storage" target="_blank">Skanowanie danych w Cloud Storage przy użyciu DLP</a>
+6. Dodatkowe źródła i dokumentacja:
+- Automating Data Classification with Cloud DLP: <a href="https://cloud.google.com/dlp/docs/tutorials/gcs-notifications" target="_blank">https://cloud.google.com/dlp/docs/tutorials/gcs-notifications</a>
 </pre>
 </div>
 

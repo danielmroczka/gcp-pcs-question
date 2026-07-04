@@ -89,31 +89,30 @@ You are deploying a web application hosted on Compute Engine. A business require
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Configure your Compute Engine instances to use the Google Cloud's operations suite Cloud Logging agent to send application logs to a custom log bucket in the EUROPE-WEST1 region with a custom retention of 12 years)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Configure your Compute Engine instances to use the Google Cloud's operations suite Cloud Logging agent to send application logs to a custom log bucket in the EUROPE-WEST1 region with a custom retention of 12 years.
 
-Dlaczego ta odpowiedź jest poprawna:
-- Cloud Logging Agent: Jest to standardowe, niskonarzutowe (low overhead) rozwiązanie do zbierania logów z instancji Compute Engine. Agent automatycznie przesyła logi systemowe i aplikacyjne do Cloud Logging.
-- Custom Log Bucket: Cloud Logging pozwala na tworzenie własnych kubłów na logi (Log Buckets). Jest to rozwiązanie natywne, które nie wymaga pisania dodatkowego kodu ani skomplikowanej infrastruktury.
-- Regionality: Wybór konkretnego regionu (EUROPE-WEST1) zapewnia, że dane nie opuszczą granic europejskich, spełniając wymogi compliance.
-- Retention: Log Buckety pozwalają na ustawienie własnego czasu retencji (custom retention).
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymagania: przechowywanie logów aplikacji przez 12 lat, rezydentność danych w Europie (Europe-west1), minimalizacja narzutu operacyjnego i efektywność kosztowa:
+- Zastosowanie Cloud Logging Agent (Ops Agent) na maszynach wirtualnych pozwala na automatyczne zbieranie i wysyłanie logów systemowych oraz aplikacyjnych do usługi Cloud Logging bez ingerencji w kod źródłowy aplikacji (brak overheadu).
+- Cloud Logging pozwala na tworzenie własnych, dedykowanych kubełków logów (Custom Log Buckets) w określonych regionach (np. `europe-west1`), co spełnia wymóg przechowywania danych w granicach europejskich.
+- Konfiguracja czasu retencji (retention) na 12 lat bezpośrednio na tym kubełku logów w pełni automatyzuje proces przechowywania i usuwania logów po tym okresie z minimalnym kosztem i zerowym narzutem administracyjnym.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Modify application code: Pisanie własnego mechanizmu przesyłania logów bezpośrednio do GCS z poziomu kodu aplikacji wiąże się z bardzo wysokim narzutem operacyjnym (utrzymanie kodu, obsługa błędów, zarządzanie poświadczeniami w aplikacji).
-- C. Pub/Sub forward to GCS: To rozwiązanie jest technicznie poprawne dla długiej retencji, ale wprowadza dodatkową warstwę skomplikowania (Logging -> Sink -> Pub/Sub -> Dataflow/Function -> GCS) i generuje dodatkowe koszty, co przeczy zasadzie minimalizacji narzutu i kosztów.
-- D. Custom retention on *your* log bucket: Zmiana retencji na domyślnym buckecie (_Default) wpłynęłaby na wszystkie logi w projekcie, co może nie być pożądane i mniej precyzyjne niż dedykowany kubeł dla konkretnej aplikacji.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Zapis bezpośrednio do Cloud Storage z kodu aplikacji: Zmiana kodu aplikacji w celu bezpośredniego przesyłania logów do GCS generuje narzut deweloperski, utrudnia zarządzanie błędami transmisji i uniemożliwia łatwe przeszukiwanie logów w czasie rzeczywistym.
+- C. Przekazywanie logów przez Pub/Sub do Cloud Storage: Pub/Sub wprowadza dodatkową warstwę architektoniczną, co zwiększa koszty operacyjne (opłaty za transfer i przetwarzanie wiadomości w Pub/Sub) oraz stopień skomplikowania rozwiązania.
+- D. Konfiguracja retencji bezpośrednio na domyślnym kubełku logów bez agenta: Bez zainstalowania agenta (Ops Agent) na maszynach VM, logi aplikacji nie będą przesyłane do Cloud Logging. Ponadto domyślne kubełki (`_Default`) nie gwarantują lokalizacji geograficznej wymaganej przez politykę rezydentności.
 
-Wskazówki i triki (Tips & Tricks):
-- "Minimize overhead" w pytaniach o logi niemal zawsze wskazuje na użycie Cloud Logging Agenta i natywnych funkcji platformy.
-- Pamiętaj: Cloud Logging Ingestion to koszt ok. $0.50/GiB. Jeśli logów jest bardzo dużo, GCS (Archive class) może być tańszy, ale wymaga konfiguracji Sinka.
+4. Wskazówki, hinty, tips and tricks:
+- W chmurze Google Cloud, aby zbierać logi z maszyn wirtualnych Compute Engine w sposób zautomatyzowany, należy zainstalować **Cloud Logging Agent / Ops Agent**.
+- Custom Log Buckets pozwalają na ustawienie dowolnego regionu składowania logów oraz czasu retencji dostosowanego do wymogów prawnych (compliance).
 
-Praktyczne informacje na egzamin:
-- Uwaga techniczna: W rzeczywistości natywna retencja w Log Bucketach Google Cloud jest obecnie ograniczona do 3650 dni (10 lat). Dla okresu 12 lat standardowym rozwiązaniem inżynierskim jest "Log Sink" do Cloud Storage. Jednak w kontekście tego konkretnego pytania egzaminacyjnego, odpowiedź B jest uznawana za poprawną, gdyż promuje natywne narzędzia Logging Suite.
-- Zwracaj uwagę na regiony. Jeśli w pytaniu jest wymóg "European boundaries", każda odpowiedź z regionem spoza UE (np. US-CENTRAL1) jest błędna.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Zbieranie logów z VM + rezydentność w regionie + retencja X lat -> Cloud Logging Agent + Custom Log Bucket z retencją w wybranym regionie.
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/logging/docs/routing/overview#buckets" target="_blank">Cloud Logging buckets overview</a>
-- <a href="https://cloud.google.com/logging/docs/agent" target="_blank">Cloud Logging agent overview</a>
-- <a href="https://cloud.google.com/logging/docs/storage" target="_blank">Log storage and retention</a>
+6. Dodatkowe źródła i dokumentacja:
+- Regionalize log buckets: <a href="https://cloud.google.com/logging/docs/routing/regional-log-buckets" target="_blank">https://cloud.google.com/logging/docs/routing/regional-log-buckets</a>
+- Ops Agent overview: <a href="https://cloud.google.com/stackdriver/docs/solutions/agents/ops-agent" target="_blank">https://cloud.google.com/stackdriver/docs/solutions/agents/ops-agent</a>
 </pre>
 </div>
 

@@ -89,17 +89,29 @@ You want to prevent users from accidentally deleting a Shared VPC host project. 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. compute.restrictXpnProjectLienRemoval
 
-Wyjaśnienie (Dlaczego poprawna):
-B. compute.restrictXpnProjectLienRemoval: GCP automatycznie nakłada 'Lien' (zastaw) na projekt hosta Shared VPC, co uniemożliwia jego usunięcie. To konkretne ograniczenie polityki organizacji blokuje użytkownikom możliwość usunięcia tego zastawu, co jest jedynym sposobem na 'skuteczną' obronę przed skasowaniem hosta sieci.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymaganie dotyczy uniemożliwienia użytkownikom przypadkowego usunięcia projektu hosta Shared VPC (Shared VPC host project):
+- W Google Cloud, gdy projekt jest skonfigurowany jako host Shared VPC, system automatycznie nakłada na niego mechanizm blokady usunięcia o nazwie "Lien" (zastaw). Blokuje to możliwość skasowania projektu.
+- Jednak użytkownik z odpowiednio wysokimi uprawnieniami (np. Project Owner) może usunąć ten zastaw (Lien) i skasować projekt.
+- Włączenie polityki organizacji (Organization Policy) z ograniczeniem `compute.restrictXpnProjectLienRemoval` blokuje możliwość usunięcia zastawu (Lien) na projekcie hosta Shared VPC dla standardowych użytkowników i administratorów, skutecznie chroniąc infrastrukturę sieciową przed usunięciem.
 
-Dlaczego inne są błędne:
-A. restrictSharedVpcHostProjects: Służy do ograniczenia listy projektów, które MOGĄ stać się hostami, a nie chroni przed usunięciem już istniejących.
-C. restrictSharedVpcSubnetworks: Kontroluje, które podsieci są udostępniane projektom usługowym.
-D. sharedReservations: Dotyczy rezerwacji zasobów (compute reservations), a nie ochrony sieci Shared VPC.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. compute.restrictSharedVpcHostProjects: To ograniczenie definiuje, które projekty mogą w ogóle zostać włączone jako hosty Shared VPC. Nie zapobiega ono usunięciu już działających projektów hosta.
+- C. compute.restrictSharedVpcSubnetworks: To ograniczenie kontroluje, które konkretne podsieci z projektu hosta mogą być udostępniane projektom usługowym (Service Projects).
+- D. compute.sharedReservationsOwnerProjects: Dotyczy udostępniania i zużycia rezerwacji maszyn wirtualnych (Compute Engine reservations) pomiędzy projektami.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. Słowo 'Lien' jest kluczem do ochrony przed usunięciem w GCP.
+4. Wskazówki, hinty, tips and tricks:
+- Pojęcie **"Lien"** w Google Cloud oznacza twardą blokadę chroniącą zasób przed skasowaniem (np. gdy usunięcie hosta Shared VPC zepsułoby wszystkie projekty usługowe).
+- Blokowanie usuwania zastawu (`restrictXpnProjectLienRemoval`) to standardowa technika hardeningu organizacji.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Ochrona przed usunięciem hosta Shared VPC -> compute.restrictXpnProjectLienRemoval.
+
+6. Dodatkowe źródła i dokumentacja:
+- Prevent accidental deletion of a Shared VPC host project: <a href="https://cloud.google.com/vpc/docs/shared-vpc#prevent_accidental_deletion" target="_blank">https://cloud.google.com/vpc/docs/shared-vpc#prevent_accidental_deletion</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

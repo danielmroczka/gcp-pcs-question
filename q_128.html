@@ -89,17 +89,28 @@ Users are reporting an outage on your public-facing application that is hosted o
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Enable Firewall Rules Logging on the latest rules that were changed. Use Logs Explorer to analyze whether the rules are working correctly.
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Firewall Rules Logging: To najszybsza i najdokładniejsza metoda diagnozy. Rejestruje ona każdy pakiet, który został dopuszczony lub odrzucony przez konkretną regułę. W Logs Explorerze zobaczysz dokładnie nazwę reguły, która 'zabiła' ruch aplikacji.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Aplikacja produkcyjna uległa awarii i podejrzewasz, że winna jest niedawna zmiana w regułach zapory sieciowej (firewall). Należy to sprawdzić szybko i bez zakłócania ruchu:
+- Włączenie funkcji **Firewall Rules Logging** dla zmodyfikowanych reguł pozwala na rejestrowanie każdego pakietu sieciowego, który pasuje do danej reguły (zarówno reguł blokujących, jak i zezwalających). Logi te są przesyłane do Cloud Logging.
+- Za pomocą Logs Explorer można natychmiast wyszukać zdarzenia blokady (action: "DENY") powiązane ze sprawdzanym adresem IP lub portem aplikacji. Pozwala to precyzyjnie wskazać, która reguła odrzuca ruch użytkowników, co czyni tę metodę najszybszą i najbardziej precyzyjną diagnostycznie.
 
-Dlaczego inne są błędne:
-B. Bastion host: Analiza z poziomu bastionu nie powie Ci, co dzieje się na interfejsach innych maszyn chronionych przez rozproszony firewall GCP.
-C. Disable rules: Bardzo ryzykowne i czasochłonne. Może pogorszyć sytuację bezpieczeństwa na produkcji.
-D. VPC Flow Logs: Rejestrują przepływy, ale nie zawsze precyzują nazwę reguły firewalla, która spowodowała blokadę tak czytelnie jak dedykowane logi firewalla.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Połączenie się z hostem bastionu i analiza ruchu: Analiza z poziomu jednej maszyny (bastionu) nie da pełnego obrazu rozproszonej zapory sieciowej GCP, która działa na poziomie wirtualnych kart sieciowych (NIC) poszczególnych maszyn backendowych.
+- C. Wyłączanie reguł pojedynczo w środowisku pre-produkcyjnym: Jest to metoda prób i błędów, która wymaga dodatkowego czasu, nie gwarantuje odtworzenia identycznych warunków ruchu produkcyjnego i może być niebezpieczna dla spójności konfiguracji.
+- D. Włączenie VPC Flow Logs: Chociaż VPC Flow Logs pokazują kierunek przepływów IP, to nie wiążą one zdarzenia blokady z konkretną nazwą reguły zapory sieciowej w sposób tak bezpośredni i czytelny jak dedykowane logi reguł firewalla.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na A. To standardowe narzędzie do debugowania sieci w GCP.
+4. Wskazówki, hinty, tips and tricks:
+- W celu debugowania, diagnostyki lub audytu działania reguł zapory sieciowej w GCP, zawsze używaj **Firewall Rules Logging**.
+- W logach szukaj pól takich jak `jsonPayload.rule_details.name` oraz `jsonPayload.rule_details.action`.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Testowanie / debugowanie działania reguł zapory sieciowej -> Firewall Rules Logging + Logs Explorer.
+
+6. Dodatkowe źródła i dokumentacja:
+- Using Firewall Rules Logging: <a href="https://cloud.google.com/vpc/docs/firewall-rules-logging" target="_blank">https://cloud.google.com/vpc/docs/firewall-rules-logging</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

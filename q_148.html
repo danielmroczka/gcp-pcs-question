@@ -89,28 +89,27 @@ Which Google Cloud service should you use to enforce access control policies for
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Identity-Aware Proxy).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Identity-Aware Proxy
 
-Wyjaśnienie:
-Identity-Aware Proxy (IAP) to usługa GCP, która pozwala kontrolować dostęp do aplikacji HTTPS oraz zasobów (takich jak instancje Compute Engine przez SSH/TCP) na podstawie tożsamości użytkownika i kontekstu (np. stan urządzenia, lokalizacja). IAP działa jako warstwa uwierzytelniająca i autoryzująca przed aplikacją, co pozwala na wdrożenie modelu Zero Trust (BeyondCorp) bez konieczności korzystania z tradycyjnych sieci VPN.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Pytanie dotyczy wyboru usługi Google Cloud służącej do wdrażania i egzekwowania polityk kontroli dostępu do aplikacji i zasobów:
+- Identity-Aware Proxy (IAP) to centralny punkt kontroli dostępu dla aplikacji i maszyn wirtualnych działających w Google Cloud. IAP weryfikuje tożsamość użytkownika (Identity) oraz kontekst jego żądania (Context-Aware Access, np. adres IP, stan bezpieczeństwa urządzenia) przed zezwoleniem na połączenie. Działa w modelu Zero Trust, co pozwala na rezygnację z tradycyjnych sieci VPN i ochronę aplikacji przed nieautoryzowanym dostępem na poziomie warstwy aplikacyjnej.
 
-Dlaczego pozostałe są błędne:
-- B. Cloud NAT: Służy do umożliwienia maszynom bez publicznych adresów IP dostępu do internetu (ruch wychodzący), ale nie pełni funkcji kontroli dostępu do aplikacji dla użytkowników zewnętrznych.
-- C. Google Cloud Armor: Chroni aplikacje przed atakami DDoS i zawiera reguły WAF (np. ochrona przed SQLi, XSS), ale podstawowym narzędziem do egzekwowania polityk dostępu opartych na tożsamości ("access control policies") jest IAP.
-- D. Shielded VMs: Zapewniają bezpieczeństwo na poziomie integralności systemu operacyjnego i bootowania maszyn wirtualnych, ale nie zarządzają dostępem użytkowników do zasobów aplikacji.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Cloud NAT: Jest usługą sieciową realizującą translację adresów IP dla wychodzącego ruchu maszyn wirtualnych z sieci prywatnej do internetu. Nie kontroluje dostępu użytkowników do aplikacji ani nie analizuje tożsamości.
+- C. Google Cloud Armor: Jest to zapora sieciowa typu WAF (Web Application Firewall) i ochrona przed atakami DDoS na poziomie warstwy 3/4 oraz warstwy 7. Służy do blokowania złośliwego ruchu (np. SQLi, XSS), ale nie zarządza uwierzytelnianiem i autoryzacją użytkowników IAM do aplikacji.
+- D. Shielded VMs: Zapewniają ochronę na poziomie sprzętu/systemu operacyjnego maszyn wirtualnych (ochrona bootloadera, wykrywanie rootkitów). Nie zarządzają politykami dostępu użytkowników do zasobów aplikacyjnych.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Enforce access control" + "Applications" -> IAP (Identity-Aware Proxy).
-- IAP to kluczowy produkt dla strategii BeyondCorp (Zero Trust) w Google Cloud.
-- Pamiętaj, że IAP sprawdza uprawnienia IAM przed dopuszczeniem ruchu do backendu.
+4. Wskazówki, hinty, tips and tricks:
+- IAP (Identity-Aware Proxy) to kluczowy element architektury bezpieczeństwa BeyondCorp (Zero Trust) w chmurze Google Cloud.
+- Pozwala na precyzyjne sterowanie dostępem za pomocą ról IAM (np. IAP-secured Web App User).
 
-Kluczowe zagadnienia do powtórzenia:
-- Zasada działania Cloud IAP.
-- Model bezpieczeństwa Zero Trust.
-- Różnica między IAP, Cloud Armor i Cloud VPN.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Kontrola dostępu do aplikacji i maszyn na bazie tożsamości / Zero Trust -> Identity-Aware Proxy (IAP).
 
-Dokumentacja:
-<a href="https://cloud.google.com/iap/docs/concepts-overview" target="_blank">Cloud Identity-Aware Proxy overview</a>
+6. Dodatkowe źródła i dokumentacja:
+- Identity-Aware Proxy overview: <a href="https://cloud.google.com/iap/docs/concepts-overview" target="_blank">https://cloud.google.com/iap/docs/concepts-overview</a>
 </pre>
 </div>
 
