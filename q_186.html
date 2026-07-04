@@ -89,30 +89,32 @@ You have stored company approved compute images in a single Google Cloud project
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (1. Update the perimeter. 2. Configure the egressTo field to include the external Google Cloud project number as an allowed resource and the serviceName to compute.googleapis.com. 3. Configure the egressFrom field to set identityType to ANY_IDENTITY).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. 1. Update the perimeter. 2. Configure the egressTo field to include the external Google Cloud project number as an allowed resource and the serviceName to compute.googleapis.com. 3. Configure the egressFrom field to set identityType to ANY_IDENTITY.
 
-Wyjaśnienie:
-VPC Service Controls (VPC SC) domyślnie blokuje komunikację z usługami Google Cloud (API) znajdującymi się poza perymetrem. W tej sytuacji żądanie pobrania obrazu wychodzi Z Twojego perymetru DO zewnętrznego projektu. Jest to ruch typu "Egress". Aby go umożliwić, należy:
-1. Skonfigurować `egressTo`, wskazując numer zewnętrznego projektu jako zasób (resource) oraz usługę `compute.googleapis.com`.
-2. Skonfigurować `egressFrom`, określając, kto może wykonać to połączenie (ustawienie `ANY_IDENTITY` pozwala każdemu uwierzytelnionemu użytkownikowi wewnątrz perymetru na taką próbę, pod warunkiem posiadania odpowiednich uprawnień IAM).
-To rozwiązanie precyzyjnie "wycina otwór" w perymetrze tylko dla konkretnego celu, zachowując ochronę przed ogólną eksfiltracją danych.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Perymetr VPC Service Controls (VPC SC) chroni zasoby wewnątrz przed nieuprawnionym wyciekiem danych (eksfiltracją) oraz przed komunikacją z zewnętrznymi usługami API Google Cloud. W tym przypadku projekt będący repozytorium obrazów znajduje się wewnątrz perymetru, a zespół musi wdrożyć obraz z zewnętrznego projektu (znajdującego się poza organizacją/perymetrem).
+Połączenie w celu pobrania zewnętrznego dysku wychodzi z wewnątrz perymetru do zewnętrznego projektu Google Cloud. W terminologii VPC SC jest to ruch wychodzący (Egress).
+Aby to umożliwić:
+1. Należy zmodyfikować konfigurację perymetru.
+2. W sekcji `egressTo` należy określić cel – numer zewnętrznego projektu jako dozwolony zasób (resource) oraz usługę API, z którą się łączymy (`compute.googleapis.com`).
+3. W sekcji `egressFrom` ustalamy tożsamość, która może to wyjście zainicjować. Ustawienie `identityType` na `ANY_IDENTITY` zezwala na to dowolnej uwierzytelnionej tożsamości z wewnątrz perymetru (która posiada również odpowiednie uprawnienia IAM do pobrania obrazu).
 
-Dlaczego pozostałe są błędne:
-- A. Organization policy (trustedImageProjects): Ta polityka ogranicza to, co można zrobić wewnątrz projektu, ale nie znosi blokady sieciowej na poziomie API nałożonej przez VPC SC. Żądanie do zewnętrznego API wciąż zostałoby zablokowane.
-- C. Ingress rule: Reguły Ingress służą do wpuszczania ruchu Z ZEWNĄTRZ perymetru do Twoich chronionych zasobów. Tutaj to Ty chcesz sięgnąć "na zewnątrz" do zasobów zewnętrznych.
-- D. Egress swap: Ta opcja błędnie przypisuje parametry – `egressTo` powinno zawierać cel (projekt/usługa), a `egressFrom` tożsamość źródłową.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Allow the external project by using the organizational policy, constraints/compute.trustedImageProjects: Polityka organizacji `compute.trustedImageProjects` pozwala autoryzować projekty wewnątrz architektury GCP pod kątem uprawnień, ale nie znosi sieciowych blokad dostępu do API nakładanych przez perymetr VPC SC. Usługa Compute Engine wciąż nie mogłaby pobrać obrazu z zewnętrznego projektu z powodu blokady API przez VPC SC.
+- C. Configure the ingressFrom... ingressTo...: Reguły Ingress służą do wpuszczania ruchu z zewnątrz perymetru do wewnątrz. Tutaj inicjatorem połączenia jest usługa wewnątrz perymetru próbująca sięgnąć po zewnętrzny obraz – jest to typowy scenariusz Egress.
+- D. Configure the egressTo field to set identityType to ANY_IDENTITY...: Opcja ta zamienia konfigurację pól miejscami – tożsamość źródłowa (`ANY_IDENTITY`) musi być zdefiniowana w sekcji `egressFrom` (skąd ruch wychodzi), a cel (zewnętrzny projekt i usługa) w sekcji `egressTo` (dokąd ruch zmierza).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Pamiętaj: Egress = wyjście z perymetru do zewnętrznego projektu Google Cloud. Ingress = wejście do perymetru.
-- Reguły VPC SC działają na poziomie API Google Cloud, a nie na poziomie adresów IP.
+4. Wskazówki, hinty, tips and tricks:
+- Egress = ruch wychodzący z perymetru na zewnątrz. Ingress = ruch wchodzący do perymetru z zewnątrz.
+- `egressFrom` odpowiada na pytanie "kto/skąd" (identity, source).
+- `egressTo` odpowiada na pytanie "dokąd/co" (destination resource, service name).
 
-Kluczowe zagadnienia do powtórzenia:
-- Zasada działania Ingress i Egress w VPC Service Controls.
-- Różnica między Perimeter Bridge (wewnątrz jednej organizacji) a regułami Egress (między organizacjami).
-- Debugowanie blokad VPC SC w logach audytowych.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- "VPC Service Controls perimeter" + "deploy image from external project" -> Egress Rule -> `egressTo` (external project, compute.googleapis.com) + `egressFrom` (ANY_IDENTITY).
 
-Dokumentacja:
-<a href="https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules" target="_blank">Reguły Ingress i Egress w VPC Service Controls</a>
+6. Dodatkowe źródła i dokumentacja:
+- Ingress and egress rules configuration: <a href="https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules" target="_blank">https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules</a>
 </pre>
 </div>
 <div class="ai-analysis-container d-none"  >

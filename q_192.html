@@ -90,30 +90,30 @@ What should you do?
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (1. Create two service accounts, one for the infrastructure and one for the application deployment. 2. Use workload identities to let the pods run the two pipelines and authenticate with the service accounts. 3. Run the infrastructure and application pipelines in separate namespaces).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. 1. Create two service accounts, one for the infrastructure and one for the application deployment. 2. Use workload identities to let the pods run the two pipelines and authenticate with the service accounts. 3. Run the infrastructure and application pipelines in separate namespaces.
 
-Wyjaśnienie:
-- Workload Identity: Jest to najbezpieczniejszy i zalecany przez Google sposób uwierzytelniania aplikacji działających w GKE (w tym pipeline'ów CI/CD) do usług Google Cloud. Eliminuje potrzebę generowania, pobierania i przechowywania statycznych kluczy JSON (Service Account Keys), które są częstym źródłem wycieków danych.
-- Mapowanie Tożsamości: Workload Identity wiąże konto serwisowe Kubernetes (KSA) z kontem serwisowym Google Cloud (GSA). Dzięki temu pod działający w klastrze automatycznie otrzymuje tokeny tożsamości GSA z serwera metadanych.
-- Separacja Obowiązków (Separation of Duties): Użycie dwóch osobnych kont serwisowych (dla infrastruktury i dla aplikacji) oraz odrębnych przestrzeni nazw (namespaces) zapewnia silną izolację. Pipeline infrastrukturalny (wymagający wyższych uprawnień, np. Project Editor) jest odseparowany od pipeline'u aplikacyjnego (wymagającego zazwyczaj tylko uprawnień do deploymentu obrazu).
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Zadaniem jest zaprojektowanie bezpiecznego uwierzytelniania dla procesów CI/CD wdrażających infrastrukturę oraz aplikacje w Google Cloud, uruchomionych na klastrze Google Kubernetes Engine (GKE).
+Zgodnie z najlepszymi praktykami Google Cloud:
+1. **Zasada najniższych uprawnień oraz separacja obowiązków (Separation of Duties):** Pipeline wdrożeniowy infrastruktury (który tworzy sieci, maszyny itp.) potrzebuje znacznie wyższych uprawnień (np. Editor/Owner lub dedykowane role administracyjne) niż pipeline aplikacyjny (który tylko aktualizuje wdrożenie kontenera). Tworzymy więc dwa oddzielne konta serwisowe (GCP Service Accounts).
+2. **Bezpieczne uwierzytelnianie w GKE:** Do uwierzytelniania podów w GKE do API Google Cloud należy stosować **Workload Identity**. Eliminuje to konieczność generowania i przechowywania statycznych kluczy prywatnych (JSON keys) wewnątrz klastra, co chroni przed ich wyciekiem. Workload Identity wiąże konto serwisowe Kubernetes (KSA) z kontem serwisowym Google Cloud (GSA).
+3. **Izolacja sieciowa i logiczna klastra:** Uruchomienie pipeline'ów w osobnych przestrzeniach nazw (namespaces) w Kubernetes zapewnia silną izolację ról RBAC oraz konfiguracji sekretów i zasobów między procesami wdrożenia infrastruktury i aplikacji.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- B. Node Pool Service Account: Nadanie wysokich uprawnień całemu węzłowi (node) sprawia, że KAŻDY pod działający na tym węźle ma te same uprawnienia. Jest to skrajnie niebezpieczne i narusza zasadę Least Privilege. Workload Identity nadaje uprawnienia konkretnym podom, a nie całym maszynom.
-- C. Individual SA for each pipeline: Choć jest to technicznie poprawne i bardzo granularne, opcja A jest częściej spotykana na egzaminie jako standardowy model separacji "Infra vs App". W opcji C brakuje również wzmianki o separacji na poziomie Namespace, co jest kluczowe dla izolacji w GKE.
-- D. Kubernetes Secrets: Przechowywanie kluczy JSON w sekretach Kubernetes jest lepsze niż trzymanie ich w kodzie, ale wciąż gorsze niż Workload Identity. Klucze wciąż muszą być rotowane i mogą zostać wykradzione przy kompromitacji klastra.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Use the service account that you created as identity for the nodes in the pool...: Przypisanie konta serwisowego o wysokich uprawnieniach bezpośrednio do węzłów (Node Service Account) sprawia, że każdy pod uruchomiony w danej puli maszyn dziedziczy te same uprawnienia. Narusza to podstawowe zasady bezpieczeństwa (Least Privilege).
+- C. Create individual service accounts for each deployment pipeline... Use workload identity...: Ta opcja proponuje tworzenie indywidualnych kont dla każdego pojedynczego pipeline'u oraz użycie identyfikatora w nazwie konta, co w dużej skali prowadzi do dużego narzutu administracyjnego. Przede wszystkim jednak opcja ta pomija kluczowy element bezpieczeństwa – izolację na poziomie przestrzeni nazw (namespaces) w GKE, co uniemożliwia pełne rozdzielenie uprawnień wewnątrz klastra Kubernetes.
+- D. Generate private keys for the service accounts. Securely store the private keys as Kubernetes secrets...: Korzystanie ze statycznych kluczy prywatnych kont serwisowych (JSON service account keys) w klastrze GKE jest złą praktyką i niesie ryzyko kompromitacji. Zawsze należy dążyć do eliminacji statycznych kluczy na rzecz tożsamości dynamicznych (Workload Identity).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "GKE" + "Access Google Cloud APIs" + "Secure" = Workload Identity.
-- Jeśli widzisz "Service Account Keys" lub "JSON keys" w opcjach dla GKE, zazwyczaj jest to błędna odpowiedź.
-- Pamiętaj: Workload Identity wymaga włączenia na poziomie klastra ORAZ na poziomie puli węzłów.
+4. Wskazówki, hinty, tips and tricks:
+- W pytaniach dotyczących bezpiecznego dostępu aplikacji/podów działających w **GKE** do zasobów/API Google Cloud (np. Cloud Storage, BigQuery), prawidłowa odpowiedź niemal zawsze wskazuje na **Workload Identity**.
+- Zawsze unikaj odpowiedzi sugerujących pobieranie kluczy prywatnych kont serwisowych (JSON keys) lub nadawanie wysokich uprawnień do kont węzłów (Node Service Accounts).
 
-Kluczowe zagadnienia do powtórzenia:
-- Workload Identity w GKE.
-- Zasada najniższych uprawnień (Least Privilege) w GKE.
-- Uwierzytelnianie między GKE a Google Cloud APIs.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- "GKE" + "securely access Google Cloud APIs" + "CI/CD pipelines" -> Workload Identity + separate namespaces.
 
-Dokumentacja:
-<a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity" target="_blank">Workload Identity overview</a>
+6. Dodatkowe źródła i dokumentacja:
+- GKE Workload Identity: <a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity" target="_blank">https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity</a>
 </pre>
 </div>
 <div class="ai-analysis-container d-none"  >

@@ -89,33 +89,28 @@ You need to create a VPC that enables your security team to control network reso
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: D (Set up a Shared VPC where the security team manages the firewall rules, and share the network with developers via service projects)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Set up a Shared VPC where the security team manages the firewall rules, and share the network with developers via service projects.
 
-Dlaczego ta odpowiedź jest poprawna:
-- Shared VPC (Współdzielone VPC): Jest to kluczowa architektura w Google Cloud dla organizacji typu Enterprise. Pozwala ona na oddzielenie zarządzania siecią od zarządzania aplikacjami.
-- Host Project: Zespół bezpieczeństwa lub sieciowy zarządza jednym centralnym projektem (Host Project), w którym zdefiniowana jest sieć VPC, podsieci i reguły firewall.
-- Service Projects: Deweloperzy posiadają własne projekty (Service Projects), które są "podpięte" do projektu hosta. Mogą oni tworzyć tam swoje zasoby (np. VM, GKE), korzystając z bezpiecznej sieci z projektu hosta, ale NIE mają uprawnień do modyfikowania samej sieci ani jej reguł firewall.
-- Separation of Duties (Separacja obowiązków): Ten model idealnie realizuje wymóg pytania. Zespół security ma pełną kontrolę nad infrastrukturą sieciową, a deweloperzy mogą swobodnie wdrażać aplikacje w wyznaczonych granicach.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymagane jest zapewnienie separacji obowiązków (separation of duties): zespół bezpieczeństwa musi kontrolować zasoby sieciowe (np. reguły firewalla), natomiast deweloperzy powinni mieć możliwość wdrażania swoich maszyn wirtualnych bez dostępu do konfiguracji sieci:
+- **Shared VPC** (Współdzielone VPC) to podstawowy mechanizm GCP realizujący ten postulat.
+- Zespół bezpieczeństwa i sieci zarządza centralnym Projektem Hosta (Host Project), gdzie skonfigurowane są sieci VPC, podsieci, trasy oraz reguły zapory sieciowej.
+- Deweloperzy otrzymują dostęp do projektów usługowych (Service Projects), które są podpięte pod projekt hosta. Deweloperzy mogą tworzyć maszyny VM w dozwolonych podsieciach hosta, ale nie mają żadnych uprawnień sieciowych w projekcie hosta, co uniemożliwia im modyfikowanie reguł zapory i zapewnia ścisłą separację obowiązków.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Multiple VPCs + Multi-NIC appliances: Jest to rozwiązanie bardzo skomplikowane i trudne w utrzymaniu. Wymaga zarządzania wieloma sieciami i wirtualnymi urządzeniami, co zwiększa narzut operacyjny i koszty, zamiast wykorzystać natywne funkcje platformy.
-- B. VPC Peering with Shared VPC: Peering służy do łączenia niezależnych sieci. Choć pozwala na komunikację, nie zapewnia natywnej separacji obowiązków w taki sposób jak Shared VPC. W modelu peeringu deweloperzy wciąż mieliby pełną kontrolę nad firewallem w swojej sieci.
-- C. Compute Network Admin role in a single project: W jednym projekcie bardzo trudno jest zapewnić czystą separację. Użytkownik z rolą Compute Admin wciąż mógłby mieć zbyt szerokie uprawnienia, a zarządzanie setkami deweloperów w jednym projekcie sieciowym jest błędem architektury (brak izolacji zasobów).
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Wiele sieci VPC połączonych urządzeniami multi-NIC: Rozwiązanie bardzo skomplikowane i kosztowne. Nie rozwiązuje problemu uprawnień IAM i delegacji zadań w sposób natywny dla platformy GCP.
+- B. VPC Peering dla sieci deweloperów z Shared VPC: Dając deweloperom własne sieci VPC, dajemy im też pełną kontrolę nad ich lokalnymi regułami zapory, co bezpośrednio łamie wymóg centralnej kontroli reguł firewalla przez zespół bezpieczeństwa.
+- C. Pojedynczy projekt z podziałem ról IAM: Dzielenie ról wewnątrz jednego projektu jest trudne do zarządzania w skali przedsiębiorstwa. Rola Compute Admin pozwala deweloperom na szerokie interakcje w projekcie i nie zapewnia fizycznej ani logicznej izolacji środowisk deweloperskich.
 
-Wskazówki i triki (Tips & Tricks):
-- "Separation of duties" + "Network resources" = Shared VPC.
-- Host Project = Network/Security Team.
-- Service Project = Application/Dev Team.
-- Pamiętaj: Tylko JEDEN projekt może być Hostem dla danej sieci VPC.
+4. Wskazówki, hinty, tips and tricks:
+- Separacja obowiązków sieciowych w GCP (Security zarządza siecią/firewallem, App/Devs wdrażają aplikacje) to definicja i główne zastosowanie architektury **Shared VPC**.
 
-Praktyczne informacje na egzamin:
-- Aby skonfigurować Shared VPC, musisz posiadać uprawnienie "Shared VPC Admin" na poziomie organizacji.
-- Deweloperzy w projektach serwisowych potrzebują roli "Compute Network User" na konkretnych podsieciach w projekcie hosta, aby móc z nich korzystać.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Separacja obowiązków sieciowych + centralne zarządzanie firewallem -> Shared VPC.
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/vpc/docs/shared-vpc" target="_blank">Shared VPC overview</a>
-- <a href="https://cloud.google.com/vpc/docs/provisioning-shared-vpc" target="_blank">Provisioning Shared VPC</a>
-- <a href="https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#networking" target="_blank">Best practices for Enterprise Networking</a>
+6. Dodatkowe źródła and dokumentacja:
+- Shared VPC Overview: <a href="https://cloud.google.com/vpc/docs/shared-vpc" target="_blank">https://cloud.google.com/vpc/docs/shared-vpc</a>
 </pre>
 </div>
 

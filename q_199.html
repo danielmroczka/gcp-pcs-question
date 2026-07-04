@@ -90,30 +90,27 @@ Which logs should you analyze?
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Data Access audit logs).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Data Access audit logs
 
-Wyjaśnienie:
-- Identity-Aware Proxy (IAP) Audit Logs: IAP generuje logi audytowe, które rejestrują interakcje użytkowników z chronionymi zasobami.
-- Data Access Logs: Są to jedyne logi, które rejestrują każde pojedyncze żądanie dostępu (zarówno udane, jak i odrzucone) od konkretnych użytkowników. W kontekście wykrywania włamań (intrusions), informacje o tym, kto próbował się zalogować, z jakiego adresu IP i czy mu się udało, są kluczowe dla systemu SIEM.
-- SIEM i Intrusion Detection: Systemy SIEM potrzebują granularnych danych o "zdarzeniach dostępowych", aby móc korelować je i wykrywać wzorce ataków (np. brute-force, spray attack czy logowanie z nietypowych lokalizacji).
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Identity-Aware Proxy (IAP) jest kluczowym elementem architektury Zero Trust w GCP, kontrolującym dostęp użytkowników do aplikacji. Aby wykrywać potencjalne włamania (intrusions) za pomocą systemu SIEM, należy analizować logi, które rejestrują szczegóły dotyczące każdej próby dostępu użytkownika do chronionych zasobów (kto się logował, kiedy, z jakiego IP, czy żądanie zostało autoryzowane).
+W Google Cloud logi IAP są zapisywane jako **Data Access audit logs** (logi dostępu do danych). Rejestrują one szczegółowe interakcje z API i zasobami chronionymi przez IAP (zarówno próby udane, jak i zablokowane z powodu braku uprawnień). Ingestowanie tych logów do SIEM pozwala na wykrywanie anomalii (np. ataki brute-force, spray attack czy podejrzane próby logowania).
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- B. Policy Denied audit logs: Te logi rejestrują naruszenia Polityk Organizacji (Organization Policies), a nie próby logowania poszczególnych użytkowników do aplikacji przez IAP.
-- C. Cloud Identity user log events: Logi te dotyczą zdarzeń administracyjnych w samej usłudze Cloud Identity (np. zmiana hasła, dodanie użytkownika do grupy). Choć ważne dla bezpieczeństwa tożsamości, nie dają one bezpośredniego wglądu w ruch do konkretnych aplikacji chronionych przez IAP.
-- D. Admin Activity audit logs: Te logi są zawsze włączone i rejestrują ZMIANY W KONFIGURACJI (np. ktoś wyłączył IAP dla danego backendu). Nie rejestrują one jednak standardowego ruchu użytkowników (access attempts), który jest esencją monitorowania włamań do aplikacji.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Policy Denied audit logs: Taki typ logów audytowych w standardowej strukturze Cloud Audit Logs nie istnieje jako oddzielna kategoria dla IAP. Informacje o odmowie dostępu ze względu na politykę IAP są częścią logów Data Access.
+- C. Cloud Identity user log events: Logi te rejestrują zdarzenia administracyjne i operacyjne w samej usłudze Cloud Identity (np. reset hasła użytkownika, modyfikacja grupy). Nie zawierają one jednak informacji o bezpośrednich zapytaniach HTTP i próbach autoryzacji do konkretnych aplikacji chronionych przez IAP.
+- D. Admin Activity audit logs: Logi te rejestrują wyłącznie operacje konfiguracyjne (np. włączenie/wyłączenie IAP dla danego backendu, zmiana uprawnień IAM). Są one zawsze włączone i bezpłatne, lecz nie rejestrują codziennego ruchu użytkowników (user access requests), przez co są bezużyteczne do wykrywania prób włamań na poziomie aplikacji.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "User access attempts" / "SIEM intrusion detection" + "IAP" = Data Access Logs.
-- Pamiętaj: Logi Data Access są domyślnie WYŁĄCZONE (z wyjątkiem BigQuery). Musisz je jawnie włączyć dla usługi `iap.googleapis.com` w ustawieniach IAM & Admin -> Audit Logs.
-- Logi IAP typu Data Access zawierają unikalne informacje o tożsamości (identity-based logging).
+4. Wskazówki, hinty, tips and tricks:
+- Logi audytowe w GCP dzielą się na: Admin Activity (zmiany konfiguracji - zawsze włączone) oraz Data Access (odczyt/zapis danych i żądania użytkowników - domyślnie wyłączone ze względu na wolumen danych).
+- Monitorowanie prób autoryzacji i dostępu użytkowników do aplikacji przez IAP wymaga włączenia i analizy logów **Data Access**.
 
-Kluczowe zagadnienia do powtórzenia:
-- Typy Cloud Audit Logs (Admin Activity, Data Access, System Event, Access Transparency).
-- Monitoring i analiza logów IAP.
-- Integracja logów GCP z systemami SIEM przez Log Sinks.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- "IAP" + "ingest logs into SIEM" + "alerted to possible intrusions" -> Data Access audit logs.
 
-Dokumentacja:
-<a href="https://cloud.google.com/iap/docs/audit-logging" target="_blank">IAP audit logging documentation</a>
+6. Dodatkowe źródła i dokumentacja:
+- IAP audit logging documentation: <a href="https://cloud.google.com/iap/docs/audit-logging" target="_blank">https://cloud.google.com/iap/docs/audit-logging</a>
 </pre>
 </div>
 <div class="ai-analysis-container d-none"  >

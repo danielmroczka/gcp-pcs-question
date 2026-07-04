@@ -90,24 +90,29 @@ Your organization develops software involved in many open source projects and is
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. 1. Generate Supply Chain Levels for Software Artifacts (SLSA) level 3 assurance by using Cloud Build. 2. View the build provenance in the Security insights side panel within the Google Cloud console.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Organizacja chce zabezpieczyć łańcuch dostaw oprogramowania i dostarczyć dowód pochodzenia (provenance) kompilacji potwierdzający, że kod nie został zmodyfikowany:
+- Usługa **Cloud Build** posiada natywne wsparcie dla standardu **SLSA (Supply Chain Levels for Software Artifacts) Level 3**.
+- Podczas procesu budowania kontenera lub pakietu, Cloud Build automatycznie generuje i podpisuje cyfrowo metadane pochodzenia (build provenance). Zawierają one informacje o kodzie źródłowym, sumach kontrolnych, krokach kompilacji i użytym środowisku. Dane te są weryfikowalne i odporne na fałszowanie, a ich status i szczegóły można wygodnie przeglądać w konsoli Google Cloud w panelu Security Insights, co minimalizuje narzut operacyjny.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Wynajęcie zewnętrznego audytora i publikacja oświadczeń na stronie WWW: Jest to proces czysto papierowy, powolny i kosztowny, który nie zapewnia technicznego, automatycznego dowodu integralności kompilacji w czasie rzeczywistym dla każdego wdrożenia.
+- B. Ręczne podpisywanie plików za pomocą PGP: Generuje ogromny narzut operacyjny na zarządzanie kluczami PGP i podpisywanie artefaktów. Nie integruje się natywnie z platformą wdrożeniową chmury w sposób zautomatyzowany.
+- C. Publikowanie kodu jako open-source i programy Bug Bounty: Pomagają w wykrywaniu podatności w kodzie źródłowym, ale nie dostarczają dowodu pochodzenia (provenance) skompilowanego artefaktu binarnego.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+4. Wskazówki, hinty, tips and tricks:
+- Standardem zabezpieczenia łańcucha dostaw oprogramowania (Software Supply Chain) w GCP jest **SLSA** w integracji z **Cloud Build**.
+- Cloud Build generuje podpisaną deklarację pochodzenia (provenance metadata) spełniającą wymagania SLSA Level 3.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Zabezpieczenie łańcucha dostaw / dowód pochodzenia oprogramowania (provenance) -> SLSA Level 3 + Cloud Build.
+
+6. Dodatkowe źródła i dokumentacja:
+- View build provenance in Cloud Build: <a href="https://cloud.google.com/build/docs/securing-builds/view-build-provenance" target="_blank">https://cloud.google.com/build/docs/securing-builds/view-build-provenance</a>
+- SLSA framework: <a href="https://slsa.dev/" target="_blank">https://slsa.dev/</a>
 </pre>
 
 </div>

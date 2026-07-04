@@ -89,33 +89,27 @@ You are onboarding new users into Cloud Identity and discover that some users ha
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: C (Use the transfer tool for unmanaged user accounts)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Use the transfer tool for unmanaged user accounts.
 
-Dlaczego ta odpowiedź jest poprawna:
-- Unmanaged User Accounts (Konta niezarządzane): To konta osobiste Google (np. Gmail), które użytkownicy stworzyli samodzielnie przy użyciu swojego służbowego adresu e-mail (np. jan@firma.pl), zanim firma wdrożyła Cloud Identity.
-- Conflicting Accounts (Konta konfliktowe): Gdy firma zaczyna zarządzać domeną firma.pl w Cloud Identity, te osobiste konta stają się kontami "konfliktowymi". Firma nie ma nad nimi kontroli, dopóki nie zostaną one przeniesione (stransferowane) do domeny zarządzanej.
-- Transfer Tool for Unmanaged Users (TTUU): Jest to narzędzie w konsoli administracyjnej Google, które pozwala na: 
-  1. Zidentyfikowanie takich użytkowników w Twojej domenie.
-  2. Wysłanie im prośby o przeniesienie ich konta (wraz z danymi, np. z Dysku Google) pod kontrolę organizacji.
-  3. Monitorowanie statusu tych próśb.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Podczas wdrożenia Cloud Identity okazuje się, że niektórzy pracownicy wcześniej utworzyli osobiste (konsumenckie) konta Google przy użyciu firmowych adresów e-mail (np. `jan.kowalski@firma.com` jako konto do YouTube lub Dysku). Są to tzw. unmanaged accounts (konta niezarządzane). Należy przejąć nad nimi kontrolę w organizacji:
+- Dedykowanym narzędziem do tego celu jest **narzędzie do przenoszenia kont niezarządzanych (transfer tool for unmanaged user accounts)** w konsoli administracyjnej Google Workspace / Cloud Identity.
+- Narzędzie to skanuje domenę, wykrywa konta konsumenckie i umożliwia wysłanie do użytkowników zaproszenia do migracji konta pod kontrolę organizacji. Po zaakceptowaniu, konto staje się w pełni zarządzane przez firmowy IAM, a użytkownik zachowuje swoje dotychczasowe dane.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Google Cloud Directory Sync (GCDS): GCDS służy do synchronizowania użytkowników z lokalnego katalogu (np. AD) do Google Cloud. Nie służy do konwertowania istniejących już "osobistych" kont Google na konta zarządzane. Próba stworzenia takiego konta przez GCDS spowoduje błąd konfliktu.
-- B. Create new managed accounts: Stworzenie nowego konta "obok" istniejącego konta osobistego o tym samym adresie e-mail spowoduje powstanie tzw. konta tymczasowego (gtempaccount.com) dla użytkownika i nie rozwiąże problemu rozproszonych danych oraz braku kontroli nad pierwotnym kontem.
-- D. Configure SSO: SSO (Single Sign-On) służy do uwierzytelniania użytkowników, którzy JUŻ SĄ w systemie Cloud Identity. Nie pomaga w procesie odkrywania i migrowania niezarządzanych kont osobistych.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Użycie Google Cloud Directory Sync (GCDS): GCDS służy do synchronizacji kont z lokalnego katalogu LDAP/AD do Cloud Identity, ale nie potrafi migrować ani konwertować istniejących, konfliktowych osobistych kont Google. Próba synchronizacji takiego konta stworzy tzw. konto konfliktowe.
+- B. Ręczne utworzenie nowego konta zarządzanego: Spowoduje to konflikt nazw. Istniejące konto konsumenckie zostanie zmuszone do zmiany nazwy (np. na `jan.kowalski%firma.com@gtempaccount.com`), a użytkownik zostanie odcięty od swoich dotychczasowych danych chmurowych, co wywoła chaos operacyjny.
+- D. Skonfigurowanie SSO: Logowanie jednokrotne (SSO) obsługuje proces uwierzytelniania, ale nie przenosi fizycznie struktury i własności istniejących unmanaged kont pod kontrolę administracyjną domeny.
 
-Wskazówki i triki (Tips & Tricks):
-- "Consumer accounts with corporate domain" / "Unmanaged users" = Transfer Tool.
-- Pamiętaj: Użytkownik musi wyrazić zgodę na transfer. Nie możesz go do tego zmusić technicznie jednym kliknięciem bez jego interakcji.
+4. Wskazówki, hinty, tips and tricks:
+- Słowo-klucz w pytaniach GCP dotyczące przejmowania kontroli nad osobistymi kontami Google założonymi na firmowych adresach e-mail (conflict/unmanaged accounts) to **transfer tool for unmanaged user accounts**.
 
-Praktyczne informacje na egzamin:
-- Proces transferu jest kluczowy przy przejmowaniu istniejącego środowiska (Onboarding).
-- Jeśli użytkownik odrzuci prośbę, możesz jedynie zablokować mu możliwość tworzenia nowych kont w Twojej domenie, ale stare konto pozostanie pod jego prywatną kontrolą (zmieniony zostanie tylko jego login na adres nie-firmowy).
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Konsumenckie konta w domenie firmowej -> transfer tool for unmanaged user accounts.
 
-Dokumentacja i linki:
-- <a href="https://support.google.com/cloudidentity/answer/7062710" target="_blank">Transfer tool for unmanaged users overview</a>
-- <a href="https://support.google.com/a/answer/6178640" target="_blank">Migrate unmanaged users to Cloud Identity</a>
-- <a href="https://support.google.com/a/answer/181126" target="_blank">About conflicting accounts</a>
+6. Dodatkowe źródła i dokumentacja:
+- Transfer tool for unmanaged users: <a href="https://support.google.com/a/answer/6178640" target="_blank">https://support.google.com/a/answer/6178640</a>
 </pre>
 </div>
 

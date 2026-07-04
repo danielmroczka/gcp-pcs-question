@@ -90,30 +90,32 @@ What should you do?
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Use Policy Analyzer to query the permissions compute.firewalls.create or compute.firewalls.update or compute.firewalls.delete).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Use Policy Analyzer to query the permissions compute.firewalls.create or compute.firewalls.update or compute.firewalls.delete.
 
-Wyjaśnienie:
-- Cel audytu: Musimy zidentyfikować osoby, które mogą ZMIENIAĆ (change) reguły firewall. W Google Cloud uprawnienia do odczytu (view/list) i zapisu (create/update/delete) są od siebie odseparowane.
-- Policy Analyzer: Jest to potężne narzędzie w IAM, które pozwala na zadawanie pytań o to, "kto ma jakie uprawnienia do jakiego zasobu". Największą zaletą Policy Analyzer jest to, że automatycznie analizuje on całą hierarchię (organizacja, foldery, projekty) oraz rozwiązuje członkostwo w grupach Google Groups.
-- Precyzja: Zapytanie o uprawnienia `create`, `update` oraz `delete` (opcja D) precyzyjnie wskazuje osoby z uprawnieniami modyfikacyjnymi.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Celem audytu bezpieczeństwa jest identyfikacja wszystkich tożsamości (principals), które mają uprawnienia do ZMIANY (change) reguł zapory sieciowej (firewall rules) w projekcie produkcyjnym.
+W Google Cloud do audytowania i sprawdzania, kto ma dostęp do jakich zasobów i za pomocą jakich uprawnień, służy narzędzie **IAM Policy Analyzer**. Pomaga ono przeanalizować całą hierarchię dziedziczenia uprawnień (organizacja, foldery, projekty) oraz rozwinąć członkostwo w grupach dyskusyjnych Google Groups.
+Aby precyzyjnie wykryć osoby mogące dokonywać zmian, musimy zapytać o uprawnienia modyfikacyjne (write/change):
+- `compute.firewalls.create` (tworzenie nowych reguł)
+- `compute.firewalls.update` (modyfikacja istniejących reguł)
+- `compute.firewalls.delete` (usuwanie reguł)
+Odpowiedź D jest najbardziej kompleksowa, ponieważ pyta o wszystkie trzy operacje, które bezpośrednio wpływają na zmianę stanu zapory sieciowej.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Permissions compute.firewalls.get or list: Te uprawnienia pozwalają jedynie na PRZEGLĄDANIE reguł (Viewer). Osoba z tymi uprawnieniami nie może wprowadzić żadnych zmian, więc audyt omijający uprawnienia modyfikacyjne byłby niepełny i błędny.
-- B. Firewall Insights: To narzędzie służy do analizy użycia reguł (np. które reguły są nieużywane, które się pokrywają). Pomaga optymalizować firewall, ale nie służy do audytowania tożsamości użytkowników i ich uprawnień IAM.
-- C. Security Health Analytics (SHA): Moduł SCC, który wykrywa błędy w konfiguracji (np. "firewall pozwala na ruch SSH z całego świata"). Skupia się na zasobach i ich stanie bezpieczeństwa, a nie na tym, "kto" ma uprawnienia do ich zmiany.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Use Policy Analyzer to query the permissions compute.firewalls.get or compute.firewalls.list: Uprawnienia `get` oraz `list` to uprawnienia tylko do odczytu (read-only). Tożsamości posiadające wyłącznie te uprawnienia mogą przeglądać konfigurację firewalla (np. rola Security Viewer), ale nie mogą wprowadzać żadnych zmian, co oznacza, że zapytanie to dałoby błędne wyniki audytu.
+- B. Use Firewall Insights to understand your firewall rules usage patterns: Firewall Insights to doskonałe narzędzie analityczne, ale służy do sprawdzania, które reguły firewall są aktywnie używane, które są nadmiarowe lub generują błędy. Nie analizuje uprawnień IAM użytkowników.
+- C. Reference the Security Health Analytics...: Moduł Security Health Analytics w Security Command Center służy do wykrywania błędów w konfiguracji zasobów (np. "otwarty port 22 na cały świat"). Nie służy jednak do badania praw dostępu IAM dla poszczególnych tożsamości.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Who can [ACTION]" + "Audit/Identify" = IAM Policy Analyzer.
-- Pamiętaj: W GCP zmiana zasobu to zawsze zestaw uprawnień: create, update, delete.
-- Policy Analyzer to "Google Search dla uprawnień IAM" – potrafi przeskanować miliardy kombinacji ról i tożsamości.
+4. Wskazówki, hinty, tips and tricks:
+- Zawsze, gdy celem jest znalezienie **"kto ma dostęp/kto może wykonać akcję" (who has access / who can change)**, szukaj narzędzia **Policy Analyzer**.
+- Zwracaj uwagę na zakres uprawnień w opcjach (odróżniaj uprawnienia modyfikacyjne `.create / .update / .delete` od uprawnień do odczytu `.get / .list`).
 
-Kluczowe zagadnienia do powtórzenia:
-- IAM Policy Analyzer i jego zastosowania.
-- Uprawnienia IAM dla VPC Firewall.
-- Analiza hierarchii zasobów i dziedziczenia ról.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- "identify all principals who can change firewall rules" -> Policy Analyzer -> compute.firewalls.create/update/delete.
 
-Dokumentacja:
-<a href="https://cloud.google.com/iam/docs/policy-analyzer-overview" target="_blank">IAM Policy Analyzer overview</a>
+6. Dodatkowe źródła i dokumentacja:
+- Policy Analyzer overview: <a href="https://cloud.google.com/iam/docs/policy-analyzer-overview" target="_blank">https://cloud.google.com/iam/docs/policy-analyzer-overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container d-none"  >

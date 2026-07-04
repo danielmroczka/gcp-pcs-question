@@ -90,24 +90,28 @@ You are working with a client who plans to migrate their data to Google Cloud. Y
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Customer-managed encryption keys with Cloud HSM
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymagania dla zarządzania kluczami szyfrującymi to: 1) rotacja klucza głównego co najmniej raz na 45 dni, 2) sprzętowa ochrona FIPS 140-2 Level 3, 3) redundancja wieloregionowa w USA:
+- Wymóg **FIPS 140-2 Level 3** (poziom bezpieczeństwa sprzętowego modułu HSM) kategorycznie wyklucza oprogramowanie Cloud KMS, które spełnia jedynie normy FIPS 140-2 Level 2. Klucze fizycznie muszą być generowane i przechowywane w usłudze **Cloud HSM**.
+- Użycie CMEK (Customer-Managed Encryption Keys) zintegrowanych z Cloud HSM pozwala klientowi na pełne zarządzanie cyklem życia kluczy, w tym na skonfigurowanie automatycznej rotacji kluczy co 45 dni.
+- Cloud HSM pozwala na tworzenie kluczy w lokalizacjach wieloregionowych (multi-region, np. `us` lub `nam4`), co zapewnia wymaganą redundancję geograficzną w obrębie Stanów Zjednoczonych.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. CMEK z podstawowym Cloud Key Management Service (KMS): Standardowy, programowy Cloud KMS nie posiada certyfikacji FIPS 140-2 Level 3 (oferuje tylko Level 2). Do spełnienia wymogów Level 3 konieczne jest wdrożenie Cloud HSM (B).
+- C. Customer-supplied encryption keys (CSEK): CSEK (klucze dostarczane przez klienta) nie obsługują automatycznej, harmonogramowej rotacji kluczy wewnątrz GCP – rotacja musiałaby być w pełni koordynowana i wdrażana ręcznie przez klienta z poziomu systemów on-premises.
+- D. Google-managed encryption keys (Klucze zarządzane przez Google): Klucze te są rotowane automatycznie przez systemy Google według sztywnego harmonogramu (zazwyczaj co 90 lub 365 dni), co uniemożliwia wymuszenie niestandardowego cyklu rotacji co 45 dni przez klienta.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+4. Wskazówki, hinty, tips and tricks:
+- W pytaniach egzaminacyjnych GCP, zwrot **"FIPS 140-2 Level 3"** jednoznacznie wskazuje na konieczność użycia usługi **Cloud HSM**. Standardowy Cloud KMS to Level 2.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- FIPS 140-2 Level 3 + własny harmonogram rotacji -> Customer-managed encryption keys (CMEK) z Cloud HSM.
+
+6. Dodatkowe źródła i dokumentacja:
+- Cloud HSM overview: <a href="https://cloud.google.com/hsm/docs/overview" target="_blank">https://cloud.google.com/hsm/docs/overview</a>
 </pre>
 
 </div>

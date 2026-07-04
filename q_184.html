@@ -89,27 +89,27 @@ You have a highly sensitive BigQuery workload that contains personally identifia
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Use service perimeter and create an access level based on the authorized source IP address as the condition).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Use service perimeter and create an access level based on the authorized source IP address as the condition.
 
-Wyjaśnienie:
-VPC Service Controls (VPC SC) to kluczowy mechanizm bezpieczeństwa w Google Cloud, który pozwala na stworzenie "perymetru" wokół usług takich jak BigQuery. Perymetr ten izoluje usługę od internetu oraz od innych projektów wewnątrz Google Cloud. Aby umożliwić dostęp do tak zabezpieczonego BigQuery z określonych lokalizacji, należy użyć Access Context Manager do zdefiniowania "Poziomu dostępu" (Access Level). Warunkiem w tym poziomie dostępu będzie lista autoryzowanych adresów IP. Takie połączenie skutecznie zapobiega eksfiltracji danych, ponieważ dostęp jest rygorystycznie ograniczony zarówno pod względem tożsamości (IAM), jak i kontekstu sieciowego (IP).
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Masz wrażliwy zbiór danych w BigQuery. Należy zablokować możliwość eksfiltracji danych oraz ograniczyć dostęp do zapytań SQL wyłącznie do żądań pochodzących z autoryzowanych adresów IP z internetu:
+- **VPC Service Controls** pozwala na otoczenie BigQuery perymetrem bezpieczeństwa (Service Perimeter), co blokuje do niego dostęp z publicznego internetu.
+- Aby umożliwić dostęp dla wybranych użytkowników zewnętrznych, tworzy się **poziom dostępu (Access Level)** w usłudze Access Context Manager.
+- W poziomie dostępu definiuje się warunek (condition) oparty na dozwolonych adresach IP (IP subnets). Połączenia do API BigQuery spoza perymetru zostaną dopuszczone tylko wtedy, gdy IP klienta pasuje do zdefiniowanej listy zaufanych adresów.
 
-Dlaczego pozostałe są błędne:
-- B. Google Cloud Armor: Służy do ochrony aplikacji webowych wystawionych za Load Balancerem (ochrona przed L7 DDoS, SQLi, XSS). Nie jest to narzędzie przeznaczone do ograniczania dostępu do natywnego API BigQuery i nie zapobiega eksfiltracji danych w taki sposób jak VPC SC.
-- C/D. Organization Policy constraints: Polityki organizacji (np. Restrict Resource Service Usage) pozwalają kontrolować, jakie usługi mogą być używane w danym projekcie, ale nie oferują mechanizmu filtrowania ruchu do tych usług na podstawie adresu IP klienta.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Użycie polityk Google Cloud Armor na Load Balancerze HTTPS: Cloud Armor zabezpiecza aplikacje webowe stojące za load balancerem HTTP(S). Zapytania do BigQuery są wysyłane bezpośrednio do publicznych punktów końcowych API Google (np. `bigquery.googleapis.com`), które nie są i nie mogą być umieszczone za Twoim własnym load balancerem HTTP(S).
+- C i D. Polityki organizacji typu Restrict Resource Service Usage: Te polityki określają, które usługi Google mogą być włączane i używane w projektach, ale nie filtrują ruchu sieciowego i dostępu na podstawie adresu IP klienta.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Prevent data exfiltration" + "BigQuery/Storage/SQL" = szukaj odpowiedzi z VPC Service Controls (VPC SC).
-- "Access based on IP for Google APIs" = Access Context Manager + Access Levels.
-- Zapamiętaj: IAM decyduje "kto", a VPC SC decyduje "skąd" (context-aware access).
+4. Wskazówki, hinty, tips and tricks:
+- Filtrowanie dostępu do API usług Google (takich jak BigQuery, Cloud Storage) na podstawie atrybutów sieciowych (np. **adresów IP klienta**) realizuje się za pomocą **VPC Service Controls** w połączeniu z **Access Levels** (Access Context Manager).
 
-Kluczowe zagadnienia do powtórzenia:
-- Architektura VPC Service Controls.
-- Access Context Manager i tworzenie Access Levels.
-- Różnica między bezpieczeństwem tożsamości (IAM) a bezpieczeństwem sieciowym (VPC SC).
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Ograniczenie dostępu do BigQuery/API GCP do określonych IP + ochrona przed eksfiltracją -> VPC Service Controls + Access Level (Access Context Manager).
 
-Dokumentacja:
-<a href="https://cloud.google.com/vpc-service-controls/docs/overview" target="_blank">Omówienie VPC Service Controls</a>
+6. Dodatkowe źródła i dokumentacja:
+- VPC Service Controls Access Levels: <a href="https://cloud.google.com/vpc-service-controls/docs/access-level-usage" target="_blank">https://cloud.google.com/vpc-service-controls/docs/access-level-usage</a>
 </pre>
 </div>
 <div class="ai-analysis-container d-none"  >

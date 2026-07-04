@@ -89,27 +89,28 @@ Your company conducts clinical trials and needs to analyze the results of a rece
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Use date shifting with the context set to the unique ID of the test subject).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Use date shifting with the context set to the unique ID of the test subject.
 
-Wyjaśnienie:
-Date Shifting (przesunięcie daty) to technika pseudonimizacji w Cloud DLP, która dodaje lub odejmuje losową liczbę dni od daty. Kluczowym elementem jest użycie "kontekstu" (np. ID pacjenta) – dzięki temu dla danego pacjenta wszystkie daty (np. rozpoczęcia i zakończenia leczenia) zostaną przesunięte o TĘ SAMĄ liczbę dni. Pozwala to na zachowanie precyzyjnych interwałów czasowych (czasu trwania kuracji) przy jednoczesnym ukryciu prawdziwych dat kalendarzowych, co chroni przed identyfikacją konkretnych partii leku lub osób.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Należy zanonimizować (obfuscate) daty rozpoczęcia i zakończenia brania leków w tabeli BigQuery w taki sposób, aby same daty nie ujawniły tożsamości pacjentów (Outliers), ale jednocześnie kluczowe jest zachowanie dokładnego czasu trwania przedziału (interval data) między datami:
+- **Przesuwanie dat (Date Shifting)** w Cloud DLP przesuwa daty o losową liczbę dni w przód lub w tył.
+- Ustawienie **kontekstu (context)** na unikalny identyfikator pacjenta (test subject ID) sprawia, że dla danego pacjenta wszystkie daty w jego wierszu (data rozpoczęcia i zakończenia) zostaną przesunięte o **dokładnie tę samą liczbę dni**.
+- W efekcie konkretne daty zostaną całkowicie zmienione (obfuscated), ale czas trwania kuracji (różnica między datą zakończenia a rozpoczęcia) pozostanie nienaruszony i w 100% spójny matematycznie do analizy.
 
-Dlaczego pozostałe są błędne:
-- B. TimePartConfig: Wyciąganie części daty (np. tylko roku) całkowicie niszczy informację o precyzyjnym interwale czasowym. Nie będziesz wiedzieć, czy pacjent brał lek 2 dni czy 20 dni.
-- C. Bucketing: Grupowanie dat w przedziały (np. "Styczeń 2023") powoduje utratę precyzji niezbędnej do analizy interwałów czasowych w badaniach klinicznych.
-- D. Format Preserving Encryption (FPE): FFX/FPE służy do szyfrowania danych przy zachowaniu ich formatu (np. numeru karty kredytowej), ale nie jest to technika optymalna do manipulacji datami w celu zachowania relacji czasowych (interwałów).
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Wyodrębnienie części daty i dodanie losowego miesiąca/roku: Całkowicie niszczy to korelację czasową między datą początkową a końcową, zmieniając długość trwania przedziału czasu.
+- C. Bucketing (podział na przedziały): Grupuje daty w większe przedziały (np. rok 2021). Spowoduje to utratę precyzji co do dokładnej liczby dni trwania leczenia pacjenta.
+- D. Szyfrowanie zachowujące format (FPE): Szyfruje daty w taki sposób, że wynik wygląda jak prawidłowa data (np. 12-05-1985), ale nie gwarantuje zachowania stałej odległości czasowej (interwału) pomiędzy dwoma różnymi polami dat w wierszu.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Preserve interval data" + "obfuscate dates" = zawsze szukaj "Date Shifting".
-- Słowo "Context" w Date Shiftingu zapewnia spójność zmian dla danego obiektu (np. użytkownika, pacjenta).
+4. Wskazówki, hinty, tips and tricks:
+- Słowo-klucz w pytaniach o anonimizację dat: jeśli wymagane jest **ukrycie dokładnych dat przy jednoczesnym zachowaniu czasu trwania odstępu (interval/duration)** między nimi, poprawnym rozwiązaniem jest **Date Shifting z powiązaniem kontekstowym (context)**.
 
-Kluczowe zagadnienia do powtórzenia:
-- Metody de-identyfikacji w Cloud DLP (redaction, masking, bucketing, date shifting).
-- Różnica między de-identyfikacją a pseudonimizacją.
-- Zastosowanie Cloud DLP w branżach regulowanych (Healthcare - HIPAA).
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Ukrycie dat + zachowanie przedziału czasu (duration/interval) -> Date shifting z kontekstem (context).
 
-Dokumentacja:
-<a href="https://cloud.google.com/dlp/docs/concepts-date-shifting" target="_blank">Przesuwanie dat w Cloud DLP</a>
+6. Dodatkowe źródła i dokumentacja:
+- Cloud DLP Date Shifting: <a href="https://cloud.google.com/dlp/docs/concepts-date-shifting" target="_blank">https://cloud.google.com/dlp/docs/concepts-date-shifting</a>
 </pre>
 </div>
 <div class="ai-analysis-container d-none"  >

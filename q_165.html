@@ -90,30 +90,31 @@ You are a security administrator at your company and are responsible for managin
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: DE (D: Use SSO/SAML integration, E: Provide granular access with predefined roles)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Use SSO/SAML integration with Cloud Identity for user authentication and user lifecycle management.
+E. Provide granular access with predefined roles.
 
-Dlaczego te odpowiedzi są poprawne:
-- Federacja tożsamości (D): Użycie SSO/SAML z Cloud Identity pozwala na połączenie istniejącego dostawcy tożsamości firmy (np. AD, Okta) z Google Cloud. Zapewnia to spójne uwierzytelnianie i automatyczne zarządzanie cyklem życia użytkownika (user lifecycle management). Jeśli pracownik odejdzie z firmy i jego konto zostanie zablokowane w AD, automatycznie straci on dostęp do Google Cloud.
-- Zasada najniższych uprawnień (Least Privilege - E): Predefiniowane role (np. Storage Object Viewer zamiast Storage Admin) pozwalają na nadawanie dokładnie takich uprawnień, jakie są potrzebne do wykonania zadania. Jest to znacznie bezpieczniejsze niż używanie szerokich ról podstawowych.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Pytanie dotyczy najlepszych praktyk Google Cloud w zakresie zarządzania tożsamością i dostępem (IAM):
+- D (Uwierzytelnianie i Cykl życia): Integracja SSO/SAML z Cloud Identity pozwala na połączenie GCP z istniejącym korporacyjnym dostawcą tożsamości (IdP, np. Active Directory, Okta). Zapewnia to automatyzację procesu uwierzytelniania oraz cyklu życia kont (gdy pracownik odchodzi z firmy i jego konto jest usuwane w lokalnym AD, automatycznie traci on dostęp do GCP).
+- E (Zasada najmniejszych uprawnień): Stosowanie ról predefiniowanych (Predefined Roles, np. `roles/storage.objectViewer`) zamiast ról podstawowych/prymitywnych (Owner, Editor, Viewer) pozwala na precyzyjne ograniczenie uprawnień użytkownika wyłącznie do tych, które są mu niezbędne do pracy, co minimalizuje ryzyko nadmiarowych uprawnień.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Google default encryption: To pytanie dotyczy kontroli dostępu (identyfikacji, autentykacji i autoryzacji), a nie szyfrowania danych "at rest".
-- B. Manually add users: Ręczne dodawanie użytkowników jest nieefektywne, podatne na błędy i nie skaluje się w dużych organizacjach. Utrudnia też zarządzanie usuwaniem dostępów (deprovisioning).
-- C. Basic roles: Role podstawowe (Owner, Editor, Viewer) są zbyt szerokie i niebezpieczne. Google stanowczo odradza ich używanie w środowiskach produkcyjnych (z wyjątkiem bardzo specyficznych przypadków), promując w ich miejsce role predefiniowane lub własne (custom).
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Użycie domyślnego szyfrowania Google: Szyfrowanie danych w spoczynku jest mechanizmem ochrony danych (kryptografia), a nie mechanizmem uwierzytelniania czy autoryzacji użytkowników w IAM.
+- B. Ręczne dodawanie użytkowników: Jest to rozwiązanie nieefektywne, podatne na błędy ludzkie i uniemożliwiające automatyczne odbieranie uprawnień (deprovisioning) po odejściu pracownika z firmy.
+- C. Przypisywanie ról podstawowych (Basic Roles / Primitive Roles): Role podstawowe (Owner, Editor, Viewer) dają zbyt szerokie uprawnienia w obrębie całego projektu. Ich stosowanie w środowiskach produkcyjnych jest rażącym naruszeniem zasady najmniejszych uprawnień.
 
-Wskazówki i triki (Tips & Tricks):
-- "Best practices" + "Authentication" = SSO / Federation.
-- "Best practices" + "Authorization" = Least Privilege / Predefined Roles.
-- Unikaj wszystkiego, co zawiera "Basic roles" (Owner/Editor/Viewer) lub "Manual".
+4. Wskazówki, hinty, tips and tricks:
+- Dobre praktyki IAM w GCP:
+  1. Zapomnij o rolach podstawowych (Basic Roles) – zawsze wybieraj role predefiniowane (Predefined) lub niestandardowe (Custom).
+  2. Zawsze federuj tożsamości przy użyciu SSO i Cloud Identity dla kont enterprise, zamiast zarządzać nimi ręcznie.
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj hierarchię ról: Basic (szerokie) -> Predefined (zalecane) -> Custom (bardzo specyficzne).
-- Cloud Identity to produkt Google, który pozwala na zarządzanie tożsamościami bez konieczności kupowania pełnych licencji Google Workspace.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Najlepsze praktyki uwierzytelniania w skali enterprise -> Integracja SSO/SAML + Cloud Identity.
+- Najlepsze praktyki autoryzacji -> Predefined roles / granular access.
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/iam/docs/best-practices" target="_blank">IAM best practices guide</a>
-- <a href="https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction" target="_blank">Federating GCP with Active Directory</a>
-- <a href="https://cloud.google.com/iam/docs/understanding-roles" target="_blank">Understanding IAM roles</a>
+6. Dodatkowe źródła i dokumentacja:
+- IAM best practices: <a href="https://cloud.google.com/iam/docs/using-predefined-roles" target="_blank">https://cloud.google.com/iam/docs/using-predefined-roles</a>
 </pre>
 </div>
 

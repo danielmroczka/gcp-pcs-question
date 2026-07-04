@@ -89,28 +89,27 @@ Your application is deployed as a highly available, cross-region solution behind
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Configure a throttle action by using Google Cloud Armor to limit the number of requests per client over a specified time interval).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Configure a throttle action by using Google Cloud Armor to limit the number of requests per client over a specified time interval.
 
-Wyjaśnienie:
-Google Cloud Armor oferuje funkcję Rate Limiting (ograniczanie natężenia ruchu), która jest idealna do ochrony dostępności aplikacji przed nagłymi wzrostami ruchu (spikes). Akcja "Throttle" pozwala na ustawienie limitu żądań w określonym czasie (np. 100 na minutę na dany IP). Żądania powyżej limitu są odrzucane, ale po upływie interwału klient znów może wysyłać zapytania. Jest to najlepszy wybór, gdy "nie wiadomo, czy ruch jest złośliwy" – chronimy infrastrukturę przed przeciążeniem, ale nie odcinamy całkowicie potencjalnych, legalnych użytkowników (jak w przypadku blokady stałej).
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Aplikacja doświadcza nagłych skoków natężenia ruchu (traffic spikes) z wielu adresów IP. Ponieważ intencje klientów i status adresów IP (czy są złośliwe, czy to np. nagły wzrost popularności serwisu) nie są znane, priorytetem jest zabezpieczenie dostępności aplikacji przy jednoczesnym uniknięciu fałszywych dopasowań (false positives) i całkowitego zablokowania potencjalnych, prawdziwych klientów.
+Google Cloud Armor posiada mechanizm ograniczania natężenia ruchu (Rate Limiting). Konfiguracja akcji typu **Throttle** pozwala na nałożenie limitu na liczbę żądań HTTP(S), jakie dany klient może wysłać w określonym przedziale czasu (np. maksymalnie 100 żądań na minutę). Jeśli limit zostanie przekroczony, nadmiarowy ruch jest odrzucany, a po zresetowaniu licznika czasu klient może ponownie wysyłać zapytania. Jest to optymalny kompromis chroniący serwery aplikacyjne przed przeciążeniem bez odcinania dostępu klientom na stałe.
 
-Dlaczego pozostałe są błędne:
-- B. rate_based_ban action: Ta akcja jest bardziej restrykcyjna – po przekroczeniu progu klient zostaje całkowicie zablokowany (zbanowany) na określony czas. Może to być zbyt agresywne, jeśli nie mamy pewności co do złośliwości ruchu.
-- C. Firewall rule: Tradycyjne reguły zapory sieciowej VPC działają na warstwie 3/4 (IP/port) i nie posiadają natywnej funkcji ograniczania liczby żądań HTTP (warstwa 7) w czasie (throttlingu).
-- D. Deny action: Zwykła akcja "deny" po prostu blokuje cały ruch bez względu na jego natężenie i limity czasowe. Nie jest to mechanizm rate-limitingu.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Configure a rate_based_ban action...: Akcja typu ban całkowicie blokuje (zrzuca cały ruch) z danego adresu IP na określony czas (np. 5 minut) po przekroczeniu limitu. Przy braku pewności, czy ruch jest złośliwy, może to doprowadzić do zablokowania prawdziwych użytkowników na długi czas.
+- C. Configure a firewall rule in your VPC to throttle traffic...: Zapory sieciowe VPC (VPC Firewall Rules) działają w warstwach 3 i 4 modelu OSI (IP/porty) i nie posiadają funkcji inspekcji warstwy aplikacyjnej L7 ani natywnej obsługi throttlingu zapytań HTTP w czasie.
+- D. Configure a deny action by using Google Cloud Armor to deny the clients that issued too many requests...: Zwykła akcja `deny` w Cloud Armor po prostu bezwarunkowo blokuje ruch na podstawie reguły (np. adresu IP), ale nie jest to mechanizm dynamicznego rate-limitingu (nie potrafi zliczać zapytań w oknie czasowym per-client).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Limit traffic spikes" + "Unknown intent" = Cloud Armor Throttle (najbezpieczniejszy balans).
-- "Identify and stop DDoS/Brute-force" = Cloud Armor Rate-based Ban.
-- Pamiętaj, że Cloud Armor działa na poziomie Global External HTTP(S) Load Balancera.
+4. Wskazówki, hinty, tips and tricks:
+- Jeśli ruch pochodzi z nieznanych źródeł (nie wiemy, czy to atak, czy legalni klienci) i celem jest ochrona wydajności / dostępności (availability), wybieramy **Throttle** (dławienie ruchu ponad limit).
+- Jeśli celem jest twarde odcięcie ataku typu Brute Force lub DDoS ze znanych złośliwych IP, wybieramy **rate_based_ban**.
 
-Kluczowe zagadnienia do powtórzenia:
-- Parametry rate-limitingu w Cloud Armor (threshold, interval, exceed_action).
-- Różnica między throttlingiem a banowaniem.
-- Ochrona warstwy 7 (L7) w Google Cloud.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- "limit traffic from clients" + "unknown whether IPs are malicious" + "limit over time interval" -> Cloud Armor -> throttle action.
 
-Dokumentacja:
-<a href="https://cloud.google.com/armor/docs/rate-limiting-overview" target="_blank">Omówienie ograniczania natężenia ruchu w Cloud Armor</a>
+6. Dodatkowe źródła i dokumentacja:
+- Google Cloud Armor Rate Limiting: <a href="https://cloud.google.com/armor/docs/rate-limiting-overview" target="_blank">https://cloud.google.com/armor/docs/rate-limiting-overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container d-none"  >

@@ -90,24 +90,28 @@ You're developing the incident response plan for your company. You need to defin
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Create a service account, and grant it limited list/view permissions. Give the Service Account User Role on this service account to the DevOps team.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+W planie reagowania na incydenty należy zdefiniować dostęp dla zespołu DevOps do wglądu w zasoby chmurowe wyłącznie na czas trwania awarii, przy zachowaniu zasady najmniejszych uprawnień:
+- Prawidłowe podejście w duchu least-privilege i just-in-time access polega na stworzeniu dedykowanego konta serwisowego (Service Account) z precyzyjnie dobranymi, minimalnymi rolami typu view/list do diagnostyki.
+- DevOps nie posiada stałych uprawnień do projektów. Podczas incydentu członkowie zespołu DevOps mogą tymczasowo podszyć się (impersonować) pod to konto serwisowe (dzięki posiadaniu roli Service Account User / `roles/iam.serviceAccountUser`).
+- Pozwala to na pełny audyt działań (w logach widać, kto podszył się pod konto i co zrobił) oraz na łatwe wstrzymanie dostępu po zakończeniu awarii bez modyfikowania bezpośrednich uprawnień użytkowników.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A i B. Przypisanie roli Project Viewer lub roli niestandardowej na stałe użytkownikom: Narusza wymóg tymczasowości dostępu ("access the required resources only during the deployment issue"). Zespoły posiadałyby stały dostęp do wglądu w dane produkcyjne poza czasem awarii.
+- C. Konto serwisowe z rolą Project Owner: Nadanie roli Owner (właściciel) kontu serwisowemu całkowicie łamie zasadę najmniejszych uprawnień (least-privilege). Rola Owner pozwala na modyfikację i usuwanie wszystkich zasobów chmurowych, co jest zbędne i niebezpieczne podczas analizy problemów wdrożeniowych.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+4. Wskazówki, hinty, tips and tricks:
+- Używanie kont serwisowych do tymczasowego podszywania się (Impersonation) to bezpieczna alternatywa dla przekazywania statycznych poświadczeń lub nadawania stałych uprawnień użytkownikom.
+- Logi audytowe rejestrują operacje podszywania się za pomocą pola `firstPartyDelegation` lub powiązanych struktur tożsamości.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Dostęp tylko na czas incydentu + najmniejsze uprawnienia -> Dedykowane konto serwisowe o minimalnych uprawnieniach + rola Service Account User dla zespołu DevOps (impersonacja).
+
+6. Dodatkowe źródła i dokumentacja:
+- Service account impersonation: <a href="https://cloud.google.com/iam/docs/service-account-overview#impersonation" target="_blank">https://cloud.google.com/iam/docs/service-account-overview#impersonation</a>
 </pre>
 
 </div>

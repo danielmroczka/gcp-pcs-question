@@ -89,27 +89,27 @@ Your organization operates Virtual Machines (VMs) with only private IPs in the V
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Ensure that VM Manager is installed and running on the VMs. In the OS patch management service, configure the patch jobs to update with critical patches daily).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Ensure that VM Manager is installed and running on the VMs. In the OS patch management service, configure the patch jobs to update with critical patches daily.
 
-Wyjaśnienie:
-VM Manager to natywny zestaw narzędzi Google Cloud do zarządzania systemami operacyjnymi na instancjach Compute Engine. Jego kluczowym modułem jest OS Patch Management, który pozwala na automatyzację aktualizacji (fleet patching). Usługa ta potrafi zarządzać poprawkami krytycznymi, definiować harmonogramy oraz generować raporty podsumowujące (summary reports) stan zgodności całej floty maszyn. Co ważne, rozwiązanie to działa bezpiecznie z instancjami posiadającymi tylko prywatne adresy IP (poprzez Cloud NAT lub Private Google Access).
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Firma musi codziennie instalować krytyczne poprawki systemu operacyjnego (OS patching) na maszynach prywatnych (za bramą Cloud NAT) oraz generować raporty podsumowujące:
+- **VM Manager** to zestaw zintegrowanych narzędzi GCP służących do zarządzania systemami operacyjnymi na instancjach Compute Engine.
+- Moduł **OS patch management** (zarządzanie poprawkami) pozwala na pełne zautomatyzowanie procesu wdrażania poprawek. Zamiast pisać skrypty, administrator definiuje zadania aktualizacji (Patch Jobs) bezpośrednio w konsoli chmury, wskazując harmonogram (np. codziennie) oraz typ poprawek (np. krytyczne). VM Manager dba o pobranie poprawek przez Cloud NAT, ich instalację oraz automatycznie generuje raporty zgodności, co całkowicie eliminuje narzut operacyjny.
 
-Dlaczego pozostałe są błędne:
-- A. Manual log-in + Cloud Scheduler: Ręczne logowanie się na każdą instancję ("log in to each VM") jest niemożliwe do wykonania w skali i narusza zasady automatyzacji. Cloud Scheduler nie służy do bezpośredniego wykonywania komend w systemach operacyjnych.
-- B. Copy patches to Cloud Storage: Ręczne zarządzanie poprawkami w Cloud Storage wprowadza niepotrzebny narzut operacyjny i ryzyko błędów. Nie zapewnia też wymaganych natywnych raportów podsumowujących.
-- C. Assign public IPs: Przypisywanie publicznych adresów IP do prywatnych instancji tylko w celu aktualizacji drastycznie zwiększa powierzchnię ataku i jest sprzeczne z dobrą praktyką ograniczania ekspozycji na internet.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Ręczne logowanie się i uruchamianie aktualizacji: Generuje gigantyczny narzut operacyjny dla administratorów przy zarządzaniu wieloma maszynami i uniemożliwia spójne generowanie raportów audytowych.
+- B. Pobieranie poprawek z kubełka Cloud Storage: Wymaga ręcznego pobierania aktualizacji z repozytoriów dystrybucyjnych, wrzucania ich do kubełka i pisania własnych skryptów instalacyjnych na maszynach VM, co jest wysoce skomplikowane i nieefektywne.
+- C. Przypisywanie publicznych adresów IP maszynom wirtualnym: Jest to poważne naruszenie zasad bezpieczeństwa, wystawiające prywatne maszyny bezpośrednio na zagrożenia z internetu.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Słowa klucze: "patch all VMs", "summary reports", "at scale" zazwyczaj wskazują na VM Manager (OS Patch Management).
-- Unikaj rozwiązań wymagających manualnych kroków na poszczególnych instancjach w zadaniach dotyczących floty maszyn.
+4. Wskazówki, hinty, tips and tricks:
+- Do centralnego, automatycznego aktualizowania systemów operacyjnych maszyn wirtualnych (patching) i generowania raportów w GCP służy usługa **VM Manager** (wymagająca zainstalowania agenta OS Config na instancjach).
 
-Kluczowe zagadnienia do powtórzenia:
-- Funkcje VM Manager (Patch, Inventory, Policy Management).
-- Konfiguracja agenta OS Config w metadanych.
-- Rola Cloud NAT i Private Google Access w dostępie do aktualizacji.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Codzienne instalowanie krytycznych łatek (patching) + raportowanie -> VM Manager (OS patch management).
 
-Dokumentacja:
-<a href="https://cloud.google.com/compute/docs/os-patch-management" target="_blank">Zarządzanie poprawkami OS w Google Cloud</a>
+6. Dodatkowe źródła i dokumentacja:
+- OS patch management overview: <a href="https://cloud.google.com/compute/docs/os-patch-management" target="_blank">https://cloud.google.com/compute/docs/os-patch-management</a>
 </pre>
 </div>
 <div class="ai-analysis-container d-none"  >

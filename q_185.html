@@ -89,27 +89,27 @@ Your organization is moving virtual machines (VMs) to Google Cloud. You must ens
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Implement an organization policy to enforce that boot disks can only be created from images that come from the trusted image project).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Implement an organization policy to enforce that boot disks can only be created from images that come from the trusted image project.
 
-Wyjaśnienie:
-Ograniczenie `compute.trustedImageProjects` w polityce organizacji Google Cloud pozwala na zdefiniowanie białej listy projektów, z których użytkownicy mogą pobierać obrazy systemowe (images) do tworzenia dysków rozruchowych. Jest to najskuteczniejszy i najbardziej proaktywny sposób wymuszenia stosowania wyłącznie zaufanych i utwardzonych (hardened) obrazów OS w całej organizacji. Każda próba użycia obrazu spoza listy zostanie natychmiast zablokowana przez API.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymaganie polega na zapewnieniu, że obrazy systemów operacyjnych (OS images) używane do tworzenia maszyn wirtualnych (VM) we wszystkich projektach w organizacji są zaufane i spełniają wymagania bezpieczeństwa. W Google Cloud najlepszą i najbardziej proaktywną metodą na zrealizowanie tego celu na poziomie całej hierarchii zasobów (organizacja/foldery) jest zastosowanie polityki organizacji (Organization Policy).
+Ograniczenie (constraint) `constraints/compute.trustedImageProjects` pozwala na zdefiniowanie białej listy projektów (np. centralnego projektu zarządzanego przez zespół bezpieczeństwa), z których dozwolone jest tworzenie dysków rozruchowych (boot disks). Każda próba wdrożenia maszyny wirtualnej z obrazu pochodzącego z innego, niezatwierdzonego projektu zostanie natychmiast zablokowana przez API Compute Engine przed utworzeniem zasobu.
 
-Dlaczego pozostałe są błędne:
-- B. Shielded VM service: Shielded VM to funkcja zwiększająca bezpieczeństwo startu systemu (Secure Boot, vTPM), ale sama w sobie nie ogranicza źródła obrazów. Można uruchomić "Shielded VM" z niezaufanego projektu.
-- C. Cloud Function trigger: To rozwiązanie reaktywne. Funkcja usuwałaby maszyny PO ich stworzeniu, co nie zapobiega samemu incydentowi i jest trudniejsze w utrzymaniu niż natywna polityka organizacji.
-- D. Automated security scanner: Skanowanie obrazów pod kątem podatności (CVE) jest kluczowe w procesie CI/CD budowania obrazu, ale samo w sobie nie uniemożliwia użytkownikom uruchomienia maszyny z innego, niebezpiecznego źródła.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Implement an organization policy constraint that enables the Shielded VM service on all projects...: Funkcja Shielded VM zwiększa bezpieczeństwo na poziomie bootowania systemu (zabezpieczenie przed rootkitami poprzez Secure Boot i vTPM), jednak samo jej włączenie nie filtruje źródła pochodzenia obrazów. Nadal można wdrożyć maszynę jako Shielded VM z niezaufanego projektu.
+- C. Create a Cloud Function that is automatically triggered when a new virtual machine is created...: Jest to podejście reaktywne. Funkcja uruchamiana na podstawie logów usunęłaby maszynę dopiero po jej utworzeniu. Ponadto wymaga to utrzymywania własnego kodu i architektury event-driven, co jest gorszym rozwiązaniem niż natywna polityka organizacji.
+- D. Automate a security scanner that verifies that no common vulnerabilities and exposures (CVEs)...: Skanowanie obrazów pod kątem podatności (CVE) jest kluczowe w procesie budowania obrazu (złotego obrazu), ale samo skanowanie nie blokuje użytkownikom możliwości uruchomienia maszyny z innego, dowolnego publicznego obrazu w GCP.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Trusted OS images" + "Across projects" = szukaj "Organization Policy" oraz "trustedImageProjects".
-- Zapamiętaj: Ta polityka dotyczy dysków rozruchowych (boot disks), a nie wszystkich dysków w ogóle.
+4. Wskazówki, hinty, tips and tricks:
+- Kiedy pytanie dotyczy wymuszenia używania wyłącznie autoryzowanych obrazów maszyn wirtualnych w całej organizacji, szukaj polityki organizacji `compute.trustedImageProjects`.
+- Zapamiętaj, że ta polityka kontroluje źródło obrazów tylko dla dysków rozruchowych (boot disks), a nie zwykłych dysków z danymi.
 
-Kluczowe zagadnienia do powtórzenia:
-- Hierarchia polityk organizacji (Organization Policy Service).
-- Proces tworzenia i udostępniania obrazów (Golden Images).
-- Rola uprawnienia `compute.imageUser`.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- "operating system images used across projects are trusted" -> Organization Policy -> `trustedImageProjects` / `compute.trustedImageProjects`.
 
-Dokumentacja:
-<a href="https://cloud.google.com/compute/docs/images/restricting-image-access" target="_blank">Ograniczanie dostępu do obrazów w Google Cloud</a>
+6. Dodatkowe źródła i dokumentacja:
+- Restricting image access in Google Cloud: <a href="https://cloud.google.com/compute/docs/images/restricting-image-access" target="_blank">https://cloud.google.com/compute/docs/images/restricting-image-access</a>
 </pre>
 </div>
 <div class="ai-analysis-container d-none"  >

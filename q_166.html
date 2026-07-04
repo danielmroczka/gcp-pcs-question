@@ -89,31 +89,28 @@ You have been tasked with inspecting IP packet data for invalid or malicious con
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: A (Use Packet Mirroring to mirror traffic to and from particular VM instances)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Use Packet Mirroring to mirror traffic to and from particular VM instances. Perform inspection using security software that analyzes the mirrored traffic.
 
-Dlaczego ta odpowiedź jest poprawna:
-- Packet Mirroring: Jest to usługa Google Cloud, która klonuje ruch sieciowy (zarówno przychodzący, jak i wychodzący) z konkretnych instancji VM, podsieci lub tagów i przesyła go do wybranego celu (zazwyczaj Load Balancera przed grupą instancji inspekcyjnych).
-- Deep Packet Inspection (DPI): Aby wykryć "złośliwą zawartość" (malicious content) wewnątrz pakietów IP, potrzebujesz dostępu do całej treści pakietu (payload), a nie tylko do nagłówków. Rozwiązania klasy IDS (Intrusion Detection System) lub IPS (Intrusion Prevention System) wymagają właśnie pełnych pakietów dostarczanych przez Packet Mirroring, aby móc przeanalizować je pod kątem sygnatur ataków lub anomalii.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymaganiem jest zbadanie danych pakietów IP (IP packet data) pod kątem złośliwej lub nieprawidłowej zawartości (payload / Deep Packet Inspection):
+- Packet Mirroring w GCP klonuje pełny ruch sieciowy (zarówno nagłówki protokołów, jak i rzeczywistą zawartość / ładunek pakietów) z wybranych maszyn wirtualnych lub podsieci.
+- Skopiowany ruch jest przesyłany do kolektora (np. maszyny wirtualnej z zainstalowanym systemem IDS/IPS, np. Snort, Suricata lub oprogramowaniem dostawców trzecich), który analizuje pakiety na poziomie sygnatur w poszukiwaniu zagrożeń. Jest to jedyna metoda na fizyczne zbadanie zawartości pakietów przechodzących przez VPC.
 
-Analiza niepoprawnych odpowiedzi:
-- B. VPC Flow Logs: Logi przepływu zawierają metadane o połączeniach (IP źródłowe/docelowe, porty, protokół, liczba bajtów, czas), ale NIE zawierają samej treści pakietów. Nie pozwalają więc na inspekcję zawartości pod kątem malware czy exploitów.
-- C. Fluentd agent: Jest to agent zbierający logi systemowe i aplikacyjne (pliki tekstowe). Nie służy on do przechwytywania i analizowania surowych pakietów sieciowych na poziomie warstwy IP.
-- D. Cloud Armor access logs: Cloud Armor działa na poziomie warstwy 7 (HTTP/S) dla Load Balancera. Jego logi pokazują szczegóły żądań webowych, ale nie dają wglądu w surowe pakiety IP dla całego ruchu sieciowego wewnątrz VPC.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Włączenie VPC Flow Logs: Logi przepływu rejestrują jedynie metadane połączeń (adresy IP, porty, liczba bajtów, protokół), ale celowo nie zapisują samej zawartości (payloadu) pakietów ze względów bezpieczeństwa i wydajności. Nie pozwalają na wykrycie złośliwej zawartości wewnątrz pakietu.
+- C. Agent Fluentd: Służy do zbierania logów systemowych i aplikacyjnych z poziomu systemu operacyjnego maszyn wirtualnych, nie monitoruje i nie analizuje surowego ruchu sieciowego IP na interfejsach sieciowych.
+- D. Logi dostępowe Google Cloud Armor: Dotyczą wyłącznie ruchu HTTP(S) przychodzącego do zewnętrznych load balancerów chronionych przez Cloud Armor. Nie pozwalają na analizę pakietów IP dla ruchu wewnętrznego lub maszyn wirtualnych wewnątrz sieci VPC.
 
-Wskazówki i triki (Tips & Tricks):
-- "Inspect packet data" / "Malicious content" + "Network level" = Packet Mirroring.
-- "Metadata" / "Connection info" = VPC Flow Logs.
-- "L7 protection" / "WAF" = Cloud Armor.
+4. Wskazówki, hinty, tips and tricks:
+- Wszelkie zapytania o analizę **zawartości pakietu (packet payload / invalid or malicious content)** w sieci VPC kierują do **Packet Mirroring**.
+- VPC Flow Logs = tylko metadane (no payload). Packet Mirroring = pełne pakiety (headers + payload).
 
-Praktyczne informacje na egzamin:
-- Packet Mirroring nie wpływa na wydajność mirrorowanych maszyn, ponieważ odbywa się na poziomie infrastruktury sieciowej Google (SDN).
-- Pamiętaj, że ruch mirrorowany jest płatny (koszt za GB przetworzonych danych).
-- Mirrorowanie odbywa się w obrębie tego samego VPC (lub przez VPC Peering).
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Inspekcja zawartości pakietów sieciowych / payload / deep packet inspection -> Packet Mirroring + oprogramowanie analizujące (security software).
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/vpc/docs/packet-mirroring" target="_blank">Packet Mirroring overview</a>
-- <a href="https://cloud.google.com/vpc/docs/using-packet-mirroring" target="_blank">Using Packet Mirroring</a>
-- <a href="https://cloud.google.com/blog/products/networking/using-packet-mirroring-for-security-and-network-analysis" target="_blank">Packet Mirroring for security analysis</a>
+6. Dodatkowe źródła i dokumentacja:
+- Packet Mirroring overview: <a href="https://cloud.google.com/vpc/docs/packet-mirroring" target="_blank">https://cloud.google.com/vpc/docs/packet-mirroring</a>
 </pre>
 </div>
 

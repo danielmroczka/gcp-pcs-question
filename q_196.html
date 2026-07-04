@@ -90,30 +90,30 @@ What should you do?
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Change the encryption type on the bucket to CMEK, and rewrite the objects).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Change the encryption type on the bucket to CMEK, and rewrite the objects.
 
-Wyjaśnienie:
-- Zmiana domyślnego klucza (Default Key): Pierwszym krokiem jest zmiana ustawień bucketu, aby wszystkie NOWE obiekty były automatycznie szyfrowane kluczem CMEK.
-- Operacja Rewrite (Przepisanie): Zmiana domyślnego klucza na buckecie NIE wpływa automatycznie na obiekty, które już w nim są (one pozostają zaszyfrowane starym kluczem GMEK). Aby zmienić ich szyfrowanie "w miejscu", należy użyć operacji `rewrite`.
-- Wydajność i Koszt: Operacja `rewrite` odbywa się w całości wewnątrz infrastruktury Google Cloud. Nie wymaga pobierania danych na lokalny dysk i ich ponownego wysyłania, co oszczęża czas, przepustowość sieci oraz eliminuje koszty transferu (egress fees), spełniając wymóg "minimal cost".
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Organizacja wymaga zmiany metody szyfrowania danych w Cloud Storage z domyślnego klucza zarządzanego przez Google (GMEK) na klucze zarządzane przez klienta (CMEK). Proces ten musi zostać wykonany szybko, efektywnie i przy minimalnych kosztach.
+Prawidłowa procedura re-szyfrowania w Cloud Storage składa się z dwóch etapów:
+1. **Zmiana domyślnego klucza na buckecie:** W ustawieniach bucketu konfiguruje się domyślne szyfrowanie przy użyciu wybranego klucza Cloud KMS (CMEK). Od tego momentu każdy nowo zapisany obiekt będzie szyfrowany tym kluczem.
+2. **Re-szyfrowanie istniejących obiektów (Rewrite):** Obiekty, które już znajdowały się w buckecie przed zmianą ustawień, nadal są zaszyfrowane starym kluczem (GMEK). Aby zmienić ich szyfrowanie "w miejscu" na nowy klucz, stosuje się operację **Rewrite** (w CLI `gsutil rewrite`).
+Operacja ta jest wykonywana w całości wewnątrz infrastruktury Google Cloud. Dane nie są pobierane na zewnątrz, co minimalizuje czas wykonania oraz eliminuje koszty transferu sieciowego (egress fees), czyniąc tę metodę najbardziej efektywną kosztowo.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Reupload with gsutil: Wymaga pobrania wszystkich plików i ich ponownego wysłania. Jest to bardzo wolne przy dużych zbiorach danych i generuje koszty transferu sieciowego, jeśli robisz to spoza sieci Google.
-- B. Encrypt locally: Szyfrowanie lokalne (Customer-Supplied Encryption Keys - CSEK) to inny model niż CMEK. Ponadto, podobnie jak opcja A, generuje ogromny narzut operacyjny i sieciowy.
-- C. Copy to new bucket in secondary region: Kopiowanie między regionami jest kosztowne (opłaty za transfer międzyregionalny) i niepotrzebne, jeśli celem jest jedynie zmiana klucza szyfrującego w tym samym miejscu.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Reupload the files to the same Cloud Storage bucket specifying a key file by using gsutil: Pobieranie wszystkich plików na lokalną maszynę i ich ponowne wysyłanie (re-upload) wiąże się z ogromnym czasem pracy, narzutem sieciowym oraz potencjalnymi kosztami transferu danych, jeśli maszyna lokalna znajduje się poza siecią GCP.
+- B. Encrypt the files locally, and then use gsutil to upload...: Szyfrowanie lokalne przed wysyłką oznacza przejście na model CSEK (Customer-Supplied Encryption Keys), co jest niezgodne z wymaganiem wdrożenia CMEK (klucze w Cloud KMS). Podobnie jak opcja A, generuje to niepotrzebne koszty transferu i narzut operacyjny.
+- C. Copy the files to a new bucket with CMEK enabled in a secondary region: Kopiowanie danych do innego regionu geograficznego generuje wysokie opłaty za transfer danych między regionami (cross-region egress), co stoi w sprzeczności z wymaganiem minimalizacji kosztów.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Re-encrypt existing objects" + "GCS" = Rewrite.
-- "Minimize cost" w GCS zazwyczaj oznacza unikanie transferu danych poza region lub poza chmurę.
-- Komenda CLI to: `gsutil rewrite -k gs://bucket-name/**` (używa domyślnego klucza bucketu).
+4. Wskazówki, hinty, tips and tricks:
+- Zmiana szyfrowania istniejących plików w Cloud Storage w miejscu (in-place re-encryption) zawsze wiąże się z użyciem polecenia **rewrite** (`gsutil rewrite`).
+- Zmiana domyślnego klucza szyfrowania bucketu wpływa tylko na nowo wgrywane pliki. Istniejące obiekty wymagają jawnego przepisania (rewrite).
 
-Kluczowe zagadnienia do powtórzenia:
-- Zarządzanie kluczami szyfrującymi (CMEK vs GMEK) w Cloud Storage.
-- Operacja `gsutil rewrite`.
-- Koszty transferu danych w Google Cloud.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- "re-encrypt files quickly" + "Cloud Storage" + "require CMEK" + "minimal cost" -> Change encryption on bucket to CMEK -> rewrite objects.
 
-Dokumentacja:
-<a href="https://cloud.google.com/storage/docs/using-customer-managed-encryption-keys#rewrite" target="_blank">Re-encrypting objects with CMEK</a>
+6. Dodatkowe źródła i dokumentacja:
+- Re-encrypting objects with CMEK: <a href="https://cloud.google.com/storage/docs/using-customer-managed-encryption-keys#rewrite" target="_blank">https://cloud.google.com/storage/docs/using-customer-managed-encryption-keys#rewrite</a>
 </pre>
 </div>
 <div class="ai-analysis-container d-none"  >

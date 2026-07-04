@@ -89,27 +89,27 @@ For compliance reporting purposes, the internal audit department needs you to pr
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Ensure the OS Config agent is installed on all VMs and extract the patch status dashboard every six months).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Ensure the OS Config agent is installed on all VMs and extract the patch status dashboard every six months.
 
-Wyjaśnienie:
-VM Manager (którego częścią jest OS Config agent) to dedykowana usługa Google Cloud do zarządzania inwentarzem oraz poprawkami systemów operacyjnych. Pulpit nawigacyjny (Patch Status Dashboard) w konsoli GCP udostępnia gotowe zestawienie brakujących aktualizacji krytycznych dla całej floty maszyn. Jest to najszybsza i najbardziej wiarygodna metoda przygotowania raportu dla audytu, eliminująca konieczność ręcznego sprawdzania każdej instancji.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Dla celów audytu zgodności należy szybko i cyklicznie (co 6 miesięcy) generować listę maszyn wirtualnych, które mają dostępne, ale niezainstalowane krytyczne poprawki bezpieczeństwa:
+- Usługa **VM Manager** (wykorzystująca agenta **OS Config** zainstalowanego na maszynach) zbiera informacje o stanie pakietów systemowych na maszynach wirtualnych.
+- Pulpit nawigacyjny stanu poprawek (Patch Status Dashboard) lub funkcja OS Inventory w konsoli Google Cloud pozwala na natychmiastowy wgląd w stan zgodności maszyn (wyświetla listę VM, które wymagają zainstalowania łatek). Wyciągnięcie raportu zajmuje kilka sekund, co w pełni spełnia wymaganie szybkości wykonania zadania.
 
-Dlaczego pozostałe są błędne:
-- A. Security Command Center (SCC) scan: SCC służy do wykrywania błędów w konfiguracji chmurowej i ogólnych podatności, ale raportowanie o konkretnych, brakujących poprawkach systemowych (OS patches) jest domeną VM Managera.
-- B. gcloud CLI command for OS version: Wyciągnięcie samej wersji systemu (np. "Ubuntu 20.04") nie dostarcza informacji o tym, czy wszystkie dostępne poprawki bezpieczeństwa zostały zainstalowane. Wymagałoby to dodatkowej, żmudnej analizy.
-- C. Cloud Logging agent: Agent ten służy do zbierania logów. Choć można by próbować analizować logi z przebiegu aktualizacji, nie jest to narzędzie pozwalające na szybkie i bezpośrednie sprawdzenie, jakich poprawek brakuje w danej chwili w repozytoriach systemowych.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Uruchomienie skanowania Security Command Center (SCC): SCC skanuje konfigurację chmury pod kątem misconfigurations (np. publiczne porty, uprawnienia IAM), ale nie wykonuje wewnętrznej analizy menedżera pakietów systemu operacyjnego (apt/yum) w poszukiwaniu dostępnych aktualizacji w locie.
+- B. Pobieranie wersji systemu za pomocą gcloud CLI: Sam numer wersji systemu operacyjnego (np. Ubuntu 20.04.1) nie informuje o tym, jakie konkretnie krytyczne pakiety bezpieczeństwa są w tej chwili dostępne w repozytoriach do zainstalowania.
+- C. Analiza logów agenta Cloud Logging: Agent logów przesyła surowe zdarzenia systemowe, ale nie generuje zagregowanych raportów o stanie brakujących poprawek bezpieczeństwa w menedżerze pakietów OS.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Compliance reporting" oraz "OS security updates" to słowa klucze wskazujące na VM Managera (OS Patch / OS Inventory).
-- "Dashboard" w odpowiedziach często wskazuje na najbardziej efektywne i gotowe do użycia rozwiązanie raportowe w GCP.
+4. Wskazówki, hinty, tips and tricks:
+- Wszelkie raporty o stanie aktualizacji maszyn, brakujących łatek bezpieczeństwa (missing patches) oraz utylizacji wersji systemów operacyjnych VM w GCP wymagają użycia agenta **OS Config** (VM Manager).
 
-Kluczowe zagadnienia do powtórzenia:
-- Różnica między OS Inventory Management a OS Patch Management.
-- Włączanie agenta OS Config w metadanych instancji.
-- Możliwości raportowania w VM Manager.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Lista VM z brakującymi łatkami bezpieczeństwa -> Agent OS Config / VM Manager.
 
-Dokumentacja:
-<a href="https://cloud.google.com/compute/docs/os-config/view-patch-compliance" target="_blank">Wyświetlanie zgodności poprawek w Google Cloud</a>
+6. Dodatkowe źródła i dokumentacja:
+- View patch compliance status: <a href="https://cloud.google.com/compute/docs/os-patch-management/view-patch-compliance" target="_blank">https://cloud.google.com/compute/docs/os-patch-management/view-patch-compliance</a>
 </pre>
 </div>
 <div class="ai-analysis-container d-none"  >

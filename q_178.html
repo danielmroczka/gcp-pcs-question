@@ -90,24 +90,28 @@ An organization wants to track how bonus compensations have changed over time to
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Format-preserving encryption
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Należy analizować trendy zmian zarobków (bonusów) w czasie w celu wykrycia anomalii, bez ujawniania tożsamości pracowników i z możliwością odwrócenia procesu (reversible) w celu zidentyfikowania konkretnego pracownika będącego outlierem:
+- **Format-Preserving Encryption (FPE)** za pomocą algorytmu FF1 w Cloud DLP szyfruje dane tekstowe lub numeryczne w taki sposób, że wynikowy szyfrogram ma dokładnie taki sam format i długość jak dane wejściowe.
+- Ponieważ szyfr zachowuje strukturę danych (np. zaszyfrowana kwota nadal jest liczbą o tej samej strukturze), analitycy mogą przeprowadzać obliczenia i identyfikować anomalie (outliery).
+- FPE jest procesem w pełni odwracalnym (reversible). Po znalezieniu rekordu anomalii, uprawniony użytkownik posiadający klucz kryptograficzny może odszyfrować wartość i zidentyfikować tożsamość pracownika.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Haszowanie kryptograficzne (Cryptographic hashing): Jest to operacja jednokierunkowa. Uniemożliwiłoby to odszyfrowanie danych (brak odwracalności) w celu identyfikacji pracownika.
+- B. Redakcja (Redaction): Polega na fizycznym wymazaniu lub zamaskowaniu kwot finansowych, co uniemożliwiłoby przeprowadzenie jakiejkolwiek analizy matematycznej i wykrycie trendów.
+- D. Generalizacja (Generalization): Zastępuje dokładne wartości przedziałami (np. zarobki w przedziale 10 000 - 20 000). Jest to proces nieodwracalny, co uniemożliwia precyzyjne odzyskanie oryginalnej tożsamości.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+4. Wskazówki, hinty, tips and tricks:
+- Szyfrowanie zachowujące format (FPE) pozwala na zachowanie struktury bazy danych i typów danych (np. numerycznych), co umożliwia wykonywanie analiz na zaszyfrowanych danych przy jednoczesnym zachowaniu możliwości odkodowania (odwracalności).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Odwracalna deidentyfikacja + zachowanie struktury/formatu danych do analizy -> Format-preserving encryption (FPE).
+
+6. Dodatkowe źródła i dokumentacja:
+- Cloud DLP Format-preserving encryption: <a href="https://cloud.google.com/dlp/docs/concepts-pseudonymization#format-preserving-encryption" target="_blank">https://cloud.google.com/dlp/docs/concepts-pseudonymization#format-preserving-encryption</a>
 </pre>
 
 </div>

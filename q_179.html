@@ -90,24 +90,27 @@ You need to set up a Cloud Interconnect connection between your company's on-pre
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Use restricted googleapis.com to access Google APIs using a set of IP addresses only routable from within Google Cloud, which are advertised as routes over the Cloud Interconnect connection.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymaganiem jest skierowanie ruchu z sieci lokalnej (on-premises) do API Google przez Cloud Interconnect, uniemożliwiając ruch przez internet oraz ograniczając dostęp wyłącznie do usług wspieranych przez VPC Service Controls w celu ochrony przed wyciekiem danych:
+- Skierowanie zapytań DNS do API Google na domenę `restricted.googleapis.com` (IP: 199.36.153.4/30) zapewnia, że zapytania są kierowane wyłącznie przez wewnętrzne połączenie Cloud Interconnect.
+- Domena ta obsługuje i przepuszcza ruch wyłącznie do usług Google zintegrowanych i wspieranych przez perymetry bezpieczeństwa VPC Service Controls, blokując dostęp do innych usług nieobsługiwanych, co eliminuje ryzyko wycieku danych (exfiltration) na nieautoryzowane platformy.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Włączenie Private Google Access: PGA pozwala maszynom wewnątrz sieci VPC na dostęp do API Google bez publicznych adresów IP, ale nie konfiguruje routingu i DNS dla serwerów w sieci lokalnej (on-premises) przez Interconnect.
+- B. Mapowanie na IP `199.36.153.8/30`: Adres `199.36.153.8/30` (zakres 199.36.153.8 - 199.36.153.11) to pula adresów IP przypisana do domeny `private.googleapis.com`, a nie `restricted.googleapis.com` (która korzysta z zakresu 199.36.153.4/30).
+- C. Użycie `private.googleapis.com`: Ta domena umożliwia dostęp do wszystkich usług Google (w tym YouTube, Gmail), co narusza wymóg ograniczania dostępu wyłącznie do usług chronionych przez VPC Service Controls i zwiększa ryzyko eksfiltracji.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+4. Wskazówki, hinty, tips and tricks:
+- W scenariuszach z udziałem **VPC Service Controls** oraz połączeń hybrydowych (Interconnect / VPN) poprawnym adresem IP i domeną API jest zawsze **restricted.googleapis.com** (zakres IP: **199.36.153.4/30**).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Zabezpieczenie przed eksfiltracją + VPC Service Controls + połączenie hybrydowe -> restricted.googleapis.com.
+
+6. Dodatkowe źródła i dokumentacja:
+- Private connectivity options for Google APIs: <a href="https://cloud.google.com/vpc-service-controls/docs/private-connectivity" target="_blank">https://cloud.google.com/vpc-service-controls/docs/private-connectivity</a>
 </pre>
 
 </div>

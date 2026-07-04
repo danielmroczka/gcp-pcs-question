@@ -90,24 +90,27 @@ You need to enforce a security policy in your Google Cloud organization that pre
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Enable the constraints/storage.publicAccessPrevention constraint at the organization level.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Należy wdrożyć politykę bezpieczeństwa, która proaktywnie uniemożliwi użytkownikom upublicznianie obiektów w kubełkach Cloud Storage na poziomie całej organizacji, przy minimalnym narzucie operacyjnym:
+- Najbardziej efektywnym rozwiązaniem jest włączenie polityki organizacji (Organization Policy) z ograniczeniem **`storage.publicAccessPrevention`** na poziomie węzła organizacji.
+- Włączenie tej polityki powoduje automatyczne i natychmiastowe zablokowanie możliwości konfiguracji publicznego dostępu (np. przypisywania roli Storage Object Viewer dla tożsamości `allUsers` lub `allAuthenticatedUsers`) do jakichkolwiek kubełków w aktualnych i nowo tworzonych projektach. Działa to w pełni proaktywnie i nie wymaga pisania kodu ani stałego monitorowania.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Skrypt cron z funkcją Cloud Function: Jest to rozwiązanie reaktywne. Kubełek może być publiczny przez czas do kolejnego uruchomienia skryptu (np. do godziny), co stwarza okno podatności na wyciek. Dodatkowo wymaga to pisania kodu i monitorowania działania infrastruktury bezserwerowej.
+- C. Enforce `storage.uniformBucketLevelAccess`: Wymuszenie jednolitego dostępu (UBLA) wyłącza obsługę list ACL, ale nie zapobiega udostępnieniu całego kubełka publicznie przy użyciu polityki IAM (użytkownik wciąż może nadać dostęp publiczny w IAM).
+- D. VPC Service Controls: Perymetr VPC SC chroni przed wyciekiem danych do zewnętrznych projektów, ale konfiguracja perymetru dla każdego nowego projektu z kubełkiem generuje ogromny narzut operacyjny i administracyjny, co narusza wymóg minimalizacji overheadu.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+4. Wskazówki, hinty, tips and tricks:
+- W chmurze Google Cloud standardowym sposobem na zablokowanie możliwości upubliczniania kubełków w skali firmy jest wdrożenie polityki organizacji **Public Access Prevention (PAP)**.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Proaktywna blokada publicznego dostępu do Storage na poziomie organizacji -> Enforce constraints/storage.publicAccessPrevention.
+
+6. Dodatkowe źródła i dokumentacja:
+- Public Access Prevention: <a href="https://cloud.google.com/storage/docs/public-access-prevention" target="_blank">https://cloud.google.com/storage/docs/public-access-prevention</a>
 </pre>
 
 </div>

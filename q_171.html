@@ -91,24 +91,30 @@ You have created an OS image that is hardened per your organization's security s
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Grant users the compute.imageUser role in the OS image project.
+D. Set up an image access organization policy constraint, and list the security team managed project in the project's allow list.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Należy wymusić w całej organizacji używanie wyłącznie jednego, zatwierdzonego obrazu systemu operacyjnego (hardened OS image) przechowywanego w bezpiecznym projekcie zespołu bezpieczeństwa, minimalizując przy tym narzut operacyjny:
+- D (Blokada użycia innych obrazów): Polityka organizacji z ograniczeniem `constraints/compute.trustedImageProjects` pozwala zdefiniować listę zaufanych projektów, z których użytkownicy w organizacji mogą pobierać obrazy do tworzenia maszyn VM. Dodając do tej listy wyłącznie projekt zespołu bezpieczeństwa, blokujemy możliwość korzystania z publicznych obrazów (np. Debian, Ubuntu) oraz obrazów z innych nieautoryzowanych projektów.
+- B (Autoryzacja dostępu): Aby użytkownicy z projektów deweloperskich mogli fizycznie odczytać i uruchomić ten zatwierdzony obraz, muszą posiadać rolę `roles/compute.imageUser` (imageUser) nadaną na poziomie projektu zespołu bezpieczeństwa (właściciela obrazu).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Nadanie roli `compute.imageUser` deweloperom w ich własnych projektach: Daje im to uprawnienie do używania obrazów w ich własnym projekcie, ale nie pozwala na dostęp do chronionego obrazu w zewnętrznym projekcie bezpieczeństwa.
+- C. Kopiowanie obrazu do każdego nowego projektu: Generuje ogromny narzut operacyjny związany z kopiowaniem, aktualizowaniem obrazu w setkach projektów i marnowaniem miejsca, co stoi w sprzeczności z wymogiem minimalizacji overheadu.
+- E. Odebranie uprawnień do tworzenia maszyn deweloperom: Całkowicie uniemożliwia samoobsługę (self-service) i paraliżuje proces wdrażania maszyn wirtualnych przez zespoły, zmuszając zespół bezpieczeństwa do ręcznego tworzenia każdej maszyny.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+4. Wskazówki, hinty, tips and tricks:
+- Wymuszenie użycia zatwierdzonych obrazów OS w GCP realizuje się za pomocą:
+  1. Polityki organizacji **`compute.trustedImageProjects`** (określa skąd można brać obrazy).
+  2. Roli IAM **`roles/compute.imageUser`** na projekcie źródłowym (daje prawo do odczytu obrazu).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Wymuszenie użycia obrazów z zaufanego projektu w organizacji -> compute.trustedImageProjects + roles/compute.imageUser na projekcie źródłowym.
+
+6. Dodatkowe źródła i dokumentacja:
+- Control access to images: <a href="https://cloud.google.com/compute/docs/images/controlling-access-to-images" target="_blank">https://cloud.google.com/compute/docs/images/controlling-access-to-images</a>
 </pre>
 
 </div>

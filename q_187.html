@@ -89,28 +89,27 @@ A service account key has been publicly exposed on multiple public code reposito
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Delete the compromised service account).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Delete the compromised service account.
 
-Wyjaśnienie:
-Wyciek klucza konta serwisowego (JSON key) do publicznych repozytoriów to poważny incydent. Jeśli logi wskazują, że klucz został już użyty do generowania krótkotrwałych poświadczeń (tokenów OAuth), samo wyłączenie klucza (Disable key) może nie wystarczyć, ponieważ aktywne tokeny mogą nadal działać przez pewien czas (standardowo do 1 godziny). Usunięcie całego konta serwisowego (Delete account) jest najskuteczniejszą i najszybszą metodą natychmiastowego przerwania wszelkiego dostępu – unieważnia ono wszystkie powiązane klucze oraz aktywne sesje i tokeny oparte na tym koncie.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wyciek klucza konta serwisowego (JSON key) do publicznego repozytorium to krytyczny incydent bezpieczeństwa. Z logów wynika, że klucz ten został już użyty przez intruza do wygenerowania krótkotrwałych poświadczeń (takich jak tokeny OAuth 2.0 / access tokens).
+W takiej sytuacji wyłączenie samego klucza lub jego rotacja nie chroni natychmiast przed zagrożeniem, ponieważ wygenerowane wcześniej tokeny dostępowe mogą pozostać aktywne i ważne (standardowo do 1 godziny). Najbardziej drastycznym, ale zarazem jedynym w 100% skutecznym i natychmiastowym krokiem w celu odcięcia dostępu jest całkowite usunięcie konta serwisowego (Delete the compromised service account). Usunięcie konta serwisowego natychmiast unieważnia sam obiekt w IAM, co sprawia, że wszystkie powiązane z nim klucze prywatne oraz wszystkie wygenerowane na jego podstawie aktywne tokeny sesyjne stają się natychmiast bezużyteczne.
 
-Dlaczego pozostałe są błędne:
-- B. Disable the compromised service account key: Jest to dobra praktyka, ale w sytuacji aktywnego ataku z użyciem tokenów, usunięcie konta (A) daje większą pewność całkowitego odcięcia intruza.
-- C. Wait until credentials expire: To działanie skrajnie niebezpieczne, pozwalające atakującemu na dalszą kradzież danych lub niszczenie zasobów przez czas ważności tokenów.
-- D. Rotate the compromised key: Rotacja klucza w trakcie trwającego incydentu nie rozwiązuje problemu już wygenerowanych i aktywnych tokenów sesyjnych, którymi posługuje się atakujący.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Disable the compromised service account key: Wyłączenie klucza uniemożliwia generowanie nowych tokenów, ale nie unieważnia tokenów, które atakujący zdążył już wygenerować i które są aktywne w pamięci podręcznej Google.
+- C. Wait until the service account credentials expire automatically: Czekanie na wygaśnięcie tokenów (do godziny) pozwala atakującemu na swobodne kontynuowanie złośliwych działań (eksfiltracja danych, niszczenie zasobów) i jest niedopuszczalne w procedurach reagowania na incydenty.
+- D. Rotate the compromised service account key: Rotacja klucza (utworzenie nowego i usunięcie starego) zapobiega użyciu starego klucza w przyszłości, ale tak jak w przypadku opcji B, nie unieważnia natychmiast wygenerowanych wcześniej aktywnych tokenów dostępowych OAuth.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Sytuacje typu "Public exposure" wymagają najbardziej zdecydowanych działań.
-- Pamiętaj o zasadzie: usunięcie konta = natychmiastowe unieważnienie wszystkich tokenów.
-- Najlepszą praktyką zapobiegawczą jest nieużywanie kluczy JSON (Service Account Keys) i zastąpienie ich Workload Identity.
+4. Wskazówki, hinty, tips and tricks:
+- Kiedy klucz konta serwisowego wyciekł publicznie i został użyty do generowania krótkotrwałych tokenów (short-lived credentials / OAuth tokens), jedyną natychmiastową i pewną metodą na przerwanie ataku jest usunięcie całego konta serwisowego.
+- Aby zapobiegać takim incydentom, Google zaleca całkowite unikanie pobierania kluczy JSON kont serwisowych i korzystanie z Workload Identity Federation lub Service Account impersonation.
 
-Kluczowe zagadnienia do powtórzenia:
-- Różnica między kluczem konta serwisowego (Key) a tokenem dostępowym (Access Token).
-- Procedury reagowania na incydenty (Incident Response) w GCP.
-- TTL (Time-to-Live) dla poświadczeń krótkotrwałych.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- "exposed service account key" + "used to generate short-lived credentials" + "immediately remove access" -> Delete the compromised service account.
 
-Dokumentacja:
-<a href="https://cloud.google.com/iam/docs/service-accounts#compromised-key" target="_blank">Postępowanie z naruszonymi kluczami kont serwisowych</a>
+6. Dodatkowe źródła i dokumentacja:
+- Dealing with compromised Google Cloud credentials: <a href="https://cloud.google.com/iam/docs/service-accounts#compromised-key" target="_blank">https://cloud.google.com/iam/docs/service-accounts#compromised-key</a>
 </pre>
 </div>
 <div class="ai-analysis-container d-none"  >

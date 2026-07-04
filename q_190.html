@@ -89,33 +89,32 @@ Your organization is using Active Directory and wants to configure Security Asse
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (1. Create a new SAML profile. 2. Populate the sign-in and sign-out page URLs. 3. Upload the X.509 certificate. 4. Configure Entity ID and ACS URL in your IdP).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. 1. Create a new SAML profile. 2. Populate the sign-in and sign-out page URLs. 3. Upload the X.509 certificate. 4. Configure Entity ID and ACS URL in your IdP.
 
-Wyjaśnienie:
-Konfiguracja Single Sign-On (SSO) za pomocą SAML 2.0 wymaga wymiany metadanych i zaufania między Google (Service Provider - SP) a Active Directory (Identity Provider - IdP).
-Kroki po stronie Google:
-1. Utworzenie profilu SAML.
-2. Podanie adresów URL stron logowania i wylogowania IdP (aby Google wiedziało, dokąd przekierować użytkownika).
-3. Przesłanie certyfikatu X.509 (zawierającego klucz publiczny IdP), aby Google mogło weryfikować podpisy pod asercjami SAML.
-Kroki po stronie IdP (np. ADFS):
-4. Skonfigurowanie Entity ID i ACS URL (Assertion Consumer Service URL), aby IdP wiedziało, że wysyła poświadczenia do Google Cloud i pod jaki adres.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Integracja Google Cloud (Cloud Identity) z lokalnym Active Directory przy użyciu protokołu SAML 2.0 wymaga skonfigurowania relacji zaufania między dostawcą tożsamości (Identity Provider - IdP, czyli Active Directory/ADFS) a dostawcą usługi (Service Provider - SP, czyli Google).
+Prawidłowa procedura konfiguracji Single Sign-On (SSO) po stronie Google (SP) wymaga:
+1. Utworzenia nowego profilu SAML w konsoli Google Admin.
+2. Wprowadzenia adresów URL stron logowania (sign-in) i wylogowania (sign-out) wskazujących na Twój IdP (aby Google wiedziało, dokąd przekierować użytkownika w celu uwierzytelnienia).
+3. Przesłania certyfikatu X.509 (zawierającego klucz publiczny IdP), aby Google mogło kryptograficznie zweryfikować asercje SAML przesyłane z IdP.
+Po stronie IdP (Active Directory / ADFS):
+4. Konfiguracji Entity ID (identyfikatora Google) oraz ACS URL (Assertion Consumer Service URL – adresu, na który IdP ma wysyłać zaszyfrowane asercje SAML po udanym zalogowaniu użytkownika).
 
-Dlaczego pozostałe są błędne:
-- B i D. OpenID Connect (OIDC): OIDC to inny protokół niż SAML (oparty na OAuth 2.0). Chociaż oba służą do federacji, ich konfiguracja techniczna jest diametralnie inna. Pytanie wyraźnie prosi o konfigurację SAML.
-- C. Brak adresów URL: Utworzenie profilu bez podania adresów sign-in/sign-out uniemożliwi poprawne przekierowanie użytkownika do strony logowania firmy. "Change password URL" jest opcjonalny i nie jest fundamentem SSO.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Configure prerequisites for OpenID Connect (OIDC) in your Active Directory...: OIDC to nowoczesny protokół uwierzytelniania oparty na standardzie OAuth 2.0 i JSON Web Tokens (JWT). Pytanie wprost wymaga konfiguracji standardu SAML.
+- C. Create a new SAML profile. Upload the X.509 certificate. Enable the change password URL...: Ta konfiguracja nie uwzględnia kluczowego kroku polegającego na podaniu adresów URL logowania i wylogowania (sign-in i sign-out page URLs). Bez tych adresów Google nie będzie w stanie przekierować przeglądarki użytkownika do formularza logowania w Active Directory. "Change password URL" jest opcjonalny.
+- D. Manage SAML profile assignments. Enable OpenID Connect (OIDC)...: Podobnie jak w opcji B, ta opcja błędnie wprowadza protokół OIDC do zadania dotyczącego konfiguracji SAML.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "SAML" + "Federacja" = SSO.
-- Zapamiętaj kluczowe pojęcia SAML: Entity ID, ACS URL, X.509 Certificate, Sign-in URL.
-- Pamiętaj, że SSO zajmuje się uwierzytelnianiem, a nie automatycznym tworzeniem kont (do tego służy GCDS).
+4. Wskazówki, hinty, tips and tricks:
+- W pytaniach o konfigurację SAM SSO z Active Directory w Google Cloud szukaj elementów składowych standardu SAML: **SAML profile, sign-in/sign-out URLs, X.509 certificate, Entity ID i ACS URL**.
+- Pamiętaj, że federacja tożsamości przez SAML służy do uwierzytelniania (Authentication), natomiast do synchronizacji kont z Active Directory (cykl życia użytkowników) służy narzędzie GCDS (Google Cloud Directory Sync).
 
-Kluczowe zagadnienia do powtórzenia:
-- Różnica między SAML a OIDC.
-- Rola Cloud Identity jako dostawcy tożsamości.
-- Przypisywanie profilu SSO do jednostek organizacyjnych (OU).
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- "Active Directory" + "configure SAML" + "enforce single sign-on (SSO)" -> SAML profile -> sign-in/sign-out URLs + X.509 certificate + Entity ID + ACS URL.
 
-Dokumentacja:
-<a href="https://support.google.com/cloudidentity/answer/60224" target="_blank">Konfiguracja SSO za pomocą SAML</a>
+6. Dodatkowe źródła i dokumentacja:
+- Set up SSO via SAML for Cloud Identity: <a href="https://support.google.com/cloudidentity/answer/60224" target="_blank">https://support.google.com/cloudidentity/answer/60224</a>
 </pre>
 </div>
 <div class="ai-analysis-container d-none"  >

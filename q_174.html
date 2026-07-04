@@ -91,24 +91,28 @@ You manage your organization's Security Operations Center (SOC). You currently m
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Cloud IDS
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Menedżer SOC chce mieć możliwość monitorowania, wykrywania anomalii oraz badania zagrożeń w sieci VPC na podstawie nagłówków i zawartości pakietów (payload):
+- Cloud IDS (Intrusion Detection System) to w pełni zarządzana przez Google Cloud usługa bezpieczeństwa sieciowego. Służy do wykrywania włamań i złośliwego oprogramowania wewnątrz sieci VPC.
+- Cloud IDS automatycznie przechwytuje ruch sieciowy i przesyła go do zaawansowanego silnika analizy zagrożeń (wykorzystującego technologie Palo Alto Networks), który bada nagłówki i całą zawartość (payload) pakietów sieciowych w poszukiwaniu sygnatur ataków. Jako gotowy **produkt** (usługa zarządzana PaaS), Cloud IDS dostarcza pełny interfejs analityczny i alerty o zagrożeniach bez konieczności wdrażania własnego oprogramowania IDS na maszynach wirtualnych.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- E. Packet Mirroring: Jest to podstawowa funkcja sieciowa (telemetria), która służy do kopiowania ruchu i przesyłania go do zewnętrznego systemu. Sama z siebie nie analizuje zagrożeń ani payloadu – wymaga od klienta samodzielnego zainstalowania, licencjonowania i konfigurowania oprogramowania IDS/IPS (np. Suricata) na maszynach wirtualnych, co czyni ją technologią bazową, a nie gotowym, zarządzanym produktem wykrywającym zagrożenia.
+- B. Logi VPC Service Controls: Rejestrują wyłącznie błędy i blokady dostępu na poziomie API usług Google (np. BigQuery, GCS), nie monitorują ogólnego ruchu IP pomiędzy instancjami VM wewnątrz sieci VPC.
+- C. VPC Flow Logs: Rejestrują tylko metadane ruchu (nagłówki połączeń), nie dając wglądu w zawartość (payload) pakietu.
+- D. Google Cloud Armor: Chroni aplikacje na brzegu sieci (WAF) przed atakami DDoS, nie jest narzędziem typu IDS do ciągłego badania wewnętrznego ruchu sieciowego w VPC.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+4. Wskazówki, hinty, tips and tricks:
+- Cloud IDS to gotowa, zarządzana usługa bezpieczeństwa sieciowego (Intrusion Detection System) w GCP, która wewnętrznie korzysta z Packet Mirroring, ale oferuje pełną analitykę zagrożeń w payloadzie out-of-the-box.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Zarządzany produkt do wykrywania włamań i analizy payloadu/nagłówków w VPC -> Cloud IDS.
+
+6. Dodatkowe źródła i dokumentacja:
+- Cloud IDS overview: <a href="https://cloud.google.com/intrusion-detection-system/docs/overview" target="_blank">https://cloud.google.com/intrusion-detection-system/docs/overview</a>
 </pre>
 
 </div>

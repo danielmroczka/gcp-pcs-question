@@ -90,30 +90,30 @@ What should you do?
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Implement an Access Policy in BeyondCorp Enterprise to verify the device certificate. Create an access binding with the access policy just created).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Implement an Access Policy in BeyondCorp Enterprise to verify the device certificate. Create an access binding with the access policy just created.
 
-Wyjaśnienie:
-- BeyondCorp Enterprise (wcześniej Context-Aware Access): Jest to rozwiązanie Google Cloud typu Zero Trust, które pozwala na kontrolowanie dostępu do aplikacji i konsoli Google Cloud w oparciu o kontekst (tożsamość, lokalizacja, stan urządzenia).
-- Weryfikacja certyfikatu: BeyondCorp pozwala na zdefiniowanie poziomów dostępu (Access Levels), które sprawdzają, czy urządzenie, z którego loguje się użytkownik, posiada poprawny, korporacyjny certyfikat X.509.
-- Access Policy: Stworzenie polityki dostępu (Access Policy) i powiązanie jej z konsolą Google Cloud (poprzez Access Binding) jest standardową metodą wymuszenia, aby tylko autoryzowane urządzenia (corporate-issued) miały dostęp.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Celem jest zapewnienie, że pracownicy mogą uzyskać dostęp do konsoli Google Cloud wyłącznie z urządzeń wydanych przez firmę (corporate-issued devices) zaopatrzonych w ważny certyfikat korporacyjny (enterprise certificate). Jest to klasyczne podejście typu Zero Trust.
+W Google Cloud do realizacji reguł dostępu opartych na kontekście urządzenia (Context-Aware Access) służy **BeyondCorp Enterprise** (wykorzystujący pod maską usługę Access Context Manager).
+Aby wdrożyć to zabezpieczenie:
+1. Tworzy się politykę dostępu (Access Policy) w Access Context Managerze, która zawiera warunki (Access Levels) weryfikujące obecność i ważność certyfikatu X.509 na urządzeniu klienta (przy użyciu Endpoint Verification).
+2. Następnie tworzy się powiązanie dostępu (Access Binding), które przypisuje tę politykę dostępu bezpośrednio do konsoli Google Cloud dla danej grupy użytkowników.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- B. VPC firewall policy: Firewalle VPC działają wewnątrz sieci wirtualnej i chronią ruch między maszynami lub ruch do internetu. Nie służą do kontrolowania dostępu użytkowników do samej konsoli Google Cloud (warstwa zarządzania / Control Plane).
-- C. Organization policy: Polityki organizacji służą do narzucania ograniczeń konfiguracyjnych na zasoby (np. "zakaz tworzenia publicznych IP"), ale nie posiadają natywnej funkcji weryfikacji certyfikatów na urządzeniach końcowych użytkowników.
-- D. IAM conditional policy: Choć IAM Conditions pozwalają na pewną kontrolę kontekstową (np. IP źródłowe, czas), nie mają one bezpośredniego wglądu w certyfikaty sprzętowe urządzenia tak jak BeyondCorp (który wykorzystuje agenta Endpoint Verification).
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Implement a VPC firewall policy. Activate packet inspection...: Zapory sieciowe VPC (Firewalle) filtrują ruch sieciowy IP na poziomie maszyn wirtualnych w sieciach VPC. Nie mają możliwości weryfikacji tożsamości użytkowników i certyfikatów ich urządzeń końcowych podczas logowania się do konsoli webowej Google Cloud (Control Plane).
+- C. Implement an organization policy to verify the certificate...: Polityki organizacji (Organization Policies) wymuszają reguły konfiguracji zasobów w chmurze (np. ograniczenie regionów, zakaz publicznych IP), ale nie służą do weryfikacji certyfikatów klienckich na stacjach roboczych pracowników podczas uwierzytelniania.
+- D. Implement an Identity and Access Management (IAM) conditional policy to verify the device certificate: Warunki IAM (IAM Conditions) pozwalają ograniczyć dostęp na podstawie adresu IP źródłowego, czasu lub zasobu, ale nie posiadają natywnej funkcji sprawdzania i walidacji certyfikatów sprzętowych na urządzeniach klienckich. Do głębokiej weryfikacji stanu urządzenia (device posture/certyfikaty) niezbędny jest BeyondCorp Enterprise / Access Context Manager.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Corporate-issued devices" / "Device certificate" + "Access to Console" = BeyondCorp Enterprise / Context-Aware Access.
-- Szukaj słów takich jak "Access Context Manager" lub "Access Level" w podobnych pytaniach.
-- Pamiętaj, że do działania tego rozwiązania potrzebujesz wtyczki "Endpoint Verification" w przeglądarce Chrome.
+4. Wskazówki, hinty, tips and tricks:
+- Zabezpieczenie dostępu do konsoli Google Cloud lub aplikacji webowych na podstawie stanu stacji roboczej (np. system operacyjny, obecność certyfikatu firmowego, zaszyfrowany dysk) zawsze realizuje się za pomocą **BeyondCorp Enterprise** / **Context-Aware Access** / **Access Context Manager**.
+- Pamiętaj, że BeyondCorp współpracuje z rozszerzeniem Endpoint Verification w przeglądarkach użytkowników.
 
-Kluczowe zagadnienia do powtórzenia:
-- Model Zero Trust w Google Cloud.
-- BeyondCorp Enterprise i Context-Aware Access.
-- Access Context Manager i Access Levels.
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- "access Google Cloud console" + "corporate-issued devices" + "valid enterprise certificate" -> BeyondCorp Enterprise -> Access Policy + Access Binding.
 
-Dokumentacja:
-<a href="https://cloud.google.com/access-context-manager/docs/device-policy" target="_blank">Device policy in Access Context Manager</a>
+6. Dodatkowe źródła i dokumentacja:
+- Device policy in Access Context Manager: <a href="https://cloud.google.com/access-context-manager/docs/device-policy" target="_blank">https://cloud.google.com/access-context-manager/docs/device-policy</a>
 </pre>
 </div>
 <div class="ai-analysis-container d-none"  >

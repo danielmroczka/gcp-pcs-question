@@ -89,35 +89,28 @@ Your security team wants to implement a defense-in-depth approach to protect sen
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Enable VPC Service Controls, create a perimeter around Projects A and B, and include the Cloud Storage API in the Service Perimeter configuration)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Enable VPC Service Controls, create a perimeter around Projects A and B, and include the Cloud Storage API in the Service Perimeter configuration.
 
-Dlaczego ta odpowiedź jest poprawna:
-- VPC Service Controls (VPC SC): Jest to mechanizm bezpieczeństwa Google Cloud, który pozwala na stworzenie logicznego obwodu (perimetru) wokół zasobów w różnych projektach.
-- Zapobieganie eksfiltracji danych (Data Exfiltration): VPC SC chroni przed kopiowaniem danych z chronionego zasobu (np. Bucket w Projekcie A) do niechronionego zasobu poza perymetrem (np. prywatny bucket pracownika), nawet jeśli użytkownik posiada odpowiednie role IAM w obu projektach.
-- Spełnienie wymagań: 
-  1. "Readable from Project B" - Projekty A i B są w tym samym perymetrze, więc mogą się swobodnie komunikować.
-  2. "Cannot be accessed from outside the network" - VPC SC domyślnie blokuje dostęp do usług Google Cloud z internetu, chyba że skonfigurujesz poziomy dostępu (Access Levels).
-  3. "Cannot be copied to external bucket" - To kluczowa funkcja perymetru VPC SC.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymagania bezpieczeństwa to: 1) Kubełek w Projekcie A może być czytany tylko z Projektu B, 2) Kubełek nie może być dostępny spoza sieci prywatnej (internet), 3) Dane z kubełka nie mogą zostać skopiowane do zewnętrznego kubełka (ochrona przed eksfiltracją):
+- Usługa **VPC Service Controls** pozwala na zdefiniowanie perymetru bezpieczeństwa wokół zasobów Google Cloud. Umieszczając Projekt A (właściciel danych) oraz Projekt B (konsument) w jednym perymetrze i dodając API Cloud Storage (`storage.googleapis.com`) do usług chronionych:
+  - Blokujemy wszelki dostęp do kubełków w Projekcie A z internetu (spełnia wymóg 2).
+  - Pozwalamy zasobom z Projektu B na bezproblemowy odczyt danych z Projektu A, ponieważ oba projekty są wewnątrz tej samej zaufanej granicy perymetru (spełnia wymóg 1).
+  - Uniemożliwiamy kopiowanie danych (data exfiltration) z projektów w perymetrze do jakichkolwiek kubełków na zewnątrz perymetru (np. na prywatne konto napastnika), co spełnia wymóg 3.
 
-Analiza niepoprawnych odpowiedzi:
-- A. Domain restricted sharing + UBLA: Te mechanizmy chronią przed przypadkowym udostępnieniem danych osobom postronnym (IAM). Nie zapobiegają jednak sytuacji, w której uprawniony użytkownik (mający dostęp do obu projektów) kopiuje dane z projektu firmowego do swojego prywatnego projektu.
-- C. Private Access + Firewalls: Private Google Access pozwala maszynom bez publicznego IP łączyć się z API Google, a firewalle kontrolują ruch na poziomie IP między VM. Żadne z tych narzędzi nie kontroluje operacji na poziomie API (np. 'gsutil cp'), czyli nie widzi, dokąd dane są przesyłane wewnątrz usług Google.
-- D. VPC Peering + Firewalls: Podobnie jak w punkcie C, peering dotyczy warstwy sieciowej (IP). Nie ma wpływu na bezpieczeństwo usług PaaS takich jak Cloud Storage na poziomie logicznym/API.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Enforce Domain Restricted Sharing i Uniform Access: Te opcje kontrolują uprawnienia IAM na poziomie domen i uprawnień obiektowych kubełka. Zapobiegają publicznym kubełkom, ale nie chronią przed kopiowaniem danych przez uprawnionych użytkowników do ich własnych zewnętrznych projektów GCP ani nie blokują sieciowo dostępu do API z internetu.
+- C i D. Prywatny dostęp (Private Access) lub VPC Peering z firewallami: Reguły zapory sieciowej (Firewall Rules) i routing VPC działają na poziomie warstwy L3/L4 dla ruchu między maszynami VM. Nie potrafią one filtrować żądań API do usług typu PaaS (jak Cloud Storage), które mają publiczne punkty końcowe API i nie zapobiegają eksfiltracji danych.
 
-Wskazówki i triki (Tips & Tricks):
-- Jeśli w pytaniu pojawia się "Prevent copy to external project/bucket" -> szukaj VPC Service Controls (Perymetr).
-- IAM to "Kto ma dostęp?", VPC SC to "Skąd i dokąd dane mogą płynąć?".
-- VPC SC działa na poziomie API (Warstwa 7), a nie na poziomie IP (Warstwa 3).
+4. Wskazówki, hinty, tips and tricks:
+- Jeśli w wymaganiach pojawia się zapobieganie kopiowaniu danych z kubełków GCP do zewnętrznych lokalizacji chmurowych (ochrona przed **data exfiltration**), jedynym poprawnym rozwiązaniem architektonicznym w GCP jest **VPC Service Controls**.
 
-Praktyczne informacje na egzamin:
-- Zapamiętaj termin "Data Exfiltration Protection". To główne zadanie VPC SC.
-- Perymetr może obejmować wiele projektów z różnych organizacji (poprzez tzw. Bridge).
-- Uważaj na "Dry-run mode" – to funkcja VPC SC pozwalająca testować restrykcje bez faktycznego blokowania ruchu (często pojawia się w pytaniach o wdrażanie).
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Zakaz kopiowania danych do zewnętrznych bucketów / ochrona przed wyciekiem (exfiltration) + odizolowanie API sieciowo -> VPC Service Controls.
 
-Dokumentacja i linki:
-- <a href="https://cloud.google.com/vpc-service-controls/docs/overview" target="_blank">VPC Service Controls overview</a>
-- <a href="https://cloud.google.com/vpc-service-controls/docs/service-perimeters" target="_blank">Service perimeters guide</a>
-- <a href="https://cloud.google.com/blog/products/identity-security/announcing-vpc-service-controls-general-availability" target="_blank">Introduction to VPC Service Controls</a>
+6. Dodatkowe źródła i dokumentacja:
+- VPC Service Controls overview: <a href="https://cloud.google.com/vpc-service-controls/docs/overview" target="_blank">https://cloud.google.com/vpc-service-controls/docs/overview</a>
 </pre>
 </div>
 

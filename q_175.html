@@ -91,24 +91,32 @@ You are consulting with a client that requires end-to-end encryption of applicat
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Confidential Computing and Istio
+E. Client-side encryption
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymagane jest zapewnienie pełnego szyfrowania typu end-to-end obejmującego wszystkie trzy stany danych w chmurze Google Cloud: dane w tranzycie (in transit), dane w użyciu (in use) oraz dane w spoczynku (at rest):
+- **Opcja D (Confidential Computing + Istio)**:
+  - **Dane w użyciu (in use)**: Usługa **Confidential Computing** (Confidential VMs/GKE Nodes) wykorzystuje szyfrowanie pamięci RAM na poziomie sprzętowym (np. AMD SEV). Dane są w pełni zaszyfrowane w pamięci operacyjnej podczas przetwarzania przez procesor.
+  - **Dane w tranzycie (in transit)**: **Istio** (Service Mesh) wdraża automatyczne szyfrowanie wzajemnego TLS (mTLS) dla komunikacji sieciowej pomiędzy wszystkimi kontenerami aplikacji.
+  - **Dane w spoczynku (at rest)**: GCP domyślnie szyfruje wszystkie dane na dyskach i w bazach.
+- **Opcja E (Client-side encryption)**:
+  - Szyfrowanie danych po stronie klienta (Client-side) przed wysłaniem ich do chmury gwarantuje, że dane są chronione podczas przesyłania (in transit), są przechowywane w postaci zaszyfrowanej (at rest), a chmura Google nie ma możliwości ich odszyfrowania w swojej pamięci RAM (in use), co również realizuje koncepcję end-to-end.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A, B i C. External Key Manager, Customer-supplied keys (CSEK), Hardware Security Module (HSM): Są to wyłącznie technologie zarządzania kluczami szyfrującymi dla danych w spoczynku (at rest). Żadne z tych rozwiązań samo z siebie nie chroni danych w użyciu (w pamięci RAM podczas wykonywania programu) ani nie szyfruje ruchu sieciowego (in transit).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+4. Wskazówki, hinty, tips and tricks:
+- Zapamiętaj pojęcie **Data in Use Encryption** (szyfrowanie danych w użyciu / w pamięci RAM) – w chmurach publicznych jedyną technologią, która to realizuje, jest **Confidential Computing** (sprzętowe szyfrowanie pamięci maszyn wirtualnych).
+- Do szyfrowania ruchu (Data in transit) w mikroserwisach służy mTLS z poziomu **Istio**.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Kompleksowe szyfrowanie end-to-end (at rest, in transit, in use) -> Confidential Computing (in use) + Istio (in transit) lub Client-side encryption.
+
+6. Dodatkowe źródła i dokumentacja:
+- Confidential Computing on GCP: <a href="https://cloud.google.com/confidential-computing" target="_blank">https://cloud.google.com/confidential-computing</a>
+- Istio mutual TLS authentication: <a href="https://istio.io/latest/docs/concepts/security/#mutual-tls-authentication" target="_blank">https://istio.io/latest/docs/concepts/security/#mutual-tls-authentication</a>
 </pre>
 
 </div>
