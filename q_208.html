@@ -89,30 +89,35 @@ Your organization recently activated the Security Command Center (SCC) standard 
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (1. Change the bucket permissions to limit access. 2. Query the bucket's usage logs to report on unauthorized access to the data. 3. Enforce the organization policy storage.publicAccessPrevention to avoid regressions).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. 1. Change the bucket permissions to limit access. 2. Query the bucket's usage logs to report on unauthorized access to the data. 3. Enforce the organization policy storage.publicAccessPrevention to avoid regressions.
 
-Wyjaśnienie:
-- Krok 1: Naprawa (Remediation) - Zmiana uprawnień na buckecie (usunięcie `allUsers` lub `allAuthenticatedUsers`) jest pierwszym i natychmiastowym krokiem w celu zatrzymania wycieku danych.
-- Krok 2: Dochodzenie (Investigation) - Przeszukanie logów użycia bucketu (GCS Usage Logs) lub logów audytowych Data Access pozwala odpowiedzieć na pytanie: "Czy ktoś niepowołany odczytał te dane, kiedy były publiczne?". Jest to kluczowe dla oceny skutków incydentu.
-- Krok 3: Prewencja (Prevention) - Włączenie polityki organizacji `storage.publicAccessPrevention` gwarantuje, że nikt w przyszłości nie będzie mógł ponownie udostępnić tego (lub innego) bucketu publicznie. Jest to najlepszy sposób na uniknięcie regresji (powrotu błędu).
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź C jest prawidłowa, ponieważ przedstawia kompletny i zgodny z najlepszymi praktykami GCP proces reagowania na incydenty bezpieczeństwa związany z wyciekiem danych z Cloud Storage.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. storage.uniformBucketLevelAccess: UBLA jest bardzo ważne (wyłącza ACL), ale samo w sobie nie zabrania administratorowi nadania publicznego dostępu przez IAM. Tylko `publicAccessPrevention` (PAP) twardo blokuje taką możliwość na poziomie platformy.
-- B. VPC Service Controls: VPC SC służy do ochrony przed eksfiltracją (wynoszeniem danych poza perymetr przez autoryzowanych użytkowników), a nie do naprawiania błędnie skonfigurowanych publicznych uprawnień IAM. Jest to rozwiązanie zbyt skomplikowane i nieadekwatne do tego problemu.
-- D. Mute the finding: Wyciszenie znaleziska w SCC jest czynnością porządkową w samym narzędziu, ale nie stanowi technicznego zabezpieczenia przed ponownym wystąpieniem błędu (regresją) tak jak polityka organizacji w opcji C.
+Etapy procesu:
+a. **Natychmiastowe usunięcie zagrożenia:** Pierwszym krokiem jest zmiana uprawnień (permissions) na kubełkach, aby zablokować dostęp dla użytkowników `allUsers` lub `allAuthenticatedUsers`.
+b. **Analiza powłamaniowa (Forensics):** Aby sprawdzić, czy doszło do nieuprawnionego pobrania danych, należy przeanalizować dzienniki użycia (storage usage logs / data access logs). Pozwalają one na identyfikację adresów IP, tożsamości oraz obiektów, które zostały pobrane w czasie, gdy kubełek był publiczny.
+c. **Zapobieganie ponownym incydentom (Remediation/Prevention):** Wdrożenie polityki organizacji `storage.publicAccessPrevention` na poziomie projektów lub folderów trwale blokuje możliwość ustawienia jakiegokolwiek kubełka jako publicznego w przyszłości, eliminując ryzyko błędu ludzkiego.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Incydent Response Workflow: Stop the leak (Fix) -> Understand the damage (Investigate) -> Stop it from happening again (Prevent).
-- "Prevent regressions" w kontekście publicznych bucketów = `publicAccessPrevention`.
-- Pamiętaj: Logi "Data Access" muszą być wcześniej włączone, aby móc z nich skorzystać. Jeśli nie były, "GCS Usage Logs" mogą być jedynym śladem historycznym.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. ...Apply the organization policy storage.uniformBucketLevelAccess to prevent regressions...
+   * Dlaczego nieprawidłowa: Uniform Bucket-Level Access wymusza stosowanie IAM zamiast ACL na poziomie obiektów, ale samo w sobie nie zapobiega ustawieniu kubełka jako publicznego (nadal można nadać rolę Storage Object Viewer dla `allUsers`).
+B. ...Enforce a VPC Service Controls perimeter around all the production projects...
+   * Dlaczego nieprawidłowa: Wdrożenie VPC Service Controls to skomplikowany proces, który chroni przed eksfiltracją danych, ale nie zapobiega bezpośrednio publicznemu udostępnianiu kubełków przez błędne konfiguracje uprawnień IAM.
+D. ...After the misconfiguration is corrected, mute the finding in the Security Command Center.
+   * Dlaczego nieprawidłowa: Samo wyciszenie (mute) alertu w SCC to krok kosmetyczny w konsoli i nie stanowi zabezpieczenia zapobiegającego przyszłym błędom (brak wdrożenia polityki prewencyjnej takiej jak `publicAccessPrevention`).
 
-Kluczowe zagadnienia do powtórzenia:
-- Cloud Storage Public Access Prevention (PAP).
-- Cloud Storage Usage Logs vs Data Access Logs.
-- Proces Incident Response w chmurze.
+4. Wskazówki, hinty, tips and tricks:
+* Aby trwale zabronić publicznego udostępniania jakichkolwiek kubełków Cloud Storage w organizacji/projekcie, używa się polityki organizacji **`storage.publicAccessPrevention`**.
+* Śledzenie operacji odczytu/zapisu na obiektach w Cloud Storage wymaga włączenia **Data Access Audit Logs** (część Cloud Audit Logs) lub analizy **Storage Usage Logs**.
 
-Dokumentacja:
-<a href="https://cloud.google.com/storage/docs/public-access-prevention" target="_blank">Public Access Prevention overview</a>
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Blokowanie publicznego dostępu do GCS w przyszłości -> `storage.publicAccessPrevention`.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/storage/docs/public-access-prevention" target="_blank">Using public access prevention</a>
+<a href="https://cloud.google.com/storage/docs/access-logs" target="_blank">Access logs and storage usage logs</a>
 </pre>
 </div>
 <div class="ai-analysis-container d-none"  >

@@ -90,24 +90,36 @@ Your organization processes sensitive health information. You want to ensure tha
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Implement an organization policy that ensures all VM resources created across your organization are Confidential VM instances.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź B jest prawidłowa, ponieważ Confidential VMs (Poufne Maszyny Wirtualne) to technologia Google Cloud, która szyfruje dane w pamięci RAM podczas ich przetwarzania (encryption in-use). Zastosowanie polityki organizacji gwarantuje centralne i bezwyjątkowe egzekwowanie tej reguły.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Szczegóły techniczne:
+a. **Szyfrowanie danych w użyciu (Encryption in-use):** Tradycyjne szyfrowanie chroni dane w spoczynku (at-rest) i w transporcie (in-transit). Dane w pamięci RAM procesora są jednak jawne. Confidential VMs wykorzystują sprzętowe wsparcie procesorów (np. AMD SEV - Secure Encrypted Virtualization) do szyfrowania pamięci maszyn wirtualnych za pomocą kluczy generowanych sprzętowo, do których nie ma dostępu nawet hypervisor Google.
+b. **Wymuszenie w skali organizacji:** Poprzez wdrożenie ograniczenia polityki organizacji `constraints/compute.requireConfidentialCompute` (wymagaj poufnych obliczeń), administrator zabezpiecza całe środowisko przed uruchomieniem standardowej (nienależącej do kategorii Confidential) maszyny wirtualnej.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. ...use customer-managed encryption keys (CMEK) protection.
+   * Dlaczego nieprawidłowa: Szyfrowanie CMEK zabezpiecza dane w spoczynku (na dyskach persistent disks lub w kubełkach GCS). Nie chroni danych w użyciu (w pamięci RAM podczas wykonywania obliczeń przez procesor).
+C. ...use Cloud External Key Manager (EKM) protection.
+   * Dlaczego nieprawidłowa: Cloud EKM służy do przechowywania kluczy szyfrujących w zewnętrznym systemie poza GCP w celu szyfrowania danych w spoczynku. Nie chroni pamięci RAM działającej maszyny wirtualnej.
+D. No action is necessary because Google encrypts data while it is in use by default.
+   * Dlaczego nieprawidłowa: Jest to nieprawda. Domyślnie Google szyfruje dane w spoczynku oraz w transporcie. Szyfrowanie danych w użyciu (w pamięci) nie jest włączone domyślnie dla standardowych maszyn VM, ponieważ wymaga specjalnego typu maszyn (Confidential VMs) i niesie minimalny narzut wydajnościowy.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Szyfrowanie danych w spoczynku -> CMEK / CSEK.
+* Szyfrowanie danych w transporcie -> TLS / IPsec.
+* Szyfrowanie danych w użyciu (in-use / in memory) -> **Confidential VMs / Confidential Computing**.
+* Ograniczenie polityki organizacji dla Confidential VM to `compute.requireConfidentialCompute`.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Encrypted while in use / encryption in-use -> Confidential VMs / Confidential Computing.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/confidential-computing/confidential-vm/docs/about-confidential-vm" target="_blank">Confidential VM technology overview</a>
+<a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">Compute Engine organization policy constraints</a>
 </pre>
 
 </div>

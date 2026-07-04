@@ -90,24 +90,34 @@ Your organization wants to protect all workloads that run on Compute Engine VM t
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. 1. Use Google Shielded VM including secure boot, Virtual Trusted Platform Module (vTPM), and integrity monitoring. 2. Activate Confidential Computing. 3. Enforce these actions by using organization policies.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź C jest prawidłowa, ponieważ łączy dwa zaawansowane mechanizmy bezpieczeństwa maszyn wirtualnych w GCP w celu ochrony przed zagrożeniami na różnych etapach cyklu życia danych:
+1. **Zabezpieczenie przed malware podczas rozruchu (Shielded VMs):** Shielded VMs zapewniają ochronę przed rootkitami i bootkitami na poziomie jądra (kernel) i bootloadera za pomocą Secure Boot (podpisywanie cyfrowe komponentów startowych), vTPM (weryfikacja stanu maszyny) oraz Integrity Monitoring (raportowanie zmian w procesie bootowania).
+2. **Szyfrowanie danych w użyciu (Confidential Computing):** Confidential VMs szyfrują dane w pamięci RAM za pomocą kluczy generowanych sprzętowo przez procesor (np. AMD SEV). Uniemożliwia to odczytanie danych w użyciu przez hypervisor Google Cloud, system operacyjny hosta oraz inne maszyny wirtualne współdzielące ten sam serwer fizyczny.
+3. **Wymuszenie automatyczne:** Użycie polityk organizacji (np. `compute.requireConfidentialCompute` oraz `compute.requireShieldedVm`) gwarantuje, że żadna maszyna w organizacji nie zostanie uruchomiona bez tych zabezpieczeń, eliminując ryzyko błędów ludzkich.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. ...Create a Cloud Run function to check for the VM settings...
+   * Dlaczego nieprawidłowa: Monitorowanie za pomocą funkcji Cloud Run (reaktywne) pozwala jedynie na wykrycie maszyn niezgodnych z zasadami po ich utworzeniu. Nie zabezpiecza pamięci RAM (brak Confidential Computing) i nie zapobiega samemu wdrożeniu maszyn podatnych.
+B. 1. Activate Virtual Machine Threat Detection in Security Command Center...
+   * Dlaczego nieprawidłowa: VMTD to usługa detekcyjna (wykrywa malware w uruchomionej pamięci). Nie zapobiega infekcji na poziomie bootowania (brak Shielded VM) ani nie szyfruje pamięci w użyciu przed wglądem z poziomu hosta fizycznego.
+D. 1. Use secure hardened images from the Google Cloud Marketplace...
+   * Dlaczego nieprawidłowa: Choć utwardzone obrazy (hardened images) są dobrą praktyką, to same w sobie nie zapewniają sprzętowej ochrony procesu bootowania (Shielded VM) ani szyfrowania pamięci RAM (Confidential Computing) bez jawnej aktywacji tych funkcji na poziomie platformy Compute Engine.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+4. Wskazówki, hinty, tips and tricks:
+* Ochrona bootowania/jądra przed malware -> **Shielded VM** (Secure Boot, vTPM).
+* Ochrona danych w użyciu (in-use data / RAM encryption) -> **Confidential Computing** (Confidential VMs).
+* Zawsze wdrażaj te zabezpieczenia w sposób prewencyjny za pomocą polityk organizacji (Organization Policies).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Boot-level/kernel-level malware protection + data in use cannot be read by host -> Shielded VM + Confidential Computing.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/security/shielded-cloud/shielded-vm" target="_blank">Shielded VM overview</a>
+<a href="https://cloud.google.com/confidential-computing" target="_blank">Confidential Computing overview</a>
 </pre>
 
 </div>

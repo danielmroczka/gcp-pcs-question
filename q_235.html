@@ -90,24 +90,35 @@ You are setting up a new Cloud Storage bucket in your environment that is encryp
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. The CMEK is in a different region than the Cloud Storage bucket.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź D jest prawidłowa, ponieważ Google Cloud nakłada rygorystyczne wymagania dotyczące dopasowania lokalizacji (location matching) dla kluczy szyfrujących zarządzanych przez klienta (CMEK) używanych z usługą Cloud Storage.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Dlaczego lokalizacja ma kluczowe znaczenie:
+a. Zgodnie z architekturą bezpieczeństwa GCP, kubełek Cloud Storage (w tym przypadku zlokalizowany w regionie `europe-west1` - Belgia) musi używać klucza KMS znajdującego się w tym samym regionie geograficznym.
+b. Klucz CMEK podany w scenariuszu znajduje się w regionie `europe-west3` (Frankfurt).
+c. Ze względu na niedopasowanie regionów (`europe-west1` vs `europe-west3`), usługa Cloud Storage nie jest w stanie powiązać kubełka z kluczem, co skutkuje brakiem możliwości autoryzacji i utworzenia zabezpieczonego kubełka.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. A firewall rule prevents the key from being accessible.
+   * Dlaczego nieprawidłowa: Reguły zapory sieciowej (firewall rules) w GCP filtrują ruch sieciowy IP na poziomie maszyn wirtualnych Compute Engine i kontenerów. Dostęp do interfejsów API GCP (takich jak Cloud KMS czy Cloud Storage) odbywa się przez globalną sieć Google i nie jest blokowany przez standardowe reguły zapory sieciowej VPC.
+B. Cloud HSM does not support Cloud Storage.
+   * Dlaczego nieprawidłowa: Jest to nieprawda. Klucze KMS generowane i przechowywane w Cloud HSM są w pełni kompatybilne i wspierane jako klucze CMEK dla wszystkich operacji w Cloud Storage.
+C. The CMEK is in a different project than the Cloud Storage bucket.
+   * Dlaczego nieprawidłowa: GCP w pełni wspiera konfiguracje międzyprojektowe (cross-project CMEK). Klucz KMS może znajdować się w projekcie A (`prj-a`), a kubełek w projekcie B (`prj-b`), pod warunkiem, że nadano odpowiednie uprawnienia IAM dla konta serwisowego Cloud Storage z projektu B na kluczu w projekcie A. Sam fakt bycia w innym projekcie nie uniemożliwia dostępu.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Dla Cloud Storage: Klucz CMEK **musi** znajdować się w tej samej lokalizacji (regionie) co kubełek. Wyjątkiem są lokalizacje wieloregionowe (multi-region), gdzie lokalizacja klucza musi odpowiadać strukturze multi-regionu.
+* Pamiętaj, że dostęp cross-project dla CMEK jest dozwolony i jest powszechną praktyką bezpieczeństwa (centralny projekt KMS).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Storage bucket in region X, key in region Y -> Access issue is caused by different regions (different locations).
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/storage/docs/encryption/customer-managed-keys" target="_blank">Cloud Storage Customer-Managed Encryption Keys (Location restrictions)</a>
+<a href="https://cloud.google.com/kms/docs/locations" target="_blank">Cloud KMS Locations</a>
 </pre>
 
 </div>

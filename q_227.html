@@ -91,24 +91,35 @@ You are migrating your users to Google Cloud. There are cookie replay attacks wi
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Configure Google session control to a shorter duration.
+E. Enforce Security Key Authentication with 2SV.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedzi A i E są prawidłowe, ponieważ bezpośrednio utrudniają przechwycenie i ponowne użycie (replay) ciasteczek sesyjnych (session cookies) oraz poświadczeń użytkowników przez złośliwe oprogramowanie na stacjach klienckich.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Analiza techniczna:
+a. **Krótszy czas trwania sesji (A):** Skrócenie czasu ważności sesji w konsoli administracyjnej ogranicza czas przydatności skradzionego ciasteczka sesyjnego. Nawet jeśli napastnik przechwyci ciastko (cookie), szybko straci ono ważność, zmuszając użytkownika do ponownej weryfikacji.
+b. **Klucze bezpieczeństwa (Security Keys - FIDO2/WebAuthn) (E):** Wymuszenie fizycznych kluczy bezpieczeństwa jako drugiego składnika (2SV) chroni przed wieloma wektorami ataków. Standard FIDO2 opiera się na kryptografii asymetrycznej i jest odporny na phishing oraz przechwycenie sesji w locie. Tokeny autoryzacyjne FIDO2 są powiązane z konkretną domeną (origin-bound), co uniemożliwia ich ponowne użycie na fałszywych witrynach i utrudnia ataki typu man-in-the-middle / session replay.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+B. Set an organizational policy for OAuth 2.0 access token with a shorter duration.
+   * Dlaczego nieprawidłowa: Polityki organizacji w GCP nie posiadają natywnej funkcji bezpośredniej zmiany domyślnego czasu życia standardowych tokenów dostępu użytkowników OAuth 2.0. Zarządzanie sesjami odbywa się centralnie w konsoli administracyjnej Cloud Identity/Workspace.
+C. Set a reauthentication policy for Google Cloud services to a shorter duration.
+   * Dlaczego nieprawidłowa: Reauthentication policy (częstotliwość ponownego logowania) chroni przed pozostawieniem aktywnego CLI na odblokowanym laptopie, ale w przypadku zaawansowanego cookie replay (gdzie napastnik kopiuje ciasteczka sesyjne z przeglądarki) sama ta opcja bez wymuszenia sprzętowego klucza FIDO (opcja E) nie chroni w pełni przed ponownym użyciem skopiowanej tożsamości z innej maszyny.
+D. Configure a third-party identity provider with session management.
+   * Dlaczego nieprawidłowa: Przeniesienie zarządzania sesją do zewnętrznego dostawcy tożsamości (IdP) nie eliminuje podatności po stronie Google – po pomyślnym uwierzytelnieniu w zewnętrznym IdP, Google i tak wystawia własne ciasteczka sesyjne (GCP session cookies) na stacji użytkownika, które nadal byłyby podatne na ataki replay.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Najlepsza ochrona przed phishingiem i man-in-the-middle / session replay -> **FIDO2 Security Keys** (np. YubiKey).
+* Zarządzanie czasem życia sesji w Google odbywa się przez **Google session control**.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Cookie replay attacks protection -> Google session control + Security Key (FIDO/2SV).
+
+6. Dodatkowe źródła and dokumentacja:
+<a href="https://support.google.com/a/answer/9368756" target="_blank">Control Google session length</a>
+<a href="https://support.google.com/a/answer/7541190" target="_blank">Enforce 2-Step Verification with security keys</a>
 </pre>
 
 </div>

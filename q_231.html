@@ -90,24 +90,35 @@ You are migrating an application into the cloud. The application will need to re
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Generate a key in your on-premises environment and store it in a Hardware Security Module (HSM) that is managed on-premises. Use this key as an external key in the Cloud Key Management Service (KMS). Activate Key Access Justifications (KAJ) and set the external key system to reject unauthorized accesses.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź D jest prawidłowa, ponieważ w pełni realizuje zaawansowane wymagania suwerenności danych oraz pełnej kontroli klienta nad procesem odszyfrowywania za pomocą zewnętrznego zarządzania kluczami (Cloud EKM) oraz Key Access Justifications (KAJ).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Analiza krok po kroku:
+a. **Kontrola klucza on-premises:** Klucz generowany i przechowywany w lokalnym module HSM (on-premises HSM) gwarantuje, że materiał klucza (key material) nigdy nie znajdzie się w chmurze Google.
+b. **Integracja z GCP:** Cloud EKM pozwala na odwołanie się do tego zewnętrznego klucza podczas szyfrowania kubełka Cloud Storage.
+c. **Key Access Justifications (KAJ):** Przy każdej próbie odczytu danych przez GCP, Google przesyła do zewnętrznego HSM uzasadnienie (rationale) dostępu. Lokalny HSM klienta analizuje to uzasadnienie i jeśli żądanie nie jest autoryzowane (lub brak poprawnego uzasadnienia), odrzuca operację odszyfrowania, co uniemożliwia dostęp do danych.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Encrypt the data... using Customer Managed Encryption Keys. Configure an IAM deny policy...
+   * Dlaczego nieprawidłowa: Zwykłe klucze CMEK w Cloud KMS są przechowywane i kontrolowane przez infrastrukturę Google Cloud, a nie lokalnie na fizycznym HSM klienta. Ponadto IAM deny policy nie dostarcza mechanizmu wymuszania racjonalizacji (Key Access Justifications) przy dostępie do kluczy przez systemy Google.
+B. Generate a key in your on-premises environment... Upload the key to the Cloud Key Management Service (KMS)...
+   * Dlaczego nieprawidłowa: Przesłanie (import) klucza do Cloud KMS powoduje, że materiał klucza trafia do chmury Google. Przestaje on być "w pełni pod kontrolą on-premises" i wyklucza integrację z zewnętrznymi mechanizmami decyzji HSM klienta w locie.
+C. Encrypt the data... using Customer Managed Encryption Keys backed by a Cloud Hardware Security Module (HSM). Enable data access logs.
+   * Dlaczego nieprawidłowa: Cloud HSM to usługa zarządzana w chmurze Google. Klucze nie są przechowywane w lokalnej serwerowni klienta. Logi dostępu (Data Access Logs) są jedynie mechanizmem audytowym po fakcie, a nie aktywnym systemem odrzucania nieautoryzowanych zapytań o klucz na bazie KAJ.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Pełna kontrola nad kluczami poza GCP + wymaganie uzasadnienia żądań dostępu -> **External HSM (Cloud EKM)** + **Key Access Justifications (KAJ)**.
+* KAJ pozwala na blokowanie żądań bezpośrednio na zewnętrznym systemie klienta (external key coordinator/system).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Hold key material fully under control on-premises + rationale for accessing -> External HSM/KMS + Key Access Justifications (KAJ).
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/kms/docs/ekm" target="_blank">Cloud External Key Manager (Cloud EKM)</a>
+<a href="https://cloud.google.com/kms/docs/key-access-justifications" target="_blank">Key Access Justifications overview</a>
 </pre>
 
 </div>

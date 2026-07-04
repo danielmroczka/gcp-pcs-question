@@ -90,24 +90,35 @@ Your company is moving to Google Cloud. You plan to sync your users first by usi
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Use the transfer tool to migrate unmanaged users.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź B jest prawidłowa, ponieważ narzędzie do transferu użytkowników niezarządzanych (Transfer Tool for Unmanaged Users) jest oficjalnym i bezpiecznym mechanizmem Google służącym do przejmowania kontroli nad osobistymi kontami Google, które pracownicy utworzyli samodzielnie przy użyciu służbowych adresów e-mail.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Mechanizm działania:
+a. Kiedy weryfikujesz domenę firmy w Cloud Identity/Workspace, system wykrywa tzw. konta konfliktowe (unmanaged accounts) – konta konsumenckie zarejestrowane na e-maile w tej domenie.
+b. Narzędzie transferu pozwala administratorowi wysłać zaproszenie do tych użytkowników z prośbą o przeniesienie ich konta pod zarządzanie organizacji.
+c. Po zaakceptowaniu zaproszenia przez pracownika, jego konto (wraz z istniejącymi danymi GCP/Drive) staje się kontem zarządzanym centralnie przez Twoją firmę, a jego cykl życia może być kontrolowany przez GCDS.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Configure GCDS and use GCDS search rules to sync these users.
+   * Dlaczego nieprawidłowa: GCDS służy do jednostronnej synchronizacji (aprowizacji) tożsamości z LDAP do Google. Jeśli spróbujemy zsynchronizować użytkownika o tym samym adresie e-mail bez uprzedniego rozwiązania konfliktu kont, proces zakończy się błędem lub utworzeniem konta tymczasowego, a istniejące dane użytkownika nie zostaną zmigrowane.
+C. Write a custom script to identify existing Google Cloud users and call the Admin SDK...
+   * Dlaczego nieprawidłowa: Pisanie niestandardowych skryptów jest skomplikowane i niepotrzebne, ponieważ Google udostępnia gotowe, wbudowane narzędzie w konsoli administracyjnej do tego celu. Ponadto Admin API nie pozwala na wymuszenie transferu konta osobistego bez zgody użytkownika i przejścia procesu migracji.
+D. Configure GCDS and use GCDS exclusion rules to ensure users are not suspended.
+   * Dlaczego nieprawidłowa: Reguły wykluczenia (exclusion rules) zapobiegają modyfikacjom określonych kont w GCP przez proces synchronizacji GCDS, ale nie rozwiązują problemu unmanaged users – te konta nadal pozostaną osobiste i poza kontrolą bezpieczeństwa firmy.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Konta konfliktowe (konfiguracyjne adresy e-mail powtarzające się jako konta osobiste Google i konta firmowe) -> Rozwiązaniem jest zawsze **Transfer Tool for Unmanaged Users** w Google Admin Console.
+* GCDS nie potrafi samodzielnie migrować lub łączyć kont osobistych z firmowymi bez zgody użytkownika.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Istniejące konta Google utworzone poza organizacją (unmanaged users) -> Transfer tool.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://support.google.com/a/answer/6178640" target="_blank">Transfer tool for unmanaged users</a>
+<a href="https://cloud.google.com/architecture/identity/migrating-consumer-accounts" target="_blank">Migrating consumer accounts to Cloud Identity</a>
 </pre>
 
 </div>

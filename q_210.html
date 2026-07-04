@@ -89,30 +89,34 @@ Your company uses Google Cloud and has publicly exposed network assets. You want
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Identify all external assets by using Cloud Asset Inventory, and then run a network security scanner against them).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Identify all external assets by using Cloud Asset Inventory, and then run a network security scanner against them.
 
-Wyjaśnienie:
-- Cloud Asset Inventory (CAI): Jest to usługa Google Cloud, która utrzymuje pełną bazę danych wszystkich zasobów w Twojej organizacji. Pozwala na błyskawiczne (w czasie niemal rzeczywistym) wyszukiwanie zasobów na podstawie ich metadanych (np. "znajdź wszystkie instancje z przypisanym zewnętrznym adresem IP"). Jest to najszybsza metoda odkrywania (Discovery) rozproszonych zasobów.
-- Network Security Scanner: Po zidentyfikowaniu celów (zewnętrznych IP), użycie automatycznego skanera bezpieczeństwa (np. Web Security Scanner lub narzędzi zewnętrznych) pozwala na szybkie przeprowadzenie audytu podatności bez konieczności ręcznego sprawdzania każdej maszyny.
-- Minimalizacja czasu: Połączenie CAI (automatyczne odkrywanie) i skanera (automatyczny audyt) jest najbardziej efektywnym czasowo podejściem w skali Enterprise.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź B jest prawidłowa, ponieważ łączy szybkość i dokładność inwentaryzacji zasobów za pomocą natywnego narzędzia Cloud Asset Inventory z automatycznym testowaniem podatności za pomocą skanera sieciowego.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Platform security scanner on all instances: Skanowanie WSZYSTKICH instancji (w tym wewnętrznych, baz danych itp.) może być bardzo czasochłonne i niepotrzebne, jeśli celem jest audyt aktywów WYSTAWIONYCH na zewnątrz. CAI precyzyjniej wskazuje cele.
-- C. Contact a Google approved security vendor: Zaangażowanie zewnętrznej firmy wiąże się z procesami biurokratycznymi i wysokimi kosztami. Nie jest to metoda pozwalająca na wykonanie zadania "w najkrótszym możliwym czasie" w porównaniu do narzędzi natywnych.
-- D. Notify Google and wait: Zgodnie z zasadami Google Cloud, klienci mogą przeprowadzać własne skany bezpieczeństwa (vulnerability scans) na swoich zasobach bez konieczności uprzedniego powiadamiania Google. Czekanie na potwierdzenie byłoby niepotrzebną stratą czasu.
+Dlaczego to najlepsze podejście:
+a. **Cloud Asset Inventory (CAI):** Pozwala na błyskawiczne przeszukanie całej struktury organizacji i eksport listy wszystkich publicznie dostępnych zasobów (np. maszyn VM z publicznymi IP, zewnętrznych Load Balancerów, otwartych zapór sieciowych). CAI działa niemal natychmiastowo, dając pełny obraz stanu posiadania.
+b. **Automatyczne skanowanie:** Posiadając dokładną listę zewnętrznych punktów wejścia, zespół może natychmiast uruchomić ukierunkowany skaner sieciowy (np. Web Security Scanner lub zewnętrzne narzędzia do testów penetracyjnych), co oszczędza czas, eliminując skanowanie ślepych adresów IP lub maszyn wewnętrznych.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Discover assets" / "Visibility" + "Least time" = Cloud Asset Inventory.
-- "Audit vulnerabilities" + "Network level" = Network Security Scanner.
-- Pamiętaj: Cloud Asset Inventory pozwala na zapytania typu SQL (Search All Resources), co daje wynik w sekundach dla całej organizacji liczącej tysiące projektów.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Run a platform security scanner on all instances in the organization.
+   * Dlaczego nieprawidłowa: Skanowanie wszystkich instancji (w tym tysięcy maszyn prywatnych w sieciach wewnętrznych) zajmie bardzo dużo czasu i wygeneruje niepotrzebne koszty oraz narzut na infrastrukturę. Celem audytu są wyłącznie zasoby *publicznie eksponowane*.
+C. Contact a Google approved security vendor to perform the audit.
+   * Dlaczego nieprawidłowa: Zaangażowanie zewnętrznej firmy i przejście przez procesy formalne (zakup, planowanie, ustalanie zakresu) zajmie dni lub tygodnie. Nie spełnia to wymogu wykonania zadania "w najkrótszym możliwym czasie".
+D. Notify Google about the pending audit, and wait for confirmation before performing the scan.
+   * Dlaczego nieprawidłowa: Zgodnie z zasadami GCP, klienci mogą przeprowadzać testy penetracyjne i skanowanie bezpieczeństwa swoich zasobów bez konieczności wcześniejszego informowania Google. Czekanie na potwierdzenie od Google jest stratą czasu.
 
-Kluczowe zagadnienia do powtórzenia:
-- Cloud Asset Inventory i eksport do BigQuery.
-- Google Cloud Web Security Scanner.
-- Zasady testów penetracyjnych i skanowania w GCP.
+4. Wskazówki, hinty, tips and tricks:
+* Google Cloud pozwala na skanowanie własnych zasobów bez uprzedniej zgody (no prior authorization required for security testing).
+* Cloud Asset Inventory to najlepsze narzędzie do szybkiego odkrywania (asset discovery) i audytu konfiguracji w GCP.
 
-Dokumentacja:
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Szybkie odkrycie zasobów publicznych + audyt -> Cloud Asset Inventory + skaner bezpieczeństwa.
+
+6. Dodatkowe źródła i dokumentacja:
 <a href="https://cloud.google.com/asset-inventory/docs/overview" target="_blank">Cloud Asset Inventory overview</a>
+<a href="https://cloud.google.com/security/penetration-testing" target="_blank">Penetration testing on Google Cloud</a>
 </pre>
 </div>
 <div class="ai-analysis-container d-none"  >

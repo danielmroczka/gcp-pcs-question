@@ -91,24 +91,35 @@ You manage a mission-critical workload for your organization, which is in a high
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Configure Cloud External Key Manager to encrypt the sensitive data before it is uploaded to Cloud Storage, and decrypt the sensitive data after it is downloaded into your VMs.
+C. Create Confidential VMs to access the sensitive data.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedzi B i C są prawidłowe, ponieważ łącznie spełniają skomplikowane wymagania regulacyjne dotyczące ochrony danych w spoczynku i w użyciu przy zachowaniu suwerenności kluczy szyfrujących poza chmurą Google.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Szczegóły rozwiązań:
+a. **Szyfrowanie danych w spoczynku poza GCP (B):** Użycie Cloud External Key Manager (Cloud EKM) pozwala na to, aby klucz szyfrujący (KEK) fizycznie znajdował się u zewnętrznego dostawcy (on-premises HSM) poza jurysdykcją i infrastrukturą Google Cloud. Cloud EKM jest zintegrowany z Cloud Storage, co pozwala na automatyczne szyfrowanie danych podczas przesyłania ich do kubełka i ich odszyfrowywanie przy pobieraniu przez autoryzowane maszyny wirtualne.
+b. **Szyfrowanie danych w użyciu (C):** Maszyny wirtualne przetwarzające te dane w pamięci RAM muszą być skonfigurowane jako **Confidential VMs** (Poufne Maszyny Wirtualne). Wykorzystują one sprzętowe szyfrowanie pamięci (RAM encryption), dzięki czemu dane w użyciu są chronione przed potencjalnym odczytem z poziomu systemu hosta fizycznego GCP.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Configure Customer Managed Encryption Keys...
+   * Dlaczego nieprawidłowa: Standardowe klucze zarządzane przez klienta (CMEK) w Cloud KMS są przechowywane w infrastrukturze Google Cloud. Nie spełnia to krytycznego wymagania przechowywania i zarządzania kluczem szyfrującym (KEK/DEK) w 100% poza granicami Google (outside the Google Cloud boundary).
+D. Migrate the Compute Engine VMs to Confidential VMs...
+   * Dlaczego nieprawidłowa: Choć cel jest poprawny, to technicznie w GCP nie można po prostu "zmigrować" istniejącej standardowej maszyny wirtualnej bezpośrednio na typ Confidential VM bez zmiany typu maszyny w locie lub jej ponownego wdrożenia (wymagane jest utworzenie nowej instancji z włączoną opcją Confidential Computing - stąd opcja C "Create Confidential VMs" jest poprawnym sformułowaniem).
+E. Create a VPC Service Controls service perimeter...
+   * Dlaczego nieprawidłowa: VPC Service Controls zapobiega eksfiltracji danych z projektów, ale nie szyfruje danych w użyciu (w pamięci RAM) ani nie pozwala na zarządzanie kluczami u zewnętrznego dostawcy.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Przechowywanie kluczy poza chmurą (External control of keys) -> **Cloud EKM (External Key Manager)**.
+* Ochrona danych w użyciu w procesorze/pamięci (encryption in-use) -> **Confidential VMs**.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Encryption key outside Google Cloud + encrypt data in memory -> Cloud EKM + Confidential VMs.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/kms/docs/ekm" target="_blank">Cloud External Key Manager (Cloud EKM)</a>
+<a href="https://cloud.google.com/confidential-computing" target="_blank">Confidential Computing in GCP</a>
 </pre>
 
 </div>

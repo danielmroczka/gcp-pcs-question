@@ -90,24 +90,35 @@ For data residency requirements, you want your secrets in Google Clouds Secret M
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Create your secret with a user managed replication policy, and choose only compliant locations.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź A jest prawidłowa, ponieważ Secret Manager pozwala na precyzyjne kontrolowanie lokalizacji przechowywania danych sekretów (payloads) za pomocą zasad replikacji zarządzanych przez użytkownika (user-managed replication).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Jak to działa:
+a. **Replikacja automatyczna (Automatic):** Powoduje, że Secret Manager replikuje sekret w wielu regionach wybranych automatycznie przez Google w celu zapewnienia wysokiej dostępności i wydajności na całym świecie. Nie gwarantuje to zgodności z przepisami o rezydentności danych w Europie (dane mogą trafić np. do USA).
+b. **Replikacja zarządzana przez użytkownika (User-managed):** Pozwala administratorowi na ręczne wskazanie listy regionów (np. wyłącznie `europe-west1` w Belgii i `europe-west4` w Holandii). Sekret zostanie powielony w obu tych regionach, co zapewnia wysoką dostępność (High Availability) w przypadku awarii jednego z nich, a jednocześnie gwarantuje, że dane nigdy nie opuszczą tych lokalizacji.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+B. Create your secret with an automatic replication policy, and choose only compliant locations.
+   * Dlaczego nieprawidłowa: Przy wyborze replikacji automatycznej (Automatic) nie ma możliwości ręcznego wskazania i ograniczenia lokalizacji (compliant locations). Usługa decyduje o tym sama globalnie.
+C. Create two secrets by using Terraform, one in europe-west1 and the other in europe-west4.
+   * Dlaczego nieprawidłowa: Tworzenie dwóch niezależnych sekretów komplikuje logikę aplikacji (aplikacja musi wiedzieć, który sekret odpytać i jak synchronizować ich wartości) i nie jest natywnym mechanizmem replikacji wysokiej dostępności oferowanym przez Secret Manager.
+D. Create your secret with an automatic replication policy, and create an organizational policy...
+   * Dlaczego nieprawidłowa: Replikacja automatyczna nadal rozprzestrzeni payload po całym świecie. Polityki organizacji blokujące tworzenie sekretów w nieprawidłowych miejscach spowodowałyby po prostu błąd działania usługi Secret Manager przy próbie automatycznej replikacji globalnej.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Secret Manager rezydentność danych:
+  - Automatyczna replikacja -> brak kontroli lokalizacji (rezyduje globalnie).
+  - Zarządzana przez użytkownika (User-managed) -> pełna kontrola lokalizacji (wskazujesz regiony).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Secrets payload only in specific regions + highly available -> User-managed replication policy.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/secret-manager/docs/choosing-replication" target="_blank">Choosing a replication policy in Secret Manager</a>
+<a href="https://cloud.google.com/secret-manager/docs/creating-and-configuring-secrets" target="_blank">Creating secrets with user-managed replication</a>
 </pre>
 
 </div>

@@ -90,24 +90,35 @@ You are a Cloud Identity administrator for your organization. In your Google Clo
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Change the configuration of the relevant groups in the Google Workspace Admin console to prevent external users from being added to the group.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź A jest prawidłowa, ponieważ najprostszym, najbardziej niezawodnym i zalecanym sposobem na ograniczenie członkostwa w grupach wyłącznie do użytkowników wewnętrznych jest zmiana ustawień udostępniania i członkostwa w Google Workspace / Cloud Identity Admin Console.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Jak to działa:
+a. Grupy Cloud Identity są zarządzane z poziomu konsoli Google Admin.
+b. W ustawieniach grupy administrator może wyłączyć opcję "Zezwalaj członkom spoza organizacji" (Allow members outside your organization).
+c. Gdy ta opcja jest wyłączona, właściciele i menedżerowie grup (np. zespoły aplikacyjne) otrzymają błąd i nie będą mogli dodać do grupy żadnego adresu e-mail spoza domeny firmowej. Zabezpiecza to przed przypadkowym wyciekiem uprawnień do zewnętrznych podmiotów.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+B. Set an Identity and Access Management (IAM) policy that includes a condition...
+   * Dlaczego nieprawidłowa: Warunki IAM (IAM Conditions) mogą ograniczać dostęp do zasobów na podstawie różnych kryteriów (np. IP, czasu), ale nie kontrolują bezpośrednio procesu dodawania członków do grup tożsamości w Cloud Identity. Użytkownicy nadal mogliby być dodawani do grup.
+C. Define an Identity and Access Management (IAM) deny policy that denies the assignment of principals...
+   * Dlaczego nieprawidłowa: Polityki blokowania IAM (Deny Policies) zapobiegają przypisywaniu ról IAM do określonych tożsamości, ale nie blokują możliwości dodawania zewnętrznych użytkowników do samych grup w katalogu Cloud Identity.
+D. Export the Cloud Identity logs to BigQuery. Configure an alert... trigger a Cloud Function...
+   * Dlaczego nieprawidłowa: Jest to podejście reaktywne i nadmiernie skomplikowane. Wymaga utrzymywania dodatkowego kodu, integracji logów i generuje opóźnienie (napastnik miałby dostęp do zasobów przez czas potrzebny na uruchomienie funkcji). Najlepszą praktyką jest blokada prewencyjna u źródła (opcja A).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Zarządzanie grupami w GCP odbywa się za pomocą konsoli **Google Workspace / Cloud Identity Admin Console**.
+* Kontrola członkostwa w grupach (wewnętrzni vs. zewnętrzni członkowie) powinna być realizowana na poziomie konfiguracji samej grupy w katalogu tożsamości.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Zablokowanie dodawania zewnętrznych użytkowników do grup -> Zmiana konfiguracji w Google Workspace Admin console.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://support.google.com/a/answer/167094" target="_blank">Manage group sharing settings in Google Workspace</a>
+<a href="https://cloud.google.com/identity/docs/groups" target="_blank">Managing Cloud Identity Groups</a>
 </pre>
 
 </div>

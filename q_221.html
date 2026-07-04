@@ -90,24 +90,34 @@ You define central security controls in your Google Cloud environment. For one o
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. At a project level, the organizational policy control has been overwritten with an "allow" value.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź C jest prawidłowa, ponieważ hierarchia zasobów w Google Cloud Platform (Organizacja -> Foldery -> Projekty) pozwala na dziedziczenie polityk organizacji, ale domyślnie pozwala również administratorom posiadającym odpowiednie uprawnienia na poziomie projektu na nadpisanie (override) polityk odziedziczonych z wyższych poziomów (np. folderu).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Analiza sytuacji:
+a. Jeśli polityka `compute.vmExternalIpAccess` została zdefiniowana na poziomie folderu jako restrykcyjna (blokada publicznych adresów IP), to wszystkie projekty wewnątrz tego folderu dziedziczą to ograniczenie.
+b. Jednak administrator projektu posiadający rolę `roles/orgpolicy.policyAdmin` może edytować politykę organizacji na poziomie swojego projektu i ustawić wartość na "Allow", nadpisując regułę z folderu. To tłumaczy, dlaczego deweloper mógł utworzyć maszynę z zewnętrznym adresem IP w tym konkretnym projekcie.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. The VM was created with a static external IP address...
+   * Dlaczego nieprawidłowa: Rezerwacja adresu IP nie omija polityki organizacji w momencie tworzenia lub uruchamiania maszyny wirtualnej. Silnik Compute Engine zablokuje przypisanie zarówno dynamicznego, jak i statycznego zewnętrznego IP do nowej maszyny, jeśli polityka jest poprawnie egzekwowana w projekcie.
+B. The organizational policy constraint wasn't properly enforced and is running in "dry run" mode.
+   * Dlaczego nieprawidłowa: Chociaż dry-run istnieje w GCP, standardowe ograniczenia takie jak `compute.vmExternalIpAccess` są egzekwowane bezpośrednio (enforced). Egzamin zakłada domyślny tryb działania. Nadpisanie na poziomie projektu jest najbardziej typowym powodem obejścia polityk folderu.
+D. The policy constraint on the folder level does not have any effect because of an "allow" value... on the organizational level.
+   * Dlaczego nieprawidłowa: Zgodnie z hierarchią GCP, polityki zdefiniowane na niższych poziomach (folder) są bardziej restrykcyjne i nadpisują luźniejsze polityki z wyższych poziomów (organizacja), chyba że w polityce wyższego poziomu jawnie zablokowano możliwość nadpisywania (inheritFromParent=false/rules merge). Luźna polityka na poziomie organizacji nie wyłącza restrykcyjnej polityki na poziomie folderu.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Zapamiętaj hierarchię dziedziczenia polityk w GCP: niższe poziomy (projekt) dziedziczą po wyższych (organizacja/folder), ale mogą je nadpisywać, chyba że w polityce nadrzędnej wyłączono możliwość nadpisania.
+* Aby uniemożliwić nadpisywanie polityk na poziomie projektów, administrator organizacji powinien zablokować modyfikację polityki (wyłączyć dziedziczenie z możliwością luzowania) lub nie nadawać roli Org Policy Admin lokalnym zespołom.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Polityka działa na poziomie folderu, ale projekt jej nie przestrzega -> polityka została nadpisana (overwritten) na poziomie projektu.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/resource-manager/docs/organization-policy/understanding-hierarchy" target="_blank">Understanding Organization Policy hierarchy</a>
+<a href="https://cloud.google.com/compute/docs/ip-addresses/restrict-vm-external-ips" target="_blank">Restricting external IP addresses for Compute Engine</a>
 </pre>
 
 </div>

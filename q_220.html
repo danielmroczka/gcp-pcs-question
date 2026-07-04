@@ -90,24 +90,37 @@ You manage one of your organization's Google Cloud projects (Project A). A VPC S
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Configure an ingress policy for the perimeter in Project A, and allow access for the service account in Project B to collect messages.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź A jest prawidłowa, ponieważ zasady wejściowe (Ingress Policies) w VPC Service Controls (VPC SC) pozwalają na bezpieczne dopuszczenie ruchu z zasobów znajdujących się poza perymetrem bezpieczeństwa (Project B) do zasobów chronionych wewnątrz perymetru (Project A) na podstawie tożsamości konta serwisowego, bez konieczności rozszerzania perymetru na cały zewnętrzny projekt.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Mechanizm ten działa w następujący sposób:
+a. Projekt A jest chroniony przez perymetr, co oznacza, że wszelki nieautoryzowany ruch przychodzący do jego API (w tym Pub/Sub) z zewnątrz perymetru jest domyślnie blokowany.
+b. Zamiast tworzyć most (perimeter bridge) łączący całe projekty, konfigurujemy regułę Ingress w perymetrze Projektu A.
+c. Reguła Ingress definiuje tożsamość źródłową (konto serwisowe z Projektu B) oraz dozwoloną operację docelową (usługę Pub/Sub w Projekcie A). Spełnia to zasadę najmniejszych uprawnień (least privilege), ponieważ dopuszcza tylko jedno, konkretne konto serwisowe i tylko dla usługi Pub/Sub.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+B. Create an access level that allows a developer in Project B to subscribe...
+   * Dlaczego nieprawidłowa: Poziomy dostępu (Access Levels) bazują głównie na atrybutach sieciowych (np. IP, geolokalizacja, stan urządzenia) i służą do uwierzytelniania użytkowników za pomocą Access Context Manager. Nie są one przeznaczone do precyzyjnej autoryzacji komunikacji między kontami serwisowymi w różnych projektach przez granicę perymetru.
+C. Create a perimeter bridge between Project A and Project B...
+   * Dlaczego nieprawidłowa: Perymetr mostu (Perimeter Bridge) łączy dwa projekty, które oba znajdują się wewnątrz jakichś perymetrów. Ponieważ Projekt B nie jest częścią żadnego perymetru, stworzenie mostu jest niemożliwe. Nawet gdyby było możliwe, dałoby to zbyt szeroki dostęp, naruszając zasadę least privilege.
+D. Remove the Pub/Sub API from the list of restricted services...
+   * Dlaczego nieprawidłowa: Usunięcie Pub/Sub z listy usług chronionych całkowicie pozbawiłoby ochrony całą usługę Pub/Sub w Projekcie A dla wszystkich zasobów, co jest poważnym osłabieniem profilu bezpieczeństwa organizacji.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Aby kontrolować ruch przez perymetr VPC SC:
+  - Ruch przychodzący (spoza perymetru do środka) -> **Ingress Policy**.
+  - Ruch wychodzący (ze środka perymetru na zewnątrz) -> **Egress Policy**.
+* Unikaj wyłączania ochrony API (opcja D) w celach rozwiązywania problemów z dostępem dla pojedynczych klientów.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Dostęp spoza perymetru do chronionego projektu w perymetrze -> Ingress policy dla perymetru.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules" target="_blank">Ingress and egress rules for VPC Service Controls</a>
+<a href="https://cloud.google.com/vpc-service-controls/docs/overview" target="_blank">VPC Service Controls overview</a>
 </pre>
 
 </div>

@@ -89,30 +89,35 @@ Your organization must comply with the regulation to keep instance logging data 
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Set the logging storage region to europe-west4 by using the gcloud CLI logging settings update).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Set the logging storage region to europe-west4 by using the gcloud CLI logging settings update.
 
-Wyjaśnienie:
-- Rezydencja danych (Data Residency): Niektóre regulacje (np. RODO/GDPR w specyficznych interpretacjach lub lokalne prawo holenderskie) wymagają, aby logi nie tylko były "dostępne" w regionie, ale fizycznie tam składowane.
-- gcloud logging settings update: Jest to najskuteczniejszy i najbardziej elegancki sposób na wymuszenie rezydencji danych dla całego projektu. Komenda ta pozwala na ustawienie domyślnej lokalizacji (storage location) dla automatycznie tworzonych bucketów logów (`_Default` i `_Required`).
-- Automatyzacja: Zmieniając to ustawienie na poziomie projektu, masz pewność, że wszystkie logi systemowe i aplikacyjne trafią do właściwego regionu bez konieczności ręcznego tworzenia nowych bucketów i konfigurowania skomplikowanych sinków.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź D jest prawidłowa, ponieważ najskuteczniejszym i zalecanym sposobem na wymuszenie rezydentności danych logów (data residency) w konkretnym regionie geograficznym dla domyślnych kubełków logów (`_Required` i `_Default`) jest zmiana globalnych ustawień Cloud Logging dla projektu, folderu lub organizacji.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. resourceLocations organization policy: Ta polityka ogranicza to, GDZIE można tworzyć zasoby (np. w którym regionie postawić maszynę VM), ale nie kontroluje ona bezpośrednio fizycznej lokalizacji składowania logów wewnątrz samej usługi Cloud Logging.
-- B. Log sink to Cloud Storage: Choć eksport logów do GCS w konkretnym regionie zapewnia kopię danych w tym regionie, nie rozwiązuje problemu "głównych" logów, które wciąż trafiałyby do domyślnej lokalizacji Cloud Logging (często Global lub US).
-- C. Redirect _Default bucket: Jest to technicznie możliwe i często stosowane (stworzenie własnego bucketu i ustawienie sinka), ale opcja D jest uznawana za bardziej "natywną" i systemową metodę zarządzania ustawieniami regionalnymi Cloud Logging w nowoczesnej infrastrukturze GCP.
+Mechanizm działania:
+a. Domyślnie Cloud Logging przechowuje logi w regionie `global`.
+b. Użycie polecenia `gcloud logging settings update` pozwala administratorowi zdefiniować domyślną lokalizację przechowywania logów (np. `europe-west4` w Holandii).
+c. Wszystkie nowo tworzone zasobniki logów (`_Required` i `_Default`) zostaną automatycznie utworzone w wskazanym regionie, gwarantując, że dane logowania nie opuszczą terytorium Europy, co spełnia wymogi regulacyjne.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Keep logging data within [REGION]" = `gcloud logging settings update --storage-location=[REGION]`.
-- Pamiętaj: Zmiana lokalizacji składowania logów dotyczy tylko NOWYCH logów od momentu zmiany. Stare logi pozostają w poprzedniej lokalizacji.
-- Google Cloud Logging domyślnie przechowuje logi w lokalizacji "Global", co oznacza replikację danych na cały świat. Dla compliance w UE zawsze wymagana jest zmiana na konkretny region.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Configure the organization policy constraint gcp.resourceLocations to europe-west4.
+   * Dlaczego nieprawidłowa: Ta polityka organizacji ogranicza lokalizację tworzenia zasobów (np. maszyn VM, dysków), ale nie wpływa automatycznie na wewnętrzne mechanizmy i domyślne lokalizacje przechowywania danych w Cloud Logging, które wymagają dedykowanej konfiguracji.
+B. Configure log sink to export all logs into a Cloud Storage bucket in europe-west4.
+   * Dlaczego nieprawidłowa: Chociaż wyeksportowanie logów do kubła GCS w Europie zapisze tam ich kopię, to domyślne logi wciąż będą zapisywane i przechowywane w domyślnych kubełkach `_Default` i `_Required` w lokalizacji `global`, co narusza wymóg przechowywania wszystkich logów wyłącznie w Europie.
+C. Create a new log bucket in europe-west4, and redirect the _Default bucket to the new bucket.
+   * Dlaczego nieprawidłowa: Choć przekierowanie logów do nowego kubełka jest wykonalne, nie rozwiązuje to problemu kubełka `_Required`, który nadal zbiera logi audytowe (Admin Activity) i jest przechowywany w lokalizacji domyślnej (`global`). Tylko aktualizacja ustawień domyślnych (opcja D) rozwiązuje ten problem kompleksowo.
 
-Kluczowe zagadnienia do powtórzenia:
-- Cloud Logging Regionalization (Regionalizacja logów).
-- Cloud Audit Logs i ich składowanie.
-- Rezydencja danych w chmurze (Data Sovereignty).
+4. Wskazówki, hinty, tips and tricks:
+* Aby zmienić lokalizację domyślnych kubełków logowania (`_Default` i `_Required`), należy skonfigurować ustawienia domyślne (default settings) dla Cloud Logging za pomocą narzędzi gcloud lub API.
+* Pamiętaj o różnicy między eksportem logów (sink) a konfiguracją domyślnego miejsca zapisu logów.
 
-Dokumentacja:
-<a href="https://cloud.google.com/logging/docs/region-restrictions" target="_blank">Cloud Logging regional settings overview</a>
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Zmiana domyślnej lokalizacji przechowywania logów (Cloud Logging data residency) -> `logging settings update`.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/logging/docs/regional-log-buckets" target="_blank">Regionalize your log buckets</a>
+<a href="https://cloud.google.com/sdk/gcloud/reference/logging/settings/update" target="_blank">gcloud logging settings update</a>
 </pre>
 </div>
 <div class="ai-analysis-container d-none"  >

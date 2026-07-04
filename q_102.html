@@ -90,18 +90,44 @@ An office manager at your small startup company is responsible for matching paym
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: CD.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Billing Account Viewer
+D. Billing Account Costs Manager
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Billing Account Viewer: Pozwala widzieć faktury i płatności.
-D. Billing Account Costs Manager: Pozwala zarządzać alertami budżetowymi.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Pytanie dotyczy zasady najmniejszych uprawnień (least privilege) w kontekście ról billingowych w Google Cloud IAM. Menedżer biurowy musi wykonywać dwa konkretne zadania: (1) dopasowywanie płatności do faktur oraz (2) tworzenie alertów billingowych. Rozwiązanie musi zapewniać tylko i wyłącznie uprawnienia niezbędne do tych zadań.
 
-Dlaczego inne są błędne:
-A. Org Admin: Zdecydowanie zbyt wysokie uprawnienia.
-B. Project Creator: Pozwala wydawać pieniądze poprzez tworzenie nowych zasobów, nie jest potrzebne do audytu faktur.
-E. Billing Account User: Pozwala 'podpinać' projekty do płatności, co wykracza poza rolę managera od faktur.
+Rola Billing Account Viewer (C) zapewnia uprawnienia tylko do odczytu na koncie rozliczeniowym. Pozwala na przeglądanie informacji o kosztach, faktur, transakcji i historii płatności. Jest to dokładnie to, czego menedżer biurowy potrzebuje do dopasowywania płatności do faktur — może widzieć wszystkie dane finansowe, ale nie może niczego modyfikować poza swoim zakresem.
 
-Konsensus społeczności ExamTopics: 100% na CD. To podręcznikowy podział ról finansowych.
+Rola Billing Account Costs Manager (D) jest specjalnie zaprojektowana do zarządzania budżetami i alertami kosztowymi. Pozwala na tworzenie, edytowanie i usuwanie budżetów oraz alertów billingowych, a także eksportowanie danych o kosztach. Nie daje jednak uprawnień do modyfikowania samego konta rozliczeniowego ani do łączenia projektów z kontem rozliczeniowym. To idealna rola do drugiego zadania menedżera — tworzenia alertów billingowych.
+
+Kombinacja tych dwóch ról jest zgodna z zasadą least privilege, ponieważ zapewnia precyzyjnie te uprawnienia, które są wymagane do wykonywania powierzonych zadań, bez żadnych nadmiarowych uprawnień. W Google Cloud model ról billingowych jest hierarchiczny i precyzyjnie rozdzielony, co pozwala na granularne zarządzanie dostępem do zasobów finansowych organizacji.
+
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Organization Administrator
+   * Dlaczego nieprawidłowa: Rola Organization Administrator (roles/resourcemanager.organizationAdmin) daje pełne uprawnienia do zarządzania organizacją, w tym zarządzanie politykami IAM, folderami, projektami i zasobami na poziomie całej organizacji. Jest to rola o znacznie szerszym zakresie niż potrzeby menedżera biurowego i rażąco narusza zasadę least privilege. Menedżer biurowy nie potrzebuje dostępu do zarządzania strukturą organizacyjną.
+
+B. Project Creator
+   * Dlaczego nieprawidłowa: Rola Project Creator (roles/resourcemanager.projectCreator) pozwala na tworzenie nowych projektów Google Cloud. Tworzenie projektów wiąże się z możliwością generowania nowych kosztów (przez uruchamianie zasobów w nowych projektach), co nie ma nic wspólnego z zadaniami menedżera biurowego. Ta rola jest przeznaczona dla deweloperów i administratorów infrastruktury, nie dla personelu finansowego.
+
+E. Billing Account User
+   * Dlaczego nieprawidłowa: Rola Billing Account User (roles/billing.user) pozwala na łączenie (linkowanie) projektów z kontem rozliczeniowym. Oznacza to, że osoba z tą rolą może przypisywać projekty do konta billingowego organizacji, co może prowadzić do nieautoryzowanego generowania kosztów. Menedżer biurowy nie powinien mieć możliwości łączenia projektów z kontami rozliczeniowymi — to wykracza poza jego zakres odpowiedzialności.
+
+4. Wskazówki, hinty, tips and tricks:
+* Zapamiętaj kluczowy podział ról billingowych: Viewer = czytanie, Costs Manager = budżety/alerty, User = linkowanie projektów, Administrator = pełna kontrola.
+* Na egzaminie PCS pytania o billing zawsze testują zasadę least privilege — szukaj najwęższego zestawu ról.
+* Billing Account Costs Manager NIE daje uprawnień do modyfikowania konta rozliczeniowego — daje tylko kontrolę nad budżetami i alertami.
+* Uwaga na pułapkę: Billing Account User brzmi niewinnie, ale pozwala "podpinać" projekty do konta billingowego, co jest potężnym uprawnieniem.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* "matching payments to invoices" → Billing Account Viewer (uprawnienia do odczytu danych finansowych)
+* "creating billing alerts" → Billing Account Costs Manager (zarządzanie budżetami i alertami)
+* "only permitted to have necessary permissions" / "compliance" → zasada least privilege, eliminuj role z nadmiarowymi uprawnieniami
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/billing/docs/how-to/billing-access" target="_blank">Cloud Billing - Overview of billing access control</a>
+<a href="https://cloud.google.com/billing/docs/how-to/budgets" target="_blank">Cloud Billing - Set budgets and budget alerts</a>
+<a href="https://cloud.google.com/iam/docs/understanding-roles#billing" target="_blank">IAM - Billing roles reference</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

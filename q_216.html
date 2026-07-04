@@ -90,24 +90,34 @@ Your organization wants to be continuously evaluated against CIS Google Cloud Co
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Activate Security Command Center (SCC) Premium. Create a rule to mute the security findings in SCC so they are not evaluated.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź B jest prawidłowa, ponieważ Security Command Center (SCC) Premium oferuje wbudowane i zautomatyzowane monitorowanie zgodności z benchmarkami CIS (w tym CIS Google Cloud Computing Foundations Benchmark) oraz natywną funkcję wyciszania (mute rules).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Zalety tego rozwiązania:
+a. **SCC Premium Compliance Monitoring:** SCC automatycznie skanuje konfigurację chmury i generuje wykrycia (findings) niezgodności z CIS.
+b. **Mute Rules (Zasady wyciszania):** Pozwalają na definiowanie filtrów wyciszających określone typy wykryć (np. te, które są uznane za nieistotne dla Twojej organizacji). Wyciszone wykrycia nie pojawiają się w domyślnych raportach i nie obniżają wskaźnika zgodności organizacji (compliance score), co pozwala na automatyczne odrzucenie niechcianych reguł.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Mark all security findings... mute them on the console every time they appear...
+   * Dlaczego nieprawidłowa: Ręczne wyciszanie każdego wykrycia za każdym razem, gdy się pojawi, nie jest procesem zautomatyzowanym i generuje ogromny nakład pracy dla zespołu operacyjnego (brak skalowalności).
+C. Download all findings from Security Command Center (SCC) to a CSV file... Ignore the entries...
+   * Dlaczego nieprawidłowa: Praca na plikach CSV pobieranych ręcznie jest procesem statycznym, podatnym na błędy ludzkie i nie pozwala na ciągłą (continuous) ewaluację w czasie rzeczywistym.
+D. Ask an external audit company to provide independent reports...
+   * Dlaczego nieprawidłowa: Zewnętrzne audyty są przeprowadzane okresowo (np. raz w roku) i są bardzo kosztowne. Nie stanowią one "automatycznego systemu lub procesu ciągłej ewaluacji".
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Ciągły audyt zgodności z CIS Benchmark w GCP -> Zawsze używaj **Security Command Center Premium**.
+* Ignorowanie specyficznych reguł w SCC bez wpływania na wyniki ogólne realizuje się za pomocą **Mute Rules** (Reguł wyciszania).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* CIS Benchmark compliance evaluation in GCP -> Security Command Center Premium + Mute Rules.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/security-command-center/docs/how-to-mute-findings" target="_blank">Muting findings in Security Command Center</a>
+<a href="https://cloud.google.com/security-command-center/docs/concepts-compliance-validation" target="_blank">Compliance monitoring in Security Command Center</a>
 </pre>
 
 </div>

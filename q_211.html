@@ -91,24 +91,37 @@ Your organization wants to be compliant with the General Data Protection Regulat
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Limit the physical location of a new resource with the Organization Policy Service "resource locations constraint."
+C. Limit Google personnel access based on predefined attributes such as their citizenship or geographic location by using Key Access Justifications.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedzi A i C są prawidłowe, ponieważ bezpośrednio adresują dwa filary suwerenności danych wymagane przez GDPR w chmurze publicznej: suwerenność danych (rezydentność fizyczną) oraz suwerenność operacyjną (kontrolę nad dostępem personelu dostawcy).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Analiza techniczna:
+a. **Suwerenność danych (Rezydentność) (A):** Ograniczenie `constraints/gcp.resourceLocations` w polityce organizacji pozwala na zdefiniowanie dozwolonych regionów geograficznych dla tworzenia wszelkich zasobów (np. tylko regiony z grupy `europe-west`). Uniemożliwia to deweloperom przypadkowe wdrożenie danych lub maszyn w USA czy Azji.
+b. **Suwerenność operacyjna (C):** Key Access Justifications (KAJ) działa w połączeniu z zewnętrznym zarządzaniem kluczami (EKM). Przy każdej próbie odszyfrowania danych przez Google (np. w celach wsparcia technicznego), KAJ przesyła szczegółowe uzasadnienie żądania. Klient może automatycznie zablokować odszyfrowanie klucza, jeśli personel Google nie spełnia określonych kryteriów (np. nie jest obywatelem UE lub nie znajduje się fizycznie na terenie UE).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+B. Use Cloud IDS to get east-west and north-south traffic visibility...
+   * Dlaczego nieprawidłowa: Cloud IDS to system wykrywania intruzów w sieci VPC. Służy do bezpieczeństwa sieciowego i wykrywania ataków, ale nie ma wpływu na suwerenność operacyjną ani na rezydentność danych w rozumieniu GDPR.
+D. Use identity federation to limit access to Google Cloud resources from non-EU entities.
+   * Dlaczego nieprawidłowa: Federacja tożsamości zarządza logowaniem użytkowników Twojej firmy, ale nie chroni przed dostępem pracowników samego Google (Google personnel) do Twoich danych, co jest kluczem do suwerenności operacyjnej.
+E. Use VPC Flow Logs to monitor intra-VPC and inter-VPC traffic in the EU.
+   * Dlaczego nieprawidłowa: VPC Flow Logs rejestrują metadane ruchu sieciowego do celów audytu. Jest to pasywny monitoring sieciowy, który nie wdraża ani nie wymusza suwerenności danych ani ograniczeń dostępu.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Suwerenność w GCP (Sovereign Cloud) opiera się na:
+  - Rezydentność zasobów -> **Resource Locations Org Policy**.
+  - Kontrola nad dostępem Google -> **Key Access Justifications (KAJ) + Access Approval**.
+* Zawsze kojarz GDPR i suwerenność operacyjną z KAJ (Key Access Justifications) oraz Cloud EKM.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* GDPR / Data residency / Operational sovereignty -> Resource locations constraint + Key Access Justifications (KAJ).
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">Restricting resource locations</a>
+<a href="https://cloud.google.com/kms/docs/key-access-justifications" target="_blank">Key Access Justifications overview</a>
 </pre>
 
 </div>

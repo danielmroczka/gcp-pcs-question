@@ -91,24 +91,37 @@ You are migrating an on-premises data warehouse to BigQuery, Cloud SQL, and Clou
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Key Access Justifications
+E. Cloud External Key Manager
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedzi C i E są prawidłowe, ponieważ wspólnie realizują wymagania suwerenności danych oraz pełnej separacji dostawcy usług danych od dostawcy kluczy szyfrujących.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Analiza wymagań:
+a. **Separacja zarządzania kluczami od zarządzania danymi:** Cloud External Key Manager (Cloud EKM) (E) umożliwia przechowywanie i zarządzanie kluczami szyfrującymi w zewnętrznym systemie zarządzania kluczami (np. Thales, Fortanix), który znajduje się fizycznie poza infrastrukturą Google Cloud. Usługi takie jak BigQuery czy Cloud SQL przy każdej operacji zapisu/odczytu muszą wysłać żądanie odszyfrowania do zewnętrznego EKM.
+b. **Widoczność i kontrola żądań szyfrowania:** Key Access Justifications (KAJ) (C) działa w parze z EKM. Przy każdym żądaniu klucza, Google przesyła do EKM zakodowane uzasadnienie (np. żądanie od klienta, automatyczne zadanie systemowe). Klient może skonfigurować swój zewnętrzny system EKM tak, by automatycznie odrzucał żądania bez prawidłowego uzasadnienia. Daje to pełny audyt i ostateczną kontrolę nad tym, kiedy i dlaczego dane są odszyfrowywane.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Customer-managed encryption keys (CMEK)
+   * Dlaczego nieprawidłowa: Choć CMEK pozwala klientowi na zarządzanie kluczami za pomocą Cloud KMS, to same klucze nadal fizycznie znajdują się w infrastrukturze Google Cloud. Nie realizuje to wymogu pełnego odseparowania dostawcy kluczy od dostawcy danych (Google zarządza zarówno danymi, jak i kluczami w KMS).
+B. Customer-Supplied Encryption Keys (CSEK)
+   * Dlaczego nieprawidłowa: CSEK polega na dostarczeniu klucza w nagłówku API przy każdym zapytaniu. CSEK nie jest wspierany przez BigQuery ani Cloud SQL w taki sposób jak CMEK/EKM, i nie oferuje zaawansowanej integracji z Key Access Justifications.
+D. Access Transparency and Approval
+   * Dlaczego nieprawidłowa: Access Transparency i Access Approval dają wgląd i wymagają zatwierdzenia dostępu personelu Google do zasobów, ale nie są bezpośrednim mechanizmem zarządzania kluczami kryptograficznymi szyfrującymi dane w spoczynku.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Integracja zewnętrznego systemu zarządzania kluczami z GCP -> **Cloud EKM (External Key Manager)**.
+* Widoczność i decyzyjność o powodach użycia klucza -> **Key Access Justifications (KAJ)**.
+* KAJ i Cloud EKM to kluczowe elementy oferty "Sovereign Cloud" w Google Cloud.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Separate key management provider from Google -> Cloud EKM.
+* Visibility/justification for key requests -> Key Access Justifications (KAJ).
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/kms/docs/ekm" target="_blank">Cloud External Key Manager (Cloud EKM) overview</a>
+<a href="https://cloud.google.com/kms/docs/key-access-justifications" target="_blank">Key Access Justifications overview</a>
 </pre>
 
 </div>

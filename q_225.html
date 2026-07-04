@@ -90,24 +90,34 @@ Your organization's record data exists in Cloud Storage. You must retain all rec
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. 1. Identify buckets with record data. 2. Apply a retention policy and set it to retain for seven years. 3. Enable bucket lock.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź D jest prawidłowa, ponieważ blokada kubełka (Bucket Lock) w Cloud Storage jest jedynym mechanizmem gwarantującym trwałość i nieusuwalność zdefiniowanej polityki retencji danych (Retention Policy), co bezpośrednio spełnia wymagania regulacji prawnych.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Szczegóły mechanizmu:
+a. **Polityka retencji (Retention Policy):** Definiuje czas (np. 7 lat), przez który żaden obiekt w kubełku nie może zostać zmodyfikowany ani usunięty.
+b. **Bucket Lock (Blokada):** Po aktywowaniu i zablokowaniu polityki za pomocą Bucket Lock, staje się ona niezmienna (immutable). Oznacza to, że nikt – w tym administrator projektu, właściciel konta, a nawet samo Google – nie może usunąć blokady ani skrócić czasu retencji. Jedynym sposobem na usunięcie kubełka byłoby poczekanie, aż wszystkie zawarte w nim obiekty osiągną wiek 7 lat i zostaną usunięte po wygaśnięciu retencji.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. ...Monitor the bucket by using log-based alerts to ensure that no modifications...
+   * Dlaczego nieprawidłowa: Monitorowanie za pomocą alertów (log-based alerts) jest kontrolą detekcyjną (detective control). Poinformuje Cię o fakcie modyfikacji lub usunięcia polityki już po tym, jak do tego doszło. Nie zapobiega to usunięciu danych i nie spełnia wymogu prawnego "trwałego i bezwzględnego" egzekwowania retencji.
+B. ...Remove any Identity and Access Management (IAM) roles that contain the storage buckets update permission.
+   * Dlaczego nieprawidłowa: Usunięcie uprawnień IAM administratorom nie gwarantuje trwałości. Ktoś z rolą Owner lub Administrator Organizacji nadal mógłby te uprawnienia sobie przyznać i usunąć kubełek. Tylko Bucket Lock blokuje zmiany na poziomie samego API przechowywania danych (storage engine).
+C. ...Enable the bucket policy only to ensure that data is retained. 3. Enable bucket lock.
+   * Dlaczego nieprawidłowa: "Bucket policy only" (obecnie Uniform Bucket-Level Access) służy do wymuszenia zarządzania uprawnieniami za pomocą IAM zamiast list ACL. Samo włączenie tej opcji nie definiuje czasu retencji danych (np. 7 lat) i nie zastępuje zdefiniowania Retention Policy.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Trwałe i nieodwracalne zachowanie danych (WORM - Write Once Read Many / Compliance) w Cloud Storage -> Zdefiniowanie **Retention Policy** + **Bucket Lock**.
+* Pamiętaj: zablokowany Bucket Lock jest operacją nieodwracalną!
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Retain data / regulatory compliance / permanent retention policy -> Apply retention policy + Enable Bucket Lock.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/storage/docs/bucket-lock" target="_blank">Retention policies and bucket locks</a>
+<a href="https://cloud.google.com/storage/docs/placement-retention-delays" target="_blank">Cloud Storage WORM compliance</a>
 </pre>
 
 </div>

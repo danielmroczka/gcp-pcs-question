@@ -90,30 +90,39 @@ Your DevOps team uses Packer to build Compute Engine images by using this proces
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: BC (B. Provision a Cloud NAT instance, C. Enable Private Google Access).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Provision a Cloud NAT instance in the same VPC and region as the Compute Engine VM.
+C. Enable Private Google Access on the subnet that the Compute Engine VM is deployed within.
 
-Wyjaśnienie:
-- Kontekst: Maszyna wirtualna nie posiada publicznego adresu IP ze względu na politykę organizacji, co uniemożliwia jej domyślną komunikację z internetem oraz usługami Google.
-- Cloud NAT (B): Jest niezbędny, aby maszyna mogła pobrać aktualizacje systemu (krok 3) oraz pakiety zewnętrzne z internetu (krok 4). Cloud NAT pozwala instancjom z samym prywatnym adresem IP na inicjowanie połączeń wychodzących (outbound) do internetu, przy jednoczesnym blokowaniu ruchu przychodzącego (inbound).
-- Private Google Access (PGA - C): Pozwala maszynom bez publicznego adresu IP na łączenie się z publicznymi adresami IP usług Google Cloud (np. `storage.googleapis.com` w celu skopiowania binariów w kroku 2). PGA jest włączane na poziomie podsieci (subnet).
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedzi B i C są prawidłowe, ponieważ umożliwiają maszynie wirtualnej pozbawionej publicznego adresu IP komunikację z usługami zewnętrznymi (internetem) oraz wewnętrznymi API Google w bezpieczny sposób.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. HTTP Load Balancer: Służy do obsługi ruchu PRZYCHODZĄCEGO (inbound) od użytkowników do aplikacji. Nie pomaga maszynie w wyjściu do internetu po paczki ani w połączeniu z Cloud Storage.
-- D. Update VPC routes: Same trasy (routes) nie wystarczą, jeśli maszyna nie ma adresu IP, który jest "rozumiany" w internecie. Bez mechanizmu translacji (NAT), pakiety z prywatnym IP zostaną odrzucone przez routery brzegowe internetu.
-- E. Cloud VPN: Służy do łączenia sieci VPC z siecią lokalną (on-premises). Nie zapewnia on dostępu do publicznego internetu (w celu pobrania paczek) ani nie jest standardową metodą dostępu do GCS z wewnątrz tej samej chmury.
+Analiza scenariusza:
+Polityka organizacji `compute.vmExternalIpAccess` zabrania przypisywania zewnętrznych (publicznych) adresów IP do maszyn wirtualnych Compute Engine. W rezultacie maszyna budująca (Packer VM) posiada wyłącznie prywatny adres IP. Aby proces budowania obrazu zakończył się sukcesem, maszyna musi wykonać dwie operacje sieciowe:
+1. **Pobrać binarki z Cloud Storage (usługa Google):** Aby maszyna z prywatnym adresem IP mogła połączyć się z API Cloud Storage bez przechodzenia przez internet, na jej podsieci musi być włączone **Private Google Access (C)**.
+2. **Pobrać pakiety z repozytoriów zewnętrznych (internet):** Ponieważ repozytoria te znajdują się w publicznym internecie, maszyna potrzebuje bramki sieciowej, która przetłumaczy jej adres prywatny na publiczny. Służy do tego usługa **Cloud NAT (B)**, która pozwala instancjom bez publicznego IP inicjować bezpieczne połączenia wychodzące do internetu.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "VM without public IP" + "Access internet (apt-get/yum)" = Cloud NAT.
-- "VM without public IP" + "Access Google APIs (GCS/BigQuery)" = Private Google Access.
-- Pamiętaj: PGA jest darmowe i włączane na podsieci. Cloud NAT jest usługą płatną i wymaga Cloud Routera.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Provision an HTTP load balancer...
+   * Dlaczego nieprawidłowa: Load Balancer HTTP(S) służy do dystrybucji ruchu przychodzącego (inbound) z internetu do maszyn wirtualnych. Nie pozwala on maszynie wirtualnej na inicjowanie połączeń wychodzących (outbound) do internetu, co jest wymagane do aktualizacji systemu i pobierania pakietów.
+D. Update the VPC routes to allow traffic to and from the internet.
+   * Dlaczego nieprawidłowa: Same trasy VPC nie rozwiążą problemu braku publicznego adresu IP. Router internetowy odrzuci pakiety z prywatnymi adresami IP (RFC 1918), jeśli nie przejdą one przez bramę NAT (Network Address Translation).
+E. Provision a Cloud VPN tunnel in the same VPC and region...
+   * Dlaczego nieprawidłowa: Cloud VPN służy do łączenia sieci VPC z siecią lokalną (on-premises) lub inną chmurą. Nie służy do uzyskiwania dostępu do publicznych repozytoriów oprogramowania w internecie.
 
-Kluczowe zagadnienia do powtórzenia:
-- Cloud NAT i Cloud Router.
-- Private Google Access (PGA).
-- Organization Policy: compute.vmExternalIpAccess.
+4. Wskazówki, hinty, tips and tricks:
+* Maszyna wirtualna bez publicznego IP w GCP:
+  - Dostęp do API Google (np. Cloud Storage) -> **Private Google Access**.
+  - Dostęp do ogólnego internetu (wychodzący) -> **Cloud NAT**.
+* Te dwa mechanizmy są podstawą bezpiecznego projektowania sieci w chmurze (Private-only VMs).
 
-Dokumentacja:
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* VM bez publicznego IP + dostęp do usług Google -> Private Google Access.
+* VM bez publicznego IP + dostęp do internetu -> Cloud NAT.
+
+6. Dodatkowe źródła i dokumentacja:
 <a href="https://cloud.google.com/nat/docs/overview" target="_blank">Cloud NAT overview</a>
+<a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">Private Google Access overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container d-none"  >

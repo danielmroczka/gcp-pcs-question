@@ -90,24 +90,34 @@ Your organization uses the top-tier folder to separate application environments 
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. 1. Grant logging.viewer role to the security team at the organization resource level. 2. Grant logging.viewer role to the developer team at the folder resource level that contains all the dev projects.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź A jest prawidłowa, ponieważ poprawnie wykorzystuje hierarchię zasobów GCP i mechanizm dziedziczenia uprawnień IAM w celu zapewnienia zasady najmniejszych uprawnień (least privilege).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Dlaczego ten podział jest poprawny:
+a. **Dostęp dla zespołu bezpieczeństwa:** Nadanie roli `logging.viewer` (przeglądający logi) na poziomie organizacji sprawia, że uprawnienia te są dziedziczone w dół na wszystkie foldery (zarówno dev, jak i prod) oraz wszystkie zawarte w nich projekty. Zespół bezpieczeństwa widzi pełen zestaw logów.
+b. **Dostęp dla deweloperów:** Deweloperzy potrzebują dostępu wyłącznie do środowisk rozwojowych. Nadając im rolę `logging.viewer` na poziomie folderu "Dev" (który grupuje wszystkie projekty deweloperskie), ograniczamy ich widoczność do tego obszaru. Nie mając żadnych uprawnień przypisanych na poziomie folderu "Prod" lub organizacji, nie mogą przeglądać logów produkcyjnych.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+B. ...Grant logging.admin role to the developer team at the organization level.
+   * Dlaczego nieprawidłowa: Nadanie deweloperom roli na poziomie organizacji dałoby im wgląd w logi produkcyjne, co narusza kluczowy warunek zadania. Ponadto rola `logging.admin` (administrator logowania) daje uprawnienia do usuwania logów i modyfikowania sinków, co znacznie wykracza poza wymóg "przeglądania logów" (brak least privilege).
+C. 1. Grant logging.admin role to the security team...
+   * Dlaczego nieprawidłowa: Zespół bezpieczeństwa potrzebuje jedynie uprawnień do "przeglądania" logów. Rola `logging.admin` daje uprawnienia modyfikacji konfiguracji logowania, co narusza zasadę najmniejszych uprawnień (least privilege).
+D. ...Grant logging.admin to both teams at the organization level.
+   * Dlaczego nieprawidłowa: Ta opcja łamie wszystkie założenia: daje deweloperom dostęp do produkcji oraz nadaje obu zespołom nadmierne uprawnienia administratora na poziomie całej organizacji.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Pamiętaj o hierarchii zasobów GCP: uprawnienia nadane wyżej (Organizacja) automatycznie spływają w dół. Aby ograniczyć dostęp, nadawaj role jak najniżej w strukturze (np. na poziomie konkretnego folderu lub projektu).
+* Do samego czytania logów służy rola **`roles/logging.viewer`** (Logging Viewer). Rola `roles/logging.admin` jest nadmiarowa do tego celu.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Widoczność logów w dev, brak na prod -> Dostęp dla dev przypisany na poziomie folderu dev (folder resource level).
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/logging/docs/access-control" target="_blank">Access control guide for Cloud Logging</a>
+<a href="https://cloud.google.com/iam/docs/resource-hierarchy-access-control" target="_blank">Resource hierarchy and IAM inheritance</a>
 </pre>
 
 </div>

@@ -91,24 +91,35 @@ You manage a fleet of virtual machines (VMs) in your organization. You have enco
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. View patch management data in VM Manager by using OS patch management.
+E. Deploy patches with VM Manager by using OS patch management.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedzi A i E są prawidłowe, ponieważ VM Manager (część pakietu OS Configuration Management) jest oficjalną, natywną usługą Google Cloud zaprojektowaną do automatyzacji aktualizacji systemów operacyjnych i zarządzania poprawkami (patch management) na maszynach wirtualnych Compute Engine w skali wielu projektów.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Komponenty rozwiązania:
+a. **Automatyzacja wdrażania poprawek (E):** Usługa OS Patch Management w VM Manager pozwala na definiowanie zadań wdrażania poprawek (patch jobs) na grupach maszyn wirtualnych. Zadania te można zaplanować, określić okna serwisowe (maintenance windows) oraz zasady restartu maszyn.
+b. **Wizualizacja stanu poprawek (A):** VM Manager oferuje centralny pulpit nawigacyjny w konsoli GCP, który zbiera i wyświetla stan zgodności z poprawkami (compliance data) dla wszystkich maszyn wirtualnych w wielu projektach, ułatwiając audyt bezpieczeństwa.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+B. View patch management data in Artifact Registry.
+   * Dlaczego nieprawidłowa: Artifact Registry służy do przechowywania i zarządzania pakietami oprogramowania (np. Docker images, Maven, npm artifacts) oraz obrazami maszyn. Nie monitoruje ani nie wdraża poprawek bezpośrednio w systemach operacyjnych uruchomionych maszyn VM.
+C. View patch management data in a Security Command Center dashboard.
+   * Dlaczego nieprawidłowa: Security Command Center Premium integruje się z wieloma usługami i może zgłaszać luki w zabezpieczeniach (vulnerabilities), ale nie jest głównym panelem do natywnego zarządzania operacyjnego i monitorowania szczegółowych wdrożeń OS patch management z VM Managera.
+D. Deploy patches with Security Command Center by using Rapid Vulnerability Detection.
+   * Dlaczego nieprawidłowa: Rapid Vulnerability Detection w SCC służy do wykrywania podatności sieciowych (np. słabe hasła, znane exploity portów). SCC nie posiada funkcji aktywnego instalowania poprawek (patching) wewnątrz systemów operacyjnych maszyn VM.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Narzędziem do patchowania systemów operacyjnych (OS patching) maszyn Compute Engine w GCP jest **VM Manager** (OS patch management).
+* VM Manager wymaga włączenia odpowiedniego agenta (OS Config agent) na instancjach VM.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Automate regular patching / patch management data -> VM Manager / OS patch management.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/compute/docs/os-patch-management" target="_blank">OS patch management overview (VM Manager)</a>
+<a href="https://cloud.google.com/compute/docs/os-config-agent" target="_blank">OS Config agent overview</a>
 </pre>
 
 </div>

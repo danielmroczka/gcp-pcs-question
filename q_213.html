@@ -90,24 +90,35 @@ Your organization is using GitHub Actions as a continuous integration and delive
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Configure workload identity federation to use GitHub as an identity pool provider.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź D jest prawidłowa, ponieważ Workload Identity Federation (Federacja Tożsamości Obciążeń) jest najbezpieczniejszą metodą uwierzytelniania zewnętrznych potoków CI/CD (np. GitHub Actions) w Google Cloud.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Dlaczego to najbezpieczniejsze rozwiązanie:
+a. **Brak kluczy długoterminowych:** Eliminuje potrzebę generowania plików kluczy JSON dla kont serwisowych GCP. Przechowywanie takich kluczy w zewnętrznych systemach (np. jako GitHub Secrets) niesie ogromne ryzyko ich wycieku lub kompromitacji.
+b. **Klucze krótkoterminowe (Short-lived tokens):** GitHub Actions uwierzytelnia się u swojego dostawcy OIDC, uzyskując token tożsamości. Następnie GCP Security Token Service (STS) weryfikuje ten token i wymienia go na tymczasowy (ważny np. przez godzinę) token dostępu OAuth 2.0 konta serwisowego GCP.
+c. **Precyzyjne mapowanie:** Możemy ograniczyć dostęp tylko do konkretnego repozytorium GitHub, a nawet konkretnej gałęzi (branch), za pomocą warunków atrybutów (attribute conditions).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Create a service account key, and add it to the GitHub pipeline configuration file.
+   * Dlaczego nieprawidłowa: Umieszczenie klucza prywatnego (pliku JSON) bezpośrednio w pliku konfiguracyjnym w repozytorium kodu to krytyczny błąd bezpieczeństwa. Każdy, kto ma dostęp do kodu, uzyska pełne uprawnienia do Twojej chmury.
+B. Create a service account key, and add it to the GitHub repository content.
+   * Dlaczego nieprawidłowa: Podobnie jak w opcji A, przechowywanie klucza konta serwisowego w zawartości repozytorium (nawet prywatnego) jest niezgodne z najlepszymi praktykami i grozi wyciekiem danych.
+C. Configure a Google Kubernetes Engine cluster that uses Workload Identity to supply credentials to GitHub.
+   * Dlaczego nieprawidłowa: Workload Identity w GKE służy do nadawania tożsamości podom (pods) uruchomionym wewnątrz klastra Kubernetes w GCP. Nie rozwiązuje to problemu uwierzytelniania zewnętrznego systemu CI/CD (GitHub Actions), który działa poza GCP.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Uwierzytelnianie systemów CI/CD działających poza GCP (GitHub Actions, GitLab, Terraform Cloud) w Google Cloud -> Zawsze wybieraj **Workload Identity Federation**.
+* Unikaj generowania kluczy kont serwisowych (Service Account Keys) – Google uznaje je za ryzyko bezpieczeństwa (compromised credentials).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* GitHub Actions / CI/CD external access without keys -> Workload Identity Federation.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/iam/docs/workload-identity-federation" target="_blank">Workload Identity Federation</a>
+<a href="https://github.com/google-github-actions/auth" target="_blank">Google GitHub Actions Auth Guide</a>
 </pre>
 
 </div>

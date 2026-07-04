@@ -90,24 +90,34 @@ After completing a security vulnerability assessment, you learned that cloud adm
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Set the reauthentication frequency for the Google Cloud Session Control to one hour.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź B jest prawidłowa, ponieważ skrócenie czasu trwania sesji (reauthentication frequency) w ramach Google Cloud Session Control bezpośrednio wymusza na administratorach ponowne logowanie po wskazanym czasie (minimum 1 godzina), co minimalizuje czas w jakim skradziony token sesyjny lub pozostawiona bez nadzoru konsola/CLI pozostają aktywne.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Mechanizm działania:
+a. W konsoli administracyjnej Google Workspace / Cloud Identity można ustawić politykę częstotliwości ponownego uwierzytelniania dla Google Cloud Console oraz narzędzi Google Cloud SDK/CLI.
+b. Ustawienie wartości na 1 godzinę (minimum) sprawia, że po tym czasie sesja wygasa i gcloud CLI odmówi wykonania jakichkolwiek poleceń bez ponownej weryfikacji tożsamości (np. MFA).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Set the session duration for the Google session control to one hour.
+   * Dlaczego nieprawidłowa: Chociaż cel jest podobny, pojęciem używanym w konsoli administracyjnej Google dla usług chmurowych GCP jest "reauthentication frequency" (częstotliwość ponownego uwierzytelniania), a nie ogólna kontrola sesji Google, która ma inne limity i zachowania dla zwykłych usług typu Gmail.
+C. Set the organization policy constraint constraints/iam.allowServiceAccountCredentialLifetimeExtension to one hour.
+   * Dlaczego nieprawidłowa: Ograniczenie `iam.allowServiceAccountCredentialLifetimeExtension` służy do kontrolowania maksymalnego czasu życia tokenów krótkotrwałych (OAuth access tokens) generowanych przez konta serwisowe (pozwala na wydłużenie czasu życia z domyślnego 1h do maksymalnie 12h), a nie do wymuszania reuwierzytelniania dla sesji użytkowników ludzkich korzystających z gcloud CLI.
+D. Set the organization policy constraint constraints/iam.serviceAccountKeyExpiryHours...
+   * Dlaczego nieprawidłowa: Ta polityka dotyczy maksymalnego czasu ważności generowanych kluczy prywatnych kont serwisowych (Service Account Keys), a nie sesji interaktywnych użytkowników (administratorów) korzystających z interfejsu CLI.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Ochrona sesji administratorów przed nieautoryzowanym użyciem (np. pozostawienie otwartej konsoli/CLI) -> Zmiana **reauthentication frequency** w Google Cloud Session Control.
+* Minimalny możliwy czas ponownej weryfikacji tożsamości dla sesji to **1 godzina**.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* CLI sessions open for days / reduce session lifetime -> Set reauthentication frequency in Session Control to 1 hour.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://support.google.com/a/answer/9368756" target="_blank">Set session length for Google Cloud services</a>
+<a href="https://cloud.google.com/identity-aware-proxy/docs/session-duration" target="_blank">Control session duration with Cloud IAP</a>
 </pre>
 
 </div>

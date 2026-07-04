@@ -89,30 +89,34 @@ Your Google Cloud organization allows for administrative capabilities to be dist
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Create a hierarchical firewall policy configured at the organization to allow connections only from internal IP ranges).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Create a hierarchical firewall policy configured at the organization to allow connections only from internal IP ranges.
 
-Wyjaśnienie:
-- Hierarchiczne polityki firewalla (Hierarchical Firewall Policies): Pozwalają na definiowanie i wymuszanie reguł na poziomie całej organizacji lub folderów. Są one sprawdzane PRZED tradycyjnymi regułami firewalla VPC w poszczególnych projektach.
-- Guardrails (Barierki ochronne): Ponieważ organizacja posiada tysiące projektów, z których każdy ma swojego Ownera (posiadającego pełne uprawnienia do swojej sieci VPC), jedynym sposobem na "twarde" zablokowanie niebezpiecznych konfiguracji (takich jak publicznie otwarty port MySQL 3306) jest narzucenie reguły z góry.
-- Skuteczność: Reguła "allow only from internal IP" na poziomie organizacji automatycznie blokuje wszelkie próby otwarcia MySQL (i innych portów) na świat (0.0.0.0/0), nawet jeśli Project Owner stworzy regułę "Allow" w swojej sieci VPC.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź B jest prawidłowa, ponieważ pozwala na wdrożenie nadrzędnych reguł bezpieczeństwa (guardrails) na poziomie całej organizacji, które automatycznie blokują lub ograniczają dostęp sieciowy dla wszystkich podrzędnych sieci VPC. 
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Deny all from 0.0.0.0/0: Choć brzmi poprawnie, restrykcja "deny all" mogłaby zablokować również legalny ruch (np. HTTP/HTTPS dla serwerów webowych). Opcja B (tylko ruch wewnętrzny) jest bardziej precyzyjna dla baz danych, które z definicji nie powinny być wystawione na internet.
-- C. Google Cloud Armor: Cloud Armor służy do ochrony aplikacji webowych za Load Balancerem (Warstwa 7). MySQL działa na poziomie TCP (Warstwa 4) i zazwyczaj nie jest umieszczany za HTTP(S) Load Balancerem. Cloud Armor nie jest narzędziem do ochrony tysięcy rozproszonych projektów przed błędami firewalla VPC.
-- D. Firewall rule for each VPC: Przy tysiącach projektów, ręczne tworzenie reguł w każdym z nich jest operacyjnie niemożliwe i nieskuteczne (Owner projektu mógłby taką regułę usunąć lub zmienić jej priorytet).
+Kluczowe cechy tego podejścia:
+a. **Polityki hierarchiczne zapory sieciowej (Hierarchical Firewall Policies):** Pozwalają one na tworzenie i egzekwowanie reguł zapory sieciowej na poziomie Organizacji lub Folderów. Reguły te są oceniane przed jakimikolwiek regułami zapory sieciowej zdefiniowanymi w konkretnych sieciach VPC przez lokalne zespoły projektowe.
+b. **Ograniczenie do wewnętrznych adresów IP:** Tworząc regułę, która zezwala na dostęp do portów MySQL (domyślnie 3306) tylko z zaufanych, wewnętrznych zakresów IP (np. RFC 1918), a w przeciwnym razie blokuje ruch z zewnątrz, skutecznie neutralizujemy zagrożenie wystawienia MySQL na świat, niezależnie od tego, co lokalni administratorzy (posiadający rolę Owner) ustawią w swoich projektach. Zapobiega to powstawaniu alertów `OPEN_MYSQL_PORT`.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Prevent misconfigurations at scale" + "Network guardrails" = Hierarchical Firewall Policies.
-- Pamiętaj o hierarchii sprawdzania firewalla: Polityka Organizacji -> Polityka Folderu -> Reguły VPC.
-- "First match wins": Jeśli polityka hierarchiczna dopasuje ruch i go zablokuje, reguły wewnątrz projektu nie są nawet sprawdzane.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Create a hierarchical firewall policy configured at the organization to deny all connections from 0.0.0.0/0.
+   * Dlaczego nieprawidłowa: Zablokowanie WSZYSTKICH połączeń z adresu 0.0.0.0/0 na poziomie organizacji całkowicie odcięłoby cały ruch przychodzący z internetu do wszystkich aplikacji w organizacji, co uniemożliwiłoby działanie jakichkolwiek publicznych usług webowych.
+C. Create a Google Cloud Armor security policy to deny traffic from 0.0.0.0/0.
+   * Dlaczego nieprawidłowa: Cloud Armor działa na poziomie zewnętrznych Load Balancerów HTTP(S) i TCP/SSL proxy. Nie chroni bezpośrednio instancji bazodanowych MySQL w sieci VPC, które mogą mieć przypisane publiczne adresy IP i być wystawione bezpośrednio przez reguły zapory sieciowej VPC.
+D. Create a firewall rule for each virtual private cloud (VPC) to deny traffic from 0.0.0.0/0 with priority 0.
+   * Dlaczego nieprawidłowa: Wymagałoby to ręcznego lub skryptowego tworzenia reguł w tysiącach projektów, co jest podatne na błędy. Ponadto właściciele projektów (Owners) posiadają pełne uprawnienia i mogliby te reguły usunąć lub zmodyfikować.
 
-Kluczowe zagadnienia do powtórzenia:
-- Hierarchical Firewall Policies (Hierarchiczne polityki firewalla).
-- Priorytety reguł firewalla i kolejność ich przetwarzania.
-- Rola IAM Compute Security Admin.
+4. Wskazówki, hinty, tips and tricks:
+* Aby zapobiec miskonfiguracjom robionym przez administratorów projektów (np. Ownerów), zawsze stosuje się mechanizmy nadrzędne, których nie mogą modyfikować. W kwestiach sieciowych są to **Hierarchical Firewall Policies**.
+* Właściciel projektu (Owner) nie ma uprawnień do modyfikowania reguł zapory sieciowej przypisanych na poziomie organizacji lub folderu.
 
-Dokumentacja:
-<a href="https://cloud.google.com/vpc/docs/firewall-policies" target="_blank">Hierarchical firewall policies overview</a>
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Narzucenie centralnych ograniczeń zapory sieciowej w skali całej organizacji -> Hierarchical firewall policy.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/vpc/docs/hierarchical-firewall-policies" target="_blank">Hierarchical firewall policies overview</a>
+<a href="https://cloud.google.com/security-command-center/docs/concepts-security-sources" target="_blank">Security Command Center Findings and Port Vulnerabilities</a>
 </pre>
 </div>
 <div class="ai-analysis-container d-none"  >

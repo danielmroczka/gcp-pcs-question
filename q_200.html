@@ -90,30 +90,36 @@ What command should you execute?
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (organization policy: constraints/gcp.restrictNonCmekServices / binding at: org1 / policy type: deny / policy value: storage.googleapis.com).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. organization policy: constraints/gcp.restrictNonCmekServices / binding at: org1 / policy type: deny / policy value: storage.googleapis.com
 
-Wyjaśnienie:
-- Wymuszenie CMEK: Aby spełnić wymogi regulacyjne dotyczące korzystania wyłącznie z kluczy zarządzanych przez klienta (CMEK), Google Cloud udostępnia specjalną politykę organizacji: `constraints/gcp.restrictNonCmekServices`.
-- Logika DENY (Blokowanie): Ta polityka jest polityką typu "list constraint". Ustawienie typu polityki na `DENY` dla konkretnej usługi (np. `storage.googleapis.com`) oznacza: "Zablokuj możliwość korzystania z tej usługi, jeśli NIE jest używany klucz CMEK".
-- Zakres: Skonfigurowanie tego wiązania (binding) na poziomie organizacji `org1` sprawia, że każda próba stworzenia nowego bucketu Cloud Storage bez podania klucza KMS zostanie odrzucona przez API we wszystkich podległych projektach.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź B jest prawidłowa, ponieważ ograniczenie `constraints/gcp.restrictNonCmekServices` służy do egzekwowania zasad używania kluczy zarządzanych przez klienta (CMEK) dla określonych usług Google Cloud. Ustawiając politykę typu „deny” z wartością usługi `storage.googleapis.com` na poziomie całej organizacji `org1`, wymuszamy, aby każde tworzenie nowego zasobu w Cloud Storage bez ochrony CMEK było blokowane.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A i C. restrictStorageNonCmekServices: Taki constraint (ograniczenie) nie istnieje w standardowym zestawie polityk organizacji Google Cloud. Prawidłowa nazwa to ogólny `gcp.restrictNonCmekServices`, który przyjmuje listę usług jako wartości. Google często używa "zmyślonych" nazw w opcjach, aby sprawdzić Twoją czujność co do oficjalnej dokumentacji.
-- D. Logic ALLOW: Ustawienie `ALLOW` dla `storage.googleapis.com` w tej polityce oznaczałoby, że usługa ta MOŻE używać domyślnego szyfrowania Google (non-CMEK), co jest przeciwieństwem wymogu "enforce CMEK". Opcja `ALLOW` jest używana zazwyczaj do robienia wyjątków na niższych szczeblach hierarchii, gdy góra narzuca restrykcje.
+Mechanizm ten działa w następujący sposób:
+a. Usługa `storage.googleapis.com` zostaje dodana do listy zablokowanych usług nienależących do CMEK.
+b. W rezultacie każda próba utworzenia nowego kubła (bucket) lub zapisania nowego obiektu przy użyciu domyślnego szyfrowania zarządzanego przez Google (Google-managed key) zostanie odrzucona przez system GCP.
+c. Zmusza to deweloperów i administratorów do określenia klucza Cloud KMS (CMEK) przy tworzeniu zasobów Cloud Storage.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Enforce CMEK" = `gcp.restrictNonCmekServices`.
-- "Mandate specific services" = `DENY` (zablokuj brak klucza).
-- Pamiętaj: Ta polityka dotyczy tylko NOWYCH zasobów. Nie zaszyfruje automatycznie już istniejących bucketów.
-- Zwracaj uwagę na prefix `gcp.` w nazwach polityk organizacji dotyczących usług Google.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. gcp.restrictStorageNonCmekServices / allow / all supported services
+   * Dlaczego nieprawidłowa: Constraint `gcp.restrictStorageNonCmekServices` nie istnieje w GCP. Nazwa właściwego ograniczenia to `gcp.restrictNonCmekServices`. Dodatkowo, zezwolenie (allow) na wszystkie wspierane usługi pozwoliłoby na tworzenie zasobów bez CMEK, co jest sprzeczne z celem.
+C. gcp.restrictStorageNonCmekServices / deny / storage.googleapis.com
+   * Dlaczego nieprawidłowa: Chociaż akcja (deny) i wartość (storage.googleapis.com) są logicznie poprawne, to samo ograniczenie `constraints/gcp.restrictStorageNonCmekServices` jest nieistniejącą nazwą w politykach organizacji GCP.
+D. gcp.restrictNonCmekServices / allow / storage.googleapis.com
+   * Dlaczego nieprawidłowa: Zezwolenie (allow) dla `storage.googleapis.com` w ramach tej polityki oznaczałoby wykluczenie tej usługi z blokady lub zezwolenie na korzystanie z domyślnego szyfrowania (nie-CMEK), co nie wymusiłoby stosowania CMEK.
 
-Kluczowe zagadnienia do powtórzenia:
-- Customer-Managed Encryption Keys (CMEK).
-- Organization Policy Service - List Constraints.
-- Szyfrowanie danych w spoczynku (Data at Rest).
+4. Wskazówki, hinty, tips and tricks:
+* Zapamiętaj nazwę ograniczenia organizacji do wymuszania CMEK: to zawsze `constraints/gcp.restrictNonCmekServices`. Nie ma dedykowanych nazw per usługa (jak restrictStorage...).
+* Usługa Cloud Storage w API GCP jest reprezentowana jako `storage.googleapis.com`.
+* Wymuszenie CMEK w polityce organizacji polega na określeniu zabronionych (deny) usług bez CMEK.
 
-Dokumentacja:
-<a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">Organization Policy constraints reference</a>
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Jeśli pytanie wymaga wymuszenia CMEK dla danej usługi w całej organizacji -> użyj ograniczenia `gcp.restrictNonCmekServices` typu `deny` i wskaż odpowiedni identyfikator usługi (np. `storage.googleapis.com` dla GCS lub `compute.googleapis.com` dla dysków GCE).
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/resource-manager/docs/organization-policy/estimating-cmek-impact" target="_blank">Enforce CMEK with Organization Policies</a>
+<a href="https://cloud.google.com/storage/docs/encryption/customer-managed-keys" target="_blank">Cloud Storage Customer-Managed Encryption Keys</a>
 </pre>
 </div>
 <div class="ai-analysis-container d-none"  >

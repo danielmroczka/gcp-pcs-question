@@ -90,24 +90,34 @@ You are deploying regulated workloads on Google Cloud. The regulation has data r
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Deploy Assured Workloads.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź B jest prawidłowa, ponieważ Assured Workloads to usługa Google Cloud stworzona specjalnie w celu automatyzacji i egzekwowania rygorystycznych wymogów regulacyjnych (takich jak suwerenność danych, suwerenność operacyjna oraz wymogi dotyczące wsparcia technicznego) bez konieczności ręcznego konfigurowania wielu skomplikowanych polityk.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Zalety wdrożenia Assured Workloads:
+a. **Automatyczne wdrażanie barier (Guardrails):** Tworzy dedykowany folder w hierarchii GCP z prekonfigurowanymi politykami organizacji ograniczającymi lokalizacje zasobów (data residency).
+b. **Suwerenność personelu wsparcia (Sovereign Support):** Gwarantuje, że wszelkie zgłoszenia serwisowe i interwencje wsparcia technicznego Google będą obsługiwane wyłącznie przez inżynierów spełniających wymagania geograficzne (np. zlokalizowanych w UE dla regulacji europejskich). Jest to kluczowe wymaganie postawione w pytaniu ("support is provided from the same geographical location").
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Enable Access Transparency Logging.
+   * Dlaczego nieprawidłowa: Access Transparency rejestruje logi z działań personelu Google na Twoich danych. Jest to usługa monitorująca i audytująca (reaktywna), ale sama w sobie nie blokuje dostępu ani nie wymusza, by wsparcie techniczne fizycznie pochodziło z określonego regionu geograficznego.
+C. Deploy resources only to regions permitted by data residency requirements.
+   * Dlaczego nieprawidłowa: Samo wdrożenie zasobów we właściwym regionie (np. przez dyscyplinę zespołu) nie gwarantuje spełnienia wymogów prawnych dotyczących wsparcia technicznego Google ze specyficznych lokalizacji (personel Google w USA nadal mógłby mieć dostęp do maszyn w Europie w celach wsparcia).
+D. Use Data Access logging and Access Transparency logging to confirm...
+   * Dlaczego nieprawidłowa: Potwierdzanie braku dostępu w logach to mechanizm detekcyjny i audytowy. Regulacje wymagają prewencyjnego zapewnienia (enforcement) zgodności, co realizuje tylko Assured Workloads.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Zgodność z surowymi regulacjami rządowymi/geograficznymi (FedRAMP, IL4, CJIS, EU Regions and Support) -> Zawsze wybieraj **Assured Workloads**.
+* Pamiętaj o kluczowej funkcji Assured Workloads: gwarancji obsługi wsparcia technicznego (customer support) przez osoby z określonego regionu geograficznego.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Support from the same geographical location / Regulatory compliance folder -> Assured Workloads.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/assured-workloads" target="_blank">Assured Workloads overview</a>
+<a href="https://cloud.google.com/assured-workloads/docs/concept-eu-sovereignty" target="_blank">EU Sovereignty with Assured Workloads</a>
 </pre>
 
 </div>

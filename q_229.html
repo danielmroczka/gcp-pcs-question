@@ -90,24 +90,35 @@ Your organization wants to be General Data Protection Regulation (GDPR) complian
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Use the org policy constraint 'Google Cloud Platform - Resource Location Restriction' on your Google Cloud organization node.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź B jest prawidłowa, ponieważ najprostszym, najbardziej niezawodnym i zalecanym przez Google sposobem na wymuszenie rezydentności danych i ograniczenie lokalizacji zasobów w skali całej organizacji jest wdrożenie odpowiedniej polityki organizacji.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Szczegóły rozwiązania:
+a. Polityka organizacji zawiera ograniczenie o nazwie `Google Cloud Platform - Resource Location Restriction` (identyfikator techniczny: `constraints/gcp.resourceLocations`).
+b. Aplikując to ograniczenie na poziomie głównego węzła organizacji (organization node), administrator definiuje listę dozwolonych lokalizacji (np. `in:eu-locations` lub konkretne regiony typu `europe-west1`, `europe-west3`).
+c. Od tego momentu każda próba utworzenia zasobu (np. maszyny Compute Engine, dysku, kubełka GCS, bazy danych SQL) w regionie spoza listy (np. w USA) zostanie zablokowana przez GCP dla każdego użytkownika, w tym dla zespołu DevOps.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Use Identity-Aware Proxy (IAP) with Access Context Manager...
+   * Dlaczego nieprawidłowa: IAP w połączeniu z Access Context Manager służy do kontrolowania dostępu użytkowników do aplikacji na podstawie ich kontekstu (np. z jakiego adresu IP się logują). Nie pozwala na definiowanie ograniczeń dotyczących lokalizacji geograficznej wdrażanych zasobów chmurowych.
+C. Use the org policy constraint 'Restrict Resource Service Usage' on your Google Cloud organization node.
+   * Dlaczego nieprawidłowa: Ograniczenie `constraints/gcp.restrictServiceUsage` pozwala na zablokowanie korzystania z określonych usług API Google Cloud (np. zakaz używania BigQuery), ale nie kontroluje lokalizacji geograficznej, w której te usługi są wdrażane.
+D. Use Identity and Access Management (IAM) custom roles...
+   * Dlaczego nieprawidłowa: Uprawnienia IAM (np. `compute.instances.create`) są globalne lub projektowe i decydują o tym, *czy* użytkownik może stworzyć zasób. IAM nie posiada wbudowanych funkcji szczegółowego filtrowania uprawnień w zależności od regionu geograficznego, w którym zasób ma powstać.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Rezydentność danych (data residency) / zakaz tworzenia zasobów poza określonym kontynentem/krajem -> Zawsze polityka organizacji **`constraints/gcp.resourceLocations`**.
+* Aplikuj reguły na poziomie organizacji (org node) w celu globalnego egzekwowania.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Create resources only in Europe regions / data residency -> 'Resource Location Restriction' / `gcp.resourceLocations`.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">Restricting resource locations in Google Cloud</a>
+<a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">Organization policy constraints reference</a>
 </pre>
 
 </div>

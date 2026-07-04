@@ -89,21 +89,45 @@ Your company wants to determine what products they can build to help customers i
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Deterministic encryption
 
-Wyjaśnienie:
-- A. Deterministic encryption: Metoda ta generuje ten sam tekst zaszyfrowany dla tej samej wartości wejściowej, co umożliwia wykonywanie operacji JOIN na danych bez konieczności ich deszyfrowania, zachowując jednocześnie integralność referencyjną i chroniąc poufność danych.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Pytanie dotyczy scenariusza, w którym firma musi połączyć (JOIN) dane użytkowników z aplikacji bankowej z danymi o zdolności kredytowej od strony trzeciej. Kluczowe wymagania to: de-identyfikacja danych, tokenizacja za pomocą Cloud Data Loss Prevention (DLP) oraz zachowanie integralności referencyjnej (referential integrity) pomiędzy bazami danych.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- B. Secure, key-based hashes: Hashing jest procesem jednokierunkowym; choć bezpieczny, nie pozwala na odzyskanie danych (co może być potrzebne w procesach biznesowych) i trudniej nim zarządzać w kontekście JOIN niż szyfrowaniem deterministycznym.
-- C. Format-preserving encryption (FPE): FPE jest przydatne, gdy musimy zachować format danych (np. długość numeru karty płatniczej), ale w kontekście dużych zbiorów danych i operacji JOIN, szyfrowanie deterministyczne jest standardem.
-- D. Cryptographic hashing: Podobnie jak w przypadku haszowania z kluczem, jest to technika jednokierunkowa, która nie zapewnia elastyczności odwracalności wymaganej w wielu scenariuszach biznesowych, w przeciwieństwie do szyfrowania.
+Szyfrowanie deterministyczne (Deterministic encryption) w Cloud DLP wykorzystuje algorytm AES-SIV (Synthetic Initialization Vector). Jego kluczowa cecha to fakt, że dla tej samej wartości wejściowej i tego samego klucza kryptograficznego zawsze generuje identyczny tekst zaszyfrowany (ciphertext). Oznacza to, że jeśli wartość "Jan Kowalski" pojawia się w obu zbiorach danych (aplikacja bankowa i dane kredytowe), po zastosowaniu szyfrowania deterministycznego obie wartości zostaną zamienione na identyczny token. Dzięki temu operacja JOIN pomiędzy tabelami jest nadal możliwa bez konieczności odszyfrowania danych, co spełnia wymóg zachowania integralności referencyjnej.
 
-Wskazówki:
-- W scenariuszach wymagających wykonywania operacji JOIN na zaszyfrowanych danych, zawsze szukaj metod, które gwarantują determinizm (taki sam wynik dla tego samego wejścia), przy jednoczesnym zachowaniu bezpieczeństwa kryptograficznego (np. szyfrowanie deterministyczne AES-SIV).
+W przeciwieństwie do losowego szyfrowania, szyfrowanie deterministyczne jest zaprojektowane specjalnie do scenariuszy, w których musimy zachować relacje między danymi w różnych zbiorach (cross-dataset referential integrity). Jest to odwracalna metoda pseudonimizacji — dane mogą być odszyfrowane z powrotem do postaci oryginalnej, jeśli posiadamy odpowiedni klucz, co jest istotne w procesach biznesowych wymagających dostępu do surowych danych.
 
-Dokumentacja:
-<a href="https://cloud.google.com/dlp/docs/concepts-pseudonymization#deterministic-encryption" target="_blank">Google Cloud DLP - Pseudonimizacja danych</a>
+Cloud DLP oferuje tę metodę jako jedną z transformacji de-identyfikacji (deidentify transformations), która doskonale nadaje się do dużych zbiorów danych wymagających operacji analitycznych na zaszyfrowanych danych przy jednoczesnym zachowaniu prywatności i zgodności regulacyjnej.
+
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+B. Secure, key-based hashes
+   * Dlaczego nieprawidłowa: Haszowanie z kluczem (HMAC) jest operacją jednokierunkową — po zahaszowaniu danych nie można ich odwrócić do wartości oryginalnej. Choć zachowuje determinizm (ten sam input = ten sam hash), brak odwracalności może być problemem w scenariuszach biznesowych, gdzie potrzebny jest dostęp do oryginalnych danych. Ponadto, haszowanie z kluczem w Cloud DLP nie obsługuje szyfrowania z zachowaniem kontekstu (surrogates), co ogranicza możliwości zarządzania danymi.
+
+C. Format-preserving encryption
+   * Dlaczego nieprawidłowa: Szyfrowanie zachowujące format (FPE) z użyciem algorytmu FF1 jest przydatne, gdy konieczne jest zachowanie formatu danych wejściowych (np. numer telefonu po szyfrowaniu nadal wygląda jak numer telefonu). Jest to użyteczne w scenariuszach UI/wyświetlania, ale nie jest optymalnym wyborem dla operacji JOIN na dużych zbiorach danych. FPE generuje dane zastępcze w tym samym formacie, ale głównym celem pytania jest integralność referencyjna, a nie zachowanie formatu — do tego lepiej nadaje się szyfrowanie deterministyczne.
+
+D. Cryptographic hashing
+   * Dlaczego nieprawidłowa: Haszowanie kryptograficzne (np. SHA-256) jest jednokierunkowe i nieodwracalne. Nie zapewnia możliwości odzyskania danych oryginalnych, co ogranicza elastyczność w procesach biznesowych. Ponadto, bez użycia klucza (w przeciwieństwie do HMAC), jest podatne na ataki słownikowe i tęczowe tablice (rainbow tables), co obniża bezpieczeństwo w kontekście danych wrażliwych jak informacje o klientach banku.
+
+4. Wskazówki, hinty, tips and tricks:
+* Słowo kluczowe "referential integrity" w pytaniu niemal zawsze wskazuje na szyfrowanie deterministyczne — bo tylko ono gwarantuje, że ten sam input da ten sam output, umożliwiając JOIN.
+* Cloud DLP oferuje 4 główne metody pseudonimizacji: deterministic encryption, format-preserving encryption, cryptographic hashing i secure key-based hashing.
+* Pamiętaj różnicę: deterministyczne = odwracalne + zachowuje relacje; haszowanie = nieodwracalne.
+* AES-SIV (used by deterministic encryption) jest standardem dla scenariuszy wymagających determinizmu z bezpieczeństwem kryptograficznym.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Jeśli pytanie mówi o "referential integrity" + "JOIN" + "DLP" → szukaj "Deterministic encryption"
+* Jeśli pytanie mówi o "zachowaniu formatu" danych → szukaj "Format-preserving encryption"
+* Jeśli pytanie mówi o "jednokierunkowej" ochronie bez potrzeby odwracania → szukaj "Cryptographic hashing"
+* Jeśli pytanie dotyczy "tokenizacji" z możliwością łączenia danych → Deterministic encryption
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/dlp/docs/concepts-pseudonymization" target="_blank">Cloud DLP - Pseudonymization concepts</a>
+<a href="https://cloud.google.com/dlp/docs/concepts-pseudonymization#deterministic-encryption" target="_blank">Cloud DLP - Deterministic encryption</a>
+<a href="https://cloud.google.com/dlp/docs/deidentify-sensitive-data" target="_blank">Cloud DLP - De-identify sensitive data</a>
+<a href="https://cloud.google.com/dlp/docs/transformations-reference" target="_blank">Cloud DLP - Transformations reference</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

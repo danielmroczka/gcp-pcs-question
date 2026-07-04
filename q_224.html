@@ -90,24 +90,38 @@ You have numerous private virtual machines on Google Cloud. You occasionally nee
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Create a firewall rule to allow access from the Identity-Aware Proxy (IAP) IP range. Grant the role of an IAP-secured Tunnel User to the administrators.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź C jest prawidłowa, ponieważ Identity-Aware Proxy (IAP) TCP Forwarding (tunelowanie TCP) to najbardziej bezpieczne, elastyczne i bezkosztowe rozwiązanie do zdalnego zarządzania maszynami prywatnymi w GCP.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Jak to działa:
+a. Maszyny wirtualne nie potrzebują zewnętrznych (publicznych) adresów IP, co redukuje powierzchnię ataku i eliminuje koszty związane z publicznymi IP.
+b. Zamiast łączyć się bezpośrednio, administratorzy inicjują tunel SSH za pomocą narzędzia gcloud (`gcloud compute ssh --tunnel-through-iap`).
+c. Ruch z internetu trafia najpierw do punktu końcowego IAP, który weryfikuje tożsamość użytkownika za pomocą IAM oraz wymusza uwierzytelnienie wieloskładnikowe (MFA).
+d. Po pomyślnej weryfikacji, IAP przekazuje ruch do maszyny wirtualnej. Do poprawnego działania wymagana jest jedynie reguła zapory sieciowej (firewall) w sieci VPC zezwalająca na ruch przychodzący na port 22 (SSH) wyłącznie z dedykowanego zakresu IP Google IAP: `35.235.240.0/20`.
+e. Jest to rozwiązanie w pełni darmowe (optymalizacja kosztów) i nie wymaga utrzymywania dodatkowej infrastruktury (VPN, Bastion).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Create a site-to-site VPN from your corporate network to Google Cloud.
+   * Dlaczego nieprawidłowa: Utworzenie i utrzymywanie tunelu VPN (Cloud VPN) generuje stałe koszty godzinowe oraz wymaga konfiguracji urządzeń sieciowych po stronie lokalnej. Jest to rozwiązanie znacznie droższe i bardziej złożone niż darmowy IAP TCP forwarding, zwłaszcza do "okazjonalnego" zarządzania serwerami.
+B. Configure server instances with public IP addresses. Create a firewall rule...
+   * Dlaczego nieprawidłowa: Przypisanie publicznych IP do maszyn wirtualnych wystawia je na ataki skanowania sieci w internecie. Ponadto publiczne adresy IP w GCP generują dodatkowe koszty, a filtrowanie ruchu wyłącznie po adresach IP jest mniej bezpieczne niż weryfikacja tożsamości IAM.
+D. Create a jump host instance with public IP. Manage the instances by connecting through...
+   * Dlaczego nieprawidłowa: Maszyna typu jump host (Bastion) musi być stale uruchomiona, co generuje koszty obliczeniowe (Compute Engine). Ponadto serwer Bastion staje się pojedynczym punktem awarii oraz celem ataków, wymagającym ciągłego patchowania i monitorowania.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Bezpieczny, tani dostęp SSH/RDP do maszyn prywatnych w GCP -> Zawsze **IAP TCP Forwarding** (IAP-secured tunnel).
+* Zakres adresów IP dla reguły firewall IAP to **`35.235.240.0/20`**.
+* Rola IAM wymagana do tunelowania to **`roles/iap.tunnelResourceAccessor`** (IAP-secured Tunnel User).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Manage private VMs via SSH / optimize cost and security -> IAP IP range (35.235.240.0/20) + IAP-secured Tunnel User.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/iap/docs/tcp-forwarding-overview" target="_blank">IAP TCP forwarding overview</a>
+<a href="https://cloud.google.com/iap/docs/using-tcp-forwarding" target="_blank">Using IAP for TCP forwarding</a>
 </pre>
 
 </div>

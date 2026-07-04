@@ -90,29 +90,35 @@ Your organization is transitioning to Google Cloud. You want to ensure that only
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: CE (C. Create a custom organization policy constraint to enforce Binary Authorization for GKE, E. Configure the Binary Authorization policy with respective attestations for the project).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Create a custom organization policy constraint to enforce Binary Authorization for Google Kubernetes Engine (GKE).
+E. Configure the Binary Authorization policy with respective attestations for the project.
 
-Wyjaśnienie:
-- Binary Authorization (BinAuthz - E): Jest to kluczowa usługa bezpieczeństwa dla GKE, która pozwala na zdefiniowanie polityki "kto i co może zostać uruchomione". Wymóg "signed by a trusted authority" realizuje się właśnie w BinAuthz poprzez tzw. atestacje (attestations). Atestacja to cyfrowy podpis potwierdzający, że dany obraz kontenera przeszedł pomyślnie przez określony etap (np. skanowanie podatności).
-- Polityka Organizacji (C): Aby zapewnić, że zabezpieczenie to nie jest opcjonalne, należy użyć polityki organizacji, która wymusza (enforce) włączenie Binary Authorization na wszystkich klastrach GKE w projekcie. Uniemożliwia to deweloperom tworzenie klastrów omijających mechanizm weryfikacji podpisów.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedzi C i E są prawidłowe, ponieważ Binary Authorization (Autoryzacja Binarna) jest flagową usługą bezpieczeństwa Google Cloud służącą do egzekwowania wdrażania wyłącznie podpisanych i zaufanych obrazów kontenerowych na klastrach GKE.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Container Threat Detection: Służy do wykrywania zagrożeń w CZASIE RZECZYWISTYM (runtime) na już działających kontenerach (np. wykrywanie reverse shells). Nie służy do zapobiegania wdrożeniu niezaufanych obrazów przed ich uruchomieniem.
-- B. trustedImageProjects: Ta polityka organizacji dotyczy obrazów maszyn wirtualnych (Compute Engine), a nie obrazów kontenerów (Docker/OCI) dla GKE.
-- D. PodSecurity standards: Standardy te kontrolują uprawnienia kontenera wewnątrz klastra (np. czy może działać jako root). Nie kontrolują one pochodzenia obrazu ani jego autentyczności (podpisu).
+Szczegóły wdrożenia:
+a. **Polityka organizacji (C):** Aby upewnić się, że żadne klastry GKE w projektach nie ominą tego zabezpieczenia, administrator może utworzyć lub włączyć politykę organizacji wymuszającą aktywację usługi Binary Authorization na każdym nowo tworzonym klastrze GKE.
+b. **Reguły i atestatory (Attestators) (E):** Konfiguracja samej polityki Binary Authorization polega na zdefiniowaniu reguł (np. blokowanie wszystkich obrazów poza określonymi wyjątkami) oraz zdefiniowaniu Atestatorów. Atestatory to tożsamości, które muszą kryptograficznie podpisać (attest) obraz kontenera (np. po pomyślnym przejściu skanowania podatności w potoku CI/CD), aby GKE zezwoliło na jego uruchomienie.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Only trusted images" + "GKE" = Binary Authorization.
-- "Signed by authority" = Attestations (wewnątrz Binary Authorization).
-- Pamiętaj: BinAuthz sprawdza obraz w momencie wywołania API deploymentu (`kubectl apply`). Jest to brama wejściowa na klaster.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Enable Container Threat Detection in the Security Command Center (SCC) for the project.
+   * Dlaczego nieprawidłowa: Container Threat Detection wykrywa zagrożenia w czasie rzeczywistym w już uruchomionych kontenerach (np. próby wykonania exploitów). Jest to kontrola reaktywna (detective), a nie prewencyjna blokada wdrożenia niepodpisanych obrazów.
+B. Configure the trusted image organization policy constraint for the project.
+   * Dlaczego nieprawjednoczesna: Polityka `constraints/compute.trustedImageProjects` dotyczy obrazów maszyn wirtualnych Compute Engine (GCE), a nie obrazów kontenerów (Docker/OCI) wdrażanych w klastrach Kubernetes.
+D. Enable PodSecurity standards, and set them to Restricted.
+   * Dlaczego nieprawidłowa: Standardy bezpieczeństwa Podów (Pod Security Standards) w Kubernetes kontrolują uprawnienia kontenerów wewnątrz systemu (np. zakaz uruchamiania jako root, dostęp do sieci hosta), ale nie weryfikują podpisów kryptograficznych samych obrazów przed wdrożeniem.
 
-Kluczowe zagadnienia do powtórzenia:
-- Binary Authorization workflow (Build -> Attest -> Deploy).
-- Role IAM: Attestor (tworzy podpis), Evaluator (sprawdza podpis).
-- Bezpieczeństwo łańcucha dostaw oprogramowania (Supply Chain Security).
+4. Wskazówki, hinty, tips and tricks:
+* Weryfikacja podpisów kontenerów / dopuszczenie tylko zaufanych obrazów do uruchomienia na GKE -> Zawsze **Binary Authorization**.
+* Atestacja (attestation) to proces podpisywania obrazu przez zaufany podmiot (np. potok Jenkins/GitHub Actions lub skaner podatności Cloud Build).
 
-Dokumentacja:
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Trusted container images on GKE / Signed images -> Binary Authorization.
+
+6. Dodatkowe źródła i dokumentacja:
 <a href="https://cloud.google.com/binary-authorization/docs/overview" target="_blank">Binary Authorization overview</a>
+<a href="https://cloud.google.com/binary-authorization/docs/run-w-attestations" target="_blank">Deploying with attestations using Binary Authorization</a>
 </pre>
 </div>
 <div class="ai-analysis-container d-none"  >

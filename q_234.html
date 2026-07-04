@@ -90,24 +90,34 @@ Your organization uses BigQuery to process highly sensitive, structured datasets
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Create curated tables in a separate dataset and assign the role roles/bigquery.dataViewer.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź C jest prawidłowa, ponieważ separacja danych na poziomie zbiorów danych (datasets) w BigQuery jest standardową i najbezpieczniejszą metodą implementacji zasady najmniejszych uprawnień (least privilege) dla użytkowników biznesowych, którzy potrzebują wglądu jedynie w przetworzone i bezpieczne raporty.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Analiza techniczna:
+a. **Zasada Need to Know:** Biznesowi użytkownicy nie powinni mieć dostępu do surowych, wrażliwych danych. Stworzenie wydzielonego zbioru danych (dataset) zawierającego wyłącznie wyselekcjonowane i zagregowane tabele/widoki (curated tables/views) izoluje wrażliwe informacje u źródła.
+b. **Rola Data Viewer:** Przypisanie roli `roles/bigquery.dataViewer` do tego dedykowanego zbioru danych pozwala użytkownikom biznesowym na odpytywanie i przeglądanie danych raportowych, jednocześnie blokując im możliwość modyfikacji danych lub wglądu w inne, nieautoryzowane zbiory danych w projekcie.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Configure data access log for BigQuery services, and grant Project Viewer role...
+   * Dlaczego nieprawidłowa: Rola `Project Viewer` na poziomie projektu daje uprawnienia do odczytu metadanych wszystkich zasobów w tym projekcie (w tym wszystkich tabel w BigQuery). Jest to zbyt szerokie uprawnienie dla security operatora i użytkowników biznesowych, naruszające zasadę least privilege.
+B. Set row-based access control based on the "region" column...
+   * Dlaczego nieprawidłowa: Filtrowanie rekordów dla inżynierów danych (Data Engineers) uniemożliwiłoby im poprawne administrowanie cyklem życia danych w pełnym zakresie (potrzebują oni pełnego dostępu administrative/lifecycle, a nie ograniczonego widoku wierszy).
+D. Generate a CSV data file based on the business user's needs, and send the data to their email...
+   * Dlaczego nieprawidłowa: Ręczne lub automatyczne wysyłanie plików CSV e-mailem jest niebezpieczne (dane mogą zostać przechwycone, brak kontroli po wysłaniu pliku) i nieefektywne w porównaniu z kontrolowanym dostępem przez natywne mechanizmy BigQuery.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Aby ograniczyć dostęp użytkownikom do wrażliwych tabel w BigQuery, dobrą praktyką jest stosowanie **Autoryzowanych Widoków (Authorized Views)** lub dedykowanych zbiorów danych (Datasets) z rolą **BigQuery Data Viewer**.
+* Operator bezpieczeństwa (Security Operator) powinien mieć dostęp do logów audytowych w Cloud Logging, a nie bezpośrednie role projektowe w BigQuery.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Business user curated reports access -> Separate dataset + `roles/bigquery.dataViewer`.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/bigquery/docs/dataset-access-controls" target="_blank">Controlling access to datasets in BigQuery</a>
+<a href="https://cloud.google.com/bigquery/docs/authorized-views" target="_blank">Creating and using authorized views</a>
 </pre>
 
 </div>

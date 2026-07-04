@@ -90,29 +90,37 @@ You manage a BigQuery analytical data warehouse in your organization. You want t
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: CE (C. Create row-level access policies, E. Create column-level policy tags).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Create row-level access policies to restrict the result data when you run queries with the filter expression set to FALSE.
+E. Create column-level policy tags to control access to columns at query runtime.
 
-Wyjaśnienie:
-- Row-Level Security (RLS - C): BigQuery pozwala na ograniczanie dostępu do danych na poziomie poszczególnych wierszy w tabeli za pomocą tzw. "Row-level access policies". Każda polityka zawiera wyrażenie filtrujące (np. `customer_id = 'ABC'`). BigQuery automatycznie odfiltrowuje wiersze, dla których wyrażenie to jest FAŁSZYWE (FALSE). Dzięki temu w jednej tabeli możesz trzymać dane wielu klientów, a każdy z nich zobaczy tylko swoje rekordy.
-- Column-Level Security (CLS - E): Do ograniczania dostępu do całych kolumn (np. PII) służą "Policy Tags" zarządzane w usłudze Data Catalog. Możesz oznaczyć konkretne kolumny tagami i nadać uprawnienia do odczytu tych tagów tylko wybranym osobom. Użytkownik bez odpowiedniej roli IAM nie będzie mógł wybrać tych kolumn w zapytaniu SELECT.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedzi C i E są prawidłowe, ponieważ stanowią natywne i zalecane mechanizmy Google Cloud do wdrażania zaawansowanej kontroli dostępu na poziomie wierszy i kolumn w BigQuery dla wspólnych tabel.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Filter expression set to TRUE: Gdybyś stworzył politykę z filtrem `TRUE`, użytkownik widziałby WSZYSTKIE wiersze (ponieważ dla każdego wiersza warunek byłby spełniony). Nie stanowiłoby to żadnej restrykcji.
-- B. AEAD Encryption: Szyfrowanie AEAD z użyciem KMS jest potężną techniką, ale jest znacznie trudniejsze w implementacji i zarządzaniu niż natywne funkcje RLS/CLS BigQuery. Wymagałoby modyfikacji zapytań SQL przez użytkowników (użycie funkcji deszyfrujących w kodzie SQL).
-- D. Dynamic data masking: Służy do ukrywania części danych (np. pokazanie tylko gwiazdek zamiast numeru karty), ale dane wciąż są widoczne w sformatowanej formie. CLS (opcja E) jest silniejszym mechanizmem, ponieważ całkowicie blokuje dostęp do kolumny na poziomie metadanych.
+Szczegóły rozwiązań:
+a. **Polityki dostępu na poziomie wiersza (Row-level access policies) (C):** Pozwalają na filtrowanie wierszy zwracanych użytkownikom na podstawie ich tożsamości. Przykładowo, filtr `country = 'PL'` sprawi, że użytkownik z Polski zobaczy tylko te wiersze. Zastosowanie filtru domyślnego dla nieautoryzowanych zapytań (lub jawne zdefiniowanie polityki z filtrem dającym wynik logiczny `FALSE` dla niepasujących warunków) gwarantuje, że nieuprawnieni użytkownicy nie zobaczą żadnych danych.
+b. **Tagi polityki na poziomie kolumny (Column-level policy tags) (E):** Pozwalają na przypisywanie taksonomii bezpieczeństwa (Data Catalog) do poszczególnych kolumn w tabeli BigQuery. Użytkownik, który nie posiada roli `Fine-Grained Reader` dla danego tagu, otrzyma błąd przy próbie wykonania zapytania odwołującego się do tej kolumny. Chroni to dane wrażliwe (np. numery PESEL czy kart kredytowych) bez konieczności tworzenia oddzielnych tabel.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Restrict access based on rows" = Row-level access policies.
-- "Restrict access based on columns" = Policy tags (Data Catalog).
-- Pamiętaj: Jeśli do tabeli zostanie przypisana chociaż jedna polityka RLS, wszyscy użytkownicy NIE ujęci w żadnej polityce tracą dostęp do WSZYSTKICH wierszy (bezpieczne domyślne zachowanie).
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Create row-level access policies... filter expression set to TRUE.
+   * Dlaczego nieprawidłowa: Ustawienie wyrażenia filtrującego na `TRUE` spowodowałoby, że polityka zezwalałaby wszystkim dopasowanym tożsamościom na zobaczenie wszystkich wierszy w tabeli, co całkowicie niweczy cel segmentacji danych klientów.
+B. Configure column-level encryption by using AEAD functions with Cloud KMS...
+   * Dlaczego nieprawidłowa: Szyfrowanie AEAD z KMS na poziomie zapytań wymaga skomplikowanego zarządzania kluczami w locie i modyfikacji kodu zapytań SQL przez użytkowników. Jest to znacznie trudniejsze w implementacji i zarządzaniu niż natywne Column-level policy tags.
+D. Configure dynamic data masking rules to control access to columns at query runtime.
+   * Dlaczego nieprawidłowa: Maskowanie danych (Data Masking) modyfikuje zwracane wartości (np. zastępuje cyfry znakami 'X'), ale nie blokuje całkowicie dostępu do kolumny w sposób tak restrykcyjny i oparty na taksonomii jak tagi polityk. Pytanie dotyczy restrykcji dostępu (query access restriction) w trybie bez wsparcia dla operacji modyfikacji danych.
 
-Kluczowe zagadnienia do powtórzenia:
-- BigQuery Row-level security (RLS).
-- BigQuery Column-level security (CLS) i Policy Tags.
-- Data Catalog w ekosystemie Google Cloud.
+4. Wskazówki, hinty, tips and tricks:
+* Bezpieczeństwo w BigQuery:
+  - Poziom wierszy -> **Row-level security / Row-level access policies**.
+  - Poziom kolumn -> **Column-level security / Policy tags (Data Catalog)**.
+* Kiedy stosujesz row-level security na tabeli, domyślny dostęp do wierszy dla wszystkich innych użytkowników (którzy nie są objęci żadną regułą) zostaje całkowicie zablokowany.
 
-Dokumentacja:
-<a href="https://cloud.google.com/bigquery/docs/row-level-security-intro" target="_blank">BigQuery Row-level security overview</a>
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* BigQuery segmentacja danych (wiersze i kolumny) -> Row-level access policies + Column-level policy tags.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/bigquery/docs/row-level-security-intro" target="_blank">Introduction to BigQuery row-level security</a>
+<a href="https://cloud.google.com/bigquery/docs/column-level-security-intro" target="_blank">Introduction to BigQuery column-level security</a>
 </pre>
 </div>
 <div class="ai-analysis-container d-none"  >

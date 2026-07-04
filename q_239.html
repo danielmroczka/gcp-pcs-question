@@ -90,24 +90,35 @@ You control network traffic for a folder in your Google Cloud environment. Your 
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. 1. Attach external IP addresses to the VMs in scope. 2. Define and apply a hierarchical firewall policy on folder level to deny all egress connections and to allow egress to IP range 10.58.5.0/24 from network dev-vpc.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź C jest prawidłowa, ponieważ polityka hierarchiczna zapory sieciowej (Hierarchical Firewall Policy) pozwala na centralne narzucenie i egzekwowanie reguł sieciowych na poziomie Folderu dla wielu projektów i sieci VPC, co minimalizuje wysiłek wdrożeniowy i administracyjny.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Dlaczego to rozwiązanie działa:
+a. **Folder-level enforcement:** Aplikując politykę na poziomie folderu, automatycznie obejmujemy nią wszystkie projekty i sieci VPC wewnątrz tego folderu. Nie musimy konfigurować reguł oddzielnie w każdej sieci.
+b. **Reguły polityki:** Definiujemy regułę blokującą cały ruch wychodzący (deny egress) oraz regułę zezwalającą na wyjście (allow egress) wyłącznie do docelowego zakresu `10.58.5.0/24` dla sieci `dev-vpc`.
+c. **Przypisanie zewnętrznych IP:** Umożliwia maszynom bezpośrednią komunikację zewnętrzną (jeśli jest wymagana) pod warunkiem przejścia przez filtry zapory sieciowej.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. ...Deploy a network appliance in "new-vpc" to filter access requests...
+   * Dlaczego nieprawidłowa: Wdrożenie zewnętrznego urządzenia sieciowego (network appliance / wirtualny firewall) wymaga skomplikowanej konfiguracji routingu (route tables), konfiguracji interfejsów sieciowych maszyn oraz wiąże się z wysokimi kosztami licencyjnymi i operacyjnymi. Nie spełnia to warunku "minimalizacji wysiłku".
+B. ...Enable Cloud NAT for "dev-vpc" and restrict the target range in Cloud NAT to 10.58.5.0/24.
+   * Dlaczego nieprawidłowa: Cloud NAT nie służy do bezpośredniego filtrowania i ograniczania ruchu sieciowego (nie zastępuje zapory sieciowej). Służy do translacji adresów IP dla połączeń wychodzących.
+D. ...Configure a VPC Firewall rule in "dev-vpc" that allows egress connectivity...
+   * Dlaczego nieprawidłowa: Konfiguracja reguł na poziomie pojedynczej sieci VPC (VPC Firewall) nie działa na poziomie Folderu. Jeśli w folderze pojawią się nowe sieci VPC lub projekty, reguły te nie zostaną na nich automatycznie zastosowane, co zwiększa narzut na utrzymanie.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Narzucanie reguł sieciowych dla całego Folderu (folder level) -> **Hierarchical Firewall Policy**.
+* Polityki hierarchiczne ułatwiają centralne zarządzanie bezpieczeństwem sieciowym w środowiskach wieloprojektowych.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Enforce network rules on folder level -> Hierarchical firewall policy.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/vpc/docs/hierarchical-firewall-policies" target="_blank">Hierarchical firewall policies overview</a>
+<a href="https://cloud.google.com/vpc/docs/firewalls" target="_blank">VPC firewall rules overview</a>
 </pre>
 
 </div>

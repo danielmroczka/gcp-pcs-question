@@ -90,24 +90,35 @@ Your organization uses Google Workspace Enterprise Edition for authentication. Y
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Set the session length timeout for Google Cloud services to a shorter duration.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź D jest prawidłowa, ponieważ skrócenie czasu trwania sesji (session control) bezpośrednio minimalizuje ryzyko nieautoryzowanego użycia aktywnej sesji administratora na pozostawionym bez nadzoru urządzeniu.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Zasada działania:
+a. Administrator Google Workspace/Cloud Identity może wymusić maksymalny czas trwania sesji dla usług Google Cloud (takich jak Google Cloud Console oraz gcloud CLI).
+b. Ustawienie tego limitu na krótką wartość (np. 1 lub 2 godziny) sprawia, że po tym czasie użytkownik zostanie automatycznie wylogowany i poproszony o ponowne wpisanie hasła / przejście 2SV.
+c. Zmniejsza to "okno czasowe", w którym nieuprawniona osoba może fizycznie podejść do laptopa i dokonać złośliwych modyfikacji w infrastrukturze produkcyjnej.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Create a policy that requires employees to not leave their sessions open for long durations.
+   * Dlaczego nieprawidłowa: Polityki papierowe i procedury (human-based policies) są nieskuteczne bez technicznych zabezpieczeń (technical controls). Pracownicy nadal będą zapominać o blokowaniu ekranu.
+B. Review and disable unnecessary Google Cloud APIs.
+   * Dlaczego nieprawidłowa: Wyłączenie nieużywanych API to dobra praktyka zmniejszania powierzchni ataku, ale nie zapobiega nieautoryzowanemu dostępowi do wciąż używanych, kluczowych API (np. Compute Engine, IAM) ze skompromitowanego urządzenia.
+C. Require strong passwords and 2SV through a security token or Google authenticator.
+   * Dlaczego nieprawidłowa: Silne hasła i dwuetapowa weryfikacja (2SV) chronią przed przejęciem konta z zewnątrz (np. phishing), ale nie chronią przed fizycznym dostępem do urządzenia, na którym użytkownik już się pomyślnie uwierzytelnił (sesja jest już aktywna).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Zagrożenie: Pozostawiony bez opieki komputer z zalogowanym użytkownikiem (unattended laptop).
+* Rozwiązanie techniczne w GCP: Skrócenie czasu trwania sesji w Google Admin Console (Session length settings).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Unattended laptop session hijacking protection -> Session length / session timeout.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://support.google.com/a/answer/9368756" target="_blank">Set session length for Google Cloud services</a>
+<a href="https://cloud.google.com/identity-aware-proxy/docs/session-duration" target="_blank">Control session duration with IAP</a>
 </pre>
 
 </div>

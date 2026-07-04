@@ -89,30 +89,36 @@ Your company's Google Cloud organization has about 200 projects and 1,500 virtua
 <div class="q-card q-answer mb-4 d-none"  >
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (1. Create one log sink at the organization level that includes all the child resources. 2. Use as destination a Pub/Sub topic to ingest the logs into the security information and event management (SIEM) on-premises. 3. Grant the Viewer role at organization level to the security operations team).
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. 1. Create one log sink at the organization level that includes all the child resources. 2. Use as destination a Pub/Sub topic to ingest the logs into the security information and event management (SIEM) on-premises, and ensure that the right team can access the SIEM. 3. Grant the Viewer role at organization level to the security operations team.
 
-Wyjaśnienie:
-- Agregowanie logów (Aggregated Sinks): W organizacji posiadającej 200 projektów, tworzenie oddzielnych sinków w każdym z nich jest nieefektywne i trudne do zarządzania. Jeden sink na poziomie organizacji z zaznaczoną opcją "include children" automatycznie zbiera logi ze wszystkich obecnych i przyszłych projektów.
-- Integracja z SIEM przez Pub/Sub: Pub/Sub jest standardowym mechanizmem Google Cloud do przesyłania strumieniowego logów do systemów zewnętrznych (takich jak on-premises SIEM, Splunk czy Chronicle). Zapewnia on niskie opóźnienia i wysoką niezawodność przy dużej skali danych.
-- Widoczność konfiguracji: Nadanie roli `Viewer` na poziomie organizacji pozwala zespołowi bezpieczeństwa na przeglądanie konfiguracji wszystkich zasobów (metadata) w całej firmie, co jest niezbędne do audytu, przy jednoczesnym zachowaniu zasady Least Privilege (brak uprawnień do zmiany danych).
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź B jest prawidłowa, ponieważ centralizacja logów z wielu projektów (tutaj 200 projektów) i integracja z lokalnym systemem klasy SIEM w czasie rzeczywistym wymaga zastosowania zagregowanego odbiornika logów (Aggregated Sink) na poziomie organizacji oraz kolejki Pub/Sub.
 
-Dlaczego pozostałe odpowiedzi są niepoprawne:
-- A. Project-level sinks + BigQuery: Tworzenie 200 sinków ręcznie jest błędem operacyjnym. BigQuery jest świetne do analizy SQL, ale SIEM-y on-premises zazwyczaj wymagają ciągłego strumienia danych (Pub/Sub) zamiast zapytań do bazy. Rola `Monitoring Viewer` nie daje pełnej widoczności konfiguracji zasobów tak jak rola `Viewer`.
-- C. No log sinks: Brak sinków oznacza, że logi są dostępne tylko przez 30 dni (domyślnie) w każdym projekcie z osobna. Uniemożliwia to centralną analizę w SIEM i długoterminowe przechowywanie wymagane dla compliance.
-- D. Production folder sink: To rozwiązanie jest zbyt wąskie – pomija logi z projektów deweloperskich, testowych czy z poziomu samej organizacji, co tworzy niebezpieczne "martwe punkty" w monitoringu. Rola `Security Reviewer` jest przydatna, ale sama w sobie nie zapewnia logów w SIEM.
+Kluczowe aspekty tego rozwiązania:
+a. **Zagregowany log sink (Aggregated Log Sink):** Tworząc jeden sink na poziomie organizacji z flagą uwzględniania zasobów podrzędnych (`includeChildren=true`), automatycznie przechwytujemy logi ze wszystkich istniejących i nowo tworzonych projektów bez konieczności ręcznej konfiguracji sinków w każdym projekcie z osobna. Jest to wysoce skalowalne i odporne na błędy administracyjne.
+b. **Pub/Sub jako miejsce docelowe:** Przesyłanie logów w czasie rzeczywistym do systemu SIEM on-premises najlepiej zrealizować poprzez Pub/Sub, który działa jako wysoce wydajny bufor wiadomości i pozwala na asynchroniczne pobieranie logów przez lokalne kolektory SIEM.
+c. **Uprawnienia do widoczności konfiguracji:** Nadanie zespołowi bezpieczeństwa roli `Viewer` na poziomie organizacji daje im prawo do przeglądania konfiguracji i metadanych zasobów w konsoli, co jest niezbędne do analizowania środowiska, nie dając jednocześnie uprawnień do edycji lub dostępu do danych wrażliwych.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- "Organization-wide visibility" + "SIEM" = Aggregated Sink + Pub/Sub.
-- Słowo klucz: "Scale" lub "200 projects" sugeruje rozwiązanie na poziomie Organizacji (Organization-level).
-- Jeśli celem jest analiza SQL wewnątrz GCP -> wybierz BigQuery. Jeśli celem jest SIEM lub system zewnętrzny -> wybierz Pub/Sub.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. 1. Create a dedicated log sink for each project... 4. Grant the role Monitoring Viewer...
+   * Dlaczego nieprawidłowa: Tworzenie dedykowanych sinków w każdym z 200 projektów oddzielnie jest operacyjnym koszmarem i nie gwarantuje, że nowe projekty będą automatycznie objęte monitoringiem. Dodatkowo rola `Monitoring Viewer` nie pozwala na pełny wgląd w konfigurację wszystkich zasobów w organizacji.
+C. 1. Enable network logs and data access logs... 2. Do not create log sinks...
+   * Dlaczego nieprawidłowa: Niezapisywanie logów do zewnętrznego odbiornika uniemożliwia ich analizę w systemie SIEM i powoduje utratę logów po standardowym okresie retencji GCP. Zespół bezpieczeństwa nie miałby centralnego miejsca analizy.
+D. 1. Create one sink for the Production folder... 2. Use a log bucket...
+   * Dlaczego nieprawidłowa: Logowanie do lokalnego Log Bucket w GCP utrudnia integrację z on-premises SIEM. Ponadto ta opcja nie obejmuje całej organizacji, a rola `Security Reviewer` na poziomie organizacji daje duże uprawnienia, ale samo rozwiązanie nie realizuje integracji SIEM on-premises w sposób natychmiastowy i efektywny za pomocą Pub/Sub.
 
-Kluczowe zagadnienia do powtórzenia:
-- Aggregated Sinks (Agregowane Sinki).
-- Log Sinks i ich cele (Cloud Storage, BigQuery, Pub/Sub).
-- Rola IAM Viewer vs Security Reviewer.
+4. Wskazówki, hinty, tips and tricks:
+* Kiedy celem jest integracja z zewnętrznym/lokalnym (on-premises) systemem SIEM, domyślnym i zalecanym mechanizmem transportu w GCP jest **Pub/Sub**.
+* Zagregowane odbiorniki logów (Aggregated Sinks) na poziomie Organizacji lub Folderu są jedyną poprawną metodą zbierania logów w środowiskach wieloprojektowych (multi-project).
 
-Dokumentacja:
-<a href="https://cloud.google.com/logging/docs/export/aggregated_sinks" target="_blank">Aggregated sinks overview</a>
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Integracja z SIEM on-premises -> szukaj Pub/Sub.
+* Centralizacja logów w skali organizacji -> szukaj "log sink at the organization level" lub "aggregated sink".
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/logging/docs/export/aggregated_sinks" target="_blank">Aggregated sinks in Cloud Logging</a>
+<a href="https://cloud.google.com/architecture/exporting-security-logs-to-siem" target="_blank">Exporting Google Cloud security logs to your SIEM</a>
 </pre>
 </div>
 <div class="ai-analysis-container d-none"  >

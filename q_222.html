@@ -90,24 +90,34 @@ Your company recently published a security policy to minimize the usage of servi
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Set up a workload identity pool with your corporate Active Directory Federation Service (ADFS). Configure a rule to let principals in the pool impersonate the Google Cloud service account.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź A jest prawidłowa, ponieważ implementacja Workload Identity Federation (WIF) z lokalnym ADFS wymaga precyzyjnego ograniczenia (zasady najmniejszych uprawnień) tożsamości, które mogą uzyskiwać dostęp do chmury i przybierać tożsamość konta serwisowego.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Kluczowe elementy konfiguracji:
+a. **Workload Identity Pool & Provider:** Tworzymy pulę dedykowaną dla aplikacji on-premises, a jako providera konfigurujemy ADFS (obsługującego SAML lub OIDC).
+b. **Konfiguracja reguł dostępu (impersonation rules):** Zamiast pozwalać wszystkim tożsamościom z ADFS na dostęp (co stanowiłoby ogromne zagrożenie, gdyby dowolny użytkownik domeny AD mógł kontrolować zasoby GCP), musimy zdefiniować regułę (np. sprawdzającą członkostwo w danej grupie AD lub konkretny identyfikator aplikacji) i tylko tym wybranym podmiotom (principals) zezwolić na przybranie roli konta serwisowego GCP (`roles/iam.workloadIdentityUser`).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+B. ...Let all principals in the pool impersonate the Google Cloud service account.
+   * Dlaczego nieprawidłowa: Zezwolenie wszystkim tożsamościom (all principals) w puli na przejmowanie uprawnień konta serwisowego jest rażącym naruszeniem zasady najmniejszych uprawnień. Każdy użytkownik uwierzytelniony w lokalnym ADFS miałby wówczas dostęp do zasobów GCP przypisanych do tego konta.
+C. Set up a workload identity pool with an OpenID Connect (OIDC) service on the same machine...
+   * Dlaczego nieprawidłowa: Instalacja lokalnej usługi OIDC na "tej samej maszynie" (same machine) nie skaluje się dla aplikacji on-premises i nie integruje się bezpośrednio z centralnym dostawcą tożsamości (corporate IdP), jakim jest ADFS, co było kluczowym wymaganiem.
+D. ...OIDC service on the same machine. Let all principals...
+   * Dlaczego nieprawidłowa: Ta opcja łączy wady rozwiązań z punktów B i C: brak integracji z ADFS oraz brak ograniczenia uprawnień (zezwolenie wszystkim tożsamościom).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Workload Identity Federation pozwala aplikacjom on-premises na dostęp do API Google bez używania kluczy konta serwisowego.
+* Przy przypisywaniu roli `Workload Identity User` do konta serwisowego zawsze stosuj selektywne mapowanie atrybutów (np. `principalSet://iam.googleapis.com/projects/.../attribute.group/app_team`).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* WIF z ADFS -> skonfiguruj regułę (configure a rule) ograniczającą dostęp zamiast dopuszczania wszystkich (all principals).
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/iam/docs/workload-identity-federation" target="_blank">Workload Identity Federation</a>
+<a href="https://cloud.google.com/iam/docs/workload-identity-federation-with-adfs" target="_blank">Configuring Workload Identity Federation with ADFS</a>
 </pre>
 
 </div>

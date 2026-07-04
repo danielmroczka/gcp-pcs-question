@@ -90,24 +90,35 @@ Your company is concerned about unauthorized parties gaining access to the Googl
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Security key
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź A jest prawidłowa, ponieważ fizyczne klucze bezpieczeństwa (Security Keys) oparte na standardzie FIDO2 / WebAuthn są jedynym mechanizmem uwierzytelniania dwuskładnikowego (2FA/2SV), który jest w 100% odporny na ataki typu phishing i person-in-the-middle (MITM).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Dlaczego klucz bezpieczeństwa chroni przed fałszywą stroną logowania:
+a. **Powiązanie z domeną (Origin binding):** Podczas rejestracji klucza bezpieczeństwa jest on powiązany kryptograficznie z domeną (np. `accounts.google.com`).
+b. **Weryfikacja w locie:** Kiedy użytkownik próbuje zalogować się na fałszywej stronie (np. `accounts.go0gle.com`), przeglądarka przesyła rzeczywistą domenę witryny do klucza bezpieczeństwa. Klucz sprawdza, czy domena zgadza się z zarejestrowaną. Ponieważ domena fałszywej strony się nie zgadza, klucz odmawia podpisania żądania logowania i nie przekazuje żadnych sekretów.
+c. Żadne inne metody 2FA nie weryfikują domeny w ten sposób i mogą zostać przechwycone przez fałszywy serwer proxy (phishing proxy).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+B. Google prompt
+   * Dlaczego nieprawidłowa: Powiadomienia w telefonie (Google Prompt) wymagają jedynie zatwierdzenia logowania na ekranie urządzenia. Jeśli użytkownik wpisze hasło na fałszywej stronie, napastnik natychmiast wyzwoli prompta. Użytkownik, myśląc, że loguje się na prawdziwej stronie, zatwierdzi komunikat w telefonie, umożliwiając napastnikowi dostęp.
+C. Text message or phone call code
+   * Dlaczego nieprawidłowa: Kody jednorazowe wysyłane SMS-em są bardzo podatne na phishing. Użytkownik po wpisaniu hasła na fałszywej stronie wpisze tam również otrzymany kod SMS, który napastnik natychmiast przekieruje do prawdziwej usługi (Real-time phishing/MITM).
+D. Google Authenticator application
+   * Dlaczego nieprawidłowa: Podobnie jak kody SMS, kody z aplikacji Authenticator (TOTP) mogą zostać łatwo skopiowane przez użytkownika i wklejone na fałszywej stronie logowania, a następnie użyte przez napastnika do zalogowania się.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Najwyższy poziom ochrony przed phishingiem / fałszywymi stronami logowania / man-in-the-middle -> **Security key** (FIDO2/WebAuthn).
+* Tradycyjne kody (SMS, Authenticator) nie chronią przed zaawansowanym phishingiem przechwytującym dane w czasie rzeczywistym.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Protect against fake login page / person-in-the-middle / phishing -> Security key.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://support.google.com/a/answer/7541190" target="_blank">Enforce 2-Step Verification with security keys</a>
+<a href="https://fidoalliance.org/fido2/" target="_blank">FIDO Alliance: FIDO2 overview</a>
 </pre>
 
 </div>
