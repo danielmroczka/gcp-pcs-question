@@ -114,29 +114,8 @@ Audyt wykazał, że maszyny wirtualne posiadają publiczne adresy IP. Maszyny te
 </pre>
 
 </div>
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
-<div class="analysis-section">
-<h3>Reguła Egzaminacyjna (Exam Rule)</h3>
-<p>Dla każdej architektury, która wymaga "izolacji publicznej" przy jednoczesnym zachowaniu łączności wychodzącej, <b>Cloud NAT</b> jest jedyną słuszną odpowiedzią w GCP.</p>
 
-<h3>Haczyki Egzaminacyjne (Exam Traps)</h3>
-<ul>
-    <li><b>Cloud Router vs Cloud NAT:</b> Egzamin często zestawia te usługi. Zapamiętaj: Router to "mózg" (zarządzanie trasami BGP), NAT to "narzędzie" (translacja adresów). Sam Router nie zapewni wyjścia do internetu.</li>
-    <li><b>Myśl o NAT jako o firewallu:</b> Pamiętaj, że Cloud NAT nie otwiera połączeń przychodzących. Jeśli pytanie wspomina o potrzebie przyjmowania ruchu (np. web server), NAT nie wystarczy – potrzebny będzie Load Balancer.</li>
-</ul>
-
-<h3>Głębokie wyjaśnienie techniczne (GCP Professional Cloud Security Engineer)</h3>
-<p>Cloud NAT działa jako usługa typu <b>Software-Defined Networking (SDN)</b> w warstwie zarządzanej GCP. Wykorzystuje <b>IP masquerading</b>, mapując prywatne adresy IP instancji (z zakresu RFC 1918) na jeden lub więcej publicznych adresów IP zarezerwowanych dla bramy NAT. Z punktu widzenia bezpieczeństwa, pozwala to na utrzymanie "Zero Trust" wewnątrz sieci VPC: maszyny nie są osiągalne z Internetu, co eliminuje ryzyko skanowania portów czy ataków typu brute-force bezpośrednio na instancje.</p>
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

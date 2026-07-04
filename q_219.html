@@ -125,46 +125,15 @@ D. Access Transparency and Approval
 </pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
-Jeśli scenariusz dotyczy zabezpieczania zasobów chmurowych (GCP), zawsze wybieraj rozwiązanie typu Managed (SCC, Secret Manager, Cloud KMS), a unikaj rozwiązań self-managed, chyba że pytanie wyraźnie wymaga dostosowania niskopoziomowego.
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <strong>Pułapka IAM:</strong> Pytania o uprawnienia często sugerują 'Project Owner' – zawsze szukaj 'Least Privilege' (np. 'Role: Secret Manager Secret Accessor').
-- <strong>Pułapka Sieciowa:</strong> Często mylone są VPC Peering (wydajność) oraz VPN (szyfrowanie/on-premise).
-
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Rozwiązanie bazuje na GCP Shared Responsibility Model. Google zarządza bezpieczeństwem infrastruktury (Physical, Network, Host), podczas gdy administrator zarządza tożsamością (IAM), danymi (Encryption, Cloud KMS) i regułami dostępu (VPC Firewall).
-</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: CE</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie jest testem zrozumienia najwyższych standardów "Sovereignty" (suwerenności) w chmurze. EKM fizycznie oddziela "skarb" (klucz) od "domu skarbu" (Google Cloud), a KAJ daje właścicielowi "klucza do drzwi" pełny wgląd w to, kto i dlaczego chce do niego zajrzeć. To idealna konfiguracja dla najbardziej wrażliwych danych.</p>
-<h3>Dodatkowe wskazówki</h3>
-<ul>
-<li>Wdróż KAJ w trybie "Log-only", aby najpierw zobaczyć, jakie żądania zgłasza Google, zanim przełączysz się na tryb wymuszania zgód.</li>
-<li>EKM i KAJ są dostępne tylko dla organizacji w wybranych regionach i dla wybranych usług.</li>
-</ul>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

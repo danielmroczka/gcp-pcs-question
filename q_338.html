@@ -127,67 +127,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/kubernetes-engine/docs/concepts/node-auto-upgrades</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: A
 
-Prawidłowa odpowiedź: A – Configure node auto-upgrades for node pools in the maintenance windows.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO A JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-GKE Node Auto-Upgrade automatycznie aktualizuje węzły do najnowszej wersji K8s podczas zdefiniowanych okien serwisowych. To natywna, zarządzana funkcja GKE, która:
-- Nie wymaga ręcznej interwencji.
-- Zapewnia że wszystkie węzły są aktualne.
-- Maintenance windows = kontrola czasu aktualizacji (minimalizacja disruption).
-- Skaluje się do dowolnej liczby klastrów.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-B. ❌ Custom organization policy `autoUpgrade == true` = org policies dla GKE nie mają takiego constraint. Org policies operują na innym poziomie.
-C. ❌ Tworzenie nowego node pool + migracja = ręczny proces. Kosztowny czas i zasoby przy wielu klastrach.
-D. ❌ Ręczna komenda `gcloud container clusters upgrade` = to co mamy teraz i co jest problemem. Nie rozwiązuje kwestii "missed notifications".
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• GKE automatic node upgrades = Node Auto-Upgrade (nie org policy constraint).
-• Maintenance windows = zdefiniowane okna aktualizacji.
-• "Many clusters" + "automatic" = zarządzana funkcja GKE.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• GKE node patching = Node Auto-Upgrade + Maintenance Windows.
-• Nie ma org policy constraint dla GKE auto-upgrade (w odróżnieniu od Vertex AI Workbench).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/kubernetes-engine/docs/concepts/node-auto-upgrades</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie o automatyzację utrzymania klastrów GKE. Auto-upgrade to natywna, bezobsługowa metoda zapewnienia aktualności klastra, co bezpośrednio redukuje ryzyko podatności.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

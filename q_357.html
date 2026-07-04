@@ -129,69 +129,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/iam/docs/best-practices-service-accounts</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: A
 
-Prawidłowa odpowiedź: A – Create two separate service accounts. Grant one service account the permissions to execute service A, and grant the other service account the permissions to execute service B. Require authentication for service B from service A only.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO A JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Pytanie: service A (frontend) wywołuje service B (backend API). Najlepsze praktyki:
-- Osobny SA dla każdego serwisu = izolacja uprawnień.
-- SA service A ma tylko uprawnienia do wykonywania (run) Cloud Run i wywoływania service B.
-- SA service B = tylko uprawnienia do działania backendu.
-- "Authentication from service A only" = Cloud Run autoryzacja (roles/run.invoker przyznane tylko SA service A).
-Zasada least privilege + izolacja serwisów.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-B. ❌ Trzy SA (A, B, i jeden wspólny) = nadmiarowe i niepotrzebna złożoność. Nie wyjaśnione jest do czego służy trzeci SA.
-C. ❌ Jeden SA dla obu serwisów = brak izolacji. Jeśli jeden serwis jest skompromitowany, atakujący ma dostęp do drugiego.
-D. ❌ Default Compute Engine SA = zbyt szerokie uprawnienia. Naruszenie least privilege.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Każdy serwis Cloud Run = własny SA (izolacja).
-• Cloud Run service-to-service auth = SA service A ma roles/run.invoker na service B.
-• "From service A only" = IAM binding ograniczony do SA-A na service B.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Jeden SA per serwis = zasada izolacji.
-• Service-to-service auth = invoker role na SA wywołującego serwisu.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/run/docs/authenticating/service-to-service
-• https://cloud.google.com/iam/docs/best-practices-service-accounts</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie o bezpieczną architekturę w środowisku serverless (Cloud Run). Kluczem jest izolacja tożsamości każdego serwisu (osobne SA) oraz restrykcyjne nadawanie uprawnień do wywoływania (Invoker role) w celu realizacji modelu "Least Privilege".</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

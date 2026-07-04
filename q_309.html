@@ -123,63 +123,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/confidential-computing/confidential-vm/docs/about-cvm</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: A
 
-Prawidłowa odpowiedź: A – Enable Confidential VM instances for Compute Engine, and ensure that relevant Cloud Run jobs use Confidential Cloud Run.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO A JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Pytanie dotyczy ochrony danych finansowych PODCZAS przetwarzania (data in use). Confidential Computing (Confidential VMs + Confidential Cloud Run) szyfruje dane w pamięci RAM podczas obliczeń, co oznacza że nawet Google nie może odczytać tych danych. To jedyna technologia chroniąca dane "in use".
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-B. ❌ Data masking i tokenizacja chronią dane przechowywane/przenoszone, ale nie dane PODCZAS przetwarzania w pamięci RAM.
-C. ❌ Cloud DLP skanuje i maskuje dane w spoczynku/tranzycie, nie podczas aktywnego przetwarzania finansowego.
-D. ❌ CMEK dla Cloud Storage = szyfrowanie at rest. Dane finansowe podczas przetwarzania są odszyfrowane w pamięci.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• "During processing / in use" = Confidential Computing.
-• Trzy typy szyfrowania: at rest (CMEK/CSEK) | in transit (TLS) | in use (Confidential VMs).
-• Dane finansowe "during processing" wskazuje na Confidential Computing.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• In-use encryption = Confidential VMs / Confidential Cloud Run.
-• At-rest = CMEK/CSEK. In-transit = TLS/VPN.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/confidential-computing/confidential-vm/docs/about-cvm</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość "poufności obliczeniowej" (Confidential Computing). Przez lata był to brakujący element w bezpieczeństwie chmurowym. Google jako lider w tej dziedzinie pozwala na całkowite odizolowanie danych klienta od infrastruktury dostawcy. Na egzaminie zawsze łącz "Data in use" z "Confidential VMs".</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

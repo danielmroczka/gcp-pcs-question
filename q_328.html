@@ -127,67 +127,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/iam/docs/rotate-service-account-keys</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: D
 
-Prawidłowa odpowiedź: D – Implement a secret management service. Configure the service to frequently rotate the service account keys. Grant access to the partner application by using secret manager.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO D JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Partner zewnętrzny potrzebuje dostępu do Cloud Storage. Zewnętrzni partnerzy (poza GCP) nie mogą używać Workload Identity. Secret Manager z rotacją kluczy SA to właściwe podejście:
-- Secret Manager = bezpieczne przechowywanie i dystrybucja sekretów.
-- Rotacja kluczy = ograniczenie ryzyka wycieku.
-- Kontrolowany dostęp partnera tylko do sekretów (nie do samych zasobów bezpośrednio).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ Cloud DLP scan + auto-share = automatyczne udostępnianie danych po skanowaniu. Niebezpieczne i nie adresuje pytania o bezpieczny dostęp partnera.
-B. ❌ VPC Service Controls z ingress rule = VPC SC działa dla zasobów w obrębie GCP. Zewnętrzny partner nie jest częścią VPC SC perimeter.
-C. ❌ Szyfrowanie danych = ochrona at-rest, nie mechanizm dostępu dla partnera.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Zewnętrzny partner (poza GCP) = SA keys z Secret Manager (nie Workload Identity).
-• Secret Manager = centralne zarządzanie sekretami z audytem.
-• Rotacja kluczy = ograniczenie okna ataku.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Zewnętrzny dostęp partner → GCP = SA keys + Secret Manager + rotacja.
-• Wewnętrzny GCP workload → GCP = Workload Identity (bez kluczy).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/secret-manager/docs/overview
-• https://cloud.google.com/iam/docs/rotate-service-account-keys</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje pragmatyczne podejście do bezpieczeństwa w sytuacjach, gdy nie da się uniknąć użycia Service Account Keys (np. integracja z podmiotem trzecim). Rotacja i kontrola dostępu do samego klucza to niezbędne minimum.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

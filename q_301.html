@@ -126,66 +126,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/vpc-service-controls/docs/overview</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: B
 
-Prawidłowa odpowiedź: B – Use VPC Service Controls to enforce restrictions on access to and from Google-managed services within a perimeter.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO B JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-VPC Service Controls (VPC SC) tworzy "perymetr bezpieczeństwa" wokół usług Google (BigQuery, Cloud Storage, itp.) i zapobiega:
-- Eksfiltracji danych poza perymetr.
-- Dostępowi do danych z niezaufanych sieci/projektów.
-- To jedyne narzędzie GCP, które faktycznie zapobiega eksfiltracji danych z zarządzanych usług.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ Firewall rules dotyczą ruchu sieciowego do/z VM, nie zarządzają dostępem do Google-managed services (np. BigQuery API).
-C. ❌ Cloud DLP wykrywa i maskuje dane wrażliwe, ale nie blokuje eksfiltracji na poziomie sieci.
-D. ❌ IAM kontroluje kto ma dostęp do zasobów, ale nie tworzy perimetru zapobiegającego eksfiltracji.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• "Prevent data exfiltration from managed services" = VPC Service Controls.
-• VPC SC ≠ firewall rules (firewalls = VM traffic, VPC SC = API-level perimeter).
-• Kluczowe słowa: "perimeter", "Google-managed services", "data exfiltration".
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Eksfiltracja danych z managed services → VPC Service Controls.
-• Firewall rules → ruch do/z VM (nie do API Google).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/vpc-service-controls/docs/overview</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do projektowania bezpiecznych procesów administracyjnych. W chmurze uprawnienia są "wszędobylskie". Twoim zadaniem jako inżyniera bezpieczeństwa jest ich "przycinanie" (pruning), aby każda osoba miała tylko tyle uprawnień, ile jest jej niezbędne do wykonania pracy – ani mniej, ani więcej.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

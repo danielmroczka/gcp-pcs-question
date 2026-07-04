@@ -125,65 +125,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/dlp/docs/creating-templates-deid</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: A
 
-Prawidłowa odpowiedź: A – De-identify sensitive data before model training by using Cloud Data Loss Prevention (Cloud DLP).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO A JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Model ML trenowany na danych z BigQuery może przechowywać i "zapamiętywać" wrażliwe dane (PII). De-identyfikacja (tokenizacja, pseudonimizacja, maskowanie) przez Cloud DLP PRZED treningiem eliminuje problem u źródła – model nigdy nie widzi prawdziwych danych PII. To zgodne z zasadą privacy by design i standardami jak GDPR.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-B. ❌ IAP kontroluje dostęp do aplikacji webowych, nie chroni danych w BigQuery przed modelem ML. Nie rozwiązuje problemu PII w danych treningowych.
-C. ❌ CMEK szyfruje dane w spoczynku, ale model ML i tak ma dostęp do odszyfrowanych danych podczas treningu – nie chroni przed PII w modelu.
-D. ❌ Confidential VMs chronią dane w użyciu (in-use encryption), ale nie usuwają PII z danych treningowych. Model i tak może "nauczyć się" PII.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• ML + PII w danych treningowych = Cloud DLP de-identification PRZED treningiem.
-• CMEK/Confidential VM chronią infrastrukturę, nie usuną PII z danych.
-• "Privacy by design" = eliminacja PII przed przetwarzaniem, nie po.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Ochrona PII w danych treningowych ML = Cloud DLP de-identification.
-• CMEK = encryption at rest (nie usuwa PII).
-• Confidential VM = encryption in use (nie usuwa PII).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/dlp/docs/deidentify-sensitive-data
-• https://cloud.google.com/dlp/docs/creating-templates-deid</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją zdolność do projektowania bezpiecznych środowisk testowych/treningowych. W środowiskach AI często używa się danych rzeczywistych, co jest naruszeniem standardów bezpieczeństwa. Użycie natywnych funkcji "De-identification" pozwala zachować użyteczność modelu, przy jednoczesnej eliminacji ryzyka wycieku rzeczywistych danych PII.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

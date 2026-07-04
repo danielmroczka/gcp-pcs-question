@@ -127,67 +127,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/access-context-manager/docs/access-policy-overview</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: C
 
-Prawidłowa odpowiedź: C – Use Context-Aware Access. Create an access level that defines the required context. Apply it as an organization-level access policy to allow only specific users from the storage team to access the Cloud Storage APIs.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO C JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Pytanie: izolacja dostępu do Cloud Storage dla jednego projektu, tylko storage team. Context-Aware Access:
-- Tworzy access level z wymaganiami kontekstualnymi (tożsamość, urządzenie, etc.).
-- Organization-level policy = stosowane centralnie.
-- Pozwala na granularne ograniczenie dostępu do konkretnych API/usług.
-- Nie wpływa na inne projekty.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ IAM project-level = IAM nie izoluje Cloud Storage API (blokuje dostęp, ale nie per-API kontekst).
-B. ❌ Organization firewall rules blocking Cloud Storage = firewall działa na L3/L4, nie na API pozwoleniach dla Cloud Storage (managed service).
-D. ❌ VPC SC organization-wide perimeter = wszystkie projekty w perimetrze, co może zakłócić inne projekty. Nadmiarowe dla izolacji jednego projektu.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Granularna izolacja API dla konkretnych użytkowników = Context-Aware Access.
-• VPC SC = cały perymetr (wszystko wewnątrz/zewnątrz), Context-Aware = per-user/per-group.
-• Firewall = L3/L4 (IP/port), nie API permission.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Granularny dostęp do API dla grupy = Context-Aware Access.
-• Izolacja zasobów całego projektu = VPC SC.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/access-context-manager/docs/access-policy-overview</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie o egzekwowanie kontroli dostępu opartej na urządzeniu (device-based access control). Kluczem jest Context-Aware Access, który pozwala na "wielowarstwową" weryfikację dostępu (tożsamość + urządzenie).</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

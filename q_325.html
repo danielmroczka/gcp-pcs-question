@@ -130,70 +130,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/iap/docs/concepts-overview</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: C
 
-Prawidłowa odpowiedź: C – Configure firewall rules to block traffic from known malicious IP ranges. Set up Google Cloud Armor and implement Identity-Aware Proxy (IAP) for granular access control.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO C JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Aplikacja atakowana przez malicious traffic (DDoS/bot attacks). Odpowiedź C:
-- Firewall rules = blokada znanych złośliwych IP (szybka ochrona).
-- Cloud Armor = WAF + DDoS protection (filtruje ataki na poziomie L7, chroni przed OWASP Top 10, rate limiting).
-- IAP = granularna kontrola dostępu oparta na tożsamości (tylko autoryzowani użytkownicy).
-Razem = kompletna, wielowarstwowa ochrona.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ Network load balancing bez WAF/Armor = rozkłada ruch, ale nie filtruje złośliwego. "Rely on load balancers for threat detection" = błędne.
-B. ❌ Firewall na instancjach + "rely on load balancers for threat detection" = load balancer nie wykrywa zagrożeń. Brak Cloud Armor.
-D. ❌ "Restrict all internal IP ranges" = zablokowałoby legalny ruch wewnętrzny. "Disable external IPs" może złamać publiczną dostępność aplikacji.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• DDoS/malicious traffic = Google Cloud Armor (WAF + DDoS protection).
-• IAP = granularna kontrola dostępu (nie DDoS protection).
-• Cloud Armor działa na poziomie Load Balancer (nie instancji).
-• Wielowarstwowa ochrona = firewall + Cloud Armor + IAP.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• DDoS/malicious traffic = Cloud Armor (nie Network LB).
-• Granular access control = IAP.
-• Load Balancer = traffic distribution, NIE threat detection.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/armor/docs/cloud-armor-overview
-• https://cloud.google.com/iap/docs/concepts-overview</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie o standardowe zestawienie usług bezpieczeństwa brzegowego GCP. Cloud Armor zapewnia ochronę WAF/DDoS, a IAP pozwala na implementację modelu Zero Trust (dostęp oparty na tożsamości, a nie na sieci).</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

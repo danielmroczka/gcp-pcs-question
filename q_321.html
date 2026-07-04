@@ -132,73 +132,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/security-command-center/docs/concepts-security-health-analytics-overview</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: A, D
 
-Prawidłowe odpowiedzi: A i D
-A – Apply organization policy constraints. Detect and monitor drifts by using Security Health Analytics.
-D – Apply a predefined AI-recommended security posture template for Gemini in Vertex AI in Security Command Center Enterprise or Premium tiers.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO A i D SĄ PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Kontekst: 200 developerów, 5-osobowy security team, Gemini in Vertex AI, potrzeba bezpieczeństwa przy skali.
-
-A: Organization policy constraints wymuszają reguły na całej organizacji automatycznie (prewencja). Security Health Analytics (SHA) monitoruje drifty od pożądanego stanu (detekcja). Razem = prewencja + monitoring.
-
-D: SCC Enterprise/Premium oferuje gotowe szablony "security posture" specyficznie dla Gemini in Vertex AI. Oszczędza czas przy wdrożeniu bezpieczeństwa AI dla małego security teamu.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-B. ❌ Publikowanie polityk i wytycznych = miękka kontrola. Przy 200 developerach i małym security teamie, manualne podejście nie jest skalowalne.
-C. ❌ Cloud Logging + Cloud Run do remediacji = custom rozwiązanie wymagające budowy i utrzymania. Opcje A i D są natywne i gotowe.
-E. ❌ Least privilege IAM = dobre, ale samo w sobie nie zapobiega wszystkim misconfiguracji i nie monitoruje driftów.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• "200 developers + 5-person security team" = potrzeba automatyzacji i gotowych rozwiązań.
-• SCC Premium = gotowe posture templates dla AI workloads.
-• Pytania wielokrotnego wyboru: szukaj kombinacji prewencja + monitoring.
-• Organization policy = prewencja, SHA = detekcja driftów.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Bezpieczeństwo AI workloads w skali = SCC security posture + org policies.
-• Drift detection = Security Health Analytics (SHA).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/security-command-center/docs/security-posture-overview
-• https://cloud.google.com/security-command-center/docs/concepts-security-health-analytics-overview</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: AD</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie kładzie nacisk na skalowalność operacji bezpieczeństwa (SecOps). Przy tak dużej dysproporcji między liczbą deweloperów a zespołem bezpieczeństwa, jedynym wyjściem jest "Security as Code" i automatyzacja poprzez natywne narzędzia takie jak SCC Security Postures.</p>
-<h3>Praktyczny przykład</h3>
-<p>Zamiast ręcznie sprawdzać 200 projektów, zespół security aktywuje posture "Gemini/Vertex AI security" na poziomie folderu. Jeśli deweloper spróbuje wyłączyć audytowanie danych w jednym z projektów, SHA natychmiast wyśle powiadomienie o "posture violation".</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

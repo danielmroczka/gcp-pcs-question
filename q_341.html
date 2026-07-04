@@ -129,69 +129,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/iap/docs/concepts-overview</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: D
 
-Prawidłowa odpowiedź: D – Deploy Cloud Armor, and configure Cloud Firewall rules to control traffic based on source IP addresses. Integrate with Identity-Aware Proxy to control user-level access.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO D JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Pytanie wymaga ochrony przed: SQL injection, XSS (L7) + kontrola na podstawie source IP + kontrola dostępu użytkownika. Odpowiedź D:
-- Cloud Armor = WAF (SQL injection, XSS, OWASP Top 10).
-- Cloud Firewall rules = kontrola source IP (L3/L4).
-- IAP = granularna kontrola dostępu na poziomie użytkownika (tożsamość).
-Każde narzędzie adresuje inną warstwę bezpieczeństwa.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ Cloud CDN + Cloud Armor "Layer 3 DDoS" = Cloud CDN nie jest narzędziem bezpieczeństwa. Brak user-level access control.
-B. ❌ "Default WAF rules" bez konfiguracji = niewystarczające dla zaawansowanej ochrony. Brak user-level access control.
-C. ❌ VPC Service Controls = perymetr dla managed services (nie Compute Engine VMs). Nie odpowiada na wymaganie IP-based + user control.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• WAF (SQL injection, XSS) = Cloud Armor.
-• IP-based control = Cloud Firewall.
-• User-level access = IAP.
-• Te trzy narzędzia często występują razem w odpowiedziach egzaminacyjnych.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Wielowarstwowa ochrona: Cloud Armor (L7) + Firewall (L3/L4) + IAP (tożsamość).
-• Cloud CDN ≠ security narzędzie.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/armor/docs/cloud-armor-overview
-• https://cloud.google.com/iap/docs/concepts-overview</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie sprawdza umiejętność łączenia różnych warstw bezpieczeństwa (Defense in Depth). Cloud Armor chroni aplikację, Firewall chroni sieć, a IAP chroni tożsamość użytkownika.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

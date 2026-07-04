@@ -123,46 +123,15 @@ C. Configure Cloud Interconnect with HA VPN. Replace the default 0.0.0.0/0 route
 </pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
-Jeśli scenariusz dotyczy zabezpieczania zasobów chmurowych (GCP), zawsze wybieraj rozwiązanie typu Managed (SCC, Secret Manager, Cloud KMS), a unikaj rozwiązań self-managed, chyba że pytanie wyraźnie wymaga dostosowania niskopoziomowego.
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <strong>Pułapka IAM:</strong> Pytania o uprawnienia często sugerują 'Project Owner' – zawsze szukaj 'Least Privilege' (np. 'Role: Secret Manager Secret Accessor').
-- <strong>Pułapka Sieciowa:</strong> Często mylone są VPC Peering (wydajność) oraz VPN (szyfrowanie/on-premise).
-
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Rozwiązanie bazuje na GCP Shared Responsibility Model. Google zarządza bezpieczeństwem infrastruktury (Physical, Network, Host), podczas gdy administrator zarządza tożsamością (IAM), danymi (Encryption, Cloud KMS) i regułami dostępu (VPC Firewall).
-</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje architekturę sieciową "Enterprise". Duże organizacje często wymuszają tzw. "Forced Tunneling", aby cały ruch internetowy był analizowany przez korporacyjny stos bezpieczeństwa (np. proxy, firewalle) przed wyjściem w świat. Cloud Interconnect jest "autostradą" niezbędną dla takiej skali.</p>
-<h3>Dodatkowe wskazówki</h3>
-<ul>
-<li>Przy forced tunneling musisz uważać na routing – jeśli zablokujesz drogę powrotną, zepsujesz komunikację z aplikacjami.</li>
-<li>Natywne usługi Google (jak Cloud NAT) są często wybierane jako prostsza alternatywa dla on-premise firewalli, jeśli wymagania bezpieczeństwa na to pozwalają.</li>
-</ul>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

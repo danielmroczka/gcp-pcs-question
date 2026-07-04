@@ -128,68 +128,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/resource-manager/docs/tags/tags-overview</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: C
 
-Prawidłowa odpowiedź: C – Create an organization-level tag. Attach the tag to relevant folders. Use an IAM Condition that grants the organization policy administrator role only to principals with the specific tag.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO C JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-IAM Conditions z tagami pozwalają na przyznanie uprawnień warunkowo – tylko gdy zasób ma konkretny tag. Takie podejście:
-- Centralizuje zarządzanie (jeden tag, wiele folderów).
-- Realizuje zasadę least privilege (nie daje uprawnień wszędzie).
-- Jest skalowalne i audytowalne.
-- Nie wymaga central service account (które byłoby single point of failure).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ Custom IAM role z organization policy admin bez warunku = zbyt szerokie uprawnienia, brak granularności.
-B. ❌ Central service account jako pośrednik = dodatkowa złożoność, single point of failure, trudniejsze audytowanie.
-D. ❌ Przyznanie roli na poziomie organizacji każdemu zespołowi = zbyt szerokie uprawnienia, naruszenie least privilege.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• IAM Conditions + Tags = granularne uprawnienia warunkowe.
-• "Least privilege" + "specific resources" = IAM Conditions.
-• Organization tags = etykiety hierarchiczne przekazywane w dół hierarchii zasobów.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Warunkowe uprawnienia do konkretnych zasobów = IAM Conditions + Tags.
-• Granularność + least privilege = warunki na tagach, nie role na poziomie organizacji.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/iam/docs/conditions-overview
-• https://cloud.google.com/resource-manager/docs/tags/tags-overview</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość zarządzania chmurą w dużej skali. Foldery nie są tylko "katalogami" – to punkty egzekwowania polityk bezpieczeństwa (Governance), które pozwalają na jednoczesne utrzymanie globalnych standardów i lokalnej elastyczności.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

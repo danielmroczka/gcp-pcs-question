@@ -124,64 +124,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/vpc-service-controls/docs/access-context-manager-integration</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: A
 
-Prawidłowa odpowiedź: A – Establish a Context-Aware Access policy that specifies the required contextual attributes, and associate the policy with the VPC Service Controls perimeter.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO A JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Pytanie: VPC SC perimeter + dodatkowe wymagania kontekstualne (company device). Context-Aware Access (Access Context Manager) integruje się z VPC Service Controls przez access levels. Użytkownik musi spełniać zarówno: (1) VPC SC perimeter rules + (2) context requirements (device policy). Połączenie = Zero Trust dla managed services.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-B. ❌ VPC SC Violation dashboard = narzędzie monitorowania/troubleshooting, nie konfiguracja polityki dostępu.
-C. ❌ VPC SC w dry run mode = tryb testowy, nie egzekwuje reguł. Firewall segmentation nie adresuje wymagań kontekstualnych.
-D. ❌ Cloud Audit Logs + post-incident analysis = reaktywne. Nie zapobiega dostępowi nieautoryzowanym użytkownikom.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• VPC SC + context requirements = Context-Aware Access + VPC SC integration.
-• Access Context Manager access levels można przypisać do VPC SC perimetrów.
-• "Company device requirement" = device policy w access level.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• VPC SC + kontekst urządzenia = Access Context Manager + Context-Aware Access.
-• Post-incident = reaktywne. Prewencja = polityki.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/access-context-manager/docs/overview
-• https://cloud.google.com/vpc-service-controls/docs/access-context-manager-integration</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie o zaawansowaną implementację Zero Trust w GCP. Kluczem jest połączenie Access Context Manager (kontekst urządzenia/użytkownika) z VPC SC (sieć) oraz użycie trybu "dry run" dla bezpiecznej walidacji polityk przed ich wdrożeniem.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

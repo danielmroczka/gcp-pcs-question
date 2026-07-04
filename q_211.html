@@ -125,46 +125,15 @@ E. Use VPC Flow Logs to monitor intra-VPC and inter-VPC traffic in the EU.
 </pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
-Jeśli scenariusz dotyczy zabezpieczania zasobów chmurowych (GCP), zawsze wybieraj rozwiązanie typu Managed (SCC, Secret Manager, Cloud KMS), a unikaj rozwiązań self-managed, chyba że pytanie wyraźnie wymaga dostosowania niskopoziomowego.
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <strong>Pułapka IAM:</strong> Pytania o uprawnienia często sugerują 'Project Owner' – zawsze szukaj 'Least Privilege' (np. 'Role: Secret Manager Secret Accessor').
-- <strong>Pułapka Sieciowa:</strong> Często mylone są VPC Peering (wydajność) oraz VPN (szyfrowanie/on-premise).
-
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Rozwiązanie bazuje na GCP Shared Responsibility Model. Google zarządza bezpieczeństwem infrastruktury (Physical, Network, Host), podczas gdy administrator zarządza tożsamością (IAM), danymi (Encryption, Cloud KMS) i regułami dostępu (VPC Firewall).
-</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: AC</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie uderza w najbardziej rygorystyczne wymagania prawne w Europie. Różnica między "bezpieczeństwem" a "suwerennością" jest kluczowa: bezpieczeństwo chroni przed hakerami, suwerenność chroni przed nieautoryzowanym dostępem dostawcy chmury i obcych rządów. KAJ jest unikalnym mechanizmem Google, który technicznie (nie tylko prawnie) wymusza tę suwerenność.</p>
-<h3>Dodatkowe wskazówki</h3>
-<ul>
-<li>Możesz połączyć KAJ z Access Approval, aby ręcznie zatwierdzać każde wejście personelu Google do Twoich danych.</li>
-<li>Pamiętaj, że polityka Resource Locations może być nałożona na całą organizację, ale pozwala na robienie wyjątków na niższych szczeblach hierarchii.</li>
-</ul>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

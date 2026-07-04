@@ -128,68 +128,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/dlp/docs/transformations-reference#fpe</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: D
 
-Prawidłowa odpowiedź: D – Configure Sensitive Data Protection (SDP) to de-identify PII using format-preserving encryption (FPE).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO D JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Format-preserving encryption (FPE) przez Sensitive Data Protection (Cloud DLP):
-- FPE zachowuje format danych (np. numer karty pozostaje 16-cyfrowy po transformacji).
-- Dane są użyteczne analitycznie (format zachowany).
-- Deterministyczne = ten sam input → ten sam output → możliwość join.
-- Odwracalne (z kluczem) = re-identyfikacja gdy konieczna.
-- Spełnia regulacje finansowe (GDPR, PCI-DSS dla PII).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ CMEK = szyfruje całe datasety, nie de-identyfikuje konkretnych PII fields. Dane są dostępne przez autoryzowanych użytkowników w plaintext.
-B. ❌ VPC SC + row-level encryption = perymetr + szyfrowanie wierszy. Nie de-identyfikuje PII (dane nadal są widoczne dla autoryzowanych).
-C. ❌ Custom UDF z hashem = nieodwracalne, brak standardu, wymaga utrzymania. FPE jest bezpieczniejsze i deterministyczne.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• PII analytics + format preserving = SDP/DLP z FPE (CryptoReplaceFfxFpe).
-• FPE = dane wyglądają "normalnie" ale są anonimizowane.
-• "Transform to protect privacy while maintaining analytical utility" = FPE.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• PII de-identification z użytecznością = Cloud DLP/SDP + FPE.
-• CMEK ≠ de-identification (szyfrowanie ≠ anonimizacja).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/dlp/docs/transformations-reference#fpe</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie o techniki ochrony danych w analityce. Format-Preserving Encryption (FPE) pozwala na analitykę na danych (np. joinowanie tabel), zachowując format danych, przy jednoczesnej ochronie prywatności zgodnie z regulacjami.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

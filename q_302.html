@@ -125,65 +125,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/resource-manager/docs/organization-policy/creating-managing-custom-constraints</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: D
 
-Prawidłowa odpowiedź: D – Create a custom organizational policy constraint that will prevent users from disabling audit logging. Apply the constraint to all production projects.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO D JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Organization policy constraints to mechanizm egzekwowania zasad na poziomie całej organizacji/folderów/projektów. Custom constraint na CAAI (Cloud Audit Activity Includes) zapobiega wyłączeniu logowania audytu przez kogokolwiek – nawet właścicieli projektów. To rozwiązanie skalowalne (wszystkie projekty produkcyjne) i egzekwowalne bez ręcznej interwencji.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ Cloud Monitoring alert po fakcie – informuje o wyłączeniu logowania, ale nie zapobiega. Reaktywne, a nie prewencyjne.
-B. ❌ Backup logów to dobra praktyka, ale nie zapobiega wyłączeniu audit logging w przyszłości.
-C. ❌ Log sinks do Cloud Storage = replikacja, nie prewencja wyłączenia logowania.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• "Prevent" = organization policy constraints (prewencja, nie detekcja).
-• Custom constraints pozwalają tworzyć własne reguły poza gotowymi.
-• Jeśli pytanie mówi "zapobiec wyłączeniu X" – myśl organization policy.
-• Alert/monitoring = reaktywne. Policy constraint = prewencyjne.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Prewencja przed zmianami konfiguracji = Organization Policy Constraints.
-• Detekcja zmian = Cloud Monitoring/SCC alerts.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/resource-manager/docs/organization-policy/overview
-• https://cloud.google.com/resource-manager/docs/organization-policy/creating-managing-custom-constraints</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje zrozumienie architektury "VPC Service Controls". W nowoczesnych, wieloprojektowych środowiskach, izolacja usług jest kluczowa. Reguły Ingress/Egress oraz ograniczenie dostępnych API to "bezpieczne furtki" w tej izolacji, pozwalające na precyzyjne sterowanie przepływem danych bez niszczenia bariery ochronnej.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

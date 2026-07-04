@@ -115,46 +115,15 @@ Należy analizować trendy zmian zarobków (bonusów) w czasie w celu wykrycia a
 </pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
-Jeśli scenariusz dotyczy zabezpieczania zasobów chmurowych (GCP), zawsze wybieraj rozwiązanie typu Managed (SCC, Secret Manager, Cloud KMS), a unikaj rozwiązań self-managed, chyba że pytanie wyraźnie wymaga dostosowania niskopoziomowego.
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <strong>Pułapka IAM:</strong> Pytania o uprawnienia często sugerują 'Project Owner' – zawsze szukaj 'Least Privilege' (np. 'Role: Secret Manager Secret Accessor').
-- <strong>Pułapka Sieciowa:</strong> Często mylone są VPC Peering (wydajność) oraz VPN (szyfrowanie/on-premise).
-
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Rozwiązanie bazuje na GCP Shared Responsibility Model. Google zarządza bezpieczeństwem infrastruktury (Physical, Network, Host), podczas gdy administrator zarządza tożsamością (IAM), danymi (Encryption, Cloud KMS) i regułami dostępu (VPC Firewall).
-</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoje zrozumienie równowagi między prywatnością danych (Privacy) a ich użytecznością biznesową (Utility). FPE jest "świętym Graalem" dla analityków danych, ponieważ pozwala na pracę na niemal rzeczywistych danych bez naruszania prywatności osób, których te dane dotyczą, przy zachowaniu furtki bezpieczeństwa (odwracalność dla uprawnionych osób).</p>
-<h3>Dodatkowe wskazówki</h3>
-<ul>
-<li>Przy użyciu FPE w GCP musisz zarządzać kluczami w Cloud KMS.</li>
-<li>Pamiętaj, że FPE chroni przed identyfikacją, ale jeśli atakujący zna format danych i niektóre wartości, może próbować ataków statystycznych, dlatego klucze muszą być dobrze chronione.</li>
-</ul>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

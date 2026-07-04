@@ -124,64 +124,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/kms/docs/key-rotation</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: D
 
-Prawidłowa odpowiedź: D – Identify keys that have not been rotated by using Security Health Analytics. If keys are non-compliant, trigger a Cloud Run function to rotate them.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO D JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Security Health Analytics (część SCC) automatycznie sprawdza klucze KMS pod kątem zgodności z politykami bezpieczeństwa, w tym rotacji kluczy. Połączenie z Cloud Run function do automatycznej rotacji tworzy kompletny, zautomatyzowany cykl: wykrycie → naprawa. To natywne podejście GCP.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ Cloud Asset Inventory może pokazać metadane kluczy, ale nie analizuje compliance i wymaga custom skryptów do detekcji problemu.
-B. ❌ Cloud Functions sprawdzające Cloud KMS API = custom rozwiązanie wymagające pisania i utrzymania kodu. Opcja D jest natywna i prostsza.
-C. ❌ Cloud Logging metryki mogą wykryć brak rotacji, ale wymagają własnej logiki. SHA jest bardziej bezpośredni i wbudowany w SCC.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• KMS key rotation compliance = Security Health Analytics (SCC).
-• SHA znajdzie nieskonfigurowaną rotację automatycznie bez pisania kodu.
-• Pytania o "compliance klucza" = myśl SCC/SHA jako pierwsza opcja.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Compliance kluczy szyfrowania = Security Health Analytics.
-• Automatyczna remediacja = Cloud Run/Cloud Functions trigger z SCC findings.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/security-command-center/docs/concepts-security-health-analytics-overview
-• https://cloud.google.com/kms/docs/key-rotation</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość automatyzacji audytu. W środowiskach chmurowych, gdzie rotacja kluczy jest wymogiem bezpieczeństwa, używanie natywnych detektorów SCC jest jedyną metodą zapewniającą niezawodność, skalowalność i przejrzystość przed audytorami.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

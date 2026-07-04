@@ -127,67 +127,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/resource-manager/docs/organization-policy/hierarchy-evaluation</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: C
 
-Prawidłowa odpowiedź: C – Apply the custom organization policy at the organization level to restrict external IPs. Move the regulated business workload to a separate folder. Override the policy at the folder level to allow external IPs.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO C JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Mechanizm hierarchii organizacyjnej: org policy na poziomie org = domyślny, ale można ją nadpisać na poziomie folderu. Odpowiedź C:
-- Org policy na poziomie organizacji = wszyscy podlegają ograniczeniu.
-- Osobny folder dla regulowanego workloadu = izolacja.
-- Override na folderze = wyjątek tylko dla tego folderu.
-- Reszta organizacji nadal jest chroniona.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ Polityka tylko na folderze dla nie-regulowanych = regulowane workloady nie mają constraintów. Odwrócona logika.
-B. ❌ IAM custom role z "bypass org policies" = org policies nie mogą być omijane przez IAM. Org policies &gt; IAM.
-D. ❌ Modyfikacja org policy na poziomie organizacji aby zezwolić = usuwa ochronę dla WSZYSTKICH, nie tylko regulowanego workloadu.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Org policy hierarchy: org → folder → projekt (można override na niższych poziomach).
-• Override na folderze = wyjątek nie łamiący całościowej polityki.
-• IAM nie może "bypass" org policies.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Wyjątek od org policy = override na niższym poziomie hierarchii (folder/projekt).
-• IAM ≠ org policy override.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/resource-manager/docs/organization-policy/hierarchy-evaluation</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie sprawdza zrozumienie hierarchii i sposobu nadpisywania (overriding) polityk organizacji. Zarządzanie wyjątkami poprzez hierarchię folderów to najlepsza praktyka zapewniająca separację środowisk i unikająca "policy drift".</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

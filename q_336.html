@@ -123,65 +123,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: B
 
-Prawidłowa odpowiedź: B – Identify which projects contain Cloud Storage buckets with regulated data. Apply the restrictNonCmekServices and restrictCmekCryptoKeyProjects organization policy constraints to those projects.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO B JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Migracja z Google-managed keys do CMEK (Customer-Managed Encryption Keys):
-- `restrictNonCmekServices` = wymusza że usługi muszą używać CMEK (blokuje Google-managed keys).
-- `restrictCmekCryptoKeyProjects` = ogranicza które projekty/key rings mogą być użyte jako CMEK.
-Razem gwarantują że: (1) CMEK jest wymagane, (2) tylko zatwierdzone klucze mogą być użyte.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO OPCJA A JEST BŁĘDNA?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ Ręczne tworzenie key ring + konfiguracja każdego bucketu = nie zapobiega tworzeniu nowych bucketów z Google-managed keys. Brak enforcement na przyszłość.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Wymuszenie CMEK dla Cloud Storage = `restrictNonCmekServices` org policy.
-• `restrictCmekCryptoKeyProjects` = kontroluje które klucze mogą być użyte.
-• Org policy = prewencja dla przyszłych zasobów (nie tylko obecnych).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Wymuszone CMEK = organization policy constraints (nie ręczna konfiguracja).
-• Compliance at scale = org policies, nie per-resource konfiguracja.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/kms/docs/cmek
-• https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie sprawdza różnicę między prostą zmianą konfiguracji zasobu a wymuszeniem polityki bezpieczeństwa w skali organizacji. Organization Policy jest właściwym narzędziem do automatycznego wymuszania standardów CMEK.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

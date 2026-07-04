@@ -131,71 +131,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/vpc-service-controls/docs/overview</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: C
 
-Prawidłowa odpowiedź: C – Use Cloud Storage with client-side encryption, Cloud KMS for key management, and VPC Service Controls to prevent unauthorized access.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO C JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-"Strongest level of security" wymaga wielowarstwowej ochrony:
-1. Client-side encryption = dane są szyfrowane ZANIM trafią do Google Cloud (nawet Google nie widzi plaintext).
-2. Cloud KMS = zarządzanie kluczami z pełną kontrolą i audytowalnością.
-3. VPC Service Controls = perymetr zapobiegający eksfiltracji danych.
-
-Client-side encryption &gt; CMEK &gt; CSEK &gt; Server-side encryption (pod względem kontroli klienta).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ CSEK = server-side encryption z kluczami klienta. Google widzi plaintext podczas szyfrowania. Silniejsze niż CMEK, ale słabsze niż client-side.
-B. ❌ CMEK = Google zarządza kluczami w KMS, ale Google Cloud widzi dane podczas przetwarzania. Cloud DLP to dodatkowa warstwa, nie silniejsza.
-D. ❌ Server-side encryption = Google kontroluje szyfrowanie. Najsłabsza opcja z perspektywy klienta.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Hierarchia siły szyfrowania (od najsilniejszej kontroli klienta):
-  Client-side &gt; CSEK &gt; CMEK &gt; Server-side (Google managed)
-• "Strongest/maximum security" = client-side encryption.
-• Client-side + KMS + VPC SC = kompletna ochrona.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Maximum kontrola klienta = client-side encryption.
-• Prevent exfiltration = VPC Service Controls.
-• Key management = Cloud KMS.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/storage/docs/encryption
-• https://cloud.google.com/vpc-service-controls/docs/overview</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie o architekturę wysokiego bezpieczeństwa. Kluczem jest rozróżnienie między ochroną oferowaną przez chmurę (server-side, CMEK) a ochroną, w której chmura jest tylko "ciemnym magazynem" (client-side + HSM).</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

@@ -127,67 +127,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/artifact-registry/docs/analysis</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: A
 
-Prawidłowa odpowiedź: A – Configure a policy in Binary Authorization to use Artifact Analysis vulnerability scanning to only allow images without critical vulnerabilities.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO A JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Pełny pipeline bezpieczeństwa kontenerów:
-1. Artifact Analysis = automatyczne skanowanie vulnerabilities przy push do Artifact Registry.
-2. Binary Authorization policy = blokuje deployment obrazów z krytycznymi vulnerabilities (bez attestacji).
-Razem tworzą automatyczny "security gate" w pipeline CI/CD.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-B. ❌ "Enable scanning + manually remove" = ręczna interwencja. Nie automatyzuje blokowania deploymentu.
-C. ❌ Custom script z third-party narzędziem = nienative, wymaga utrzymania. Opcja A jest natywna.
-D. ❌ "Manually inspect all images" = przeciwieństwo automatyzacji. Nie skaluje się.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Automatyczne blokowanie vulnerabilities w GKE = Binary Authorization + Artifact Analysis.
-• "Only allow images without critical vulnerabilities" = BA policy z attestation requirement.
-• Artifact Analysis = natywne skanowanie w Artifact Registry.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Automatic vulnerability-based deployment gate = Binary Authorization + Artifact Analysis.
-• Ręczna inspekcja = nie skalowalne, nie wybieraj w egzaminie.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/binary-authorization/docs/overview
-• https://cloud.google.com/artifact-registry/docs/analysis</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie o automatyzację bezpieczeństwa w procesie CI/CD i GKE. Binary Authorization jest natywnym rozwiązaniem GCP do wymuszania polityk bezpieczeństwa na poziomie obrazów kontenerowych przed ich uruchomieniem w klastrze.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

@@ -128,68 +128,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/security-command-center/docs/overview</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: C
 
-Prawidłowa odpowiedź: C – Deploy Model Armor to protect the Vertex AI endpoint. Review Security Command Center findings to detect and respond to security events.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO C JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Pytanie o ochronę Gemini w Vertex AI przed prompt injection i innymi atakami AI-specific:
-- Model Armor = ochrona endpointów AI przed: prompt injection, jailbreaking, harmful content (GCP-native WAF dla LLM).
-- SCC findings = centralne monitorowanie bezpieczeństwa całego środowiska.
-To narzędzia zaprojektowane specjalnie dla bezpieczeństwa AI workloads.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ VPC SC + DLP API = chronią dane i perymetr, ale nie chronią endpointu AI przed prompt injection lub atakami na model.
-B. ❌ Vertex AI User role + Cloud Logging = kontrola dostępu i audyt. Nie chroni przed atakami na model (prompt injection, etc.).
-D. ❌ "Allow all traffic to Vertex AI endpoint" = całkowity brak kontroli dostępu. Wręcz odwrotność bezpieczeństwa!
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Prompt injection / AI security = Model Armor (narzędzie Google 2024+).
-• Model Armor = WAF dla LLM (filtruje złośliwe prompty).
-• SCC = centralne findings dla monitoringu bezpieczeństwa.
-• Pamiętaj: Model Armor to relatywnie nowa usługa GCP.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Ochrona AI endpointów przed atakami = Model Armor.
-• Monitoring security events = SCC findings.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/model-armor/docs/overview
-• https://cloud.google.com/security-command-center/docs/overview</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie o nowoczesne podejście do bezpieczeństwa AI. Wymagane jest użycie dedykowanych rozwiązań klasy "AI Firewall" (Model Armor), które rozumieją specyfikę komunikacji z modelami LLM.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

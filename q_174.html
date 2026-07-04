@@ -116,46 +116,15 @@ Menedżer SOC chce mieć możliwość monitorowania, wykrywania anomalii oraz ba
 </pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
-Jeśli scenariusz dotyczy zabezpieczania zasobów chmurowych (GCP), zawsze wybieraj rozwiązanie typu Managed (SCC, Secret Manager, Cloud KMS), a unikaj rozwiązań self-managed, chyba że pytanie wyraźnie wymaga dostosowania niskopoziomowego.
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <strong>Pułapka IAM:</strong> Pytania o uprawnienia często sugerują 'Project Owner' – zawsze szukaj 'Least Privilege' (np. 'Role: Secret Manager Secret Accessor').
-- <strong>Pułapka Sieciowa:</strong> Często mylone są VPC Peering (wydajność) oraz VPN (szyfrowanie/on-premise).
-
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Rozwiązanie bazuje na GCP Shared Responsibility Model. Google zarządza bezpieczeństwem infrastruktury (Physical, Network, Host), podczas gdy administrator zarządza tożsamością (IAM), danymi (Encryption, Cloud KMS) i regułami dostępu (VPC Firewall).
-</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość narzędzi do "Network Security Monitoring" (NSM). W ekosystemie GCP Cloud IDS jest pozycjonowany jako rozwiązanie premium dla firm, które potrzebują profesjonalnej ochrony sieciowej bez konieczności zarządzania własną flotą maszyn inspekcyjnych. Kluczowe jest zrozumienie, że IDS "widzi" to, czego nie "widzą" standardowe logi.</p>
-<h3>Dodatkowe wskazówki</h3>
-<ul>
-<li>Cloud IDS tworzy tzw. "endpoint" w Twojej sieci VPC, do którego ruch jest przekierowywany za pomocą automatycznie konfigurowanych reguł Packet Mirroring.</li>
-<li>Alerty z Cloud IDS zawierają szczegółowe informacje o zagrożeniu, w tym linki do baz wiedzy o malware (np. CVE, silnik Unit 42).</li>
-</ul>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

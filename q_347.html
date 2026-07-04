@@ -129,69 +129,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/security-command-center/docs/concepts-container-threat-detection-overview</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: D
 
-Prawidłowa odpowiedź: D – Enable Container Threat Detection in Security Command Center Premium tier for the projects within the production folder.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO D JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Container Threat Detection (CTD) to dedykowany moduł SCC Premium który:
-- Wykrywa anomalie w runtime kontenerów: ładowanie dodatkowych bibliotek, wykonywanie binary, reverse shells.
-- Monitoruje zmiany w systemie plików kontenerów.
-- Działa w czasie rzeczywistym na poziomie kernela.
-- Integruje się z GKE natively.
-To właśnie rozwiązanie dla scenariusza "additional libraries loaded or malicious binary executed".
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ Log-based metrics = logi aplikacji nie zawierają informacji o ładowaniu bibliotek na poziomie kernela. Brak visibility do runtime behavior.
-B. ❌ Security Health Analytics = statyczna analiza konfiguracji (misconfigurations), nie runtime threat detection.
-C. ❌ Container-Optimized OS = hardened OS, zmniejsza powierzchnię ataku, ale nie wykrywa runtime threats.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• "Runtime threat detection" + kontenery = Container Threat Detection (SCC Premium).
-• SHA = konfiguracja (static), CTD = runtime (dynamic).
-• CTD wymaga SCC Premium tier.
-• "Additional libraries" + "malicious binary" = CTD keywords.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Runtime container security = Container Threat Detection (SCC Premium).
-• Static config security = Security Health Analytics.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/security-command-center/docs/concepts-container-threat-detection-overview</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie sprawdzające umiejętność doboru odpowiedniego narzędzia detekcji zagrożeń w GCP. Kluczowe jest rozróżnienie skanowania konfiguracji (SHA) od detekcji zagrożeń w czasie rzeczywistym w kontenerach (Container Threat Detection).</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

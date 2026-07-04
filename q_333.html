@@ -128,68 +128,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/beyondcorp-enterprise/docs/overview</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: C
 
-Prawidłowa odpowiedź: C – Create an access level in Access Context Manager that requires a device policy. Create a Context-Aware Access rule for the Cloud Storage buckets.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO C JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Zero Trust + Chrome Enterprise Premium to typowy scenariusz Context-Aware Access:
-- Access Context Manager + device policy = dostęp warunkowy oparty na stanie urządzenia (endpoint verification, OS version, screen lock, etc.).
-- Chrome Enterprise Premium integruje się z Access Context Manager.
-- Context-Aware Access = decyzja o dostępie oparta na: KTO (tożsamość) + SKĄD (kontekst urządzenia/sieci).
-To implementacja Zero Trust bez konieczności VPN.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ VPC Service Controls = perymetr dla managed services, nie zarządzanie dostępem opartym na urządzeniu.
-B. ❌ IAM Conditions po IP + VPN = stary model ochrony oparty na sieci. Zero Trust nie opiera się na lokalizacji sieciowej.
-D. ❌ Cloud Firewall rules + IP = firewall działa na warstwie sieciowej, nie weryfikuje stanu urządzenia ani tożsamości użytkownika. Nie jest Zero Trust.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Zero Trust + Chrome Enterprise Premium = Access Context Manager + Context-Aware Access.
-• Device policy = wymagania dot. stanu urządzenia (zainstalowany cert, OS version, itp.).
-• Zero Trust ≠ VPN (VPN = stary model).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Zero Trust dostęp = Access Context Manager + Context-Aware Access.
-• Device-based access control = Access Level z device policy.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/access-context-manager/docs/overview
-• https://cloud.google.com/beyondcorp-enterprise/docs/overview</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie o implementację zaawansowanego modelu Zero Trust. W GCP to połączenie Access Context Manager (warstwa kontekstu urządzenia) z VPC Service Controls (warstwa perimetru sieciowego).</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

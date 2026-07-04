@@ -127,59 +127,14 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/logging/docs/export/using_exported_logs</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: C
 
-Prawidłowa odpowiedź: C – Create a log sink for the relevant logs. Send the logs to Pub/Sub. Retrieve the logs from Pub/Sub in the on-premises SIEM.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO C JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-On-premises SIEM potrzebuje real-time logu z GCP. Log sink → Pub/Sub to standardowy wzorzec integracji GCP z zewnętrznymi systemami:
-- Log sink filtruje tylko wybrane logi (subset).
-- Pub/Sub dostarcza je w czasie rzeczywistym.
-- SIEM może subskrybować Pub/Sub i przetwarzać logi na bieżąco.
-- Pub/Sub obsługuje push/pull – SIEM może używać pull bez potrzeby otwierania ruchu inbound.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ BigQuery = analityka batch, nie real-time streaming dla SIEM. Dostarczenie do on-premises wymaga dodatkowo kopii danych.
-B. ❌ Log view + principal access = kontrola dostępu do logów w GCP, ale SIEM on-premises nadal musi aktywnie pobierać dane z Logging API. Brak natywnego streamingu.
-D. ❌ Cloud Storage = pliki batch. Nie nadaje się do real-time integracji z SIEM.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• On-premises SIEM + GCP logs = Log Sink → Pub/Sub (standard pattern).
-• Pub/Sub = real-time, skalowalne, zarządzane.
-• BigQuery = analityka, nie real-time SIEM integration.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Real-time log export do zewnętrznych systemów = Log Sink + Pub/Sub.
-• Batch export = Log Sink + Cloud Storage lub BigQuery.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/logging/docs/export/using_exported_logs</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość wzorców projektowych logowania w skali. Architektura Sink -> Pub/Sub -> Dataflow jest najbardziej skalowalna i bezpieczna, ponieważ w pełni wykorzystuje usługi zarządzane, eliminuje potrzebę zarządzania kluczami i zapewnia odporność na awarie (fault tolerance).</p>
-</div>
+
 </div>
 
 <script src="navigation.js"></script>

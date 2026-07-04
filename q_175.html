@@ -120,46 +120,15 @@ Wymagane jest zapewnienie pełnego szyfrowania typu end-to-end obejmującego wsz
 </pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
-Jeśli scenariusz dotyczy zabezpieczania zasobów chmurowych (GCP), zawsze wybieraj rozwiązanie typu Managed (SCC, Secret Manager, Cloud KMS), a unikaj rozwiązań self-managed, chyba że pytanie wyraźnie wymaga dostosowania niskopoziomowego.
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <strong>Pułapka IAM:</strong> Pytania o uprawnienia często sugerują 'Project Owner' – zawsze szukaj 'Least Privilege' (np. 'Role: Secret Manager Secret Accessor').
-- <strong>Pułapka Sieciowa:</strong> Często mylone są VPC Peering (wydajność) oraz VPN (szyfrowanie/on-premise).
-
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Rozwiązanie bazuje na GCP Shared Responsibility Model. Google zarządza bezpieczeństwem infrastruktury (Physical, Network, Host), podczas gdy administrator zarządza tożsamością (IAM), danymi (Encryption, Cloud KMS) i regułami dostępu (VPC Firewall).
-</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: DE</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie sprawdza holistyczne podejście do bezpieczeństwa danych. Tradycyjne chmury skupiały się na ochronie dysków i transmisji. Google Cloud idzie krok dalej z "Confidential Computing", eliminując ostatnią lukę - dane w pamięci RAM procesora. Połączenie tego z mTLS (Istio) daje pełny stos ochrony "Zero Trust" wewnątrz chmury.</p>
-<h3>Dodatkowe wskazówki</h3>
-<ul>
-<li>Szyfrowanie po stronie klienta (Client-side) jest najbezpieczniejsze, ale uniemożliwia korzystanie z wielu funkcji chmurowych (np. przeszukiwanie danych w BigQuery, transkodowanie wideo).</li>
-<li>Confidential GKE nodes pozwalają na uruchamianie całych klastrów Kubernetes w trybie poufnym.</li>
-</ul>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

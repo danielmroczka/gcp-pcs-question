@@ -128,68 +128,15 @@ DODATKOWE ŹRÓDŁA
 • https://workspace.google.com/products/admin/</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: D
 
-Prawidłowa odpowiedź: D – Create a Cloud Logging sink to export relevant authentication logs to a Pub/Sub topic for SIEM subscription.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO D JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Pytanie: eksport logów Google Workspace (auth events) do zewnętrznego SIEM w czasie rzeczywistym. Log Sink → Pub/Sub:
-- Google Workspace logi są dostępne w Cloud Logging (przez audit logs).
-- Log Sink filtruje konkretne eventy (login, failed login).
-- Pub/Sub = real-time streaming do SIEM.
-- SIEM subskrybuje Pub/Sub i pobiera logi natychmiast.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ "Poll Cloud Logging" = polling = opóźnienia, nieefektywne, nie real-time. gcloud logging read = ręczna komenda.
-B. ❌ Google Workspace "directly to SIEM API" = nie jest standardową obsługiwaną funkcją. Workspace nie ma natywnego push do zewnętrznych SIEM.
-C. ❌ Cloud Storage sink + periodic scan = batch (nie real-time). Opóźnienia w dostarczeniu logów.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Real-time log export do SIEM = Log Sink → Pub/Sub (standard pattern).
-• Google Workspace logi → Cloud Logging → Pub/Sub → SIEM.
-• GCS sink = batch/opóźnienia; Pub/Sub = real-time.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Real-time SIEM integration = Log Sink + Pub/Sub.
-• Polling/GCS sink = batch (nie real-time).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/logging/docs/export/using_exported_logs
-• https://workspace.google.com/products/admin/</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie o architekturę logowania w skali. Wykorzystanie Pub/Sub jako pośrednika ("message bus") między GCP (Cloud Logging) a systemami SIEM jest standardem w projektach korporacyjnych.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

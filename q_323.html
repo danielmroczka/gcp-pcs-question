@@ -127,67 +127,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/resource-manager/docs/creating-managing-projects</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: B
 
-Prawidłowa odpowiedź: B – Grant each service account the project creator role at the organization level and use folder-level IAM conditions to restrict project creation to specific folders.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO B JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Wymaganie: SA mogą tworzyć projekty TYLKO w swoim folderze (IaC). Rozwiązanie:
-- Project Creator na poziomie org = SA może technicznie tworzyć projekty.
-- IAM Conditions na folderze = warunek ograniczający scope do konkretnego folderu.
-Razem tworzą granularne, warunkowe uprawnienie zgodne z least privilege.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ Folder Administrator = zbyt szerokie uprawnienia. Nie tylko tworzy projekty, ale też zarządza politykami, subfolderami, etc.
-C. ❌ Project Editor na poziomie org = nadmiarowe uprawnienia (edytowanie wszystkich zasobów w całej org, nie tylko tworzenie projektów).
-D. ❌ Folder IAM Administrator = uprawnienie do zarządzania IAM, nie do tworzenia projektów. Nieodpowiednia rola dla tego celu.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Project Creator + IAM Conditions = granularne tworzenie projektów.
-• IAM Conditions mogą ograniczyć role do konkretnych zasobów/folderów.
-• "Only in their folder" = IAM Conditions na poziomie folderu.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Ograniczone tworzenie projektów = Project Creator + IAM Conditions (nie Folder Admin).
-• Least privilege = minimalna rola + warunki.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/iam/docs/conditions-overview
-• https://cloud.google.com/resource-manager/docs/creating-managing-projects</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie o zarządzanie zasobami w skali (Governance) z użyciem IaC. Kluczowe jest zrozumienie, jak łączyć globalne uprawnienia (Project Creator) z lokalnymi ograniczeniami (IAM Conditions), aby nie złamać zasady Least Privilege.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

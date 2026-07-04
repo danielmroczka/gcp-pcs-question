@@ -131,71 +131,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/kms/docs/key-management-overview</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: D
 
-Prawidłowa odpowiedź: D – Configure Cloud External Key Manager (Cloud EKM) for the BigQuery datasets and Cloud Storage buckets. Integrate with the accredited on-premises Hardware Security Module (HSM).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO D JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Kluczowe wymaganie: "master encryption key material NEVER leaves the accredited HSM". Cloud EKM:
-- Klucze pozostają w zewnętrznym Key Management System (KMS) – on-premises HSM.
-- GCP wywołuje zewnętrzny KMS do operacji kryptograficznych.
-- Klucze NIGDY nie są importowane do GCP.
-- Integracja z certyfikowanymi HSM (Thales, Fortanix, itp.).
-To jedyne rozwiązanie spełniające wymóg "klucze nie opuszczają HSM".
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ CMEK = klucze przechowywane w Cloud KMS (w GCP). Klucze opuściły on-premises HSM.
-B. ❌ CSEK = klucze dostarczane przy każdej operacji przez API. Klucze przechodzą przez sieć do GCP.
-C. ❌ Import kluczy do Cloud KMS = klucze OPUSZCZAJĄ on-premises HSM. Naruszenie wymagania.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• "Key material NEVER leaves HSM" = Cloud External Key Manager (EKM).
-• EKM ≠ CMEK (CMEK = klucze w Cloud KMS, EKM = klucze poza GCP).
-• Defense/classified data = EKM z on-premises HSM.
-• Import do KMS = klucze opuściły on-premises (naruszenie).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Klucze NIE opuszczają organizacji = Cloud EKM.
-• Klucze w GCP = CMEK (Cloud KMS).
-• Klucze per operacja = CSEK.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/kms/docs/ekm
-• https://cloud.google.com/kms/docs/key-management-overview</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie o zaawansowane scenariusze suwerenności danych (Data Sovereignty). EKM jest kluczowy dla organizacji, które z powodów regulacyjnych muszą utrzymać fizyczną kontrolę nad "matką wszystkich kluczy" wewnątrz własnego sprzętu HSM.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

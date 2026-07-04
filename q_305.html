@@ -126,66 +126,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/vertex-ai/docs/workbench/instances/manage-organization-policies</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: A
 
-Prawidłowa odpowiedź: A – Enforce the disableRootAccess and requireAutoUpgradeSchedule organization policies on the folder containing the Vertex AI Workbench Instances.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO A JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Organization policies pozwalają wymuszać konfigurację bezpieczeństwa na poziomie całych folderów/organizacji:
-- `disableRootAccess` → zapobiega dostępowi root do instancji Workbench.
-- `requireAutoUpgradeSchedule` → wymusza automatyczne aktualizacje instancji.
-To podejście prewencyjne, skalowalne i nie wymaga ręcznej konfiguracji każdej instancji.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-B. ❌ VM Manager zarządza OS patch management dla Compute Engine VM, ale nie jest natywnym rozwiązaniem dla Vertex AI Workbench Instances.
-C. ❌ Firewall blokujący SSH nie zapobiega root access z wewnątrz instancji i nie zapewnia auto-upgrade.
-D. ❌ Role IAM (AI Notebooks Runner/Viewer) kontrolują dostęp do API, nie konfigurację samych instancji.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Vertex AI Workbench ma dedykowane organization policy constraints.
-• "Automatically kept up-to-date" + "disable root" = organization policies, nie VM Manager.
-• Organization policies &gt; ręczna konfiguracja dla skali.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Wymuszona konfiguracja na instancjach managed service = Organization Policy Constraints.
-• Auto-upgrade dla Workbench = `requireAutoUpgradeSchedule` policy.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/vertex-ai/docs/workbench/instances/manage-organization-policies</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją wiedzę o specyfice usług zarządzanych AI. Zrozumienie, że Workbench nie jest "zwykłą maszyną wirtualną", pozwala na dobór właściwych narzędzi (Org Policy) zamiast używania ogólnych narzędzi (jak VM Manager) do zarządzania tym środowiskiem.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

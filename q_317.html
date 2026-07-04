@@ -124,64 +124,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/network-connectivity/docs/interconnect/concepts/macsec</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: D
 
-Prawidłowa odpowiedź: D – Ensure that the active pre-shared key matches on both the on-premises and Google side.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO D JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-MACsec (IEEE 802.1AE) szyfruje ruch na warstwie Ethernet (Layer 2). Wymaga że pre-shared key (CAK – Connectivity Association Key) musi być IDENTYCZNY po obu stronach połączenia. Jeśli klucze nie pasują, sesja MACsec nie nawiązuje szyfrowania, co powoduje problemy z łącznością. To najczęstsza przyczyna awarii MACsec.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ "Ensure Cloud Interconnect supports MACsec" – Cloud Interconnect od 2021 roku wspiera MACsec dla 100G połączeń. To sprawdzenie przed wdrożeniem, nie diagnoza istniejącego problemu.
-B. ❌ "Ensure on-premises router is not down" – ogólna diagnoza sieciowa. Pytanie dotyczy problemu z MACsec, nie ogólnej łączności.
-C. ❌ "Ensure pre-shared key is not expired" – wygaśnięcie klucza to jeden przypadek, ale D jest bardziej precyzyjne i obejmuje też sytuację "klucz się nie zgadza". Expired key ⊂ non-matching key.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• MACsec = Layer 2 encryption dla Cloud Interconnect.
-• Pre-shared key MUSI być identyczny po obu stronach.
-• MACsec problemy = prawie zawsze problem z kluczami.
-• Cloud Interconnect MACsec wymaga 100Gbps połączenia (nie 10G).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• MACsec troubleshooting = sprawdź zgodność pre-shared key po obu stronach.
-• MACsec ≠ IPsec (IPsec = Layer 3, MACsec = Layer 2).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/network-connectivity/docs/interconnect/concepts/macsec</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie techniczne dotyczące troubleshooting'u Cloud Interconnect z MACsec. Kluczową zasadą bezpieczeństwa w tym protokole jest idealna synchronizacja kluczy PSK między obiema stronami połączenia fizycznego.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

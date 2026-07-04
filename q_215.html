@@ -122,46 +122,15 @@ D. Export the Cloud Identity logs to BigQuery. Configure an alert... trigger a C
 </pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
-Jeśli scenariusz dotyczy zabezpieczania zasobów chmurowych (GCP), zawsze wybieraj rozwiązanie typu Managed (SCC, Secret Manager, Cloud KMS), a unikaj rozwiązań self-managed, chyba że pytanie wyraźnie wymaga dostosowania niskopoziomowego.
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <strong>Pułapka IAM:</strong> Pytania o uprawnienia często sugerują 'Project Owner' – zawsze szukaj 'Least Privilege' (np. 'Role: Secret Manager Secret Accessor').
-- <strong>Pułapka Sieciowa:</strong> Często mylone są VPC Peering (wydajność) oraz VPN (szyfrowanie/on-premise).
-
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Rozwiązanie bazuje na GCP Shared Responsibility Model. Google zarządza bezpieczeństwem infrastruktury (Physical, Network, Host), podczas gdy administrator zarządza tożsamością (IAM), danymi (Encryption, Cloud KMS) i regułami dostępu (VPC Firewall).
-</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją znajomość różnic między usługami GCP. Częstym błędem jest próba rozwiązania problemów "tożsamościowych" za pomocą IAM. IAM zarządza tym, co użytkownik może zrobić, natomiast konsola Admina (Cloud Identity) zarządza tym, kim użytkownik jest i w jakich grupach się znajduje.</p>
-<h3>Dodatkowe wskazówki</h3>
-<ul>
-<li>Zasada Least Privilege powinna być stosowana również przy zarządzaniu członkami grup – nie każda grupa musi pozwalać na dodawanie osób z zewnątrz.</li>
-<li>Jeśli Twoja organizacja musi współpracować z zewnętrznymi firmami, zamiast dodawać ich do grup, rozważ użycie "Cloud Identity External Identities" lub dedykowanych kont typu "Guest".</li>
-</ul>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

@@ -123,63 +123,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: D
 
-Prawidłowa odpowiedź: D – Implement an organization policy that only allows the EU as the location for your workload's project or folder.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO D JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Pytanie: regulowany workload UE, bez wpływu na inne globalne aplikacje. Organization policy `gcp.resourceLocations` stosowana na konkretnym projekcie/folderze ogranicza lokalizacje zasobów tylko do regionów UE. Prewencyjne, automatyczne, bez ryzyka omyłkowego tworzenia zasobów poza UE.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ Cloud Function wykrywająca i usuwająca zasoby poza EU = reaktywna (zasoby już zostały stworzone). Dane mogły już trafić poza UE.
-B. ❌ Regionalny subnet w EU = ogranicza VM, ale nie zarządzane usługi (BigQuery, Spanner, itp.) które mogą mieć globalny zakres.
-C. ❌ VPC Service Controls = perymetr bezpieczeństwa (zapobiega eksfiltracji), nie lokalizacja zasobów. Nie ogranicza gdzie zasoby są tworzone.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• "Restrict resource creation to EU" = `gcp.resourceLocations` org policy.
-• VPC SC ≠ lokalizacja zasobów (mylona często!).
-• Org policy na folderze = nie wpływa na inne foldery (inne aplikacje globalne).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Ograniczenie lokalizacji zasobów = `gcp.resourceLocations` organization policy.
-• Stosuj na folderze/projekcie workloadu, nie na całej organizacji.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie o egzekwowanie polityk Compliance (lokalizacja danych) w skali organizacji. Prewencyjna blokada na poziomie Organization Policy jest jedynym "efektywnym" (gwarantowanym technicznie) rozwiązaniem.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

@@ -129,69 +129,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/iam/docs/service-account-impersonation</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: C
 
-Prawidłowa odpowiedź: C – Create a service account with the storage.objectCreator role. Use service account impersonation in the batch job's code.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO C JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Pytanie: batch job na Compute Engine, tymczasowy zapis do Cloud Storage, minimum uprawnień:
-- `storage.objectCreator` = tylko tworzenie obiektów (write), nie listing, nie delete, nie admin.
-- Service account impersonation = job działa tymczasowo jako ten SA, bez trwałego przypisania kluczy.
-- Zasada least privilege: tylko `objectCreator` (nie `objectAdmin` ani `storage.admin`).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ Storage administrator = pełne uprawnienia (CRUD + IAM). Nadmiarowe dla prostego zapisu.
-B. ❌ Long-lived SA key file w kodzie = antywzorzec bezpieczeństwa. Klucze mogą wyciec w kodzie.
-D. ❌ Default SA = domyślnie ma zbyt szerokie uprawnienia. Naruszenie zasady least privilege.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• "Minimum permissions" + "write to bucket" = `storage.objectCreator` (nie `objectAdmin`).
-• SA impersonation = tymczasowy dostęp bez stałego przypisania.
-• Long-lived keys = antywzorzec (nigdy w kodzie).
-• Default SA = za szerokie uprawnienia (Editor).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Least privilege write = storage.objectCreator.
-• SA impersonation &gt; key files.
-• Default SA = nie używać dla batch jobs (zbyt szerokie).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/storage/docs/access-control/iam-roles
-• https://cloud.google.com/iam/docs/service-account-impersonation</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie sprawdza dwie kluczowe zasady: *Least Privilege* (granulowana rola *objectCreator*) oraz *bezpieczna autoryzacja* (impersonation zamiast kluczy).</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

@@ -123,63 +123,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/iam/docs/principal-access-boundary-policies</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: A
 
-Prawidłowa odpowiedź: A – Set a principal access boundary policy with the appropriate enforcement version. Bind the policy to the relevant principal sets.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO A JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Principal Access Boundary (PAB) to mechanizm ograniczający zasoby, do których principal (użytkownik/SA) MOŻE mieć dostęp, niezależnie od przyznanych uprawnień IAM. Stosując PAB ograniczający dostęp do Cloud Storage tylko w obrębie organizacji, użytkownicy nie będą mogli uzyskać dostępu do zewnętrznych bucketów (nawet jeśli mają IAM binding na zewnętrznym zasobie). To precyzyjne rozwiązanie.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-B. ❌ Organization restriction headers = nagłówki HTTP wymuszające dostęp tylko do zasobów własnej organizacji. Wymagają konfiguracji proxy/urządzeń. PAB jest natywniejszy i pewniejszy.
-C. ❌ IAM deny policy "poza organizacją" = IAM deny działa na zasobach w organizacji, nie może deny dostępu do zasobów w INNYCH organizacjach.
-D. ❌ Domain restricted sharing = ogranicza KOMU można nadawać dostęp do Twoich zasobów, nie zapobiega dostępowi Twoich użytkowników do zewnętrznych zasobów.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Ograniczenie dostępu użytkowników do zasobów ZEWNĘTRZNYCH = Principal Access Boundary.
-• PAB = nowy mechanizm (2024+), pojawia się coraz częściej w pytaniach egzaminacyjnych.
-• Domain restricted sharing ≠ PAB (różne mechanizmy ochrony).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Zapobieganie dostępowi do zasobów poza organizacją = Principal Access Boundary.
-• Ograniczenie komu nadajesz dostęp = Domain Restricted Sharing.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/iam/docs/principal-access-boundary-policies</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie o zaawansowane mechanizmy ochrony danych przed wyciekiem (data exfiltration) między organizacjami w chmurze. PAB to nowoczesne podejście do definiowania "granic dostępności" dla tożsamości.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

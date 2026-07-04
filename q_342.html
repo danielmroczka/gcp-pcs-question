@@ -129,69 +129,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/network-connectivity/docs/interconnect/concepts/macsec</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: B
 
-Prawidłowa odpowiedź: B – Set up pairs of Cloud Interconnect connections to your data centers in multiple regions, and employ MACsec encryption.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO B JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Wymagania: "low overhead encryption" + "private connectivity" + "high availability" + "multiple regions". Cloud Interconnect + MACsec:
-- Interconnect = prywatne połączenie (nie przez Internet).
-- MACsec = Layer 2 encryption z minimalnym narzutem (hardware-level, nie softwarowy).
-- Pary połączeń = HA.
-- Multiple regions = pokrycie geograficzne.
-MACsec ma najmniejszy overhead z dostępnych opcji szyfrowania.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ HA VPN przez Internet = nie "private connectivity". VPN przechodzi przez publiczny Internet.
-C. ❌ L2TP = starszy protokół z wyższym narzutem niż MACsec. Nie jest standardem dla Cloud Interconnect.
-D. ❌ IPSec nad Partner Interconnect = wyższy overhead niż MACsec (IPSec = L3 software encryption). Partner Interconnect ≠ Dedicated Interconnect.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• "Low overhead encryption" = MACsec (Layer 2, hardware).
-• "Private connectivity" = Cloud Interconnect (nie VPN przez Internet).
-• MACsec &gt; IPSec &gt; SSL/TLS (pod względem narzutu).
-• HA = pary połączeń Interconnect.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Low overhead + private = Cloud Interconnect + MACsec.
-• VPN = przez Internet (nie "private" w sensie L2).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/network-connectivity/docs/interconnect/concepts/macsec</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie techniczne o wydajność szyfrowania w połączeniach hybrydowych. Kluczem jest rozróżnienie protokołów szyfrowania (MACsec vs IPSec) w kontekście "low overhead" (niskiego narzutu na wydajność).</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

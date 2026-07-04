@@ -129,69 +129,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/network-connectivity/docs/interconnect/concepts/overview</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: A
 
-Prawidłowa odpowiedź: A – Establish a Dedicated Interconnect connection between the Google Cloud VPC network and the on-premises network.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO A JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Pytanie: regulowane wymagania + "existing network infrastructure" + 3-tier app (frontend w GCP, backend i DB on-premises). Dedicated Interconnect:
-- Połączenie fizyczne dedykowane (prywatne, nie przez Internet).
-- Spełnia wymagania regulacyjne (dane nie przechodzą przez publiczny Internet).
-- Wysoka przepustowość (10Gbps-100Gbps).
-- Niskie opóźnienia.
-- SLA 99.99% (dla redundantnego).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-B. ❌ Direct Internet connection = dane przechodzą przez publiczny Internet. Naruszenie wymagań regulacyjnych.
-C. ❌ Replikacja backendu/DB do GCP + hybrid connectivity = zmiana architektury, nie rozwiązanie hybrid connectivity dla istniejącej aplikacji.
-D. ❌ Cloud VPN przez publiczny Internet = szyfrowane, ale dane przechodzą przez publiczny Internet. Dla ścisłych wymagań regulacyjnych, Interconnect jest preferowany.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• "Regulatory requirements" + "on-premises" + "private connection" = Dedicated Interconnect.
-• Cloud VPN = przez Internet (szyfrowane), Interconnect = nie przez Internet.
-• Dedicated Interconnect &gt; Partner Interconnect (Dedicated = bezpośrednie).
-• Kolocacja wymagana dla Dedicated Interconnect.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Regulowane + prywatne połączenie = Dedicated/Partner Interconnect (nie VPN).
-• VPN = szyfrowany tunnel przez Internet (nie "private network").
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/network-connectivity/docs/interconnect/concepts/overview</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie o wybór mechanizmu łączności hybrydowej. Wymogi wysokiej dostępności, niskiej latencji oraz "bezpieczeństwa" dla dużych przedsiębiorstw kierują wybór ku fizycznym połączeniom typu Dedicated Interconnect, a nie VPN przez internet.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

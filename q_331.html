@@ -128,68 +128,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/artifact-registry/docs/analysis</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: B
 
-Prawidłowa odpowiedź: B – Enforce Binary Authorization in your GKE clusters. Integrate container image vulnerability scanning with Artifact Registry and create attestations of successful scans.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO B JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-To kompleksowe rozwiązanie supply chain security dla GKE:
-1. Binary Authorization = wymuszenie że tylko attested obrazy mogą być deployed.
-2. Artifact Registry vulnerability scanning = automatyczne skanowanie przy push.
-3. Attestations = kryptograficzne potwierdzenia ze skanowania, wymagane przez Binary Authorization.
-Razem tworzą automatyczny, niezawodny pipeline bezpieczeństwa kontenerów.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ Custom org policies dla "hosted in Artifact Registry" = ogranicza source rejestru, ale nie weryfikuje czy obraz był skanowany. Brak attestation enforcement.
-C. ❌ Auto-deploy po CI/CD build = brak weryfikacji bezpieczeństwa obrazu przed deploymentem. "Successful build" ≠ "secure image".
-D. ❌ Third-party databases + custom scripts = niespójne, trudne do utrzymania, nie natywne GCP rozwiązanie. Opcja B jest wbudowana.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Container image security GKE = Binary Authorization + Artifact Registry + Attestations.
-• Attestations = "dowód" że skan się odbył i był pomyślny.
-• Binary Authorization bez attestations = tylko weryfikacja źródła, nie bezpieczeństwa.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Container supply chain security = Binary Authorization + scanning + attestations.
-• Shift left: skanuj w Artifact Registry, nie na produkcji.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/binary-authorization/docs/overview
-• https://cloud.google.com/artifact-registry/docs/analysis</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie o automatyzację bezpieczeństwa w procesie CI/CD i GKE. Binary Authorization jest natywnym rozwiązaniem GCP do wymuszania polityk bezpieczeństwa na poziomie obrazów kontenerowych przed ich uruchomieniem w klastrze.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

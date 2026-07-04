@@ -130,70 +130,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/iam/docs/best-practices-service-accounts</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: B
 
-Prawidłowa odpowiedź: B – Enable Workload Identity for GKE. Assign a Kubernetes service account to the application and configure IAM to allow the Kubernetes service account to act as a Google service account with only the required permissions.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO B JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Workload Identity to Google-recommended metoda dla aplikacji GKE do dostępu do Google Cloud APIs:
-- Eliminuje potrzebę service account keys (klucze JSON = ryzyko wycieku).
-- Kubernetes SA jest powiązany z Google SA przez IAM.
-- Granularne uprawnienia (tylko wymagane role).
-- Automatyczna rotacja tokenów.
-- Nie wymaga przechowywania sekretów.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ Default Compute Engine SA = zbyt szerokie domyślne uprawnienia (Editor). Naruszenie least privilege.
-C. ❌ User-managed SA z przypisaniem do node pool = SA jest dla WSZYSTKICH podów na nodzie, nie dla konkretnej aplikacji. Brak izolacji.
-D. ❌ SA key file = antywzorzec. Klucze JSON są długoterminowe, trudne do rotacji i mogą wyciec. Google rekomenduje Workload Identity zamiast kluczy.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• GKE + Google APIs = Workload Identity (zawsze, gdy pytanie mówi "recommended").
-• Unikaj SA key files (JSON keys) – to antywzorzec bezpieczeństwa.
-• Default SA = zbyt szerokie uprawnienia.
-• Workload Identity = per-pod uprawnienia (nie per-node).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• GKE application → Google APIs = Workload Identity (Google recommended).
-• Nigdy SA key files dla GKE workloads w produkcji.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/kubernetes-engine/docs/concepts/workload-identity
-• https://cloud.google.com/iam/docs/best-practices-service-accounts</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie sprawdza kluczową umiejętność zabezpieczania kontenerów w GCP. Workload Identity to absolutny standard – eliminacja kluczy (JSON key files) jest kluczowym krokiem do zwiększenia bezpieczeństwa aplikacji w chmurze.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

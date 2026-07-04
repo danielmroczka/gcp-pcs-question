@@ -130,70 +130,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/armor/docs/configure-security-policies</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: D
 
-Prawidłowa odpowiedź: D – Configure a Cloud Armor security policy with customized and pre-configured WAF rules for OWASP Top 10 vulnerabilities. Apply the policy at the load balancer level.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO D JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Ataki L7 (XSS, SQL injection) wymagają WAF na poziomie load balancera:
-- Cloud Armor z WAF rules = gotowe reguły OWASP Top 10 (XSS, SQLi, RFI, etc.).
-- Customized rules = dostosowanie do konkretnych wzorców ataków.
-- Pre-configured rules = szybkie wdrożenie.
-- Load balancer level = blokowanie przed dotarciem do backend.
-Odpowiedź D łączy oba: customized + pre-configured = najkompletniejsza ochrona.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ "Enable Adaptive Protection and throttle" = Adaptive Protection wykrywa DDoS, nie L7 WAF attacks. Throttling ≠ WAF.
-B. ❌ Cloud NGFW + /32 IP blocking = blokada konkretnych IP (L3), nie WAF dla XSS/SQLi (L7).
-C. ❌ Tylko pre-configured WAF rules bez customization = może być niewystarczające. Opcja D jest pełniejsza (customized + pre-configured).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• XSS + SQL injection + layer 7 = Cloud Armor WAF (OWASP rules).
-• Cloud Armor = zawsze na poziomie load balancera.
-• Customized + pre-configured = lepsza ochrona niż samo pre-configured.
-• Adaptive Protection = DDoS (nie WAF).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• L7 attacks (XSS, SQLi) = Cloud Armor WAF rules.
-• IP blocking (L3) = Cloud NGFW (nie WAF).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/armor/docs/waf-rules
-• https://cloud.google.com/armor/docs/configure-security-policies</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie techniczne o WAF. Kluczem jest wybór Cloud Armor z gotowymi regułami OWASP dla ataków warstwy siódmej (L7).</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

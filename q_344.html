@@ -124,64 +124,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/identity/docs/set-up-cloud-identity-admin</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: A
 
-Prawidłowa odpowiedź: A – Create an organizational unit (OU) for Super admins, and enable 2SV within Cloud Identity for the OU.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO A JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Pytanie: zewnętrzny IdP (tylko hasło), ale potrzeba 2SV dla Super admins w Cloud Identity. Cloud Identity pozwala na własne zarządzanie 2SV niezależnie od IdP. Tworzenie osobnego OU dla Super adminów + włączenie 2SV na tym OU = precyzyjne, wymuszone 2SV tylko dla tej grupy. Super admins MUSZĄ mieć 2SV (best practice i wymóg Google).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-B. ❌ Współpraca z zewnętrznym IdP dla 2SV = skomplikowane, zależne od możliwości IdP. Pytanie sugeruje że IdP "only requires username and password" = brak 2SV.
-C. ❌ Monitoring 2SV = reaktywne, nie prewencyjne. Alert po fakcie nie wymusza 2SV.
-D. ❌ "Evaluate and implement strongest" = zbyt ogólne. Cloud Identity ma natywną 2SV per OU – to właśnie opcja A.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• 2SV dla konkretnej grupy = OU w Cloud Identity + wymuszenie 2SV.
-• Cloud Identity obsługuje 2SV niezależnie od zewnętrznego IdP.
-• Super admins = ZAWSZE powinni mieć 2SV (wymóg bezpieczeństwa).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Wymuszenie 2SV dla grupy = OU + Cloud Identity 2SV enforcement.
-• Monitoring ≠ enforcement (reaktywne vs prewencyjne).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://support.google.com/a/answer/9176657
-• https://cloud.google.com/identity/docs/set-up-cloud-identity-admin</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie o egzekwowanie polityk bezpieczeństwa (2SV) dla uprzywilejowanych użytkowników. Kluczem jest wykorzystanie natywnych narzędzi do zarządzania tożsamością w Google Workspace (OU) do wymuszenia silniejszej autoryzacji.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

@@ -127,59 +127,14 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/vpc/docs/private-google-access</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: C
 
-Prawidłowa odpowiedź: C – Create a VPC with a private subnet. Assign a private IP address to each database server. Use Private Google Access to allow the servers to communicate with Google APIs and services.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO C JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Wymaganie: serwery DB bez dostępu do publicznego Internetu, ale możliwość komunikacji z Google APIs. Odpowiedź C:
-- Prywatny subnet = brak publicznych IP.
-- Private Google Access = pozwala serwerom bez publicznych IP na dostęp do Google APIs (BigQuery, Cloud Storage) przez wewnętrzną sieć Google.
-Bez Private Google Access, serwer bez zewnętrznego IP nie mógłby się połączyć z Google APIs.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ NAT gateway umożliwia wychodzący ruch do Internetu – narusza wymóg braku komunikacji z "public Internet". NAT ≠ Private Google Access.
-B. ❌ Statyczny publiczny IP = bezpośrednia ekspozycja na Internet. Przeciwieństwo wymagania.
-D. ❌ Oba IP (prywatny + publiczny) = nadal ma publiczne IP = komunikacja z Internetem = naruszenie wymagania.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• "No public Internet" + "access Google APIs" = Private Google Access.
-• NAT = routing przez Internet (nawet jeśli z prywatnego IP – wychodzi na publiczny Internet).
-• Private Google Access = dostęp do Google APIs bez Internetu (przez backbone Google).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Brak Internet + Google APIs = Private Google Access.
-• NAT = Internet access (nie "private").
-• Cloud NAT vs Private Google Access: różne koncepcje!
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/vpc/docs/private-google-access</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją podstawową wiedzę o bezpiecznym projektowaniu sieci. Izolacja baz danych w prywatnych podsieciach to "krytyczny punkt" bezpieczeństwa w każdej architekturze chmurowej.</p>
-</div>
+
 </div>
 
 <script src="navigation.js"></script>

@@ -128,68 +128,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/bigquery/docs/external-tables</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: B
 
-Prawidłowa odpowiedź: B – Use the data in the Cloud Storage bucket as an external table in BigQuery. Provide the auditors access to the BigQuery dataset.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO B JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Wymagania: "cost-effective" + analiza logów z Cloud Storage przez audytorów. BigQuery External Tables (federated queries) pozwalają na:
-- Zapytania bezpośrednio do danych w Cloud Storage (bez kopiowania/importu).
-- Standard SQL dla audytorów.
-- Brak kosztów przechowywania w BigQuery (dane są w GCS).
-- Granularny dostęp do datasetu.
-Najskalowalne i najtańsze rozwiązanie.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ VM + download = kosztowny, manualny, problemy ze skalowalnością. Audytorzy musieliby instalować narzędzia.
-C. ❌ Dataflow + Elasticsearch = drogie i skomplikowane. Nadmiarowa infrastruktura dla prostego audytu.
-D. ❌ Cloud Run + Cloud Logging import = dane z GCS do Logging = kosztowne i nienaturalne (Logging nie jest narzędziem analitycznym).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Logi w Cloud Storage + analiza = BigQuery External Tables (najtaniej).
-• External Table = zapytania do GCS bez importu = zero kosztów przechowywania BQ.
-• "Cost-effective" = wskazuje na rozwiązanie bez niepotrzebnych kopii danych.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Cost-effective log analytics z GCS = BigQuery External Tables.
-• Nie kopiuj danych jeśli możesz je analizować bezpośrednio.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/bigquery/docs/external-tables</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie o efektywną analizę logów w chmurze. Kluczem jest wykorzystanie funkcji "external table" w BigQuery, która pozwala na analizę SQL bezpośrednio na plikach w GCS bez kosztów importu danych.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

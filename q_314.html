@@ -127,67 +127,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/shielded-vm/docs/shielded-vm</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: B
 
-Prawidłowa odpowiedź: B – Establish a trusted execution environment with a Confidential VM.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO B JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Pytanie: "highest level of security" + ochrona danych klientów PODCZAS przetwarzania. Confidential VMs używają AMD SEV (Secure Encrypted Virtualization) lub Intel TDX, które szyfrują dane w pamięci RAM. Nawet Google i hypervisor nie mają dostępu do danych w użyciu. To "trusted execution environment" (TEE) – najwyższy poziom ochrony.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ CSEK = szyfrowanie at rest z kluczami dostarczonymi przez klienta. Nie chroni danych podczas przetwarzania.
-C. ❌ Shielded VM zapewnia bezpieczny boot i integralność platformy (ochrona przed rootkitami), ale NIE szyfruje danych w pamięci.
-D. ❌ CMEK = szyfrowanie at rest z kluczami zarządzanymi przez klienta. Jak CSEK – nie chroni danych "in use".
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• "Strongest/highest level" + "during processing" = Confidential VM.
-• Shielded VM ≠ Confidential VM (mylona często!).
-  - Shielded = Secure Boot, vTPM, Integrity Monitoring.
-  - Confidential = szyfrowanie RAM (AMD SEV).
-• CMEK/CSEK = at rest, NIE in use.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• In-use encryption = Confidential VM.
-• Boot integrity = Shielded VM.
-• At-rest encryption = CMEK/CSEK.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/confidential-computing/confidential-vm/docs/about-cvm
-• https://cloud.google.com/shielded-vm/docs/shielded-vm</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie sprawdza znajomość różnych stanów szyfrowania danych. "In use" to specyficzny stan, w którym konwencjonalne metody (CMEK/CSEK) nie działają, wymagane jest Confidential Computing (Confidential VMs).</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

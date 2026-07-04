@@ -124,64 +124,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/artifact-registry/docs/analysis</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: D
 
-Prawidłowa odpowiedź: D – Enable Binary Authorization and create attestations of scans.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO D JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Binary Authorization zapewnia że tylko zaufane, przeskanowane i podpisane obrazy kontenerów mogą być wdrożone w produkcji (GKE, Cloud Run). Attestations = kryptograficzne potwierdzenie że obraz przeszedł skanowanie pod kątem vulnerabilities. To mechanizm "supply chain security" – blokuje wdrożenie niezweryfikowanego obrazu.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-A. ❌ Kubernetes RBAC kontroluje dostęp do zasobów K8s, nie weryfikuje bezpieczeństwa obrazów kontenerów podczas deploymentu.
-B. ❌ gcloud artifacts docker images describe to komenda ręczna do sprawdzenia konkretnego obrazu. Nie jest automatycznym enforcement mechanizmem dla wszystkich deploymentów.
-C. ❌ Cloud Code daje real-time feedback developerom, ale nie blokuje wdrożenia niezweryfikowanych obrazów w produkcji.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• "Prevent vulnerable container images in production" = Binary Authorization.
-• Attestations = kryptograficzne "podpisy" że obraz był zweryfikowany.
-• Binary Authorization integruje się z Artifact Registry i Container Analysis.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Software supply chain security = Binary Authorization + Attestations.
-• RBAC = dostęp do zasobów, NIE weryfikacja obrazów.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/binary-authorization/docs/overview
-• https://cloud.google.com/artifact-registry/docs/analysis</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: D</b></p>
-<p><b>Analiza strategiczna:</b> To pytanie testuje Twoją wiedzę o zabezpieczaniu łańcucha dostaw oprogramowania (Supply Chain Security). Binary Authorization to "najtwardsza" metoda wymuszania standardów – jeśli obraz nie przejdzie przez bezpieczny proces CI/CD i nie zostanie podpisany, nie zostanie dopuszczony do uruchomienia w środowisku produkcyjnym.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 

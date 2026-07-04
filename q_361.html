@@ -131,71 +131,15 @@ DODATKOWE ŹRÓDŁA
 • https://cloud.google.com/vertex-ai/docs/general/private-endpoints</pre>
 
 </div>
-<div class="q-card q-answer mb-4 d-none" >
-<h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: A
 
-Prawidłowa odpowiedź: A – Within the model project, create an internal Application Load Balancer that points to the model endpoint. Expose the load balancer by using Private Service Connect (PSC). Allow consumer projects to access the PSC service.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO A JEST PRAWIDŁOWE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Wymagania: AI model odizolowany od Internetu, dostępny dla innych projektów wewnętrznie. Private Service Connect (PSC):
-- Internal Load Balancer = model nie jest dostępny z Internetu.
-- PSC = bezpieczne, prywatne udostępnienie serwisu innym projektom/VPC.
-- Consumer projects łączą się przez PSC endpoint (bez VPC peering, bez Shared VPC).
-- Każdy projekt ma własny PSC endpoint = granularna kontrola dostępu.
-- Ruch pozostaje w sieci Google (nie przez Internet).
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DLACZEGO INNE OPCJE SĄ BŁĘDNE?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-B. ❌ Private Google Access = dla dostępu do Google APIs z VM bez zewnętrznego IP. Nie służy do ekspozycji własnych endpointów innym projektom.
-C. ❌ Shared VPC = współdzielona sieć, ale wymaga centralnego zarządzania i daje szerszy dostęp sieciowy. PSC jest bardziej granularny i izolowany.
-D. ❌ External ALB = dostępny z Internetu. Naruszenie wymagania "strictly isolated from the internet".
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WSKAZÓWKI EGZAMINACYJNE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Prywatna ekspozycja serwisu innym projektom = Private Service Connect (PSC).
-• PSC = serwis jest "published", konsumenci tworzą własne endpoint w ich VPC.
-• "Isolated from internet" + "accessible to other projects" = PSC + Internal LB.
-• PSC &gt; Shared VPC dla granularnej izolacji serwisów.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REGUŁY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Prywatny serwis dla wielu projektów = Private Service Connect.
-• External LB = Internet = naruszenie izolacji.
-• Shared VPC = wspólna sieć (szerszy dostęp), PSC = izolowany serwis.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DODATKOWE ŹRÓDŁA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• https://cloud.google.com/vpc/docs/private-service-connect
-• https://cloud.google.com/vertex-ai/docs/general/private-endpoints</pre>
-</div>
 
 
 
 </div>
 
 
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie (AI)</h2>
-<div class="analysis-section">
-<h3>Kluczowe zagadnienia</h3>
-<p><b>Sugerowana odpowiedź: A</b></p>
-<p><b>Analiza strategiczna:</b> Pytanie o bezpieczne udostępnianie usług wewnętrznych wewnątrz organizacji. Private Service Connect (PSC) to nowoczesny standard zapewniający bezpieczne połączenia "usługa-konsument" bez narażania ruchu na publiczny internet.</p>
+
 </div>
-</div>
-
-
-
-
-
-
-
 
 <script src="navigation.js"></script></body>
 
