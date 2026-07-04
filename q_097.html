@@ -87,28 +87,33 @@ Your organization has implemented synchronization and SAML federation between Cl
 </div>
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (AD password policy + Post-SSO 2FA (Security Keys))
+**Poprawna odpowiedź: C**
 
-Wyjaśnienie: 
-W modelu federacyjnym (SAML) hasło jest weryfikowane przez AD (on-premises). GCP może jednak dodać własną warstwę bezpieczeństwa w postaci 'Post-SSO 2-Step Verification'. Użycie kluczy bezpieczeństwa (Security Keys/FIDO2) jest najsilniejszą formą ochrony przed phishingiem.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Organizacja korzysta z synchronizacji oraz federacji tożsamości (SAML) między Microsoft Active Directory (jako dostawcą tożsamości - IdP) a Cloud Identity (jako dostawcą usług - SP). Celem jest zmniejszenie ryzyka kompromitacji kont użytkowników:
+- **Utworzenie silnej polityki haseł w Active Directory oraz skonfigurowanie weryfikacji dwuetapowej (2SV) z kluczami bezpieczeństwa po stronie Google (post-SSO) (C):** Ponieważ AD jest źródłem prawdy i obsługuje uwierzytelnianie SAML, to w AD należy wymusić silną politykę haseł. Gdy użytkownik pomyślnie zaloguje się w AD (SSO), zostaje przekierowany z powrotem do Google. Google Cloud Identity pozwala na skonfigurowanie weryfikacji dwuetapowej uruchamianej **po logowaniu jednokrotnym (post-SSO 2SV)**. Użycie fizycznych kluczy bezpieczeństwa (np. YubiKey / FIDO2) zapewnia najwyższy poziom ochrony przed phishingiem i przejęciem sesji.
 
-Dlaczego pozostałe są błędne:
-A, B. Polityka haseł w Cloud Identity nie zadziała, jeśli używasz SSO (wtedy hasło sprawdza Twoje AD).
-D. Kody SMS/telefoniczne są uważane za mniej bezpieczne niż fizyczne klucze bezpieczeństwa (podatność na SIM swapping/phishing).
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A i B. Tworzenie polityki haseł w Cloud Identity:** W architekturze federacji SAML, hasła są weryfikowane przez lokalne Active Directory, a nie przez Cloud Identity. Wdrożenie polityki haseł w Cloud Identity nie będzie miało żadnego wpływu na użytkowników logujących się przez SSO.
+- **D. Użycie kodów SMS/połączeń telefonicznych:** Kody jednorazowe przesyłane za pomocą SMS lub połączeń telefonicznych są podatne na ataki typu SIM-swapping oraz phishing, dlatego są znacznie mniej bezpieczne niż fizyczne klucze bezpieczeństwa (Security Keys) rekomendowane w opcji C.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-Najsilniejsza ochrona konta = Security Keys (FIDO2). Przy SSO hasło zarządza IdP (AD).
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- W federacji tożsamości (SAML SSO):
+  - Polityka haseł leży po stronie **dostawcy tożsamości (IdP)** -> czyli Active Directory.
+  - Dodatkowe uwierzytelnienie wieloskładnikowe (MFA) może być wymuszone po zalogowaniu do AD -> czyli **post-SSO 2-Step Verification** w konsoli Google.
+- Fizyczne klucze bezpieczeństwa (Security Keys / FIDO2) są zawsze najbezpieczniejszą formą 2FA na egzaminie Google Cloud.
 
-Kluczowe zagadnienia do powtórzenia:
-- SAML Federation
-- Post-SSO 2FA
-- Phishing-resistant MFA
+**4. Reguły wyboru odpowiedzi:**
+- Polityka haseł w federacji -> W AD (lokalnie).
+- Bezpieczne MFA po SSO -> post-SSO 2SV z Security Keys w Google Admin.
 
-Dokumentacja:
-<a href="https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction" target="_blank">https://cloud.google.com/architecture/identity/federating-gcp-with-active-directory-introduction</a>
+**5. Dodatkowe źródła:**
+- Enforcing 2-Step Verification for SSO users: https://support.google.com/a/answer/9373117
 </pre>
+
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

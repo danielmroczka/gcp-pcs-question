@@ -87,29 +87,31 @@ You are the project owner for a regulated workload that runs in a project you ow
 </div>
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Policy Analyzer)
+**Poprawna odpowiedź: B**
 
-Wyjaśnienie: 
-Policy Analyzer to narzędzie w GCP, które pozwala na głęboką analizę tego, kto ma dostęp do jakich zasobów. W przeciwieństwie do prostego przeglądu IAM, Policy Analyzer potrafi rozwinąć grupy i konta serwisowe, dając pełny obraz uprawnień, co jest niezbędne jako dowód dla audytora.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Dla celów audytu zgodności należy przeprowadzić analizę dostępu i wygenerować dowody na to, kto i jakie uprawnienia posiada w projektach GCP (access reviews):
+- **Policy Analyzer (B):** Jest to narzędzie w GCP, które pozwala na zapytania i analizowanie polityk IAM w celu ustalenia, które tożsamości (użytkownicy, grupy, konta usług) mają dostęp do określonych zasobów i za pomocą jakich ról/uprawnień. Umożliwia ono analizę ścieżek dostępu (np. poprzez członkostwo w grupach lub dziedziczenie polityk) i wyeksportowanie tych danych, co stanowi idealny dowód audytowy na przegląd uprawnień (access reviews).
 
-Dlaczego pozostałe są błędne:
-A. Policy Troubleshooter służy do sprawdzania, dlaczego konkretny użytkownik NIE ma dostępu do zasobu w danym momencie.
-C. IAM Recommender sugeruje usunięcie nadmiarowych uprawnień, nie służy do generowania raportów dowodowych.
-D. Policy Simulator pozwala testować zmiany w uprawnieniach przed ich wprowadzeniem, aby uniknąć błędów.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Policy Troubleshooter:** Służy do diagnozowania pojedynczych przypadków odmowy dostępu (np. dlaczego dany użytkownik nie może wykonać konkretnej operacji API w danej chwili). Nie pozwala na masową analizę i generowanie raportów audytowych dla całego projektu.
+- **C. IAM Recommender:** Automatycznie analizuje faktyczne użycie uprawnień i sugeruje odebranie nadmiarowych ról w celu wdrożenia zasady najmniejszych uprawnień. Nie służy do generowania pełnego zestawienia przypisanych praw na potrzeby audytu.
+- **D. Policy Simulator:** Pozwala na przetestowanie zmian w politykach IAM przed ich wdrożeniem w celu sprawdzenia, jaki wpływ będą miały na dostęp użytkowników. Nie generuje dowodów na obecny stan dostępu do celów audytowych.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-Raport dla audytora (kto ma dostęp) = Policy Analyzer.
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- **Policy Analyzer:** Odpowiada na pytanie: "Kto ma dostęp do czego i jak?". Służy do analizowania dużych zestawów uprawnień i generowania raportów dla audytorów.
+- **Policy Troubleshooter:** Odpowiada na pytanie: "Dlaczego ten użytkownik nie ma dostępu?". Służy do rozwiązywania problemów z uprawnieniami na bieżąco.
 
-Kluczowe zagadnienia do powtórzenia:
-- IAM Policy Analyzer
-- Access Reviews
-- GCP Auditing tools
+**4. Reguły wyboru odpowiedzi:**
+- Raporty i analizy uprawnień dla audytu (Access reviews / compliance evidence) -> Policy Analyzer.
 
-Dokumentacja:
-<a href="https://cloud.google.com/iam/docs/policy-analyzer-overview" target="_blank">https://cloud.google.com/iam/docs/policy-analyzer-overview</a>
+**5. Dodatkowe źródła:**
+- Analyzing IAM policies with Policy Analyzer: https://cloud.google.com/iam/docs/policy-analyzer-overview
 </pre>
+
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

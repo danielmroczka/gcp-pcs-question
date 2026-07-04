@@ -90,24 +90,27 @@ You are on your company's development team. You noticed that your web applicatio
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: D**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+W aplikacji wykryto lukę typu Cross-Site Scripting (XSS), polegającą na dynamicznym wstrzykiwaniu niezweryfikowanych danych użytkownika do przeglądarki. Należy zapobiec i trwale naprawić tę podatność w środowisku staging:
+- **Użycie Web Security Scanner w staging do symulacji ataków XSS oraz wdrożenie systemu szablonów obsługującego automatyczne uciekanie znaków (contextual auto-escaping) (D):** Web Security Scanner (część Security Command Center) pozwala na automatyczne testowanie aplikacji w środowisku staging pod kątem podatności takich jak XSS czy SQL injection. Aby trwale wyeliminować podatność w kodzie źródłowym, należy użyć silnika szablonów (templating engine), który automatycznie koduje (escape) znaki specjalne HTML (np. `<`, >, `&`) w zależności od kontekstu (HTML, atrybut, JavaScript), co uniemożliwia przeglądarce wykonanie wstrzykniętego kodu jako skryptu.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Użycie Cloud IAP na podstawie IP lub urządzenia:** IAP kontroluje dostęp do aplikacji (uwierzytelnianie i autoryzacja), ale nie modyfikuje kodu aplikacji ani nie chroni przed lukami XSS wewnątrz samej aplikacji po zalogowaniu się użytkownika.
+- **B. Użycie Cloud Armor w produkcji:** Cloud Armor może pomóc zablokować niektóre próby ataków XSS na brzegu sieci, ale nie naprawia samej luki w kodzie aplikacji. Zadanie pyta o zapobieżenie i *naprawienie* podatności (prevent and fix).
+- **C. Web Security Scanner do sprawdzania nieaktualnych bibliotek:** Web Security Scanner wykrywa podatności aplikacyjne (np. XSS), ale nie służy głównie do analizy składników oprogramowania (Software Component Analysis / dependency scanning) pod kątem wersji bibliotek (od tego są inne narzędzia, np. Artifact Registry scanning). Ponadto zmiana wersji biblioteki nie naprawi luki, jeśli tkwi ona w autorskim kodzie renderującym dane wejściowe.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- **XSS (Cross-Site Scripting):** Najlepszym sposobem na trwałą naprawę w kodzie jest **contextual auto-escaping** w silnikach szablonów.
+- **Web Security Scanner:** Narzędzie GCP dedykowane do automatycznego skanowania aplikacji webowych pod kątem luk bezpieczeństwa (takich jak XSS) w środowiskach deweloperskich i staging.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Wykrywanie luk webowych w staging (XSS, SQLi) -> Web Security Scanner.
+- Naprawa XSS w kodzie -> Contextual auto-escaping.
+
+**5. Dodatkowe źródła:**
+- Web Security Scanner overview: https://cloud.google.com/security-command-center/docs/concepts-web-security-scanner-overview
 </pre>
 
 </div>

@@ -88,27 +88,28 @@ You have an application where the frontend is deployed on a managed instance gro
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
 
-
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: B**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Wymagane jest zezwolenie na dostęp do bazy danych MySQL (port 3306) wyłącznie dla maszyn z warstwy frontendowej (Subnet A), bez zezwalania innym maszynom w tej samej podsieci na dostęp, co stanowi implementację mikrosegmentacji sieciowej:
+- **Skonfigurowanie reguły zapory sieciowej opartej na kontach usług (Service Accounts) (B):** W Google Cloud reguły firewall mogą być definiowane nie tylko za pomocą zakresów IP czy tagów sieciowych, ale także na podstawie tożsamości maszyn (konta usługi powiązanego z maszyną wirtualną). Konfiguracja reguły zezwalającej na ruch z konta usługi frontendu do konta usługi bazy danych jest najbezpieczniejszym rozwiązaniem. Działa niezależnie od adresacji IP oraz uniemożliwia innym maszynom w Subnet A (które mają inne konta usługi) na dostęp do bazy danych.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Reguła oparta na zakresie IP podsieci A:** Zezwoliłaby na ruch z *każdej* maszyny znajdującej się w podsieci A, co narusza zasadę najmniejszych uprawnień (inne aplikacje w tej podsieci również zyskałyby dostęp).
+- **C. Reguła egress z bazy do frontendu:** Reguły typu egress kontrolują ruch wychodzący. Zezwolenie na ruch wychodzący z bazy do frontendu nie jest właściwym sposobem na autoryzowanie połączeń inicjowanych przez frontend w kierunku bazy (potrzebna jest reguła ingress na bazie).
+- **D. Reguła oparta na tagach sieciowych ("fe-tag" i "data-tag"):** Tagi sieciowe nie są powiązane z tożsamością maszyn i mogą być łatwo zmieniane przez osoby z uprawnieniami do edycji VM. Ponadto, reguły oparte na kontach usług (Service Accounts) są rekomendowaną praktyką bezpieczeństwa w GCP, ponieważ IAM ściśle kontroluje, kto może uruchomić maszynę z danym kontem usługi.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Definiowanie reguł firewall na podstawie **konta usługi (Service Account)** jest bezpieczniejsze niż na podstawie **tagów sieciowych (network tags)**, ponieważ uprawnienie do przypisania konta usługi (`iam.serviceAccounts.actAs`) jest ściślej kontrolowane niż uprawnienie do edycji tagów sieciowych.
+- Reguły firewall oparte na kontach usług umożliwiają prawdziwą mikrosegmentację w GCP.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Ścisłe ograniczenie ruchu między warstwami aplikacji (frontend -> backend/database) -> Użycie kont usług (Service Accounts) jako źródła i celu w regułach firewall.
+
+**5. Dodatkowe źródła:**
+- VPC firewall rules filtering by service account: https://cloud.google.com/vpc/docs/firewalls#service-accounts
 </pre>
 
 </div>

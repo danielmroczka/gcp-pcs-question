@@ -87,28 +87,30 @@ You are asked to recommend a solution to store and retrieve sensitive configurat
 </div>
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Secret Manager)
+**Poprawna odpowiedź: D**
 
-Wyjaśnienie: 
-Secret Manager to dedykowana usługa Google Cloud do bezpiecznego przechowywania wrażliwych danych konfiguracyjnych, takich jak klucze API, hasła do baz danych czy certyfikaty. Oferuje wersjonowanie, audytowanie i silną kontrolę dostępu przez IAM.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Dla aplikacji działającej na Compute Engine należy zarekomendować bezpieczne i nowoczesne rozwiązanie do przechowywania i pobierania wrażliwych danych konfiguracyjnych (np. haseł do baz danych, kluczy API, sekretów):
+- **Secret Manager (D):** Jest to dedykowana, w pełni zarządzana i bezpieczna usługa w Google Cloud przeznaczona do przechowywania danych wrażliwych (sekretów). Wspiera wersjonowanie sekretów, automatyczne szyfrowanie kluczami CMEK/Google, kontrolę dostępu za pomocą ról IAM na poziomie pojedynczego sekretu oraz pozwala maszynom Compute Engine na bezpieczne pobieranie wartości sekretu za pomocą API/SDK bez potrzeby zapisywania ich w kodzie źródłowym lub metadanych instancji.
 
-Dlaczego pozostałe są błędne:
-A. Cloud KMS służy do zarządzania kluczami kryptograficznymi, a nie do bezpośredniego przechowywania haseł czy ciągów tekstowych konfiguracji.
-B, C. Metadane (Metadata) i atrybuty gościa (Guest attributes) są widoczne dla każdego, kto ma uprawnienia do edycji lub podglądu VM, i nie są szyfrowane w taki sposób jak sekrety w Secret Managerze.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Cloud Key Management Service (KMS):** Cloud KMS służy do zarządzania kluczami kryptograficznymi (szyfrowanie/deszyfrowanie kopertowe danych), a nie do bezpośredniego przechowywania i pobierania sekretów tekstowych takich jak hasła bazy danych. Choć można zaszyfrować sekret za pomocą KMS i przechowywać go w pliku, Secret Manager jest rozwiązaniem prostszym i bezpośrednio dedykowanym do tego celu.
+- **B i C. Atrybuty gościa (guest attributes) oraz metadane niestandardowe (custom metadata):** Metadane Compute Engine nie są szyfrowane w spoczynku w ten sam sposób co sekrety i są widoczne dla każdego użytkownika lub procesu wewnątrz maszyny wirtualnej, który ma dostęp do lokalnego serwera metadanych (`http://metadata.google.com/computeMetadata/v1/`). Przechowywanie tam haseł i kluczy API jest poważnym błędem bezpieczeństwa.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-Hasła / API Keys / Certyfikaty = Secret Manager.
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Do przechowywania haseł, tokenów API, certyfikatów i innych danych poufnych zawsze wybieraj **Secret Manager**.
+- Unikaj przechowywania sekretów w metadanych Compute Engine (Custom Metadata), ponieważ są one łatwo dostępne z wewnątrz maszyny wirtualnej i nie zapewniają odpowiedniego poziomu ochrony.
 
-Kluczowe zagadnienia do powtórzenia:
-- Secret Manager
-- Secret vs ConfigMap
-- IAM for secrets
+**4. Reguły wyboru odpowiedzi:**
+- Przechowywanie i pobieranie haseł/sekretów w aplikacji -> Secret Manager.
 
-Dokumentacja:
-<a href="https://cloud.google.com/secret-manager/docs/overview" target="_blank">https://cloud.google.com/secret-manager/docs/overview</a>
+**5. Dodatkowe źródła:**
+- Secret Manager overview: https://cloud.google.com/secret-manager/docs/overview
 </pre>
+
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

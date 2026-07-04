@@ -88,27 +88,28 @@ A customer wants to run a batch processing system on VMs and store the output fi
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
 
-
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: C**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Podobnie jak w poprzednim pytaniu, system przetwarzania wsadowego (batch processing) na maszynach wirtualnych musi zapisywać wyniki do Cloud Storage, ale maszyny te nie mogą mieć dostępu do publicznego internetu:
+- **Private Google Access (C):** Włączenie Private Google Access na podsieci, w której znajdują się maszyny wirtualne, pozwala im na komunikowanie się z API Cloud Storage za pomocą ich prywatnych adresów IP. Ruch ten nie opuszcza sieci Google i nie wymaga przypisywania publicznych adresów IP ani tras internetowych do maszyn.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Reguła zapory sieciowej blokująca ruch do internetu:** Chociaż blokuje ruch, to zablokowanie całego ruchu wychodzącego do internetu uniemożliwiłoby również maszynom nawiązanie połączenia z Cloud Storage, ponieważ domyślne punkty końcowe Cloud Storage rozwiązują się na publiczne adresy IP. Bez włączonego PGA lub PSC, zablokowanie internetu zablokuje też dostęp do GCS.
+- **B. Brama NAT:** Cloud NAT daje maszynom dostęp do publicznego internetu (ruch wychodzący), co wprost narusza politykę bezpieczeństwa ("no VMs may reach the public internet").
+- **D. Montowanie Cloud Storage jako lokalnego systemu plików (np. za pomocą gcsfuse):** Aby gcsfuse działał, maszyna nadal musi mieć dostęp do API Cloud Storage. Samo zamontowanie nie rozwiązuje problemu braku łączności sieciowej z API GCS bez włączonego PGA.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Private Google Access to kluczowa funkcja sieciowa w GCP, która często pojawia się na egzaminie bezpieczeństwa. Zapamiętaj: PGA włącza się na poziomie podsieci (subnet level).
+- PGA działa tylko dla maszyn mających *wyłącznie* prywatne IP (internal IP only).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Maszyny bez dostępu do internetu -> Dostęp do Cloud Storage -> Private Google Access.
+
+**5. Dodatkowe źródła:**
+- Configuring Private Google Access: https://cloud.google.com/vpc/docs/configure-private-google-access
 </pre>
 
 </div>

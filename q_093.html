@@ -90,24 +90,25 @@ You are part of a security team that wants to ensure that a Cloud Storage bucket
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: A**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Wymagane jest zapewnienie, że kubełek Cloud Storage w Projekcie A może być odczytywany tylko przez Projekt B, a dane z tego kubełka nie mogą zostać skopiowane ani przesłane poza dozwolony perymetr sieciowy, nawet przez uwierzytelnionego użytkownika (zapobieganie eksfiltracji danych):
+- **Włączenie VPC Service Controls, utworzenie perymetru sieciowego obejmującego Projekt A i Projekt B oraz dodanie usługi Cloud Storage (A):** VPC Service Controls (VPC SC) tworzy logiczny perymetr bezpieczeństwa wokół zasobów zarządzanych przez Google (takich jak Cloud Storage). Uniemożliwia to przesyłanie danych pomiędzy usługami wewnątrz perymetru a usługami na zewnątrz niego (np. polecenie `gsutil cp gs://bucket-in-perimeter gs://external-bucket` zostanie zablokowane, nawet jeśli użytkownik ma pełne uprawnienia IAM w obu miejscach). Pozwala to na ścisłą kontrolę przepływu danych i ochronę przed eksfiltracją.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **B. Polityka Domain Restricted Sharing oraz Bucket Policy Only:** Domain Restricted Sharing ogranicza dodawanie tożsamości spoza określonej organizacji Google Workspace do polityk IAM, ale nie zapobiega eksfiltracji danych przez uprawnionych użytkowników do zewnętrznych bucketów.
+- **C i D. Private Access oraz VPC Peering:** Te mechanizmy działają na poziomie sieci VPC (warstwy L3/L4), natomiast Cloud Storage jest usługą publicznego API Google i ruch do niej nie jest domyślnie filtrowany przez standardowy VPC Peering czy Private Access pod kątem kierunku kopiowania danych między zasobami API.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Zapobieganie kopiowaniu danych na zewnątrz / ochrona przed eksfiltracją danych z usług API Google (Cloud Storage, BigQuery) -> **VPC Service Controls (VPC SC)**.
+- IAM kontroluje autoryzację tożsamości ("kto"), natomiast VPC Service Controls kontroluje sieć i kierunek przepływu danych ("skąd i dokąd"), zapobiegając eksfiltracji przez zaufanych użytkowników.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Zapobieganie kopiowaniu/dostępowi do Cloud Storage poza dozwolone projekty / eksfiltracja danych -> VPC Service Controls.
+
+**5. Dodatkowe źródła:**
+- VPC Service Controls overview: https://cloud.google.com/vpc-service-controls/docs/overview
 </pre>
 
 </div>

@@ -88,27 +88,28 @@ An engineering team is launching a web application that will be public on the in
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
 
-
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: A**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Wymaganiem jest zabezpieczenie publicznej aplikacji internetowej, która jest wdrożona w wielu regionach GCP i kierowana przez Load Balancer, przed bezpośrednią ekspozycją na internet oraz zablokowanie ruchu z określonej listy złośliwych adresów IP:
+- **Cloud Armor (A)** to usługa bezpieczeństwa brzegu sieci (Edge Security) w Google Cloud, która integruje się bezpośrednio z zewnętrznym load balancerem HTTP(S) (Global HTTP(S) Load Balancer). Pozwala na definiowanie reguł zapory sieciowej aplikacyjnej (WAF) oraz reguł kontroli dostępu na warstwie L3/L4/L7, w tym blokowanie/zezwolenie na ruch na podstawie list adresów IP (zarówno ręcznie zdefiniowanych, jak i gotowych list reputacyjnych). Chroni to backendy przed bezpośrednim dostępem i blokuje ataki DDoS oraz złośliwych nadawców.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **B. Network Load Balancing:** Jest to regionalny load balancer warstwy 4 (passthrough), który nie posiada wbudowanych funkcji zaawansowanej ochrony aplikacyjnej (WAF) ani natywnej integracji z Cloud Armor w celu blokowania określonych list IP na brzegu sieci.
+- **C. SSL Proxy Load Balancing:** Używany do ruchu nie-HTTP (np. SSL/TLS), ale nie integruje się bezpośrednio z regułami Cloud Armor WAF w ten sam sposób co HTTP(S) Load Balancer i nie jest optymalny do blokowania złośliwych IP dla aplikacji webowej.
+- **D. NAT Gateway:** Służy do umożliwienia instancjom z adresami prywatnymi nawiązywania połączeń wychodzących do internetu. Nie służy do obsługi ruchu przychodzącego z internetu ani filtrowania złośliwych IP dla publicznej aplikacji webowej.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Jeśli aplikacja jest wystawiona publicznie i potrzebujesz filtrować ruch przychodzący na podstawie adresów IP lub chronić przed atakami OWASP Top 10, właściwym wyborem jest zawsze **Cloud Armor** połączony z zewnętrznym HTTP(S) Load Balancerem.
+- Zapamiętaj, że Cloud Armor działa na brzegu sieci Google (Google Edge), zanim ruch w ogóle dotrze do Twoich serwerów.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Blokowanie złośliwych IP / WAF / ochrona przed DDoS dla publicznej aplikacji -> Cloud Armor.
+
+**5. Dodatkowe źródła:**
+- Google Cloud Armor documentation: https://cloud.google.com/armor/docs
 </pre>
 
 </div>

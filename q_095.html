@@ -87,28 +87,33 @@ You are a Security Administrator at your organization. You need to restrict serv
 </div>
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (iam.disableServiceAccountCreation boolean constraint)
+**Poprawna odpowiedź: D**
 
-Wyjaśnienie: 
-Organizacyjne polityki (Organization Policies) pozwalają na nakładanie restrykcji na całą strukturę GCP. Aby zablokować możliwość tworzenia nowych kont serwisowych, należy użyć więzu (constraint) `iam.disableServiceAccountCreation` ustawionego na poziomie organizacji lub folderu produkcyjnego.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Wymagane jest centralne zablokowanie możliwości tworzenia nowych kont usług (Service Accounts) w środowiskach produkcyjnych na poziomie całej organizacji:
+- **Użycie ograniczenia polityki organizacji (Organization Policy constraint) `constraints/iam.disableServiceAccountCreation` (D):** Polityki organizacji (Organization Policies) pozwalają administratorom na centralne narzucanie ograniczeń w strukturze zasobów GCP (organizacja, foldery, projekty). Włączenie reguły logicznej (boolean constraint) `constraints/iam.disableServiceAccountCreation` skutecznie blokuje możliwość tworzenia nowych kont usług w projektach objętych tą polityką, niezależnie od uprawnień IAM posiadanych przez użytkowników.
 
-Dlaczego pozostałe są błędne:
-A. IAM może ograniczać uprawnienia, ale zarządzanie tym per-użytkownik w dużej skali jest trudne do centralnego wyegzekwowania w porównaniu do Organization Policy.
-B, C. Te więzy dotyczą tworzenia KLUCZY (keys) lub przesyłania kluczy zewnętrznych, a nie samego tworzenia obiektu Konta Serwisowego.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Użycie IAM do ograniczenia dostępu użytkowników:** Modyfikowanie ról IAM dla każdego użytkownika z osobna w wielu projektach produkcyjnych jest trudne do zarządzania, podatne na błędy i nie zapewnia centralnego wymuszenia reguły (ktoś może przypadkowo otrzymać rolę Owner lub Editor, która pozwala na tworzenie kont usług).
+- **B. `constraints/iam.disableServiceAccountKeyCreation`:** Wyłącza tworzenie *kluczy* (plików JSON/P12) dla kont usług, ale nie blokuje tworzenia samych kont usług.
+- **C. `constraints/iam.disableServiceAccountKeyUpload`:** Blokuje możliwość wgrywania (uploadu) własnych kluczy publicznych do kont usług, ale nie blokuje tworzenia samych kont usług.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-Centralne ograniczanie możliwości chmury = Organization Policy.
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Centralne ograniczanie możliwości tworzenia zasobów lub wymuszanie konfiguracji w GCP realizuje się za pomocą **Polityki Organizacji (Organization Policy)**, a nie samych ról IAM.
+- Zapamiętaj konkretne nazwy ograniczeń:
+  - `disableServiceAccountCreation` -> Używane do zablokowania tworzenia kont usług.
+  - `disableServiceAccountKeyCreation` -> Blokuje tworzenie kluczy do kont usług (częsty wymóg bezpieczeństwa, aby zapobiegać wyciekom kluczy JSON).
 
-Kluczowe zagadnienia do powtórzenia:
-- Organization Policy Service
-- IAM Constraints
-- Service Account management
+**4. Reguły wyboru odpowiedzi:**
+- Centralne zablokowanie tworzenia Service Accounts -> Org Policy constraint `constraints/iam.disableServiceAccountCreation`.
 
-Dokumentacja:
-<a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints</a>
+**5. Dodatkowe źródła:**
+- Organization policy constraints for IAM: https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints#iam
 </pre>
+
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

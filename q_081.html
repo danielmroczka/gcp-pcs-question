@@ -89,50 +89,29 @@ A customer is running an analytics workload on Google Cloud Platform (GCP) where
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
 
-
 <h2>Wyjaśnienie</h2>
 <pre>
-1. Prawidłowe odpowiedzi:
-A. Configure Private Google Access on the Compute Engine subnet
-B. Avoid assigning public IP addresses to the Compute Engine cluster.
+**Poprawna odpowiedź: AB**
 
-2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
-Pytanie dotyczy dwóch kluczowych wymagań: (1) instancje Compute Engine muszą mieć dostęp do Cloud Storage, oraz (2) workload nie może mieć dostępu do internetu ani być z niego dostępny. Aby spełnić oba te wymagania jednocześnie, potrzebna jest kombinacja dwóch strategii.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Wymaganiem jest uniemożliwienie instancjom Compute Engine dostępu do internetu oraz zablokowanie dostępu z internetu do nich, przy jednoczesnym zachowaniu możliwości korzystania z usług Google Cloud takich jak Cloud Storage (GCS):
+- **Brak publicznych adresów IP (B):** Usunięcie lub nieprzypisywanie publicznych adresów IP do maszyn wirtualnych uniemożliwia bezpośredni dwukierunkowy ruch z i do internetu.
+- **Private Google Access (A):** Jest to ustawienie na poziomie podsieci VPC. Po włączeniu pozwala maszynom wirtualnym, które posiadają wyłącznie prywatne adresy IP, na bezpieczną komunikację z publicznymi punktami końcowymi API usług Google (np. Cloud Storage, BigQuery) bez przechodzenia przez publiczny internet.
 
-Odpowiedź B (brak publicznych adresów IP) jest fundamentalnym krokiem do izolacji od internetu. Instancja bez publicznego adresu IP nie może bezpośrednio komunikować się z internetem — ani inicjować połączeń wychodzących, ani odbierać przychodzących z zewnątrz. To eliminuje dwukierunkową komunikację z publicznym internetem. Jest to najprostsza i najskuteczniejsza metoda zapewnienia, że VM-y nie są dostępne z internetu.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **C. Osobna podsieć:** Samo umieszczenie maszyn w osobnej podsieci nie blokuje dostępu do internetu ani z internetu, jeśli podsieć ta ma trasę do bramy internetowej (default internet gateway) i maszyny mają publiczne IP.
+- **D. Wyłączenie IP forwarding:** IP forwarding pozwala instancji na przekazywanie pakietów przeznaczonych dla innych adresów (np. działanie jako router). Wyłączenie tego nie odcina dostępu samej instancji do internetu.
+- **E. Cloud NAT gateway:** Cloud NAT pozwala maszynom z prywatnymi IP na inicjowanie połączeń *wychodzących* do internetu. Włączenie Cloud NAT złamałoby warunek, że maszyny nie mogą mieć dostępu do internetu.
 
-Odpowiedź A (Private Google Access) jest niezbędna, aby instancje bez publicznych adresów IP mogły nadal komunikować się z usługami Google, w tym z Cloud Storage. Private Google Access (PGA) to ustawienie na poziomie podsieci VPC, które umożliwia maszynom z wyłącznie prywatnymi adresami IP dostęp do publicznych API Google (np. storage.googleapis.com) poprzez wewnętrzne trasy sieciowe Google, bez konieczności wychodzenia na publiczny internet. Bez PGA, maszyny bez publicznego IP po prostu nie byłyby w stanie połączyć się z Cloud Storage.
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Dostęp do usług Google (Cloud Storage, BigQuery) z sieci bez dostępu do internetu -> **Private Google Access** (na poziomie podsieci) + brak publicznych adresów IP.
+- Cloud NAT daje dostęp do internetu (tylko ruch wychodzący), podczas gdy Private Google Access daje dostęp *tylko* do API Google, a nie do całego internetu.
 
-Kombinacja tych dwóch strategii jest więc optymalna: brak publicznych IP zapewnia izolację od internetu, a PGA zapewnia łączność z Cloud Storage przez prywatne ścieżki sieciowe Google.
+**4. Reguły wyboru odpowiedzi:**
+- Brak internetu + Dostęp do Google APIs -> Private Google Access (PGA) + Brak publicznego IP.
 
-3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
-C. Make sure that the Compute Engine cluster is running on a separate subnet.
-   * Dlaczego nieprawidłowa: Umieszczenie instancji na osobnej podsieci samo w sobie nie zapewnia izolacji od internetu. Podsieć w GCP jest tylko logicznym podziałem zakresu adresów IP w ramach VPC. Jeśli instancje na tej podsieci mają publiczne adresy IP, nadal mogą komunikować się z internetem. Oddzielna podsieć może być elementem strategii segmentacji, ale nie rozwiązuje problemu izolacji od internetu.
-
-D. Turn off IP forwarding on the Compute Engine instances in the cluster.
-   * Dlaczego nieprawidłowa: IP forwarding to ustawienie, które pozwala instancji na przekazywanie (forward) pakietów sieciowych, które nie są adresowane bezpośrednio do niej. Jest to potrzebne np. przy tworzeniu własnych routerów, bram NAT lub firewalli programowych na VM-ach. Wyłączenie IP forwarding nie blokuje samej instancji przed dostępem do internetu — jedynie uniemożliwia jej działanie jako router dla innych maszyn.
-
-E. Configure a Cloud NAT gateway.
-   * Dlaczego nieprawidłowa: Cloud NAT (Network Address Translation) robi dokładnie odwrotność tego, czego wymaga pytanie — umożliwia instancjom bez publicznych adresów IP dostęp do internetu poprzez translację adresów. Konfiguracja Cloud NAT dałaby instancjom wychodzący dostęp do internetu, co jest sprzeczne z wymaganiem izolacji.
-
-4. Wskazówki, hinty, tips and tricks:
-* Gdy pytanie mówi o „dostępie do usług Google bez internetu", szukaj odpowiedzi z Private Google Access (PGA).
-* Brak publicznego IP + PGA = klasyczny wzorzec izolacji sieciowej z zachowaniem dostępu do API Google.
-* Cloud NAT to pułapka — daje dostęp DO internetu, a nie od niego izoluje.
-* IP forwarding dotyczy przekazywania pakietów (routing), NIE dostępu samej instancji.
-* Oddzielna podsieć to segmentacja, nie izolacja od internetu.
-
-5. Reguły wyboru odpowiedzi (Słowa kluczowe):
-* „no internet access" + „access Cloud Storage" → Private Google Access + brak publicznych IP
-* „not be accessed from the internet" → brak publicznych adresów IP
-* „access Google services without internet" → Private Google Access
-* Dwa wymagania (Choose two) → szukaj dwóch komplementarnych rozwiązań
-
-6. Dodatkowe źródła i dokumentacja:
-<a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">Private Google Access - dokumentacja</a>
-<a href="https://cloud.google.com/vpc/docs/vpc#internet_access_reqs" target="_blank">VPC - wymagania dostępu do internetu</a>
-<a href="https://cloud.google.com/nat/docs/overview" target="_blank">Cloud NAT - przegląd</a>
-<a href="https://cloud.google.com/compute/docs/ip-addresses" target="_blank">Compute Engine - adresy IP</a>
+**5. Dodatkowe źródła:**
+- Private Google Access overview: https://cloud.google.com/vpc/docs/private-google-access
 </pre>
 
 </div>

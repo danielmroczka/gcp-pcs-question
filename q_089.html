@@ -88,27 +88,28 @@ You are the security admin of your company. You have 3,000 objects in your Cloud
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
 
-
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: D**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Wymaganiem jest zarządzanie dostępem do 3000 obiektów w kubłach Cloud Storage w sposób scentralizowany i zbiorowy, zapobieganie sytuacji, w której uploader automatycznie ma pełną kontrolę (np. nadpisuje polityki dostępu), oraz możliwość pełnego audytowania dostępu za pomocą Cloud Audit Logs:
+- **Włączenie Uniform bucket-level access (UBLA) na kubełku i zarządzanie dostępem przez IAM (D):** UBLA wyłącza listy kontroli dostępu (ACL) na poziomie poszczególnych obiektów. Po jego włączeniu dostęp jest kontrolowany wyłącznie przez zasady IAM przypisane na poziomie całego kubełka (bucket). Zapobiega to sytuacji, w której użytkownik wgrywający plik konfiguruje niestandardowe uprawnienia (ACL) na obiekcie. Ponadto, wyłączenie ACL upraszcza zarządzanie bezpieczeństwem i pozwala na niezawodne raportowanie audytowe.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Set up an ACL with OWNER permission to a scope of allUsers:** Dostęp typu `allUsers` oznacza, że obiekty stają się publicznie dostępne w internecie dla każdego, co jest poważnym błędem bezpieczeństwa.
+- **B. Set up an ACL with READER permission to a scope of allUsers:** Podobnie jak w opcji A, czyni to dane publicznymi i narusza bezpieczeństwo danych.
+- **C. Domyślne ACL i zarządzanie przez IAM:** Pozostawienie włączonych ACL (nawet z domyślnymi ustawieniami) sprawia, że uprawnienia na obiektach nadal mogą być modyfikowane niezależnie od IAM przez użytkowników posiadających uprawnienia zapisu, co uniemożliwia scentralizowaną i jednolitą kontrolę dostępu.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- **Uniform bucket-level access (UBLA):** Wyłącza ACL-e. Dostęp jest zarządzany wyłącznie przez IAM. Jest to domyślne i zalecane ustawienie bezpieczeństwa w Google Cloud.
+- Zapamiętaj: Jeśli pytanie mówi o rezygnacji z zarządzania dostępem do pojedynczych plików na rzecz spójnego, scentralizowanego zarządzania -> kluczem jest **Uniform bucket-level access**.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Wyłączenie indywidualnych uprawnień per obiekt / ujednolicenie uprawnień w GCS -> Uniform bucket-level access.
+
+**5. Dodatkowe źródła:**
+- Uniform bucket-level access: https://cloud.google.com/storage/docs/uniform-bucket-level-access
 </pre>
 
 </div>

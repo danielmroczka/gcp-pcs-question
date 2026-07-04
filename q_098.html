@@ -88,29 +88,32 @@ You have been tasked with implementing external web application protection again
 </div>
 </div>
 <div class="q-card q-answer mb-4" style="display:none;">
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A (Cloud Armor's preconfigured rules in preview mode)
+**Poprawna odpowiedź: A**
 
-Wyjaśnienie: 
-Tryb 'preview' w Cloud Armor pozwala na testowanie reguł bezpieczeństwa (np. przeciw SQLi lub XSS) na rzeczywistym ruchu, ale bez ich blokowania. Zdarzenia pasujące do reguł są odnotowywane w logach, co pozwala ocenić ryzyko 'false positives' przed faktycznym włączeniem blokady.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Wymagane jest wdrożenie ochrony publicznej aplikacji internetowej przed typowymi atakami aplikacyjnymi (OWASP Top 10) oraz przetestowanie/zweryfikowanie tych reguł przed ich ostatecznym wymuszeniem w celu uniknięcia blokowania prawidłowego ruchu (false positives):
+- **Użycie prekonfigurowanych reguł Cloud Armor w trybie podglądu (preview mode) (A):** Cloud Armor posiada zestaw gotowych reguł WAF (np. ochrona przed SQL injection, XSS, LFI). Uruchomienie tych reguł w trybie `preview` sprawia, że Cloud Armor analizuje ruch i zapisuje w logach informację o tym, czy ruch zostałby zablokowany, ale nie przerywa połączenia (nie blokuje użytkownika). Pozwala to administratorom na bezpieczną ocenę wpływu reguł na działanie aplikacji przed ich ostatecznym włączeniem (enforce).
 
-Dlaczego pozostałe są błędne:
-B. VPC Firewall nie posiada 'monitor mode' dla reguł L7 ani predefiniowanych reguł przeciw atakom webowym.
-C. Inherent protections GFE są podstawowe i nie pozwalają na specyficzną walidację własnych polityk.
-E. VPC Service Controls dry run dotyczy izolacji API (eksfiltracji), a nie ataków typu SQLi/XSS na aplikację webową.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **B. Reguły firewall VPC w trybie monitorowania:** Reguły zapory sieciowej VPC działają na warstwach L3/L4 i nie posiadają prekonfigurowanych reguł WAF do wykrywania ataków aplikacyjnych takich jak SQLi czy XSS. Ponadto w standardowym VPC nie ma wbudowanego trybu "monitor mode" dla reguł firewall.
+- **C. Ochrona Google Front End (GFE):** GFE chroni infrastrukturę Google przed atakami wolumetrycznymi DDoS, ale nie analizuje specyfiki kodu aplikacji ani nie chroni przed atakami na warstwie aplikacji (SQLi/XSS) bez skonfigurowanych polityk Cloud Armor.
+- **D. Reguły firewall Cloud Load Balancing:** Load Balancer nie posiada własnych, niezależnych reguł firewall przeznaczonych do ochrony aplikacyjnej WAF; funkcję tę realizuje zintegrowany z nim Cloud Armor.
+- **E. VPC Service Controls w trybie dry-run:** VPC SC służy do zapobiegania eksfiltracji danych z usług API Google (np. Cloud Storage), a nie do ochrony publicznych aplikacji webowych przed atakami typu SQLi czy XSS.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-Testowanie reguł WAF bez ryzyka przerwy w działaniu = Cloud Armor Preview Mode.
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- **Cloud Armor Preview Mode:** Kluczowa funkcja umożliwiająca testowanie polityk bezpieczeństwa (WAF) bez wpływu na ruch produkcyjny. Każde dopasowanie reguły w trybie preview jest logowane w Cloud Logging z tagiem `preview`.
+- Ochrona przed typowymi atakami webowymi (OWASP Top 10 / SQLi / XSS) -> **Cloud Armor preconfigured WAF rules**.
 
-Kluczowe zagadnienia do powtórzenia:
-- Cloud Armor Preview Mode
-- WAF rule validation
-- Security log analysis
+**4. Reguły wyboru odpowiedzi:**
+- Walidacja zmian reguł WAF bez ich blokowania -> Cloud Armor preconfigured rules in preview mode.
 
-Dokumentacja:
-<a href="https://cloud.google.com/armor/docs/configure-security-policies#preview-mode" target="_blank">https://cloud.google.com/armor/docs/configure-security-policies#preview-mode</a>
+**5. Dodatkowe źródła:**
+- Cloud Armor rule preview mode: https://cloud.google.com/armor/docs/rule-preview
 </pre>
+
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

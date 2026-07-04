@@ -88,27 +88,28 @@ Your team uses a service account to authenticate data transfers from a given Com
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
 
-
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: B**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Gdy konto usługi (service account) zostanie przypadkowo usunięte, aplikacja korzystająca z niego traci autoryzację. Celem jest szybkie i bezpieczne przywrócenie działania:
+- **Użycie polecenia `undelete` do odzyskania usuniętego konta usługi (B):** Google Cloud pozwala na przywrócenie (odskasowanie) usuniętego konta usługi w ciągu 30 dni od jego usunięcia. Przywrócenie konta usługi zachowuje jego unikalny identyfikator (Unique ID), wszystkie przypisane role IAM na poziomie projektu i zasobów, a także powiązane klucze. Jest to najszybszy i najbezpieczniejszy sposób na przywrócenie działania aplikacji bez konieczności ponownego konfigurowania ról IAM i dystrybucji nowych kluczy.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Wyłączenie uwierzytelniania na Cloud Storage:** Jest to rażące naruszenie zasad bezpieczeństwa (upublicznienie danych wrażliwych), na co żaden administrator bezpieczeństwa nie może wyrazić zgody.
+- **C. Utworzenie nowego konta usługi o tej samej nazwie:** Nawet jeśli nazwa (Email ID) będzie taka sama, nowo utworzone konto otrzyma nowy unikalny identyfikator wewnętrzny (Unique ID). Zasady IAM oraz uprawnienia są powiązane z wewnętrznym Unique ID, a nie tylko z adresem email, co oznacza, że nowe konto nie odzyska automatycznie utraconych uprawnień.
+- **D. Zmiana uprawnień innego istniejącego konta:** Zmiana uprawnień innego konta i wdrożenie nowych kluczy do aplikacji wymaga zmian konfiguracyjnych w aplikacji i niesie ryzyko naruszenia zasady najmniejszych uprawnień (Least Privilege) poprzez współdzielenie konta.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Usunięte konto usługi można przywrócić w ciągu **30 dni**. Służy do tego polecenie: `gcloud iam service-accounts undelete [UNIQUE_ID]`.
+- Zapamiętaj: Odskasowanie (undelete) przywraca oryginalne Unique ID oraz powiązane role IAM. Stworzenie nowego konta z tą samą nazwą (e-mailem) **nie** przywraca uprawnień, ponieważ Unique ID będzie inne!
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Przypadkowe usunięcie Service Account -> Przywrócenie (undelete) konta za pomocą gcloud lub API.
+
+**5. Dodatkowe źródła:**
+- Undeleting a service account: https://cloud.google.com/iam/docs/creating-managing-service-accounts#undeleting_a_service_account
 </pre>
 
 </div>
