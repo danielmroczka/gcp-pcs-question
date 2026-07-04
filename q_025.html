@@ -89,24 +89,30 @@ Your team needs to configure their Google Cloud Platform (GCP) environment so th
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: A**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Wymagania to:
+- Scentralizowanie kontroli nad zasobami sieciowymi (firewalle, podsieci, trasy) w jednym ręku (zespół ds. bezpieczeństwa sieci).
+- Połączenie sieci hybrydowej (VPN) z on-premises.
+- Możliwość tworzenia zasobów przez inne zespoły inżynieryjne w dedykowanych projektach.
+Idealnym wzorcem projektowym dla takich założeń w GCP jest:
+- **Shared VPC Network (Współdzielona sieć VPC) z projektem hosta i projektami usługowymi (A):** Projekt hosta (host project) zawiera wspólną sieć VPC, podsieci, bramę VPN i reguły zapory sieciowej kontrolowane przez zespół sieciowy. Projekty usługowe (service projects) są podpięte pod hosta, co pozwala deweloperom na uruchamianie swoich maszyn VM, ale uniemożliwia im modyfikowanie konfiguracji sieci i zapór.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **B. Przypisanie roli Compute Admin w każdym projekcie:** Narusza to zasadę najmniejszych uprawnień. Zespół sieciowy miałby pełne prawa administracyjne do maszyn wirtualnych deweloperów, a z kolei deweloperzy mogliby tworzyć własne sieci lokalnie, co uniemożliwia centralizację.
+- **C. VPC Peering w modelu hub and spoke:** Przy dużej skali zarządzanie peeringami staje się skomplikowane (limity peeringów w VPC) i nie pozwala na tak ścisłą centralizację zasobów sieciowych jak Shared VPC (każda sieć VPC w peeringu nadal ma własne reguły zapory).
+- **D. Cloud VPN Gateway między wszystkimi projektami:** Tworzenie tuneli VPN między projektami wewnątrz chmury generuje ogromne koszty, narzut konfiguracyjny i opóźnienia sieciowe.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Słowo-klucz: **centralize control over networking resources** w organizacji o wielu projektach. Prawidłową odpowiedzią jest zawsze **Shared VPC**.
+- W Shared VPC rozróżnia się projekt hosta (zawiera sieć) i projekty usługowe (konsumują sieć).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Centralny zespół sieciowy + wiele projektów korzystających z sieci -> Shared VPC.
+
+**5. Dodatkowe źródła:**
+- Shared VPC Overview: https://cloud.google.com/vpc/docs/shared-vpc
 </pre>
 
 </div>

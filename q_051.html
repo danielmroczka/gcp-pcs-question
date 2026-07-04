@@ -91,24 +91,26 @@ What should you do?
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: A**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Wymagane jest zablokowanie możliwości tworzenia dysków startowych z nieautoryzowanych obrazów i dopuszczenie obrazów wyłącznie z jednego, zaufanego i dedykowanego projektu:
+- **Skorzystanie z usługi Polityki Organizacji (Organization Policy Service) i nałożenie ograniczenia `compute.trustedimageProjects` na poziomie organizacji, definiując zaufany projekt jako dozwolony (A):** Ograniczenie `compute.trustedimageProjects` to wbudowana reguła polityki organizacji w GCP. Umożliwia ona zdefiniowanie białej listy (whitelist) projektów, z których użytkownicy w całej organizacji mogą pobierać obrazy systemowe do tworzenia maszyn VM. Każda próba użycia obrazu spoza tej listy (np. obrazów publicznych) zostanie natychmiast zablokowana przez system.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **B. Ograniczenie z regułą deny (blokuj):** Ograniczenie `compute.trustedimageProjects` wymaga zdefiniowania projektów, które są zaufane (reguła Allow). Próba definiowania wyjątków przez "Deny" jest nieefektywna i trudna w utrzymaniu, ponieważ domyślnie pozwalałaby na pobieranie obrazów z każdego nowo powstałego projektu w internecie.
+- **C. IAM role Compute Image User dla organizacji na projekcie zaufanym:** Nadanie tej roli pozwala użytkownikom na dostęp do obrazów w tym projekcie, ale w żaden sposób nie zabrania im korzystania z innych publicznych lub prywatnych projektów z obrazami (brak wymuszenia ograniczenia).
+- **D. IAM role Compute Image User dla projektu na organizacji:** Przypisanie roli IAM w ten sposób jest logicznie niepoprawne i nie blokuje tworzenia dysków ze źródeł zewnętrznych.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Ograniczanie źródeł obrazów maszyn wirtualnych w GCP realizuje się wyłącznie za pomocą polityki organizacji z ograniczeniem **`compute.trustedimageProjects`**.
+- Pamiętaj, że polityki organizacji (Organization Policies) wymuszają twarde limity (guardrails) niezależnie od uprawnień IAM użytkowników.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Ograniczenie dozwolonych obrazów maszyn wirtualnych -> Org Policy + `compute.trustedimageProjects` (Allow whitelist).
+
+**5. Dodatkowe źródła:**
+- Restricting image access with trusted image policies: https://cloud.google.com/compute/docs/images/restricting-image-access
 </pre>
 
 </div>

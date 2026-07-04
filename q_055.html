@@ -88,32 +88,31 @@ Which method should be used to protect employee credentials in this situation?
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: A
+**Poprawna odpowiedź: A**
 
-Wyjaśnienie:
-Ataki typu phishing polegają na wyłudzaniu poświadczeń (loginów i haseł) poprzez podszywanie się pod zaufane instytucje lub usługi. Nawet najsilniejsze hasło jest bezużyteczne, jeśli użytkownik sam je poda na fałszywej stronie logowania. Uwierzytelnianie wieloskładnikowe (MFA / 2-Step Verification) stanowi krytyczną warstwę ochrony, ponieważ wymaga od użytkownika przedstawienia drugiego składnika (czegoś, co posiada, np. klucza bezpieczeństwa Titan, kodu z aplikacji lub telefonu), którego atakujący nie jest w stanie łatwo pozyskać za pomocą phishingu.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Organizacja mierzy się z plagą ataków phishingowych, których celem jest wyłudzenie haseł pracowników. W przypadku wyłudzenia hasła przez sfałszowaną stronę, atakujący natychmiast uzyskuje dostęp do konta:
+- **Wieloskładnikowe uwierzytelnianie (Multifactor Authentication - MFA) (A):** MFA wymaga od użytkownika podania dodatkowego składnika (np. powiadomienia push na telefonie, kodu z aplikacji lub fizycznego klucza U2F) podczas logowania. Nawet jeśli pracownik padnie ofiarą phishingu i poda swoje hasło na fałszywej stronie, atakujący nie będzie w stanie zalogować się na konto bez fizycznego dostępu do drugiego składnika uwierzytelniania. Złotym standardem ochrony przed phishingiem są sprzętowe klucze bezpieczeństwa (np. YubiKey) z obsługą standardu FIDO2/WebAuthn.
 
-Dlaczego pozostałe opcje są niepoprawne:
-- B: Restrykcyjna polityka haseł (długość, znaki specjalne) chroni przed atakami typu brute-force lub zgadywaniem haseł, ale nie chroni przed phishingiem, w którym użytkownik dobrowolnie ujawnia swoje poprawne hasło.
-- C: Mechanizmy Captcha służą do odróżniania ludzi od botów i chronią przed automatycznymi atakami typu credential stuffing, ale nie zapobiegają oszukaniu człowieka przez złośliwą wiadomość e-mail.
-- D: Szyfrowanie e-maili (np. S/MIME lub PGP) chroni treść wiadomości przed odczytaniem przez niepowołane osoby w trakcie transmisji, ale nie powstrzymuje atakujących przed wysyłaniem e-maili z linkami do fałszywych stron.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **B. Restrykcyjna polityka haseł:** Wymuszanie skomplikowanych i często zmienianych haseł nie chroni przed phishingiem. Użytkownik może równie łatwo podać bardzo skomplikowane hasło na fałszywej stronie.
+- **C. Captcha na stronach logowania:** Chroni przed atakami automatycznymi (botami próbującymi zgadnąć hasło metodą brute-force), ale nie zapobiega podaniu poświadczeń przez człowieka na fałszywej stronie kontrolowanej przez hakera.
+- **D. Szyfrowanie wiadomości e-mail:** Szyfrowanie (np. S/MIME) chroni treść wiadomości przed podsłuchem w locie, ale nie zapobiega wysyłaniu wiadomości phishingowych podszywających się pod inne osoby i nakłaniających do logowania.
 
-Tips & Tricks:
-- Gdy pytanie dotyczy phishingu i ochrony kont, MFA (lub 2FA) jest niemal zawsze poprawną odpowiedzią.
-- W ekosystemie Google najwyższym poziomem ochrony przed phishingiem są fizyczne klucze bezpieczeństwa zgodne ze standardem FIDO/WebAuthn.
-- Pamiętaj, że MFA jest częścią strategii "Defense in Depth" (Obrona w głąb).
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Jedynym skutecznym zabezpieczeniem tożsamości przed udanymi atakami wyłudzania danych (phishing) jest **Multifactor Authentication (MFA / 2FA)**.
+- Najwyższą odporność na phishing (phishing-resistant MFA) zapewniają fizyczne klucze bezpieczeństwa (Security Keys).
 
-Zagadnienia:
-- Multi-factor Authentication (MFA)
-- Phishing & Social Engineering
-- Identity and Access Management (IAM)
-- 2-Step Verification (2SV)
+**4. Reguły wyboru odpowiedzi:**
+- Ochrona przed wyłudzeniem haseł / phishingiem -> Multifactor Authentication.
 
-Dokumentacja:
-<a href="https://cloud.google.com/identity-platform/docs/multi-factor-authentication" target="_blank">https://cloud.google.com/identity-platform/docs/multi-factor-authentication</a>
+**5. Dodatkowe źródła:**
+- Multi-factor authentication (MFA) for Cloud Identity: https://cloud.google.com/identity/docs/set-up-mfa
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie (Egzamin)</h2>

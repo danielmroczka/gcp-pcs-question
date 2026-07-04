@@ -89,24 +89,25 @@ You are in charge of migrating a legacy application from your company datacenter
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: A**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Mamy do czynienia z migracją starszej aplikacji (legacy app) typu "Lift & Shift" do chmury w warunkach braku dokumentacji technicznej i nieznajomości portów, na których działa aplikacja. Chcemy uruchomić aplikację bezpiecznie i ustalić porty:
+- **Migracja aplikacji do odizolowanego projektu, tymczasowe zezwolenie na ruch wewnętrzny TCP w sieci VPC i użycie VPC Flow Logs do analizy połączeń (A):** Umieszczenie aplikacji w osobnym, dedykowanym projekcie (sandbox) całkowicie izoluje ją od reszty infrastruktury produkcyjnej firmy, minimalizując ryzyko. Zezwolenie na ruch wewnątrz tej odizolowanej sieci pozwala aplikacji wystartować i komunikować się z bazą. Włączenie **VPC Flow Logs** pozwala na nagranie i przeanalizowanie surowego ruchu sieciowego – na tej podstawie administrator może dokładnie określić, na jakich portach aplikacja faktycznie rozmawia i stworzyć dla niej docelowe, restrykcyjne reguły zapory sieciowej.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **B. Wyłączenie całego ruchu sieciowego i patrzenie na logi firewall:** Jeśli całkowicie zablokujemy ruch wewnątrz VPC, aplikacja nie będzie mogła nawiązać żadnych połączeń (np. z bazą danych) i przestanie działać, co uniemożliwi poprawne zidentyfikowanie działających portów i zakłóci migrację.
+- **C, D. Refaktoryzacja do mikrousług (GKE / Cloud Functions):** Przepisanie starszej, nieudokumentowanej aplikacji monolitycznej na architekturę mikrousług (GKE) lub funkcje serverless (Cloud Functions) jest procesem niezwykle długim, kosztownym i ryzykownym. Wyklucza to dotrzymanie krótkiego terminu wygaśnięcia kontraktu utrzymaniowego.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- W scenariuszach migracji legacy, gdzie goni czas ("contract expires"), refaktoryzacja do mikrousług (GKE/Serverless) jest zawsze złą odpowiedzią. Należy zastosować podejście **Lift & Shift** (czyli przeniesienie maszyn VM 1:1 do Compute Engine).
+- Do analizy nieznanego ruchu sieciowego na poziomie pakietów w GCP służą logi przepływu sieciowego – **VPC Flow Logs**.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Szybka migracja legacy z nieznaną konfiguracją -> VM w odizolowanym projekcie + VPC Flow Logs do analizy portów.
+
+**5. Dodatkowe źródła:**
+- Using VPC Flow Logs: https://cloud.google.com/vpc/docs/using-flow-logs
 </pre>
 
 </div>

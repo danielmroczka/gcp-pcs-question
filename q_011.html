@@ -90,24 +90,26 @@ A customer needs to prevent attackers from hijacking their domain/IP and redirec
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: C**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Atak polegający na przejęciu domeny/IP i przekierowaniu użytkowników na fałszywą stronę (man-in-the-middle / DNS spoofing/poisoning) polega na sfałszowaniu odpowiedzi serwerów DNS.
+- **DNS Security Extensions - DNSSEC (C):** Jest to zestaw rozszerzeń bezpieczeństwa DNS, które cyfrowo podpisują rekordy DNS. Klient (np. przeglądarka) może zweryfikować podpis i upewnić się, że odpowiedź DNS nie została zmodyfikowana w locie przez napastnika. Chroni to przed zatruciem pamięci podręcznej DNS (DNS cache poisoning) i przejęciem ruchu.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. VPC Flow Logs:** Służą do rejestrowania metadanych o ruchu IP w sieci VPC (do celów audytu i debugowania), ale nie zapobiegają atakom na protokół DNS.
+- **B. Cloud Armor:** Jest to WAF i ochrona DDoS dla warstwy aplikacyjnej, nie chroni serwerów DNS przed spoofingiem adresów IP przed dotarciem ruchu do chmury.
+- **D. Cloud IAP:** Kontroluje dostęp do aplikacji na podstawie tożsamości użytkownika, ale nie zabezpiecza warstwy routingu DNS.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Słowo-klucz: **hijacking domain/IP** lub **man-in-the-middle DNS**. Jedynym mechanizmem kryptograficznego zabezpieczenia zapytań DNS jest **DNSSEC**.
+- Cloud DNS w GCP w pełni wspiera DNSSEC i można go włączyć jednym kliknięciem.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Ochrona przed fałszowaniem rekordów DNS -> DNSSEC.
+
+**5. Dodatkowe źródła:**
+- Cloud DNS DNSSEC Overview: https://cloud.google.com/dns/docs/dnssec
 </pre>
 
 </div>

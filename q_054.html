@@ -91,24 +91,26 @@ How should your team design this network?
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: A**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Wymaganie: Baza danych (backend) może być dostępna wyłącznie dla aplikacji frontendowej. Żadne inne maszyny w sieci VPC nie mogą mieć do niej dostępu:
+- **Utworzenie reguły zapory sieciowej dla ruchu przychodzącego (ingress firewall rule) zezwalającej na dostęp do bazy danych wyłącznie z tagów sieciowych przypisanych do frontendu (A):** W GCP reguły zapory sieciowej mogą filtrować ruch nie tylko po adresach IP, ale również po tagach sieciowych (network tags) lub kontach usługowych (service accounts). Przypisanie tagu `frontend` do maszyn aplikacyjnych i tagu `database` do maszyn bazodanowych pozwala na stworzenie reguły: "zezwól na ruch na porcie bazy danych tylko wtedy, gdy źródłem jest tag `frontend`". Jest to rozwiązanie elastyczne, bezpieczne i zgodne z zaleceniami GCP.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **B. Utworzenie różnych podsieci (subnets):** Podsieci w tej samej sieci VPC w GCP nie zapewniają izolacji sieciowej – domyślnie ruch między podsieciami w ramach tej samej VPC jest w pełni dozwolony i routowalny. Sama zmiana podsieci bez reguł firewall nie blokuje dostępu.
+- **C. Dwie sieci VPC połączone przez Cloud VPN:** Połączenie dwóch sieci przez VPN umożliwia pełen routing między nimi. Jest to rozwiązanie niezwykle skomplikowane i generujące duże koszty, które nie zastępuje precyzyjnego filtrowania ruchu na poziomie maszyn.
+- **D. Dwie sieci VPC połączone przez VPC Peering:** Podobnie jak w C, peering sieci VPC łączy je na poziomie routingu. Bez reguł firewall maszyny z jednej sieci mogłyby bez przeszkód łączyć się z bazą danych w drugiej sieci.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Pamiętaj: W GCP **podsieci (subnets) nie stanowią granicy bezpieczeństwa sieciowego**. Domyślny router VPC umożliwia pełną komunikację między wszystkimi podsieciami w tej samej VPC.
+- Izolację sieciową i kontrolę dostępu wewnątrz VPC realizuje się wyłącznie za pomocą **VPC Firewall Rules** z użyciem **target/source tags** lub kont usługowych (**Service Accounts**).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Ograniczenie komunikacji między maszynami w VPC -> Reguły Ingress Firewall z użyciem Tagów / Kont Usługowych.
+
+**5. Dodatkowe źródła:**
+- VPC Firewall Rules overview: https://cloud.google.com/vpc/docs/firewalls
 </pre>
 
 </div>

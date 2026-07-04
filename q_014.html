@@ -90,24 +90,26 @@ A business unit at a multinational corporation signs up for GCP and starts movin
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: A**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Dział bezpieczeństwa chce przejąć kontrolę nad zarządzaniem uprawnieniami (managing permissions) ORAZ audytowaniem (auditing) zasobów w nowo odkrytym zasobie organizacji chmurowej:
+- **Organization Administrator (A):** Rola Administratora Organizacji daje pełną kontrolę nad wszystkimi zasobami w hierarchii GCP (organizacja, foldery, projekty). Umożliwia zarówno przydzielanie ról IAM innym użytkownikom (zarządzanie uprawnieniami), jak i definiowanie polityk oraz audytowanie całego środowiska.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **B. Security Reviewer (Przeglądający zabezpieczenia):** Ta rola pozwala jedynie na wgląd (odczyt) w konfigurację zabezpieczeń i logi (audyt), ale nie pozwala na modyfikowanie i zarządzanie uprawnieniami IAM (brak możliwości zapisu/edycji uprawnień).
+- **C. Organization Role Administrator:** Ta rola pozwala jedynie na tworzenie i zarządzanie niestandardowymi rolami (Custom Roles) w organizacji, ale nie daje uprawnień do przypisywania tych ról użytkownikom do konkretnych zasobów.
+- **D. Organization Policy Administrator:** Pozwala jedynie na zarządzanie ograniczeniami polityki organizacji (Organization Policies), nie daje wglądu ani uprawnień do zarządzania standardowymi rolami IAM dla użytkowników.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Uważaj na różnicę między **Security Reviewer** (tylko odczyt/audyt) a **Organization Administrator** (pełna władza, w tym zarządzanie uprawnieniami). Ponieważ pytanie żąda *zarządzania uprawnieniami i audytu*, wymagana jest rola administratora.
+- Administrator Organizacji to rola najwyższego poziomu w hierarchii zasobów GCP.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Zarządzanie uprawnieniami + audyt w skali całej organizacji -> Organization Administrator.
+
+**5. Dodatkowe źródła:**
+- GCP Resource Hierarchy and IAM Roles: https://cloud.google.com/iam/docs/understanding-roles#organization-roles
 </pre>
 
 </div>

@@ -90,24 +90,26 @@ A customer needs an alternative to storing their plain text secrets in their sou
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: B**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Aby bezpiecznie przechowywać sekrety i klucze bez umieszczania ich w postaci jawnego tekstu (plain text) w repozytorium kodu (SCM), należy je zaszyfrować. Najlepszym z dostępnych w tym pytaniu rozwiązań jest:
+- **Szyfrowanie za pomocą CMEK (Customer-Managed Encryption Keys) i przechowywanie w Cloud Storage (B):** Pozwala to na pełną kontrolę dostępu do klucza szyfrującego w Cloud KMS. Nawet jeśli ktoś uzyska dostęp do plików w Cloud Storage, nie będzie mógł odczytać sekretów bez uprawnień do odszyfrowania kluczem w KMS.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Przechowywanie w Cloud SQL:** Zapisanie sekretów w bazie danych bez dodatkowego szyfrowania nie rozwiązuje problemu bezpieczeństwa – nadal są one przechowywane w formie jawnej, a dodatkowo generuje to narzut administracyjny bazy danych.
+- **C. DLP API i Cloud SQL:** DLP API służy do skanowania i wykrywania danych wrażliwych (np. PII), a nie do bezpiecznego zarządzania i przechowywania sekretów aplikacji.
+- **D. Compute Engine z lokalnymi dyskami SSD i maszynami preemptible:** Ta opcja w ogóle nie odnosi się do bezpiecznego przechowywania sekretów aplikacji i wprowadza ryzyko utraty danych (dyski SSD są czyszczone przy wyłączeniu maszyny preemptible).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Uwaga historyczna: Obecnie rekomendowanym narzędziem do zarządzania sekretami w GCP jest **Secret Manager**. Pytanie to pochodzi z okresu przed jego premierą, dlatego należy wybrać "najlepszą dostępną" opcję, którą jest połączenie Cloud Storage i KMS (CMEK).
+- W pytaniach o sekrety unikaj przechowywania ich w bazach danych w formie jawnej.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Ochrona sekretów bez dedykowanego narzędzia -> Szyfrowanie kluczem KMS + bezpieczny obiekt w GCS.
+
+**5. Dodatkowe źródła:**
+- Dokumentacja Google Cloud KMS: https://cloud.google.com/kms/docs
 </pre>
 
 </div>

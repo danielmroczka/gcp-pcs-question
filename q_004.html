@@ -90,24 +90,26 @@ Your team wants to centrally manage GCP IAM permissions from their on-premises A
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: A**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Wymaganie polega na centralnym zarządzaniu uprawnieniami IAM w GCP na podstawie członkostwa w grupach lokalnego Active Directory (AD). 
+- **Skonfigurowanie Cloud Directory Sync (GCDS) do synchronizacji grup oraz przypisywanie uprawnień IAM bezpośrednio do zsynchronizowanych grup (A):** GCDS pobiera tożsamości użytkowników oraz struktury grup z AD i synchronizuje je do Google Cloud Identity/Workspace. Po zsynchronizowaniu grup w GCP, administrator może przypisać im odpowiednie role IAM. Zmiany w lokalnym AD (np. dodanie/usunięcie użytkownika z grupy) zostaną automatycznie odzwierciedlone w GCP.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **B. Skonfigurowanie SAML 2.0 SSO:** Logowanie jednokrotne (SSO) służy do uwierzytelniania użytkowników (potwierdzenia tożsamości), ale samo w sobie nie synchronizuje członkostwa w grupach ani nie pozwala na przypisywanie ról IAM na podstawie grup AD w konsoli GCP.
+- **C. Cloud IAM API:** Chociaż technicznie możliwe jest napisanie własnego skryptu integracyjnego z użyciem API, Google zaleca użycie gotowego, stabilnego i wspieranego narzędzia GCDS.
+- **D. Admin SDK:** Służy do automatyzacji zadań administracyjnych w Google Workspace/Cloud Identity, ale nie jest dedykowanym narzędziem do bezpośredniej i ciągłej synchronizacji z Active Directory w taki sposób jak GCDS.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Synchronizacja użytkowników/grup z Active Directory / LDAP do GCP -> Zawsze wybieraj **Cloud Directory Sync (GCDS)**.
+- SSO (SAML) = Uwierzytelnianie (Authentication), GCDS = Aprowizacja/Synchronizacja tożsamości (Provisioning). Są to dwa komplementarne, ale różne procesy.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Zarządzanie grupami AD w GCP -> GCDS.
+
+**5. Dodatkowe źródła:**
+- Dokumentacja Google: https://cloud.google.com/directory-sync/docs
 </pre>
 
 </div>

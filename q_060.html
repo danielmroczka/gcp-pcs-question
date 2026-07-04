@@ -86,31 +86,31 @@ A company is running their webshop on Google Kubernetes Engine and wants to anal
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: B (Use the Cloud Data Loss Prevention API to redact related infoTypes before data is ingested into BigQuery.)
+**Poprawna odpowiedź: B**
 
-Wyjaśnienie:
-Cloud Data Loss Prevention (DLP) API to flagowa usługa Google Cloud do wykrywania i ochrony danych wrażliwych (PII, numery kart kredytowych, adresy itp.). Najlepszą praktyką bezpieczeństwa jest "oczyszczanie" danych (redakcja/anonimizacja) ZANIM trafią one do docelowego systemu analitycznego (BigQuery). Pozwala to zminimalizować ryzyko wycieku danych oraz zmniejsza zakres audytów (np. PCI DSS). Cloud DLP posiada wbudowane "infoTypes" dla kart kredytowych (`CREDIT_CARD_NUMBER`), co pozwala na ich automatyczną identyfikację i zastąpienie (redaction) np. znakami `X`.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Aplikacja e-sklepu w GKE przesyła dane transakcyjne do BigQuery. Zgodnie z zasadami PCI DSS i polityką firmy, numery kart płatniczych (PAN) nie mogą trafić do bazy BigQuery:
+- **Użycie Cloud Data Loss Prevention (DLP) API do zredagowania/zamaskowania (redact) danych typu Credit Card Number przed ich zapisaniem w BigQuery (B):** DLP API posiada wbudowany, predefiniowany detektor `CREDIT_CARD_NUMBER`. Aplikacja w GKE przed wysłaniem transakcji do BigQuery przesyła dane do DLP API w celu zamaskowania numerów kart (np. zastąpienia ich znakiem X lub tokenem). Zapewnia to pełną zgodność z PCI DSS i chroni przed zapisaniem wrażliwych danych.
 
-Dlaczego pozostałe są błędne:
-A. BigQuery view + Regex: Widoki służą do prezentacji danych, a nie do ich usuwania. Usuwanie wierszy po ich zapisaniu w BigQuery jest nieefektywne kosztowo i nie gwarantuje, że dane nie zostały już gdzieś zreplikowane lub zapisane w logach systemowych.
-C. Security Command Center: SCC może raportować, że dane wrażliwe znajdują się w BigQuery (poprzez Sensitive Data Protection), ale samo w sobie nie służy do "w locie" filtrowania danych podczas ich przesyłania.
-D. Identity-Aware Proxy: IAP służy do kontroli dostępu do aplikacji webowych (uwierzytelnianie/autoryzacja). Nie ma funkcjonalności głębokiej analizy i modyfikacji treści (payloadu) danych przesyłanych do BigQuery.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Widoki BigQuery i usuwanie wierszy po czasie:** Zapytania usuwające (DELETE) w BigQuery są wolne i kosztowne. Ponadto, dane kart kredytowych i tak trafiłyby na chwilę do bazy w postaci jawnej, co narusza normy PCI i powoduje, że cały system BigQuery wpada w zakres audytu.
+- **C. Security Command Center do skanowania zasobów:** SCC może wykryć podatności lub poinformować o obecności danych wrażliwych, ale sam z siebie nie filtruje i nie modyfikuje danych w locie przed ich zapisaniem do bazy.
+- **D. Cloud IAP:** IAP kontroluje tożsamość użytkowników logujących się do aplikacji, nie potrafi analizować struktury przesyłanych danych aplikacyjnych i nie filtruje numerów kart kredytowych w logach.
 
-Tips & Tricks:
-- "Sensitive data" / "Credit Card" + "Google Cloud" = DLP API.
-- Zawsze wybieraj rozwiązanie, które blokuje/anonimizuje dane jak najbliżej źródła ("before ingestion").
-- DLP API to jedyne narzędzie Google Cloud zaprojektowane specjalnie do manipulacji treścią danych wrażliwych.
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Filtrowanie / Usuwanie / Maskowanie danych wrażliwych (kart płatniczych, danych osobowych) **przed ich zapisaniem w bazie danych (ingestion phase)** to domyślne zadanie dla usługi **Cloud DLP API**.
+- Słowo-klucz: **ensure no credit card numbers are stored** (upewnij się, że nie zostaną zapisane).
 
-Zagadnienia:
-- Cloud Data Loss Prevention (DLP) infoTypes.
-- De-identification techniques (Redaction, Masking, Tokenization).
-- PCI DSS compliance in GCP.
+**4. Reguły wyboru odpowiedzi:**
+- Ochrona przed zapisaniem PII/kart w BigQuery -> Cloud DLP API (redaction before ingestion).
 
-Dokumentacja:
-<a href="https://cloud.google.com/dlp/docs/redacting-sensitive-data" target="_blank">https://cloud.google.com/dlp/docs/redacting-sensitive-data</a>
+**5. Dodatkowe źródła:**
+- Redacting sensitive data in ingestion pipelines: https://cloud.google.com/dlp/docs/redacting-sensitive-data-ingestion-pipelines
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

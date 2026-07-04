@@ -89,24 +89,26 @@ An organization is migrating from their current on-premises productivity softwar
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: C**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+G Suite (obecnie Google Workspace) jest produktem typu SaaS (Software as a Service). Zgodnie ze wspólnym modelem odpowiedzialności w chmurze (Shared Responsibility Model):
+- **Dla usług typu SaaS, bezpieczeństwo sieciowe jest w całości po stronie Google (C):** Google w pełni zarządza infrastrukturą sieciową, routingiem i zapaporami chroniącymi usługi Workspace. Klient nie ma wglądu ani możliwości konfiguracji reguł firewall czy sieci VPC pod Workspace. Odpowiedzialnością klienta w Workspace jest zarządzanie tożsamością, urządzeniami oraz politykami dostępu do danych (np. Context-Aware Access).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Firewall rules:** Reguły zapory sieciowej VPC służą do ochrony zasobów typu IaaS (maszyny wirtualne) i nie mają żadnego zastosowania ani wpływu na ruch sieciowy wewnątrz usług SaaS takich jak Google Workspace.
+- **B. Cloud Armor:** Jest to usługa WAF dla aplikacji uruchamianych przez klienta na własnych Load Balancerach w GCP, nie służy do ochrony ruchu dla usług SaaS od Google.
+- **D. Skonfigurowanie sieci VPC:** Podobnie jak w punkcie A, sieci VPC należą do warstwy IaaS klienta i nie służą do zabezpieczania wewnętrznego przesyłu danych w Workspace.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Egzamin sprawdza zrozumienie **Shared Responsibility Model** dla różnych typów chmur (IaaS vs PaaS vs SaaS).
+- Pamiętaj: W SaaS (Workspace, Gmail, Drive) warstwa sieciowa jest całkowicie zarządzana i zabezpieczana przez dostawcę chmury (Google).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Bezpieczeństwo sieciowe w usługach SaaS (G Suite/Workspace) -> Odpowiedzialność Google.
+
+**5. Dodatkowe źródła:**
+- Google Cloud Shared Responsibility Model: https://cloud.google.com/security/shared-responsibility-model
 </pre>
 
 </div>

@@ -89,24 +89,26 @@ A company is deploying their application on Google Cloud Platform. Company polic
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: B**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Wymaganie polityki firmy polega na automatycznym replikowaniu długoterminowych danych w co najmniej dwóch odrębnych obszarach geograficznych (geographic places):
+- **Cloud BigQuery (B):** BigQuery przy tworzeniu zestawu danych (dataset) umożliwia wybranie lokalizacji typu **Multi-region** (np. `US` lub `EU`). Wybranie tej opcji sprawia, że Google automatycznie i w sposób niewidoczny dla użytkownika replikuje dane w co najmniej dwóch różnych regionach geograficznych w obrębie wybranego kontynentu. Zapewnia to najwyższą odporność na awarie katastroficzne całego regionu.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Cloud Bigtable:** Bigtable wspiera replikację wewnątrzstrefową i międzyregionalną, ale wymaga to ręcznego dodawania klastrów w innych regionach oraz samodzielnej konfiguracji i zarządzania replikacją – nie dzieje się to w pełni automatycznie "by default" na poziomie pojedynczej prostej alokacji.
+- **C. Compute Engine SSD Disk:** Lokalny dysk SSD jest fizycznie przypisany do jednego konkretnego serwera w jednej strefie i nie ma żadnej replikacji sieciowej poza tę strefę.
+- **D. Compute Engine Persistent Disk:** Dysk sieciowy Persistent Disk może być replikowany regionalnie (Regional PD), ale odbywa się to tylko między dwiema strefami (zones) w obrębie **jednego** regionu (np. europe-west1-b i europe-west1-c), co nie spełnia wymogu podziału na dwa różne obszary geograficzne (regiony).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Słowo-klucz: **replicate data over at least two geographic places** (dwa odrębne obszary geograficzne / regiony).
+- Odróżniaj strefy (Zones) od regionów (Regions/Geographic places). Replikacja regionalna (np. Regional PD) chroni przed awarią strefy, ale tylko replikacja multi-regionalna (dostępna w GCS i BigQuery) chroni przed awarią całego regionu geograficznego.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Replikacja wieloregionowa (multi-region) bez administracji -> BigQuery (lub Cloud Storage Multi-region).
+
+**5. Dodatkowe źródła:**
+- BigQuery datasets locations: https://cloud.google.com/bigquery/docs/locations
 </pre>
 
 </div>

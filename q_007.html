@@ -91,24 +91,27 @@ A company is running workloads in a dedicated server room. They must only be acc
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: AC**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Wymagane jest ustanowienie bezpiecznego, prywatnego połączenia między dedykowaną serwerownią firmy (on-premises) a siecią VPC w Google Cloud Platform. Google oferuje dwa natywne rozwiązania hybrydowe:
+- **Cloud VPN (A):** Umożliwia bezpieczne połączenie sieci lokalnej z VPC za pomocą tuneli IPSec przez publiczny internet. Jest to rozwiązanie szybkie do wdrożenia i tańsze.
+- **Cloud Interconnect (C):** Zapewnia bezpośrednie, fizyczne połączenie o wysokiej przepustowości i niskich opóźnieniach (Dedicated lub Partner Interconnect) z pominięciem publicznego internetu.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **B. Shared VPC:** Służy do współdzielenia sieci VPC pomiędzy wieloma projektami w ramach jednej organizacji w GCP, ale nie łączy GCP z siecią on-premises.
+- **D. VPC Peering:** Służy do bezpośredniego łączenia dwóch niezależnych sieci VPC w GCP, a nie do łączenia z fizyczną serwerownią lokalną.
+- **E. Private Access:** Private Google Access pozwala maszynom z prywatnymi IP na dostęp do API Google, ale nie tworzy połączenia routowalnego między serwerownią a VPC.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Gdy pytanie dotyczy łączenia on-premises z GCP w bezpieczny, prywatny sposób, jedynymi poprawnymi odpowiedziami są **Cloud VPN** lub **Cloud Interconnect**.
+- VPN jest szyfrowany (IPsec), natomiast Interconnect nie szyfruje ruchu domyślnie (wymaga dodatkowo MACsec lub VPN over Interconnect), ale zapewnia prywatną ścieżkę fizyczną.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Łączenie chmury z on-premises -> VPN (tani/szybki/szyfrowany) lub Interconnect (droższy/dedykowany/wysoka wydajność).
+
+**5. Dodatkowe źródła:**
+- Google Cloud Hybrid Connectivity: https://cloud.google.com/hybrid-connectivity
 </pre>
 
 </div>

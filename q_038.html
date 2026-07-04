@@ -90,24 +90,26 @@ A customer's internal security team must manage its own encryption keys for encr
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: B**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Klient zdecydował się na użycie kluczy szyfrujących dostarczanych przez użytkownika (Customer-Supplied Encryption Keys - CSEK) w Cloud Storage:
+- **Użycie narzędzia gsutil do przesłania obiektu z określeniem lokalizacji klucza szyfrującego na maszynie lokalnej (B):** W przypadku CSEK, Google Cloud nie przechowuje klucza. Klient musi przekazać 256-bitowy klucz AES w nagłówkach żądania przy każdej operacji zapisu i odczytu. Narzędzie `gsutil` obsługuje to poprzez plik konfiguracyjny `.boto` (sekcja `encryption_key`), w którym definiuje się klucz, lub przez odpowiednie flagi w linii poleceń. Dane są szyfrowane po stronie Google przy użyciu dostarczonego w locie klucza.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Upload klucza do tego samego kubła GCS:** Przechowywanie klucza szyfrującego w tym samym miejscu co zaszyfrowane dane (w tym samym kubełku) całkowicie niweczy cel bezpieczeństwa szyfrowania.
+- **C. Generowanie klucza w Konsoli GCP i upload:** Konsola GCP nie pozwala na generowanie kluczy CSEK do pobrania. Klucz CSEK musi zostać wygenerowany przez klienta lokalnie i nie może być przechowywany w infrastrukturze Google.
+- **D. Ręczne szyfrowanie przed wysłaniem:** Szyfrowanie po stronie klienta (Client-side encryption) to inna technika. Pytanie dotyczy technologii CSEK, w której to Google Cloud wykonuje operację szyfrowania/odszyfrowywania w locie, korzystając z klucza przekazanego przez klienta w żądaniu API.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Zapamiętaj: W **CSEK** klucze są przechowywane przez klienta (on-premises) i przekazywane w żądaniu API. Narzędzie `gsutil` konfiguruje się do tego za pomocą pliku `.boto`.
+- Konsola GCP (GUI) **nie wspiera** wgrywania ani pobierania plików za pomocą CSEK (wspiera tylko CMEK w KMS).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- CSEK dla Cloud Storage -> Użycie `gsutil` + lokalna konfiguracja klucza (np. w pliku `.boto`).
+
+**5. Dodatkowe źródła:**
+- Customer-supplied encryption keys in Cloud Storage: https://cloud.google.com/storage/docs/encryption/customer-supplied-keys
 </pre>
 
 </div>

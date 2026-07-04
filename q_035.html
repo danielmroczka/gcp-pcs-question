@@ -90,24 +90,26 @@ You are a member of the security team at an organization. Your team has a single
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: C**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Celem organizacji jest ograniczenie zakresu audytu zgodności z normą PCI DSS (PCI Audit Scope reduction). Obecnie systemy przetwarzające dane kart płatniczych (Cardholder Data Environment - CDE) działają w tym samym projekcie co inne aplikacje:
+- **Przeniesienie środowiska danych kart płatniczych (CDE) do oddzielnego, dedykowanego projektu GCP (C):** W chmurze Google, projekt (Project) stanowi najsilniejszą granicę administracyjną, uprawnień (IAM) oraz sieciową (VPC). Izolując systemy CDE w osobnym projekcie, automatycznie wyłączamy pozostałe aplikacje i systemy z zakresu audytu PCI, co drastycznie zmniejsza koszty i stopień skomplikowania audytu.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Uwierzytelnianie wieloskładnikowe (MFA):** Jest wymagane przez PCI DSS, ale samo w sobie nie zmniejsza zakresu audytu dla systemów znajdujących się w tym samym projekcie.
+- **B. Używanie tylko aplikacji PA-DSS:** Zapewnia zgodność oprogramowania, ale nie wpływa na izolację infrastruktury i ograniczenie zakresu audytu sieciowego.
+- **D. Połączenie VPN z biurem:** Zabezpiecza transmisję danych do chmury, ale nie izoluje systemów nie-PCI od systemów PCI wewnątrz chmury.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Najbardziej skutecznym sposobem na ograniczenie zakresu audytu PCI DSS (scope reduction) jest **izolacja logiczna i sieciowa (segmentacja)**.
+- W GCP najlepszym kontenerem segmentacyjnym jest dedykowany **Project** z własną siecią VPC.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Ograniczenie zakresu audytu (PCI scope reduction) -> Segmentacja/Izolacja (osobny projekt GCP).
+
+**5. Dodatkowe źródła:**
+- PCI DSS Scoping and Segmentation: https://cloud.google.com/solutions/pci-dss#segmentation
 </pre>
 
 </div>

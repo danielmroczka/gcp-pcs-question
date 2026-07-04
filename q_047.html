@@ -89,24 +89,26 @@ A large e-retailer is moving to Google Cloud Platform with its ecommerce website
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: A**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Dla serwisu e-commerce kluczowe jest zabezpieczenie przesyłu danych płatniczych (kart kredytowych) za pomocą protokołu HTTPS (SSL/TLS) między przeglądarką klienta a chmurą GCP:
+- **Skonfigurowanie certyfikatu SSL na warstwowym Load Balancerze L7 (HTTP(S) Load Balancer) i wymuszenie szyfrowania (A):** HTTPS Load Balancer (Load Balancer warstwy 7) umożliwia zainstalowanie certyfikatu SSL (zarządzanego przez Google lub własnego). Odpowiada za proces deszyfrowania (SSL termination) na brzegu sieci Google, odciążając serwery aplikacyjne backendu. L7 Load Balancer pozwala również na inteligentne kierowanie ruchem HTTP/HTTPS, wstrzykiwanie nagłówków bezpieczeństwa i integrację z zapaporą Cloud Armor WAF, co jest kluczowe dla witryn e-commerce.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **B. Certyfikat SSL na Network TCP Load Balancerze:** Network Load Balancer (NLB) działa w warstwie 4 (L4) i nie terminuje sesji SSL/TLS – przekazuje surowe pakiety TCP bezpośrednio do maszyn backendowych. Wymagałoby to instalacji i zarządzania certyfikatami SSL na każdej maszynie wirtualnej z osobna, co utrudnia administrację i nie realizuje centralnej terminacji na LB.
+- **C. Konfiguracja firewall na ruch przychodzący portu 443 i blokowanie reszty:** Samo otwarcie portu 443 na zapaporze sieciowej nie konfiguruje szyfrowania ani nie instaluje certyfikatu SSL niezbędnego do bezpiecznej komunikacji HTTPS.
+- **D. Konfiguracja firewall na ruch wychodzący portu 443:** Dotyczy filtrowania ruchu opuszczającego sieć VPC i nie ma wpływu na proces szyfrowania połączeń przychodzących od klientów zewnętrznych.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Witryny webowe i e-commerce (ruch HTTP/HTTPS) wymagające terminacji certyfikatów SSL na poziomie chmury zawsze powinny korzystać z **HTTP(S) Load Balancer (L7)**.
+- L7 Load Balancer obsługuje tzw. Google-managed SSL certificates (darmowe, automatycznie odnawiane certyfikaty).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Terminacja SSL dla ruchu webowego (HTTPS) -> L7 HTTP(S) Load Balancer.
+
+**5. Dodatkowe źródła:**
+- Google Cloud HTTP(S) Load Balancing overview: https://cloud.google.com/load-balancing/docs/https
 </pre>
 
 </div>

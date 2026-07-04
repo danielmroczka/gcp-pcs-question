@@ -89,24 +89,26 @@ While migrating your organization's infrastructure to GCP, a large number of use
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: B**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Organizacja migruje użytkowników do GCP i chce zachować istniejący lokalny serwer Active Directory / LDAP jako jedyne źródło prawdy (Single Source of Truth) oraz zachować te same hasła SSO:
+- **Użycie Google Cloud Directory Sync (GCDS) do synchronizacji tożsamości z Active Directory/LDAP (B):** GCDS jest darmowym, zalecanym i bezpiecznym narzędziem Google, które instaluje się lokalnie. Łączy się ono z AD/LDAP przez bezpieczne połączenie, odczytuje użytkowników oraz grupy i automatycznie synchronizuje ich konta do Google Cloud Identity/Workspace. GCDS nie synchronizuje haseł bezpośrednio, co pozwala organizacji na wdrożenie SAML SSO (logowania jednokrotnego), dzięki czemu użytkownicy logują się swoimi firmowymi hasłami.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Ręczna synchronizacja:** Przy dużej liczbie użytkowników ("large number of users") ręczne dodawanie i usuwanie kont jest nieefektywne, powolne i podatne na błędy ludzkie (np. nieusunięcie konta zwolnionego pracownika).
+- **C. Logowanie bezpośrednio za pomocą Kerberos:** GCP Console nie wspiera bezpośredniego uwierzytelniania protokołem Kerberos z lokalnej domeny bez integracji z dostawcą tożsamości SAML/OIDC.
+- **D. Logowanie za pomocą OpenID (OIDC) IdP bez synchronizacji kont:** Nawet przy wdrożonym SSO, użytkownicy wciąż muszą posiadać zsynchronizowane konta tożsamości (szkielety kont) w Cloud Identity, by móc przypisywać im role IAM. OIDC samo z siebie nie tworzy kont w GCP bez wcześniejszej synchronizacji.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- AD/LDAP jako źródło prawdy -> **Google Cloud Directory Sync (GCDS)** do synchronizacji kont.
+- Zapamiętaj: GCDS działa w jedną stronę (ze środowiska lokalnego do chmury Google). Nigdy nie modyfikuje lokalnego Active Directory.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Synchronizacja kont AD/LDAP do GCP -> GCDS.
+
+**5. Dodatkowe źródła:**
+- Google Cloud Directory Sync: https://cloud.google.com/directory-sync/docs
 </pre>
 
 </div>

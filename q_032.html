@@ -89,24 +89,25 @@ You are creating an internal App Engine application that needs to access a user'
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: D**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Aplikacja w App Engine musi mieć dostęp do zasobów Google Drive (które leżą w domenie Google Workspace/G Suite) w imieniu użytkownika, ale bez ciągłego żądania od niego interaktywnych poświadczeń:
+- **Utworzenie konta usługowego (Service Account) z włączoną delegacją uprawnień na poziomie całej domeny (Domain-Wide Delegation) (D):** Pozwala to kontu usługowemu na czasowe podszywanie się (impersonation) pod dowolnego użytkownika w domenie Workspace. Aplikacja uwierzytelnia się za pomocą konta usługowego i żąda tokenu dostępu w imieniu konkretnego użytkownika, uzyskując dostęp do jego plików na Dysku Google bez konieczności ponownego logowania przez użytkownika.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A, B. Przypisanie roli Service Account User użytkownikom:** Rola `iam.serviceAccountUser` pozwala użytkownikom na uruchamianie zasobów (np. maszyn VM) z uprawnieniami tego konta. Nie daje to aplikacji możliwości uzyskania dostępu do danych w Google Drive należących do tych użytkowników.
+- **C. Użycie dedykowanego konta administratora G Suite:** Przechowywanie haseł administratora w konfiguracji aplikacji jest krytycznym błędem bezpieczeństwa, a ponadto aplikacja działałaby z pełnymi prawami administratora całej domeny, co narusza zasadę najmniejszych uprawnień.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Słowo-klucz: **access Google Drive on the user's behalf** (dostęp do dysku w imieniu użytkownika) bez interakcji. Rozwiązaniem w środowiskach Workspace jest zawsze **Domain-Wide Delegation** dla konta usługowego.
+- Zawsze konfiguruj minimalny zakres OAuth (scopes) przy delegacji domeny (np. tylko odczyt Drive).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Aplikacja GCP modyfikuje zasoby Workspace (Drive, Gmail) użytkowników bez ich interakcji -> Domain-Wide Delegation (DWD).
+
+**5. Dodatkowe źródła:**
+- Delegating domain-wide authority to a service account: https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority
 </pre>
 
 </div>

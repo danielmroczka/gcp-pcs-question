@@ -90,24 +90,26 @@ An application running on a Compute Engine instance needs to read data from a Cl
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: C**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Aplikacja na maszynie VM Compute Engine musi mieć dostęp do prywatnego kubła Cloud Storage (GCS) z zachowaniem zasady minimalnych uprawnień (least privilege) i bez narażania kluczy na wyciek:
+- **Użycie konta usługowego (Service Account) z uprawnieniami tylko do odczytu i pobieranie poświadczeń z serwera metadanych instancji (C):** Jest to standardowa, zalecana praktyka Google Cloud. Do maszyny VM przypisuje się konto usługowe. Aplikacja nie potrzebuje żadnych zapisanych plików kluczy (.json) na dysku – biblioteki klienckie Google automatycznie pobierają tymczasowe tokeny dostępu z lokalnego serwera metadanych instancji (`http://metadata.google.internal`). Zapobiega to wyciekowi kluczy i ogranicza uprawnienia.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Cloud Storage ACL oparty na IP:** ACL w Cloud Storage nie obsługują filtrowania na podstawie adresów IP maszyn wirtualnych. Udostępnianie bez uwierzytelniania ("without credentials") narusza zasady bezpieczeństwa.
+- **B. Zapisywanie kluczy konta usługowego w konfiguracji aplikacji:** Przechowywanie kluczy prywatnych konta usługowego (plików JSON) na dysku maszyny wirtualnej lub w kodzie aplikacji jest poważnym naruszeniem bezpieczeństwa (ryzyko wycieku w przypadku skompromitowania maszyny lub kodu).
+- **D. Szyfrowanie KMS:** Szyfrowanie danych kluczem KMS chroni dane w spoczynku, ale samo w sobie nie zastępuje autoryzacji dostępu do samego kubła Cloud Storage. Maszyna nadal musi uwierzytelnić się, by pobrać obiekt.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- **NIGDY** nie zapisuj kluczy kont usługowych (Service Account Keys / pliki JSON) na instancjach VM, jeśli aplikacja działa wewnątrz GCP. Serwer metadanych (Metadata Server) dostarcza tokeny automatycznie i bezpiecznie.
+- Zasada Least Privilege w GCP w odniesieniu do maszyn VM = Przypisanie Service Account do VM + rola Storage Object Viewer.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Autoryzacja maszyny VM w GCP do innych usług -> Zawsze używaj konta usługowego przypisanego do VM i pobieraj token z Metadata Server.
+
+**5. Dodatkowe źródła:**
+- GCP Service Accounts overview: https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances
 </pre>
 
 </div>

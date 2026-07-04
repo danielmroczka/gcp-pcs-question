@@ -89,24 +89,26 @@ An organization is starting to move its infrastructure from its on-premises envi
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: B**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Pierwszym krokiem migracji jest stworzenie skalowalnego i niedrogiego środowiska do przechowywania kopii zapasowych i danych odzyskiwania katastroficznego (DR) z serwerowni lokalnej:
+- **Cloud Storage z użyciem zaplanowanego zadania i narzędzia gsutil (B):** Cloud Storage to wysoce skalowalna, obiektowa pamięć masowa o niemal nieograniczonej pojemności. Klasy przechowywania (np. Coldline lub Archive) zapewniają minimalne koszty dla rzadko używanych danych DR. Narzędzie `gsutil` pozwala na łatwe skryptowanie i automatyzację przesyłania kopii zapasowych z lokalnych serwerów.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. BigQuery:** Jest to hurtownia danych przeznaczona do analiz analitycznych SQL. Przechowywanie tam surowych kopii zapasowych (np. obrazów dysków, backupów baz) jest nieefektywne i niezwykle kosztowne.
+- **C. Compute Engine VM z Persistent Disk:** Wymagałoby to ciągłego działania maszyn wirtualnych i opłacania stałej alokacji dysków SSD/HDD, co jest rozwiązaniem drogim i słabo skalowalnym w porównaniu do obiektowego Cloud Storage.
+- **D. Cloud Datastore (obecnie Firestore):** To baza danych NoSQL dla małych obiektów/dokumentów, całkowicie niedostosowana do przechowywania dużych plików kopii zapasowych.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Dla kopii zapasowych (backups) i archiwizacji danych (disaster recovery) w chmurze najtańszym i najprostszym wyborem jest zawsze **Cloud Storage** z odpowiednią klasą dostępu (Nearline/Coldline/Archive).
+- Narzędzie `gsutil` to standardowe narzędzie CLI do zarządzania obiektami w Cloud Storage.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Przechowywanie kopii zapasowych (DR) -> Cloud Storage.
+
+**5. Dodatkowe źródła:**
+- Cloud Storage classes: https://cloud.google.com/storage/docs/storage-classes
 </pre>
 
 </div>

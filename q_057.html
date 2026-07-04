@@ -88,31 +88,31 @@ How should your team meet these requirements?
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C
+**Poprawna odpowiedź: C**
 
-Wyjaśnienie:
-Ograniczenie polityki organizacji (Organization Policy) o nazwie `constraints/compute.restrictExternalIp` jest najskuteczniejszym sposobem na wymuszenie zakazu posiadania publicznych adresów IP w projekcie. Pozwala ono na zdefiniowanie "listy dopuszczonych" (whitelist) instancji maszyn wirtualnych, które jako jedyne mogą mieć przypisany zewnętrzny adres IP. Jest to mechanizm nadrzędny wobec IAM – nawet jeśli użytkownik posiada rolę Editor lub Compute Admin, polityka organizacji fizycznie zablokuje mu możliwość przypisania publicznego IP do instancji, która nie znajduje się na liście.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Wymaganie polega na zablokowaniu możliwości przypisywania publicznych adresów IP do maszyn wirtualnych w projekcie produkcyjnym, za wyjątkiem instancji aplikacji frontendowej:
+- **Skonfigurowanie Polityki Organizacji (Organization Policy) z ograniczeniem `compute.skipDefaultNetworkCreation` lub precyzyjniej `compute.vmExternalIpAccess` (C):** Ograniczenie `compute.vmExternalIpAccess` pozwala na zdefiniowanie polityki na poziomie folderu lub projektu produkcyjnego, która blokuje przypisywanie zewnętrznych (publicznych) adresów IP do maszyn wirtualnych. Polityka ta pozwala na zdefiniowanie białej listy (whitelist) konkretnych maszyn VM (np. instancji frontendu), które są uprawnione do posiadania zewnętrznego IP. Dla wszystkich pozostałych maszyn przypisanie publicznego IP zostanie zablokowane, nawet jeśli inżynierowie posiadają rolę Editor w projekcie.
 
-Dlaczego pozostałe opcje są niepoprawne:
-- A: `Private Google Access` (Prywatny dostęp do Google) umożliwia instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi API Google (np. Cloud Storage, BigQuery). Sama w sobie ta funkcja nie zabrania jednak przypisywania publicznych adresów IP do maszyn.
-- B: Zmiana roli z Editor na `Compute Admin` nie rozwiąże problemu. Rola Compute Admin nadal daje pełne uprawnienia do zarządzania interfejsami sieciowymi maszyn, w tym do przypisywania im zewnętrznych adresów IP.
-- D: W Google Cloud publiczny adres IP jest atrybutem interfejsu konkretnej instancji, a nie całej podsieci. Choć można zaprojektować architekturę z podziałem na podsieci "publiczne" i "prywatne", bez dodatkowych ograniczeń (jak Organization Policy) nic nie stoi na przeszkodzie, aby inżynier przypisał publiczny IP do maszyny w dowolnej podsieci.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Private Access na sieci VPC:** Private Google Access pozwala maszynom z prywatnymi IP na łączenie się z API Google, ale samo włączenie tej opcji nie uniemożliwia inżynierom posiadającym uprawnienia edycji na ręczne przypisanie publicznego IP do nowo tworzonej maszyny.
+- **B. Usunięcie roli Editor i nadanie Compute Admin:** Rola Compute Admin daje pełne prawa do zarządzania zasobami Compute Engine, w tym do tworzenia maszyn z publicznymi IP, więc nie rozwiązuje to problemu twardego ograniczenia konfiguracji maszyn.
+- **D. Sieć VPC z dwiema podsieciami (publiczną i prywatną):** W chmurze Google strefy publiczne/prywatne kontroluje się przypisywaniem publicznego IP do maszyny oraz regułami routingu/firewalla. Samo stworzenie podsieci nie blokuje inżynierowi o roli Editor możliwości dodania publicznego IP do maszyny w podsieci "prywatnej".
 
-Tips & Tricks:
-- Słowo kluczowe "Enforce" (wymusić) w kontekście infrastruktury GCP bardzo często wskazuje na Organization Policy.
-- Pamiętaj, że polityka `compute.restrictExternalIp` może być skonfigurowana tak, aby dopuszczać tylko konkretne nazwy instancji lub grupy instancji.
-- Zawsze wybieraj Organization Policy, gdy musisz ograniczyć możliwości użytkowników o wysokich uprawnieniach (Administratorów/Edytorów).
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Blokowanie publicznych IP na maszynach VM w GCP (niezależnie od ról IAM użytkowników) realizuje się za pomocą **Polityki Organizacji** z ograniczeniem **`compute.vmExternalIpAccess`**.
+- Polityki organizacji to tzw. twarde bariery bezpieczeństwa (guardrails).
 
-Zagadnienia:
-- Organization Policy Service (Więzy/Constraints)
-- Compute Engine Networking (Adresacja IP)
-- External IP restrictions (Ograniczanie zewnętrznych IP)
+**4. Reguły wyboru odpowiedzi:**
+- Wymuszenie braku publicznych IP dla wybranych/wszystkich VM -> Organization Policy + `compute.vmExternalIpAccess`.
 
-Dokumentacja:
-<a href="https://cloud.google.com/compute/docs/ip-addresses/reserve-static-external-ip-address#restrict_external_ip_addresses" target="_blank">https://cloud.google.com/compute/docs/ip-addresses/reserve-static-external-ip-address#restrict_external_ip_addresses</a>
+**5. Dodatkowe źródła:**
+- Restricting VMs from using external IP addresses: https://cloud.google.com/compute/docs/ip-addresses/restrict-vm-external-ips
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie (Egzamin)</h2>

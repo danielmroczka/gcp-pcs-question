@@ -90,24 +90,26 @@ An organization's typical network and security review consists of analyzing appl
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: B**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Organizacja chce umożliwić deweloperom samodzielne wdrażanie aplikacji przy jednoczesnym automatycznym egzekwowaniu reguł bezpieczeństwa (sieć, zapory, trasy) bez narzutu czasochłonnych, ręcznych przeglądów bezpieczeństwa:
+- **Wprowadzenie zasad Infrastructure as Code (IaC) oraz wdrożenie analizy statycznej w potokach CI/CD do egzekwowania polityk (B):** Użycie narzędzi takich jak Terraform (IaC) pozwala na deklaratywne definiowanie zasobów. Skanowanie kodu infrastruktury w potoku CI/CD (np. za pomocą narzędzi do analizy statycznej/polityk takich jak Terraform Validator, Checkov czy OPA) pozwala automatycznie zablokować wdrożenia naruszające reguły bezpieczeństwa zanim trafią one do chmury. Daje to deweloperom szybkość, a zespołowi bezpieczeństwa pełną kontrolę.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Forseti w środowisku produkcyjnym:** Forseti to doskonałe narzędzie, ale działa reaktywnie (wykrywa błędy konfiguracji już po ich wdrożeniu na produkcji). Nie zapobiega to wdrożeniu błędnych konfiguracji, a jedynie o nich raportuje.
+- **C. Kierowanie ruchu przez własne routery:** Wprowadza to ogromny narzut wydajnościowy, dodatkowe punkty awarii i nie rozwiązuje problemu wdrożeń niezgodnych z politykami.
+- **D. Praca w chmurze tylko dla Dev/QA, a produkcja on-premises:** To podejście neguje korzyści z migracji do chmury i nie rozwiązuje problemu automatyzacji kontroli w środowiskach deweloperskich.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Nowoczesne bezpieczeństwo w chmurze stawia na podejście **Shift-Left** – czyli wykrywanie błędów konfiguracji jak najwcześniej (w fazie kodu / CI/CD pipeline), a nie po wdrożeniu.
+- Statyczna analiza kodu infrastruktury (IaC static analysis) w potokach CI/CD to złoty standard automatycznego egzekwowania polityk (Policy as Code).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Bezpieczne wdrożenia bez ręcznego przeglądu -> Automatyczne testy polityk w CI/CD + Infrastructure as Code.
+
+**5. Dodatkowe źródła:**
+- Google Cloud - Policy intelligence: https://cloud.google.com/policy-intelligence/docs
 </pre>
 
 </div>

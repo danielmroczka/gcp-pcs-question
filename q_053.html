@@ -91,24 +91,26 @@ How can you work with Infrastructure Operations Engineers to best ensure that Wi
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: A**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+W środowisku chmurowym opartym na elastycznym i automatycznym skalowaniu (autoscaling w Managed Instance Groups), instancje VM mogą być tworzone i niszczone w każdej chwili. Tradycyjne metody patchowania (np. instalowanie poprawek na działających maszynach) nie gwarantują spójności:
+- **Budowanie nowych obrazów bazowych po wydaniu poprawek i użycie potoku CI/CD do przebudowania maszyn VM oraz ich stopniowego (rolling) wdrażania (A):** Jest to zasada tzw. **Infrastruktury Niezmiennej (Immutable Infrastructure)**. Zamiast patchować działające systemy, tworzy się nowy złoty obraz (golden image) z zainstalowanymi poprawkami, a potok CI/CD automatycznie zastępuje stare maszyny nowymi w sposób przyrostowy (rolling update). Gwarantuje to, że każda nowo uruchomiona w autoscalingu maszyna będzie od razu w pełni zaktualizowana i spójna z innymi.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **B. Rejestracja maszyn w domenie i GPO:** Metoda tradycyjna (Group Policy Object). W dynamicznym środowisku chmurowym instalowanie poprawek w locie przez GPO na nowo uruchomionych instancjach trwa zbyt długo, obciąża sieć i może prowadzić do niespójności konfiguracji maszyn obsługujących ruch.
+- **C. Deployment Manager do tworzenia nowych grup:** Deployment Manager służy do wdrażania infrastruktury (IaC), ale nie zarządza automatycznie procesem budowania obrazów OS i cyklicznym patchowaniem aplikacji w działających autoskalowanych grupach maszyn.
+- **D. Startup Script pobierający poprawki z internetu:** Pobieranie poprawek przy każdym uruchomieniu maszyny drastycznie wydłuża czas startu maszyny (boot time), co uniemożliwia szybkie skalowanie (autoscaling) w odpowiedzi na skoki ruchu, a dodatkowo stwarza ryzyko awarii w przypadku braku łączności z serwerami aktualizacji.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- W chmurze dla systemów w grupach skalowalnych (MIG) stosuje się podejście **Immutable Infrastructure (Infrastruktura Niezmienna)**. Aktualizacje wykonuje się poprzez wymianę maszyn na nowe ze "złotego obrazu", a nie przez aktualizację "na żywo" (live patching).
+- Słowo-klucz: **elastic nature of cloud computing** (elastyczny charakter / autoscaling).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Patchowanie maszyn w grupach autoskalowania -> Rebuild obrazów + Rolling update w CI/CD.
+
+**5. Dodatkowe źródła:**
+- Recreate VMs in a managed instance group: https://cloud.google.com/compute/docs/instance-groups/recreating-instances-in-migs
 </pre>
 
 </div>

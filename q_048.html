@@ -90,24 +90,30 @@ Applications often require access to `secrets` - small pieces of sensitive data 
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: AC**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Administrator chce mieć pełny wgląd (ścieżkę audytową - audit trail) w to, "kto, co, gdzie i kiedy" robił w odniesieniu do sekretów w projektach GCP:
+- **Admin Activity logs (A):** Rejestrują wszelkie operacje modyfikujące konfigurację lub metadane (zapisy, usunięcia, modyfikacje) zasobów i uprawnień IAM w projekcie. Są włączone domyślnie i bezpłatne.
+- **Data Access logs (C):** Rejestrują operacje odczytu i zapisu samych danych (np. pobranie wartości sekretu przez aplikację, odczyt obiektu w GCS). Te logi pozwalają precyzyjnie stwierdzić, kto pobrał/odczytał sekret. Ze względu na dużą objętość są domyślnie wyłączone i należy je ręcznie aktywować w polityce IAM projektu.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **B. System Event logs:** Rejestrują operacje administracyjne wykonywane przez systemy Google Cloud (np. automatyczna migracja maszyny na inny host), nie rejestrują działań użytkowników i aplikacji na danych.
+- **D. VPC Flow logs:** Rejestrują metadany o ruchu sieciowym (IP źródłowe/docelowe, porty, pakiety) w sieci VPC. Nie informują o tym, jakie konkretne zasoby aplikacyjne (np. sekrety) były odczytywane przez użytkowników.
+- **E. Agent logs:** Logi pochodzące z agentów zainstalowanych na maszynach VM (np. logi aplikacji, logi systemowe Windows/Linux), nie rejestrują operacji na poziomie API Google Cloud.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Ścieżka audytowa w GCP (GCP Audit Trail) składa się z trzech typów logów (Cloud Audit Logs):
+  1. **Admin Activity** (Kto zmienił konfigurację/zasób? - Zawsze włączone).
+  2. **Data Access** (Kto odczytał/zapisał dane? - Domyślnie wyłączone).
+  3. **System Event** (Działania systemu Google).
+- Słowo-klucz: **who did what, where, and when** w odniesieniu do danych/sekretów wymaga włączenia **Data Access logs**.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Pełny audyt administracyjny i dostępu do danych -> Admin Activity + Data Access logs.
+
+**5. Dodatkowe źródła:**
+- Cloud Audit Logs overview: https://cloud.google.com/logging/docs/audit
 </pre>
 
 </div>

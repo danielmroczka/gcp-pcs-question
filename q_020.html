@@ -90,24 +90,26 @@ How should a customer reliably deliver Stackdriver logs from GCP to their on-pre
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: C**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Wymagane jest niezawodne (reliable) dostarczenie logów z GCP do lokalnego systemu SIEM w czasie rzeczywistym:
+- **Skonfigurowanie sinków logów (Organizational Log Sinks) do eksportu logów do tematu Cloud Pub/Sub, a następnie przesłanie ich do SIEM za pomocą potoku Dataflow (C):** Pub/Sub działa jako bufor kolejki komunikatów, gwarantując dostarczenie wiadomości ("at-least-once delivery") i odporność na awarie sieci czy przeciążenia systemu SIEM. Cloud Dataflow automatycznie przetwarza i przekazuje strumień logów z Pub/Sub do lokalnego SIEM (np. Splunk) przy użyciu dedykowanych szablonów Google.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Send logs via syslog:** Stackdriver (Cloud Logging) nie posiada wbudowanego mechanizmu bezpośredniego wysyłania logów protokołem syslog do zewnętrznych lokalizacji bez dodatkowych agentów i infrastruktury pośredniczącej.
+- **B. Export logs to BigQuery:** BigQuery jest bazą danych przeznaczoną do analiz analitycznych (SQL). SIEM musiałby stale odpytywać bazę danych (polling), co jest nieefektywne, kosztowne i nie działa w czasie zbliżonym do rzeczywistego (real-time).
+- **D. Query logs via RESTful JSON APIs:** Odpytywanie API Cloud Logging w czasie rzeczywistym dla dużych ilości logów doprowadzi do przekroczenia limitów API (rate limiting) i nie gwarantuje niezawodności w przypadku awarii sieci po stronie lokalnej.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Standardowa, zalecana przez Google architektura eksportu logów do systemów trzecich (SIEM/Splunk/Elastic) to: **Cloud Logging Sink -> Cloud Pub/Sub -> Cloud Dataflow -> SIEM**.
+- Słowo-klucz: **reliably** i **SIEM** w GCP zawsze oznacza użycie Cloud Pub/Sub jako bufora odpornego na skoki obciążenia.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Eksport logów do zewnętrznych systemów w czasie rzeczywistym -> Pub/Sub (+ ewentualnie Dataflow).
+
+**5. Dodatkowe źródła:**
+- Google Cloud - Deploying production-ready log exports to Splunk: https://cloud.google.com/architecture/deploying-production-ready-log-exports-to-splunk
 </pre>
 
 </div>

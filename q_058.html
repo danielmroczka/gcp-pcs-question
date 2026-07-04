@@ -88,33 +88,33 @@ Which two security characteristics are related to the use of VPC peering to conn
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: BC
+**Poprawna odpowiedź: BC**
 
-Wyjaśnienie:
-VPC Network Peering posiada dwie kluczowe cechy istotne z punktu widzenia bezpieczeństwa i architektury sieciowej:
-1. (B) Nietranzytywność (Non-transitivity): Połączenie typu peering jest ograniczone tylko do dwóch bezpośrednio połączonych sieci. Jeśli sieć A jest połączona z B, a sieć B z C, to zasoby w sieci A NIE mogą komunikować się z zasobami w sieci C przez sieć B. Zwiększa to bezpieczeństwo, zapobiegając niekontrolowanemu przepływowi ruchu przez sieci pośredniczące.
-2. (C) Wsparcie dla wielu organizacji (Cross-organization): Możesz utworzyć peering między sieciami VPC, które należą do różnych organizacji Google Cloud (np. Twoja firma i zewnętrzny dostawca usług). Cały ruch odbywa się wewnątrz sieci Google, przy użyciu prywatnych adresów IP.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+VPC Network Peering umożliwia bezpośrednią komunikację sieciową o niskich opóźnieniach między dwiema sieciami VPC w GCP. Charakteryzuje się następującymi cechami bezpieczeństwa:
+- **Non-transitive communication (B):** Peering VPC jest nieprzechodni (non-transitive). Oznacza to, że jeśli Sieć A ma peering z Siecią B, a Sieć B ma peering z Siecią C, to Sieć A **nie może** komunikować się z Siecią C za pośrednictwem Sieci B, chyba że skonfigurowano dodatkowy routing (np. za pomocą bram VPN lub routerów programowych). Podnosi to bezpieczeństwo i izolację sieci.
+- **Peering across different organizations (C):** Peering VPC umożliwia łączenie sieci należących do zupełnie różnych organizacji w GCP (np. integracja z siecią partnera biznesowego lub dostawcy oprogramowania).
 
-Dlaczego pozostałe opcje są niepoprawne:
-- A: VPC Peering jest rozwiązaniem zdecentralizowanym. Każda sieć zarządza własnymi regułami firewall i trasami. Jeśli szukasz centralnego zarządzania, poprawną odpowiedzią byłoby `Shared VPC`.
-- D: Reguły firewall oparte na tagach sieciowych (network tags) działają tylko w obrębie jednej sieci VPC. W Peeringu nie można użyć tagu z sieci A jako źródła (source) w regule firewall sieci B. (Można natomiast używać Service Accounts lub zakresów IP).
-- E: VPC Peering łączy całe sieci. Do współdzielenia konkretnych podsieci między projektami służy mechanizm `Shared VPC`.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Centralne zarządzanie trasami i firewallami:** Peering łączy sieci na poziomie routingu, ale każda sieć VPC zachowuje własne, niezależne reguły zapory sieciowej (firewall rules) i własne tabele routingu. Nie ma tu centralnego zarządzania w taki sposób jak w Shared VPC.
+- **D. Reguły firewall z tagami sieciowymi między sieciami w peeringu:** Tagi sieciowe (network tags) są unikalne dla danej sieci VPC i **nie mogą** być używane jako źródło (source tag) ani cel (target tag) w regułach zapory sieciowej chroniących drugą sieć w peeringu. Do filtrowania ruchu między sieciami w peeringu należy używać adresów IP/CIDR lub kont usługowych.
+- **E. Udostępnianie wybranych podsieci:** Peering VPC domyślnie udostępnia całe sieci VPC (wszystkie podsieci) i nie pozwala na precyzyjne odizolowanie i udostępnienie tylko jednej wybranej podsieci bez stosowania reguł firewall.
 
-Tips & Tricks:
-- Słowo "Non-transitive" jest kluczowe dla VPC Peering w GCP. Zapamiętaj to!
-- Peering = Decentralizacja (każdy projekt ma swój admin sieci). Shared VPC = Centralizacja (jeden Host Project zarządza siecią dla innych).
-- VPC Peering to najlepsze rozwiązanie dla "Cross-organization connectivity" przy zachowaniu prywatności ruchu.
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Pamiętaj o dwóch fundamentalnych limitach peeringu VPC w GCP:
+  1. Brak przechodniości (Peering is **non-transitive**).
+  2. Brak możliwości używania **tagów sieciowych** (network tags) w regułach firewall dla ruchu przechodzącego przez peering.
 
-Zagadnienia:
-- VPC Network Peering Features
-- Network Transitivity (Tranzystywność sieci)
-- Cross-project and Cross-org connectivity
+**4. Reguły wyboru odpowiedzi:**
+- Cechy peeringu VPC -> Brak przechodniości, brak wsparcia dla tagów sieciowych, łączenie między różnymi projektami/organizacjami.
 
-Dokumentacja:
-<a href="https://cloud.google.com/vpc/docs/vpc-peering#features" target="_blank">https://cloud.google.com/vpc/docs/vpc-peering#features</a>
+**5. Dodatkowe źródła:**
+- VPC Network Peering overview: https://cloud.google.com/vpc/docs/vpc-peering
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie (Egzamin)</h2>

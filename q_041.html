@@ -89,24 +89,26 @@ Your company runs a website that will store PII on Google Cloud Platform. To com
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: C**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Wymaganie polega na przechowywaniu danych osobowych (PII) przez określony czas, a następnie ich pełnym i automatycznym usunięciu po tym okresie (retencja danych/usuwanie po upływie TTL) bez ryzyka usunięcia nowszych danych:
+- **Przechowywanie danych w Cloud Storage i skonfigurowanie cyklu życia obiektu (Object Lifecycle Management) na poziomie kubła (C):** Cloud Storage umożliwia zdefiniowanie reguł cyklu życia (np. akcja `Delete` dla obiektów o wieku powyżej określonej liczby dni). Google automatycznie i bezpłatnie dba o to, by obiekty, które przekroczyły wiek (Age), były bezpowrotnie usuwane, podczas gdy nowo utworzone obiekty pozostają bezpieczne. Jest to rozwiązanie w pełni zautomatyzowane, niezawodne i najbardziej opłacalne kosztowo.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Pojedynczy Persistent Disk i usunięcie dysku:** Usunięcie całego dysku spowodowałoby skasowanie *wszystkich* danych jednocześnie, w tym tych, które jeszcze nie przekroczyły limitu czasu przechowywania (narusza to warunek nieusuwania nowszych danych).
+- **B. Pojedyncza tabela BigQuery z wygaśnięciem:** BigQuery pozwala na ustawianie wygaśnięcia tabel (Table Expiration), ale usunięcie tabeli powoduje skasowanie wszystkich wierszy jednocześnie. Podobnie jak w A, skasowałoby to nowo dodane dane. Wygaśnięcie partycji mogłoby pomóc, ale Cloud Storage jest domyślnym i bardziej dopasowanym obiektowym systemem retencji plików.
+- **D. BigTable z wygaśnięciem rodzin kolumn (TTL):** BigTable obsługuje TTL (Time to Live) na poziomie komórek, ale jest to bardzo droga, wysoce wydajna baza danych NoSQL, nieprzeznaczona do taniej, długoterminowej retencji plików z danymi osobowymi.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Jeśli mowa o automatycznej retencji i usuwaniu całych plików/obiektów z danymi osobowymi, najtańszym i najprostszym mechanizmem w GCP jest **Object Lifecycle Management w Cloud Storage**.
+- Zapamiętaj: Reguły cyklu życia obiektów w GCS działają na poziomie poszczególnych obiektów, więc każdy plik jest usuwany indywidualnie na podstawie swojej daty utworzenia.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Retencja plików/obiektów i usuwanie po czasie -> Cloud Storage Lifecycle Management.
+
+**5. Dodatkowe źródła:**
+- Object Lifecycle Management: https://cloud.google.com/storage/docs/lifecycle
 </pre>
 
 </div>

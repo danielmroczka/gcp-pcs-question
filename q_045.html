@@ -89,24 +89,28 @@ A large financial institution is moving its Big Data analytics to Google Cloud P
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: C**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Instytucja finansowa chce mieć **maksymalną kontrolę nad procesem szyfrowania danych w BigQuery** (szyfrowanie danych w spoczynku):
+- **Customer-Managed Encryption Keys (CMEK) (C):** BigQuery natywnie integruje się z Cloud Key Management Service (KMS), umożliwiając korzystanie z kluczy zarządzanych przez klienta (CMEK). Klient może samodzielnie zarządzać rotacją, wyłączaniem i niszczeniem klucza KEK. Ponieważ klucz leży w KMS, klient kontroluje uprawnienia dostępu do niego za pomocą IAM, zachowując pełną kontrolę nad dostępem do tabel BigQuery.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Cloud Storage jako zewnętrzne źródło danych:** BigQuery może odpytywać dane w GCS (Federated Queries), ale to nie rozwiązuje problemu natywnego szyfrowania danych przechowywanych wewnątrz samego BigQuery i nie daje lepszej kontroli nad kluczami.
+- **B. Użycie Cloud HSM:** Cloud HSM to sprzętowy moduł bezpieczeństwa, który przechowuje klucze w KMS. Jest to fizyczna lokalizacja klucza, a nie technika integracji z BigQuery. Klient nadal potrzebuje wdrożyć mechanizm CMEK, by BigQuery korzystało z kluczy w HSM.
+- **D. Customer-Supplied Encryption Keys (CSEK):** BigQuery **nie wspiera** kluczy dostarczanych przez użytkownika (CSEK). CSEK są wspierane wyłącznie przez Compute Engine i Cloud Storage.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Zapamiętaj bardzo ważną różnicę w obsłudze kluczy:
+  - **Cloud Storage i Compute Engine:** Wspierają zarówno **CMEK**, jak i **CSEK**.
+  - **BigQuery (oraz większość innych usług GCP):** Wspierają wyłącznie **CMEK**. CSEK jest tu niedostępny.
+- Dlatego w BigQuery maksymalną formą kontroli szyfrowania jest **CMEK**.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Szyfrowanie w BigQuery pod kontrolą klienta -> CMEK.
+
+**5. Dodatkowe źródła:**
+- Protect BigQuery data with CMEK: https://cloud.google.com/bigquery/docs/customer-managed-keys
 </pre>
 
 </div>

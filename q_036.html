@@ -90,24 +90,26 @@ A retail customer allows users to upload comments and product reviews. The custo
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: B**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Klient musi skanować tekst komentarzy i recenzji przed publikacją, aby upewnić się, że nie zawierają one danych wrażliwych (PII, takich jak e-maile, telefony, dane finansowe):
+- **Cloud Data Loss Prevention (DLP) API (B):** Jest to usługa zaprojektowana specjalnie do automatycznego wykrywania, klasyfikowania i maskowania (deidentyfikacji) danych wrażliwych w tekstach i plikach. DLP API udostępnia szybkie metody synchroniczne, które aplikacja może wywołać w locie przed zapisaniem komentarza do bazy danych.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Cloud KMS:** Służy do kryptograficznego szyfrowania/odszyfrowywania danych, nie analizuje ich zawartości pod kątem obecności danych osobowych.
+- **C. BigQuery:** To analityczna baza danych. Zapisanie tam nieoczyszczonych komentarzy i dopiero późniejsza analiza nie zapobiega opublikowaniu danych wrażliwych na stronie www.
+- **D. Web Security Scanner:** Służy do wykrywania podatności w kodzie i konfiguracji aplikacji webowej (np. SQLi, XSS), nie służy do cenzurowania i ochrony danych wrażliwych przesyłanych przez użytkowników w formularzach.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Jeśli celem jest identyfikacja lub usunięcie danych osobowych / wrażliwych (PII, PHI, dane kart) z nieustrukturyzowanego tekstu przed jego zapisaniem/publikacją -> Zawsze wybieraj **Cloud DLP API**.
+- DLP działa w czasie rzeczywistym przez API.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Wykrywanie i usuwanie danych osobowych w tekście -> Cloud DLP API.
+
+**5. Dodatkowe źródła:**
+- Cloud DLP API Documentation: https://cloud.google.com/dlp/docs
 </pre>
 
 </div>

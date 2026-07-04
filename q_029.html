@@ -89,24 +89,26 @@ Your team sets up a Shared VPC Network where project co-vpc-prod is the host pro
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: B**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+W architekturze Shared VPC, projekt hosta (host project) udostępnia sieć i podsieci projektom usługowym (service projects). Chcemy zezwolić inżynierom (Group A) na podpinanie maszyn tylko do jednej konkretnej podsieci (10.1.1.0/24):
+- **Przydzielenie roli Compute Network User (Rola użytkownika sieci) na poziomie tej konkretnej podsieci (B):** GCP umożliwia precyzyjne przypisywanie ról IAM do poszczególnych podsieci. Nadanie roli `roles/compute.networkUser` bezpośrednio na zasobie podsieci 10.1.1.0/24 pozwala Grupie A na używanie tej podsieci do tworzenia interfejsów sieciowych maszyn VM, jednocześnie blokując im dostęp do wszystkich pozostałych podsieci w sieci hosta.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Compute Network User na poziomie projektu hosta:** Nadanie tej roli na poziomie całego projektu hosta dałoby Grupie A uprawnienia do podpinania maszyn do *wszystkich* podsieci w tym projekcie, co narusza zasadę minimalnych uprawnień.
+- **C. Compute Shared VPC Admin na poziomie projektu hosta:** Rola Shared VPC Admin pozwala na pełną administrację i konfigurację współdzielonego VPC (włączanie hosta, dodawanie projektów). Jest to rola o zbyt wysokich uprawnieniach dla zwykłych inżynierów tworzących maszyny VM.
+- **D. Compute Shared VPC Admin na poziomie projektu usługowego:** Ta rola jest nadawana na poziomie organizacji lub projektu hosta administratorom sieci, przypisanie jej na poziomie projektu usługowego nie rozwiązuje problemu uprawnień do konkretnej podsieci.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Przypisywanie roli **Compute Network User** bezpośrednio do **zasobu podsieci (subnet level)** to standardowy wzorzec zabezpieczania sieci hybrydowych w GCP.
+- Unikaj nadawania uprawnień sieciowych na poziomie projektu, jeśli wymagana jest precyzyjna kontrola nad podsieciami.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Dostęp tylko do wybranej podsieci w Shared VPC -> Compute Network User na poziomie podsieci (Subnet level).
+
+**5. Dodatkowe źródła:**
+- Shared VPC IAM roles: https://cloud.google.com/vpc/docs/shared-vpc#iam-roles-shared-vpc
 </pre>
 
 </div>

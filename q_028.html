@@ -89,24 +89,26 @@ A company has redundant mail servers in different Google Cloud Platform regions 
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: A**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Klient posiada serwery pocztowe w różnych regionach GCP i chce kierować ruch do najbliższej lokalizacji na porcie TCP 995 (bezpieczny POP3/SSL):
+- **Skonfigurowanie TCP Proxy Load Balancing (A):** Jest to globalna usługa równoważenia obciążenia (Global Load Balancer) przeznaczona dla ruchu TCP niebędącego ruchem HTTP(S). Działa na poziomie globalnym z użyciem jednego adresu IP typu anycast, automatycznie terminując sesje TCP w najbliższym punkcie dostępowym Google (Edge POP) i przekazując ruch do najbliższego zdrowego serwera pocztowego w chmurze na porcie 995.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **B. Network Load Balancer (NLB):** NLB jest usługą regionalną, nie globalną. Działa na poziomie warstwy 4 (bez terminacji proxy) i nie kieruje automatycznie ruchu z całego świata do najbliższego geograficznie regionu na podstawie jednego IP anycast w tak efektywny sposób jak TCP Proxy.
+- **C. HTTP(S) Load Balancer:** Protokół pocztowy POP3/SSL na porcie 995 korzysta z czystego TCP, a nie HTTP(S). HTTP(S) LB nie obsługuje ruchu nie-HTTP.
+- **D. Cloud CDN:** Służy do buforowania zawartości statycznej (obrazki, skrypty) dla stron WWW, nie obsługuje protokołów pocztowych TCP takich jak POP3.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Jeśli ruch to czyste TCP/SSL (inne niż porty 80/443), a wymaganiem jest globalne kierowanie i wysoka dostępność -> Użyj **TCP Proxy Load Balancing** lub **SSL Proxy Load Balancing**.
+- Pamiętaj, że proxy terminują ruch na brzegu sieci (Google Edge).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Globalny ruch TCP (nie-HTTP) -> TCP Proxy Load Balancer.
+
+**5. Dodatkowe źródła:**
+- TCP Proxy Load Balancing Overview: https://cloud.google.com/load-balancing/docs/tcp
 </pre>
 
 </div>

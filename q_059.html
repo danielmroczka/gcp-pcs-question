@@ -86,34 +86,31 @@ A patch for a vulnerability has been released, and a DevOps team needs to update
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: C (Update the application code or apply a patch, build a new image, and redeploy it.)
+**Poprawna odpowiedź: C**
 
-Wyjaśnienie:
-Kontenery w ekosystemie Docker/Kubernetes są z założenia niemutowalne (immutable). Oznacza to, że nie powinno się ich patchować "na żywo" w trakcie działania. Prawidłowy proces aktualizacji (tzw. "Cloud-native way") polega na:
-1. Naniesieniu poprawek w kodzie źródłowym lub pliku Dockerfile.
-2. Zbudowaniu nowego obrazu kontenera z nowym tagiem (wersją).
-3. Przesłaniu obrazu do rejestru (np. Artifact Registry).
-4. Wykonaniu nowej instalacji (redeploy) w klastrze GKE (np. za pomocą `kubectl set image` lub aktualizacji manifestu Deployment), co spowoduje, że Kubernetes automatycznie zastąpi stare kontenery nowymi (Rolling Update).
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+W architekturze kontenerowej (np. w klastrach GKE), kontenery są projektowane jako zasoby efemeryczne i niezmienne (immutable). Kiedy wydany zostaje patch (poprawka bezpieczeństwa) dla aplikacji lub systemu wewnątrz kontenera:
+- **Należy zaktualizować kod aplikacji lub nałożyć poprawkę w pliku Dockerfile, zbudować nowy obraz kontenera, wypchnąć go do rejestru i wdrożyć (redeploy) w klastrze GKE (C):** Jest to jedyny prawidłowy i bezpieczny sposób aktualizacji kontenerów. Wdrożenie nowego obrazu powoduje, że Kubernetes zastępuje stare kontenery nowymi podami (np. za pomocą strategii Rolling Update) bez przerw w działaniu aplikacji.
 
-Dlaczego pozostałe są błędne:
-A. Puppet/Chef: Narzędzia do zarządzania konfiguracją są świetne dla systemów operacyjnych maszyn wirtualnych, ale nie dla kontenerów. Kontener powinien być traktowany jako "jednorazowy" – jeśli wymaga zmiany, tworzy się nowy.
-B. Node Auto-upgrade: To ustawienie dotyczy aktualizacji systemu operacyjnego i oprogramowania samych węzłów (maszyn wirtualnych) klastra GKE, a nie aplikacji działających w kontenerach na tych węzłach.
-D. Auto-upgrade kontenerów: W GKE nie ma wbudowanego mechanizmu, który automatycznie wykrywa nowy obraz w rejestrze i samoczynnie aktualizuje działające kontenery bez zewnętrznego wyzwalacza (np. CI/CD pipeline).
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Puppet lub Chef do instalacji poprawek w działającym kontenerze:** Narzędzia do zarządzania konfiguracją systemów tradycyjnych (Puppet/Chef) nie powinny być używane do modyfikowania działających kontenerów. Kontenery nie powinny być modyfikowane w locie (tzw. konfiguracja dryfująca - configuration drift).
+- **B. Auto upgrade węzłów klastra:** Automatyczna aktualizacja węzłów (Node Auto-Upgrade) w GKE aktualizuje system operacyjny samych maszyn wirtualnych (węzłów klastra), ale nie modyfikuje i nie aktualizuje obrazów kontenerów aplikacji wdrożonych przez użytkownika.
+- **D. Automatyczna aktualizacja po wydaniu obrazu bazowego:** Kubernetes nie posiada mechanizmu automatycznego pobierania i wdrażania nowej wersji kontenera tylko dlatego, że w rejestrze pojawił się nowy obraz bazowy, bez jawnej zmiany tagu obrazu w manifeście Deploymentu przez system CI/CD.
 
-Tips & Tricks:
-- "Immutability" (Niemutowalność) to słowo klucz w świecie kontenerów. Pamiętaj: nie naprawiaj kontenera, wymień go na nowy.
-- Na egzaminie Google Cloud zawsze wybieraj odpowiedzi promujące standardowe cykle CI/CD (Build -> Image -> Deploy).
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Zapamiętaj: W świecie kontenerów **nigdy nie instalujemy aktualizacji wewnątrz uruchomionego kontenera (no live updates)**. Zamiast tego budujemy nowy obraz (rebuild image) i wdrażamy go na nowo (redeploy).
+- Utrzymuje to pełną powtarzalność i spójność środowisk.
 
-Zagadnienia:
-- Kubernetes Deployment strategies (Rolling Updates).
-- Container Best Practices.
-- Artifact Registry / Container Registry integration.
+**4. Reguły wyboru odpowiedzi:**
+- Aktualizacja kontenera -> Build new image + Deploy.
 
-Dokumentacja:
-<a href="https://cloud.google.com/kubernetes-engine/docs/concepts/deployment-objects" target="_blank">https://cloud.google.com/kubernetes-engine/docs/concepts/deployment-objects</a>
+**5. Dodatkowe źródła:**
+- GKE Application deployment best practices: https://cloud.google.com/kubernetes-engine/docs/best-practices/security-hardening
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

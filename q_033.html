@@ -89,24 +89,30 @@ A customer wants to move their sensitive workloads to a Compute Engine-based clu
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: B**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Klient wdraża Managed Instance Groups (MIG) z dynamicznym skalowaniem i ma dwa wymagania dotyczące szyfrowania dysków startowych:
+- Skalowanie musi przebiegać automatycznie i szybko (bursty).
+- Klient musi zachować pełną kontrolę nad cyklem życia klucza szyfrującego (lifecycle control).
+- **Customer-Managed Encryption Keys (CMEK) w Cloud KMS (B):** Klucze CMEK pozwalają klientowi na zarządzanie ich rotacją, włączaniem/wyłączaniem i niszczeniem bezpośrednio w Cloud KMS. Aby umożliwić automatyczne skalowanie MIG bez interwencji człowieka, nadaje się uprawnienia szyfrowania (role Encrypter/Decrypter) dla konta usługowego agenta Compute Engine. Google Cloud automatycznie odszyfrowuje i tworzy nowe dyski VM w locie za pomocą tego klucza.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Customer-Supplied Encryption Keys (CSEK):** W przypadku CSEK klucz musi być podawany przy każdym tworzeniu maszyny w parametrach API (Google nie przechowuje go w KMS). Przy automatycznym skalowaniu MIG (Manged Instance Groups) Google Cloud nie miałby skąd pobrać klucza w locie, co uniemożliwia poprawne działanie automatycznego skalowania.
+- **C. Encryption by default (Szyfrowanie domyślne):** Szyfrowanie domyślne (Google-managed keys) nie daje klientowi żadnej kontroli nad cyklem życia kluczy (Google w pełni nimi zarządza).
+- **D. Pre-encrypting files:** Szyfrowanie plików przed wysłaniem nie chroni samego dysku startowego (boot disk) systemu operacyjnego maszyny wirtualnej.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Zapamiętaj kluczową różnicę na egzaminie:
+  - **CMEK (KMS):** Klucze są w chmurze. Obsługuje **MIG i autoscaling** (ponieważ GCP ma uprawnienia do pobierania klucza z KMS).
+  - **CSEK:** Klucze są poza chmurą (podawane w locie przez użytkownika). **Nie obsługuje** MIG i autoscalingu.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Własny klucz + Autoscaling/MIG -> CMEK (Cloud KMS).
+- Własny klucz + Statyczna pojedyncza maszyna bez chmury -> CSEK.
+
+**5. Dodatkowe źródła:**
+- Encrypt disks with CMEK: https://cloud.google.com/compute/docs/disks/customer-managed-encryption
 </pre>
 
 </div>

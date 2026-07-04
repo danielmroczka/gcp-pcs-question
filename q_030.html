@@ -89,24 +89,27 @@ A company migrated their entire data/center to Google Cloud Platform. It is runn
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: B**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Klient potrzebuje historycznego rejestru inwentarza (asset inventory snapshot) wszystkich uruchomionych zasobów w chmurze w celach audytowych:
+- **Użycie Forseti Security do automatyzacji migawek inwentarza (B):** Forseti to otwartoźródłowy zestaw narzędzi bezpieczeństwa dla GCP. Jego kluczowy moduł, *Forseti Inventory*, okresowo skanuje zasoby w organizacji GCP i zapisuje ich stan w bazie danych (tworząc migawki - snapshots). Umożliwia to audytorom sprawdzenie konfiguracji dowolnego zasobu z przeszłości.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Resource Manager:** Służy do organizacji struktury (projekty, foldery), ale nie rejestruje i nie przechowuje historii konfiguracji i stanów uruchomionych maszyn wirtualnych w czasie.
+- **C. Stackdriver Dashboard:** Służy do wyświetlania metryk wydajności i logów w czasie rzeczywistym, nie tworzy historycznych migawek inwentarza zasobów chmurowych.
+- **D. Security Command Center (SCC):** Pokazuje aktualny stan podatności i zasobów, ale w momencie powstawania pytania nie posiadało natywnej, łatwo eksportowalnej historii stanów historycznych typu "Time Travel" w takim stopniu jak dedykowany inwentarz Forseti.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Uwaga historyczna: Obecnie Google posiada potężną, wbudowaną usługę **Cloud Asset Inventory**, która automatycznie archiwizuje historię zmian zasobów do 5 tygodni wstecz (lub pozwala na ciągły eksport do BigQuery). Jednak na starszych wersjach egzaminu standardową odpowiedzią dla audytu inwentarza było **Forseti Security**.
+- Słowo-klucz: **historical record of what was running** w GCP.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Historyczny rejestr zasobów (starsze pytania) -> Forseti Inventory.
+- Nowoczesne pytania -> Cloud Asset Inventory.
+
+**5. Dodatkowe źródła:**
+- Forseti Security Inventory: https://forsetisecurity.org/docs/latest/concepts/inventory.html
 </pre>
 
 </div>

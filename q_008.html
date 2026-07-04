@@ -90,24 +90,26 @@ A customer implements Cloud Identity-Aware Proxy for their ERP system hosted on 
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: A**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Cloud Identity-Aware Proxy (IAP) kontroluje dostęp do aplikacji internetowych hostowanych w GCP. Aby upewnić się, że aplikacja (ERP) akceptuje ruch *wyłącznie* pochodzący z IAP (co zapobiega ominięciu IAP przez ruch wewnętrzny lub inne maszyny w tej samej sieci VPC):
+- **ERP system must validate the JWT assertion in the HTTP requests (A):** IAP dołącza do każdego uwierzytelnionego zapytania nagłówek HTTP `x-goog-iap-jwt-assertion` zawierający kryptograficznie podpisany token JWT. Aplikacja musi zdekodować i zweryfikować ten podpis przy użyciu publicznych kluczy Google. Dzięki temu aplikacja ma pewność, że żądanie przeszło przez bramkę IAP i tożsamość użytkownika została zweryfikowana.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **B. Validate identity headers:** IAP dołącza nagłówki takie jak `x-goog-authenticated-user-email`, ale same nagłówki tekstowe mogą zostać łatwo sfałszowane przez napastnika wewnątrz sieci VPC. Tylko weryfikacja podpisu cyfrowego JWT (opcja A) daje pewność autentyczności.
+- **C. Validate x-forwarded-for headers:** Ten nagłówek zawiera adresy IP proxy, przez które przeszedł ruch. Może być łatwo modyfikowany i nie zapewnia kryptograficznego potwierdzenia tożsamości.
+- **D. Validate user's unique identifier headers:** Podobnie jak w punkcie B, sam identyfikator tekstowy bez weryfikacji JWT nie jest bezpieczny.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Wdrażanie zasad **Zero Trust** przy użyciu IAP wymaga, aby aplikacja docelowa zawsze weryfikowała **JWT assertion** (nagłówek `x-goog-iap-jwt-assertion`). Bez tego zabezpieczenia, każdy kto ma dostęp sieciowy do maszyny, może podrobić tożsamość.
+- Zapamiętaj: Nagłówki tożsamości są łatwe do sfałszowania, token JWT podpisany przez Google jest niemożliwy do podrobienia.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Zabezpieczenie aplikacji za IAP -> Weryfikacja tokena JWT (JWT assertion).
+
+**5. Dodatkowe źródła:**
+- Dokumentacja Cloud IAP JWT: https://cloud.google.com/iap/docs/identity-headers
 </pre>
 
 </div>

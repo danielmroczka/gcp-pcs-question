@@ -87,26 +87,33 @@ Which service provides visibility into Google's own internal audit logs for acti
 </div>
 </div>
 <div class="q-card q-answer mb-4 d-none"  >
+
 <h2>Wyjaśnienie</h2>
 <pre>
-Poprawna odpowiedź: B (Access Transparency)
+**Poprawna odpowiedź: B**
 
-Analiza poprawności:
-Access Transparency to usługa Google Cloud, która udostępnia Ci logi dokumentujące każde działanie inżynierów Google, którzy uzyskali dostęp do Twoich danych lub zasobów wewnątrz Twojego projektu (np. podczas rozwiązywania zgłoszenia do supportu). Logi te zawierają istotne informacje: powód dostępu (np. zgłoszenie techniczne), lokalizację inżyniera, czas dostępu oraz zakres (do jakich zasobów). Jest to kluczowe narzędzie dla organizacji z branż regulowanych, które muszą wykazywać pełną kontrolę nad dostępem do swoich danych.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Klienci korporacyjni przetwarzający wrażliwe dane w chmurze wymagają pełnej widoczności działań personelu dostawcy chmury (Google).
+- **Access Transparency (Przejrzystość Dostępu) (B):** Jest to unikalna usługa Google Cloud, która generuje logi w czasie zbliżonym do rzeczywistego, gdy inżynierowie lub pracownicy wsparcia technicznego Google uzyskują dostęp do danych klienta (np. w celu rozwiązania zgłoszenia serwisowego lub błędu systemu). Logi te zawierają informacje o powodzie dostępu, lokalizacji pracownika Google oraz podjętych przez niego działaniach, zapewniając pełną przejrzystość i zgodność z regulacjami.
 
-Dlaczego pozostałe są błędne:
-A (Cloud Audit Logs): Audytowe logi rejestrują działania TWOICH użytkowników, aplikacji i systemów wewnątrz Twojego projektu. Nie pokazują one działań podejmowanych "od wewnątrz" przez zespół Google w ramach obsługi infrastruktury.
-C (Access Approval): To usługa "aktywna" – pozwala Ci zatwierdzić lub odrzucić prośbę o dostęp, *zanim* inżynier Google uzyska dostęp. Pytanie pyta o *widoczność* działań (logs), a nie o mechanizm kontroli przed faktem.
-D (Security Command Center - SCC): SCC to centralny dashboard bezpieczeństwa, który agreguje alerty (znaleziska) dotyczące podatności i zagrożeń. Choć może wyświetlać powiadomienia, nie jest źródłem logów dla działań personelu Google.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Cloud Audit Logs:** Rejestrują operacje wykonywane przez samego klienta (jego użytkowników i konta usługowe) na zasobach GCP, nie rejestrują domyślnie wewnętrznych działań administracyjnych personelu Google na danych klienta.
+- **C. Access Approval (Zatwierdzanie Dostępu):** Działa o krok dalej niż Access Transparency – zamiast tylko logować dostęp, Access Approval pozwala klientowi na aktywne zatwierdzenie lub odrzucenie wniosku pracownika Google o dostęp do danych przed jego udzieleniem.
+- **D. Security Command Center:** To platforma zarządzania podatnościami i zagrożeniami bezpieczeństwa w zasobach klienta, nie zajmuje się audytowaniem personelu Google.
 
-Wskazówki egzaminacyjne:
-- "Actions taken by Google employees" + "on your data": Zawsze szukaj "Access Transparency".
-- "Visibility" / "Audit": Jeśli pytanie pyta o logi działań pracowników Google – Access Transparency.
-- Eliminacja: Jeśli pytanie pyta o Twoich użytkowników – Cloud Audit Logs. Jeśli o aktywne blokowanie dostępu inżynierom – Access Approval.
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Odróżniaj dwie kluczowe usługi zgodnościowe w GCP:
+  - **Access Transparency:** Widoczność i logowanie działań inżynierów Google na Twoich danych (audyt po fakcie).
+  - **Access Approval:** Aktywna akceptacja/blokada dostępu inżynierów Google przed wykonaniem operacji (kontrola prewencyjna).
 
-Dokumentacja:
-<a href="https://cloud.google.com/access-transparency" target="_blank">https://cloud.google.com/access-transparency</a>
+**4. Reguły wyboru odpowiedzi:**
+- Widoczność działań pracowników Google -> Access Transparency.
+- Wymóg wyrażenia zgody na dostęp inżyniera Google -> Access Approval.
+
+**5. Dodatkowe źródła:**
+- Access Transparency overview: https://cloud.google.com/access-transparency/docs/overview
 </pre>
+
 </div>
 <div class="ai-analysis-container d-none"  >
 <h2>Analiza i Podsumowanie Dyskusji (AI)</h2>

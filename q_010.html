@@ -90,24 +90,27 @@ Your team needs to obtain a unified log view of all development cloud projects i
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: A**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Wymaganiem jest zebranie logów z wielu projektów rozwojowych (development) znajdujących się pod wspólnym folderem w organizacji (`folders/NONPROD`) i przesłanie ich do systemu SIEM za pośrednictwem Pub/Sub:
+- **Eksport logów na poziomie folderu do tematu Cloud Pub/Sub w dedykowanym projekcie SIEM, z włączoną opcją includeChildren (A):** Log sink (odbiornik logów) utworzony na poziomie folderu z właściwością `includeChildren=True` automatycznie zbiera logi ze wszystkich projektów i podfolderów znajdujących się pod tym folderem. Przesłanie ich do jednego tematu Pub/Sub w dedykowanym projekcie pozwala systemowi SIEM na łatwą subskrypcję i pobieranie danych z jednego miejsca.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **B. Cloud Storage sink z poziomem billingAccounts:** Konto rozliczeniowe (billing account) nie grupuje zasobów w sposób logiczny dla celów bezpieczeństwa, a Cloud Storage (GCS) jest rozwiązaniem wsadowym (batch), nie nadającym się do przesyłania logów w czasie rzeczywistym do SIEM.
+- **C. Eksport logów w każdym projekcie osobno:** Wymagałoby to ręcznej konfiguracji sinków w setkach projektów, co jest nieefektywne, trudne do zarządzania i audytu.
+- **D. Publicznie współdzielony bucket Cloud Storage:** Udostępnianie publiczne logów bezpieczeństwa narusza podstawowe zasady poufności i stwarza ogromne zagrożenie wycieku danych wrażliwych.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Zbiorczy eksport logów w GCP realizuje się na poziomie **Folderu** lub **Organizacji** z parametrem **`includeChildren=True`** (tzw. Aggregated Sinks).
+- Integracja z systemami SIEM w czasie rzeczywistym prawie zawsze opiera się na **Cloud Pub/Sub**.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Wiele projektów w jednym folderze -> Aggregated Sink na poziomie Folderu.
+- Integracja z SIEM -> Pub/Sub.
+
+**5. Dodatkowe źródła:**
+- Collate and routing organization logs: https://cloud.google.com/logging/docs/routing/monitored-resources
 </pre>
 
 </div>

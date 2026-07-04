@@ -89,24 +89,26 @@ Your company is using GSuite and has developed an application meant for internal
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: A**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Celem jest uniemożliwienie zewnętrznemu atakującemu dostępu do wewnętrznej aplikacji App Engine, nawet w przypadku przejęcia/skompromitowania hasła pracownika:
+- **Wymuszenie dwuskładnikowego uwierzytelniania (2-Factor Authentication / 2SV) w G Suite dla wszystkich użytkowników (A):** W modelu tożsamości opartym na kontach Google (G Suite/Workspace), autoryzacja do aplikacji App Engine przechodzi przez ekrany logowania Google. Wdrożenie 2FA (MFA) sprawia, że samo skradzione hasło jest bezużyteczne dla napastnika – do zalogowania wymagany jest drugi składnik (np. klucz bezpieczeństwa U2F, aplikacja uwierzytelniająca lub kod SMS).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **B. Skonfigurowanie Cloud IAP:** IAP jest świetnym narzędziem do kontroli dostępu, ale IAP opiera się na uwierzytelnieniu konta Google. Jeśli hasło użytkownika wyciekło, a na koncie nie ma włączonego MFA, atakujący zaloguje się do konta Google i bez przeszkód ominie bramkę IAP.
+- **C. G Suite Password Sync (GSPS):** GSPS synchronizuje hasła z Active Directory do Google Workspace, ale nie dodaje żadnego dodatkowego składnika uwierzytelniania chroniącego przed skompromitowanym hasłem.
+- **D. Skonfigurowanie Cloud VPN:** VPN chroni na poziomie sieciowym, ale nie uniemożliwi zalogowania się z przejętymi poświadczeniami bezpośrednio przez przeglądarkę z dowolnego urządzenia podłączonego do internetu (App Engine ma publiczne punkty końcowe).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Pułapka: Wielu inżynierów wybiera IAP (B), ponieważ jest to usługa bezpieczeństwa sieciowego w GCP. IAP kontroluje *kto* ma dostęp, ale to **MFA (Multi-Factor Authentication)** zapewnia ochronę tożsamości w przypadku przejęcia hasła.
+- Pytanie wyraźnie zaznacza: "even when an employee's password has been compromised" -> Odpowiedzią musi być mechanizm zabezpieczający sam proces logowania (MFA/2FA).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Ochrona przed skradzionym hasłem -> Dwuetapowa weryfikacja / 2-Factor Authentication.
+
+**5. Dodatkowe źródła:**
+- Google Workspace 2-Step Verification: https://support.google.com/a/answer/175197
 </pre>
 
 </div>

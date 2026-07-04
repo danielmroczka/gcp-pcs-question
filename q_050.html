@@ -89,24 +89,28 @@ Your company has deployed an application on Compute Engine. The application is a
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: D**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Wymagania dotyczące Load Balancera to:
+- Równoważenie obciążenia dla ruchu niebędącego ruchem HTTP/HTTPS (port 587 - SMTP).
+- Wymóg szyfrowania TLS zakończonego (terminowanego) na Load Balancerze (SSL termination).
+- **SSL Proxy Load Balancing (D):** Jest to globalny Load Balancer przeznaczony dla ruchu szyfrowanego SSL/TLS nie-HTTP (takiego jak SMTP na porcie 587). SSL Proxy przyjmuje połączenie SSL od klienta, deszyfruje je na brzegu sieci Google przy użyciu zainstalowanego certyfikatu i przesyła czysty ruch TCP do instancji backendowych w chmurze. Zapewnia to centralne zarządzanie certyfikatami i odciąża procesory maszyn wirtualnych.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Network Load Balancing (NLB):** Działa w warstwie 4 i nie ma możliwości deszyfrowania ani terminacji SSL/TLS na poziomie Load Balancera. Przekazuje zaszyfrowany ruch bezpośrednio do maszyn backendowych, co zmusza do instalacji certyfikatów na każdej maszynie.
+- **B. HTTP(S) Load Balancing:** Działa w warstwie 7, ale obsługuje wyłącznie ruch protokołów HTTP i HTTPS. Nie może obsługiwać innych protokołów TCP takich jak bezpieczny SMTP na porcie 587.
+- **C. TCP Proxy Load Balancing:** Równoważy ruch TCP nie-HTTP i terminuje połączenia TCP na LB, ale nie obsługuje natywnej terminacji i deszyfrowania SSL/TLS przy użyciu certyfikatów w taki sposób jak SSL Proxy.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Słowo-klucz: **secured using TLS** (szyfrowanie SSL) oraz **terminated by the Load Balancer** (terminacja na LB) dla ruchu nie-HTTP (port 587). Prawidłową odpowiedzią jest **SSL Proxy Load Balancing**.
+- Jeśli ruch byłby czystym TCP bez deszyfrowania -> TCP Proxy. Jeśli ruchem byłby HTTPS -> HTTP(S) LB.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Szyfrowanie SSL (nie-HTTP) + terminacja na Load Balancerze -> SSL Proxy Load Balancer.
+
+**5. Dodatkowe źródła:**
+- SSL Proxy Load Balancing overview: https://cloud.google.com/load-balancing/docs/ssl
 </pre>
 
 </div>

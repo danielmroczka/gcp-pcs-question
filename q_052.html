@@ -92,24 +92,28 @@ Which two tasks should your team perform to handle this request? (Choose two.)
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: AD**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Cel: Zablokowanie wszystkim użytkownikom możliwości samodzielnego tworzenia nowych projektów w organizacji GCP i przekazanie tego uprawnienia wyłącznie dedykowanemu zespołowi DevOps.
+W chmurze GCP uprawnienie do tworzenia projektów na poziomie organizacji jest kontrolowane przez rolę IAM o nazwie **Project Creator (roles/resourcemanager.projectCreator)**. Aby zrealizować to wymaganie:
+- **A. Usunięcie wszystkich użytkowników z roli Project Creator na poziomie organizacji:** Domyślnie Google nadaje uprawnienie do tworzenia projektów wszystkim użytkownikom w domenie. Usunięcie tej roli blokuje tę możliwość dla ogółu pracowników.
+- **D. Przypisanie roli Project Creator na poziomie organizacji wyłącznie wybranej grupie użytkowników (zespołowi DevOps):** Dzięki temu tylko członkowie grupy DevOps będą mieli techniczne uprawnienie do zatwierdzania i tworzenia nowych projektów.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **B. Użycie Organization Policy:** Chociaż polityka organizacji pozwala na wiele ograniczeń, nie służy do bezpośredniego odbierania i nadawania uprawnień administracyjnych dla konkretnych grup użytkowników (od tego jest IAM).
+- **C. Grant Project Editor na poziomie organizacji:** Rola Project Editor na poziomie organizacji dałaby użytkownikom pełne prawa do edycji wszystkich istniejących projektów i zasobów w firmie, co jest ogromnym zagrożeniem dla bezpieczeństwa i nie ogranicza tworzenia nowych projektów.
+- **E. Rola billing account creator:** Pozwala na tworzenie nowych kont rozliczeniowych, a nie projektów w strukturze organizacji.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Do tworzenia projektów w GCP wymagana jest rola **Project Creator** przypisana na poziomie Organizacji (Organization level).
+- Domyślnie rola ta jest przypisana do grupy `everyone` w nowej organizacji Google Workspace. Pierwszym krokiem zabezpieczania organizacji jest jej usunięcie.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Blokowanie/zezwolenie na tworzenie projektów -> Rola Project Creator na poziomie Organizacji.
+
+**5. Dodatkowe źródła:**
+- Managing default organization roles: https://cloud.google.com/resource-manager/docs/creating-managing-organization#default_organization_roles
 </pre>
 
 </div>

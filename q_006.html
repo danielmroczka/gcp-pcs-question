@@ -90,24 +90,30 @@ A customer needs to launch a 3-tier internal web application on Google Cloud Pla
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: B**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Wymagania klienta to:
+- Aplikacja jest **wewnętrzna** (internal).
+- Dostęp może być dozwolony tylko ze znanych, bezpiecznych adresów IP (CIDR).
+- Klient akceptuje ryzyko SYN flood i chce skorzystać z natywnej ochrony GCP.
+Dla aplikacji wewnętrznej (czyli bez zewnętrznego Load Balancera) najlepszym i najbardziej bezpośrednim rozwiązaniem spełniającym te kryteria są **VPC Firewall Rules (B)**. Reguły zapory sieciowej VPC filtrują ruch na poziomie hypervisora (dla każdej instancji) i pozwalają na precyzyjne ograniczenie źródłowych adresów IP (Source CIDR). Dodatkowo, mechanizm śledzenia połączeń (connection tracking) w zapaporze sieciowej VPC zapewnia wbudowaną ochronę przed atakami TCP SYN flood poprzez odrzucanie nieprawidłowych pakietów.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Cloud Armor:** Cloud Armor to usługa ochrony przed atakami DDoS i WAF, ale działa wyłącznie z zewnętrznymi load balancerami (External HTTP(S) Load Balancing). Nie może być stosowana do filtrowania ruchu wewnętrznego.
+- **C. Cloud IAM:** Służy do autoryzacji użytkowników i kont usługowych (dostęp do API GCP), a no nie filtruje ruchu sieciowego na poziomie adresów IP.
+- **D. Cloud CDN:** Służy do buforowania treści statycznych i optymalizacji wydajności dla użytkowników zewnętrznych, nie filtruje dostępu po IP i nie chroni sieci wewnętrznych.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Słowo-klucz: **Internal** web application. Cloud Armor odpada, ponieważ chroni tylko zasoby wystawione na świat przez Zewnętrzny Load Balancer.
+- Reguły firewall w GCP są stanowe (stateful) i są aplikowane bezpośrednio na interfejsach sieciowych maszyn wirtualnych.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Filtrowanie IP dla ruchu wewnętrznego -> VPC Firewall Rules.
+- Filtrowanie IP/WAF dla ruchu zewnętrznego -> Cloud Armor.
+
+**5. Dodatkowe źródła:**
+- Dokumentacja VPC Firewall Rules: https://cloud.google.com/vpc/docs/firewalls
 </pre>
 
 </div>

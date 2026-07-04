@@ -89,24 +89,30 @@ A customer's company has multiple business units. Each business unit operates in
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: A**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Wymagania to:
+- Organizacja projektów na podstawie jednostek biznesowych (Business Units).
+- Przypisywanie różnych uprawnień IAM dla każdego działu.
+- Pełna widoczność wszystkich projektów w firmie (brak Shadow IT).
+Zalecaną strukturą zarządzania zasobami w GCP jest:
+- **Utworzenie węzła organizacji (Organization Node) i folderów dla każdej jednostki biznesowej (A):** Węzeł organizacji reprezentuje firmę w GCP. Pod nim tworzy się foldery (np. Dział Finansowy, Dział HR), które odzwierciedlają strukturę firmy. Pozwala to na dziedziczenie uprawnień IAM (przypisanie roli na poziomie folderu daje dostęp do wszystkich projektów wewnątrz) i zapewnia centralnemu zespołowi pełny wgląd we wszystkie zasoby.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **B. Samodzielne projekty z kontami gmail.com:** Używanie prywatnych kont gmail.com uniemożliwia jakąkolwiek centralną kontrolę, audyt czy zarządzanie tożsamościami. Jest to ogromna podatność bezpieczeństwa.
+- **C. Etykiety (Labels):** Etykiety są przydatne do celów rozliczeniowych i filtrowania, ale nie służą do logicznej organizacji hierarchii zasobów i nie można na ich podstawie przydzielać uprawnień IAM w tak bezpieczny sposób jak przez foldery.
+- **D. Podział sieciowy (VPC):** Separacja sieciowa w VPC kontroluje ruch sieciowy, ale nie organizuje projektów z punktu widzenia uprawnień IAM dla użytkowników administracyjnych.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Hierarchia zasobów w GCP wygląda następująco: **Organizacja -> Foldery -> Projekty -> Zasoby**.
+- Przypisanie uprawnień IAM na wyższym poziomie (np. Folder) powoduje automatyczne dziedziczenie tych uprawnień w dół.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Podział i zarządzanie wieloma zespołami w firmie -> Węzeł Organizacji + struktura Folderów.
+
+**5. Dodatkowe źródła:**
+- GCP Resource Hierarchy: https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy
 </pre>
 
 </div>

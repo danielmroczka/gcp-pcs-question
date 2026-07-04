@@ -89,24 +89,26 @@ You want to evaluate your organization's Google Cloud instance for PCI complianc
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: A**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Podczas audytu zgodności z normą PCI DSS w chmurze, należy określić, które zabezpieczenia są wdrażane bezpośrednio przez infrastrukturę Google Cloud, a które leżą po stronie klienta:
+- **Google Cloud Platform: Customer Responsibility Matrix (Macierz Odpowiedzialności Klienta) (A):** Jest to oficjalny dokument dostarczany przez Google Cloud. Mapuje on wymagania PCI DSS i jasno określa podział obowiązków (np. które wymagania są w pełni pokrywane przez Google, które są współdzielone, a które leżą wyłącznie po stronie klienta). Pozwala to audytorowi na szybką weryfikację wbudowanych zabezpieczeń Google (inherent controls).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **B. PCI DSS Requirements and Security Assessment Procedures:** Jest to ogólny dokument organizacji PCI SSC opisujący sam standard, nie zawiera specyficznych informacji o architekturze i wbudowanych zabezpieczeniach infrastruktury Google Cloud.
+- **C. PCI SSC Cloud Computing Guidelines:** To ogólny zbiór dobrych praktyk dla systemów chmurowych od konsorcjum PCI, nie odnosi się bezpośrednio do implementacji w GCP.
+- **D. Dokumentacja Compute Engine:** Zawiera instrukcje techniczne konfiguracji maszyn VM, ale nie jest formalnym dokumentem audytowym opisującym podział odpowiedzialności PCI.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Każdy główny dostawca chmury udostępnia **Shared Responsibility Matrix** (lub Customer Responsibility Matrix) dla różnych norm (PCI, SOC, ISO), aby ułatwić klientom przechodzenie audytów zewnętrznych.
+- Dokument ten wskazuje tzw. **inherent controls** (zabezpieczenia wbudowane/dziedziczone od dostawcy).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Podział obowiązków PCI / audyt zabezpieczeń Google -> Customer Responsibility Matrix.
+
+**5. Dodatkowe źródła:**
+- Google Cloud Compliance Reports Manager: https://cloud.google.com/security/compliance/compliance-reports-manager
 </pre>
 
 </div>

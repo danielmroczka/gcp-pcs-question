@@ -90,24 +90,27 @@ Your team needs to make sure that a Compute Engine instance does not have access
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: AC**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+Aby całkowicie zablokować instancji Compute Engine (VM) dostęp do internetu oraz do jakichkolwiek usług lub API Google, konieczne jest wyłączenie dwóch kluczowych ustawień sieciowych:
+- **Public IP (A):** Brak przypisanego publicznego adresu IP uniemożliwia bezpośrednie, dwukierunkowe przesyłanie pakietów między instancją a zewnętrznym internetem. Instancja bez publicznego IP nie może inicjować połączeń ze światem zewnętrznym, chyba że zastosowano bramę NAT lub proxy.
+- **Private Google Access (C):** Jest to funkcja włączana na poziomie podsieci (subnet), która umożliwia instancjom posiadającym wyłącznie prywatne adresy IP komunikację z publicznymi adresami IP usług i interfejsów API Google (np. Cloud Storage, BigQuery, KMS). Wyłączenie tej opcji gwarantuje, że instancja nie będzie mogła połączyć się z usługami Google przez sieć prywatną.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **B. IP Forwarding (Przekazywanie IP):** Umożliwia instancji odbieranie i przekazywanie pakietów zaadresowanych do innych maszyn (wymagane np. przy budowie własnych routerów lub programowych bram NAT). Wyłączenie tego ustawienia nie ogranicza bezpośredniego dostępu samej instancji do internetu ani API Google.
+- **D. Static routes (Trasy statyczne):** Służą do kierowania ruchu wewnątrz sieci VPC i poza nią (np. do sieci lokalnej przez VPN). Choć usunięcie tras mogłoby zakłócić routing, samo wyłączenie tras statycznych nie jest natywną metodą blokowania dostępu do internetu ani usług Google (który domyślnie jest obsługiwany przez trasę domyślną i Private Google Access).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Jeśli na egzaminie pojawia się warunek braku dostępu do *Google Services / APIs* z instancji bez publicznego IP, kluczowym pojęciem zawsze jest **Private Google Access (PGA)**.
+- Pamiętaj, że usługi Google (takie jak Cloud Storage czy BigQuery) posiadają publiczne adresy IP, a PGA to jedyny sposób, by maszyny z prywatnym IP mogły do nich dotrzeć bez bramy NAT.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Blokowanie internetu -> Wyłącz Public IP.
+- Blokowanie usług Google (bez NAT) -> Wyłącz Private Google Access.
+
+**5. Dodatkowe źródła:**
+- Dokumentacja Google Cloud: https://cloud.google.com/vpc/docs/private-google-access
 </pre>
 
 </div>

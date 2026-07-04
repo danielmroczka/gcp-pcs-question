@@ -90,24 +90,26 @@ A customer's data science group wants to use Google Cloud Platform (GCP) for the
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+**Poprawna odpowiedź: D**
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+**1. Kompleksowe wyjaśnienie poprawnej odpowiedzi:**
+W tej sytuacji mamy do czynienia z tzw. "Shadow IT" – inny dział firmy bez wiedzy działu IT założył konto Google (np. korzystając z G Suite) na tej samej domenie firmowej. Chcemy wdrożyć Cloud Identity i zintegrować logowanie przez SAML z zachowaniem ciągłości:
+- **Poproszenie kierownictwa o zlokalizowanie istniejącego konta/usługi oraz współpraca z obecnym administratorem Super Administrator (D):** Jest to najbardziej dyplomatyczne, najszybsze i najmniej inwazyjne podejście. Pozwala na przejęcie lub współdzielenie istniejącego konta organizacji bez zakłócania pracy działu, który już z niego korzysta.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+**2. Wyjaśnienie niepoprawnych odpowiedzi:**
+- **A. Domain Contestation Process (Proces kwestionowania domeny):** Jest to procedura długa i inwazyjna, stosowana w ostateczności, gdy nie ma kontaktu z właścicielem konta. W tym przypadku administratorzy są w tej samej firmie, więc kwestionowanie domeny wewnątrz własnej organizacji jest bezcelowe.
+- **B. Rejestracja nowej domeny:** Narusza to wymóg firmowy (użycie oficjalnej domeny) i utrudnia proces uwierzytelniania użytkowników, zmuszając ich do korzystania z innych adresów e-mail.
+- **C. Provision manager's account as Super Administrator:** Zmuszenie Google do nadania uprawnień Super Admina bez zgody i wiedzy obecnego właściciela nie jest możliwe bez przejścia weryfikacji domeny lub kontaktu z obecnym administratorem.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+**3. Wskazówki i pułapki egzaminacyjne (Tips & Tricks):**
+- Egzaminy Google Cloud promują rozwiązania oparte na współpracy biznesowej i minimalizacji zakłóceń operacyjnych ("least disruption").
+- Jeśli domena jest już zajęta w Google (np. przez G Suite), oznacza to, że organizacja w Google już istnieje. Pierwszym krokiem jest zawsze kontakt z jej administratorem (Super Admin).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+**4. Reguły wyboru odpowiedzi:**
+- Domena już w użyciu w Google -> Współpraca z istniejącym Super Administratorem organizacji.
+
+**5. Dodatkowe źródła:**
+- Google Cloud Identity Help - Domain in use: https://support.google.com/a/answer/183374
 </pre>
 
 </div>
