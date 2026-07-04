@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pl">
 <head>
 <meta charset="utf-8"/>
@@ -51,7 +52,7 @@
     .ai-analysis-container { width: 100% !important; max-width: 100% !important; }
 </style>
 <title>PCS 71</title>
-<link rel="icon" type="image/x-icon" href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico">
+<link href="https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body class="home2">
 <div class="q-page">
@@ -72,7 +73,6 @@ You need to create a Service Account that can list Compute Engine instances. You
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Create a custom role with compute.instances.list permission.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Grant Compute Viewer role.</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Grant Project Viewer role.</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -86,56 +86,56 @@ You need to create a Service Account that can list Compute Engine instances. You
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4 d-none"  >
-
-
+<div class="q-card q-answer mb-4 d-none">
 <h2>Wyjaśnienie</h2>
-<pre>
-**Potwierdzona odpowiedź: AC**
+<pre>1. Prawidłowa odpowiedź lub odpowiedzi:
+B (Create a custom role with compute.instances.list permission.)
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Prawidłowa odpowiedź to B, ponieważ najlepiej odzwierciedla ona przestrzeganie zasady najniższych uprawnień (principle of least privilege) oraz ogólnie zalecane praktyki Google Cloud Platform (GCP) w zarządzaniu tożsamością i dostępem (Identity and Access Management – IAM).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Service Account (SA) w GCP to specjalny rodzaj konta, które jest wykorzystywane przez aplikacje i instancje Compute Engine do uwierzytelniania się i autoryzowania dostępu do zasobów GCP. Zamiast logowania się jako użytkownik końcowy, aplikacja używa Service Account do wykonania wywołań API do usług GCP.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+Zasada najniższych uprawnień stanowi, że każdej tożsamości (w tym Service Account) należy przyznać tylko te uprawnienia, które są absolutnie niezbędne do wykonania jej zadań, i żadnych więcej. W tym scenariuszu Service Account potrzebuje tylko jednej konkretnej możliwości: listowania instancji Compute Engine. Odpowiada za to uprawnienie compute.instances.list.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
-</pre>
+IAM w GCP działa w oparciu o role, które są zbiorami uprawnień. Istnieją role predefiniowane (predefined roles), które obejmują typowe scenariusze użycia, oraz role niestandardowe (custom roles), które pozwalają na tworzenie własnych, bardzo precyzyjnych zestawów uprawnień.
+
+Tworzenie roli niestandardowej z wyłącznie uprawnieniem compute.instances.list jest dokładnie tym, czego wymaga zasada najniższych uprawnień. Zapewnia to, że Service Account będzie w stanie wykonać swoje zadanie – listować instancje – ale nie będzie miało żadnych dodatkowych uprawnień, takich jak tworzenie, aktualizowanie, usuwanie instancji czy dostęp do innych zasobów Compute Engine (np. dysków, sieci, obrazów) czy innych usług GCP. To minimalizuje potencjalne ryzyko bezpieczeństwa, ponieważ nawet w przypadku skompromitowania Service Account, zakres szkód będzie ograniczony do możliwości listowania instancji. Jest to skalowalne i bezpieczne rozwiązanie, które jest elastyczne i pozwala na precyzyjne dopasowanie uprawnień do faktycznych potrzeb aplikacji.
+
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+
+A. Use Read Only access for Compute Engine Access Scope.
+   Ta opcja jest błędna z kilku powodów. Po pierwsze, Access Scopes to starszy mechanizm kontroli dostępu, który jest specyficzny dla instancji Compute Engine i służy do definiowania domyślnych zakresów OAuth 2.0 dla żądań API wysyłanych z instancji. Nie są one podstawowym sposobem zarządzania uprawnieniami IAM dla Service Account. Uprawnienia IAM (czyli to, jakie role są przypisane do Service Account) są nadrzędne wobec Access Scopes. Jeśli Service Account ma przyznane role IAM, które zapewniają dostęp do konkretnego interfejsu API, i instancja ma odpowiedni Access Scope, który umożliwia generowanie tokenów OAuth dla tego interfejsu API, wówczas instancja może uzyskać dostęp. Jednakże, Access Scopes są gruboziarniste. "Read Only access for Compute Engine" (odpowiednik scope'u https://www.googleapis.com/auth/compute.readonly) zapewnia dostęp tylko do operacji odczytu (GET, LIST) dla WSZYSTKICH zasobów Compute Engine, a nie tylko instancji. Oznacza to, że instancja mogłaby listować nie tylko instancje, ale także dyski, obrazy, sieci, reguły firewall itp., co narusza zasadę najniższych uprawnień, jeśli celem jest tylko listowanie instancji. W nowoczesnych architekturach preferuje się zarządzanie uprawnieniami bezpośrednio za pomocą ról IAM przypisanych do Service Account, a Access Scopes są ustawiane na minimalne wartości (np. cloud-platform) lub pomijane na rzecz precyzyjnych ról IAM.
+
+C. Grant Compute Viewer role.
+   Rola Compute Viewer (roles/compute.viewer) jest predefiniowaną rolą IAM, która, jak sama nazwa wskazuje, zapewnia uprawnienia do przeglądania (odczytu) wszystkich zasobów Compute Engine. Ta rola zawiera oczywiście uprawnienie compute.instances.list, ale także wiele innych uprawnień, takich jak compute.disks.list, compute.images.get, compute.networks.list, compute.firewalls.list i wiele innych. Chociaż Service Account z tą rolą będzie mogło listować instancje, będzie miało również dostęp do listowania i przeglądania praktycznie wszystkich innych zasobów Compute Engine. Jest to szerszy zestaw uprawnień niż wymagany przez zadanie, co stanowi naruszenie zasady najniższych uprawnień. W kontekście Google-recommended practices, zawsze należy dążyć do przyznawania jak najmniejszych uprawnień, a predefiniowane role często są zbyt szerokie dla bardzo specyficznych zadań.
+
+D. Grant Project Viewer role.
+   Rola Project Viewer (roles/viewer) to bardzo szeroka predefiniowana rola IAM, która zapewnia dostęp do odczytu WSZYSTKICH zasobów w całym projekcie GCP, we WSZYSTKICH usługach. Obejmuje to oczywiście uprawnienie compute.instances.list, ale także listowanie zasobników Cloud Storage, odczytywanie danych z BigQuery, przeglądanie konfiguracji sieci VPC, listowanie użytkowników IAM, itp. Przyznanie tej roli Service Account, które ma jedynie listować instancje Compute Engine, jest drastycznym naruszeniem zasady najniższych uprawnień i stanowi poważne ryzyko bezpieczeństwa. W przypadku kompromitacji takiego Service Account, intruz uzyskałby bardzo szeroki dostęp do odczytu danych i konfiguracji w całym projekcie. Nigdy nie jest to zalecana praktyka dla tak specyficznego zadania.
+
+4. Wskazówki, hinty, tips and tricks:
+Na egzaminie Google Cloud Certified Professional Cloud Security Engineer, pytania dotyczące zarządzania tożsamością i dostępem są kluczowe. Oto kilka wskazówek:
+- Zawsze szukaj zasady najniższych uprawnień (principle of least privilege): Jeśli pytanie dotyczy nadawania uprawnień, a w opcjach jest możliwość precyzyjnego ograniczenia dostępu do minimalnie wymaganych operacji, zazwyczaj to jest prawidłowa odpowiedź. Google promuje minimalizowanie uprawnień jako podstawę bezpiecznej konfiguracji.
+- Różnicuj role predefiniowane od niestandardowych: Role predefiniowane są wygodne, ale często oferują szerszy zakres uprawnień niż jest to ściśle konieczne. Jeśli w pytaniu jest mowa o bardzo konkretnym uprawnieniu (np. 'list instances'), a w opcjach pojawia się 'custom role' z tym uprawnieniem, jest to silna wskazówka na prawidłową odpowiedź.
+- Rozumiej Access Scopes: Pamiętaj, że Access Scopes są starszym, gruboziarnistym mechanizmem kontroli dostępu specyficznym dla instancji Compute Engine, który działa na poziomie OAuth, a nie bezpośrednio IAM. Współczesne, zalecane praktyki to precyzyjne role IAM przypisywane bezpośrednio Service Account. Jeśli Access Scopes są opcją, a dostępne są bardziej granularne role IAM, zazwyczaj Access Scopes nie będą najlepszym wyborem.
+- Uważaj na pułapki szerokich ról: Opcje takie jak "Project Viewer", "Project Editor" lub "Project Owner" są niemal zawsze niepoprawne, jeśli celem jest nadanie dostępu do pojedynczego zasobu lub usługi, ponieważ nadają one zbyt szerokie uprawnienia w całym projekcie. Zawsze zastanów się, czy rola nie jest zbyt obszerna.
+- Zrozumienie Service Accounts: Pamiętaj, że Service Accounts to tożsamości dla aplikacji, a nie dla ludzi. Ich uprawnienia powinny być precyzyjnie dostosowane do zadań automatycznych.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Jeśli pytanie wspomina o "Google-recommended practices", "principle of least privilege", "minimal permissions" lub "minimal access" w kontekście nadawania uprawnień dla Service Account lub innej tożsamości, szukaj odpowiedzi, która zapewnia najbardziej granularny i ograniczony dostęp.
+- Gdy wymagane jest bardzo specyficzne uprawnienie, a jego nazwa jest explicite podana (np. "compute.instances.list", "storage.objects.create"), wtedy często najlepszym wyborem jest "create a custom role" zawierająca tylko to jedno lub kilka niezbędnych uprawnień.
+- Jeśli w opcjach pojawiają się "Access Scopes" obok "IAM roles", a celem jest precyzyjna kontrola dostępu dla Service Account, zazwyczaj należy wybrać opcję z "IAM roles", ponieważ są one bardziej nowoczesnym i granularnym mechanizmem.
+- Gdy pytanie dotyczy "listowania" lub "przeglądania" zasobów, a dostępne są role "Viewer" (np. Compute Viewer, Storage Object Viewer), rozważ je, ale zawsze sprawdź, czy nie są one zbyt szerokie i czy nie ma możliwości stworzenia roli niestandardowej z jeszcze mniejszym zakresem.
+- Unikaj opcji, które nadają role o zasięgu projektowym (np. Project Viewer, Editor, Owner), chyba że pytanie wyraźnie wskazuje na potrzebę szerokiego dostępu na poziomie projektu. To zawsze jest ostatnia deska ratunku i poważne naruszenie bezpieczeństwa dla większości scenariuszy.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/iam/docs/overview" target="_blank">IAM Overview</a>
+<a href="https://cloud.google.com/iam/docs/understanding-custom-roles" target="_blank">Understanding custom roles</a>
+<a href="https://cloud.google.com/iam/docs/service-accounts" target="_blank">Service accounts</a>
+<a href="https://cloud.google.com/compute/docs/access/service-accounts" target="_blank">Service accounts for VMs</a>
+<a href="https://cloud.google.com/blog/products/identity-security/simplify-access-management-with-fine-grained-iam-roles-for-cloud-sql-and-compute-engine" target="_blank">Simplify access management with fine-grained IAM roles for Cloud SQL and Compute Engine</a></pre>
+</div>
 
 </div>
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
-<div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> To pytanie sprawdza znajomość hierarchii uprawnień i umiejętność stosowania zasady Least Privilege. W GCP zawsze dążymy do użycia jak najwęższej roli (w tym ról Custom), zamiast polegać na zbyt szerokich rolach predefiniowanych.</p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/iam/docs/creating-custom-roles" target="_blank">https://cloud.google.com/iam/docs/creating-custom-roles</a></li>
-</ul>
-</div>
-</div>
-</div>
-
-
-
-
-
-
-
-
-
-
 <script src="navigation.js"></script></body>
-
-
 </html>

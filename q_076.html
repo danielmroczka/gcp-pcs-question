@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pl">
 <head>
 <meta charset="utf-8"/>
@@ -85,53 +86,56 @@ Your company is storing sensitive data in Cloud Storage. You want a key generate
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4 d-none"  >
-
-
+<div class="q-card q-answer mb-4 d-none">
 <h2>Wyjaśnienie</h2>
-<pre>
-**Potwierdzona odpowiedź: AC**
+<pre>1. Prawidłowa odpowiedź lub odpowiedzi:
+C (Use customer-supplied encryption keys to manage the data encryption key (DEK).)
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Prawidłowa odpowiedź C, czyli użycie kluczy szyfrujących dostarczanych przez klienta (Customer-Supplied Encryption Keys - CSEK) do zarządzania kluczem szyfrującym dane (Data Encryption Key - DEK), jest jedynym rozwiązaniem spełniającym wymagania scenariusza. Scenariusz jasno określa, że firma chce użyć klucza wygenerowanego w infrastrukturze lokalnej (on-premises) w procesie szyfrowania danych przechowywanych w Cloud Storage.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Mechanizm CSEK w Google Cloud Storage działa w następujący sposób:
+  Klient generuje klucz szyfrujący (w tym przypadku on-premises), który jest przeznaczony do szyfrowania danych obiektów.
+  Zamiast przechowywać ten klucz w Google Cloud Key Management Service (KMS) lub pozwolić Google na zarządzanie nim, klient dostarcza ten klucz bezpośrednio z każdym żądaniem operacji na obiekcie (upload, download, rewrite). Klucz jest dostarczany w nagłówkach HTTP żądania, zaszyfrowany za pomocą TLS/SSL, co zapewnia jego bezpieczeństwo w transporcie.
+  Cloud Storage używa tego dostarczonego klucza do szyfrowania lub deszyfrowania danych obiektu. Co istotne, Cloud Storage nie przechowuje tego klucza. Po wykonaniu operacji, klucz jest odrzucany z pamięci efemerycznej serwera Cloud Storage. Oznacza to, że Google nigdy nie przechowuje klucza klienta, co jest kluczowe dla firm z bardzo restrykcyjnymi wymogami bezpieczeństwa i kontroli nad kluczami.
+  W tym kontekście, klucz dostarczony przez klienta działa jako DEK dla obiektu, ponieważ jest to klucz, który bezpośrednio szyfruje i deszyfruje dane obiektu.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+Dlaczego jest to zalecana praktyka w tym konkretnym scenariuszu:
+  Zapewnia maksymalną kontrolę: Skoro klucz jest generowany i przechowywany on-premises, klient zachowuje pełną i wyłączną kontrolę nad materiałem klucza. Google nigdy nie ma dostępu do surowego materiału klucza poza chwilą jego użycia do szyfrowania/deszyfrowania.
+  Zgodność z wymaganiami regulacyjnymi: Wiele branż i regulacji wymaga, aby klucze szyfrujące były generowane i zarządzane w infrastrukturze klienta, a nie przez dostawcę chmury. CSEK jest idealnym rozwiązaniem dla takich scenariuszy.
+  Prostota w danym kontekście: W przypadku Cloud Storage, CSEK jest bezpośrednią implementacją użycia klucza zewnętrznego do szyfrowania danych obiektu. Nie wymaga skomplikowanego łańcucha zarządzania kluczami (Key Encryption Key - KEK) w ramach usługi GCP, jeśli celem jest bezpośrednie zastosowanie klucza klienta.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
-</pre>
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+  A. Use the Cloud Key Management Service to manage a data encryption key (DEK).
+     Ta opcja jest niepoprawna, ponieważ stoi w sprzeczności z wymaganiem "key generated on-premises". Jeśli Cloud KMS miałby zarządzać kluczem DEK, to oznaczałoby, że KMS jest odpowiedzialny za cykl życia klucza – jego generowanie, przechowywanie, rotację i usuwanie. Chociaż można importować klucze do KMS, to po imporcie KMS staje się ich menedżerem. Wymóg generowania klucza on-premises i używania go bezpośrednio implikuje, że klient chce zachować pełną kontrolę nad materiałem klucza i nie powierzać jego zarządzania Google KMS. W przypadku CSEK, klient faktycznie zarządza kluczem poza GCP i dostarcza go tylko w momencie potrzeby.
 
+  B. Use the Cloud Key Management Service to manage a key encryption key (KEK).
+     Ta opcja również jest niepoprawna z podobnych powodów co opcja A. W architekturze szyfrowania kopertowego (envelope encryption), KEK jest kluczem, który szyfruje inne klucze (DEK). Jeśli Google KMS miałby zarządzać KEK, to znów materiał klucza KEK znajdowałby się pod zarządzaniem KMS (nawet jeśli zostałby zaimportowany). Scenariusz wyraźnie wskazuje na użycie klucza "generated on-premises" bez sugestii, że ma on być następnie przekazany do zarządzania usłudze GCP. Klient szuka sposobu na bezpośrednie użycie swojego klucza, a nie na włączenie go w łańcuch zarządzany przez KMS. W przypadku, gdyby klucz z on-premises miał być KEK, a jednocześnie zarządzany przez klienta, wymagałoby to rozwiązania zewnętrznego KMS, a nie Google Cloud KMS.
+
+  D. Use customer-supplied encryption keys to manage the key encryption key (KEK).
+     Ta opcja jest niepoprawna i myląca. Koncepcja Customer-Supplied Encryption Keys (CSEK) w Cloud Storage polega na tym, że dostarczony klucz *jest* bezpośrednio używany do szyfrowania danych obiektu. Nie ma tutaj drugiego poziomu szyfrowania, w którym dostarczony klucz CSEK działałby jako KEK, szyfrując wewnętrznie generowany DEK przez Cloud Storage. Gdy używasz CSEK, klucz, który dostarczasz w żądaniu HTTP, jest tym, który szyfruje dane obiektu. Cloud Storage nie generuje wtedy własnego DEK i nie szyfruje go twoim CSEK. Twoje CSEK *jest* DEK dla tego konkretnego obiektu, w sensie klucza bezpośrednio szyfrującego dane obiektu.
+
+4. Wskazówki, hinty, tips and tricks:
+  Zwróć uwagę na słowa kluczowe: W pytaniach egzaminacyjnych na Professional Cloud Security Engineer, słowa takie jak "on-premises", "customer-generated key", "customer maintains full control over key material", "Google never sees/stores the key" niemal zawsze wskazują na Customer-Supplied Encryption Keys (CSEK) lub rozwiązania zewnętrzne (External Key Management - EKM), jeśli dostępne.
+  Rozróżniaj typy kluczy i ich zarządzanie:
+    Google-managed encryption keys (GMEK): Klucze w pełni zarządzane przez Google.
+    Customer-managed encryption keys (CMEK): Klucze generowane i zarządzane w Google Cloud KMS (lub zewnętrznie poprzez Cloud EKM) przez klienta. Google KMS zarządza cyklem życia klucza, ale klient kontroluje polityki IAM.
+    Customer-supplied encryption keys (CSEK): Klucze generowane i zarządzane *poza* Google Cloud. Klient dostarcza klucz z każdym żądaniem. Google nie przechowuje ani nie ma dostępu do materiału klucza poza chwilą jego użycia.
+  Zrozumienie DEK i KEK: DEK (Data Encryption Key) szyfruje bezpośrednio dane. KEK (Key Encryption Key) szyfruje DEK. W kontekście CSEK w Cloud Storage, dostarczony klucz działa jak DEK dla obiektu.
+  Pułapki językowe: Słowo "manage" może być mylące. W przypadku CSEK, klient "zarządza" kluczem w pełni, a "dostarcza" go usłudze Cloud Storage. Opcje z KMS zawsze sugerują, że KMS jest *zarządzający*.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+  Jeśli pytanie mówi o "kluczu wygenerowanym on-premises", a celem jest "użycie tego klucza do szyfrowania danych" w Google Cloud Storage, bez chęci, aby Google zarządzało tym kluczem -&gt; szukaj opcji zawierającej "customer-supplied encryption keys" (CSEK).
+  Gdy celem jest "maksymalna kontrola nad materiałem klucza poza infrastrukturą Google" dla danych w Cloud Storage -&gt; wybierz CSEK.
+  Jeżeli pytanie sugeruje "wykorzystanie Google Cloud KMS" do zarządzania kluczami, nawet tymi importowanymi -&gt; odpowiedzi będą dotyczyć Google Cloud KMS (jako KEK lub DEK w zależności od kontekstu envelope encryption), a nie CSEK, gdzie KMS nie jest zaangażowany w zarządzanie.
+  Jeżeli celem jest "szyfrowanie danych w spoczynku" w Cloud Storage i klient chce "dostarczyć własny, jednorazowy klucz" z każdym żądaniem -&gt; wybierz CSEK.
+
+6. Dodatkowe źródła i dokumentacja:
+  <a href="https://cloud.google.com/storage/docs/encryption/customer-supplied-keys" target="_blank">Szyfrowanie dostarczanymi przez klienta kluczami szyfrującymi (CSEK)</a>
+<a href="https://cloud.google.com/storage/docs/encryption" target="_blank">Szyfrowanie danych w spoczynku</a>
+<a href="https://cloud.google.com/kms/docs/encryption-key-concepts" target="_blank">Pojęcia dotyczące kluczy szyfrujących w Cloud KMS</a>
+<a href="https://cloud.google.com/kms/docs/envelope-encryption" target="_blank">Szyfrowanie kopertowe</a></pre>
 </div>
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
-<div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: C</b></p>
-<p><b>Głęboka analiza:</b> CSEK to rozwiązanie dla organizacji o najwyższych wymogach bezpieczeństwa, które nie ufają (lub nie mogą ufać) dostawcy chmury w zakresie przechowywania kluczy głównych.</p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/storage/docs/encryption/customer-supplied-encryption-keys" target="_blank">https://cloud.google.com/storage/docs/encryption/customer-supplied-encryption-keys</a></li>
-</ul>
-</div>
-</div>
 
-
-
-
-
-
-
-
-<script src="navigation.js"></script></body>
-
-
+<script src="navigation.js"></script></div></body>
 </html>

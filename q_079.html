@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pl">
 <head>
 <meta charset="utf-8"/>
@@ -72,7 +73,6 @@ An organization's security and risk management teams are concerned about where t
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="B">B.</span> Defending against XSS and SQLi attacks</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="C">C.</span> Managing the latest updates and security patches for the Guest OS</li>
 <li class="multi-choice-item"><span class="multi-choice-letter" data-choice-letter="D">D.</span> Encrypting all stored data</li>
-
 </ul>
 </div>
 <a class="btn btn-primary reveal-solution" href="#">Show Suggested Answer</a>
@@ -86,53 +86,54 @@ An organization's security and risk management teams are concerned about where t
 </div>
 </div>
 </div>
-<div class="q-card q-answer mb-4 d-none"  >
-
-
+<div class="q-card q-answer mb-4 d-none">
 <h2>Wyjaśnienie</h2>
-<pre>
-**Potwierdzona odpowiedź: AC**
+<pre>1. Prawidłowa odpowiedź lub odpowiedzi:
+B (Defending against XSS and SQLi attacks)
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Pytanie dotyczy kluczowego zagadnienia w Google Cloud Platform – modelu współodpowiedzialności (Shared Responsibility Model), który definiuje podział obowiązków w zakresie bezpieczeństwa pomiędzy Google a klientem. W zależności od typu usługi (Infrastructure-as-a-Service - IaaS, Platform-as-a-Service - PaaS, Software-as-a-Service - SaaS), zakres odpowiedzialności klienta się zmienia.
+W przypadku App Engine, usługa jest klasyfikowana jako PaaS. Oznacza to, że Google jest odpowiedzialne za bezpieczeństwo "chmury" (security OF the cloud), w tym za fizyczną infrastrukturę, sieć globalną, system operacyjny hosta, wirtualizację, środowisko uruchomieniowe App Engine (np. Python runtime, Node.js runtime) oraz jego łatki bezpieczeństwa. Z kolei klient jest odpowiedzialny za bezpieczeństwo "w chmurze" (security IN the cloud), co obejmuje kod swojej aplikacji, konfigurację dostępu do aplikacji, zarządzanie danymi, konfigurację Identity and Access Management (IAM) oraz ewentualne połączenia z innymi zasobami w jego Virtual Private Cloud (VPC).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Opcja B, "Defending against XSS and SQLi attacks", odnosi się bezpośrednio do bezpieczeństwa kodu aplikacji. Cross-Site Scripting (XSS) i SQL Injection (SQLi) to powszechne i krytyczne luki w zabezpieczeniach aplikacji webowych, które wynikają z błędów w implementacji kodu aplikacji, takich jak nieprawidłowe sanitizowanie danych wejściowych, brak ucieczki znaków specjalnych w danych wyjściowych wyświetlanych użytkownikowi (XSS) lub niewłaściwe budowanie zapytań do bazy danych (SQLi). Ponieważ App Engine służy do uruchamiania *kodu napisanego przez klienta*, to właśnie klient ponosi pełną odpowiedzialność za zapewnienie bezpieczeństwa tego kodu przed takimi atakami. Google dostarcza bezpieczną platformę do uruchamiania aplikacji, ale nie może i nie weryfikuje ani nie zabezpiecza samego kodu aplikacji klienta przed jego wewnętrznymi lukami. Zabezpieczenie przed XSS i SQLi wymaga od deweloperów stosowania bezpiecznych praktyk kodowania, w tym walidacji danych wejściowych, kodowania danych wyjściowych, używania sparametryzowanych zapytań do baz danych oraz regularnych testów bezpieczeństwa aplikacji (np. Static Application Security Testing - SAST, Dynamic Application Security Testing - DAST). Jest to więc kluczowa i *podstawowa* odpowiedzialność klienta w kontekście PaaS.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
-</pre>
+Opcja A. Configuring and monitoring VPC Flow Logs
+Ta opcja jest mniej trafna jako główna odpowiedzialność dla App Engine, zwłaszcza dla środowiska standardowego. VPC Flow Logs to mechanizm logowania ruchu IP w sieci VPC. Chociaż są one niezwykle cenne dla monitorowania i audytu bezpieczeństwa sieci, to w przypadku App Engine (szczególnie App Engine Standard), Google zarządza większością podstawowej infrastruktury sieciowej i to Google jest głównie odpowiedzialne za konfigurację i monitorowanie VPC Flow Logs dla *samego środowiska uruchomieniowego App Engine*. Klient nie ma bezpośredniego dostępu do niskopoziomowej konfiguracji sieci, w której działają instancje App Engine. Jeśli klient używa Serverless VPC Access do łączenia App Engine z własnymi zasobami w VPC, wtedy monitoring VPC Flow Logs w jego własnym VPC staje się jego odpowiedzialnością. Jednakże, nie jest to "primary responsibility" związana bezpośrednio z bezpieczeństwem *aplikacji* uruchamianej na App Engine, a bardziej z infrastrukturą sieciową, której aspekt jest w dużej mierze abstrahowany przez PaaS.
 
+Opcja C. Managing the latest updates and security patches for the Guest OS
+Ta opcja jest jednoznacznie odpowiedzialnością Google w modelu PaaS. Jedną z głównych korzyści korzystania z App Engine jest to, że deweloperzy nie muszą martwić się o zarządzanie infrastrukturą, w tym o podstawowy system operacyjny (Guest OS) i jego łatki bezpieczeństwa. Google w pełni zarządza aktualizacjami, łatami i konfiguracją bezpieczeństwa środowiska uruchomieniowego App Engine, w tym systemu operacyjnego, na którym działa platforma. Jest to odpowiedzialność Google za bezpieczeństwo "chmury". Ta opcja byłaby prawidłowa jako odpowiedzialność klienta w modelu IaaS (np. dla wirtualnych maszyn Compute Engine), ale nie w PaaS.
+
+Opcja D. Encrypting all stored data
+To zagadnienie jest przykładem współodpowiedzialności, ale w kontekście pytania nie jest to *główna* odpowiedzialność klienta. Google Cloud Platform domyślnie szyfruje wszystkie dane przechowywane w spoczynku (encryption at rest) dla większości usług, w tym dla App Engine (dane przechowywane w usługach takich jak Cloud Storage, Cloud Datastore/Firestore, Cloud SQL, które są używane przez App Engine). Klient ma jednak dodatkową odpowiedzialność w obszarze szyfrowania:
+1.  Zapewnienie szyfrowania danych w tranzycie (encryption in transit) dla ruchu aplikacji (np. przez użycie HTTPS).
+2.  Zarządzanie własnymi kluczami szyfrującymi (Customer-Managed Encryption Keys - CMEK lub Customer-Supplied Encryption Keys - CSEK), jeśli organizacja ma specyficzne wymagania dotyczące zarządzania kluczami poza domyślnym szyfrowaniem Google.
+3.  Ewentualne szyfrowanie danych po stronie klienta (client-side encryption) *przed* ich wysłaniem do usług Google.
+Samo stwierdzenie "Encrypting all stored data" jest zbyt szerokie i częściowo pokrywa się z domyślnymi zabezpieczeniami Google. W porównaniu do obrony przed XSS i SQLi, gdzie odpowiedzialność za kod aplikacji leży *wyłącznie* po stronie klienta, to szyfrowanie ma silny komponent domyślny zapewniany przez Google.
+
+4. Wskazówki, hinty, tips and tricks:
+
+    1.  Rozróżnij modele usług (IaaS, PaaS, SaaS): To jest najważniejsza wskazówka. Zawsze identyfikuj typ usługi, o której jest mowa w pytaniu. Dla IaaS (np. Compute Engine), klient ma największą odpowiedzialność. Dla PaaS (np. App Engine, Cloud Functions, Cloud Run), Google zarządza infrastrukturą i środowiskiem uruchomieniowym, a klient odpowiada za swój kod i dane. Dla SaaS (np. Gmail, Google Workspace), odpowiedzialność klienta jest minimalna i dotyczy głównie konfiguracji tożsamości i dostępu.
+    2.  Skup się na "primary responsibility": Pytanie często szuka *głównej* lub *podstawowej* odpowiedzialności klienta. Oznacza to obszar, za który klient jest w dużej mierze lub całkowicie odpowiedzialny i którego Google nie zarządza automatycznie ani nie zapewnia jako część podstawowej usługi.
+    3.  Warstwy stacku technologicznego: Pamiętaj, które warstwy są zarządzane przez Google, a które przez klienta. W PaaS Google zarządza warstwą poniżej kodu aplikacji (Guest OS, środowisko uruchomieniowe, platforma). Klient odpowiada za warstwy powyżej (kod aplikacji, konfiguracja aplikacji, dane).
+    4.  Ataki na poziomie aplikacji: Luki takie jak XSS, SQLi, Broken Authentication, Insecure Direct Object References (IDOR) i inne z listy OWASP Top 10 są niemal zawsze odpowiedzialnością klienta, ponieważ dotyczą wad w logice lub implementacji jego kodu aplikacji.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+
+    1.  Jeśli pytanie wspomina o "Platform-as-a-Service (PaaS)" lub konkretnych usługach PaaS (App Engine, Cloud Functions, Cloud Run), a celem jest zidentyfikowanie *odpowiedzialności klienta*, szukaj odpowiedzi, która odnosi się do "bezpieczeństwa kodu aplikacji", "zarządzania danymi" lub "konfiguracji dostępu do aplikacji".
+    2.  Gdy pytanie pyta o "główną odpowiedzialność klienta" w kontekście PaaS, a jedna z opcji sugeruje "zarządzanie systemem operacyjnym" (Guest OS) lub "łataniem środowiska uruchomieniowego", ta opcja jest zazwyczaj *niepoprawna*, ponieważ jest to odpowiedzialność Google.
+    3.  Jeżeli pytanie dotyczy "typów ataków" lub "luk bezpieczeństwa", takich jak "XSS", "SQL Injection", "uwierzytelnianie" czy "autoryzacja", to niemal zawsze jest to odpowiedzialność klienta, gdyż te ataki celują w kod lub logikę *jego* aplikacji.
+    4.  Słowa kluczowe "shared responsibility model" oraz "primary responsibility" (główna odpowiedzialność) powinny skierować uwagę na te obszary, których Google nie zarządza ani nie zabezpiecza w pełni w ramach domyślnej usługi, a które leżą w domenie klienta.
+
+6. Dodatkowe źródła i dokumentacja:
+
+    <a href="https://cloud.google.com/docs/security/shared-responsibility-model" target="_blank">Google Cloud Shared Responsibility Model</a>
+<a href="https://cloud.google.com/appengine/docs/security" target="_blank">Google App Engine security overview</a>
+<a href="https://cloud.google.com/security/best-practices/security-foundations" target="_blank">Google Cloud Security Foundations Guide</a>
+<a href="https://owasp.org/www-project-top-ten/" target="_blank">OWASP Top 10 Web Application Security Risks</a>
+<a href="https://cloud.google.com/security-whitepaper" target="_blank">Google Infrastructure Security Design Overview</a></pre>
 </div>
-<div class="ai-analysis-container d-none"  >
-<h2>Analiza i Podsumowanie Dyskusji (AI)</h2>
-<div class="analysis-section">
-<h3>Analiza i Wyjaśnienie</h3>
-<p><b>Sugerowana odpowiedź: B</b></p>
-<p><b>Głęboka analiza:</b> W modelu PaaS granica odpowiedzialności przebiega na poziomie interfejsu aplikacji. Deweloper musi zapewnić, że aplikacja jest bezpieczna "od środka" (brak luk w kodzie), podczas gdy Google zapewnia, że platforma, na której aplikacja działa, jest bezpieczna i aktualna.</p>
-<h3>Dodatkowe Zasoby (Linki)</h3>
-<ul>
-<li><a href="https://cloud.google.com/security/shared-responsibility-model" target="_blank">Shared Responsibility Model overview</a></li>
-</ul>
-</div>
-</div>
 
-
-
-
-
-
-
-
-<script src="navigation.js"></script></body>
-
-
+<script src="navigation.js"></script></div></body>
 </html>
