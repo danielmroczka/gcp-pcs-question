@@ -88,41 +88,78 @@ Your organization is worried about recent news headlines regarding application v
 <div class="q-card q-answer mb-4 d-none" >
 
 <h2>Wyjaśnienie</h2>
-<pre>
-**Potwierdzona odpowiedź: AC**
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: D
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+Prawidłowa odpowiedź: D – Enable Binary Authorization and create attestations of scans.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO D JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Binary Authorization zapewnia że tylko zaufane, przeskanowane i podpisane obrazy kontenerów mogą być wdrożone w produkcji (GKE, Cloud Run). Attestations = kryptograficzne potwierdzenie że obraz przeszedł skanowanie pod kątem vulnerabilities. To mechanizm "supply chain security" – blokuje wdrożenie niezweryfikowanego obrazu.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. ❌ Kubernetes RBAC kontroluje dostęp do zasobów K8s, nie weryfikuje bezpieczeństwa obrazów kontenerów podczas deploymentu.
+B. ❌ gcloud artifacts docker images describe to komenda ręczna do sprawdzenia konkretnego obrazu. Nie jest automatycznym enforcement mechanizmem dla wszystkich deploymentów.
+C. ❌ Cloud Code daje real-time feedback developerom, ale nie blokuje wdrożenia niezweryfikowanych obrazów w produkcji.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• "Prevent vulnerable container images in production" = Binary Authorization.
+• Attestations = kryptograficzne "podpisy" że obraz był zweryfikowany.
+• Binary Authorization integruje się z Artifact Registry i Container Analysis.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Software supply chain security = Binary Authorization + Attestations.
+• RBAC = dostęp do zasobów, NIE weryfikacja obrazów.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/binary-authorization/docs/overview
+• https://cloud.google.com/artifact-registry/docs/analysis</pre>
 
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
-W pytaniach typu 'Security in GCP', zawsze priorytetyzuj rozwiązania natywne (SCC, Cloud KMS, Secret Manager, VPC SC) nad rozwiązaniami typu 'third-party' lub 'self-managed', chyba że scenariusz wymaga specyficznej integracji hybrydowej.
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: D
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <strong>Pułapka 'Least Privilege':</strong> Egzamin często podpowiada role o szerokim zakresie (np. 'Editor' lub 'Owner') – zawsze odrzucaj je na rzecz ról predefiniowanych o najmniejszym zakresie uprawnień.
-- <strong>Pułapka 'Logging vs Monitoring':</strong> Pamiętaj: Audit Logs służą do badania aktywności (Who/What/When), a Monitoring do zbierania metryk wydajnościowych.
+Prawidłowa odpowiedź: D – Enable Binary Authorization and create attestations of scans.
 
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Każda architektura bezpieczeństwa w GCP powinna być projektowana w oparciu o 'Security by Default'. Oznacza to m.in. szyfrowanie w spoczynku (domyślne), tożsamość opartą na rolach (IAM) oraz pełną widoczność zapewnianą przez scentralizowane logowanie (Cloud Logging/SCC).
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO D JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Binary Authorization zapewnia że tylko zaufane, przeskanowane i podpisane obrazy kontenerów mogą być wdrożone w produkcji (GKE, Cloud Run). Attestations = kryptograficzne potwierdzenie że obraz przeszedł skanowanie pod kątem vulnerabilities. To mechanizm "supply chain security" – blokuje wdrożenie niezweryfikowanego obrazu.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. ❌ Kubernetes RBAC kontroluje dostęp do zasobów K8s, nie weryfikuje bezpieczeństwa obrazów kontenerów podczas deploymentu.
+B. ❌ gcloud artifacts docker images describe to komenda ręczna do sprawdzenia konkretnego obrazu. Nie jest automatycznym enforcement mechanizmem dla wszystkich deploymentów.
+C. ❌ Cloud Code daje real-time feedback developerom, ale nie blokuje wdrożenia niezweryfikowanych obrazów w produkcji.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• "Prevent vulnerable container images in production" = Binary Authorization.
+• Attestations = kryptograficzne "podpisy" że obraz był zweryfikowany.
+• Binary Authorization integruje się z Artifact Registry i Container Analysis.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Software supply chain security = Binary Authorization + Attestations.
+• RBAC = dostęp do zasobów, NIE weryfikacja obrazów.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/binary-authorization/docs/overview
+• https://cloud.google.com/artifact-registry/docs/analysis</pre>
 </div>
 
 

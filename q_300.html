@@ -88,41 +88,98 @@ You work for an ecommerce company that stores sensitive customer data across mul
 <div class="q-card q-answer mb-4 d-none" >
 
 <h2>Wyjaśnienie</h2>
-<pre>
-**Potwierdzona odpowiedź: AC**
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: C
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+Prawidłowa odpowiedź: C – Create separate VPC networks for each tier. Use VPC peering between application tiers and other required VPCs. Enable Identity-Aware Proxy (IAP) for remote access to management resources, limiting access to authorized vendors.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO C JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Pytanie wymaga: (1) separacji sieci między tierami, (2) bezpiecznego dostępu dla vendorów zewnętrznych.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+Odpowiedź C spełnia oba warunki:
+- Osobne VPC dla każdego tiera → silna izolacja sieciowa.
+- VPC Peering → kontrolowana komunikacja między tierami bez ekspozycji na Internet.
+- IAP (Identity-Aware Proxy) → zamiast kluczy SSH, dostęp odbywa się przez tożsamość Google (OAuth/OIDC), co eliminuje potrzebę zarządzania kluczami SSH i zapewnia MFA.
+- Dostęp vendorów ograniczony tylko do zasobów, do których mają uprawnienia – zasada najmniejszych uprawnień.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. ❌ SSH keys + root access = poważne naruszenie bezpieczeństwa. Root access dla vendorów zewnętrznych jest niedopuszczalny. Brak nowoczesnego uwierzytelniania.
+
+B. ❌ Pojedyncza VPC ze Shared VPC, a przede wszystkim „network admin role to vendors" i „rely on vendors' configurations" – oddanie kontroli nad konfiguracją sieci vendorom jest niebezpieczne. Brak własnej kontroli nad dostępem.
+
+D. ❌ Przyznanie vendorom ownership projektu i możliwości modyfikacji Shared VPC to nadmiarowe uprawnienia. Naruszenie zasady least privilege.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• IAP to standardowe rozwiązanie GCP dla bezpiecznego dostępu zdalnego bez VPN.
+• Unikaj odpowiedzi z "root access", "SSH keys" dla zewnętrznych vendorów.
+• "Rely on vendor's configuration" = brak własnej kontroli = błąd bezpieczeństwa.
+• VPC Peering &gt; Shared VPC gdy chodzi o pełną izolację sieciową między tierami.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Bezpieczny dostęp zdalny = IAP (Identity-Aware Proxy).
+• Separacja tierów = osobne VPC + peering.
+• Zewnętrzni vendorzy = min. uprawnienia, kontrolowane przez IAP, NIE root/SSH.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/iap/docs/concepts-overview
+• https://cloud.google.com/vpc/docs/vpc-peering</pre>
 
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
-W pytaniach typu 'Security in GCP', zawsze priorytetyzuj rozwiązania natywne (SCC, Cloud KMS, Secret Manager, VPC SC) nad rozwiązaniami typu 'third-party' lub 'self-managed', chyba że scenariusz wymaga specyficznej integracji hybrydowej.
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: C
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <strong>Pułapka 'Least Privilege':</strong> Egzamin często podpowiada role o szerokim zakresie (np. 'Editor' lub 'Owner') – zawsze odrzucaj je na rzecz ról predefiniowanych o najmniejszym zakresie uprawnień.
-- <strong>Pułapka 'Logging vs Monitoring':</strong> Pamiętaj: Audit Logs służą do badania aktywności (Who/What/When), a Monitoring do zbierania metryk wydajnościowych.
+Prawidłowa odpowiedź: C – Create separate VPC networks for each tier. Use VPC peering between application tiers and other required VPCs. Enable Identity-Aware Proxy (IAP) for remote access to management resources, limiting access to authorized vendors.
 
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Każda architektura bezpieczeństwa w GCP powinna być projektowana w oparciu o 'Security by Default'. Oznacza to m.in. szyfrowanie w spoczynku (domyślne), tożsamość opartą na rolach (IAM) oraz pełną widoczność zapewnianą przez scentralizowane logowanie (Cloud Logging/SCC).
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO C JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Pytanie wymaga: (1) separacji sieci między tierami, (2) bezpiecznego dostępu dla vendorów zewnętrznych.
+
+Odpowiedź C spełnia oba warunki:
+- Osobne VPC dla każdego tiera → silna izolacja sieciowa.
+- VPC Peering → kontrolowana komunikacja między tierami bez ekspozycji na Internet.
+- IAP (Identity-Aware Proxy) → zamiast kluczy SSH, dostęp odbywa się przez tożsamość Google (OAuth/OIDC), co eliminuje potrzebę zarządzania kluczami SSH i zapewnia MFA.
+- Dostęp vendorów ograniczony tylko do zasobów, do których mają uprawnienia – zasada najmniejszych uprawnień.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. ❌ SSH keys + root access = poważne naruszenie bezpieczeństwa. Root access dla vendorów zewnętrznych jest niedopuszczalny. Brak nowoczesnego uwierzytelniania.
+
+B. ❌ Pojedyncza VPC ze Shared VPC, a przede wszystkim „network admin role to vendors" i „rely on vendors' configurations" – oddanie kontroli nad konfiguracją sieci vendorom jest niebezpieczne. Brak własnej kontroli nad dostępem.
+
+D. ❌ Przyznanie vendorom ownership projektu i możliwości modyfikacji Shared VPC to nadmiarowe uprawnienia. Naruszenie zasady least privilege.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• IAP to standardowe rozwiązanie GCP dla bezpiecznego dostępu zdalnego bez VPN.
+• Unikaj odpowiedzi z "root access", "SSH keys" dla zewnętrznych vendorów.
+• "Rely on vendor's configuration" = brak własnej kontroli = błąd bezpieczeństwa.
+• VPC Peering &gt; Shared VPC gdy chodzi o pełną izolację sieciową między tierami.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Bezpieczny dostęp zdalny = IAP (Identity-Aware Proxy).
+• Separacja tierów = osobne VPC + peering.
+• Zewnętrzni vendorzy = min. uprawnienia, kontrolowane przez IAP, NIE root/SSH.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/iap/docs/concepts-overview
+• https://cloud.google.com/vpc/docs/vpc-peering</pre>
 </div>
 
 

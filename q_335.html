@@ -88,41 +88,76 @@ You are responsible for configuring Identity and Access Management in your organ
 <div class="q-card q-answer mb-4 d-none" >
 
 <h2>Wyjaśnienie</h2>
-<pre>
-**Potwierdzona odpowiedź: AC**
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: A
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+Prawidłowa odpowiedź: A – Set a principal access boundary policy with the appropriate enforcement version. Bind the policy to the relevant principal sets.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO A JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Principal Access Boundary (PAB) to mechanizm ograniczający zasoby, do których principal (użytkownik/SA) MOŻE mieć dostęp, niezależnie od przyznanych uprawnień IAM. Stosując PAB ograniczający dostęp do Cloud Storage tylko w obrębie organizacji, użytkownicy nie będą mogli uzyskać dostępu do zewnętrznych bucketów (nawet jeśli mają IAM binding na zewnętrznym zasobie). To precyzyjne rozwiązanie.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+B. ❌ Organization restriction headers = nagłówki HTTP wymuszające dostęp tylko do zasobów własnej organizacji. Wymagają konfiguracji proxy/urządzeń. PAB jest natywniejszy i pewniejszy.
+C. ❌ IAM deny policy "poza organizacją" = IAM deny działa na zasobach w organizacji, nie może deny dostępu do zasobów w INNYCH organizacjach.
+D. ❌ Domain restricted sharing = ogranicza KOMU można nadawać dostęp do Twoich zasobów, nie zapobiega dostępowi Twoich użytkowników do zewnętrznych zasobów.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Ograniczenie dostępu użytkowników do zasobów ZEWNĘTRZNYCH = Principal Access Boundary.
+• PAB = nowy mechanizm (2024+), pojawia się coraz częściej w pytaniach egzaminacyjnych.
+• Domain restricted sharing ≠ PAB (różne mechanizmy ochrony).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Zapobieganie dostępowi do zasobów poza organizacją = Principal Access Boundary.
+• Ograniczenie komu nadajesz dostęp = Domain Restricted Sharing.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/iam/docs/principal-access-boundary-policies</pre>
 
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
-W pytaniach typu 'Security in GCP', zawsze priorytetyzuj rozwiązania natywne (SCC, Cloud KMS, Secret Manager, VPC SC) nad rozwiązaniami typu 'third-party' lub 'self-managed', chyba że scenariusz wymaga specyficznej integracji hybrydowej.
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: A
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <strong>Pułapka 'Least Privilege':</strong> Egzamin często podpowiada role o szerokim zakresie (np. 'Editor' lub 'Owner') – zawsze odrzucaj je na rzecz ról predefiniowanych o najmniejszym zakresie uprawnień.
-- <strong>Pułapka 'Logging vs Monitoring':</strong> Pamiętaj: Audit Logs służą do badania aktywności (Who/What/When), a Monitoring do zbierania metryk wydajnościowych.
+Prawidłowa odpowiedź: A – Set a principal access boundary policy with the appropriate enforcement version. Bind the policy to the relevant principal sets.
 
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Każda architektura bezpieczeństwa w GCP powinna być projektowana w oparciu o 'Security by Default'. Oznacza to m.in. szyfrowanie w spoczynku (domyślne), tożsamość opartą na rolach (IAM) oraz pełną widoczność zapewnianą przez scentralizowane logowanie (Cloud Logging/SCC).
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO A JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Principal Access Boundary (PAB) to mechanizm ograniczający zasoby, do których principal (użytkownik/SA) MOŻE mieć dostęp, niezależnie od przyznanych uprawnień IAM. Stosując PAB ograniczający dostęp do Cloud Storage tylko w obrębie organizacji, użytkownicy nie będą mogli uzyskać dostępu do zewnętrznych bucketów (nawet jeśli mają IAM binding na zewnętrznym zasobie). To precyzyjne rozwiązanie.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+B. ❌ Organization restriction headers = nagłówki HTTP wymuszające dostęp tylko do zasobów własnej organizacji. Wymagają konfiguracji proxy/urządzeń. PAB jest natywniejszy i pewniejszy.
+C. ❌ IAM deny policy "poza organizacją" = IAM deny działa na zasobach w organizacji, nie może deny dostępu do zasobów w INNYCH organizacjach.
+D. ❌ Domain restricted sharing = ogranicza KOMU można nadawać dostęp do Twoich zasobów, nie zapobiega dostępowi Twoich użytkowników do zewnętrznych zasobów.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Ograniczenie dostępu użytkowników do zasobów ZEWNĘTRZNYCH = Principal Access Boundary.
+• PAB = nowy mechanizm (2024+), pojawia się coraz częściej w pytaniach egzaminacyjnych.
+• Domain restricted sharing ≠ PAB (różne mechanizmy ochrony).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Zapobieganie dostępowi do zasobów poza organizacją = Principal Access Boundary.
+• Ograniczenie komu nadajesz dostęp = Domain Restricted Sharing.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/iam/docs/principal-access-boundary-policies</pre>
 </div>
 
 

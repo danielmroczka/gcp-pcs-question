@@ -88,41 +88,90 @@ Your company hosts a critical web application on Google Cloud. The application i
 <div class="q-card q-answer mb-4 d-none" >
 
 <h2>Wyjaśnienie</h2>
-<pre>
-**Potwierdzona odpowiedź: AC**
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: D
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+Prawidłowa odpowiedź: D – Configure a Cloud Armor security policy with customized and pre-configured WAF rules for OWASP Top 10 vulnerabilities. Apply the policy at the load balancer level.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO D JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Ataki L7 (XSS, SQL injection) wymagają WAF na poziomie load balancera:
+- Cloud Armor z WAF rules = gotowe reguły OWASP Top 10 (XSS, SQLi, RFI, etc.).
+- Customized rules = dostosowanie do konkretnych wzorców ataków.
+- Pre-configured rules = szybkie wdrożenie.
+- Load balancer level = blokowanie przed dotarciem do backend.
+Odpowiedź D łączy oba: customized + pre-configured = najkompletniejsza ochrona.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. ❌ "Enable Adaptive Protection and throttle" = Adaptive Protection wykrywa DDoS, nie L7 WAF attacks. Throttling ≠ WAF.
+B. ❌ Cloud NGFW + /32 IP blocking = blokada konkretnych IP (L3), nie WAF dla XSS/SQLi (L7).
+C. ❌ Tylko pre-configured WAF rules bez customization = może być niewystarczające. Opcja D jest pełniejsza (customized + pre-configured).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• XSS + SQL injection + layer 7 = Cloud Armor WAF (OWASP rules).
+• Cloud Armor = zawsze na poziomie load balancera.
+• Customized + pre-configured = lepsza ochrona niż samo pre-configured.
+• Adaptive Protection = DDoS (nie WAF).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• L7 attacks (XSS, SQLi) = Cloud Armor WAF rules.
+• IP blocking (L3) = Cloud NGFW (nie WAF).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/armor/docs/waf-rules
+• https://cloud.google.com/armor/docs/configure-security-policies</pre>
 
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
-W pytaniach typu 'Security in GCP', zawsze priorytetyzuj rozwiązania natywne (SCC, Cloud KMS, Secret Manager, VPC SC) nad rozwiązaniami typu 'third-party' lub 'self-managed', chyba że scenariusz wymaga specyficznej integracji hybrydowej.
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: D
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <strong>Pułapka 'Least Privilege':</strong> Egzamin często podpowiada role o szerokim zakresie (np. 'Editor' lub 'Owner') – zawsze odrzucaj je na rzecz ról predefiniowanych o najmniejszym zakresie uprawnień.
-- <strong>Pułapka 'Logging vs Monitoring':</strong> Pamiętaj: Audit Logs służą do badania aktywności (Who/What/When), a Monitoring do zbierania metryk wydajnościowych.
+Prawidłowa odpowiedź: D – Configure a Cloud Armor security policy with customized and pre-configured WAF rules for OWASP Top 10 vulnerabilities. Apply the policy at the load balancer level.
 
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Każda architektura bezpieczeństwa w GCP powinna być projektowana w oparciu o 'Security by Default'. Oznacza to m.in. szyfrowanie w spoczynku (domyślne), tożsamość opartą na rolach (IAM) oraz pełną widoczność zapewnianą przez scentralizowane logowanie (Cloud Logging/SCC).
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO D JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Ataki L7 (XSS, SQL injection) wymagają WAF na poziomie load balancera:
+- Cloud Armor z WAF rules = gotowe reguły OWASP Top 10 (XSS, SQLi, RFI, etc.).
+- Customized rules = dostosowanie do konkretnych wzorców ataków.
+- Pre-configured rules = szybkie wdrożenie.
+- Load balancer level = blokowanie przed dotarciem do backend.
+Odpowiedź D łączy oba: customized + pre-configured = najkompletniejsza ochrona.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. ❌ "Enable Adaptive Protection and throttle" = Adaptive Protection wykrywa DDoS, nie L7 WAF attacks. Throttling ≠ WAF.
+B. ❌ Cloud NGFW + /32 IP blocking = blokada konkretnych IP (L3), nie WAF dla XSS/SQLi (L7).
+C. ❌ Tylko pre-configured WAF rules bez customization = może być niewystarczające. Opcja D jest pełniejsza (customized + pre-configured).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• XSS + SQL injection + layer 7 = Cloud Armor WAF (OWASP rules).
+• Cloud Armor = zawsze na poziomie load balancera.
+• Customized + pre-configured = lepsza ochrona niż samo pre-configured.
+• Adaptive Protection = DDoS (nie WAF).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• L7 attacks (XSS, SQLi) = Cloud Armor WAF rules.
+• IP blocking (L3) = Cloud NGFW (nie WAF).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/armor/docs/waf-rules
+• https://cloud.google.com/armor/docs/configure-security-policies</pre>
 </div>
 
 

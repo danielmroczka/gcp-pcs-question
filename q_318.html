@@ -88,41 +88,92 @@ Your organization must store highly sensitive data within Google Cloud. You need
 <div class="q-card q-answer mb-4 d-none" >
 
 <h2>Wyjaśnienie</h2>
-<pre>
-**Potwierdzona odpowiedź: AC**
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: C
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+Prawidłowa odpowiedź: C – Use Cloud Storage with client-side encryption, Cloud KMS for key management, and VPC Service Controls to prevent unauthorized access.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO C JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+"Strongest level of security" wymaga wielowarstwowej ochrony:
+1. Client-side encryption = dane są szyfrowane ZANIM trafią do Google Cloud (nawet Google nie widzi plaintext).
+2. Cloud KMS = zarządzanie kluczami z pełną kontrolą i audytowalnością.
+3. VPC Service Controls = perymetr zapobiegający eksfiltracji danych.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+Client-side encryption &gt; CMEK &gt; CSEK &gt; Server-side encryption (pod względem kontroli klienta).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. ❌ CSEK = server-side encryption z kluczami klienta. Google widzi plaintext podczas szyfrowania. Silniejsze niż CMEK, ale słabsze niż client-side.
+B. ❌ CMEK = Google zarządza kluczami w KMS, ale Google Cloud widzi dane podczas przetwarzania. Cloud DLP to dodatkowa warstwa, nie silniejsza.
+D. ❌ Server-side encryption = Google kontroluje szyfrowanie. Najsłabsza opcja z perspektywy klienta.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Hierarchia siły szyfrowania (od najsilniejszej kontroli klienta):
+  Client-side &gt; CSEK &gt; CMEK &gt; Server-side (Google managed)
+• "Strongest/maximum security" = client-side encryption.
+• Client-side + KMS + VPC SC = kompletna ochrona.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Maximum kontrola klienta = client-side encryption.
+• Prevent exfiltration = VPC Service Controls.
+• Key management = Cloud KMS.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/storage/docs/encryption
+• https://cloud.google.com/vpc-service-controls/docs/overview</pre>
 
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
-W pytaniach typu 'Security in GCP', zawsze priorytetyzuj rozwiązania natywne (SCC, Cloud KMS, Secret Manager, VPC SC) nad rozwiązaniami typu 'third-party' lub 'self-managed', chyba że scenariusz wymaga specyficznej integracji hybrydowej.
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: C
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <strong>Pułapka 'Least Privilege':</strong> Egzamin często podpowiada role o szerokim zakresie (np. 'Editor' lub 'Owner') – zawsze odrzucaj je na rzecz ról predefiniowanych o najmniejszym zakresie uprawnień.
-- <strong>Pułapka 'Logging vs Monitoring':</strong> Pamiętaj: Audit Logs służą do badania aktywności (Who/What/When), a Monitoring do zbierania metryk wydajnościowych.
+Prawidłowa odpowiedź: C – Use Cloud Storage with client-side encryption, Cloud KMS for key management, and VPC Service Controls to prevent unauthorized access.
 
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Każda architektura bezpieczeństwa w GCP powinna być projektowana w oparciu o 'Security by Default'. Oznacza to m.in. szyfrowanie w spoczynku (domyślne), tożsamość opartą na rolach (IAM) oraz pełną widoczność zapewnianą przez scentralizowane logowanie (Cloud Logging/SCC).
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO C JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+"Strongest level of security" wymaga wielowarstwowej ochrony:
+1. Client-side encryption = dane są szyfrowane ZANIM trafią do Google Cloud (nawet Google nie widzi plaintext).
+2. Cloud KMS = zarządzanie kluczami z pełną kontrolą i audytowalnością.
+3. VPC Service Controls = perymetr zapobiegający eksfiltracji danych.
+
+Client-side encryption &gt; CMEK &gt; CSEK &gt; Server-side encryption (pod względem kontroli klienta).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. ❌ CSEK = server-side encryption z kluczami klienta. Google widzi plaintext podczas szyfrowania. Silniejsze niż CMEK, ale słabsze niż client-side.
+B. ❌ CMEK = Google zarządza kluczami w KMS, ale Google Cloud widzi dane podczas przetwarzania. Cloud DLP to dodatkowa warstwa, nie silniejsza.
+D. ❌ Server-side encryption = Google kontroluje szyfrowanie. Najsłabsza opcja z perspektywy klienta.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Hierarchia siły szyfrowania (od najsilniejszej kontroli klienta):
+  Client-side &gt; CSEK &gt; CMEK &gt; Server-side (Google managed)
+• "Strongest/maximum security" = client-side encryption.
+• Client-side + KMS + VPC SC = kompletna ochrona.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Maximum kontrola klienta = client-side encryption.
+• Prevent exfiltration = VPC Service Controls.
+• Key management = Cloud KMS.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/storage/docs/encryption
+• https://cloud.google.com/vpc-service-controls/docs/overview</pre>
 </div>
 
 

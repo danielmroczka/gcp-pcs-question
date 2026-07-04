@@ -89,41 +89,92 @@ Your organization strives to be a market leader in software innovation. You prov
 <div class="q-card q-answer mb-4 d-none" >
 
 <h2>Wyjaśnienie</h2>
-<pre>
-**Potwierdzona odpowiedź: AC**
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: A, D
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+Prawidłowe odpowiedzi: A i D
+A – Apply organization policy constraints. Detect and monitor drifts by using Security Health Analytics.
+D – Apply a predefined AI-recommended security posture template for Gemini in Vertex AI in Security Command Center Enterprise or Premium tiers.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO A i D SĄ PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Kontekst: 200 developerów, 5-osobowy security team, Gemini in Vertex AI, potrzeba bezpieczeństwa przy skali.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+A: Organization policy constraints wymuszają reguły na całej organizacji automatycznie (prewencja). Security Health Analytics (SHA) monitoruje drifty od pożądanego stanu (detekcja). Razem = prewencja + monitoring.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
-</pre>
+D: SCC Enterprise/Premium oferuje gotowe szablony "security posture" specyficznie dla Gemini in Vertex AI. Oszczędza czas przy wdrożeniu bezpieczeństwa AI dla małego security teamu.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+B. ❌ Publikowanie polityk i wytycznych = miękka kontrola. Przy 200 developerach i małym security teamie, manualne podejście nie jest skalowalne.
+C. ❌ Cloud Logging + Cloud Run do remediacji = custom rozwiązanie wymagające budowy i utrzymania. Opcje A i D są natywne i gotowe.
+E. ❌ Least privilege IAM = dobre, ale samo w sobie nie zapobiega wszystkim misconfiguracji i nie monitoruje driftów.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• "200 developers + 5-person security team" = potrzeba automatyzacji i gotowych rozwiązań.
+• SCC Premium = gotowe posture templates dla AI workloads.
+• Pytania wielokrotnego wyboru: szukaj kombinacji prewencja + monitoring.
+• Organization policy = prewencja, SHA = detekcja driftów.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Bezpieczeństwo AI workloads w skali = SCC security posture + org policies.
+• Drift detection = Security Health Analytics (SHA).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/security-command-center/docs/security-posture-overview
+• https://cloud.google.com/security-command-center/docs/concepts-security-health-analytics-overview</pre>
 
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
-W pytaniach typu 'Security in GCP', zawsze priorytetyzuj rozwiązania natywne (SCC, Cloud KMS, Secret Manager, VPC SC) nad rozwiązaniami typu 'third-party' lub 'self-managed', chyba że scenariusz wymaga specyficznej integracji hybrydowej.
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: A, D
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <strong>Pułapka 'Least Privilege':</strong> Egzamin często podpowiada role o szerokim zakresie (np. 'Editor' lub 'Owner') – zawsze odrzucaj je na rzecz ról predefiniowanych o najmniejszym zakresie uprawnień.
-- <strong>Pułapka 'Logging vs Monitoring':</strong> Pamiętaj: Audit Logs służą do badania aktywności (Who/What/When), a Monitoring do zbierania metryk wydajnościowych.
+Prawidłowe odpowiedzi: A i D
+A – Apply organization policy constraints. Detect and monitor drifts by using Security Health Analytics.
+D – Apply a predefined AI-recommended security posture template for Gemini in Vertex AI in Security Command Center Enterprise or Premium tiers.
 
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Każda architektura bezpieczeństwa w GCP powinna być projektowana w oparciu o 'Security by Default'. Oznacza to m.in. szyfrowanie w spoczynku (domyślne), tożsamość opartą na rolach (IAM) oraz pełną widoczność zapewnianą przez scentralizowane logowanie (Cloud Logging/SCC).
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO A i D SĄ PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Kontekst: 200 developerów, 5-osobowy security team, Gemini in Vertex AI, potrzeba bezpieczeństwa przy skali.
+
+A: Organization policy constraints wymuszają reguły na całej organizacji automatycznie (prewencja). Security Health Analytics (SHA) monitoruje drifty od pożądanego stanu (detekcja). Razem = prewencja + monitoring.
+
+D: SCC Enterprise/Premium oferuje gotowe szablony "security posture" specyficznie dla Gemini in Vertex AI. Oszczędza czas przy wdrożeniu bezpieczeństwa AI dla małego security teamu.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+B. ❌ Publikowanie polityk i wytycznych = miękka kontrola. Przy 200 developerach i małym security teamie, manualne podejście nie jest skalowalne.
+C. ❌ Cloud Logging + Cloud Run do remediacji = custom rozwiązanie wymagające budowy i utrzymania. Opcje A i D są natywne i gotowe.
+E. ❌ Least privilege IAM = dobre, ale samo w sobie nie zapobiega wszystkim misconfiguracji i nie monitoruje driftów.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• "200 developers + 5-person security team" = potrzeba automatyzacji i gotowych rozwiązań.
+• SCC Premium = gotowe posture templates dla AI workloads.
+• Pytania wielokrotnego wyboru: szukaj kombinacji prewencja + monitoring.
+• Organization policy = prewencja, SHA = detekcja driftów.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Bezpieczeństwo AI workloads w skali = SCC security posture + org policies.
+• Drift detection = Security Health Analytics (SHA).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/security-command-center/docs/security-posture-overview
+• https://cloud.google.com/security-command-center/docs/concepts-security-health-analytics-overview</pre>
 </div>
 
 

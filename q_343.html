@@ -88,41 +88,86 @@ You manage the security logs within your cloud environment. You have configured 
 <div class="q-card q-answer mb-4 d-none" >
 
 <h2>Wyjaśnienie</h2>
-<pre>
-**Potwierdzona odpowiedź: AC**
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: B
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+Prawidłowa odpowiedź: B – Use the data in the Cloud Storage bucket as an external table in BigQuery. Provide the auditors access to the BigQuery dataset.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO B JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Wymagania: "cost-effective" + analiza logów z Cloud Storage przez audytorów. BigQuery External Tables (federated queries) pozwalają na:
+- Zapytania bezpośrednio do danych w Cloud Storage (bez kopiowania/importu).
+- Standard SQL dla audytorów.
+- Brak kosztów przechowywania w BigQuery (dane są w GCS).
+- Granularny dostęp do datasetu.
+Najskalowalne i najtańsze rozwiązanie.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. ❌ VM + download = kosztowny, manualny, problemy ze skalowalnością. Audytorzy musieliby instalować narzędzia.
+C. ❌ Dataflow + Elasticsearch = drogie i skomplikowane. Nadmiarowa infrastruktura dla prostego audytu.
+D. ❌ Cloud Run + Cloud Logging import = dane z GCS do Logging = kosztowne i nienaturalne (Logging nie jest narzędziem analitycznym).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Logi w Cloud Storage + analiza = BigQuery External Tables (najtaniej).
+• External Table = zapytania do GCS bez importu = zero kosztów przechowywania BQ.
+• "Cost-effective" = wskazuje na rozwiązanie bez niepotrzebnych kopii danych.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Cost-effective log analytics z GCS = BigQuery External Tables.
+• Nie kopiuj danych jeśli możesz je analizować bezpośrednio.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/bigquery/docs/external-tables</pre>
 
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
-W pytaniach typu 'Security in GCP', zawsze priorytetyzuj rozwiązania natywne (SCC, Cloud KMS, Secret Manager, VPC SC) nad rozwiązaniami typu 'third-party' lub 'self-managed', chyba że scenariusz wymaga specyficznej integracji hybrydowej.
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: B
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <strong>Pułapka 'Least Privilege':</strong> Egzamin często podpowiada role o szerokim zakresie (np. 'Editor' lub 'Owner') – zawsze odrzucaj je na rzecz ról predefiniowanych o najmniejszym zakresie uprawnień.
-- <strong>Pułapka 'Logging vs Monitoring':</strong> Pamiętaj: Audit Logs służą do badania aktywności (Who/What/When), a Monitoring do zbierania metryk wydajnościowych.
+Prawidłowa odpowiedź: B – Use the data in the Cloud Storage bucket as an external table in BigQuery. Provide the auditors access to the BigQuery dataset.
 
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Każda architektura bezpieczeństwa w GCP powinna być projektowana w oparciu o 'Security by Default'. Oznacza to m.in. szyfrowanie w spoczynku (domyślne), tożsamość opartą na rolach (IAM) oraz pełną widoczność zapewnianą przez scentralizowane logowanie (Cloud Logging/SCC).
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO B JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Wymagania: "cost-effective" + analiza logów z Cloud Storage przez audytorów. BigQuery External Tables (federated queries) pozwalają na:
+- Zapytania bezpośrednio do danych w Cloud Storage (bez kopiowania/importu).
+- Standard SQL dla audytorów.
+- Brak kosztów przechowywania w BigQuery (dane są w GCS).
+- Granularny dostęp do datasetu.
+Najskalowalne i najtańsze rozwiązanie.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. ❌ VM + download = kosztowny, manualny, problemy ze skalowalnością. Audytorzy musieliby instalować narzędzia.
+C. ❌ Dataflow + Elasticsearch = drogie i skomplikowane. Nadmiarowa infrastruktura dla prostego audytu.
+D. ❌ Cloud Run + Cloud Logging import = dane z GCS do Logging = kosztowne i nienaturalne (Logging nie jest narzędziem analitycznym).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Logi w Cloud Storage + analiza = BigQuery External Tables (najtaniej).
+• External Table = zapytania do GCS bez importu = zero kosztów przechowywania BQ.
+• "Cost-effective" = wskazuje na rozwiązanie bez niepotrzebnych kopii danych.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Cost-effective log analytics z GCS = BigQuery External Tables.
+• Nie kopiuj danych jeśli możesz je analizować bezpośrednio.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/bigquery/docs/external-tables</pre>
 </div>
 
 

@@ -88,41 +88,84 @@ Your company wants to deploy 2-step verification (2SV). The organizational unit 
 <div class="q-card q-answer mb-4 d-none" >
 
 <h2>Wyjaśnienie</h2>
-<pre>
-**Potwierdzona odpowiedź: AC**
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: B
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+Prawidłowa odpowiedź: B – Create configuration groups, and enable a phased migration to control the number of individuals in which to enforce 2SV.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO B JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Pytanie: wdrożenie 2SV, "prevent many access issues at the same time". Phased migration przez configuration groups:
+- Stopniowe wdrożenie = małe grupy pilotażowe najpierw.
+- Kontrola liczby użytkowników objętych 2SV w danym momencie.
+- Identyfikacja i rozwiązanie problemów przed masowym wdrożeniem.
+- Różne grupy mogą mieć różne harmonogramy wdrożenia.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. ❌ Jeden nowy OU = całościowa zmiana, nie phased migration. Nie kontroluje liczby użytkowników objętych zmianą.
+C. ❌ "Allow users to turn on 2SV" = opcjonalne, nie wymuszone. "Enforcement to Off" = 2SV nie jest obowiązkowe.
+D. ❌ "Uncheck allow + enforcement On" = blokuje możliwość włączenia 2SV (odwrotność wymagania). Sprzeczne z celem.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• "Prevent issues" + "phased" = configuration groups z etapowym wdrożeniem.
+• Configuration groups pozwalają na migrację bez wpływu na całą organizację naraz.
+• 2SV enforcement = check "Allow users" + Enforcement = "On" (nie odwrotnie).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Stopniowe wdrożenie nowej polityki = phased migration z configuration groups.
+• Unikaj wdrożenia "wszystko naraz" dla dużych organizacji.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://support.google.com/a/answer/9176657</pre>
 
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
-W pytaniach typu 'Security in GCP', zawsze priorytetyzuj rozwiązania natywne (SCC, Cloud KMS, Secret Manager, VPC SC) nad rozwiązaniami typu 'third-party' lub 'self-managed', chyba że scenariusz wymaga specyficznej integracji hybrydowej.
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: B
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <strong>Pułapka 'Least Privilege':</strong> Egzamin często podpowiada role o szerokim zakresie (np. 'Editor' lub 'Owner') – zawsze odrzucaj je na rzecz ról predefiniowanych o najmniejszym zakresie uprawnień.
-- <strong>Pułapka 'Logging vs Monitoring':</strong> Pamiętaj: Audit Logs służą do badania aktywności (Who/What/When), a Monitoring do zbierania metryk wydajnościowych.
+Prawidłowa odpowiedź: B – Create configuration groups, and enable a phased migration to control the number of individuals in which to enforce 2SV.
 
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Każda architektura bezpieczeństwa w GCP powinna być projektowana w oparciu o 'Security by Default'. Oznacza to m.in. szyfrowanie w spoczynku (domyślne), tożsamość opartą na rolach (IAM) oraz pełną widoczność zapewnianą przez scentralizowane logowanie (Cloud Logging/SCC).
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO B JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Pytanie: wdrożenie 2SV, "prevent many access issues at the same time". Phased migration przez configuration groups:
+- Stopniowe wdrożenie = małe grupy pilotażowe najpierw.
+- Kontrola liczby użytkowników objętych 2SV w danym momencie.
+- Identyfikacja i rozwiązanie problemów przed masowym wdrożeniem.
+- Różne grupy mogą mieć różne harmonogramy wdrożenia.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. ❌ Jeden nowy OU = całościowa zmiana, nie phased migration. Nie kontroluje liczby użytkowników objętych zmianą.
+C. ❌ "Allow users to turn on 2SV" = opcjonalne, nie wymuszone. "Enforcement to Off" = 2SV nie jest obowiązkowe.
+D. ❌ "Uncheck allow + enforcement On" = blokuje możliwość włączenia 2SV (odwrotność wymagania). Sprzeczne z celem.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• "Prevent issues" + "phased" = configuration groups z etapowym wdrożeniem.
+• Configuration groups pozwalają na migrację bez wpływu na całą organizację naraz.
+• 2SV enforcement = check "Allow users" + Enforcement = "On" (nie odwrotnie).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Stopniowe wdrożenie nowej polityki = phased migration z configuration groups.
+• Unikaj wdrożenia "wszystko naraz" dla dużych organizacji.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://support.google.com/a/answer/9176657</pre>
 </div>
 
 

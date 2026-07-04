@@ -88,41 +88,84 @@ Your company is deploying a large number of containerized applications to GKE. T
 <div class="q-card q-answer mb-4 d-none" >
 
 <h2>Wyjaśnienie</h2>
-<pre>
-**Potwierdzona odpowiedź: AC**
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: A
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+Prawidłowa odpowiedź: A – Configure a policy in Binary Authorization to use Artifact Analysis vulnerability scanning to only allow images without critical vulnerabilities.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO A JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Pełny pipeline bezpieczeństwa kontenerów:
+1. Artifact Analysis = automatyczne skanowanie vulnerabilities przy push do Artifact Registry.
+2. Binary Authorization policy = blokuje deployment obrazów z krytycznymi vulnerabilities (bez attestacji).
+Razem tworzą automatyczny "security gate" w pipeline CI/CD.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+B. ❌ "Enable scanning + manually remove" = ręczna interwencja. Nie automatyzuje blokowania deploymentu.
+C. ❌ Custom script z third-party narzędziem = nienative, wymaga utrzymania. Opcja A jest natywna.
+D. ❌ "Manually inspect all images" = przeciwieństwo automatyzacji. Nie skaluje się.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Automatyczne blokowanie vulnerabilities w GKE = Binary Authorization + Artifact Analysis.
+• "Only allow images without critical vulnerabilities" = BA policy z attestation requirement.
+• Artifact Analysis = natywne skanowanie w Artifact Registry.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Automatic vulnerability-based deployment gate = Binary Authorization + Artifact Analysis.
+• Ręczna inspekcja = nie skalowalne, nie wybieraj w egzaminie.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/binary-authorization/docs/overview
+• https://cloud.google.com/artifact-registry/docs/analysis</pre>
 
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
-W pytaniach typu 'Security in GCP', zawsze priorytetyzuj rozwiązania natywne (SCC, Cloud KMS, Secret Manager, VPC SC) nad rozwiązaniami typu 'third-party' lub 'self-managed', chyba że scenariusz wymaga specyficznej integracji hybrydowej.
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: A
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <strong>Pułapka 'Least Privilege':</strong> Egzamin często podpowiada role o szerokim zakresie (np. 'Editor' lub 'Owner') – zawsze odrzucaj je na rzecz ról predefiniowanych o najmniejszym zakresie uprawnień.
-- <strong>Pułapka 'Logging vs Monitoring':</strong> Pamiętaj: Audit Logs służą do badania aktywności (Who/What/When), a Monitoring do zbierania metryk wydajnościowych.
+Prawidłowa odpowiedź: A – Configure a policy in Binary Authorization to use Artifact Analysis vulnerability scanning to only allow images without critical vulnerabilities.
 
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Każda architektura bezpieczeństwa w GCP powinna być projektowana w oparciu o 'Security by Default'. Oznacza to m.in. szyfrowanie w spoczynku (domyślne), tożsamość opartą na rolach (IAM) oraz pełną widoczność zapewnianą przez scentralizowane logowanie (Cloud Logging/SCC).
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO A JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Pełny pipeline bezpieczeństwa kontenerów:
+1. Artifact Analysis = automatyczne skanowanie vulnerabilities przy push do Artifact Registry.
+2. Binary Authorization policy = blokuje deployment obrazów z krytycznymi vulnerabilities (bez attestacji).
+Razem tworzą automatyczny "security gate" w pipeline CI/CD.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+B. ❌ "Enable scanning + manually remove" = ręczna interwencja. Nie automatyzuje blokowania deploymentu.
+C. ❌ Custom script z third-party narzędziem = nienative, wymaga utrzymania. Opcja A jest natywna.
+D. ❌ "Manually inspect all images" = przeciwieństwo automatyzacji. Nie skaluje się.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Automatyczne blokowanie vulnerabilities w GKE = Binary Authorization + Artifact Analysis.
+• "Only allow images without critical vulnerabilities" = BA policy z attestation requirement.
+• Artifact Analysis = natywne skanowanie w Artifact Registry.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Automatic vulnerability-based deployment gate = Binary Authorization + Artifact Analysis.
+• Ręczna inspekcja = nie skalowalne, nie wybieraj w egzaminie.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/binary-authorization/docs/overview
+• https://cloud.google.com/artifact-registry/docs/analysis</pre>
 </div>
 
 

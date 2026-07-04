@@ -88,41 +88,90 @@ Your organization manages a critical web application that serves international c
 <div class="q-card q-answer mb-4 d-none" >
 
 <h2>Wyjaśnienie</h2>
-<pre>
-**Potwierdzona odpowiedź: AC**
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: C
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+Prawidłowa odpowiedź: C – Configure firewall rules to block traffic from known malicious IP ranges. Set up Google Cloud Armor and implement Identity-Aware Proxy (IAP) for granular access control.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO C JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Aplikacja atakowana przez malicious traffic (DDoS/bot attacks). Odpowiedź C:
+- Firewall rules = blokada znanych złośliwych IP (szybka ochrona).
+- Cloud Armor = WAF + DDoS protection (filtruje ataki na poziomie L7, chroni przed OWASP Top 10, rate limiting).
+- IAP = granularna kontrola dostępu oparta na tożsamości (tylko autoryzowani użytkownicy).
+Razem = kompletna, wielowarstwowa ochrona.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. ❌ Network load balancing bez WAF/Armor = rozkłada ruch, ale nie filtruje złośliwego. "Rely on load balancers for threat detection" = błędne.
+B. ❌ Firewall na instancjach + "rely on load balancers for threat detection" = load balancer nie wykrywa zagrożeń. Brak Cloud Armor.
+D. ❌ "Restrict all internal IP ranges" = zablokowałoby legalny ruch wewnętrzny. "Disable external IPs" może złamać publiczną dostępność aplikacji.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• DDoS/malicious traffic = Google Cloud Armor (WAF + DDoS protection).
+• IAP = granularna kontrola dostępu (nie DDoS protection).
+• Cloud Armor działa na poziomie Load Balancer (nie instancji).
+• Wielowarstwowa ochrona = firewall + Cloud Armor + IAP.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• DDoS/malicious traffic = Cloud Armor (nie Network LB).
+• Granular access control = IAP.
+• Load Balancer = traffic distribution, NIE threat detection.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/armor/docs/cloud-armor-overview
+• https://cloud.google.com/iap/docs/concepts-overview</pre>
 
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
-W pytaniach typu 'Security in GCP', zawsze priorytetyzuj rozwiązania natywne (SCC, Cloud KMS, Secret Manager, VPC SC) nad rozwiązaniami typu 'third-party' lub 'self-managed', chyba że scenariusz wymaga specyficznej integracji hybrydowej.
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: C
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <strong>Pułapka 'Least Privilege':</strong> Egzamin często podpowiada role o szerokim zakresie (np. 'Editor' lub 'Owner') – zawsze odrzucaj je na rzecz ról predefiniowanych o najmniejszym zakresie uprawnień.
-- <strong>Pułapka 'Logging vs Monitoring':</strong> Pamiętaj: Audit Logs służą do badania aktywności (Who/What/When), a Monitoring do zbierania metryk wydajnościowych.
+Prawidłowa odpowiedź: C – Configure firewall rules to block traffic from known malicious IP ranges. Set up Google Cloud Armor and implement Identity-Aware Proxy (IAP) for granular access control.
 
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Każda architektura bezpieczeństwa w GCP powinna być projektowana w oparciu o 'Security by Default'. Oznacza to m.in. szyfrowanie w spoczynku (domyślne), tożsamość opartą na rolach (IAM) oraz pełną widoczność zapewnianą przez scentralizowane logowanie (Cloud Logging/SCC).
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO C JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Aplikacja atakowana przez malicious traffic (DDoS/bot attacks). Odpowiedź C:
+- Firewall rules = blokada znanych złośliwych IP (szybka ochrona).
+- Cloud Armor = WAF + DDoS protection (filtruje ataki na poziomie L7, chroni przed OWASP Top 10, rate limiting).
+- IAP = granularna kontrola dostępu oparta na tożsamości (tylko autoryzowani użytkownicy).
+Razem = kompletna, wielowarstwowa ochrona.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. ❌ Network load balancing bez WAF/Armor = rozkłada ruch, ale nie filtruje złośliwego. "Rely on load balancers for threat detection" = błędne.
+B. ❌ Firewall na instancjach + "rely on load balancers for threat detection" = load balancer nie wykrywa zagrożeń. Brak Cloud Armor.
+D. ❌ "Restrict all internal IP ranges" = zablokowałoby legalny ruch wewnętrzny. "Disable external IPs" może złamać publiczną dostępność aplikacji.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• DDoS/malicious traffic = Google Cloud Armor (WAF + DDoS protection).
+• IAP = granularna kontrola dostępu (nie DDoS protection).
+• Cloud Armor działa na poziomie Load Balancer (nie instancji).
+• Wielowarstwowa ochrona = firewall + Cloud Armor + IAP.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• DDoS/malicious traffic = Cloud Armor (nie Network LB).
+• Granular access control = IAP.
+• Load Balancer = traffic distribution, NIE threat detection.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/armor/docs/cloud-armor-overview
+• https://cloud.google.com/iap/docs/concepts-overview</pre>
 </div>
 
 

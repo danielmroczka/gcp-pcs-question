@@ -88,41 +88,86 @@ Your organization is using Google Workspace, Google Cloud, and a third-party SIE
 <div class="q-card q-answer mb-4 d-none" >
 
 <h2>Wyjaśnienie</h2>
-<pre>
-**Potwierdzona odpowiedź: AC**
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: D
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+Prawidłowa odpowiedź: D – Create a Cloud Logging sink to export relevant authentication logs to a Pub/Sub topic for SIEM subscription.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO D JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Pytanie: eksport logów Google Workspace (auth events) do zewnętrznego SIEM w czasie rzeczywistym. Log Sink → Pub/Sub:
+- Google Workspace logi są dostępne w Cloud Logging (przez audit logs).
+- Log Sink filtruje konkretne eventy (login, failed login).
+- Pub/Sub = real-time streaming do SIEM.
+- SIEM subskrybuje Pub/Sub i pobiera logi natychmiast.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. ❌ "Poll Cloud Logging" = polling = opóźnienia, nieefektywne, nie real-time. gcloud logging read = ręczna komenda.
+B. ❌ Google Workspace "directly to SIEM API" = nie jest standardową obsługiwaną funkcją. Workspace nie ma natywnego push do zewnętrznych SIEM.
+C. ❌ Cloud Storage sink + periodic scan = batch (nie real-time). Opóźnienia w dostarczeniu logów.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Real-time log export do SIEM = Log Sink → Pub/Sub (standard pattern).
+• Google Workspace logi → Cloud Logging → Pub/Sub → SIEM.
+• GCS sink = batch/opóźnienia; Pub/Sub = real-time.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Real-time SIEM integration = Log Sink + Pub/Sub.
+• Polling/GCS sink = batch (nie real-time).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/logging/docs/export/using_exported_logs
+• https://workspace.google.com/products/admin/</pre>
 
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
-W pytaniach typu 'Security in GCP', zawsze priorytetyzuj rozwiązania natywne (SCC, Cloud KMS, Secret Manager, VPC SC) nad rozwiązaniami typu 'third-party' lub 'self-managed', chyba że scenariusz wymaga specyficznej integracji hybrydowej.
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: D
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <strong>Pułapka 'Least Privilege':</strong> Egzamin często podpowiada role o szerokim zakresie (np. 'Editor' lub 'Owner') – zawsze odrzucaj je na rzecz ról predefiniowanych o najmniejszym zakresie uprawnień.
-- <strong>Pułapka 'Logging vs Monitoring':</strong> Pamiętaj: Audit Logs służą do badania aktywności (Who/What/When), a Monitoring do zbierania metryk wydajnościowych.
+Prawidłowa odpowiedź: D – Create a Cloud Logging sink to export relevant authentication logs to a Pub/Sub topic for SIEM subscription.
 
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Każda architektura bezpieczeństwa w GCP powinna być projektowana w oparciu o 'Security by Default'. Oznacza to m.in. szyfrowanie w spoczynku (domyślne), tożsamość opartą na rolach (IAM) oraz pełną widoczność zapewnianą przez scentralizowane logowanie (Cloud Logging/SCC).
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO D JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Pytanie: eksport logów Google Workspace (auth events) do zewnętrznego SIEM w czasie rzeczywistym. Log Sink → Pub/Sub:
+- Google Workspace logi są dostępne w Cloud Logging (przez audit logs).
+- Log Sink filtruje konkretne eventy (login, failed login).
+- Pub/Sub = real-time streaming do SIEM.
+- SIEM subskrybuje Pub/Sub i pobiera logi natychmiast.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. ❌ "Poll Cloud Logging" = polling = opóźnienia, nieefektywne, nie real-time. gcloud logging read = ręczna komenda.
+B. ❌ Google Workspace "directly to SIEM API" = nie jest standardową obsługiwaną funkcją. Workspace nie ma natywnego push do zewnętrznych SIEM.
+C. ❌ Cloud Storage sink + periodic scan = batch (nie real-time). Opóźnienia w dostarczeniu logów.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Real-time log export do SIEM = Log Sink → Pub/Sub (standard pattern).
+• Google Workspace logi → Cloud Logging → Pub/Sub → SIEM.
+• GCS sink = batch/opóźnienia; Pub/Sub = real-time.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Real-time SIEM integration = Log Sink + Pub/Sub.
+• Polling/GCS sink = batch (nie real-time).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/logging/docs/export/using_exported_logs
+• https://workspace.google.com/products/admin/</pre>
 </div>
 
 

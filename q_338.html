@@ -88,41 +88,84 @@ Your organization is planning to deploy a large number of Google Kubernetes Engi
 <div class="q-card q-answer mb-4 d-none" >
 
 <h2>Wyjaśnienie</h2>
-<pre>
-**Potwierdzona odpowiedź: AC**
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: A
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+Prawidłowa odpowiedź: A – Configure node auto-upgrades for node pools in the maintenance windows.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO A JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+GKE Node Auto-Upgrade automatycznie aktualizuje węzły do najnowszej wersji K8s podczas zdefiniowanych okien serwisowych. To natywna, zarządzana funkcja GKE, która:
+- Nie wymaga ręcznej interwencji.
+- Zapewnia że wszystkie węzły są aktualne.
+- Maintenance windows = kontrola czasu aktualizacji (minimalizacja disruption).
+- Skaluje się do dowolnej liczby klastrów.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+B. ❌ Custom organization policy `autoUpgrade == true` = org policies dla GKE nie mają takiego constraint. Org policies operują na innym poziomie.
+C. ❌ Tworzenie nowego node pool + migracja = ręczny proces. Kosztowny czas i zasoby przy wielu klastrach.
+D. ❌ Ręczna komenda `gcloud container clusters upgrade` = to co mamy teraz i co jest problemem. Nie rozwiązuje kwestii "missed notifications".
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• GKE automatic node upgrades = Node Auto-Upgrade (nie org policy constraint).
+• Maintenance windows = zdefiniowane okna aktualizacji.
+• "Many clusters" + "automatic" = zarządzana funkcja GKE.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• GKE node patching = Node Auto-Upgrade + Maintenance Windows.
+• Nie ma org policy constraint dla GKE auto-upgrade (w odróżnieniu od Vertex AI Workbench).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/kubernetes-engine/docs/concepts/node-auto-upgrades</pre>
 
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
-W pytaniach typu 'Security in GCP', zawsze priorytetyzuj rozwiązania natywne (SCC, Cloud KMS, Secret Manager, VPC SC) nad rozwiązaniami typu 'third-party' lub 'self-managed', chyba że scenariusz wymaga specyficznej integracji hybrydowej.
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: A
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <strong>Pułapka 'Least Privilege':</strong> Egzamin często podpowiada role o szerokim zakresie (np. 'Editor' lub 'Owner') – zawsze odrzucaj je na rzecz ról predefiniowanych o najmniejszym zakresie uprawnień.
-- <strong>Pułapka 'Logging vs Monitoring':</strong> Pamiętaj: Audit Logs służą do badania aktywności (Who/What/When), a Monitoring do zbierania metryk wydajnościowych.
+Prawidłowa odpowiedź: A – Configure node auto-upgrades for node pools in the maintenance windows.
 
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Każda architektura bezpieczeństwa w GCP powinna być projektowana w oparciu o 'Security by Default'. Oznacza to m.in. szyfrowanie w spoczynku (domyślne), tożsamość opartą na rolach (IAM) oraz pełną widoczność zapewnianą przez scentralizowane logowanie (Cloud Logging/SCC).
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO A JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+GKE Node Auto-Upgrade automatycznie aktualizuje węzły do najnowszej wersji K8s podczas zdefiniowanych okien serwisowych. To natywna, zarządzana funkcja GKE, która:
+- Nie wymaga ręcznej interwencji.
+- Zapewnia że wszystkie węzły są aktualne.
+- Maintenance windows = kontrola czasu aktualizacji (minimalizacja disruption).
+- Skaluje się do dowolnej liczby klastrów.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+B. ❌ Custom organization policy `autoUpgrade == true` = org policies dla GKE nie mają takiego constraint. Org policies operują na innym poziomie.
+C. ❌ Tworzenie nowego node pool + migracja = ręczny proces. Kosztowny czas i zasoby przy wielu klastrach.
+D. ❌ Ręczna komenda `gcloud container clusters upgrade` = to co mamy teraz i co jest problemem. Nie rozwiązuje kwestii "missed notifications".
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• GKE automatic node upgrades = Node Auto-Upgrade (nie org policy constraint).
+• Maintenance windows = zdefiniowane okna aktualizacji.
+• "Many clusters" + "automatic" = zarządzana funkcja GKE.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• GKE node patching = Node Auto-Upgrade + Maintenance Windows.
+• Nie ma org policy constraint dla GKE auto-upgrade (w odróżnieniu od Vertex AI Workbench).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/kubernetes-engine/docs/concepts/node-auto-upgrades</pre>
 </div>
 
 

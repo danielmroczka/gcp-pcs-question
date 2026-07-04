@@ -88,41 +88,86 @@ Your organization is implementing a Zero Trust security model and using Chrome E
 <div class="q-card q-answer mb-4 d-none" >
 
 <h2>Wyjaśnienie</h2>
-<pre>
-**Potwierdzona odpowiedź: AC**
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: C
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+Prawidłowa odpowiedź: C – Create an access level in Access Context Manager that requires a device policy. Create a Context-Aware Access rule for the Cloud Storage buckets.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO C JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Zero Trust + Chrome Enterprise Premium to typowy scenariusz Context-Aware Access:
+- Access Context Manager + device policy = dostęp warunkowy oparty na stanie urządzenia (endpoint verification, OS version, screen lock, etc.).
+- Chrome Enterprise Premium integruje się z Access Context Manager.
+- Context-Aware Access = decyzja o dostępie oparta na: KTO (tożsamość) + SKĄD (kontekst urządzenia/sieci).
+To implementacja Zero Trust bez konieczności VPN.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. ❌ VPC Service Controls = perymetr dla managed services, nie zarządzanie dostępem opartym na urządzeniu.
+B. ❌ IAM Conditions po IP + VPN = stary model ochrony oparty na sieci. Zero Trust nie opiera się na lokalizacji sieciowej.
+D. ❌ Cloud Firewall rules + IP = firewall działa na warstwie sieciowej, nie weryfikuje stanu urządzenia ani tożsamości użytkownika. Nie jest Zero Trust.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Zero Trust + Chrome Enterprise Premium = Access Context Manager + Context-Aware Access.
+• Device policy = wymagania dot. stanu urządzenia (zainstalowany cert, OS version, itp.).
+• Zero Trust ≠ VPN (VPN = stary model).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Zero Trust dostęp = Access Context Manager + Context-Aware Access.
+• Device-based access control = Access Level z device policy.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/access-context-manager/docs/overview
+• https://cloud.google.com/beyondcorp-enterprise/docs/overview</pre>
 
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
-W pytaniach typu 'Security in GCP', zawsze priorytetyzuj rozwiązania natywne (SCC, Cloud KMS, Secret Manager, VPC SC) nad rozwiązaniami typu 'third-party' lub 'self-managed', chyba że scenariusz wymaga specyficznej integracji hybrydowej.
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: C
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <strong>Pułapka 'Least Privilege':</strong> Egzamin często podpowiada role o szerokim zakresie (np. 'Editor' lub 'Owner') – zawsze odrzucaj je na rzecz ról predefiniowanych o najmniejszym zakresie uprawnień.
-- <strong>Pułapka 'Logging vs Monitoring':</strong> Pamiętaj: Audit Logs służą do badania aktywności (Who/What/When), a Monitoring do zbierania metryk wydajnościowych.
+Prawidłowa odpowiedź: C – Create an access level in Access Context Manager that requires a device policy. Create a Context-Aware Access rule for the Cloud Storage buckets.
 
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Każda architektura bezpieczeństwa w GCP powinna być projektowana w oparciu o 'Security by Default'. Oznacza to m.in. szyfrowanie w spoczynku (domyślne), tożsamość opartą na rolach (IAM) oraz pełną widoczność zapewnianą przez scentralizowane logowanie (Cloud Logging/SCC).
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO C JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Zero Trust + Chrome Enterprise Premium to typowy scenariusz Context-Aware Access:
+- Access Context Manager + device policy = dostęp warunkowy oparty na stanie urządzenia (endpoint verification, OS version, screen lock, etc.).
+- Chrome Enterprise Premium integruje się z Access Context Manager.
+- Context-Aware Access = decyzja o dostępie oparta na: KTO (tożsamość) + SKĄD (kontekst urządzenia/sieci).
+To implementacja Zero Trust bez konieczności VPN.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. ❌ VPC Service Controls = perymetr dla managed services, nie zarządzanie dostępem opartym na urządzeniu.
+B. ❌ IAM Conditions po IP + VPN = stary model ochrony oparty na sieci. Zero Trust nie opiera się na lokalizacji sieciowej.
+D. ❌ Cloud Firewall rules + IP = firewall działa na warstwie sieciowej, nie weryfikuje stanu urządzenia ani tożsamości użytkownika. Nie jest Zero Trust.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Zero Trust + Chrome Enterprise Premium = Access Context Manager + Context-Aware Access.
+• Device policy = wymagania dot. stanu urządzenia (zainstalowany cert, OS version, itp.).
+• Zero Trust ≠ VPN (VPN = stary model).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Zero Trust dostęp = Access Context Manager + Context-Aware Access.
+• Device-based access control = Access Level z device policy.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/access-context-manager/docs/overview
+• https://cloud.google.com/beyondcorp-enterprise/docs/overview</pre>
 </div>
 
 

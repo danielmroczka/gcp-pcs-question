@@ -88,41 +88,84 @@ Your organization enforces a custom organization policy that disables the use of
 <div class="q-card q-answer mb-4 d-none" >
 
 <h2>Wyjaśnienie</h2>
-<pre>
-**Potwierdzona odpowiedź: AC**
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: C
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+Prawidłowa odpowiedź: C – Apply the custom organization policy at the organization level to restrict external IPs. Move the regulated business workload to a separate folder. Override the policy at the folder level to allow external IPs.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO C JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Mechanizm hierarchii organizacyjnej: org policy na poziomie org = domyślny, ale można ją nadpisać na poziomie folderu. Odpowiedź C:
+- Org policy na poziomie organizacji = wszyscy podlegają ograniczeniu.
+- Osobny folder dla regulowanego workloadu = izolacja.
+- Override na folderze = wyjątek tylko dla tego folderu.
+- Reszta organizacji nadal jest chroniona.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. ❌ Polityka tylko na folderze dla nie-regulowanych = regulowane workloady nie mają constraintów. Odwrócona logika.
+B. ❌ IAM custom role z "bypass org policies" = org policies nie mogą być omijane przez IAM. Org policies &gt; IAM.
+D. ❌ Modyfikacja org policy na poziomie organizacji aby zezwolić = usuwa ochronę dla WSZYSTKICH, nie tylko regulowanego workloadu.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Org policy hierarchy: org → folder → projekt (można override na niższych poziomach).
+• Override na folderze = wyjątek nie łamiący całościowej polityki.
+• IAM nie może "bypass" org policies.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Wyjątek od org policy = override na niższym poziomie hierarchii (folder/projekt).
+• IAM ≠ org policy override.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/resource-manager/docs/organization-policy/hierarchy-evaluation</pre>
 
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
-W pytaniach typu 'Security in GCP', zawsze priorytetyzuj rozwiązania natywne (SCC, Cloud KMS, Secret Manager, VPC SC) nad rozwiązaniami typu 'third-party' lub 'self-managed', chyba że scenariusz wymaga specyficznej integracji hybrydowej.
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: C
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <strong>Pułapka 'Least Privilege':</strong> Egzamin często podpowiada role o szerokim zakresie (np. 'Editor' lub 'Owner') – zawsze odrzucaj je na rzecz ról predefiniowanych o najmniejszym zakresie uprawnień.
-- <strong>Pułapka 'Logging vs Monitoring':</strong> Pamiętaj: Audit Logs służą do badania aktywności (Who/What/When), a Monitoring do zbierania metryk wydajnościowych.
+Prawidłowa odpowiedź: C – Apply the custom organization policy at the organization level to restrict external IPs. Move the regulated business workload to a separate folder. Override the policy at the folder level to allow external IPs.
 
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Każda architektura bezpieczeństwa w GCP powinna być projektowana w oparciu o 'Security by Default'. Oznacza to m.in. szyfrowanie w spoczynku (domyślne), tożsamość opartą na rolach (IAM) oraz pełną widoczność zapewnianą przez scentralizowane logowanie (Cloud Logging/SCC).
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO C JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Mechanizm hierarchii organizacyjnej: org policy na poziomie org = domyślny, ale można ją nadpisać na poziomie folderu. Odpowiedź C:
+- Org policy na poziomie organizacji = wszyscy podlegają ograniczeniu.
+- Osobny folder dla regulowanego workloadu = izolacja.
+- Override na folderze = wyjątek tylko dla tego folderu.
+- Reszta organizacji nadal jest chroniona.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. ❌ Polityka tylko na folderze dla nie-regulowanych = regulowane workloady nie mają constraintów. Odwrócona logika.
+B. ❌ IAM custom role z "bypass org policies" = org policies nie mogą być omijane przez IAM. Org policies &gt; IAM.
+D. ❌ Modyfikacja org policy na poziomie organizacji aby zezwolić = usuwa ochronę dla WSZYSTKICH, nie tylko regulowanego workloadu.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Org policy hierarchy: org → folder → projekt (można override na niższych poziomach).
+• Override na folderze = wyjątek nie łamiący całościowej polityki.
+• IAM nie może "bypass" org policies.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Wyjątek od org policy = override na niższym poziomie hierarchii (folder/projekt).
+• IAM ≠ org policy override.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/resource-manager/docs/organization-policy/hierarchy-evaluation</pre>
 </div>
 
 

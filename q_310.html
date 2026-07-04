@@ -88,41 +88,76 @@ You work for a financial organization in a highly regulated industry that is sub
 <div class="q-card q-answer mb-4 d-none" >
 
 <h2>Wyjaśnienie</h2>
-<pre>
-**Potwierdzona odpowiedź: AC**
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: B
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+Prawidłowa odpowiedź: B – Create an Assured Workloads folder for your required compliance program to apply the compliance controls to all resources in the folder.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO B JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Assured Workloads to narzędzie GCP zaprojektowane specjalnie dla organizacji w regulowanych branżach (finansowych, rządowych, healthcare). Tworzy folder z automatycznie stosowanymi kontrolami compliance (FedRAMP, HIPAA, PCI-DSS, IL4 itp.). Wszystkie zasoby w folderze automatycznie spełniają wymagania regulacyjne.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. ❌ Organization policy constraints można skonfigurować, ale nie ma gotowego "compliance program" dla regulowanych branż. Wymaga ręcznej konfiguracji każdej polityki.
+C. ❌ SCC Compliance page pokazuje status zgodności, ale nie egzekwuje compliance automatycznie.
+D. ❌ posture.yaml (Security Posture) to nowy mechanizm, ale Assured Workloads jest dedykowanym rozwiązaniem dla regulowanych branż z programami compliance.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• "Regulated industry" + "compliance program" = Assured Workloads.
+• Assured Workloads = FedRAMP, HIPAA, PCI-DSS, ITAR, IL4/IL5.
+• Jeden folder = wszystkie kontrole compliance automatycznie.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Compliance w regulowanych branżach = Assured Workloads folder.
+• Nie confunduj z SCC (detekcja) vs Assured Workloads (enforcement).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/assured-workloads/docs/overview</pre>
 
 </div>
 <div class="q-card q-answer mb-4 d-none" >
 <h2>Wskazówki egzaminacyjne (Tips & Tricks)</h2>
-<pre>
-<strong>Reguła Egzaminacyjna (Exam Rule):</strong> 
-W pytaniach typu 'Security in GCP', zawsze priorytetyzuj rozwiązania natywne (SCC, Cloud KMS, Secret Manager, VPC SC) nad rozwiązaniami typu 'third-party' lub 'self-managed', chyba że scenariusz wymaga specyficznej integracji hybrydowej.
+<pre>✅ PRAWIDŁOWA ODPOWIEDŹ: B
 
-<strong>Haczyki egzaminacyjne (Exam Traps):</strong>
-- <strong>Pułapka 'Least Privilege':</strong> Egzamin często podpowiada role o szerokim zakresie (np. 'Editor' lub 'Owner') – zawsze odrzucaj je na rzecz ról predefiniowanych o najmniejszym zakresie uprawnień.
-- <strong>Pułapka 'Logging vs Monitoring':</strong> Pamiętaj: Audit Logs służą do badania aktywności (Who/What/When), a Monitoring do zbierania metryk wydajnościowych.
+Prawidłowa odpowiedź: B – Create an Assured Workloads folder for your required compliance program to apply the compliance controls to all resources in the folder.
 
-<strong>Głębokie wyjaśnienie techniczne:</strong>
-Każda architektura bezpieczeństwa w GCP powinna być projektowana w oparciu o 'Security by Default'. Oznacza to m.in. szyfrowanie w spoczynku (domyślne), tożsamość opartą na rolach (IAM) oraz pełną widoczność zapewnianą przez scentralizowane logowanie (Cloud Logging/SCC).
-</pre>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO B JEST PRAWIDŁOWE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Assured Workloads to narzędzie GCP zaprojektowane specjalnie dla organizacji w regulowanych branżach (finansowych, rządowych, healthcare). Tworzy folder z automatycznie stosowanymi kontrolami compliance (FedRAMP, HIPAA, PCI-DSS, IL4 itp.). Wszystkie zasoby w folderze automatycznie spełniają wymagania regulacyjne.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DLACZEGO INNE OPCJE SĄ BŁĘDNE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. ❌ Organization policy constraints można skonfigurować, ale nie ma gotowego "compliance program" dla regulowanych branż. Wymaga ręcznej konfiguracji każdej polityki.
+C. ❌ SCC Compliance page pokazuje status zgodności, ale nie egzekwuje compliance automatycznie.
+D. ❌ posture.yaml (Security Posture) to nowy mechanizm, ale Assured Workloads jest dedykowanym rozwiązaniem dla regulowanych branż z programami compliance.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WSKAZÓWKI EGZAMINACYJNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• "Regulated industry" + "compliance program" = Assured Workloads.
+• Assured Workloads = FedRAMP, HIPAA, PCI-DSS, ITAR, IL4/IL5.
+• Jeden folder = wszystkie kontrole compliance automatycznie.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGUŁY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Compliance w regulowanych branżach = Assured Workloads folder.
+• Nie confunduj z SCC (detekcja) vs Assured Workloads (enforcement).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DODATKOWE ŹRÓDŁA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• https://cloud.google.com/assured-workloads/docs/overview</pre>
 </div>
 
 
