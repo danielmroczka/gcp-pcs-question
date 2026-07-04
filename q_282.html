@@ -89,24 +89,35 @@ You have just created a new log bucket to replace the _Default log bucket. You w
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Edit the _Default sink, and select the new log bucket as the sink destination.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź D jest prawidłowa, ponieważ edycja domyślnego odbiornika logów (`_Default` sink) jest najbardziej bezpośrednim, zautomatyzowanym i efektywnym (najmniejszy narzut operacyjny) sposobem na przekierowanie strumienia logów do nowo utworzonego kubełka.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Dlaczego to najlepsze podejście:
+a. **Domyślna konfiguracja:** Odbiornik `_Default` jest automatycznie tworzony w każdym projekcie GCP i zawiera predefiniowane filtry przechwytujące większość typowych logów systemowych (poza logami audytowymi zbieranymi przez `_Required`).
+b. **Brak duplikacji:** Zamiast tworzyć nowe filtry i wyłączać stare, zmieniamy jedynie pole `destination` w istniejącym sinku `_Default` na wskazanie nowego log bucketa. Zapobiega to powstawaniu zduplikowanych reguł i gwarantuje, że proces logowania nie ulegnie przerwaniu ani nie wygeneruje dodatkowych kosztów za podwójny transfer logów.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Create exclusion filters for the _Default sink... Create a user-defined sink...
+   * Dlaczego nieprawidłowa: Choć to podejście zadziała, jest nieefektywne. Tworzenie dodatkowego wykluczenia (exclusion) oraz tworzenie nowego, niezależnego sinka od zera generuje niepotrzebny narzut konfiguracyjny i zwiększa stopień skomplikowania środowiska loggingu.
+B. Disable the _Default sink. Create a user-defined sink...
+   * Dlaczego nieprawidłowa: Wyłączenie (lub wyciszenie) sinka `_Default` i budowanie własnego od nowa wymaga dokładnego skopiowania skomplikowanych domyślnych filtrów Google. Jeśli pomylimy się w filtrach, stracimy ważne logi. Edycja celu (opcja D) jest bezpieczniejsza i szybsza.
+C. Create a user-defined sink with inclusion filters copied from the _Default sink...
+   * Dlaczego nieprawidłowa: Podobnie jak w opcji B, ta metoda tworzy nadmiarową konfigurację. Nowy sink działałby równolegle z wciąż aktywnym sinkiem `_Default` (jeśli go nie wyłączymy), co doprowadziłoby do podwójnego zapisywania tych samych logów (do starych i nowych kubełków), podwajając koszty przechowywania logów.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Odbiorniki logów `_Required` i `_Default` są wbudowane w GCP.
+* Możesz edytować destynację (destination) sinka `_Default` w celu przekierowania logów do regionalnego lub niestandardowego kubełka logów.
+* Zawsze szukaj rozwiązań o najmniejszym narzucie konfiguracyjnym (most efficient).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Route logs from _Default sink to new bucket efficiently -> Edit the _Default sink and change destination.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/logging/docs/routing/overview" target="_blank">Routing and storage overview (Cloud Logging)</a>
+<a href="https://cloud.google.com/logging/docs/routing/custom-buckets" target="_blank">Configure log buckets and sinks</a>
 </pre>
 
 </div>

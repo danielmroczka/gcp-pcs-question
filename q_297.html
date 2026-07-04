@@ -89,24 +89,34 @@ Your multinational organization is undergoing rapid expansion within Google Clou
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Use a hierarchical structure of folders. Implement template-based organization policies that cascade down, allowing limited customization by regional teams.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź D jest prawidłowa, ponieważ zastosowanie hierarchii folderów (Folders Hierarchy) w połączeniu z dziedziczeniem polityk organizacji jest standardowym i najbardziej efektywnym sposobem na zarządzanie bezpieczeństwem w skali przedsiębiorstwa (enterprise governance).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Jak to realizuje wymagania:
+a. **Spójność u podstaw (Consistency):** Definiując podstawowe reguły bezpieczeństwa (np. zakaz publicznego GCS, ograniczenie domen do firmowych) na najwyższych poziomach hierarchii (np. folder główny lub folder regionalny), gwarantujemy, że wszystkie podrzędne projekty automatycznie odziedziczą te zabezpieczenia (cascading policies).
+b. **Autonomia zespołów regionalnych:** Zespoły regionalne mogą zarządzać swoimi lokalnymi projektami i dostosowywać polityki na poziomie swoich podfolderów (np. dodając specyficzne wyjątki), ale nie mogą złamać krytycznych blokad narzuconych z góry, co zapobiega rozrostowi uprawnień (permission sprawl).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Create detailed organization-wide policies... Instruct teams to apply the policies carefully...
+   * Dlaczego nieprawidłowa: Instruktaż zespołów (polityka papierowa / procedury ludzkie) nie gwarantuje bezpieczeństwa. Deweloperzy mogą zapomnieć o wdrożeniu polityk lub popełnić błędy, co doprowadzi do braku spójności i podatności środowisk.
+B. Delegate the creation of organization policies to regional teams. Centrally review...
+   * Dlaczego nieprawidłowa: Przerzucenie odpowiedzialności na zespoły regionalne i ręczny przegląd przed wdrożeniem spowalnia procesy deweloperskie i jest skrajnie nieefektywne przy dużej liczbie projektów (brak automatyzacji i skali).
+C. Define a small set of essential organization policies. Supplement these policies with a library of optional...
+   * Dlaczego nieprawidłowa: Pozostawienie polityk jako "opcjonalnych szablonów" (optional templates) do wyboru przez zespoły sprawi, że większość zespołów ich nie wdroży w celu ułatwienia sobie pracy. Nie gwarantuje to spójnego egzekwowania standardów bezpieczeństwa w całej firmie.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Skuteczne zarządzanie politykami organizacji w skali (at scale) w GCP -> Używaj **hierarchii folderów (folder structure)** i pozwól politykom spływać kaskadowo (cascade down).
+* Wyłącz dziedziczenie lub stosuj reguły łączenia (rules merging) tylko dla dozwolonych, kontrolowanych wyjątków.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Enforce consistent standards at scale + autonomy of regional teams -> Hierarchical structure of folders + template policies cascade down.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/resource-manager/docs/creating-managing-folders" target="_blank">Creating and managing folders in GCP</a>
+<a href="https://cloud.google.com/resource-manager/docs/organization-policy/understanding-hierarchy" target="_blank">Organization Policy hierarchy and inheritance</a>
 </pre>
 
 </div>

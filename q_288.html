@@ -89,24 +89,35 @@ Your organization is developing an application that will have both corporate and
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Use a customer identity and access management tool (CIAM) like Identity Platform.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź D jest prawidłowa, ponieważ Identity Platform to w pełni zarządzana przez Google usługa klasy CIAM (Customer Identity and Access Management), zaprojektowana specjalnie do obsługi, uwierzytelniania i autoryzacji zewnętrznych użytkowników aplikacji (zarówno klientów publicznych, jak i partnerów biznesowych).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Dlaczego to najlepsze rozwiązanie:
+a. **Dla użytkowników korporacyjnych:** Obsługuje federację tożsamości (SAML/OIDC), co pozwala pracownikom korporacyjnym logować się przy użyciu ich firmowego konta i domeny.
+b. **Dla użytkowników publicznych:** Obsługuje logowanie za pomocą e-mail/hasło, SMS oraz integrację z popularnymi dostawcami społecznościowymi (Google, Facebook, GitHub itp.).
+c. **Centralne zarządzanie:** Wszystkie tożsamości są zarządzane w jednym miejscu, a usługa automatycznie skaluje się do milionów użytkowników bez narzutu administracyjnego na lokalne systemy Cloud Identity.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Add the corporate and public end-user domains to domain restricted sharing...
+   * Dlaczego nieprawidłowa: Ograniczenie udostępniania domen (Domain Restricted Sharing) to polityka organizacji GCP, która limituje, jakim domenom e-mail można nadawać role IAM w konsoli administracyjnej GCP. Nie służy do logowania i autoryzacji zwykłych użytkowników końcowych (end-users) do Twojej aplikacji SaaS.
+B. Federate the customers' identity provider (IdP) with Workforce Identity Federation...
+   * Dlaczego nieprawidłowa: Workforce Identity Federation służy do nadawania dostępu do konsoli GCP, CLI oraz interfejsów API Google dla pracowników (workforce) i kontrahentów w celu zarządzania zasobami. Nie jest przeznaczona do autoryzacji i logowania klientów zewnętrznych (public end-users) do aplikacji biznesowych.
+C. Do nothing. Google Workspace identities will allow you to filter personal accounts...
+   * Dlaczego nieprawidłowa: Brak działań nie rozwiąże problemu logowania użytkowników publicznych. Google Workspace (Cloud Identity) zarządza tożsamościami pracowników Twojej firmy, a nie zewnętrznymi klientami publicznymi aplikacji SaaS, którzy nie posiadają i nie powinni posiadać kont w Twojej domenie firmowej.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Logowanie i uwierzytelnianie użytkowników końcowych aplikacji (end-users / SaaS customers / public users) -> Zawsze używaj narzędzi **CIAM (Customer Identity & Access Management)**, czyli **Identity Platform** (lub Firebase Authentication).
+* Workforce Identity Federation służy do dostępu administracyjnego pracowników do GCP, a nie klientów do aplikacji.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Corporate and public end-users + centrally manage customer identities -> Customer identity and access management (CIAM) / Identity Platform.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/identity-platform" target="_blank">Google Cloud Identity Platform overview</a>
+<a href="https://cloud.google.com/identity-platform/docs/product-comparison" target="_blank">Workforce vs. Customer Identity options</a>
 </pre>
 
 </div>

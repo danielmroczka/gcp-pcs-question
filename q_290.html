@@ -89,24 +89,35 @@ You are implementing communications restrictions for specific services in your G
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Create a scoped policy on the folder with a service perimeter to restrict BigQuery access. Assign the data analytics team the Access Context Manager Editor role on the scoped policy to allow the team to configure the scoped policy.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź B jest prawidłowa, ponieważ scoped access policies (polityki o ograniczonym zasięgu) w ramach VPC Service Controls (VPC SC) pozwalają na bezpieczną delegację uprawnień administracyjnych perymetru do wybranego poziomu w hierarchii zasobów (np. folderu).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Mechanizm działania:
+a. **Scoped Policy (Polityka z zakresem):** Tradycyjne polityki dostępu w Access Context Managerze są globalne dla całej organizacji. Stworzenie polityki o ograniczonym zasięgu (scoped policy) pozwala na powiązanie jej wyłącznie z określonym folderem (data analytics folder).
+b. **Delegacja uprawnień (Least Privilege):** Nadanie zespołowi analitycznemu roli `Access Context Manager Editor` (Edytor Access Context Managera) bezpośrednio na tej scoped policy pozwala im na samodzielne tworzenie, modyfikowanie i usuwanie perymetrów oraz poziomów dostępu w obrębie ich folderu.
+c. Zespół analityczny nie otrzymuje żadnych uprawnień administracyjnych do zasobów poza ich folderem (np. w projektach produkcyjnych innych działów), co gwarantuje pełne bezpieczeństwo i izolację administracyjną.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Create an organization-level access policy... Assign the data analytics team the Access Context Manager Editor role on the access policy...
+   * Dlaczego nieprawidłowa: Przyznanie tej roli na poziomie polityki organizacji dałoby zespołowi analitycznemu uprawnienia do modyfikowania perymetrów bezpieczeństwa we WSZYSTKICH folderach i projektach w całej firmie. Narusza to wymóg ograniczający kontrolę "wyłącznie do ich folderu" (only at the folder level).
+C. Define a hierarchical firewall policy on the folder to deny BigQuery access...
+   * Dlaczego nieprawidłowa: Hierarchical firewall policies filtrują ruch sieciowy IP na poziomie maszyn wirtualnych. Nie kontrolują dostępu do API usług zarządzanych Google, takich jak BigQuery, które są chronione na poziomie tożsamości i za pomocą VPC Service Controls, a nie reguł sieciowych L3/L4.
+D. Enforce the Restrict Resource Service Usage organization policy constraint...
+   * Dlaczego nieprawidłowa: Ograniczenie polityki organizacji `gcp.restrictServiceUsage` całkowicie blokuje możliwość włączania i używania danej usługi (np. deweloperzy nie mogliby w ogóle uruchomić BigQuery). Pytanie wymaga kontrolowania bezpiecznego dostępu do BigQuery (za pomocą perymetru sieciowego VPC SC), a nie jego całkowitego zablokowania w folderze.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Delegacja zarządzania VPC Service Controls do określonego Folderu lub Projektu -> Używaj **Scoped Access Policies** w Access Context Managerze.
+* Zapobiega to nadawaniu uprawnień administracyjnych w skali całej organizacji.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Control VPC SC restrictions only at the folder level -> Scoped policy on the folder + Access Context Manager Editor role.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/vpc-service-controls/docs/scoped-policies" target="_blank">Scoped access policies for VPC Service Controls</a>
+<a href="https://cloud.google.com/access-context-manager/docs/custom-roles" target="_blank">IAM roles for Access Context Manager</a>
 </pre>
 
 </div>

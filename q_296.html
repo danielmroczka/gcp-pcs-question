@@ -89,24 +89,37 @@ Your organization operates in a highly regulated industry and uses multiple Goog
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Principals have broad IAM roles allowing the creation and management of Compute Engine VMs without a pre-defined hardening process.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź D jest prawidłowa, ponieważ przyznawanie użytkownikom szerokich uprawnień do tworzenia i konfigurowania maszyn wirtualnych (IaaS) bez narzuconego, bezpiecznego procesu utwardzania (hardening) oraz szablonów bezpieczeństwa stwarza największe, bezpośrednie zagrożenie dla zgodności regulacyjnej i bezpieczeństwa całej infrastruktury.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Dlaczego to największe ryzyko:
+a. **Brak kontroli nad systemem operacyjnym:** Deweloperzy mogą uruchamiać niezałatane (unpatched) systemy operacyjne podatne na znane exploity.
+b. **Błędne konfiguracje sieciowe:** Szerokie uprawnienia pozwalają na otwieranie portów na cały świat (0.0.0.0/0) lub przypisywanie publicznych IP maszynom produkcyjnym.
+c. **Ucieczka z kontenera / uprawnienia roota:** Brak hardeningu pozwala na uruchamianie usług z uprawnieniami roota, co ułatwia kompromitację środowiska. Łamie to kluczowe wymagania standardów takich jak PCI DSS czy CIS.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. The security team mandates the use of customer-managed encryption keys (CMEK) for all data classified as sensitive.
+   * Dlaczego nieprawidłowa: Wymuszenie stosowania kluczy CMEK dla danych wrażliwych jest doskonałą praktyką bezpieczeństwa (best practice) i pomaga w spełnieniu wymogów regulacyjnych dotyczących ochrony danych w spoczynku. Nie stanowi ryzyka.
+B. Sensitive data is stored in a Cloud Storage bucket with the uniform bucket-level access setting enabled.
+   * Dlaczego nieprawidłowa: Uniform Bucket-Level Access (jednolity dostęp na poziomie kubełka) jest zalecaną przez Google konfiguracją Cloud Storage. Upraszcza zarządzanie uprawnieniami IAM i zapobiega wyciekom danych przez skomplikowane listy ACL na pojedynczych obiektach. Pomaga w zachowaniu zgodności.
+C. The audit team needs access to Cloud Audit Logs related to managed services like BigQuery.
+   * Dlaczego nieprawidłowa: Dostęp zespołu audytowego do logów audytowych jest standardowym wymaganiem kontroli wewnętrznej. Pozwala na audytowanie użycia danych i nie generuje zagrożenia, pod warunkiem przyznania im roli o charakterze tylko do odczytu (np. Logs Viewer).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Największe ryzyko bezpieczeństwa (greatest risk) na egzaminach GCP często wiąże się z:
+  - Nadmiarowymi uprawnieniami IAM (broad roles).
+  - Brakiem patchowania i utwardzania systemów (no hardening process).
+  - Brakiem prewencyjnych polityk organizacji.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Greatest risk to regulatory compliance -> Broad IAM roles to create VMs without hardening process.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/compute/docs/instances/hardening-vm-images" target="_blank">Hardening Compute Engine VM images</a>
+<a href="https://cloud.google.com/architecture/framework/security" target="_blank">Security design in Google Cloud Architecture Framework</a>
 </pre>
 
 </div>

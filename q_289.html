@@ -93,24 +93,37 @@ You work for an organization that handles sensitive customer data. You must secu
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Use predefined IAM roles tailored to each team's access needs, such as Storage Object Viewer and Storage Object User. Utilize customer-supplied encryption keys (CSEK) and enforce TLS encryption. Turn on both Object Versioning and Cloud Audit Logs for the storage buckets.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź C jest prawidłowa, ponieważ kompleksowo spełnia wszystkie cztery wymagania bezpieczeństwa i zgodności postawione przed systemem przechowywania danych w Cloud Storage.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Spełnienie wymagań krok po kroku:
+a. **Zróżnicowany dostęp (Least Privilege):** Zastosowanie predefiniowanych ról IAM (np. `Storage Object Viewer` dla odczytu oraz `Storage Object User` dla zapisu i odczytu) pozwala na precyzyjne przydzielenie uprawnień zespołom bez nadmiarowych uprawnień administracyjnych.
+b. **Ochrona danych w spoczynku i kontrola kluczy:** Wykorzystanie kluczy szyfrujących dostarczanych przez klienta (Customer-Supplied Encryption Keys - CSEK) gwarantuje, że bank/organizacja ma 100% kontroli nad kluczami, ponieważ Google nie zapisuje ich na dyskach i są one dostarczane w wywołaniach API.
+c. **Ochrona w locie:** Wymuszenie szyfrowania TLS (HTTPS) zabezpiecza dane przed podsłuchem podczas przesyłania.
+d. **Śledzenie zmian i audyt:** Włączenie wersjonowania obiektów (Object Versioning) pozwala na odzyskanie i śledzenie zmian w plikach, a aktywacja Cloud Audit Logs zapewnia pełną rozliczalność (kto i kiedy uzyskał dostęp do plików).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. ...Employ server-side encryption and Object Versioning by Google Cloud Storage...
+   * Dlaczego nieprawidłowa: Domyślne szyfrowanie po stronie serwera Google (Google-managed keys) nie daje organizacji kontroli nad kluczami szyfrującymi (klucze są w pełni kontrolowane przez Google), co narusza czwarty wymóg zadania.
+B. ...apply access control lists (ACLs) to each bucket and file...
+   * Dlaczego nieprawidłowa: Stosowanie list ACL na poziomie pojedynczych plików jest przestarzałą i trudną do audytowania praktyką. Google zaleca stosowanie Uniform IAM na poziomie kubełka w celu zachowania spójności bezpieczeństwa. Ponadto, ta opcja nie wspomina o wymaganiu kontroli nad kluczami szyfrującymi (brak CSEK/CMEK).
+D. Assign IAM permissions for all teams at the object level... Implement third-party software to encrypt...
+   * Dlaczego nieprawidłowa: Przypisywanie uprawnień na poziomie obiektów jest skomplikowane i nieefektywne. Używanie oprogramowania firm trzecich (third-party software) do szyfrowania danych w locie wprowadza niepotrzebną złożoność i nie integruje się natywnie z Cloud Storage. Ponadto logi sieciowe (network logs) nie dostarczają szczegółowych informacji o operacjach na plikach API GCS (brak audytu specyficznego dla przechowywania obiektów).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Kontrola nad kluczami szyfrującymi w GCS -> **Customer-Supplied Encryption Keys (CSEK)** lub **Customer-Managed Encryption Keys (CMEK)**.
+* Śledzenie zmian plików w GCS -> **Object Versioning**.
+* Audytowanie dostępu do obiektów -> **Cloud Audit Logs** (Data Access Logs).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Track file changes + audit access + organization control keys -> Object Versioning + Cloud Audit Logs + CSEK/CMEK.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/storage/docs/encryption/customer-supplied-keys" target="_blank">Customer-Supplied Encryption Keys (CSEK) in Cloud Storage</a>
+<a href="https://cloud.google.com/storage/docs/object-versioning" target="_blank">Object Versioning in Cloud Storage</a>
 </pre>
 
 </div>

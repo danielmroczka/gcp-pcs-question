@@ -89,24 +89,36 @@ You manage multiple internal-only applications that are hosted within different 
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Create a new project for the application, and use VPC Network Peering to access necessary resources in the internal projects.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź D jest prawidłowa, ponieważ umieszczenie nowej aplikacji zewnętrznej w wydzielonym projekcie (Dedicated Project) oraz sieci VPC jest podstawową zasadą izolacji bezpieczeństwa (security isolation) w chmurze.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Dlaczego to zapewnia najlepszą izolację:
+a. **Izolacja na poziomie projektu (Blast Radius):** Projekt jest główną granicą bezpieczeństwa w GCP. Jeśli zewnętrzna aplikacja zostanie zhakowana (skompromitowana), napastnik nie uzyska automatycznie dostępu do zasobów wewnętrznych aplikacji, które znajdują się w innych projektach.
+b. **Kontrolowana łączność (VPC Peering):** Użycie VPC Network Peering pozwala na bezpieczną, prywatną komunikację sieciową między siecią VPC aplikacji zewnętrznej a sieciami wewnętrznymi tylko na portach i dla zasobów, które zostaną jawnie dopuszczone przez reguły firewall.
+c. **Separacja administracyjna:** Pozwala na przydzielenie zespołowi deweloperskiemu uprawnień do zarządzania tą jedną aplikacją bez dawania im dostępu do systemów wewnętrznych.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Deploy the application within the same project as an internal application. Use a Shared VPC model...
+   * Dlaczego nieprawidłowa: Umieszczenie publicznej aplikacji w tym samym projekcie co krytyczne systemy wewnętrzne drastycznie zwiększa ryzyko (blast radius). Napastnik, przejmując uprawnienia w projekcie (np. przez podatność aplikacji), uzyska bezpośredni dostęp do innych zasobów w tym samym projekcie. Shared VPC współdzieli sieć, ale nie naprawia braku izolacji na poziomie zasobów projektu.
+B. Place the application in the same project... and adjust firewall rules to allow external traffic.
+   * Dlaczego nieprawidłowa: Podobnie jak opcja A, brak separacji na poziomie projektu jest poważnym błędem. Otwarcie zapory sieciowej dla ruchu zewnętrznego bezpośrednio do projektu z zasobami wewnętrznymi stwarza wysokie ryzyko wycieku danych w przypadku błędnej konfiguracji firewall.
+C. Create a VPC Service Controls perimeter, and place the new application's project within that perimeter.
+   * Dlaczego nieprawidłowa: Perymetr VPC Service Controls (VPC SC) służy do izolowania usług zarządzanych (np. zakaz wywoływania API BigQuery z zewnątrz perymetru). Sam perymetr nie służy do separacji ruchu sieciowego dla nowo wdrażanej publicznej aplikacji webowej i nie zastępuje potrzeby wdrożenia jej w osobnym projekcie w celu izolacji maszyn.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Podstawową granicą izolacji (security boundary) w GCP jest **Projekt (Project)**.
+* Zawsze wdrażaj aplikacje o różnym profilu ryzyka (np. publiczne vs. wewnętrzne) w osobnych projektach GCP.
+* Używaj VPC Peering lub Shared VPC do bezpiecznego łączenia wydzielonych środowisk.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Separate external application from internal systems + security isolation -> Create a new project for the application.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/resource-manager/docs/creating-managing-projects" target="_blank">Creating and managing projects in GCP</a>
+<a href="https://cloud.google.com/vpc/docs/vpc-peering" target="_blank">VPC Network Peering overview</a>
 </pre>
 
 </div>

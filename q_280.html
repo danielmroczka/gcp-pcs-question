@@ -58,24 +58,35 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Create an access level that includes conditions for internal IP address ranges and AppDev groups. Apply this access level to the application's IAP policy.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź B jest prawidłowa, ponieważ łączy weryfikację tożsamości użytkownika (IAM) z weryfikacją kontekstu sieciowego (Access Context Manager) w ramach jednej spójnej polityki Identity-Aware Proxy (IAP).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Zasada działania:
+a. **Identity-Aware Proxy (IAP):** Zabezpiecza aplikację w Cloud Run. Aby użytkownik mógł wejść do aplikacji, IAP musi autoryzować jego tożsamość.
+b. **Access Context Manager (ACM) & Access Levels:** Tworzymy poziom dostępu (Access Level) w ACM. Definiujemy w nim warunki: adres IP klienta musi należeć do wewnętrznych zakresów firmowych (IP ranges), a tożsamość musi być członkiem grupy `AppDev`.
+c. **Powiązanie z IAP:** Ten poziom dostępu aplikujemy bezpośrednio do polityki IAP dla Cloud Run. W rezultacie użytkownicy z grupy AppDev będą mieli dostęp wyłącznie wtedy, gdy będą łączyć się z biura lub przez firmowy VPN (pochodząc z dozwolonego IP). Ruch z innych lokalizacji zostanie zablokowany na poziomie IAP.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Deploy a VPN gateway and instruct the AppDev group to connect...
+   * Dlaczego nieprawidłowa: Sam VPN pozwala na dostęp do sieci wewnętrznej GCP, ale bez IAP nie wymusza autoryzacji opartej o tożsamość grupy AppDev dla samej aplikacji w Cloud Run. Ponadto instruowanie użytkowników (human procedure) nie zastępuje prewencyjnego wymuszenia technicznego (technical enforcement) na poziomie IAP.
+C. Configure firewall rules to limit access to IAP based on the AppDev group...
+   * Dlaczego nieprawidłowa: Klasyczne reguły zapory sieciowej (firewall rules) działają w warstwach 3/4 (IP/Porty) i nie posiadają żadnych funkcji pozwalających na identyfikację przynależności użytkowników do grup Cloud Identity/IAM. Zapora sieciowa nie potrafi filtrować ruchu na podstawie grup użytkowników.
+D. Configure IAP to enforce multi-factor authentication (MFA) for all users and use network intrusion detection...
+   * Dlaczego nieprawidłowa: Włączenie MFA zwiększa bezpieczeństwo logowania, ale nie ogranicza dostępu fizycznego wyłącznie do określonych zakresów adresów IP (internal network IPs), co było kluczowym wymaganiem sieciowym zadania.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Ograniczenie dostępu do aplikacji za IAP na podstawie adresu IP i tożsamości użytkownika -> Zawsze używaj **Access Context Manager (Access Levels)** i przypisz je do polityki IAP.
+* IAP w pełni współpracuje z Access Context Manager w celu wdrażania zasad Zero Trust.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Cloud Run + IAP + restrict to group and internal IP -> Create access level in Access Context Manager + Apply to IAP.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/iap/docs/concepts-overview" target="_blank">Identity-Aware Proxy (IAP) overview</a>
+<a href="https://cloud.google.com/access-context-manager/docs/overview" target="_blank">Access Context Manager overview</a>
 </pre>
 
 </div>

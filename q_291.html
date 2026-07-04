@@ -89,24 +89,34 @@ Your organization is using a third-party identity and authentication provider to
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Configure the central identity provider as a workforce identity pool provider in Workforce Identity Federation. Create an attribute mapping by using the Common Expression Language (CEL).
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź A jest prawidłowa, ponieważ Workforce Identity Federation (Federacja Tożsamości Pracowników) jest oficjalną usługą GCP zaprojektowaną do uwierzytelniania pracowników i kontrahentów w konsoli Google Cloud przy użyciu zewnętrznego IdP bez konieczności synchronizowania ich kont do Google Cloud Identity.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Szczegóły techniczne i zalety:
+a. **Brak synchronizacji (Keyless/Accountless):** Użytkownicy logują się przy użyciu swoich poświadczeń u zewnętrznego dostawcy (np. Okta, Azure AD). GCP nie tworzy dla nich kont w lokalnym katalogu Cloud Identity.
+b. **Mapowanie atrybutów za pomocą CEL:** Podczas logowania zewnętrzny IdP przesyła token zawierający atrybuty użytkownika (np. rola w firmie, dział). Używając języka Common Expression Language (CEL), możemy zmapować te atrybuty na właściwości GCP (np. zmapować grupę "GCP-Admins" z IdP na grupę w puli tożsamości GCP), a następnie przypisać odpowiednie role IAM bezpośrednio tym grupom atrybutów.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+B. Configure a periodic synchronization of relevant users and groups... Activate SSO by using SAML.
+   * Dlaczego nieprawidłowa: Ta metoda wymaga aktywnego synchronizowania (kopiowania) wszystkich kont użytkowników i grup do Cloud Identity (np. za pomocą GCDS). Narusza to kluczowe wymaganie "without syncing identities to Google Cloud".
+C. Set up the Google Cloud Identity Platform. Configure an external authentication provider...
+   * Dlaczego nieprawidłowa: Identity Platform (CIAM) służy do uwierzytelniania zewnętrznych klientów (customers) aplikacji SaaS wdrożonych przez klienta. Nie służy do nadawania dostępu pracownikom do samej konsoli Google Cloud Console (administrative access) w celu zarządzania infrastrukturą chmurową.
+D. Activate external identities on the Identity-Aware Proxy. Use SAML to configure...
+   * Dlaczego nieprawidłowa: IAP (Identity-Aware Proxy) z zewnętrznymi tożsamościami służy do zabezpieczania dostępu do aplikacji webowych klienta. Nie służy do uwierzytelniania i autoryzacji dostępu administracyjnego do standardowej konsoli Google Cloud Console.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Dostęp dla pracowników/kontrahentów do konsoli GCP bez synchronizacji kont (no identity synchronization) -> Zawsze **Workforce Identity Federation**.
+* Mapowanie atrybutów tożsamości z zewnętrznego IdP realizuje się za pomocą **Common Expression Language (CEL)**.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Grant access to GCP console without syncing identities -> Workforce Identity Federation (workforce identity pool).
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/iam/docs/workforce-identity-federation" target="_blank">Workforce Identity Federation overview</a>
+<a href="https://cloud.google.com/iam/docs/workforce-obtaining-tokens" target="_blank">Attribute mapping in Workforce Identity Federation</a>
 </pre>
 
 </div>

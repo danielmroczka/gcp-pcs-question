@@ -89,24 +89,34 @@ Your organization has an internet-facing application behind a load balancer. You
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Deploy the TLS certificate at Google Cloud Global HTTPs Load Balancer, and submit the user credentials through HTTPs.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź C jest prawidłowa, ponieważ przesłanie poświadczeń użytkownika (credentials) przez bezpieczny protokół HTTPS (zabezpieczony certyfikatem TLS terminowanym na globalnym Load Balancerze HTTPS) jest standardowym, bezpiecznym i powszechnie akceptowanym przez audytorów sposobem na zapewnienie szyfrowania danych logowania w transporcie.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Dlaczego to poprawne podejście:
+a. **Szyfrowanie w transporcie (Transit Encryption):** Protokół TLS szyfruje całą sesję HTTP, w tym nagłówki, ciasteczka sesyjne oraz treść żądania (payload zawierający login i hasło) przed opuszczeniem przeglądarki użytkownika.
+b. **Globalny Load Balancer:** Terminowanie połączeń TLS na poziomie Global HTTPS Load Balancera (GFE) chroni aplikację przed atakami DDoS i pozwala na centralne zarządzanie certyfikatami SSL za pomocą Certificate Managera. Po deszyfrowaniu, ruch do maszyn backendowych w sieci VPC również może być szyfrowany (end-to-end), jeśli skonfigurujemy HTTPS na backendzie.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Generate a symmetric key with Cloud KMS. Encrypt client-side user credentials by using the symmetric key.
+   * Dlaczego nieprawidłowa: Szyfrowanie symetryczne wymaga posiadania tego samego klucza po stronie klienta (przeglądarki) i serwera. Przekazanie klucza symetrycznego do kodu JavaScript w przeglądarce użytkownika oznacza, że klucz ten stałby się publicznie dostępny dla każdego (w tym dla napastników), co całkowicie kompromituje bezpieczeństwo szyfrowania.
+B. Concatenate the credential with a timestamp. Submit the timestamp and hashed value...
+   * Dlaczego nieprawidłowa: Samo haszowanie hasła z solą/timestampem bez szyfrowania kanału komunikacji (TLS) chroni przed niektórymi atakami typu replay, ale nie zapewnia pełnej ochrony w transporcie i nie stanowi standardowego mechanizmu end-to-end encryption wymaganego przez współczesne regulacje bezpieczeństwa.
+D. Generate an asymmetric key with Cloud KMS. Encrypt client-side user credentials using the public key.
+   * Dlaczego nieprawidłowa: Choć szyfrowanie kluczem publicznym (asymetrycznym) w przeglądarce jest kryptograficznie bezpieczne (tylko serwer posiadający klucz prywatny w KMS może odszyfrować dane), to wdrażanie własnego szyfrowania aplikacyjnego w przeglądarce bez TLS jest niezwykle skomplikowane, podatne na błędy implementacji i niepotrzebne, ponieważ standardowy protokół HTTPS (TLS) realizuje to zadanie automatycznie i bezpiecznie na poziomie przeglądarki i serwera web.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Bezpieczne przesyłanie poświadczeń w internecie (encryption of credentials in transit) -> Zawsze używaj **HTTPS / TLS** z certyfikatem zainstalowanym na **Load Balancerze**.
+* Unikaj własnych systemów szyfrowania haseł w kodzie JavaScript przeglądarki.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* End-to-end encryption of user credentials / secure transport -> Deploy TLS certificate on HTTPs Load Balancer + submit via HTTPs.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/load-balancing/docs/https" target="_blank">External HTTP(S) Load Balancing overview</a>
+<a href="https://cloud.google.com/load-balancing/docs/ssl-certificates" target="_blank">SSL certificates for Load Balancing</a>
 </pre>
 
 </div>

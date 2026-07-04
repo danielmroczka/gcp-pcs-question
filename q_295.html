@@ -89,24 +89,35 @@ Your organization heavily utilizes serverless applications while prioritizing se
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Create a Binary Authorization attestor that retrieves the Cloud Build build ID of the container image. Configure a policy to allow deployment only if there's a matching build ID attestation.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź C jest prawidłowa, ponieważ weryfikacja identyfikatora kompilacji (build ID) z Cloud Build przez Atestatora Binary Authorization pozwala na precyzyjne potwierdzenie pochodzenia obrazu (provenance) – czyli udowodnienie, że dany kontener został zbudowany przez autoryzowany potok CI/CD chmury, a nie wgrany z zewnątrz.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Mechanizm działania:
+a. **Integracja Cloud Build i Artifact Analysis:** Podczas procesu budowania obrazu, Cloud Build generuje metadane dotyczące pochodzenia (provenance metadata), w tym unikalny identyfikator buildu (build ID).
+b. **Podpisywanie (Atestacja):** Atestator Binary Authorization podpisuje te metadane kluczem kryptograficznym KMS.
+c. **Admission Control (Binary Authorization):** Podczas próby wdrożenia obrazu na Cloud Run lub GKE, usługa weryfikuje podpis atestatora i sprawdza, czy build ID w atestacji zgadza się z metadanymi obrazu. Jeśli obraz pochodzi z nieautoryzowanego źródła (np. został zbudowany lokalnie u dewelopera i wypchnięty do rejestru), wdrożenie zostanie zablokowane.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Create a Binary Authorization attestor that uses a scanner to assess source code management repositories...
+   * Dlaczego nieprawidłowa: Binary Authorization działa na poziomie gotowych obrazów kontenerowych w momencie ich wdrażania (deployment). Nie ma możliwości bezpośredniego skanowania i weryfikowania repozytoriów kodu źródłowego (git) w locie podczas uruchamiania kontenera na klastrze.
+B. Create a Binary Authorization attestor that utilizes a scanner to evaluate container image build processes...
+   * Dlaczego nieprawidłowa: Atestator sam w sobie nie jest "skanerem", który uruchamia i ocenia proces budowania obrazu. Atestator to tożsamość/klucz, który podpisuje stwierdzenia (atestacje) wygenerowane przez inne narzędzia (np. Cloud Build lub skanery podatności). Ta opcja błędnie definiuje rolę atestatora.
+D. Utilize a custom Security Health Analytics module to create a policy...
+   * Dlaczego nieprawidłowa: Security Health Analytics (SHA) w Security Command Center służy do wykrywania miskonfiguracji zasobów chmurowych (np. publiczne IP). Nie uczestniczy w procesie wdrażania kontenerów i nie potrafi generować ani weryfikować podpisów kryptograficznych obrazów kontenerowych dla Binary Authorization.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Pochodzenie obrazu (image provenance) w GCP CI/CD -> Wykorzystanie **Cloud Build** w połączeniu z **Binary Authorization** w celu weryfikacji podpisanych metadanych kompilacji (build ID/provenance).
+* Zapewnia to, że deweloperzy nie mogą wdrożyć do produkcji kontenera zbudowanego na własnym laptopie.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Enforce image provenance + Cloud Build + Binary Authorization -> Attestor retrieves Cloud Build build ID + policy requires matching build ID attestation.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/binary-authorization/docs/cloud-run-overview" target="_blank">Binary Authorization for Cloud Run</a>
+<a href="https://cloud.google.com/build/docs/securing-builds/verify-provenance" target="_blank">Verifying build provenance in Cloud Build</a>
 </pre>
 
 </div>

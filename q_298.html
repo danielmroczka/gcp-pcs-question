@@ -89,24 +89,34 @@ A security audit uncovered several inconsistencies in your project's Identity an
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Use Cloud Audit Logs. Create log export sinks to send these logs to a security information and event management (SIEM) solution for correlation with other event sources.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź C jest prawidłowa, ponieważ Cloud Audit Logs rejestruje wszystkie istotne zdarzenia związane z modyfikacjami polityk IAM, działaniami użytkowników oraz zachowaniem kont serwisowych w Google Cloud.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Dlaczego to najlepsza metoda dochodzeniowa:
+a. **Pełne pokrycie (Visibility):** Logi audytowe Admin Activity oraz Data Access rejestrują wywołania API (kto, co, kiedy, z jakiego IP). Każda zmiana uprawnień w IAM oraz każda próba dostępu do danych w projektach zostaje zapisana.
+b. **Integracja z SIEM (Correlation):** Przesłanie tych logów za pomocą log sinks (odbiorników logów) do zewnętrznego systemu SIEM pozwala na korelację tych danych z logami z innych systemów firmy (np. logowania do VPN, lokalny Active Directory). Umożliwia to wykrycie zaawansowanych ataków (np. logowanie na konto serwisowe z IP z innego kraju zaraz po tym, jak inżynier zalogował się lokalnie).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Configure Google Cloud Functions to be triggered by changes to IAM policies. Analyze changes by using the policy simulator...
+   * Dlaczego nieprawidłowa: Policy Simulator służy do testowania wpływu proponowanych zmian w IAM przed ich zastosowaniem (np. czy dodanie roli nie da komuś zbyt szerokiego dostępu). Nie służy do ciągłego monitorowania w czasie rzeczywistym i analizowania faktycznie zaistniałych zdarzeń na kontach serwisowych po ich wykonaniu.
+B. Enable the metrics explorer in Cloud Monitoring to follow the service account authentication events...
+   * Dlaczego nieprawidłowa: Cloud Monitoring zbiera metryki wydajnościowe (np. zużycie CPU, liczba zapytań na sekundę). Metryki te są agregowane i nie zawierają szczegółowych danych audytowych (kto dokładnie dokonał zmiany w IAM, jaki był adres IP, jaki był payload żądania), co uniemożliwia analizę śledczą incydentu.
+D. Deploy the OS Config Management agent to your VMs. Use OS Config Management to create patch management jobs...
+   * Dlaczego nieprawidłowa: OS Config Management (VM Manager) służy do zarządzania systemami operacyjnymi maszyn wirtualnych (np. instalowanie poprawek). Nie monitoruje zmian w politykach IAM na poziomie platformy Google Cloud ani nie analizuje dostępu do wrażliwych projektów.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Szczegółowa widoczność zmian IAM, operacji użytkowników i kont serwisowych (visibility into IAM changes and user activity) -> Zawsze używaj **Cloud Audit Logs**.
+* Analiza bezpieczeństwa i korelacja zdarzeń w skali przedsiębiorstwa -> Eksport logów do **SIEM**.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Visibility into changes to IAM + user activity + service account behavior -> Cloud Audit Logs + export to SIEM.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/logging/docs/audit" target="_blank">Cloud Audit Logs overview</a>
+<a href="https://cloud.google.com/architecture/exporting-security-logs-to-siem" target="_blank">Exporting Google Cloud logs to SIEM</a>
 </pre>
 
 </div>

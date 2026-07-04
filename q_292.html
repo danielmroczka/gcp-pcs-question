@@ -89,24 +89,35 @@ You are implementing a new web application on Google Cloud that will be accessed
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Configure a hierarchical firewall policy. Enable TLS interception by using Cloud Next Generation Firewall (NGFW) Enterprise.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź C jest prawidłowa, ponieważ Cloud Next Generation Firewall (NGFW) Enterprise jest jedynym natywnym rozwiązaniem sieciowym w GCP, które wspiera funkcję deszyfrowania i inspekcji ruchu TLS (TLS Interception / TLS Decryption).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Jak to działa:
+a. **NGFW Enterprise:** Usługa ta działa na poziomie infrastruktury sieciowej GCP i pozwala na inspekcję ruchu przychodzącego (ingress) oraz wychodzącego (egress).
+b. **TLS Interception:** Zapora sieciowa deszyfruje ruch TLS w locie przy użyciu zintegrowanego Certificate Managera, przeprowadza głęboką inspekcję pakietów (Deep Packet Inspection - DPI) w poszukiwaniu wirusów, malware i włamań, a następnie ponownie szyfruje ruch i przesyła go do aplikacji docelowej.
+c. **Konfiguracja hierarchiczna:** Wdrożenie tej funkcji wymaga skonfigurowania polityki hierarchicznej zapory sieciowej (Hierarchical Firewall Policy) na poziomie folderu lub organizacji, co pozwala na centralne narzucenie inspekcji dla całego ruchu.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Configure Secure Web Proxy. Offload the TLS traffic...
+   * Dlaczego nieprawidłowa: Secure Web Proxy (SWP) służy do filtrowania i zabezpieczania wychodzącego (egress) ruchu internetowego z maszyn w chmurze. Nie jest przeznaczony do przechwytywania i zabezpieczania ruchu przychodzącego (incoming traffic) od użytkowników zewnętrznych do aplikacji webowej.
+B. Configure an internal proxy load balancer...
+   * Dlaczego nieprawidłowa: Internal HTTPS Load Balancer terminuje połączenie TLS (TLS offloading), ale nie służy do głębokiej inspekcji pakietów (Deep Packet Inspection) pod kątem zagrożeń i malware w locie – po prostu przekazuje odszyfrowany ruch HTTP do backendu. Nie realizuje funkcji aktywnego TLS interception w celach bezpieczeństwa NGFW.
+D. Configure a VPC firewall rule. Enable TLS interception...
+   * Dlaczego nieprawidłowa: Klasyczne, standardowe reguły zapory sieciowej VPC (VPC Firewall Rules) działają na poziomie warstw L3/L4 i nie posiadają zaawansowanych funkcji warstwy L7, takich jak deszyfrowanie i inspekcja ruchu TLS (TLS Interception). Funkcja ta jest dostępna wyłącznie w Cloud NGFW Enterprise za pośrednictwem polityk hierarchicznych.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Intercepcja i deszyfrowanie ruchu TLS (TLS Interception / Decryption) w celu wykrywania malware w GCP -> Zawsze **Cloud Next Generation Firewall (NGFW) Enterprise**.
+* Funkcja ta wymaga integracji z Certificate Managerem do generowania certyfikatów w locie.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Implement TLS interception for incoming traffic -> Hierarchical firewall policy + Cloud Next Generation Firewall (NGFW) Enterprise.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/firewall/docs/next-gen-firewall" target="_blank">Cloud NGFW overview</a>
+<a href="https://cloud.google.com/firewall/docs/tls-inspection" target="_blank">TLS inspection in Cloud NGFW</a>
 </pre>
 
 </div>

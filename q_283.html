@@ -89,24 +89,36 @@ Your organization's use of the Google Cloud has grown substantially and there ar
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Scan and alert vulnerabilities and misconfigurations by using Secure Health Analytics detectors in Security Command Center Premium.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź B jest prawidłowa, ponieważ Security Health Analytics (SHA) w ramach Security Command Center (SCC) Premium to natywne i w pełni zautomatyzowane narzędzie GCP przeznaczone do ciągłego skanowania zasobów chmurowych pod kątem miskonfiguracji (misconfigurations) i naruszeń zgodności z normami bezpieczeństwa (np. CIS Benchmarks).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Zalety tego rozwiązania:
+a. **Automatyczne skanowanie:** SHA działa bez przerwy, monitorując stan konfiguracji zapór sieciowych, uprawnień IAM, szyfrowania kubełków, maszyn VM itp. we wszystkich projektach w organizacji.
+b. **Wbudowany Dashboard:** Wykryte błędy są automatycznie wyświetlane na centralnym pulpicie nawigacyjnym SCC (dashboard), umożliwiając zespołom bezpieczeństwa łatwe śledzenie, filtrowanie i zarządzanie procesem naprawczym (remediation).
+c. **Szerokie pokrycie:** Posiada setki gotowych detektorów (detectors) zgodnych z najlepszymi praktykami branżowymi.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Create a filter set in Cloud Asset Inventory to identify...
+   * Dlaczego nieprawidłowa: Cloud Asset Inventory doskonale przeszukuje stan zasobów, ale nie posiada wbudowanych silników analizy podatności ani automatycznego generowania alertów o zagrożeniach w czasie rzeczywistym z pulpitem zarządczym tak jak SCC. Wymagałoby to ręcznego odpytywania i analizowania wyników.
+C. Set up filters on Cloud Audit Logs to flag log entries...
+   * Dlaczego nieprawidłowa: Analizowanie surowych logów audytowych w poszukiwaniu ryzykownych wywołań API wymaga samodzielnego definiowania filtrów dla tysięcy różnych zdarzeń. Nie wykrywa również statycznych błędów konfiguracji, które powstały dawno temu i nie generują bieżących logów operacji (brak analizy stanu faktycznego zasobów).
+D. Alert and track emerging attacks detected in your environment by using Event Threat Detection detectors.
+   * Dlaczego nieprawidłowa: Event Threat Detection (ETD) w SCC Premium służy do wykrywania aktywnych ataków i zagrożeń w toku (np. brute-force, eksfiltracja danych, zainfekowane maszyny) na podstawie analizy logów. Nie służy do skanowania konfiguracji zasobów w poszukiwaniu pasywnych miskonfiguracji i podatności przed atakiem (co jest domeną SHA).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Zapobieganie błędom konfiguracji (misconfigurations) i compliance -> **Security Health Analytics (SHA)** w SCC.
+* Wykrywanie aktywnych zagrożeń i ataków (attacks/threats) -> **Event Threat Detection (ETD)** w SCC.
+* Security Command Center to centralny panel bezpieczeństwa w GCP.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Identify common misconfigurations + compliance violations + dashboard -> Security Health Analytics + Security Command Center.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/security-command-center/docs/concepts-security-health-analytics-overview" target="_blank">Security Health Analytics overview</a>
+<a href="https://cloud.google.com/security-command-center/docs/concepts-compliance-validation" target="_blank">Compliance monitoring with Security Health Analytics</a>
 </pre>
 
 </div>

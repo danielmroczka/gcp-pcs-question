@@ -89,24 +89,34 @@ Your application development team is releasing a new critical feature. To comple
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Scan and redact PII from the records by using the Cloud Data Loss Prevention API. Perform format-preserving encryption on the card PAN.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź B jest prawidłowa, ponieważ łączy ochronę danych osobowych (redagowanie PII) z zachowaniem użyteczności danych testowych przy użyciu szyfrowania zachowującego format (Format-Preserving Encryption - FPE) dla numeru karty kredytowej (PAN).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Dlaczego to najlepsza metoda:
+a. **Zachowanie formatu (FPE):** Aplikacja testuje funkcję sprawdzania formatu numeru karty (np. algorytm Luhna, długość 16 cyfr). Zwykłe zaszyfrowanie kluczem KMS zamieniłoby numer karty na losowy ciąg znaków alfanumerycznych, co uniemożliwiłoby testowanie formatu. FPE szyfruje numer tak, że wynikowy ciąg nadal wygląda jak poprawny numer karty (np. 16 cyfr), co pozwala na przeprowadzenie testów.
+b. **Usuwanie danych wrażliwych (Redaction):** Pozostałe dane osobowe (np. imiona, adresy, e-maile), które nie są potrzebne do testowania tej funkcji, są całkowicie usuwane (redagowane) przez Cloud DLP, co eliminuje ryzyko wycieku PII.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Run the new application by using Confidential Computing...
+   * Dlaczego nieprawidłowa: Poufne obliczenia (Confidential Computing) szyfrują pamięć RAM podczas działania programu. Nie chronią jednak danych przed deweloperami wykonującymi testy, którzy nadal mieliby pełny wgląd w surowe, niezaszyfrowane transakcje na ekranie lub w logach testowych.
+C. Encrypt the records by using Cloud Key Management Service...
+   * Dlaczego nieprawidłowa: Szyfrowanie KMS zamienia dane w nieczytelny szyfrogram (ciphertext). Odszyfrowanie danych w środowisku testowym ujawni oryginalne numery kart deweloperom (ryzyko wycieku), a nieodszyfrowane dane uniemożliwią przetestowanie funkcji sprawdzania formatu (brak formatu karty).
+D. Build a tool to replace the card PAN and PII fields with randomly generated values.
+   * Dlaczego nieprawidłowa: Pisanie własnego narzędzia do maskowania i generowania poprawnych numerów kart (zgodnych z algorytmami kart płatniczych) wymaga dużego nakładu pracy programistycznej. Google udostępnia gotowe, certyfikowane narzędzie w postaci Cloud DLP (Sensitive Data Protection), które wykonuje te transformacje automatycznie i bezpiecznie.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Jeśli testowana funkcja wymaga zachowania struktury/formatu danych (np. format numeru PESEL, karty kredytowej PAN) -> Zawsze używaj **Format-Preserving Encryption (FPE)** w Cloud DLP.
+* Inne zbędne dane wrażliwe należy zredagować (redact).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Format checking on PAN + minimize PII exposure -> Cloud DLP + Format-preserving encryption (FPE).
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/dlp/docs/pseudonymization#fpe" target="_blank">Format-preserving encryption in Cloud DLP</a>
+<a href="https://cloud.google.com/dlp/docs/deidentify-sensitive-data" target="_blank">De-identifying sensitive data in Cloud DLP</a>
 </pre>
 
 </div>
