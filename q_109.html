@@ -89,15 +89,27 @@ Your organization has had a few recent DDoS attacks. You need to authenticate re
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Cloud DNS with DNSSEC
 
-Wyjaśnienie (Dlaczego poprawna):
-A. DNSSEC: Cyfrowo podpisuje rekordy DNS, gwarantując ich autentyczność (wymóg 'authenticate responses'). Chroni to przed przekierowaniem użytkowników na złośliwe serwery przez podrobione odpowiedzi DNS.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymaganie dotyczy konieczności autentykacji (uwierzytelniania) odpowiedzi na zapytania o nazwy domenowe (domain name lookups) w celu ochrony przed niedawnymi atakami:
+- DNSSEC (Domain Name System Security Extensions) zabezpiecza system DNS poprzez dodanie podpisów kryptograficznych do istniejących rekordów DNS. Kiedy klient wykonuje zapytanie o nazwę domenową, serwer DNS zwraca rekord wraz z podpisem. Klient może zweryfikować podpis, co gwarantuje autentyczność odpowiedzi (że pochodzi z zaufanego źródła i nie została zmodyfikowana w drodze). Zapobiega to atakom typu DNS spoofing i cache poisoning.
 
-Dlaczego inne są błędne:
-D. Cloud Armor: Chroni przed DDoS na poziomie sieci/aplikacji, ale nie zapewnia autentyczności rekordów w bazie DNS.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Cloud NAT: Umożliwia zasobom w sieci prywatnej (bez zewnętrznych adresów IP) bezpieczny dostęp do internetu, ale nie ma żadnego wpływu na bezpieczeństwo czy uwierzytelnianie zapytań DNS.
+- C. HTTP(S) Load Balancing: Rozdziela ruch HTTP/HTTPS na backendy chmurowe. Może offloadować certyfikaty SSL, ale nie odpowiada za uwierzytelnianie odpowiedzi serwerów nazw DNS.
+- D. Google Cloud Armor: Chroni aplikacje przed atakami DDoS (warstwy 3, 4 i 7) oraz lukami z listy OWASP Top 10, lecz nie zapewnia kryptograficznego uwierzytelniania odpowiedzi dla zapytań DNS.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla A. Autentykacja odpowiedzi DNS to definicja DNSSEC.
+4. Wskazówki, hinty, tips and tricks:
+- Słowa klucze "authenticate responses to domain name lookups" lub "DNS spoofing protection" jednoznacznie wskazują na DNSSEC.
+- DNSSEC nie szyfruje zapytań (tym zajmuje się DoH/DoT), lecz służy wyłącznie do weryfikacji ich integralności i autentyczności.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Uwierzytelnianie odpowiedzi DNS / zapobieganie zatruwaniu pamięci podręcznej DNS -> DNSSEC.
+
+6. Dodatkowe źródła i dokumentacja:
+- Cloud DNSSEC overview: <a href="https://cloud.google.com/dns/docs/dnssec" target="_blank">https://cloud.google.com/dns/docs/dnssec</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

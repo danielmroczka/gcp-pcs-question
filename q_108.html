@@ -89,16 +89,28 @@ An organization is moving applications to Google Cloud while maintaining a few m
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Dedicated Interconnect
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Dedicated Interconnect: Jedyny sposób na uzyskanie 50 Gbps stabilnego, prywatnego łącza. Możesz zagregować 5 łączy po 10 Gbps lub użyć łączy 100 Gbps.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymaganiem jest zapewnienie stabilnego, bezpiecznego i ciągłego połączenia o przepustowości co najmniej 50 Gbps pomiędzy infrastrukturą lokalną a Google Cloud:
+- Dedicated Interconnect zapewnia bezpośrednie fizyczne połączenie sieciowe między siecią lokalną przedsiębiorstwa a siecią Google Cloud. Jest ono oferowane w wariantach 10 Gbps lub 100 Gbps na jedno łącze. W celu uzyskania przepustowości 50 Gbps można zgrupować 5 łączy po 10 Gbps (używając LACP) lub użyć pojedynczego łącza 100 Gbps. Jest to najbardziej niezawodne, wydajne i dedykowane rozwiązanie klasy enterprise dla dużych transferów danych.
 
-Dlaczego inne są błędne:
-C. Cloud VPN: Tunel ma limit ~3Gbps. 50Gbps wymagałoby absurdalnej liczby tuneli.
-D. Partner Interconnect: Zazwyczaj do 10Gbps. Dla tak dużych potrzeb (50G) Dedicated jest jedynym logicznym wyborem Enterprise.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Cloud Router: Sam Cloud Router nie zapewnia fizycznego połączenia ani przepustowości. Odpowiada jedynie za dynamiczną wymianę tras routingu (protokół BGP) przez istniejące połączenie (takie jak VPN lub Interconnect).
+- C. Cloud VPN: Pojedynczy tunel Cloud VPN (HA VPN) ma limit przepustowości wynoszący 3 Gbps. Osiągnięcie 50 Gbps za pomocą VPN wymagałoby spięcia co najmniej 17 tuneli w konfiguracji ECMP, co jest wysoce niepraktyczne, trudne w zarządzaniu i nie gwarantuje stabilności.
+- D. Partner Interconnect: Jest przeznaczony dla mniejszych przepustowości (od 50 Mbps do 10 Gbps na jedno połączenie) i realizowany za pośrednictwem dostawcy zewnętrznego. Nie nadaje się do bezpośrednich, ultra-szybkich wdrożeń rzędu 50 Gbps.
 
-Konsensus społeczności ExamTopics: 100% na A. 50 Gbps = Dedicated Interconnect.
+4. Wskazówki, hinty, tips and tricks:
+- W pytaniach GCP o hybrydową łączność sieciową, próg 10 Gbps jest granicą: wszystko poniżej lub równe 10 Gbps może korzystać z Partner Interconnect lub VPN, ale wysokie wymagania (np. 50 Gbps, 100 Gbps) bezwzględnie wymagają Dedicated Interconnect.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Przepustowość >= 10-50 Gbps -> Dedicated Interconnect.
+- Mniejsza przepustowość przez operatora trzeciego -> Partner Interconnect.
+- Szybkie wdrożenie, niska przepustowość (< 3-4 Gbps) przez internet -> Cloud VPN.
+
+6. Dodatkowe źródła i dokumentacja:
+- Dedicated Interconnect Overview: <a href="https://cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview" target="_blank">https://cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

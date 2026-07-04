@@ -89,17 +89,29 @@ You plan to deploy your cloud infrastructure using a CI/CD cluster hosted on Com
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Create a custom service account for the cluster. Enable the constraints/iam.disableServiceAccountKeyCreation organization policy at the project level
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Cloud Armor: Posiada predefiniowane reguły WAF (Web Application Firewall), które są specjalnie zaprojektowane do wykrywania i blokowania ataków L7, takich jak XSS i SQLi, zanim dotrą one do serwera aplikacji.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Celem jest wdrożenie bezpiecznej metody uwierzytelniania dla klastra CI/CD uruchomionego na Compute Engine oraz zminimalizowanie ryzyka wycieku poświadczeń:
+- Najlepszą praktyką bezpieczeństwa w GCP jest przypisywanie dedykowanych kont serwisowych (Service Accounts) do maszyn wirtualnych. Maszyna pobiera wtedy automatycznie generowane, krótkotrwałe tokeny OAuth z serwera metadanych (Metadata Server), co eliminuje potrzebę przechowywania statycznych haseł czy kluczy.
+- Aby zabezpieczyć się przed wyciekiem, należy zablokować możliwość generowania zewnętrznych, długoterminowych kluczy JSON dla kont serwisowych. Włączenie polityki organizacyjnej `constraints/iam.disableServiceAccountKeyCreation` na poziomie projektu uniemożliwia tworzenie kluczy użytkownikom i administratorom, co drastycznie redukuje wektor ataku (brak fizycznego pliku klucza, który mógłby zostać skradziony).
 
-Dlaczego inne są błędne:
-A. Firewall: Działa na warstwach 3/4 (IP/Port), nie rozumie treści HTTP.
-C. IAP: Zarządza dostępem osób, nie chroni przed błędami w kodzie dla osób już zalogowanych.
-D. DNS: Tylko tłumaczy nazwy na IP.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Użycie konta użytkownika Cloud Identity oraz zewnętrznego sejfu (Vault) na tymczasowe poświadczenia: Konta użytkowników nie powinny być stosowane do automatyzacji maszynowej (machine-to-machine). Wprowadza to niepotrzebne zarządzanie hasłami i zewnętrznym oprogramowaniem.
+- B. Użycie konta użytkownika i zablokowanie tworzenia kont serwisowych (`disableServiceAccountCreation`): Blokowanie tworzenia kont serwisowych uniemożliwiłoby prawidłową konfigurację tożsamości maszyn w chmurze, a użycie konta użytkownika dla CI/CD jest niezgodne z zaleceniami bezpieczeństwa.
+- D. Włączenie polityki `constraints/iam.allowServiceAccountCredentialLifetimeExtension`: Ta polityka pozwala na wydłużenie czasu życia tokenów dostępowych konta serwisowego, co w przypadku kompromitacji maszyny zwiększa ryzyko, dając napastnikowi więcej czasu na działanie na skradzionym tokenie.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. Cloud Armor to definicja WAF w GCP.
+4. Wskazówki, hinty, tips and tricks:
+- Zapamiętaj: **Nigdy nie pobieraj i nie twórz kluczy kont serwisowych (JSON keys)**, jeśli nie jest to absolutnie konieczne (np. dla systemów zewnętrznych poza GCP). Wewnątrz GCP korzystaj z tożsamości przypisanych bezpośrednio do maszyn/usług.
+- Blokowanie tworzenia kluczy kont serwisowych za pomocą polityki organizacyjnej to jedna z najczęściej zalecanych reguł bezpieczeństwa w GCP.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Bezpieczeństwo poświadczeń maszyn/aplikacji w GCP -> Custom Service Account + disableServiceAccountKeyCreation.
+
+6. Dodatkowe źródła i dokumentacja:
+- Service account best practices: <a href="https://cloud.google.com/iam/docs/best-practices-service-accounts" target="_blank">https://cloud.google.com/iam/docs/best-practices-service-accounts</a>
+- Organization policy constraints for IAM: <a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints#iam" target="_blank">https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints#iam</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

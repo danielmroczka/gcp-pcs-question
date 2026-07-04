@@ -89,17 +89,28 @@ Your organization recently deployed a new application on Google Kubernetes Engin
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Web Security Scanner
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Web Security Scanner: Narzędzie DAST, które potrafi udawać zalogowanego użytkownika Google, skanować aplikację webową (nawet na GKE) raz w tygodniu i precyzyjnie identyfikować luki XSS w kodzie strony.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymagania techniczne dla rozwiązania ochronnego to: uruchamianie skanów co najmniej raz w tygodniu, wykrywanie luk Cross-Site Scripting (XSS) oraz obsługa uwierzytelniania kontami Google:
+- Web Security Scanner (część Security Command Center) to narzędzie typu DAST (Dynamic Application Security Testing) stworzone specjalnie do wykrywania luk w aplikacjach internetowych uruchomionych na Compute Engine, GKE czy App Engine. Posiada wbudowaną funkcję uwierzytelniania (np. za pomocą testowych kont Google), co pozwala na testowanie zasobów za barierą logowania. Można je skonfigurować tak, aby automatycznie wykonywało skanowanie według harmonogramu (np. co tydzień) pod kątem luk takich jak XSS i SQL Injection.
 
-Dlaczego inne są błędne:
-A. Cloud Armor: Blokuje ataki (WAF), ale nie 'skanuje' i nie wykrywa luk w kodzie przed atakiem.
-C. SHA: Sprawdza błędy w konfiguracji chmury (np. publiczne IP), nie błędy w kodzie HTML/JS.
-D. CTD: Monitoruje wnętrze kontenera (runtime), nie warstwę prezentacji webowej.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Google Cloud Armor: Jest to zapora sieciowa aplikacji internetowych (WAF), która aktywnie blokuje ataki (np. ataki DDoS lub próby exploitów L7) w czasie rzeczywistym, ale nie służy do skanowania kodu czy wyszukiwania luk w zabezpieczeniach aplikacji.
+- C. Security Health Analytics: Służy do analizowania konfiguracji chmurowej GCP (np. otwarte porty w firewallu, brak rotacji kluczy, publicznie dostępne bucket-y Cloud Storage), a nie do badania kodu aplikacji pod kątem podatności webowych takich jak XSS.
+- D. Container Threat Detection: Monitoruje stan kontenerów w czasie rzeczywistym podczas ich działania (runtime) w celu wykrycia podejrzanych zachowań (np. modyfikacja binariów systemowych, uruchomienie reverse shella), ale nie skanuje interfejsu aplikacji pod kątem podatności webowych.
 
-Konsensus społeczności ExamTopics: 100% na B. To jedyny skaner warstwy aplikacyjnej w ofercie.
+4. Wskazówki, hinty, tips and tricks:
+- Kiedy w pytaniu pojawiają się pojęcia "XSS", "web vulnerability", "scan application" oraz "authenticate using Google accounts", prawidłową odpowiedzią jest zawsze Web Security Scanner.
+- Odróżniaj DAST (skanowanie uruchomionej aplikacji pod kątem podatności - Web Security Scanner) od ochrony przed atakami na żywo (Cloud Armor).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Wykrywanie luk XSS + Skanowanie aplikacji internetowych -> Web Security Scanner.
+- Blokowanie ataków L7 w czasie rzeczywistym -> Cloud Armor.
+
+6. Dodatkowe źródła i dokumentacja:
+- Web Security Scanner overview: <a href="https://cloud.google.com/security-command-center/docs/concepts-web-security-scanner-overview" target="_blank">https://cloud.google.com/security-command-center/docs/concepts-web-security-scanner-overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

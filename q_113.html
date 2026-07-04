@@ -89,16 +89,26 @@ You are troubleshooting access denied errors between Compute Engine instances co
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Add the host project containing the Shared VPC to the service perimeter.
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Add host project: W Shared VPC sieć fizycznie 'należy' do projektu hosta. Gdy VM z projektu usługowego woła BigQuery chronione przez VPC SC, system sprawdza czy sieć, z której pochodzi ruch, jest zaufana. Jeśli host sieci nie jest w perymetrze, ruch zostanie odrzucony jako 'pochodzący z zewnątrz'.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+W architekturze Shared VPC, projekt hosta (Host Project) jest właścicielem sieci VPC i jej podsieci, natomiast instancje Compute Engine znajdują się w projektach usługowych (Service Projects) i korzystają z tych podsieci:
+- Gdy maszyna wirtualna z projektu usługowego próbuje połączyć się z chronioną usługą (w tym przypadku BigQuery chronionym przez VPC Service Controls), system VPC Service Controls weryfikuje pochodzenie sieciowe żądania. Ponieważ zasoby sieciowe należą do projektu hosta, VPC SC traktuje ruch jako pochodzący z projektu hosta. Jeśli projekt hosta nie znajduje się w tym samym perymetrze bezpieczeństwa co BigQuery, połączenie zostanie zablokowane z błędem odmowy dostępu. Dodanie projektu hosta do perymetru rozwiązuje ten problem.
 
-Dlaczego inne są błędne:
-B. Service project: Zazwyczaj już tam jest, ale to nie wystarcza przy Shared VPC.
-C, D. Bridge: Służą do łączenia różnych perymetrów, tutaj problemem jest brak fundamentu (hosta sieci) w obwodzie bezpieczeństwa.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Dodanie tylko projektu usługowego (Service Project) do perymetru: Jest niewystarczające, ponieważ tożsamość sieciowa zapytania jest powiązana z projektem hosta Shared VPC, który zarządza interfejsami sieciowymi.
+- C. Tworzenie perymetru między projektem usługowym a projektem hosta: VPC Service Controls nie służy do izolowania projektów wewnątrz tej samej sieci Shared VPC w ten sposób. Perymetr powinien chronić BigQuery, a nie same projekty sieciowe przed sobą.
+- D. Tworzenie mostu perymetru (Perimeter Bridge): Mosty służą do łączenia dwóch odrębnych perymetrów bezpieczeństwa (np. gdy BigQuery jest w jednym perymetrze, a projekt hosta w drugim). W tym przypadku prostszym i prawidłowym rozwiązaniem jest umieszczenie projektu hosta w tym samym perymetrze.
 
-Konsensus społeczności ExamTopics: 100% na A. To najczęstsza przyczyna błędów VPC SC w dużych firmach.
+4. Wskazówki, hinty, tips and tricks:
+- W scenariuszach z Shared VPC i VPC Service Controls, zawsze upewnij się, że **Host Project** (właściciel sieci) jest uwzględniony w perymetrze bezpieczeństwa, aby ruch z maszyn wirtualnych mógł być autoryzowany.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Shared VPC + VPC Service Controls access issue -> Add host project to the perimeter.
+
+6. Dodatkowe źródła i dokumentacja:
+- VPC Service Controls with Shared VPC: <a href="https://cloud.google.com/vpc-service-controls/docs/shared-vpc" target="_blank">https://cloud.google.com/vpc-service-controls/docs/shared-vpc</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

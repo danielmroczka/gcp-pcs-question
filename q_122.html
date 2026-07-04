@@ -89,16 +89,28 @@ Your organization acquired a new workload. The Web and Application (App) servers
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. 1. Re-deploy the Web and App servers with instance templates configured with respective service accounts. 2. Create an allow VPC firewall rule that specifies the target/source with respective service accounts.
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Instance templates with service accounts: Użycie Kont Serwisowych (SA) w regułach firewalla jest bezpieczniejsze niż tagów, ponieważ Instance Admin nie może zmienić SA przypisanego do maszyny bez posiadania uprawnienia `iam.serviceAccounts.actAs`. Szablon instancji (Instance Template) gwarantuje, że każda nowa maszyna utworzona przez autoskalowanie automatycznie otrzyma właściwe konto SA.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymagania bezpieczeństwa to: 1) zezwolenie na ruch wyłącznie pomiędzy warstwą Web a App, 2) zachowanie spójności bezpieczeństwa przy autoskalowaniu, 3) uniemożliwienie administratorom maszyn (Instance Admins) modyfikowania reguł przepływu ruchu:
+- Używanie kont serwisowych (Service Accounts) jako źródła i celu w regułach zapory (firewall rules) opiera się na tożsamości (identity-based firewall), co jest znacznie bezpieczniejsze niż stosowanie tagów sieciowych. Administrator maszyn wirtualnych (Compute Instance Admin) nie może zmienić konta serwisowego przypisanego do instancji bez posiadania specjalnej roli IAM `iam.serviceAccounts.actAs`, co uniemożliwia mu nieautoryzowane modyfikowanie reguł ruchu.
+- Konfiguracja kont serwisowych w szablonach instancji (Instance Templates) gwarantuje, że każda nowo utworzona maszyna w procesie autoskalowania automatycznie otrzyma odpowiednią tożsamość i zostanie natychmiast objęta właściwymi regułami zapory.
 
-Dlaczego inne są błędne:
-A, C. Tags: Tagi sieciowe są mniej bezpieczne, ponieważ każdy `Compute Instance Admin` może je dowolnie modyfikować na działającej maszynie, omijając w ten sposób restrykcje firewalla.
-B. Service accounts: Sama tożsamość jest poprawna, ale bez użycia szablonów (D) trudniej o 'konsystencję przy autoskalowaniu'.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A i C. Stosowanie tagów sieciowych (network tags): Tagi sieciowe nie są zabezpieczone uprawnieniami IAM w taki sposób jak konta serwisowe. Każdy administrator maszyn wirtualnych może dodać lub usunąć tag z instancji, co pozwala na łatwe obejście reguł zapory i narusza trzecie wymaganie.
+- B. Konfiguracja na uruchomionych serwerach bez szablonów instancji: W przypadku autoskalowania, nowe instancje nie byłyby automatycznie konfigurowane z odpowiednim kontem serwisowym, co doprowadziłoby do niespójności bezpieczeństwa.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na D. SA to tożsamość, której nie da się łatwo 'podrobić' jak tagu.
+4. Wskazówki, hinty, tips and tricks:
+- Konta serwisowe w regułach firewalla zapewniają ochronę przed nieautoryzowanymi zmianami przez administratorów maszyn (brak możliwości manipulacji tagami).
+- Zawsze w przypadku autoskalowania (autoscaling) maszyn na Compute Engine konieczne jest użycie Szablonów Instancji (Instance Templates).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Zabezpieczenie przed manipulacją admina instancji + firewall -> Szyfrowanie/filtrowanie oparte na kontach serwisowych (Service Accounts).
+- Spójność przy autoskalowaniu -> Użycie Instance Templates.
+
+6. Dodatkowe źródła i dokumentacja:
+- VPC firewall rules service accounts vs network tags: <a href="https://cloud.google.com/vpc/docs/firewalls#service-accounts-vs-tags" target="_blank">https://cloud.google.com/vpc/docs/firewalls#service-accounts-vs-tags</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

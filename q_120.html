@@ -89,17 +89,28 @@ You need to enable VPC Service Controls and allow changes to perimeters in exist
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Dry run
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Cloud HSM: To dedykowana usługa Google, która pozwala na przechowywanie kluczy w fizycznych urządzeniach HSM certyfikowanych wg standardu FIPS 140-2 Level 3. Usługa jest w pełni zarządzana przez Google, więc nie musisz dbać o sprzęt.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymaganiem jest przetestowanie zmian w konfiguracji perymetrów bezpieczeństwa VPC Service Controls w działającym środowisku produkcyjnym bez ryzyka zablokowania dostępu do zasobów dla uprawnionych użytkowników i aplikacji:
+- Tryb "Dry run" (próby/symulacji) w VPC Service Controls pozwala na weryfikację działania reguł perymetru w tle. Kiedy zapytanie narusza zasady perymetru, VPC Service Controls nie blokuje tego zapytania, lecz jedynie rejestruje to zdarzenie w logach (Cloud Audit Logs) jako potencjalne naruszenie. Dzięki temu administratorzy mogą przeanalizować logi, wykryć ewentualne fałszywe alarmy i dostosować reguły przed pełnym wdrożeniem zabezpieczeń.
 
-Dlaczego inne są błędne:
-A. Cloud KMS: To ogólna usługa zarządzania kluczami. Może używać HSM jako backendu, ale to Cloud HSM (B) precyzuje wymóg sprzętowy.
-C. Cloud EKM: Służy do łączenia się z TWOIM HSM-em poza Google.
-D. Secret Manager: Służy do haseł, nie jest usługą HSM.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Cloud Run: Jest to w pełni zarządzana platforma serverless do uruchamiania kontenerów, a nie tryb działania usługi VPC Service Controls.
+- B. Native: Taki tryb nie istnieje w specyfikacji konfiguracji perymetru VPC Service Controls.
+- C. Enforced: W tym trybie (wymuszenia) wszelkie próby dostępu naruszające reguły perymetru są natychmiast blokowane. Wdrożenie zmian bezpośrednio w trybie Enforced w działającym środowisku stwarza wysokie ryzyko przestojów i awarii aplikacji.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla B. Pytanie o definicję usługi.
+4. Wskazówki, hinty, tips and tricks:
+- Zawsze, gdy mowa o bezpiecznym wdrażaniu, testowaniu lub modyfikowaniu perymetrów VPC Service Controls w działającym środowisku produkcyjnym bez zakłócania ruchu, poprawną odpowiedzią jest tryb **Dry run**.
+- Analiza logów z trybu dry run pozwala na bezbłędne przejście do trybu Enforced.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Testowanie perymetru VPC SC bez blokowania ruchu -> Dry run mode.
+- Aktywna blokada dostępu -> Enforced mode.
+
+6. Dodatkowe źródła i dokumentacja:
+- VPC Service Controls Dry run mode: <a href="https://cloud.google.com/vpc-service-controls/docs/dry-run-mode" target="_blank">https://cloud.google.com/vpc-service-controls/docs/dry-run-mode</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

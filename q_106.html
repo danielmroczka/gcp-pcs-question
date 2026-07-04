@@ -90,18 +90,31 @@ You work for a large organization where each business unit has thousands of user
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: BE.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Organize projects in folders, and assign permissions to Google groups at the folder level.
+E. Use Google Cloud Directory Sync to synchronize users and group memberships in Cloud Identity.
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Folders + Groups: Jedyny sposób na skalowalne delegowanie uprawnień dla tysięcy osób bez chaosu.
-E. GCDS: Automatyzuje cykl życia konta (lifecycle) poprzez synchronizację z lokalnym AD/LDAP.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymagania dotyczą skalowalności, delegacji uprawnień dla poszczególnych jednostek biznesowych, automatycznego deprovisioningu (odbierania uprawnień przy odejściu) oraz integracji z lokalnym katalogiem:
+- E (GCDS): Google Cloud Directory Sync pozwala na synchronizację w jedną stronę użytkowników i grup z lokalnego serwera AD/LDAP do Cloud Identity. Jeśli użytkownik zmieni jednostkę biznesową lub zostanie zwolniony, zmiana w AD automatycznie zsynchronizuje się z chmurą, a użytkownik natychmiast utraci dostęp, spełniając wymóg cyklu życia tożsamości.
+- B (Foldery i Grupy): Foldery w hierarchii zasobów GCP pozwalają na logiczne odizolowanie jednostek biznesowych (jednostka A nie ma dostępu do projektów jednostki B). Przypisanie ról IAM grupom Google (a nie bezpośrednio użytkownikom) na poziomie folderu pozwala na automatyczne dziedziczenie uprawnień do wszystkich projektów wewnątrz folderu i ułatwia zarządzanie dostępem na dużą skalę.
 
-Dlaczego inne są błędne:
-A. VPC SC: Chroni dane, nie deleguje uprawnień IAM dla osób.
-C. OUs: Służą do ustawień Google Workspace (np. kto ma YouTube), nie do zarządzania projektami chmurowymi.
-D. IAM conditions by prefix: Bardzo trudne do utrzymania i błędotwórcze w dużej skali.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. VPC Service Controls: Służy do ochrony sieciowej i zapobiegania wyciekowi danych (data exfiltration) między usługami Google, a nie do zarządzania tożsamościami i uprawnieniami użytkowników w IAM.
+- C. Organizacja według Organizational Units (OUs): Jednostki organizacyjne (OUs) w Cloud Identity/Workspace są używane do zarządzania aplikacjami SaaS (np. włączanie/wyłączanie Gmaila, ustawienia urządzeń mobilnych), a nie do strukturyzacji projektów GCP czy przypisywania ról IAM. Do tego celu służą wyłącznie Foldery.
+- D. Warunki IAM (IAM Conditions) na bazie prefiksów nazw projektów: Jest to rozwiązanie trudne w zarządzaniu, podatne na błędy ludzkie przy nazywaniu projektów i nie spełnia wymogu integracji z lokalnym systemem AD/LDAP ani automatycznego odbierania uprawnień przy zmianie stanowiska.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla BE. To fundamenty Google Cloud Landing Zone.
+4. Wskazówki, hinty, tips and tricks:
+- Pamiętaj, że w GCP uprawnienia przypisuje się do Grup Google (Google Groups), a grupy synchronizuje się z AD za pomocą GCDS. Przypisywanie ról bezpośrednio do kont pojedynczych osób jest antywzorcem na egzaminie.
+- Foldery są podstawowym narzędziem izolacji i delegowania uprawnień w strukturze organizacji Google Cloud.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Zarządzanie dostępem na poziomie biznesowym + na dużą skalę -> Foldery + Google Groups.
+- Synchronizacja z on-premises directory + automatyczny lifecycle -> Google Cloud Directory Sync (GCDS).
+
+6. Dodatkowe źródła i dokumentacja:
+- GCP Resource Hierarchy: <a href="https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy" target="_blank">https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy</a>
+- Google Cloud Directory Sync (GCDS): <a href="https://cloud.google.com/directory-sync/docs" target="_blank">https://cloud.google.com/directory-sync/docs</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

@@ -89,17 +89,31 @@ You need to connect your organization's on-premises network with an existing Goo
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. 1. Set up a Dedicated Interconnect link between the on-premises environment and Google Cloud. 2. Configure private access using the restricted.googleapis.com domains in on-premises DNS configurations.
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Dedicated Interconnect + restricted.googleapis.com: Dedicated Interconnect zapewnia fizyczne, prywatne łącze (Private transport link). Domena `restricted.googleapis.com` (199.36.153.4/30) jest jedyną domeną VIP, która wymusza obsługę wyłącznie usług wspieranych przez VPC Service Controls, co spełnia wymóg 'APIs only via VPC SC'.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymagania to: połączenie hybrydowe za pomocą prywatnego łącza transportowego (private transport link), prywatny dostęp do API Google z lokalizacji on-premises oraz ograniczenie dostępu do API wyłącznie do tych, które są objęte ochroną VPC Service Controls:
+- Dedicated Interconnect zapewnia fizyczne, prywatne połączenie światłowodowe o najwyższym poziomie bezpieczeństwa i przepustowości (spełnia warunek "private transport link").
+- Skierowanie ruchu do Google APIs na domenę `restricted.googleapis.com` (rozwiązującą się na zakres IP 199.36.153.4/30) powoduje, że zapytania są kierowane wyłącznie do usług Google obsługiwanych przez VPC Service Controls (np. Cloud Storage, BigQuery). Dostęp do innych, nieobsługiwanych usług (np. Gmail, YouTube) jest automatycznie blokowany, co zapobiega wyciekowi danych.
 
-Dlaczego inne są błędne:
-A. Cloud VPN: Choć bezpieczny, nie jest to 'dedykowane łącze fizyczne' (Interconnect jest wyżej w hierarchii wymagań 'transport link').
-B. private.googleapis.com: Ta domena (199.36.153.8/30) daje dostęp do WSZYSTKICH API Google (w tym YouTube, Gmail), a nie tylko tych chronionych przez VPC SC.
-C. Direct Peering: To peering publiczny dla API, nie zapewnia prywatnego łącza transportowego do sieci VPC.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Cloud VPN: Używa publicznego internetu jako nośnika dla zaszyfrowanych tuneli IPSec, co nie jest dedykowanym fizycznym łączem prywatnym o gwarantowanej jakości (Dedicated Interconnect jest rozwiązaniem wyższej klasy).
+- B. Partner Interconnect z domeną `private.googleapis.com`: Domena `private.googleapis.com` (199.36.153.8/30) umożliwia dostęp do wszystkich usług Google (w tym konsumenckich i nieobjętych VPC Service Controls), co narusza wymóg ograniczania dostępu wyłącznie do usług chronionych przez VPC SC.
+- C. Direct Peering: Jest to połączenie typu peering realizowane na publicznych adresach IP bez integracji z prywatnymi sieciami VPC, przez co nie wspiera bezproblemowego routingu hybrydowego do Shared VPC i nie jest w pełni prywatnym łączem transportowym.
 
-Konsensus społeczności ExamTopics: 100% na D.restricted VIP to standard dla VPC SC i łączności hybrydowej.
+4. Wskazówki, hinty, tips and tricks:
+- Zapamiętaj kluczową różnicę dla egzaminu:
+  - `restricted.googleapis.com` -> Dostęp TYLKO do API wspieranych przez VPC Service Controls (wymagane w scenariuszach z VPC SC).
+  - `private.googleapis.com` -> Dostęp do WSZYSTKICH API Google Cloud i Google Workspace.
+- Prywatne łącze o najwyższym standardzie bezpieczeństwa dla przedsiębiorstw to Dedicated Interconnect.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Wymóg VPC Service Controls dla połączenia hybrydowego -> restricted.googleapis.com.
+- Prywatne dedykowane łącze fizyczne -> Dedicated Interconnect.
+
+6. Dodatkowe źródła i dokumentacja:
+- Configure private connectivity for Google APIs: <a href="https://cloud.google.com/vpc-service-controls/docs/private-connectivity" target="_blank">https://cloud.google.com/vpc-service-controls/docs/private-connectivity</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

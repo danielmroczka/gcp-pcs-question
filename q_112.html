@@ -89,15 +89,29 @@ Your company has been creating users manually in Cloud Identity to provide acces
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. 1. Configure the option to suspend domain users not found in LDAP. 2. Set up a recurring GCDS task.
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Suspend + Recurring: Aby AD/LDAP było jedynym źródłem prawdy, GCDS musi działać w pętli (recurring). Opcja 'Suspend' (zawieszenie konta) jest bezpieczniejsza niż usuwanie (Delete) – pozwala na odzyskanie danych, jeśli ktoś został omyłkowo usunięty z LDAP, jednocześnie blokując dostęp nieuprawnionym (tym, których nie ma w LDAP).
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymagania zakładają zintegrowanie lokalnego LDAP z Cloud Identity przy użyciu GCDS, automatyczne replikowanie zmian oraz dezaktywowanie użytkowników, którzy zostali utworzeni ręcznie (czyli nie istnieją w LDAP):
+- Wybranie opcji "suspend domain users not found in LDAP" (zawieszenie użytkowników) powoduje zablokowanie kont w Cloud Identity, które zostały utworzone ręcznie i nie posiadają swojego odpowiednika w lokalnym serwerze LDAP. Zawieszenie jest bezpieczniejsze niż trwałe usunięcie (delete), ponieważ chroni przed przypadkową utratą danych w przypadku błędów konfiguracyjnych synchronizacji.
+- Konfiguracja cyklicznego zadania (recurring GCDS task) jest niezbędna, aby zmiany w strukturze pracowników i ich uprawnieniach były automatycznie i stale synchronizowane bez konieczności ręcznego uruchamiania narzędzia przez administratora.
 
-Dlaczego inne są błędne:
-C, D. Exclude: Jeśli wykluczysz ręcznie stworzone konta, to one nadal będą aktywne i będą stanowić lukę w polityce 'jedynego źródła prawdy'. Celem jest ich wyeliminowanie.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Opcja usuwania (delete) i ręczne uruchamianie: Trwałe usunięcie kont jest zbyt drastyczne (powoduje utratę danych użytkownika). Ręczne uruchamianie GCDS nie zapewnia ciągłości replikacji zmian w dynamicznym środowisku.
+- C i D. Wykluczenie ręcznie utworzonych użytkowników z atrybutów wyszukiwania LDAP: Spowodowałoby to, że GCDS ignorowałby te konta i pozostawił je w pełni aktywne w Cloud Identity, co bezpośrednio łamie wymóg ich zablokowania ("Disable any manually created users").
 
-Konsensus społeczności ExamTopics: 100% na A. 'Suspend' to złoty standard wdrożeń Enterprise.
+4. Wskazówki, hinty, tips and tricks:
+- GCDS zawsze synchronizuje tożsamości z lokalnego katalogu (LDAP/AD) do Google Cloud (jednokierunkowo).
+- Na egzaminie opcja "Suspend" jest zawsze zalecana nad "Delete" jako bezpieczna metoda deprovisioningu.
+- Automatyzacja synchronizacji cyklu życia tożsamości zawsze wymaga harmonogramu (recurring task).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- AD/LDAP jako jedyne źródło prawdy + obsługa kont spoza katalogu -> Suspend users not found in LDAP.
+- Automatyczne utrzymanie spójności tożsamości -> Recurring GCDS task.
+
+6. Dodatkowe źródła i dokumentacja:
+- GCDS user management settings: <a href="https://support.google.com/a/answer/6124299" target="_blank">https://support.google.com/a/answer/6124299</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

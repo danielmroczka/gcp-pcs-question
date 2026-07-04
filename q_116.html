@@ -89,18 +89,27 @@ You are exporting application logs to Cloud Storage. You encounter an error mess
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: AC.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Change the access control model for the bucket
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Cloud KMS: To usługa do zarządzania kluczami szyfrującymi. Pozwala na automatyczną rotację kluczy (KEK) zgodnie z harmonogramem (np. co 90 dni).
-C. Cloud Storage (GCS): Wspiera integrację z KMS (CMEK), co pozwala na szyfrowanie obiektów w bucketach kluczami zarządzanymi przez klienta, które podlegają rotacji.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Podczas eksportowania logów do Cloud Storage pojawia się błąd wskazujący, że zlew logów (log sink) nie obsługuje polityki jednolitego dostępu do kubła (Uniform bucket-level access):
+- Domyślnie niektóre starsze mechanizmy eksportu logów (sinks) w Google Cloud mogą opierać się na drobnoziarnistych listach kontroli dostępu (ACL) do zapisu obiektów w kubełkach Cloud Storage. Jeśli na kubełku włączono politykę Uniform bucket-level access, stosowanie ACL jest całkowicie zablokowane na rzecz czystego IAM. Zmiana modelu kontroli dostępu kubełka (access control model) z "Uniform" na "Fine-grained" (która dopuszcza używanie ACL-i) eliminuje ten konflikt kompatybilności i pozwala zlewowi na poprawne zapisywanie logów.
 
-Dlaczego inne są błędne:
-B. Secret Manager: Służy do haseł, nie do kluczy szyfrujących wolumeny danych.
-D. Compute Engine: Wspiera CMEK, ale GCS (C) jest bardziej fundamentalnym przykładem składowania danych wymagającego kluczy rotowanych w tym scenariuszu (często GCS i KMS idą w parze w pytaniach o compliance).
-E. IAM: Zarządza uprawnieniami, nie szyfrowaniem.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. Update your sink with the correct bucket destination: Błąd nie dotyczy błędnej nazwy kubełka docelowego, lecz konfiguracji uprawnień sieciowych/polityki bezpieczeństwa na istniejącym kubełku.
+- C i D. Nadanie roli `roles/logging.logWriter` lub `roles/logging.bucketWriter` na kubełku: Choć tożsamość zlewu (sink service account) potrzebuje odpowiednich uprawnień do zapisu, sam błąd jawnie wskazuje na brak wsparcia dla polityki "uniform bucket-level access". Sama zmiana uprawnień IAM bez zmiany modelu dostępu kubełka nie rozwiąże tego problemu kompatybilności.
 
-Konsensus społeczności ExamTopics: Zdecydowana większość na AC. KMS to mózg operacji, GCS to serce danych.
+4. Wskazówki, hinty, tips and tricks:
+- Uniform bucket-level access wyłącza ACL-e na kubełku. Jeśli narzędzie lub usługa wymaga stosowania ACL-i do zapisu obiektów, kubełek musi mieć ustawiony model dostępu na "Fine-grained".
+- Nowoczesne systemy GCP zalecają stosowanie Uniform, ale w przypadku legacy log sinks konieczne może być cofnięcie się do Fine-grained.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Log sink fails with Uniform bucket-level access policy -> Change access control model for the bucket (to Fine-grained).
+
+6. Dodatkowe źródła i dokumentacja:
+- Cloud Storage Access Control Models: <a href="https://cloud.google.com/storage/docs/access-control" target="_blank">https://cloud.google.com/storage/docs/access-control</a>
+- Logging export destinations permissions: <a href="https://cloud.google.com/logging/docs/export/configure_export_v2#dest-auth" target="_blank">https://cloud.google.com/logging/docs/export/configure_export_v2#dest-auth</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

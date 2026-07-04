@@ -89,16 +89,27 @@ The security operations team needs access to the security-related logs for all p
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. roles/logging.privateLogViewer
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Private Log Viewer: Standardowy `logging.viewer` (D) nie widzi logów Data Access (kto czytał dane) ani Access Transparency (co robiło Google). Tylko rola `privateLogViewer` daje wgląd w te wrażliwe dzienniki bez uprawnień do ich usuwania czy zmiany (view-only).
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymagane jest zapewnienie zespołowi operacji bezpieczeństwa dostępu do odczytu (least privilege view-only) specyficznych, wrażliwych logów: Admin Activity, Data Access oraz Access Transparency:
+- Rola `roles/logging.privateLogViewer` (Private Log Viewer) pozwala na przeglądanie wszystkich logów w systemie, w tym logów o najwyższym poziomie poufności: Data Access (które zawierają informacje o tym, jakie konkretnie dane były odczytywane przez użytkowników) oraz Access Transparency (które rejestrują działania inżynierów wsparcia Google na zasobach klienta). Spełnia ona zasadę najmniejszych uprawnień (least privilege), ponieważ nie pozwala na modyfikację ani usuwanie logów.
 
-Dlaczego inne są błędne:
-B. Admin: Pozwala na usuwanie logów - naruszenie zasady least privilege.
-C. Project Viewer: Widzi tylko logi Admin Activity, nie ma dostępu do prywatnych dzienników.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- B. roles/logging.admin: Daje pełne uprawnienia administratora do Cloud Logging, w tym możliwość tworzenia/usuwania zlewów (sinks), usuwania logów oraz zmiany polityk retencji. Narusza to zasadę najmniejszych uprawnień, ponieważ zespół potrzebuje jedynie dostępu do odczytu (view access).
+- C. roles/viewer: Jest to podstawowa rola czytelnika (Primitive Role) na poziomie projektu. Daje dostęp do odczytu metadanych większości zasobów GCP, ale ze względów bezpieczeństwa nie pozwala na odczytywanie logów Data Access ani Access Transparency.
+- D. roles/logging.viewer: Daje dostęp do standardowych logów (np. Admin Activity), ale nie posiada uprawnień do odczytu logów Data Access oraz Access Transparency, co uniemożliwia spełnienie wymagań zespołu.
 
-Konsensus społeczności ExamTopics: 100% na A. Zrozumienie różnicy między viewer a privateLogViewer jest kluczowe dla audytora.
+4. Wskazówki, hinty, tips and tricks:
+- Standardowy `logging.viewer` NIE widzi logów Data Access (kto czytał dane) ani Access Transparency. Do ich podglądu wymagana jest rola `logging.privateLogViewer`.
+- Zapamiętaj tę różnicę, ponieważ jest to bardzo częsty temat pytań egzaminacyjnych z zakresu audytu bezpieczeństwa GCP.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Podgląd logów Data Access / Access Transparency + Least Privilege -> roles/logging.privateLogViewer.
+
+6. Dodatkowe źródła i dokumentacja:
+- Cloud Logging IAM roles: <a href="https://cloud.google.com/logging/docs/access-control" target="_blank">https://cloud.google.com/logging/docs/access-control</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

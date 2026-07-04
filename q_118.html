@@ -89,17 +89,27 @@ You need to set up two network segments: one with an untrusted subnet and the ot
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: A.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. 1. Set up two VPC networks: one trusted and the other untrusted. 2. Configure a virtual appliance using multiple network interfaces, with each interface connected to one of the VPC networks.
 
-Wyjaśnienie (Dlaczego poprawna):
-A. Logging Sinks: Mechanizm 'Sink' (zlewozmywak) pozwala na automatyczne przekierowanie logów do różnych celów, w tym do BigQuery. Jest to standardowa metoda na analizę SQL ogromnych zbiorów logów historycznych.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymaganiem jest wdrożenie wirtualnego urządzenia zabezpieczającego (np. zapory NGFW), które będzie analizować cały ruch sieciowy przechodzący pomiędzy dwoma segmentami (zaufanym i niezaufanym):
+- Aby wirtualne urządzenie mogło skutecznie filtrować ruch sieciowy i zapobiegać bezpośredniemu obchodzeniu zabezpieczeń, segmenty sieciowe muszą być fizycznie odizolowane. Najlepszym rozwiązaniem w GCP jest stworzenie dwóch odrębnych sieci VPC (trusted i untrusted).
+- Wirtualne urządzenie (VM) jest uruchamiane jako instancja wielointerfejsowa (Multi-NIC VM). Jeden interfejs sieciowy (np. nic0) jest podłączony do sieci untrusted VPC, a drugi (nic1) do sieci trusted VPC. W ten sposób ruch nie może przepływać bezpośrednio z jednej sieci do drugiej z pominięciem maszyny NGFW, co wymusza inspekcję każdego pakietu na poziomie appliance.
 
-Dlaczego inne są błędne:
-B. Cloud Trace: Służy do analizy opóźnień aplikacji.
-C. Cloud Debugger: Służy do inspekcji kodu w czasie rzeczywistym.
-D. SCC: Pokazuje alerty, ale nie jest mechanizmem eksportu surowych logów do BigQuery.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A i B. Umieszczenie obu podsieci w tej samej sieci VPC i kierowanie ruchu trasami: W obrębie jednej sieci VPC ruch pomiędzy podsieciami (nawet zaufaną i niezaufaną) jest kierowany automatycznie za pomocą lokalnej, nieusuwalnej trasy systemowej (subnet route). Nie można jej nadpisać trasami użytkownika (Custom Routes) w taki sposób, aby zmusić ruch wewnętrzny do przejścia przez wirtualne urządzenie.
+- C. Połączenie sieci VPC za pomocą Peeringu (VPC Network Peering): Peering sieci automatycznie wymienia bezpośrednie trasy routingu między nimi. Po zestawieniu peeringu ruch będzie płynął optymalną, bezpośrednią ścieżką z pominięciem wirtualnego urządzenia.
 
-Konsensus społeczności ExamTopics: 100% na A. Sinks to klucz do analityki logów.
+4. Wskazówki, hinty, tips and tricks:
+- W chmurach publicznych (w tym GCP), aby filtrować ruch za pomocą NGFW (np. Palo Alto, Fortinet) pomiędzy dwoma strefami, należy użyć **architektury wielo-VPC** (multi-VPC) oraz maszyn wirtualnych z wieloma kartami sieciowymi (**Multi-NIC VMs**).
+- Każdy interfejs sieciowy maszyny VM musi być podłączony do innej sieci VPC.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Inspekcja ruchu przez NGFW/Appliance -> Odrębne sieci VPC + Multi-NIC VM (multiple network interfaces).
+
+6. Dodatkowe źródła i dokumentacja:
+- Multiple network interfaces overview: <a href="https://cloud.google.com/vpc/docs/multiple-network-interfaces-overview" target="_blank">https://cloud.google.com/vpc/docs/multiple-network-interfaces-overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

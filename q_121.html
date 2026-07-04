@@ -90,18 +90,28 @@ You manage your organization's Security Operations Center (SOC). You currently m
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Packet Mirroring
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Packet Mirroring: Jest to jedyna natywna usługa w GCP, która pozwala na klonowanie PEŁNEGO ruchu sieciowego (w tym zawartości pakietów - payload) z wybranych instancji VM lub całych podsieci. Skopiowany ruch można wysłać do urządzenia trzeciego (np. IDS/IPS w Marketplace) w celu głębokiej inspekcji (Deep Packet Inspection).
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymaganiem jest uzyskanie możliwości badania nie tylko nagłówków pakietów sieciowych (metadata), ale także ich pełnej zawartości (payload) na potrzeby analizy incydentów bezpieczeństwa i eksploracji przepływów:
+- Packet Mirroring w GCP klonuje (kopiuje) cały ruch sieciowy – zarówno nagłówki, jak i pełną zawartość (payload) pakietów – z wybranych instancji maszyn wirtualnych, grup instancji lub całych podsieci. Skopiowany ruch jest następnie przesyłany do kolektora (np. instancji z zainstalowanym oprogramowaniem IDS/IPS lub snifferem pakietów). Umożliwia to przeprowadzenie pełnej inspekcji (Deep Packet Inspection), co jest kluczowe w zaawansowanych śledztwach cyberbezpieczeństwa.
 
-Dlaczego inne są błędne:
-A. Marketplace IDS: To oprogramowanie (cel), ale potrzebuje ono METODY dostarczenia pakietów, którą jest właśnie Packet Mirroring.
-B. VPC Flow Logs: Rejestrują tylko metadane (nagłówki: skąd, dokąd, ile danych), ale celowo NIE rejestrują payloadu (treści pakietu).
-C. VPC SC logs: Dotyczą blokad na poziomie API usług Google (np. GCS), a nie ruchu sieciowego między maszynami VM.
-E. Cloud Armor DPI: Cloud Armor zajmuje się filtrowaniem ruchu HTTP(S) na brzegu sieci, nie jest narzędziem do ogólnej eksploracji payloadu wewnątrz VPC.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Marketplace IDS: Urządzenia IDS (Intrusion Detection System) z Google Cloud Marketplace służą do analizy ruchu, ale same z siebie nie mają możliwości przechwytywania ruchu z sieci VPC. Potrzebują do działania usługi Packet Mirroring jako źródła danych.
+- B. VPC Flow Logs: Rejestruje wyłącznie metadane dotyczące połączeń (IP źródłowe/docelowe, porty, liczba bajtów, czas trwania). Ze względów bezpieczeństwa i oszczędności miejsca celowo nie rejestruje zawartości (payloadu) pakietów.
+- C. VPC Service Controls logs: Są to logi audytowe dotyczące naruszenia granic perymetru API usług Google, nie rejestrują one ruchu sieciowego IP pomiędzy maszynami wirtualnymi w sieci VPC.
+- E. Google Cloud Armor Deep Packet Inspection: Cloud Armor nie oferuje ogólnego mechanizmu Deep Packet Inspection dla całego ruchu wewnątrz sieci VPC (działa na brzegu sieci dla Load Balancerów HTTP/HTTPS).
 
-Konsensus społeczności ExamTopics: 100% na D. Payload = Packet Mirroring w terminologii GCP.
+4. Wskazówki, hinty, tips and tricks:
+- Jeśli celem jest analiza zawartości/ładunku pakietów (**payload**) w sieci VPC, jedyną natywną usługą GCP, która to umożliwia, jest **Packet Mirroring**.
+- VPC Flow Logs = tylko nagłówki (no payload). Packet Mirroring = pełny pakiet (headers + payload).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Badanie zawartości pakietów / payload / Deep Packet Inspection -> Packet Mirroring.
+
+6. Dodatkowe źródła i dokumentacja:
+- Packet Mirroring overview: <a href="https://cloud.google.com/vpc/docs/packet-mirroring" target="_blank">https://cloud.google.com/vpc/docs/packet-mirroring</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

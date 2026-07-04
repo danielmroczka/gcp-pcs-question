@@ -89,16 +89,28 @@ Your Security team believes that a former employee of your company gained unauth
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Use the Logs Explorer to search for user activity.
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Logs Explorer: Jest to główne narzędzie do analizy kryminalistycznej (forensics) w GCP. Pozwala na przeszukiwanie historycznych logów Admin Activity i Data Access (retencja do 400 dni) pod kątem konkretnego konta serwisowego i jego klucza.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymagane jest zweryfikowanie nieautoryzowanego dostępu byłego pracownika przy użyciu klucza konta serwisowego w okresie ostatnich 2 miesięcy oraz ustalenie jego aktywności:
+- Logs Explorer w Cloud Logging jest dedykowanym narzędziem do przeszukiwania i analizowania logów w czasie rzeczywistym oraz logów historycznych. Dzienniki Admin Activity i Data Access (o ile te drugie zostały włączone) są przechowywane domyślnie i pozwalają sprawdzić każde wywołanie API z użyciem konkretnego klucza konta serwisowego (w logu widoczny jest identyfikator klucza `keyId` oraz wykonane akcje). Retencja logów audytowych wynosi 400 dni, co w pełni pokrywa wymagany okres 2 miesięcy.
 
-Dlaczego inne są błędne:
-A. SHA: Wykrywa błędy konfiguracji 'teraz', nie analizuje historii działań użytkowników.
-B. Cloud Monitoring: Służy do metryk (wykresy zużycia), a nie do śledzenia pojedynczych zdarzeń w logach audytowych.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Security Health Analytics: Służy do skanowania stanu zasobów chmurowych pod kątem błędów konfiguracyjnych i podatności (np. wykrycie wystawionego publicznie klucza), ale nie rejestruje i nie pozwala na przeglądanie historycznej aktywności użytkowników.
+- B. Cloud Monitoring: Służy do zbierania metryk wydajnościowych (np. utylizacja procesora, ruch sieciowy) i konfigurowania alertów. Nie rejestruje szczegółowych zdarzeń audytowych wykonanych przez użytkowników.
+- C. Cloud Data Loss Prevention (DLP) API: Służy do skanowania plików i baz danych w celu wykrywania i maskowania danych wrażliwych (takich jak numery PESEL, karty kredytowe), a nie do badania logów dostępu w celach śledczych (forensics).
 
-Konsensus społeczności ExamTopics: 100% na D. Logs Explorer to jedyne narzędzie do przeszukiwania treści logów historycznych.
+4. Wskazówki, hinty, tips and tricks:
+- Wszelkie analizy historycznych zdarzeń ("kto co zrobił w przeszłości") wymagają przeszukania logów audytowych za pomocą Logs Explorer.
+- Zwróć uwagę, że klucze kont serwisowych (Service Account Keys) są bardzo niebezpieczne i ich użycie jest w pełni logowane w GCP Audit Logs.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Śledzenie historycznej aktywności użytkowników / analiza incydentów -> Logs Explorer / Cloud Audit Logs.
+
+6. Dodatkowe źródła i dokumentacja:
+- Viewing logs in Logs Explorer: <a href="https://cloud.google.com/logging/docs/view/logs-explorer-overview" target="_blank">https://cloud.google.com/logging/docs/view/logs-explorer-overview</a>
+- Auditing Service Accounts: <a href="https://cloud.google.com/iam/docs/auditing-service-accounts" target="_blank">https://cloud.google.com/iam/docs/auditing-service-accounts</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

@@ -89,25 +89,31 @@ You need to implement an encryption at-rest strategy that reduces key management
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Potwierdzona odpowiedź: D (Default encryption + Cloud KMS)
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Encrypt non-sensitive data with Google default encryption, and encrypt sensitive data with Cloud Key Management Service.
 
-Wyjaśnienie: 
-Strategia zbalansowana: 1. Dane zwykłe szyfrujemy domyślnie (Google default), co nie wymaga zarządzania kluczami (zero complexity). 2. Dane wrażliwe szyfrujemy za pomocą Cloud KMS (CMEK), co daje kontrolę nad rotacją i rezydencją. Oba rozwiązania spełniają wymóg FIPS 140-2 L1.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Wymaganie polega na zbalansowaniu bezpieczeństwa i złożoności zarządzania kluczami dla dwóch rodzajów danych (zwykłych i wrażliwych), przy zachowaniu zgodności z FIPS 140-2 L1:
+- Domyślne szyfrowanie GCP (Google default encryption at-rest) automatycznie szyfruje wszystkie dane w spoczynku bez jakichkolwiek działań administracyjnych ze strony użytkownika (zerowa złożoność). Jest ono w pełni zgodne z normą FIPS 140-2 L1.
+- Dla danych wrażliwych użycie Customer-Managed Encryption Keys (CMEK) za pośrednictwem Cloud KMS pozwala użytkownikowi na pełną elastyczność i kontrolę nad rotacją kluczy (rotation schedule) oraz lokalizacją ich przechowywania (key residency). Cloud KMS również spełnia normę FIPS 140-2 L1.
+Połączenie tych dwóch podejść minimalizuje narzut operacyjny przy jednoczesnym spełnieniu wymagań compliance i kontroli.
 
-Dlaczego pozostałe są błędne:
-A, B. Używanie KMS/EKM dla wszystkich danych (nawet tych nieistotnych) zwiększa niepotrzebnie złożoność i koszty.
-C. External Key Manager (EKM) jest najbardziej złożonym rozwiązaniem i zazwyczaj stosuje się go tylko dla najbardziej rygorystycznych wymogów compliance, gdzie klucz musi być poza Google.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Szyfrowanie wszystkich danych przy użyciu Cloud External Key Manager (EKM): EKM przechowuje klucze poza środowiskiem Google Cloud, co generuje olbrzymią złożoność operacyjną, opóźnienia sieciowe oraz koszty. Stosowanie tego dla danych niewrażliwych narusza wymóg minimalizacji złożoności.
+- B. Szyfrowanie wszystkich danych za pomocą Cloud KMS: Wymagałoby to ręcznego tworzenia, rotowania i zarządzania kluczami dla danych nieistotnych, co niepotrzebnie zwiększa złożoność administracyjną (management complexity).
+- C. Szyfrowanie danych wrażliwych za pomocą Cloud EKM: External Key Manager jest rozwiązaniem nadmiarowym w tym scenariuszu. Cloud KMS (CMEK) w zupełności wystarcza do kontroli rotacji i rezydencji kluczy bez wprowadzania dodatkowej złożoności integracji z zewnętrznym HSM.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-Mieszaj poziomy szyfrowania, aby zoptymalizować 'operational overhead' (złożoność).
+4. Wskazówki, hinty, tips and tricks:
+- GCP domyślnie szyfruje wszystkie dane w spoczynku. Jeśli dane nie są poufne i nie wymagają specyficznej rotacji/kontroli klienta, zawsze wybieraj domyślne szyfrowanie (default encryption), aby zminimalizować złożoność.
+- Jeśli wymagana jest kontrola nad rezydencją (key residency) i rotacją (rotation schedule), właściwym wyborem jest Cloud KMS (CMEK).
 
-Kluczowe zagadnienia do powtórzenia:
-- Encryption at rest strategy
-- Default vs CMEK vs CSEK vs EKM
-- Compliance (FIPS 140-2)
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Zwykłe dane (low complexity) + Wrażliwe dane (rotation/residency control) -> Default Encryption + Cloud KMS (CMEK).
+- Zgodność FIPS 140-2 L1 -> Zarówno Default Encryption, jak i Cloud KMS spełniają ten wymóg (dla L3 wymagany jest Cloud HSM).
 
-Dokumentacja:
-<a href="https://cloud.google.com/security/encryption-at-rest" target="_blank">https://cloud.google.com/security/encryption-at-rest</a>
+6. Dodatkowe źródła i dokumentacja:
+- Google Cloud Encryption at Rest: <a href="https://cloud.google.com/security/encryption-at-rest" target="_blank">https://cloud.google.com/security/encryption-at-rest</a>
+- Cloud KMS compliance (FIPS 140-2): <a href="https://cloud.google.com/kms/docs/fips-140-2" target="_blank">https://cloud.google.com/kms/docs/fips-140-2</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

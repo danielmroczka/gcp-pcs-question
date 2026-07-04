@@ -89,17 +89,28 @@ You are a member of your company's security team. You have been asked to reduce 
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: B.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Implement Identity-Aware Proxy TCP forwarding for the bastion host.
 
-Wyjaśnienie (Dlaczego poprawna):
-B. Bucket Lock: Pozwala na zablokowanie polityki retencji (Retention Policy). Po zablokowaniu, dopóki w buckecie są jakiekolwiek obiekty objęte retencją, SAMEGO BUCKETU NIE DA SIĘ USUNĄĆ, nawet przez administratora.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Celem jest wyeliminowanie publicznych adresów IP z hosta bastionu (bastion host) w celu zmniejszenia powierzchni ataku, przy jednoczesnym zachowaniu możliwości zdalnego dostępu SSH dla administratorów SRE z dowolnych lokalizacji w internecie:
+- Cloud Identity-Aware Proxy (IAP) posiada funkcję przekierowania TCP (TCP forwarding). Pozwala ona na tunelowanie połączeń SSH (port 22) lub RDP (port 3389) do maszyn wirtualnych, które posiadają wyłącznie prywatne adresy IP.
+- Użytkownicy uwierzytelniają się za pomocą swoich poświadczeń Google IAM. IAP weryfikuje ich uprawnienia, a następnie tuneluje ruch SSH przez HTTPS bezpośrednio do maszyny, eliminując potrzebę posiadania publicznego adresu IP na bastionie oraz chroniąc port SSH przed skanowaniem i atakami brute-force z internetu.
 
-Dlaczego inne są błędne:
-A. IAM: Nawet z minimalnymi rolami, ktoś z uprawnieniami Owner mógłby bucket skasować. Bucket Lock chroni przed 'nadmiarowymi uprawnieniami'.
-C. Object Versioning: Chroni przed usunięciem Treści (tworzy kopie plików), ale nie zapobiega skasowaniu całego bucketu.
-D. Retention Policy: Samo w sobie określa czas, ale dopiero 'Lock' (B) sprawia, że polityka jest nieusuwalna i chroni strukturę bucketu.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Wdrożenie Cloud VPN: Cloud VPN wymaga konfiguracji stałego tunelu IPSec z konkretną lokalizacją sieciową (np. biurem firmy). Nie jest to elastyczne rozwiązanie dla administratorów SRE, którzy łączą się dynamicznie z różnych publicznych lokalizacji (np. z domu, kawiarni).
+- B. Wdrożenie OS Login z weryfikacją dwuetapową: OS Login ułatwia zarządzanie kluczami SSH i zabezpiecza proces logowania (uwierzytelniania), ale nie rozwiązuje problemu routingu sieciowego – bez zewnętrznego IP lub tunelu IAP użytkownik z internetu nie nawiąże połączenia sieciowego z maszyną o prywatnym IP.
+- D. Wdrożenie Google Cloud Armor: Cloud Armor działa na poziomie Load Balancerów (HTTP/HTTPS, TCP/SSL Proxy) chroniąc aplikacje webowe przed atakami DDoS i exploitami. Nie służy do zabezpieczania bezpośredniego dostępu SSH do pojedynczych maszyn bastionowych.
 
-Konsensus społeczności ExamTopics: 100% na B. To jedyna twarda blokada usuwania zasobu.
+4. Wskazówki, hinty, tips and tricks:
+- Dostęp SSH do maszyn prywatnych (bez publicznego IP) z internetu bez korzystania z tradycyjnego VPN-u -> **IAP TCP Forwarding** (komenda `gcloud compute ssh --tunnel-through-iap`).
+- Jest to jedno z najważniejszych zaleceń bezpieczeństwa GCP w zakresie dostępu administracyjnego.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Brak publicznego IP + zdalny dostęp SSH z internetu -> IAP TCP Forwarding.
+
+6. Dodatkowe źródła i dokumentacja:
+- Identity-Aware Proxy TCP forwarding: <a href="https://cloud.google.com/iap/docs/tcp-forwarding-overview" target="_blank">https://cloud.google.com/iap/docs/tcp-forwarding-overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

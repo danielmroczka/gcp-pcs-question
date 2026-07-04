@@ -89,17 +89,31 @@ You are working with protected health information (PHI) for an electronic health
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: C.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Cloud Data Loss Prevention with cryptographic hashing
 
-Wyjaśnienie (Dlaczego poprawna):
-C. Cryptographic hashing: Haszowanie jest procesem jednokierunkowym (nieodwracalnym). Całkowicie zmienia ono format i długość danych (np. SHA-256 zawsze daje 64 znaki hex), co spełnia wymóg 'do not preserve character set and length'.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Cel to deidentyfikacja (anonymizacja) wrażliwych danych PHI w systemie analitycznym. Wymagania: proces musi być nieodwracalny (not reversible), a zanonimizowane dane nie mogą zachowywać oryginalnego zestawu znaków ani długości:
+- Haszowanie kryptograficzne (Cryptographic hashing) to funkcja jednokierunkowa, co oznacza, że wygenerowanie oryginalnej wartości na podstawie skrótu (hash) jest matematycznie niewykonalne (proces jest nieodwracalny).
+- Haszowanie zwraca ciąg znaków o stałej, z góry określonej długości (np. 64 znaki dla SHA-256) składający się z zapisu szesnastkowego, niezależnie od tego, czy oryginalnym tekstem był krótki wyraz, czy długie zdanie. Spełnia to warunek niezachowywania zestawu znaków i długości (does not preserve character set and length).
 
-Dlaczego inne są błędne:
-A. Deterministic encryption: Jest odwracalna (reversible) przy użyciu klucza.
-B. Format-preserving encryption: Z założenia zachowuje format i długość (np. numer telefonu po zaszyfrowaniu nadal ma 9 cyfr) - przeciwieństwo wymogu.
-D. Wrapped keys: To mechanizm zarządzania kluczami, a nie technika transformacji danych (anonymizacji).
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Szyfrowanie deterministyczne (Deterministic encryption): Jest procesem odwracalnym (reversible). Każdy, kto posiada odpowiedni klucz kryptograficzny, może odszyfrować dane z powrotem do postaci oryginalnej.
+- B. Szyfrowanie zachowujące format (Format-preserving encryption - FPE): Z definicji ma na celu zachowanie dokładnie takiego samego formatu, zestawu znaków oraz długości danych wejściowych (np. zaszyfrowany numer PESEL nadal będzie 11-cyfrową liczbą), co jest bezpośrednim zaprzeczeniem wymagań pytania.
+- D. Użycie kluczy opakowanych w Cloud KMS (wrapped keys): Jest to metoda zarządzania kluczami szyfrującymi (koperta kryptograficzna), a nie metoda bezpośredniej transformacji i anonimizacji danych w Cloud DLP.
 
-Konsensus społeczności ExamTopics: 100% na C. Hashing = non-reversible i zmiana formatu.
+4. Wskazówki, hinty, tips and tricks:
+- Jeśli proces ma być **nieodwracalny** (non-reversible) i **nie może zachowywać formatu/długości**, właściwym rozwiązaniem w Cloud DLP jest **Cryptographic Hashing**.
+- Jeśli proces ma być **odwracalny** i zachowywać spójność referencyjną (np. do operacji JOIN) -> Deterministic Encryption.
+- Jeśli proces ma być **odwracalny** i zachowywać format (np. dla walidacji UI) -> Format-preserving encryption (FPE).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Nieodwracalna anonimizacja + zmiana długości i formatu -> Cryptographic hashing.
+- Odwracalna tokenizacja + zachowanie spójności referencyjnej -> Deterministic encryption.
+- Zachowanie formatu danych (np. nr telefonu) -> Format-preserving encryption.
+
+6. Dodatkowe źródła i dokumentacja:
+- Cloud DLP Pseudonymization concepts: <a href="https://cloud.google.com/dlp/docs/concepts-pseudonymization" target="_blank">https://cloud.google.com/dlp/docs/concepts-pseudonymization</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">

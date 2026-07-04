@@ -89,16 +89,26 @@ You recently joined the networking team supporting your company's Google Cloud i
 <div class="q-card q-answer mb-4" style="display:none;">
 <h2>Wyjaśnienie</h2>
 <pre>
-Odpowiedź: D.
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Firewall Insights
 
-Wyjaśnienie (Dlaczego poprawna):
-D. Firewall Insights: Narzędzie analityczne stworzone dokładnie do tego celu. Potrafi ono wskazać reguły 'shadowed' (przykryte przez inne), reguły nieużywane oraz sugerować optymalizacje.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Zadaniem jest zidentyfikowanie reguł zapory sieciowej (firewall rules), które nakładają się logicznie (są "przykryte" / shadowed) przez inne reguły o wyższym lub równym priorytecie:
+- Firewall Insights to narzędzie analityczne należące do Network Intelligence Center. Automatycznie analizuje konfigurację reguł zapory sieciowej oraz rzeczywisty ruch sieciowy w celu wykrycia nieoptymalnych reguł. Potrafi precyzyjnie wskazać tzw. "shadowed rules" (reguły nakładające się), reguły bezużyteczne (które nigdy nie zarejestrowały ruchu) oraz sugeruje poprawki poprawiające czytelność i bezpieczeństwo reguł sieciowych.
 
-Dlaczego inne są błędne:
-A. SCC: Może zgłosić, że port jest otwarty, ale nie analizuje logiki 'nakładania się' reguł między sobą.
-B. Logging: Powie Ci która reguła zadziałała, ale nie powie Ci, że 10 innych reguł pod nią jest martwych.
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+- A. Security Command Center (SCC): Wykrywa luki w zabezpieczeniach konfiguracji chmurowej (np. zbyt otwarte porty jak SSH dostępny dla całego świata), ale nie analizuje logicznych zależności i nadmiarowości pomiędzy regułami firewalla.
+- B. Firewall Rules Logging: Loguje każde zdarzenie dopasowania pakietu do reguły firewalla, co pozwala na audytowanie ruchu, ale nie potrafi wykryć logicznych nakładań się reguł ani nie generuje automatycznych rekomendacji dotyczących ich optymalizacji.
+- C. VPC Flow Logs: Rejestruje dane o przepływach pakietów IP na interfejsach maszyn wirtualnych. Jest to surowy log sieciowy i nie zawiera mechanizmów analizowania reguł zapory.
 
-Konsensus społeczności ExamTopics: 100% poparcia dla D. To jedyne narzędzie do higieny logicznej firewalli.
+4. Wskazówki, hinty, tips and tricks:
+- Do analizy logicznej reguł firewalli, wykrywania reguł nieużywanych, shadowed lub wymagających optymalizacji zawsze służy usługa **Firewall Insights**.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+- Wykrywanie nakładających się / shadowed reguł firewall -> Firewall Insights.
+
+6. Dodatkowe źródła i dokumentacja:
+- Firewall Insights overview: <a href="https://cloud.google.com/firewall/docs/firewall-insights-overview" target="_blank">https://cloud.google.com/firewall/docs/firewall-insights-overview</a>
 </pre>
 </div>
 <div class="ai-analysis-container" style="display:none; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 5px solid #2196F3;">
