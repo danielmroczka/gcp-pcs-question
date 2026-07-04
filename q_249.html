@@ -90,24 +90,36 @@ Your organization has an operational image classification model running on a man
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Explain Google's shared responsibility model. Focus the configuration review on Identity and Access Management (IAM) permissions, secure data upload/download procedures, and monitoring logs for any potential malicious activity.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź C jest prawidłowa, ponieważ model współdzielonej odpowiedzialności (Shared Responsibility Model) w chmurze precyzyjnie definiuje granice bezpieczeństwa między dostawcą chmury (Google) a klientem, zwłaszcza w usługach zarządzanych typu PaaS/SaaS (takich jak managed AI/Vertex AI).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Podział odpowiedzialności w usługach zarządzanych AI:
+a. **Odpowiedzialność Google (Security OF the Cloud):** Google odpowiada za bezpieczeństwo infrastruktury fizycznej, sieci szkieletowej, hypervisora, kodu samej usługi AI oraz zabezpieczenie przed podatnościami platformy.
+b. **Odpowiedzialność Klienta (Security IN the Cloud):** Klient odpowiada za poprawne skonfigurowanie dostępu do usługi (uprawnienia IAM – kto może wywoływać model lub modyfikować konfigurację), bezpieczeństwo przesyłanych danych (szyfrowanie CMEK, bezpieczne przesyłanie do Cloud Storage), oraz monitorowanie logów użycia (Cloud Audit Logs) w celu wykrycia nadużyć. Opcja C skupia się dokładnie na tych elementach, które leżą w gestii klienta.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Explain that using platform-as-a-service (PaaS) transfers security concerns to Google...
+   * Dlaczego nieprawidłowa: Korzystanie z PaaS nie zwalnia klienta ze wszystkich obaw o bezpieczeństwo (security concerns). Klient nadal ponosi pełną odpowiedzialność za dostęp (IAM) i ochronę przesyłanych danych. Skupienie się wyłącznie na limitach billingowych i API ignoruje kluczowe aspekty ochrony danych przed nieautoryzowanym dostępem.
+B. Explain the security aspects of the code that transforms user-uploaded images... Define Cloud IAM...
+   * Dlaczego nieprawidłowa: Skupienie się wyłącznie na kodzie transformacji i zespole deweloperskim jest zbyt wąskie. Ignoruje ogólne zasady modelu współdzielonej odpowiedzialności oraz procedury bezpiecznego przesyłania danych (data upload/download), które są kluczowe dla interesariuszy biznesowych i operacyjnych.
+D. Explain the development of custom network firewalls... Describe vulnerability scanning...
+   * Dlaczego nieprawidłowa: Usługi zarządzane AI (PaaS) są utrzymywane przez Google i klient nie ma technicznej możliwości wdrażania "własnych zapor sieciowych" (custom network firewalls) wokół silnika AI ani skanowania kodu samej usługi zarządzanej pod kątem podatności systemowych – te zadania leżą w 100% po stronie Google.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Pamiętaj o modelu współdzielonej odpowiedzialności (Shared Responsibility Model):
+  - IaaS (np. Compute Engine) -> klient zarządza systemem operacyjnym, poprawkami, aplikacją i zaporą.
+  - PaaS/SaaS (np. Vertex AI, Cloud Run) -> Google zarządza infrastrukturą i OS, klient odpowiada za konfigurację IAM, dane i logi.
+* Na egzaminie zawsze odrzucaj opcje sugerujące, że klient musi patchować systemy operacyjne lub budować firewalle dla usług w pełni zarządzanych przez Google.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Managed AI service security responsibilities -> Shared responsibility model + IAM + secure data procedures.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/security/shared-responsibility-model" target="_blank">Google Cloud Shared Responsibility Model</a>
+<a href="https://cloud.google.com/vertex-ai/docs/general/security" target="_blank">Vertex AI Security overview</a>
 </pre>
 
 </div>

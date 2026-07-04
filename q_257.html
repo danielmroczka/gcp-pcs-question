@@ -58,24 +58,35 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Create a service account. Grant bucket access to the Pods by using Workload Identity Federation for GKE.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź A jest prawidłowa, ponieważ Workload Identity Federation for GKE (dawniej znane jako GKE Workload Identity) jest zalecaną i najbezpieczniejszą metodą nadawania uprawnień IAM aplikacjom działającym w kontenerach na klastrach GKE.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Mechanizm działania i zalety:
+a. **Mapowanie tożsamości Kubernetes na IAM:** Łączymy konto serwisowe Kubernetes (KSA - używane wewnątrz klastra przez Pod) z kontem serwisowym Google Cloud (GSA).
+b. **Brak kluczy:** Pod pobiera krótkotrwałe tokeny dostępu bezpośrednio z serwera metadanych GKE w locie. Całkowicie eliminuje to potrzebę generowania, zapisywania, rotowania i zabezpieczania fizycznych kluczy prywatnych kont serwisowych (plików JSON) wewnątrz klastra.
+c. **Minimalizacja narzutu (least management overhead):** Zarządzanie uprawnieniami odbywa się w pełni deklaratywnie przez pliki YAML w Kubernetes, a tokeny są odnawiane automatycznie przez platformę GCP.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+B. ...Store the keys in Secret Manager with a 30-day rotation schedule...
+   * Dlaczego nieprawidłowa: Zapisywanie kluczy w Secret Managerze i wdrażanie ich rotacji co 30 dni wymaga napisania i utrzymywania własnych skryptów rotujących klucze i aktualizujących je w Podach. Generuje to duży narzut administracyjny (management overhead) w porównaniu do bezkluczowego Workload Identity.
+C. ...Store the keys as a Kubernetes secret. Reference the keys in the Pods.
+   * Dlaczego nieprawidłowa: Przechowywanie kluczy prywatnych jako Kubernetes Secrets jest mniej bezpieczne (są one jedynie zakodowane w Base64 i mogą zostać odczytane przez każdego z dostępem do namespace) oraz wymaga ręcznego odnawiania kluczy przed ich wygaśnięciem.
+D. ...Store the keys in Secret Manager. Reference the keys...
+   * Dlaczego nieprawidłowa: Podobnie jak opcja B, ta metoda wymaga zarządzania sekretami i integracji z Secret Managerem z poziomu kodu aplikacji w Podach, co zwiększa złożoność kodu i narzut operacyjny w porównaniu z automatycznym i natywnym Workload Identity.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Nadawanie uprawnień Podom w GKE do usług GCP (GCS, BigQuery itp.) -> Zawsze wybieraj **Workload Identity Federation for GKE** (Workload Identity).
+* Jest to złoty standard bezpieczeństwa GKE eliminujący pliki kluczy kont serwisowych.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* GKE containers/Pods + access Cloud Storage bucket + minimize management overhead -> Workload Identity Federation for GKE.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity" target="_blank">Using Workload Identity Federation for GKE</a>
+<a href="https://cloud.google.com/blog/products/containers-kubernetes/introducing-gke-workload-identity" target="_blank">Introducing GKE Workload Identity</a>
 </pre>
 
 </div>

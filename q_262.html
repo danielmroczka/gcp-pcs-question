@@ -58,24 +58,38 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Configure Cloud Firewall to permit allow-listed traffic only, deploy Google Cloud Armor with predefined rules for blocking common web attacks, and deploy Cloud Intrusion Detection System (IDS) to detect internal traffic anomalies.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź A jest prawidłowa, ponieważ łączy trzy komplementarne, natywne technologie bezpieczeństwa GCP w celu ochrony aplikacji na różnych poziomach modelu OSI (defense in depth).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Analiza komponentów ochrony:
+a. **Restrykcja ruchu (Cloud Firewall):** Działa w warstwach 3 i 4. Pozwala na precyzyjne odcięcie niepotrzebnych portów i protokołów, wpuszczając ruch wyłącznie do dozwolonych podsieci (allow-listed traffic).
+b. **Ochrona przed atakami webowymi (Cloud Armor):** Działa w warstwie 7 (aplikacyjnej). Chroni frontend aplikacji przed atakami typu SQL Injection (SQLi), Cross-Site Scripting (XSS), atakami L7 DDoS oraz innymi lukami z listy OWASP Top 10 przy użyciu predefiniowanych reguł WAF (WAF rules).
+c. **Wykrywanie anomalii wewnętrznych (Cloud IDS):** Monitoruje ruch wewnątrz sieci VPC (ruch typu East-West między frontendem a backendem). Wykorzystuje silnik wykrywania zagrożeń Palo Alto Networks do identyfikacji prób włamań, malware i anomalii sieciowych wewnątrz środowiska.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+B. ...configure DNS Security Extensions (DNSSEC) on Cloud DNS to secure against common web attacks...
+   * Dlaczego nieprawidłowa: DNSSEC zabezpiecza zapytania DNS przed sfałszowaniem (DNS poisoning). Nie chroni jednak samej aplikacji webowej przed atakami w warstwie aplikacji (takimi jak SQLi czy XSS) ani nie wykrywa anomalii w ruchu wewnętrznym.
+C. Configure Cloud Intrusion Detection System (Cloud IDS) to monitor incoming connections...
+   * Dlaczego nieprawidłowa: Cloud IDS jest systemem wykrywania intruzów (IDS), co oznacza, że jedynie monitoruje i raportuje o zagrożeniach. Nie blokuje (prevent/block) ataków webowych na wejściu w czasie rzeczywistym w taki sposób jak WAF (Cloud Armor).
+D. Configure Cloud DNS to secure incoming traffic, deploy Cloud IDS to detect...
+   * Dlaczego nieprawidłowa: Cloud DNS służy do translacji nazw domenowych na adresy IP. Nie ma możliwości analizowania i zabezpieczania ruchu przychodzącego ani blokowania ataków na aplikację.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Kompleksowe bezpieczeństwo sieciowe aplikacji w GCP:
+  - Filtrowanie IP/portów -> **VPC Firewall**.
+  - Blokowanie ataków webowych (WAF/OWASP) -> **Cloud Armor**.
+  - Wykrywanie zagrożeń w ruchu wewnętrznym -> **Cloud IDS**.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Restrict incoming traffic + protect against web-based attacks + monitor internal traffic -> Cloud Firewall + Cloud Armor + Cloud IDS.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/firewall/docs/about-firewalls" target="_blank">Cloud Firewall overview</a>
+<a href="https://cloud.google.com/armor/docs/cloud-armor-overview" target="_blank">Google Cloud Armor overview</a>
+<a href="https://cloud.google.com/intrusion-detection-system/docs/overview" target="_blank">Cloud IDS overview</a>
 </pre>
 
 </div>

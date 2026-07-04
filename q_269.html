@@ -58,24 +58,34 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Create an egress firewall policy with Threat Intelligence as the destination. Attach this policy to all Virtual Private Cloud networks with internet connectivity.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź D jest prawidłowa, ponieważ usługa Cloud Firewall (w wersji Advanced/Plus) wspiera funkcję Threat Intelligence (Inteligentna analiza zagrożeń), która pozwala na automatyczne blokowanie lub logowanie ruchu do znanych, szkodliwych adresów IP i domen w internecie.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Jak to działa:
+a. **Threat Intelligence w Firewallu:** Google stale aktualizuje listy reputacyjne zawierające adresy IP powiązane ze złośliwym oprogramowaniem, botnetami, serwerami Command & Control (C2) oraz witrynami phishingowymi.
+b. **Polityka Egress:** Tworząc regułę zapory sieciowej dla ruchu wychodzącego (egress) z celem (destination) ustawionym na odpowiednią listę Threat Intelligence (np. "iplist-malicious-ips"), system automatycznie zablokuje lub wyśle alert w przypadku próby nawiązania połączenia przez dowolną maszynę w sieci VPC z tymi adresami. Jest to wysoce skuteczna obrona prewencyjna.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Create a DNS Server Policy in Cloud DNS and turn on logs...
+   * Dlaczego nieprawidłowa: Włączenie logowania zapytań DNS pozwala na audyt (monitoring) i analizę po fakcie, ale samo w sobie nie blokuje złośliwego ruchu IP i nie generuje automatycznych alertów o zagrożeniach w czasie rzeczywistym w SCC w taki sposób jak zapora sieciowa.
+B. Forward all logs to Chronicle Security Information and Event Management...
+   * Dlaczego nieprawidłowa: Choć Chronicle SIEM doskonale nadaje się do korelacji logów w skali całej firmy, to wdrożenie i konfiguracja SIEM do detekcji ruchu wykracza poza prosty i natywny mechanizm bezpośredniego filtrowania na poziomie zapory chmurowej i generuje znaczne opóźnienia oraz koszty.
+C. Create a Cloud Intrusion Detection endpoint. Connect this endpoint to all VPC...
+   * Dlaczego nieprawidłowa: Cloud IDS (Intrusion Detection System) służy do pasywnego wykrywania zagrożeń (identyfikacji anomalii) i generuje alerty w SCC, ale nie filtruje i nie blokuje (inline mitigation) aktywnie ruchu sieciowego, co było celem wdrożenia prewencyjnego zabezpieczenia zapory.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Blokowanie/filtrowanie ruchu wychodzącego do znanych złośliwych domen/IP na poziomie sieci w GCP -> Używaj **Cloud Firewall** z włączoną funkcją **Threat Intelligence**.
+* Listy Threat Intelligence są w pełni zarządzane i aktualizowane przez Google.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Alert/block egress traffic targeting known suspicious web services -> Egress firewall policy with Threat Intelligence.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/firewall/docs/threat-intelligence" target="_blank">Threat Intelligence for Cloud Firewall</a>
+<a href="https://cloud.google.com/firewall/docs/firewall-policies" target="_blank">Hierarchical firewall policies overview</a>
 </pre>
 
 </div>

@@ -90,24 +90,35 @@ Your customer has an on-premises Public Key Infrastructure (PKI) with a certific
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Use a subordinate CA in the Google Certificate Authority Service from the on-premises PKI system to issue certificates for the load balancers.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź B jest prawidłowa, ponieważ wykorzystanie podrzędnego urzędu certyfikacji (Subordinate CA) w ramach usługi Google Certificate Authority Service (CAS), który jest podpisany przez lokalny (on-premises) główny urząd certyfikacji (Root CA), pozwala na automatyczne, bezpieczne i wysoce skalowalne wystawianie certyfikatów w chmurze bez obciążania lokalnego zespołu PKI.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Zalety tego rozwiązania:
+a. **Skalowalność i automatyzacja:** Google CAS jest w pełni zarządzaną, wysoce dostępną usługą. Po skonfigurowaniu podrzędnego CA w CAS, certyfikaty dla Load Balancerów mogą być wystawiane automatycznie (np. przy użyciu integracji z Certificate Managerem) w kilka sekund, bez konieczności ręcznego generowania żądań i podpisywania ich on-premises.
+b. **Zachowanie zaufania (Chain of Trust):** Ponieważ podrzędny CA w chmurze jest podpisany przez lokalny Root CA firmy, wszystkie systemy wewnątrz organizacji (które domyślnie ufają lokalnemu Root CA) będą automatycznie ufać certyfikatom wystawionym w GCP.
+c. **Minimalizacja wpływu na on-premises PKI:** Lokalny zespół PKI musi uczestniczyć w procesie tylko raz – podczas jednorazowego podpisania certyfikatu podrzędnego urzędu (subordinate CA) dla chmury.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Use Certificate Manager to issue Google managed public certificates...
+   * Dlaczego nieprawidłowa: Zautomatyzowane publiczne certyfikaty zarządzane przez Google są wystawiane przez publiczne urzędy certyfikacji (np. Let's Encrypt). Nie są one powiązane z wewnętrzną, lokalną infrastrukturą PKI firmy (on-premises PKI) i nie mogą być używane dla zasobów wewnętrznych wymagających zaufania do lokalnego Root CA.
+C. Use Certificate Manager to import certificates issued from on-premises PKI...
+   * Dlaczego nieprawidłowa: Ręczne lub skryptowe importowanie certyfikatów wygenerowanych on-premises wymaga ciągłego zaangażowania lokalnego zespołu PKI przy każdym nowym certyfikacie oraz przy ich odnawianiu (renewals). Nie jest to rozwiązanie skalowalne i znacznie obciąża lokalną PKI.
+D. Use the web applications with PKCS12 certificates... External TCP/UDP Network load balancer...
+   * Dlaczego nieprawidłowa: PKCS12 to format kontenera (często zawierający klucz prywatny i certyfikat), który nie jest bezpośrednio używany na load balancerach HTTP w ten sposób. Ponadto przejście na External TCP/UDP Network Load Balancer (który działa w warstwie 4) uniemożliwia terminowanie połączeń SSL na poziomie Load Balancera (brak funkcji warstwy 7, takich jak routing URL czy IAP), co zmusza do zarządzania certyfikatami na samych maszynach wirtualnych (ogromny narzut operacyjny).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Jeśli firma posiada własne PKI on-premises i chce zintegrować je z GCP w celu skalowalnego wystawiania certyfikatów -> Zawsze używaj **Certificate Authority Service (CAS)** w trybie **Subordinate CA** (podrzędny urząd certyfikacji).
+* Pozwala to na zachowanie łańcucha zaufania (Chain of Trust) przy jednoczesnym przeniesieniu ciężaru wystawiania certyfikatów do chmury.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* On-premises PKI + scale + issue certificates for load balancers -> Subordinate CA in Google Certificate Authority Service (CAS).
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/certificate-authority-service/docs/overview" target="_blank">Certificate Authority Service overview</a>
+<a href="https://cloud.google.com/certificate-manager/docs/overview" target="_blank">Certificate Manager overview</a>
 </pre>
 
 </div>

@@ -58,24 +58,35 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Create a Sensitive Data Protection job. Specify the infoType of data to be detected and run the job across all Google Cloud Storage buckets.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź A jest prawidłowa, ponieważ Sensitive Data Protection (dawniej Cloud Data Loss Prevention - Cloud DLP) jest jedynym dedykowanym narzędziem w GCP do głębokiego skanowania (inspection) zawartości plików i wykrywania danych wrażliwych (takich jak dane medyczne ICD-10, dane osobowe, numery kart) na podstawie zdefiniowanych typów informacji (infoTypes).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Jak to działa:
+a. **Inspekcja zawartości:** Zwykły monitoring i logi sieciowe nie wiedzą, co znajduje się wewnątrz plików PDF czy CSV zapisanych w Cloud Storage.
+b. **Konfiguracja zadania DLP:** Tworzymy zadanie inspekcji (Inspection Job) dla całej organizacji lub wybranych kubełków poza UE.
+c. **Wykrywanie:** Wskazujemy infoType powiązane z danymi medycznymi (np. `US_HEALTHCARE_NPI`, `POLISH_PESEL` itp.). DLP przeskanuje obiekty i zgłosi raport o wykryciu wrażliwych danych medycznych, co pozwala na ich relokację lub usunięcie.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+B. Create a log sink with a filter on resourceLocation... Trigger an alert...
+   * Dlaczego nieprawidłowa: Logi audytowe (Audit Logs) oraz logi lokalizacji zasobów informują o tym, *gdzie* i *przez kogo* kubełek został utworzony lub zmodyfikowany. Nie analizują one zawartości plików wewnątrz kubełka i nie wiedzą, czy w pliku tekstowym znajdują się dane pacjentów.
+C. Activate Security Command Center Premium. Use compliance monitoring to detect resources...
+   * Dlaczego nieprawidłowa: Compliance Monitoring w SCC sprawdza zgodność konfiguracji chmury (np. czy kubełek ma włączone szyfrowanie). Nie skanuje zawartości plików pod kątem występowania w nich ciągów znaków reprezentujących dane medyczne (PII/PHI).
+D. Enforce the gcp.resourceLocations organization policy and add "EU" in a custom rule...
+   * Dlaczego nieprawidłowa: Polityka lokalizacji zasobów zablokuje tworzenie nowych kubełków poza UE. Jednak nie pomoże w wykryciu, czy w już istniejących kubełkach poza UE znajdują się nielegalnie zapisane pliki z danymi medycznymi.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Wykrywanie i analiza danych wrażliwych (PII, PHI, karty płatnicze) wewnątrz plików przechowywanych w GCP -> Zawsze używaj **Sensitive Data Protection (Cloud DLP)**.
+* Skaner DLP potrafi klasyfikować dane bez modyfikowania oryginalnych plików.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Detect if Cloud Storage buckets contain healthcare data (PII) -> Sensitive Data Protection (Cloud DLP) job.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/dlp/docs/inspecting-storage" target="_blank">Inspecting Cloud Storage using Cloud DLP (Sensitive Data Protection)</a>
+<a href="https://cloud.google.com/dlp/docs/infotypes-reference" target="_blank">DLP InfoTypes reference</a>
 </pre>
 
 </div>

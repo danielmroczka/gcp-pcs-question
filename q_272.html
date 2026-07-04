@@ -58,24 +58,34 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Set an organization policy that denies the creation of Compute Engine instances outside the EU. Apply the policy to the appropriate projects. Identify existing non-compliant instances and migrate the instances to compliant EU regions.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź D jest prawidłowa, ponieważ łączy prewencyjne egzekwowanie zasad za pomocą polityk organizacji (Resource Location Restriction) z niezbędnymi krokami operacyjnymi w celu doprowadzenia istniejącej infrastruktury do stanu zgodności (compliance).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Kluczowe kroki:
+a. **Polityka prewencyjna (Org Policy):** Ustawienie ograniczenia `constraints/gcp.resourceLocations` typu `deny` dla wszystkich regionów poza UE (lub typu `allow` wyłącznie dla lokalizacji w Europie) gwarantuje, że od momentu jej wdrożenia żadne nowe maszyny Compute Engine nie powstaną w USA czy Azji.
+b. **Audyt i migracja (Remediation):** Polityki organizacji działają prewencyjnie – nie modyfikują i nie usuwają automatycznie zasobów, które powstały przed wdrożeniem polityki. Aby zapewnić 100% zgodności, należy zidentyfikować istniejące maszyny w niedozwolonych regionach i ręcznie lub skryptowo zmigrować ich dyski i konfigurację do Europy.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Use a third-party configuration management tool to monitor... Automatically delete or migrate...
+   * Dlaczego nieprawidłowa: Automatyczne usuwanie działających maszyn wirtualnych bez weryfikacji może doprowadzić do krytycznej awarii systemów produkcyjnych i utraty danych. Bezpieczniejszym i standardowym podejściem jest prewencyjna blokada w chmurze (Org Policy) i planowana migracja.
+B. Deploy a Security Command Center source to detect... Use a custom remediation function... run once a day.
+   * Dlaczego nieprawidłowa: Jest to podejście reaktywne. Maszyny byłyby tworzone, działałyby przez caly dzień, a funkcja usuwała/przenosiła by je raz na dobę. Narusza to ciągłość zgodności. Najlepszą praktyką jest blokada w momencie próby zapisu API chmury (prewencja u źródła).
+C. Use organization policy constraints in Resource Manager to enforce allowed regions... within specific projects.
+   * Dlaczego nieprawidłowa: Ta opcja konfiguruje blokadę dla nowych maszyn, ale całkowicie ignoruje problem już istniejących wdrożeń (existing deployments), które pozostałyby w niedozwolonych lokalizacjach, nie spełniając wymogów audytu.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Aby trwale zablokować tworzenie zasobów poza określonym obszarem geograficznym -> Używaj polityki organizacji **`constraints/gcp.resourceLocations`**.
+* Pamiętaj, że polityki organizacji nie działają wstecz (they are not retroactive) – istniejące zasoby muszą być zmigrowane ręcznie.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Enforce allowed regions + existing deployments compliant -> Set organization policy (deny outside/allow inside) + migrate existing instances.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/resource-manager/docs/organization-policy/defining-locations" target="_blank">Restricting resource locations in Google Cloud</a>
+<a href="https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints" target="_blank">Organization policy constraints reference</a>
 </pre>
 
 </div>

@@ -58,24 +58,36 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Collect all logs into an organization-level aggregated log sink and send the logs to a Pub/Sub topic. Implement a primary Dataflow pipeline that consumes logs from this Pub/Sub topic and delivers the logs to the SIEM. Implement a secondary Dataflow pipeline that replays failed messages.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź B jest prawidłowa, ponieważ przedstawia wysoce niezawodną, skalowalną i odporną na awarie (fault-tolerant) architekturę przesyłania logów w czasie rzeczywistym z Google Cloud do lokalnego systemu SIEM, zgodną z najlepszymi praktykami Google.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Analiza techniczna:
+a. **Zagregowany log sink (Aggregated Log Sink):** Zbiera logi ze wszystkich projektów w organizacji w jednym miejscu, co gwarantuje pełną widoczność.
+b. **Pub/Sub jako bufor:** Zapewnia asynchroniczne i odporne na skoki obciążenia kolejkowanie logów. Działa w trybie "at-least-once delivery", gwarantując, że żadna wiadomość nie zostanie utracona w przypadku niedostępności SIEM.
+c. **Dataflow (Autoscaling & Reliability):** Usługa Dataflow automatycznie dopasowuje liczbę procesów do ilości generowanych logów. Użycie szablonu Pub/Sub to Splunk/SIEM pozwala na bezpieczne przesyłanie logów przez HTTPS.
+d. **Obsługa błędów (Dead-Letter Queue / Replay):** Zdefiniowanie zapasowego potoku Dataflow do ponownego wysyłania nieudanych dostarczeń (np. z powodu chwilowej awarii sieci on-premises) gwarantuje spełnienie wymogu bezwzględnego dostarczenia wszystkich logów (fault tolerance).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. ...Write a custom Python script on a Cloud Function... Schedule... twice per day.
+   * Dlaczego nieprawidłowa: Cloud Function uruchamiana dwa razy dziennie to proces wsadowy (batch), a nie rozwiązanie w czasie zbliżonym do rzeczywistego (near real-time). Ponadto, odpytywanie API (pull) dwa razy na dobę przy dużej ilości logów doprowadzi do przepełnienia limitów i utraty logów.
+C. ...route all logs directly to a syslog endpoint. The endpoint is based on a single Compute Engine hosted...
+   * Dlaczego nieprawidłowa: Pojedyncza maszyna wirtualna Compute Engine działająca jako serwer syslog stanowi pojedynczy punkt awarii (single point of failure - brak fault tolerance) i nie posiada wbudowanych funkcji automatycznego skalowania (auto scaling) w przypadku nagłego skoku liczby logów.
+D. Utilize custom firewall rules to allow your SIEM to directly query Google Cloud logs...
+   * Dlaczego nieprawidłowa: Bezpośrednie odpytywanie (querying) logów GCP przez lokalny SIEM przez sieć zewnętrzną jest nieefektywne, generuje ogromne koszty zapytań API i transferu oraz nie jest rozwiązaniem typu "push" w czasie rzeczywistym.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Przesyłanie logów do SIEM (np. Splunk) w czasie rzeczywistym z obsługą błędów -> Standardowy wzorzec architektoniczny: **Cloud Logging -> Pub/Sub -> Dataflow (z obsługą nieudanych zapytań) -> SIEM**.
+* Pub/Sub i Dataflow są w pełni zarządzanymi usługami, które automatycznie skalują się do dowolnego wolumenu danych.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Export logs to on-premises SIEM + push near real-time + fault tolerance -> Aggregated sink + Pub/Sub + Dataflow.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/architecture/exporting-security-logs-to-siem" target="_blank">Exporting Google Cloud security logs to your SIEM</a>
+<a href="https://cloud.google.com/blog/products/data-analytics/stream-logs-from-google-cloud-to-splunk-using-dataflow" target="_blank">Streaming logs to Splunk using Dataflow</a>
 </pre>
 
 </div>

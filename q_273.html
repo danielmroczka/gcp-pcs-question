@@ -58,24 +58,35 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Encrypt the code, training data, and exported trained models with customer-managed encryption keys (CMEK).
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź C jest prawidłowa, ponieważ Vertex AI w pełni wspiera integrację z kluczami zarządzanymi przez klienta (CMEK) w celu szyfrowania kodu źródłowego, danych treningowych w spoczynku (przechowywanych w Cloud Storage) oraz wyjściowych modeli po eksporcie.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Analiza techniczna:
+a. **Suwerenność klucza (CMEK):** Klient tworzy klucze szyfrujące w regionie europejskim (np. `europe-west3`) i zarządza ich dostępem za pomocą IAM. Dane są szyfrowane tymi kluczami.
+b. **Wydajność operacji:** Szyfrowanie przy użyciu CMEK odbywa się na poziomie systemu plików i baz danych chmury, co oznacza, że operacje kryptograficzne są całkowicie przezroczyste dla Vertex AI i nie wpływają negatywnie na wydajność obliczeniową ani czas trwania procesu treningu modeli.
+c. **Ograniczenie zakresu:** Metadane zadań treningowych (np. parametry konfiguracji zadań przesyłane w wywołaniach API) są domyślnie chronione szyfrowaniem Google i nie zawierają rzeczywistych poufnych informacji biznesowych, które znajdują się w kodzie i plikach danych (objętych CMEK).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Encrypt the code, training data, and metadata with Google default encryption. Use CMEK for...
+   * Dlaczego nieprawidłowa: Pozostawienie kodu i danych treningowych (które zawierają wrażliwe PII i dane biznesowe) pod ochroną wyłącznie domyślnego szyfrowania Google narusza wymaganie, by wszystkie te wrażliwe dane były kontrolowane bezpośrednio przez klucze klienta (CMEK).
+B. Encrypt the code, training data, metadata, and exported trained models with customer-managed encryption keys (CMEK).
+   * Dlaczego nieprawidłowa: Niektóre globalne metadane systemowe zadań w Vertex AI (metadata) nie mogą być bezpośrednio zaszyfrowane za pomocą kluczy CMEK klienta, ponieważ usługa Vertex AI wymaga dostępu do metadanych do celów globalnej koordynacji zadań. Właściwa konfiguracja CMEK dla Vertex AI obejmuje kod, dane i modele (opcja C).
+D. Encrypt the code, training data, and metadata with Google default encryption. Implement an organization policy...
+   * Dlaczego nieprawidłowa: Domyślne szyfrowanie Google (Google default encryption) nie daje organizacji kontroli nad kluczami szyfrującymi – klucze te są w pełni zarządzane przez Google. Ograniczenie lokalizacji KMS nie zastępuje potrzeby wdrożenia CMEK w celu uzyskania kontroli nad materiałem klucza.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Vertex AI wspiera CMEK dla: danych wejściowych (Cloud Storage), kodu treningowego (Custom containers/Cloud Storage) oraz modeli wyjściowych.
+* Klucze szyfrujące CMEK muszą być utworzone w tym samym regionie, w którym przetwarzane są dane.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Vertex AI secure training + keys controlled by organization -> CMEK for code, training data, and exported models.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/vertex-ai/docs/general/cmek" target="_blank">Customer-managed encryption keys (CMEK) in Vertex AI</a>
+<a href="https://cloud.google.com/vertex-ai/docs/general/security" target="_blank">Vertex AI security overview</a>
 </pre>
 
 </div>

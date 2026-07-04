@@ -58,24 +58,37 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Configure an egress rule for the Cloud Storage bucket in Perimeter-A and a corresponding ingress rule in Perimeter-B.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź C jest prawidłowa, ponieważ reguły wejścia i wyjścia (Ingress/Egress Rules) w VPC Service Controls (VPC SC) pozwalają na precyzyjne wdrożenie zasady najmniejszych uprawnień (least privilege) dla komunikacji między perymetrami, ograniczając dostęp tylko do konkretnych kubełków i tożsamości.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Dlaczego to najlepsze podejście:
+a. **Egress Rule w Perymetrze A:** Pozwala na ruch wychodzący z zasobów wewnątrz Perymetru A (np. z projektu źródłowego) wyłącznie do określonego celu w Perymetrze B (np. do docelowego kubełka Cloud Storage).
+b. **Ingress Rule w Perymetrze B:** Zezwala na ruch przychodzący do Perymetru B wyłącznie z autoryzowanego źródła w Perymetrze A (np. z konkretnego konta serwisowego wykonującego kopiowanie).
+c. **Bezpieczeństwo:** Ta metoda nie znosi ogólnych zabezpieczeń perymetru – ruch jest dopuszczony tylko dla jednego, wskazanego zadania kopiowania i nie stwarza ryzyka masowego wycieku danych (exfiltration) z innych projektów w perymetrach.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Configure a perimeter bridge... and specify the Cloud Storage buckets as the resources...
+   * Dlaczego nieprawidłowa: Mosty perymetru (Perimeter Bridges) łączą całe projekty wewnątrz perymentów. Nie pozwalają na definiowanie reguł na poziomie pojedynczych kubełków (buckets) w taki sposób jak reguły Ingress/Egress, co narusza zasadę najmniejszych uprawnień.
+B. Configure a perimeter bridge between the projects hosting the Cloud Storage buckets...
+   * Dlaczego nieprawidłowa: Podobnie jak opcja A, stworzenie mostu perymetru na poziomie projektów łączy je całkowicie dla wszystkich chronionych usług. Pozwoliłoby to na niekontrolowaną komunikację między innymi zasobami w tych projektach, co zwiększa ryzyko eksfiltracji danych.
+D. Configure a bidirectional egress/ingress rule for the Cloud Storage buckets...
+   * Dlaczego nieprawidłowa: Pytanie wymaga skopiowania danych w jednym kierunku: z perymetru A do perymetru B. Konfigurowanie reguł dwukierunkowych (bidirectional) jest nadmiarowe i łamie zasadę least privilege (otwiera niepotrzebny ruch w drugą stronę).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Aby połączyć dwa perymetry VPC SC:
+  - Dla szerokiego połączenia projektów -> **Perimeter Bridge**.
+  - Dla precyzyjnego dostępu opartego na tożsamościach i konkretnych zasobach (least privilege) -> **Ingress/Egress Rules**.
+* Zawsze preferuj reguły Ingress/Egress nad mostami perymetru na egzaminie z bezpieczeństwa, gdy wymagana jest kontrola granularna.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Allow copy between two perimeters + least privilege + minimize exfiltration -> Egress rule in source + Ingress rule in destination.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules" target="_blank">Ingress and egress rules for VPC Service Controls</a>
+<a href="https://cloud.google.com/vpc-service-controls/docs/secure-data-exchange" target="_blank">Secure data exchange across perimeters</a>
 </pre>
 
 </div>

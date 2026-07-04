@@ -57,24 +57,33 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Create an access level titled "Corporate Access." Add a condition with the IP Subnetworks attribute, including the ranges: 10.100.0.0/16, 192.168.0.0/16, and 172.16.0.0/20. Apply this access level to the sensitive Google Cloud project.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź C jest prawidłowa, ponieważ pozwala na zdefiniowanie poziomu dostępu (Access Level) w Access Context Managerze na podstawie atrybutu sieciowego (IP Subnetworks), co precyzyjnie dopuszcza ruch wyłącznie z zaufanych adresów IP (zarówno z fizycznej sieci biurowej, jak i z puli przydzielanej przez korporacyjny VPN).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Szczegóły konfiguracji:
+a. **Dopuszczenie sieci on-premises:** Zakresy `10.100.0.0/16` oraz `192.168.0.0/16` odpowiadają lokalnej sieci firmowej.
+b. **Dopuszczenie ruchu VPN:** Ponieważ pracownicy zdalni łączą się przez VPN firmy, ich ruch sieciowy dociera do zasobów GCP z adresów przypisanych z puli VPN, czyli `172.16.0.0/20`. Dodanie tego zakresu do poziomu dostępu umożliwia im bezpieczną pracę z domu.
+c. **Powiązanie z perymetrem:** Poziom dostępu (Access Level) zostaje przypisany do perymetru chroniącego projekt, co gwarantuje, że zapytania z innych adresów IP w internecie będą blokowane.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. ...Utilize the Device Policy attribute to require corporate-managed devices...
+   * Dlaczego nieprawidłowa: Wymaganie polityki urządzeń (Device Policy) weryfikuje stan systemu operacyjnego (np. szyfrowanie dysku, hasło), ale samo w sobie nie ogranicza dostępu wyłącznie do adresów IP sieci firmowej i VPN, co było głównym wymaganiem bezpieczeństwa. Ponadto rejestracja wszystkich urządzeń generuje duży narzut operacyjny.
+B. ...Add a condition with these attributes: IP Subnetworks: 10.100.0.0/16, 192.168.0.0/16. Device Policy: Require OS as Windows or macOS.
+   * Dlaczego nieprawidłowa: Ta opcja pomija zakres IP dla pracowników zdalnych łączących się przez VPN (`172.16.0.0/20`). W rezultacie wszyscy pracownicy zdalni zostaliby odcięci od dostępu do projektu, co uniemożliwiłoby im pracę.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Access Context Manager (ACM) pozwala na definiowanie reguł dostępu opartych na: adresach IP (subnetworks), tożsamościach (principals), regionach geograficznych oraz stanie urządzenia (device policy).
+* Aby dopuścić ruch VPN w regułach IP, należy zawsze uwzględnić pulę adresów przydzielanych przez serwer VPN klientom (VPN pool).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Access only from internal corporate network + VPN remote employees -> Access level with all IP Subnetworks (including VPN pool).
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/access-context-manager/docs/create-access-level" target="_blank">Creating access levels in Access Context Manager</a>
+<a href="https://cloud.google.com/vpc-service-controls/docs/access-levels" target="_blank">Using access levels with VPC Service Controls</a>
 </pre>
 
 </div>

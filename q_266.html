@@ -58,24 +58,34 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Identify the users who will migrate the application, revoke the default user roles and assign the users with purposely created custom roles.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź A jest prawidłowa, ponieważ tworzenie i przypisywanie ról niestandardowych (Custom Roles) jest podstawowym i zalecanym mechanizmem w GCP do wdrażania zasad najmniejszych uprawnień (least privilege) oraz rozdziału obowiązków (separation of duties).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Dlaczego to podejście jest poprawne:
+a. **Odrzucenie ról domyślnych:** Role predefiniowane o szerokim zakresie (takie jak Owner, Editor czy Viewer) dają zbyt duże uprawnienia (np. prawo do usuwania zasobów lub wglądu w dane poufne).
+b. **Custom Roles (Role niestandardowe):** Pozwalają administratorowi na wybranie z dokładnością do pojedynczego uprawnienia API (np. `compute.instances.start` bez prawa do ich usuwania) zestawu akcji niezbędnych do wykonania migracji przez poszczególnych inżynierów. Dzięki temu każdy użytkownik ma dostęp wyłącznie do tych funkcji, które są mu niezbędne do pracy.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+B. Use multiple external identity providers (IdP) configured to use different SAML profiles...
+   * Dlaczego nieprawidłowa: Konfigurowanie wielu dostawców tożsamości i profili SAML dla poszczególnych komponentów aplikacji wprowadza olbrzymią złożoność architektoniczną i utrudnia zarządzanie tożsamościami. SSO/IdP odpowiada za uwierzytelnianie (kto się loguje), a nie za autoryzację granularną (co może robić) wewnątrz zasobów GCP, co kontroluje IAM.
+C. Configure multi-factor authentication (MFA) to enforce the use of physical tokens...
+   * Dlaczego nieprawidłowa: Wdrożenie MFA/2SV jest kluczową praktyką bezpieczeństwa (chroni przed kradzieżą poświadczeń), ale samo w sobie nie rozwiązuje problemu nadmiernych uprawnień. Nawet z fizycznym tokenem, użytkownik z rolą Owner nadal ma zbyt szerokie uprawnienia, co łamie zasadę least privilege.
+D. No action needed. When a Google Cloud organization is created, the appropriate permissions...
+   * Dlaczego nieprawidłowa: Jest to nieprawda. Po utworzeniu organizacji domyślni użytkownicy domeny nie otrzymują automatycznie precyzyjnych uprawnień administracyjnych dostosowanych do konkretnej migracji aplikacji. Brak jakichkolwiek działań doprowadzi do braku kontroli dostępu lub zablokowania prac.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Najmniejsze uprawnienia (Least Privilege) w IAM -> Unikaj ról podstawowych (primitive roles: Owner, Editor, Viewer). Twórz **Custom Roles** (role dedykowane) z minimalnym zakresem uprawnień API.
+* Rozdział obowiązków (Separation of Duties) polega na rozdzieleniu ról tak, aby jedna osoba nie mogła kontrolować całego procesu (np. deweloper nie może być administratorem bezpieczeństwa).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Granular access control / least privilege / separation of duties -> Revoke default roles + create custom roles.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/iam/docs/understanding-custom-roles" target="_blank">Understanding IAM Custom Roles</a>
+<a href="https://cloud.google.com/iam/docs/best-practices" target="_blank">Best practices for using IAM</a>
 </pre>
 
 </div>

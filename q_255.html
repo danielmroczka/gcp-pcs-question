@@ -58,24 +58,34 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Migrate the application to Confidential VMs to provide hardware-level encryption of memory and protect sensitive data during processing.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź C jest prawidłowa, ponieważ Poufne Maszyny Wirtualne (Confidential VMs) oferują sprzętowe szyfrowanie pamięci operacyjnej (RAM encryption) w czasie rzeczywistym, co bezpośrednio chroni dane przed zaawansowanymi atakami typu side-channel (takimi jak ataki czasowe czy wyciąganie danych z pamięci fizycznej przez system hosta).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Dlaczego to najlepsze rozwiązanie dla starego kodu:
+a. **Sprzętowe szyfrowanie (AMD SEV):** Klucze szyfrujące pamięć są generowane przez procesor wewnątrz bezpiecznej enklawy i nie są znane oprogramowaniu Google ani systemowi hosta. Chroni to dane w użyciu (in-use).
+b. **Brak modyfikacji kodu:** Confidential VMs działają transparentnie dla systemu operacyjnego i aplikacji. Przeniesienie aplikacji na ten typ maszyn nie wymaga przepisywania starego kodu ani zmian w architekturze oprogramowania, co minimalizuje ryzyko błędów (application problems).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Enforce stricter access controls for Compute Engine... least privilege IAM...
+   * Dlaczego nieprawidłowa: Kontrola dostępu IAM oraz ograniczenia sieciowe chronią przed nieautoryzowanym wywołaniem API i logowaniem. Nie chronią jednak przed atakami typu side-channel na poziomie procesora fizycznego, jeśli złośliwy proces działa na tym samym hoście fizycznym lub w przypadku naruszenia hypervisora.
+B. Implement a runtime library designed to introduce noise and timing variations...
+   * Dlaczego nieprawidłowa: Wprowadzanie sztucznych opóźnień (noise) do kodu starej aplikacji finansowej wymaga głębokiej modyfikacji kodu i środowiska uruchomieniowego, co niesie ogromne ryzyko zepsucia aplikacji (naruszenie warunku "minimizing application problems") i może drastycznie obniżyć jej wydajność.
+D. Utilize customer-managed encryption keys (CMEK)...
+   * Dlaczego nieprawidłowa: Klucze CMEK chronią dane w spoczynku (at-rest) na dyskach oraz w kubełkach. Nie chronią danych w momencie, gdy są one ładowane w postaci jawnej do pamięci RAM procesora w celu wykonania obliczeń finansowych.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Ochrona danych w użyciu (data in use) przed atakami na poziomie sprzętowym/pamięci RAM (side-channel attacks) -> **Confidential VMs**.
+* Confidential VMs nie wymagają żadnych modyfikacji w kodzie aplikacji.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Side-channel attacks / protect data in memory during processing + minimize application problems -> Confidential VMs.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/confidential-computing" target="_blank">Confidential Computing overview</a>
+<a href="https://cloud.google.com/confidential-computing/confidential-vm/docs/about-confidential-vm" target="_blank">Confidential VM technology</a>
 </pre>
 
 </div>

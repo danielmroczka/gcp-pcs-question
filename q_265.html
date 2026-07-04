@@ -56,24 +56,34 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Activate Security Command Center Premium. Use the Compliance Monitoring product to filter findings that may not be PCI DSS compliant.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź D jest prawidłowa, ponieważ Security Command Center (SCC) Premium posiada wbudowany, automatyczny system monitorowania zgodności (Compliance Monitoring), który stale ocenia konfigurację całej infrastruktury GCP pod kątem wymagań standardu PCI DSS.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Zalety tego rozwiązania w przygotowaniu do audytu:
+a. **Ciągły audyt konfiguracji (IaaS level):** SCC skanuje zasoby obliczeniowe, sieciowe oraz storage i automatycznie wykrywa odstępstwa od norm bezpieczeństwa (np. brak szyfrowania, otwarte porty, nieprawidłowe uprawnienia IAM).
+b. **Predefiniowane raporty PCI DSS:** Konsola zgodności w SCC pozwala na filtrowanie wszystkich wykrytych podatności i błędów konfiguracji bezpośrednio pod kątem specyficznych wymagań PCI DSS, co daje audytorom gotowy raport stanu bezpieczeństwa platformy.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Create a data profile covering all payment relevant data types...
+   * Dlaczego nieprawidłowa: Opcja ta skupia się na wykrywaniu danych wrażliwych (Data Discovery w Cloud DLP) w plikach i bazach danych. Choć jest to przydatne do ochrony danych kart płatniczych, nie wykrywa odstępstw na poziomie konfiguracji infrastruktury IaaS (np. błędnych reguł zapory sieciowej, braku MFA, złej konfiguracji maszyn VM).
+B. Use the Google Cloud Compliance Reports Manager to download...
+   * Dlaczego nieprawidłowa: Compliance Reports Manager służy do pobierania certyfikatów i raportów z audytów samego Google (potwierdzających, że centra danych Google są zgodne z PCI DSS). Nie analizuje konfiguracji zasobów wdrożonych przez klienta w jego własnych projektach (landing zone).
+C. Create an Assured Workloads folder... Migrate existing projects...
+   * Dlaczego nieprawidłowa: Assured Workloads pomaga wdrożyć i utrzymać zgodność dla nowych projektów (np. wymuszając określone regiony lub szyfrowanie). Sam proces migracji istniejących projektów bez aktywnego skanowania i raportowania (które zapewnia SCC) nie wykryje automatycznie wszystkich historycznych odstępstw konfiguracyjnych na poziomie IaaS.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Monitorowanie i wykrywanie odstępstw od standardów zgodności (PCI DSS, CIS, ISO 27001) na poziomie konfiguracji GCP -> Zawsze używaj **Security Command Center Premium (Compliance Monitoring)**.
+* SCC Premium ocenia zasoby w czasie rzeczywistym i dostarcza gotowe pulpity nawigacyjne zgodności.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Detect deviations on IaaS level for PCI DSS -> Security Command Center Premium + Compliance Monitoring.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/security-command-center/docs/concepts-compliance-validation" target="_blank">Compliance monitoring in Security Command Center</a>
+<a href="https://cloud.google.com/security/compliance" target="_blank">Google Cloud Compliance Resource Center</a>
 </pre>
 
 </div>

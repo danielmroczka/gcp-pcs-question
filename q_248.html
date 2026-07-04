@@ -90,24 +90,34 @@ During a routine security review, your team discovered a suspicious login attemp
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Check Event Threat Detection in Security Command Center for any related alerts. Cross-reference your findings with Cloud Audit Logs.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź D jest prawidłowa, ponieważ łączy zautomatyzowane wykrywanie zagrożeń za pomocą silnika Event Threat Detection (ETD) z głęboką analizą śledczą (forensics) w logach audytowych (Cloud Audit Logs).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Dlaczego to najlepsze podejście śledcze:
+a. **Event Threat Detection (ETD):** Jest to usługa Security Command Center Premium, która stale monitoruje strumień logów (w tym logi audytowe Cloud Audit Logs) w czasie rzeczywistym i stosuje zaawansowane algorytmy detekcji zagrożeń. Potrafi automatycznie wykryć anomalie takie jak "Service Account Leaked Credentials" lub podejrzane logowania z nietypowych IP na konta serwisowe i wygenerować precyzyjny alert.
+b. **Cross-referencing z Cloud Audit Logs:** Znalezienie alertu w SCC daje punkt wyjścia (np. dokładny czas, ID konta serwisowego, IP napastnika). Następnie analityk bezpieczeństwa odpytuje Cloud Audit Logs (Admin Activity i Data Access), aby prześledzić wszystkie operacje wykonane przez to konto serwisowe (np. jakie zasoby zostały odczytane lub zmodyfikowane), co pozwala na pełną ocenę incydentu i skuteczną reakcję.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Enable Cloud Audit Logs for the resources... Review the logs for further...
+   * Dlaczego nieprawidłowa: Włączenie logów *po* wykryciu incydentu nie pomoże w badaniu przeszłych zdarzeń – logi nie działają wstecz. Ponadto samo przeglądanie logów bez wsparcia zautomatyzowanego systemu wykrywania (jak ETD) utrudnia szybkie znalezienie korelacji zagrożeń.
+B. Review Cloud Audit Logs for activity related to the service account...
+   * Dlaczego nieprawidłowa: Choć jest to część poprawnego procesu, to samo przeglądanie surowych logów bez sprawdzenia alertów w SCC (Event Threat Detection) jest mniej efektywne. ETD dostarcza gotowe analizy i kontekst zagrożenia, który znacznie przyspiesza dochodzenie.
+C. Run a vulnerability scan to identify potentially exploitable weaknesses...
+   * Dlaczego nieprawidłowa: Skanowanie podatności (vulnerability scan) szuka dziur w oprogramowaniu i konfiguracji systemu. Nie pomaga w badaniu aktywnego incydentu polegającego na użyciu skradzionych poświadczeń (impersonation) konta serwisowego, które zostało już dokonane.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Wykrywanie i analiza anomalii w logach systemowych i logowaniach kont serwisowych w GCP -> **Event Threat Detection** w **Security Command Center**.
+* Pamiętaj, że logi audytowe (Cloud Audit Logs) są podstawowym źródłem prawdy podczas badania incydentów (forensic investigation).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Investigate suspicious login / impersonation of service account -> Event Threat Detection + Cloud Audit Logs.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/security-command-center/docs/concepts-event-threat-detection-overview" target="_blank">Event Threat Detection overview</a>
+<a href="https://cloud.google.com/logging/docs/audit" target="_blank">Cloud Audit Logs overview</a>
 </pre>
 
 </div>

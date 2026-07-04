@@ -58,24 +58,36 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Implement data pseudonymization techniques to replace the PII fields with non-identifiable values. Grant the other team access to the pseudonymized dataset.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź C jest prawidłowa, ponieważ pseudonimizacja danych (data pseudonymization) pozwala na pełną ochronę prywatności klientów (PII) przed zespołem analitycznym, jednocześnie umożliwiając im wykonywanie zaawansowanych analiz statystycznych i korelacji na pełnym zbiorze danych (1 PB).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Dlaczego to najlepsza metoda:
+a. **Zachowanie użyteczności danych:** Zastąpienie wrażliwych identyfikatorów (np. nazwisk, PESELi) unikalnymi pseudonimami (np. wygenerowanymi tokenami) pozwala analitykom na śledzenie zachowań unikalnych użytkowników w czasie i łączenie rekordów (np. ten sam klient wykonał operacje A i B), ponieważ pseudonimy są spójne.
+b. **Bezpieczeństwo (PII Protection):** Zespół analityczny nie ma możliwości bezpośredniego zidentyfikowania osób fizycznych, ponieważ nie posiada klucza dekodującego (tabeli mapowania), który pozostaje bezpiecznie w zespole źródłowym. Jest to zalecana praktyka w ramach GDPR.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Utilize BigQuery's row-level access policies to mask PII columns based on the other team's user identities.
+   * Dlaczego nieprawidłowa: Sformułowanie to zawiera błąd techniczny. W BigQuery zasady dostępu na poziomie wiersza (row-level access policies) służą do filtrowania i ukrywania *wierszy* (rekordów) spełniających określone kryteria. Do ukrywania lub maskowania *kolumn* (takich jak kolumny PII) służą zasady na poziomie kolumn (column-level security) lub dynamiczne maskowanie danych (dynamic data masking), a nie row-level policies.
+B. Export the BigQuery dataset to Cloud Storage. Create a VPC Service Control perimeter...
+   * Dlaczego nieprawidłowa: Eksport 1 petabajta danych do Cloud Storage generuje olbrzymie koszty przechowywania i transferu oraz narzut operacyjny. Perymetr VPC SC chroni przed eksfiltracją sieciową, ale nie maskuje i nie usuwa danych PII z plików – zespół analityczny nadal miałby wgląd w surowe, niezaszyfrowane dane PII wewnątrz perymetru.
+D. Create a filtered copy of the dataset and replace the sensitive data with hash values in a separate project...
+   * Dlaczego nieprawidłowa: Tworzenie fizycznej kopii zbioru o rozmiarze 1 PB w innym projekcie podwaja koszty przechowywania danych w BigQuery (kolejny 1 PB danych) oraz wymaga ciągłej synchronizacji zmian w tle, co jest nieefektywne w porównaniu z udostępnieniem jednego pseudonimizowanego zbioru/widoku (opcja C).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Aby bezpiecznie udostępnić duże zbiory danych analitycznych bez ujawniania PII -> Stosuj **pseudonimizację (pseudonymization)** lub **dynamiczne maskowanie danych (dynamic data masking)**.
+* Pamiętaj o różnicach technicznych w BigQuery:
+  - Row-level security = ukrywanie wierszy (np. tylko klienci z Polski).
+  - Column-level security / Data Masking = ukrywanie/maskowanie kolumn (np. zamiana cyfr PESEL na 'X').
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Share BigQuery dataset containing PII + protect PII -> Implement data pseudonymization techniques.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/dlp/docs/pseudonymization" target="_blank">Pseudonymizing sensitive data in Cloud DLP</a>
+<a href="https://cloud.google.com/bigquery/docs/column-level-security-intro" target="_blank">Column-level security in BigQuery</a>
 </pre>
 
 </div>

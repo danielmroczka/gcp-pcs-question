@@ -58,24 +58,34 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Discover and transform PII data in both input and output by using the Cloud Data Loss Prevention (Cloud DLP) API.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź B jest prawidłowa, ponieważ Cloud Data Loss Prevention (Cloud DLP) API jest dedykowaną usługą w GCP służącą do skanowania, wykrywania (discovery) i transformacji (np. maskowania, redagowania) danych wrażliwych w czasie rzeczywistym w strumieniach tekstowych.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Zastosowanie w chatbocie GenAI:
+a. **Skanowanie wejścia (Input/Prompt):** Przed wysłaniem zapytania pracownika do modelu językowego (LLM), chatbot przesyła tekst do DLP API. Jeśli użytkownik wpisał w prompt PII (np. "Nazywam się Jan Kowalski, PESEL..."), DLP API może zredagować te dane (np. zamienić na `[NAME]`, `[ID]`), chroniąc dane przed wyciekiem do silnika AI.
+b. **Skanowanie wyjścia (Output/Response):** Przed wyświetleniem odpowiedzi generowanej przez model użytkownikowi, chatbot ponownie skanuje tekst w DLP API w celu upewnienia się, że model nie wygenerował przypadkowo żadnych danych wrażliwych z bazy treningowej.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Encrypt data at rest... by using Cloud KMS...
+   * Dlaczego nieprawidłowa: Szyfrowanie kluczem KMS chroni bazę danych w spoczynku, ale nie analizuje treści zapytań wpisywanych przez użytkowników. Gdy użytkownik korzysta z chata, dane są odszyfrowane i przetwarzane, co oznacza, że PII nadal trafia do modelu i na ekran.
+C. Prevent PII data exfiltration by using VPC-SC to create a safe scope...
+   * Dlaczego nieprawidłowa: VPC Service Controls zabezpiecza granice sieciowe usług (np. zapobiega kopiowaniu danych między projektami), ale nie filtruje tekstu wpisywanego w oknach czatu przez użytkowników w celu wykrywania i usuwania słów zawierających PII.
+D. Scan both input and output by using data encryption tools from the Google Cloud Marketplace.
+   * Dlaczego nieprawidłowa: Narzędzia szyfrujące (encryption tools) służą do kodowania danych w celu ochrony ich poufności, a nie do inteligentnej inspekcji tekstu, klasyfikacji danych wrażliwych i selektywnego ich usuwania/maskowania w locie, co jest domeną silnika NLP w Cloud DLP.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Jeśli celem jest zapobieganie wysyłaniu/przetwarzaniu PII w aplikacjach tekstowych (jak chatbots, formularze) -> Zawsze używaj **Cloud DLP API** w celu inspekcji i redagowania (inspect and redact) tekstu w locie.
+* DLP API posiada predefiniowane detektory (infoTypes) dla setek typów danych wrażliwych z całego świata.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Chatbot + ensure no PII is communicated -> Cloud Data Loss Prevention (Cloud DLP) API.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/dlp/docs/inspecting-text" target="_blank">Inspecting text for sensitive data using Cloud DLP</a>
+<a href="https://cloud.google.com/dlp/docs/redacting-sensitive-data-quickstart" target="_blank">Redacting sensitive data from text in Cloud DLP</a>
 </pre>
 
 </div>

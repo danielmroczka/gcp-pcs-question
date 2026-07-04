@@ -58,24 +58,35 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Create two workforce identity pools for the partner IdPs.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź C jest prawidłowa, ponieważ Workforce Identity Federation (Federacja Tożsamości Pracowników) jest najnowocześniejszym i zalecanym przez Google sposobem na nadawanie dostępu do konsoli i API Google Cloud dla użytkowników zewnętrznych (np. inżynierów wsparcia partnerów) przy użyciu ich własnych, istniejących systemów tożsamości (SAML/OIDC), bez konieczności tworzenia dla nich kont w chmurze klienta.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Zalety tego rozwiązania:
+a. **Brak synchronizacji tożsamości:** Nie musimy tworzyć kont gości ani synchronizować tożsamości do naszego Cloud Identity (brak narzutu na administrację).
+b. **Logowanie federacyjne:** Inżynierowie partnera logują się swoimi firmowymi kontami (np. z Azure AD partnera).
+c. **Zarządzanie cyklem życia:** Jeśli pracownik partnera odejdzie z pracy, jego konto zostanie zablokowane w jego lokalnym systemie IdP, co automatycznie odetnie mu dostęp do Twojego GCP, zapewniając wysokie bezpieczeństwo.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Create two single sign-on (SSO) profiles... by using SSO for Cloud Identity.
+   * Dlaczego nieprawidłowa: Tradycyjne logowanie jednokrotne (SSO) w Cloud Identity pozwala na skonfigurowanie tylko jednego aktywnego profilu SSO (dostawcy tożsamości) dla całej domeny organizacji. Nie pozwala na jednoczesną federację z wieloma zewnętrznymi IdP partnerów biznesowych w ten sposób bez migracji kont.
+B. Create users manually by using the Google Cloud console. Assign the users to groups.
+   * Dlaczego nieprawidłowa: Ręczne tworzenie setek kont dla zewnętrznych inżynierów i zarządzanie ich hasłami generuje olbrzymi narzut administracyjny i zwiększa ryzyko pozostawienia aktywnych "kont widmo" (stale aktywne konta byłych pracowników partnera), co narusza zasady bezpieczeństwa.
+D. Sync user identities from their existing IdPs to Cloud Identity by using Google Cloud Directory Sync (GCDS).
+   * Dlaczego nieprawidłowa: GCDS wymaga bezpośredniego połączenia LDAP (np. Active Directory) i służy do synchronizacji wewnątrz jednej firmy. Synchronizacja tożsamości z zewnętrznych systemów AD partnerów handlowych do Twojej domeny jest technicznie trudna, narusza granice bezpieczeństwa i wymaga tworzenia kont w Twoim systemie Cloud Identity.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Dostęp do GCP dla zewnętrznych pracowników (partnerzy/kontrahenci) przy użyciu ich własnych IdP -> Zawsze wybieraj **Workforce Identity Federation**.
+* Workforce Identity Federation eliminuje potrzebę tworzenia i licencjonowania kont w Twoim Cloud Identity.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Grant project access to partner organizations using their existing IdP -> Create workforce identity pools.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/iam/docs/workforce-identity-federation" target="_blank">Workforce Identity Federation overview</a>
+<a href="https://cloud.google.com/iam/docs/workforce-sign-in" target="_blank">Workforce Identity sign-in guide</a>
 </pre>
 
 </div>

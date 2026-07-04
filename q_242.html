@@ -90,24 +90,36 @@ Your Google Cloud environment has one organization node, one folder named "Apps"
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. The action fails because a constraints/iam.allowedPolicyMemberDomains organization policy is in place and only members from the flowlogistic.com organization are allowed.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź D jest prawidłowa, ponieważ polityka organizacji `constraints/iam.allowedPolicyMemberDomains` (ograniczenie domen członków polityki) zdefiniowana na niższym poziomie hierarchii (folder "Apps") z flagą `inheritFromParent: false` całkowicie zastępuje i unieważnia politykę odziedziczoną z poziomu węzła organizacji.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Analiza hierarchii i dziedziczenia:
+a. Na poziomie organizacji dozwolona była domena `terramearth.com`.
+b. Na poziomie folderu "Apps" zdefiniowano politykę zezwalającą wyłącznie na domenę `flowlogistic.com`.
+c. Ustawienie właściwości `inheritFromParent: false` oznacza, że folder "Apps" (i wszystkie projekty pod nim) **nie dziedziczą** reguł z poziomu organizacji. Jedyną obowiązującą regułą dla folderu jest ta zdefiniowana bezpośrednio na nim.
+d. W związku z tym, w projektach wewnątrz folderu "Apps" można nadawać uprawnienia IAM wyłącznie użytkownikom z domeny `flowlogistic.com`. Próba dodania użytkownika `testuser@terramearth.com` zostanie zablokowana przez silnik IAM jako naruszenie polityki organizacji.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. The action succeeds because members from both organizations... are allowed...
+   * Dlaczego nieprawidłowa: Ponieważ dziedziczenie zostało wyłączone (`inheritFromParent: false`), listy domen nie łączą się. Dozwolona jest tylko domena z poziomu folderu (`flowlogistic.com`). Domena `terramearth.com` nie jest akceptowana.
+B. The action succeeds... because all policies are inherited by underlying folders and projects.
+   * Dlaczego nieprawidłowa: Ta opcja ignoruje fakt ustawienia `inheritFromParent: false`, co wprost blokuje standardowe dziedziczenie polityk w dół.
+C. The action fails because a... policy must be defined on the current project to deactivate the constraint temporarily.
+   * Dlaczego nieprawidłowa: Zdefiniowanie polityki na poziomie projektu nie służy do "tymczasowego wyłączenia" ograniczeń w celu dodania nieprawidłowego użytkownika. Ponadto, projekt nie może w prosty sposób obejść restrykcji z folderu nadrzędnego, chyba że projekt nadpisze politykę (co również wymagałoby ustawienia nowej polityki na projekcie, a nie jej deaktywacji).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Ograniczenie `constraints/iam.allowedPolicyMemberDomains` służy do limitowania domen e-mail (identyfikatorów katalogu Cloud Identity), które mogą otrzymać role IAM w zasobach.
+* Parametr **`inheritFromParent: false`** przerywa łańcuch dziedziczenia i sprawia, że polityki z wyższych poziomów nie są brane pod uwagę (nadpisanie całkowite).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Policy at folder level with `inheritFromParent: false` -> Policy from organization does not apply. Only folder-level domains allowed.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains" target="_blank">Restricting identities by domain (allowedPolicyMemberDomains)</a>
+<a href="https://cloud.google.com/resource-manager/docs/organization-policy/understanding-hierarchy" target="_blank">Organization Policy hierarchy and inheritance</a>
 </pre>
 
 </div>

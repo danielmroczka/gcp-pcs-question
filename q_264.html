@@ -58,24 +58,34 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Enable logging in the Application Load Balancer backend and set the log level to VERBOSE in the Cloud Armor policy.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź B jest prawidłowa, ponieważ Cloud Armor generuje szczegółowe logi dotyczące zablokowanych lub dopuszczonych żądań, a logi te są zapisywane i analizowane jako część logów powiązanego zewnętrznego Load Balancera (Application Load Balancer).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Dlaczego te kroki są konieczne:
+a. **Logowanie na backendzie:** Logi Cloud Armor nie istnieją samodzielnie – są one zintegrowane z logami żądań HTTP(S) Load Balancera. Należy upewnić się, że usługa backendowa ma włączone logowanie (HTTP logging enabled).
+b. **Log Level VERBOSE:** Ustawienie poziomu logowania na `VERBOSE` w polityce bezpieczeństwa Cloud Armor gwarantuje, że w logach znajdą się szczegółowe informacje na temat reguł, które zostały dopasowane (np. dopasowane sygnatury WAF, dokładna reguła, która zablokowała żądanie). Umożliwia to precyzyjną diagnostykę fałszywych alarmów (false positives).
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Modify the Application Load Balancer backend and increase the log sample rate...
+   * Dlaczego nieprawidłowa: Zwiększenie częstotliwości próbkowania logów (sample rate) sprawi jedynie, że będziemy zbierać więcej logów ogólnych ruchu. Nie zmieni to poziomu szczegółowości logów Cloud Armor i nie pomoże, jeśli poziom logowania w polityce nie został ustawiony na właściwy (VERBOSE) w celu diagnostyki reguł.
+C. Change the configuration of suspicious web application firewall rules in the Cloud Armor policy to preview mode.
+   * Dlaczego nieprawidłowa: Przełączenie reguł w tryb podglądu (preview mode) sprawi, że reguły przestaną blokować ruch (będą jedynie logować dopasowania). Pomaga to sprawdzić działanie reguł w tle, ale samo w sobie nie włącza zbierania i nie konfiguruje szczegółowości logów wymaganych do analizy przyczyn blokad dla dotychczas zgłaszanych błędów.
+D. Create a log sink with a filter for logs containing redirected_by_security_policy...
+   * Dlaczego nieprawidłowa: Stworzenie log sinka do BigQuery pozwala na długoterminowe analizowanie logów, ale najpierw te logi muszą zostać wygenerowane we właściwym formacie i szczegółowości na poziomie Load Balancera i Cloud Armor (co konfiguruje opcja B). Sam sink bez włączonego szczegółowego logowania będzie pusty lub niekompletny.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Logi Cloud Armor są częścią logów zewnętrznego Load Balancera HTTP(S).
+* Aby analizować szczegóły blokad WAF (np. fałszywe alarmy) -> Ustaw log level w polityce Cloud Armor na **`VERBOSE`**.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Investigate blocked traffic by Cloud Armor / collect request logs -> Enable logging in ALB backend + set log level to VERBOSE in Cloud Armor.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/armor/docs/request-logging" target="_blank">Google Cloud Armor request logging</a>
+<a href="https://cloud.google.com/armor/docs/troubleshooting" target="_blank">Troubleshooting Google Cloud Armor policies</a>
 </pre>
 
 </div>

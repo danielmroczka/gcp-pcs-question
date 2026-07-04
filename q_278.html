@@ -58,24 +58,34 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Study the shared responsibilities model. Depending on your business scenario, you might need to consider your responsibilities based on the location of your business offices, your customers, and your data.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź D jest prawidłowa, ponieważ model współdzielonej odpowiedzialności (Shared Responsibility Model) jest fundamentem planowania bezpieczeństwa i zgodności (compliance) przy migracji do chmury publicznej.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Dlaczego to podejście jest kluczowe:
+a. **Jasne granice:** Klient musi dokładnie wiedzieć, które elementy zabezpieczeń leżą po jego stronie (np. konfiguracja IAM, szyfrowanie danych CMEK, reguły firewall), a które są zarządzane przez Google (np. bezpieczeństwo fizyczne serwerów, patchowanie hypervisora).
+b. **Wpływ regulacji (Compliance):** Odpowiedzialność klienta zależy od kontekstu biznesowego (np. lokalizacja biur, rezydentność danych klientów z UE podlegających pod GDPR vs. klientów z USA podlegających pod HIPAA), co determinuje konieczność wdrożenia specyficznych polityk w chmurze.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Model your deployment on the Google Enterprise foundations blueprint. Follow the blueprint exactly...
+   * Dlaczego nieprawidłowa: Choć blueprinty Google są świetnym punktem odniesienia, to ślepe kopiowanie konfiguracji bez dostosowania do własnych, specyficznych wymagań biznesowych, regulacyjnych i operacyjnych może doprowadzić do luk w zabezpieczeniach lub zablokowania procesów biznesowych.
+B. Use the Risk Manager tool... Obtain cyber insurance coverage.
+   * Dlaczego nieprawidłowa: Zakup ubezpieczenia cybernetycznego (cyber insurance) jest elementem strategii transferu ryzyka, ale nie zastępuje wdrożenia faktycznych technicznych zabezpieczeń i kontroli operacyjnych w chmurze.
+C. Subscribe to the Google Cloud release notes... Evaluate new services... before enabling their API.
+   * Dlaczego nieprawidłowa: Śledzenie nowości i blokowanie API to dobre praktyki operacyjne, ale nie pomagają w zdefiniowaniu podstawowych granic odpowiedzialności i wdrożeniu pierwszych, kluczowych mechanizmów kontroli bezpieczeństwa dla nowych usług chmurowych.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Fundament bezpieczeństwa w chmurze -> Zrozumienie **Shared Responsibility Model** (Modelu Współdzielonej Odpowiedzialności).
+* Google odpowiada za bezpieczeństwo samej chmury (of the cloud), a klient za bezpieczeństwo w chmurze (in the cloud).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* First time in GCP + apply controls + identify what is managed by Google -> Study the shared responsibilities model.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/security/shared-responsibility-model" target="_blank">Google Cloud Shared Responsibility Model</a>
+<a href="https://cloud.google.com/architecture/framework/security" target="_blank">Google Cloud Architecture Framework: Security</a>
 </pre>
 
 </div>

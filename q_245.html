@@ -90,24 +90,35 @@ You have placed several Compute Engine instances in a private subnet. You want t
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Enable Private Google Access for the private subnet.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź A jest prawidłowa, ponieważ Private Google Access (Prywatny dostęp do Google) to natywna funkcja sieciowa w GCP, która pozwala instancjom maszyn wirtualnych posiadającym wyłącznie prywatne adresy IP (brak publicznego IP) na łączenie się z publicznymi adresami IP usług i interfejsów API Google (np. Cloud Storage, BigQuery) bez przechodzenia przez internet.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Jak to działa:
+a. Maszyny wirtualne w podsieci prywatnej wysyłają żądania do API Google (np. `storage.googleapis.com`).
+b. Gdy Private Google Access jest włączone dla tej podsieci, ruch ten jest kierowany bezpośrednio przez sieć wewnętrzną Google do punktów końcowych API Google.
+c. Pakiety nie są kierowane do bramy internetowej (Internet Gateway) i nie wymagają translacji NAT ani publicznych adresów IP na maszynach. Jest to rozwiązanie wysoce bezpieczne, wydajne i bezkosztowe.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+B. Configure Private Service Connect... and allocate an IP range...
+   * Dlaczego nieprawidłowa: Private Service Connect (PSC) służy do tworzenia prywatnych punktów końcowych (Internal IPs) w sieci VPC w celu uzyskania dostępu do usług własnych (innych firm) lub specyficznych interfejsów API Google. Chociaż PSC może realizować podobne cele, to standardowym, znacznie prostszym i domyślnym rozwiązaniem dla ogólnego dostępu do usług Google (jak GCS) z podsieci prywatnej jest włączenie Private Google Access.
+C. Reserve and assign static external IP addresses for the Compute Engine instances.
+   * Dlaczego nieprawidłowa: Przypisanie zewnętrznych (publicznych) adresów IP do maszyn wirtualnych sprawia, że przestają być one w podsieci prywatnej (są wystawione na internet). Ruch do usług Google przechodziłby wówczas przez internet, co narusza kluczowy warunek "without traversing the internet".
+D. Create a Cloud Cloud NAT gateway for the region where the private subnet is configured.
+   * Dlaczego nieprawidłowa: Cloud NAT pozwala maszynom prywatnym na dostęp do ogólnego internetu (np. w celu pobrania aktualizacji systemu). Choć ruch do API Google również mógłby przechodzić przez NAT, to Cloud NAT tłumaczy adresy na publiczne i kieruje ruch przez internetową bramę Google (traversing the internet), co jest mniej bezpieczne i generuje koszty transferu NAT w porównaniu do darmowego i wewnętrznego Private Google Access.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Dostęp z maszyn bez publicznego IP (private VMs) do usług Google (Cloud Storage, BigQuery itp.) bez internetu -> Zawsze **Private Google Access** (PGA).
+* PGA jest konfigurowane jako prosta flaga (włącz/wyłącz) bezpośrednio na poziomie podsieci (subnet level).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Private subnet VMs + access Google services + without traversing the internet -> Private Google Access.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/vpc/docs/private-google-access" target="_blank">Private Google Access overview</a>
+<a href="https://cloud.google.com/vpc/docs/configure-private-google-access" target="_blank">Configuring Private Google Access</a>
 </pre>
 
 </div>

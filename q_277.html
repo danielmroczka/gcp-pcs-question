@@ -58,24 +58,34 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Review the organization password management setting and select Enforce password policy at the next sign-in.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź B jest prawidłowa, ponieważ zmiana ustawień polityki haseł (np. wymuszenie minimalnej długości 12 znaków) w konsoli administracyjnej Google Workspace / Cloud Identity domyślnie dotyczy tylko nowych haseł lub kolejnych zmian haseł wykonywanych przez użytkowników.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Dlaczego ten krok jest wymagany:
+a. Użytkownicy posiadający aktualnie słabsze hasła (np. 8 znaków) mogą nadal logować się do konsoli GCP przy użyciu swoich dotychczasowych, aktywnych haseł, ponieważ system nie zmusza ich automatycznie do zmiany.
+b. Zaznaczenie opcji "Enforce password policy at the next sign-in" (Wymuś politykę haseł przy następnym logowaniu) sprawia, że przy kolejnej próbie wejścia do GCP, użytkownicy ze słabymi hasłami zostaną natychmiast zablokowani i zmuszeni do zmiany hasła na nowe, zgodne z nowym limitem 12-16 znaków.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Review each user's password configuration and reset existing passwords.
+   * Dlaczego nieprawidłowa: Ręczne resetowanie haseł dla wszystkich użytkowników w organizacji generuje ogromny nakład pracy administracyjnej i paraliżuje pracę działu IT. Jest to nieefektywne.
+C. Review each user's password configuration and select Enforce strong password.
+   * Dlaczego nieprawidłowa: Włączanie polityki indywidualnie dla każdego użytkownika z osobna (per-user basis) jest czasochłonne i nie zapobiega logowaniu użytkowników z aktualnymi, słabymi hasłami bez wyzwolenia wymuszenia zmiany.
+D. Review the organization password management setting and select Enforce strong password.
+   * Dlaczego nieprawidłowa: Samo włączenie opcji "Enforce strong password" w ustawieniach ogólnych wymusza reguły tylko w momencie tworzenia lub zmiany hasła przez użytkownika w przyszłości. Nie resetuje automatycznie sesji użytkownikom z już istniejącymi słabymi hasłami.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Nowe reguły haseł w Google Cloud Identity nie wpływają automatycznie na aktualne hasła użytkowników.
+* Aby natychmiast wyegzekwować nowe reguły u wszystkich użytkowników, wybierz opcję **Enforce password policy at the next sign-in**.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Policy configured but users still logging in with weak passwords -> Enforce password policy at next sign-in.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://support.google.com/a/answer/33333" target="_blank">Manage password settings in Google Workspace/Cloud Identity</a>
+<a href="https://support.google.com/a/answer/9222687" target="_blank">Enforcing password changes for users</a>
 </pre>
 
 </div>

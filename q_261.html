@@ -58,24 +58,35 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Create a folder-level deny-all rule for outbound traffic within a hierarchical firewall policy. Define FQDN allowlist rules in separate policies and associate them with the necessary VPCs. Configure Cloud NAT for these VPCs.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź B jest prawidłowa, ponieważ łączy centralne zarządzanie bezpieczeństwem sieciowym na poziomie folderu z granularną kontrolą FQDN (Fully Qualified Domain Name) na poziomie poszczególnych sieci VPC, co pozwala na bezpieczną i wysoce kontrolowaną komunikację wychodzącą.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Mechanizm działania:
+a. **Folder-level deny-all (Blokada centralna):** Polityka hierarchiczna przypisana na poziomie folderu z regułą blokującą cały ruch wychodzący (deny egress) gwarantuje, że domyślnie żadna maszyna/usługa w żadnym podrzędnym projekcie nie połączy się z internetem.
+b. **FQDN allowlist (Granularne wyjątki):** Definiujemy osobne polityki zapory sieciowej z regułami zezwalającymi na ruch wychodzący wyłącznie do zatwierdzonych domen (np. `*.api.company.com`). Powiązanie tych polityk z konkretnymi sieciami VPC pozwala na precyzyjne odblokowanie dostępu tylko tam, gdzie to konieczne.
+c. **Cloud NAT:** Umożliwia maszynom wewnątrz prywatnych sieci VPC na bezpieczną komunikację wychodzącą bez posiadania publicznych adresów IP.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Implement a global-level allowlist rule... Apply this policy across all VPCs...
+   * Dlaczego nieprawidłowa: Zastosowanie jednej globalnej listy dopuszczeń (allowlist) dla wszystkich sieci VPC łamie zasadę najmniejszych uprawnień. Usługi w niektórych projektach otrzymałyby dostęp do domen, których nie potrzebują.
+C. Create a project-level deny-all rule within a hierarchical structure...
+   * Dlaczego nieprawidłowa: Polityki hierarchiczne zapory sieciowej nie są tworzone na poziomie "projektu" – są one tworzone na poziomie folderów lub organizacji w celu zarządzania wieloma projektami. Poziom projektu służy do lokalnych reguł VPC Firewall, które nie mają struktury hierarchicznej zapory.
+D. Configure Cloud NAT with IP-based filtering to permit outbound traffic only to the allowlisted FQDNs' IP ranges.
+   * Dlaczego nieprawidłowa: Standardowy Cloud NAT nie posiada wbudowanych funkcji głębokiej inspekcji pakietów do filtrowania ruchu na podstawie nazw domenowych (FQDN). Wymaga to użycia Secure Web Proxy lub zaawansowanych reguł zapory sieciowej. Ponadto, samo IP-based filtering jest nieskuteczne dla nowoczesnych usług chmurowych, których adresy IP zmieniają się dynamicznie (np. CDN).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Aby zablokować ruch wychodzący dla wielu projektów i pozwolić tylko na wybrane FQDN dla konkretnych sieci -> Połącz **Hierarchical Firewall Policy (deny egress)** z **FQDN rules / Cloud NAT** na poziomie wybranych VPC.
+* Filtrowanie po nazwach FQDN chroni przed ominięciem reguł przez dynamicznie zmieniające się adresy IP.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Granular outbound FQDN control + deny-all folder level -> Folder-level deny-all in hierarchical firewall policy + FQDN allowlist on VPC level.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/vpc/docs/hierarchical-firewall-policies" target="_blank">Hierarchical firewall policies</a>
+<a href="https://cloud.google.com/secure-web-proxy/docs/overview" target="_blank">Secure Web Proxy overview</a>
 </pre>
 
 </div>

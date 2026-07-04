@@ -90,24 +90,34 @@ You are managing data in your organization's Cloud Storage buckets and are requi
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Define a lifecycle policy JSON with an action on SetStorageClass to COLDLINE with an age condition of 365 and matchStorageClass STANDARD.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź D jest prawidłowa, ponieważ obiektowe zarządzanie cyklem życia (Object Lifecycle Management) w Cloud Storage jest natywną, zautomatyzowaną i bezkosztową funkcją służącą do zarządzania przechowywaniem danych i optymalizacji kosztów.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Zasada działania:
+a. **Reguły cyklu życia (Lifecycle Rules):** Pozwalają na zdefiniowanie zestawu warunków (conditions) i akcji (actions).
+b. **Konfiguracja:** Warunek wieku (`age: 365`) i typu początkowego (`matchStorageClass: ["STANDARD"]`) w połączeniu z akcją `SetStorageClass` ustawioną na `COLDLINE` sprawia, że Cloud Storage automatycznie zidentyfikuje obiekty starsze niż rok i przeniesie je do tańszej klasy przechowywania Coldline. Proces ten odbywa się w tle, bez konieczności pisania kodu i ponoszenia kosztów za operacje compute.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Use Cloud Asset Inventory to generate a report... Examine the Lifecycle management policy...
+   * Dlaczego nieprawidłowa: Cloud Asset Inventory generuje raporty konfiguracyjne. Pomoże sprawdzić, czy polityka istnieje, ale samo wygenerowanie raportu nie konfiguruje i nie wykonuje operacji migracji danych do klasy Coldline.
+B. Set up a CloudRun Job with Cloud Scheduler to execute a script...
+   * Dlaczego nieprawidłowa: Rozwiązanie to wymaga napisania własnego kodu, utrzymywania infrastruktury (Cloud Run) i generuje koszty (Scheduler, Cloud Run, operacje API na Cloud Storage). Co więcej, skrypty wyszukujące i przenoszące dane w skali petabajtów są nieefektywne i powolne w porównaniu do natywnego mechanizmu Lifecycle Management w chmurze.
+C. Enable the Autoclass feature to manage all aspects of bucket storage classes.
+   * Dlaczego nieprawidłowa: Funkcja Autoclass automatycznie przenosi dane między klasami (Standard, Nearline, Coldline, Archive) w zależności od częstotliwości rzeczywistego dostępu (access patterns) do obiektów. Nie pozwala na sztywne wymuszenie przejścia do klasy Coldline dokładnie po 365 dniach, jeśli dane są nadal sporadycznie odpytywane, co może nie przynieść pożądanej redukcji kosztów zgodnie ze zdefiniowanym wymaganiem wieku.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Automatyczne przenoszenie danych między klasami przechowywania (storage classes) w Cloud Storage lub ich usuwanie po określonym czasie -> Zawsze używaj **Object Lifecycle Management**.
+* Warunki w polityce cyklu życia obejmują: wiek (age), datę utworzenia, liczbę nowszych wersji (dla wersjonowania) itp.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Downgrade storage class of objects older than X days -> Lifecycle policy JSON / SetStorageClass action.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/storage/docs/lifecycle" target="_blank">Object Lifecycle Management overview</a>
+<a href="https://cloud.google.com/storage/docs/managing-lifecycles" target="_blank">Managing Object Lifecycles in Cloud Storage</a>
 </pre>
 
 </div>

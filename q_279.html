@@ -58,24 +58,35 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. On-premises DNS servers lack the necessary records to resolve private Google API domains. Create DNS records for restricted.googleapis.com or private.googleapis.com pointing to Google's published IP ranges.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź A jest prawidłowa, ponieważ bez odpowiedniej konfiguracji DNS w lokalnej serwerowni (on-premises), systemy deweloperów próbują rozwiązywać nazwy domenowe usług Google (takich jak Artifact Registry - `*.pkg.dev` lub `*.googleapis.com`) na ich publiczne, internetowe adresy IP.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Dlaczego to powoduje błąd i jak to naprawić:
+a. Ponieważ sieć on-premises nie posiada trasy do internetu (no route to the internet), pakiety skierowane na publiczne IP są odrzucane.
+b. Aby ruch do Artifact Registry przechodził przez prywatne połączenie VPN/Interconnect, należy skonfigurować lokalny serwer DNS tak, by zapytania do domen Google były kierowane na specjalne, prywatne zakresy IP Google: `private.googleapis.com` (`199.36.153.8/30`) lub `restricted.googleapis.com` (`199.36.153.4/30`).
+c. Umożliwia to lokalnym maszynom na poprawny routing i komunikację z API Google przez sieć prywatną.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+B. Developers must be granted the artifactregistry.writer IAM role...
+   * Dlaczego nieprawidłowa: Jest to problem sieciowy (brak możliwości rozwiązania nazwy hosta / DNS resolution error), a nie problem autoryzacji IAM. Jeśli DNS nie działa, żądanie w ogóle nie dociera do Google Cloud, więc uprawnienia IAM nie mają wpływu na ten etap.
+C. Private Google Access is not enabled for the subnet hosting the Artifact Registry.
+   * Dlaczego nieprawidłowa: Private Google Access (PGA) jest funkcją włączaną na podsieciach wewnątrz sieci VPC w chmurze GCP. Nie konfiguruje ona i nie rozwiązuje problemów z DNS w fizycznej, lokalnej sieci on-premises deweloperów.
+D. Artifact Registry requires external HTTP/HTTPS access. Create a new firewall rule...
+   * Dlaczego nieprawidłowa: Otwieranie portów na zaporze sieciowej GCP nie rozwiąże problemu braku routingu do internetu i błędnego DNS on-premises. Ponadto ruch z VPN/Interconnect jest ruchem wewnętrznym, a nie zewnętrznym internetowym HTTP/S.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Brak dostępu z on-premises (przez VPN/Interconnect) do usług Google przy braku wyjścia na internet -> Zawsze w pierwszej kolejności skonfiguruj **DNS dla `private.googleapis.com` lub `restricted.googleapis.com`** w lokalnym DNS.
+* Usługa Artifact Registry korzysta z domeny `*.pkg.dev`, która również musi być mapowana na prywatne IP Google.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* On-premises developers cannot resolve Artifact Registry hostname + Cloud VPN/Interconnect -> Create DNS records for restricted/private.googleapis.com.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/vpc/docs/configure-private-google-access-hybrid" target="_blank">Configuring Private Google Access for hybrid networks</a>
+<a href="https://cloud.google.com/artifact-registry/docs/transition/setup-dns" target="_blank">Artifact Registry DNS setup for private access</a>
 </pre>
 
 </div>

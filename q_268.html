@@ -58,24 +58,34 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Grant identity and access management (IAM) roles and permissions to principals.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź C jest prawidłowa, ponieważ Identity and Access Management (IAM) to fundamentalna, natywna i najbardziej elastyczna usługa w Google Cloud służąca do autoryzacji i precyzyjnego zarządzania dostępem do odczytu danych w usługach takich jak BigQuery oraz Cloud Storage.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Zalety IAM:
+a. **Granularność uprawnień:** IAM pozwala na przydzielanie precyzyjnych ról (np. `roles/bigquery.dataViewer` dla odczytu tabel lub `roles/storage.objectViewer` dla pobierania plików z GCS) określonym tożsamościom (principals: użytkownicy, grupy, konta serwisowe).
+b. **Elastyczność i kontrola:** Możemy ograniczyć zasięg ról do konkretnego projektu, pojedynczego kubełka lub zbioru danych (dataset), a także stosować warunki IAM (IAM Conditions), co zapewnia pełne bezpieczeństwo dostępu.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Deidentify sensitive fields within the dataset by using data leakage protection...
+   * Dlaczego nieprawidłowa: Deidentyfikacja (Cloud DLP) chroni prywatność danych poprzez usuwanie lub maskowanie PII, ale sama w sobie nie jest systemem autoryzacji (authorization system) – nie kontroluje, *kto* ma prawo odpytać bazę lub pobrać pliki.
+B. Use Cloud External Key Manager (Cloud EKM) to encrypt the data...
+   * Dlaczego nieprawidłowa: Cloud EKM szyfruje dane w spoczynku. Szyfrowanie to usługa ochrony danych (confidentiality), ale nie zarządza uprawnieniami dostępu i prawami odczytu dla użytkowników w sposób tak elastyczny i granularny jak system IAM.
+D. Enable server-side encryption on the data in BigQuery and Cloud Storage.
+   * Dlaczego nieprawidłowa: Szyfrowanie po stronie serwera (Server-Side Encryption) jest domyślnie i bezwyjątkowo włączone w GCP dla wszystkich danych. Służy do ochrony przed fizyczną kradzieżą dysków, ale nie filtruje i nie autoryzuje dostępu logicznego dla użytkowników próbujących odczytać dane z poziomu API.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Autoryzacja i kontrola dostępu (authorization / access control) w GCP -> Zawsze używaj **Identity and Access Management (IAM)**.
+* Szyfrowanie (encryption) i DLP chronią same dane, ale nie zastępują polityk autoryzacji użytkowników.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Granular and flexible control authorization to read data -> Grant IAM roles and permissions.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/iam/docs/overview" target="_blank">Identity and Access Management (IAM) overview</a>
+<a href="https://cloud.google.com/storage/docs/access-control/iam" target="_blank">IAM roles for Cloud Storage</a>
 </pre>
 
 </div>

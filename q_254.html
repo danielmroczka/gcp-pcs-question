@@ -58,24 +58,35 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Create a workload identity pool with a workload identity provider for each external cloud. Set up a service account and add an IAM binding for impersonation.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź C jest prawidłowa, ponieważ Workload Identity Federation (Federacja Tożsamości Obciążeń) jest standardowym i najbardziej bezpiecznym mechanizmem Google Cloud umożliwiającym aplikacjom działającym w innych chmurach (np. AWS, Azure) bezpieczne odpytywanie API GCP przy użyciu tożsamości krótkotrwałych.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Zalety i mechanizm działania:
+a. **Pule i dostawcy (Pools & Providers):** Tworzymy dedykowaną pulę tożsamości oraz dostawców dla poszczególnych chmur zewnętrznych (np. provider AWS korzystający z ról IAM AWS, provider Azure z OIDC).
+b. **Wymiana tożsamości:** Aplikacja w innej chmurze pobiera swój natywny token tożsamości (np. AWS STS token) i wysyła go do Google STS w celu wymiany na krótkotrwały token dostępu GCP.
+c. **Impersonacja (Impersonation):** Konto serwisowe w GCP posiada przypisane powiązanie IAM (`roles/iam.workloadIdentityUser`), które zezwala tożsamościom z zewnętrznej puli chmurowej na podszywanie się pod nie. Zapewnia to pełne bezpieczeństwo bez konieczności generowania i dystrybucji kluczy prywatnych.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Create a managed workload identity. Bind an attested identity to the Compute Engine workload.
+   * Dlaczego nieprawidłowa: "Managed workload identity" w tym kontekście brzmi podobnie do Workload Identity w GKE lub Managed Identities w Active Directory, ale samo sformułowanie nie opisuje poprawnej procedury integracji dla aplikacji działających w zewnętrznych chmurach (multi-cloud). Ponadto Compute Engine dotyczy maszyn w GCP, a nie w innych chmurach.
+B. Create a service account key. Download the key to each application...
+   * Dlaczego nieprawidłowa: Pobieranie i zapisywanie kluczy prywatnych (JSON keys) konta serwisowego na maszynach w innych chmurach jest rażącym naruszeniem zasad bezpieczeństwa. W przypadku skompromitowania maszyny w chmurze zewnętrznej, klucz zostaje ujawniony, dając stały dostęp do zasobów GCP.
+D. Create a VPC firewall rule for ingress traffic with an allowlist...
+   * Dlaczego nieprawidłowa: Reguły zapory sieciowej (firewall rules) filtrują ruch sieciowy, ale nie uwierzytelniają aplikacji i nie wydają tokenów dostępu (credentials) wymaganych do autoryzacji zapytań do usług GCP (np. BigQuery czy GCS).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Uwierzytelnianie aplikacji z innych chmur (AWS, Azure, multi-cloud) w GCP bez kluczy -> Zawsze **Workload Identity Federation** (WIF).
+* WIF obsługuje natywnie uwierzytelnianie oparte na kontach AWS IAM oraz Azure Active Directory OIDC.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Applications in multiple clouds + access GCP + short-lived credentials -> Workload Identity Federation (workload identity pool).
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/iam/docs/workload-identity-federation" target="_blank">Workload Identity Federation</a>
+<a href="https://cloud.google.com/iam/docs/workload-identity-federation-aws" target="_blank">Configuring Workload Identity Federation with AWS</a>
 </pre>
 
 </div>

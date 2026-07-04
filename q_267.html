@@ -58,24 +58,35 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Create a signing key in your external HSM. Integrate the HSM with Cloud External Key Manager (Cloud EKM) and make the key available within your project. Configure Access Approval to use this key.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź C jest prawidłowa, ponieważ w pełni spełnia rygorystyczne wymagania zgodności (compliance) dotyczące przechowywania klucza podpisującego zatwierdzenia dostępu (Access Approval) w fizycznym module HSM zlokalizowanym całkowicie poza chmurą Google (on-premises / zewnętrzny partner).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Szczegóły integracji:
+a. **External HSM:** Klucz podpisujący jest generowany i stale przechowywany w zewnętrznym module bezpieczeństwa klienta.
+b. **Cloud EKM (External Key Manager):** GCP integruje się z tym zewnętrznym HSM za pomocą interfejsu Cloud EKM. Pozwala to usłudze Access Approval na wysyłanie żądań kryptograficznego podpisania decyzji o zatwierdzeniu dostępu do zewnętrznego HSM bez ujawniania samego materiału klucza chmurze Google.
+c. **Ostateczna kontrola:** Jeśli klient zablokuje dostęp do klucza na swoim zewnętrznym HSM, personel Google nie będzie mógł uzyskać dostępu do danych, nawet jeśli zatwierdzenie zostało kliknięte w konsoli, co daje klientowi pełną suwerenność operacyjną.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Create a new asymmetric signing key in Cloud Key Management System (Cloud KMS)...
+   * Dlaczego nieprawidłowa: Klucze w standardowym Cloud KMS są generowane i przechowywane w infrastrukturze chmurowej Google. Narusza to wymóg przechowywania klucza w module HSM zlokalizowanym *poza* Google Cloud.
+B. Export your existing Access Approval signing key as a PEM file. Upload the file to your external HSM...
+   * Dlaczego nieprawidłowa: Eksportowanie klucza prywatnego jako pliku tekstowego PEM i przesyłanie go przez sieć jest skrajnie niebezpieczne. Ponadto klucze generowane w Cloud KMS nie są zaprojektowane do eksportowania ich kluczy prywatnych na zewnątrz (są one bezpiecznie zamknięte w modułach HSM Google).
+D. Create a new asymmetric signing key in Cloud KMS... Add the corresponding public key to your external HSM.
+   * Dlaczego nieprawidłowa: Przesłanie klucza publicznego (public key) do zewnętrznego HSM nie pozwala na wykonywanie operacji podpisywania za pomocą tego HSM. To klucz prywatny (private key) musi być używany do podpisywania zatwierdzeń, a ta opcja pozostawia klucz prywatny w chmurze Google (Cloud KMS).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Access Approval pozwala klientom na jawne zatwierdzanie dostępu inżynierów Google do ich danych w celach wsparcia.
+* Wymóg przechowywania kluczy kryptograficznych poza infrastrukturą Google (outside Google Cloud) -> Zawsze używaj **Cloud EKM (External Key Manager)**.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Access Approval + signing key stored in HSM outside Google Cloud -> Integrate external HSM with Cloud External Key Manager (Cloud EKM).
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/access-approval/docs/custom-signing-keys" target="_blank">Access Approval with custom signing keys</a>
+<a href="https://cloud.google.com/kms/docs/ekm" target="_blank">Cloud External Key Manager (Cloud EKM)</a>
 </pre>
 
 </div>

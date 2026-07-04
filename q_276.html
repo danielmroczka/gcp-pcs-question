@@ -58,24 +58,35 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Create one Virtual Private Cloud (VPC) network per environment. Create one additional VPC for the entry point to the cloud network. Peer the entry point VPC with the environment VPCs.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź D jest prawidłowa, ponieważ wykorzystuje architekturę sieci tranzytowej (hub-and-spoke) oraz fundamentalną cechę braku przechodniości (non-transitivity) połączeń VPC Network Peering w Google Cloud w celu zapewnienia izolacji środowisk.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Szczegóły architektury:
+a. **Izolacja środowisk:** Tworzymy osobną sieć VPC dla produkcji (`prod-vpc`) oraz dla deweloperów (`dev-vpc`). Maszyny w tych sieciach nie mają żadnego bezpośredniego routingu między sobą.
+b. **Wspólny punkt wejścia (Transit VPC):** Tworzymy trzecią sieć VPC (`transit-vpc`), do której podłączamy łącze VPN/Interconnect z on-premises. Sieć ta jest jedyną bramą wejściową do chmury.
+c. **VPC Peering bez przechodniości:** Łączymy `transit-vpc` za pomocą peerowania z `prod-vpc` oraz osobno z `dev-vpc`. Zgodnie z zasadami sieciowymi GCP, połączenia peeringowe nie są przechodnie (non-transitive). Ruch z sieci lokalnej może trafić do Dev lub Prod, ale ruch z sieci Dev nie może przejść przez sieć tranzytową do sieci Prod. Gwarantuje to 100% separację środowisk dev i prod przy zachowaniu jednego punktu wejścia.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Create one VPC... Peer the VPCs with each other and create firewall rules...
+   * Dlaczego nieprawidłowa: Bezpośrednie peerowanie sieci `dev-vpc` z `prod-vpc` tworzy między nimi bezpośredni routing IP. Poleganie wyłącznie na regułach zapory sieciowej (firewall rules) do blokowania ruchu niesie duże ryzyko błędu konfiguracyjnego (jeśli ktoś usunie lub zmieni regułę, środowiska zostaną połączone). Prawidłowa architektura powinna izolować sieci na poziomie routingu.
+B. Create one shared VPC network... Create separate subnets per environment...
+   * Dlaczego nieprawidłowa: Umieszczenie Dev i Prod w jednej sieci VPC (nawet w różnych podsieciach) oznacza, że mają one domyślny routing lokalny i mogą się komunikować. Ponadto błędy w regułach firewall mogą łatwo doprowadzić do wycieku danych z produkcji na dev.
+C. Create one VPC... Create a VPC Service Controls perimeter per environment...
+   * Dlaczego nieprawidłowa: VPC Service Controls chroni interfejsy API usług zarządzanych Google (np. BigQuery, Storage). Nie izoluje ruchu sieciowego IP na poziomie maszyn wirtualnych i tras sieciowych wewnątrz sieci VPC.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Peering w GCP **nie jest przechodni** (VPC Peering is non-transitive). Jeśli sieć A jest połączona z B, a B z C, to sieć A NIE MOŻE komunikować się z C.
+* Wykorzystaj ten mechanizm (Hub-and-Spoke z tranzytowym hubem) do izolacji środowisk przy zachowaniu jednego punktu wejścia z on-premises.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Fully isolate dev and prod + single entry point from on-premises -> Transit VPC peered with environment VPCs (Hub and Spoke).
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/vpc/docs/vpc-peering#non-transitive" target="_blank">VPC Network Peering: Non-transitivity</a>
+<a href="https://cloud.google.com/architecture/hub-and-spoke-network-transit-options" target="_blank">Hub-and-spoke network architectures in GCP</a>
 </pre>
 
 </div>

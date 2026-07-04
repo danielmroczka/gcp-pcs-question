@@ -90,24 +90,35 @@ You run a web application on top of Cloud Run that is exposed to the internet wi
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Activate Identity-Aware Proxy (IAP) on the Application Load Balancer backend. Assign the role of IAP-secured Web App User to the groups of privileged users.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź D jest prawidłowa, ponieważ włączenie Identity-Aware Proxy (IAP) na poziomie zewnętrznego Load Balancera (Application Load Balancer) chroniącego usługę Cloud Run w pełni realizuje wymaganie uwierzytelniania użytkowników za pomocą przeglądarki z obsługą Single Sign-On (SSO).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Szczegóły mechanizmu:
+a. **Integracja z Load Balancerem:** Ruch z internetu trafia do Load Balancera, który przekazuje go do backendu Cloud Run.
+b. **Wymuszenie logowania (IAP):** Po aktywacji IAP na usłudze backendu, IAP przechwytuje żądania przeglądarki i automatycznie przekierowuje użytkowników do centralnego portalu logowania (Google SSO / Cloud Identity).
+c. **Kontrola dostępu:** Tylko użytkownicy posiadający rolę `roles/iap.httpsResourceAccessor` (IAP-secured Web App User) mogą przejść dalej. Cloud Run może być wówczas skonfigurowany tak, by akceptować ruch wyłącznie pochodzący z Load Balancera/IAP, co zapobiega bezpośrednim próbom dostępu.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Change Cloud Run configuration to require authentication. Assign the role of Cloud Run Invoker to the group...
+   * Dlaczego nieprawidłowa: Wymuszenie autoryzacji IAM bezpośrednio na poziomie Cloud Run (`require-authentication`) jest przeznaczone dla komunikacji między usługami (service-to-service) za pomocą tokenów kont serwisowych (Bearer tokens). Nie obsługuje ono w przyjazny sposób standardowego logowania użytkowników przez przeglądarkę za pomocą formularza SSO.
+B. Create a group of privileged users in Cloud Identity. Assign the role of Cloud Run User to the group...
+   * Dlaczego nieprawidłowa: Rola `roles/run.user` (Cloud Run User) daje uprawnienia administracyjne do zarządzania i wdrażania usług Cloud Run. Nie służy do autoryzacji użytkowników końcowych, którzy mają jedynie wywoływać aplikację webową (do tego służy rola Invoker, ale z ograniczeniami opisanymi w punkcie A).
+C. Change the Ingress Control configuration of Cloud Run to internal and create firewall rules...
+   * Dlaczego nieprawidłowa: Ustawienie Ingress na `internal` uniemożliwia bezpośredni dostęp z internetu, ale zapora sieciowa (firewall rules) w GCP nie filtruje tożsamości użytkowników i nie oferuje mechanizmu SSO dla przeglądarek. Ponadto Cloud Run nie jest bezpośrednio chroniony tradycyjnymi regułami zapory sieciowej VPC na poziomie portów w taki sposób jak maszyny VM.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Ochrona publicznych aplikacji webowych (browser access + SSO) w GCP (Cloud Run, GKE, GCE) -> Zawsze **Identity-Aware Proxy (IAP)** na **HTTPS Load Balancerze**.
+* IAP zarządza sesjami użytkowników w przeglądarce i integruje się z systemami Identity Provider (IdP) firmy.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Cloud Run / App Engine + browser access with SSO -> Identity-Aware Proxy (IAP) on Application Load Balancer backend.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/iap/docs/cloud-run-howto" target="_blank">Enabling IAP for Cloud Run</a>
+<a href="https://cloud.google.com/run/docs/securing/authenticating-users" target="_blank">Authenticating users for Cloud Run services</a>
 </pre>
 
 </div>

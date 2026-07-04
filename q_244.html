@@ -90,24 +90,34 @@ Your company's users access data in a BigQuery table. You want to ensure they ca
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Assign a BigQuery Data Viewer role along with an IAM condition that limits the access to specified working hours.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź A jest prawidłowa, ponieważ warunki IAM (IAM Conditions) są wbudowanym, deklaratywnym i w pełni zarządzanym przez GCP mechanizmem do ograniczania dostępu do zasobów na podstawie czasu (temporal access control).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Dlaczego to najlepsze rozwiązanie:
+a. **IAM Conditions:** Pozwalają na definiowanie reguł sprawdzających atrybuty żądania. Możemy użyć atrybutu `request.time` i zdefiniować zakres godzin (np. 9:00 - 17:00 od poniedziałku do piątku).
+b. **Automatyzacja i brak skryptów:** System IAM sam decyduje w locie, czy w momencie wysłania zapytania do BigQuery warunek czasu jest spełniony. Jeśli użytkownik spróbuje uzyskać dostęp o 20:00, otrzyma odmowę dostępu (Access Denied). Nie wymaga to uruchamiania żadnych zewnętrznych skryptów, zadań cron ani modyfikowania uprawnień w bazie danych.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+B. Run a gsutil script that assigns a BigQuery Data Viewer role, and remove it only...
+   * Dlaczego nieprawidłowa: Narzędzie `gsutil` służy do zarządzania zasobami w Cloud Storage (GCS), a nie w BigQuery. Ponadto ciągłe uruchamianie skryptów dodających i usuwających uprawnienia (tzw. provisioning/deprovisioning) jest podatne na awarie (np. jeśli skrypt nie zadziała, użytkownicy zachowają dostęp na noc) i generuje niepotrzebny narzut operacyjny.
+C. Assign a BigQuery Data Viewer role to a service account that adds and removes the users daily...
+   * Dlaczego nieprawidłowa: Podobnie jak opcja B, to podejście opiera się na zawodnych procesach automatyzacji (skrypty/konta serwisowe modyfikujące IAM w pętli). Może prowadzić do opóźnień (API rate limits dla IAM) oraz stwarza zagrożenie bezpieczeństwa, jeśli proces sprzątania uprawnień ulegnie awarii.
+D. Configure Cloud Scheduler so that it triggers a Cloud Functions instance that modifies the organizational policy constraint...
+   * Dlaczego nieprawidłowa: Polityki organizacji (Organization Policies) nakładają globalne ograniczenia na konfigurację zasobów (np. zakaz publicznego GCS, ograniczenie regionów), ale nie służą do przyznawania lub odbierania uprawnień do odczytu danych w BigQuery dla poszczególnych użytkowników w zależności od pory dnia.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Jeśli wymagane jest ograniczenie dostępu (Access Control) w określonych godzinach (working hours / specific time window) -> Zawsze używaj **IAM Conditions** z atrybutem czasu (`request.time`).
+* Jest to rozwiązanie wbudowane bezpośrednio w system autoryzacji GCP i nie wymaga pisania kodu.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Access only during working hours -> IAM condition that limits the access.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/iam/docs/conditions-overview" target="_blank">IAM Conditions overview</a>
+<a href="https://cloud.google.com/iam/docs/conditions-attribute-reference#time" target="_blank">IAM Conditions time attributes reference</a>
 </pre>
 
 </div>

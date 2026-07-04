@@ -90,24 +90,35 @@ An administrative application is running on a virtual machine (VM) in a managed 
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Configure an HTTP Load Balancing instance that points to the managed group with Identity-Aware Proxy (IAP) protection with Google credentials. Modify the VPC firewall to allow access from IAP network range.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź D jest prawidłowa, ponieważ Identity-Aware Proxy (IAP) zintegrowany z zewnętrznym Load Balancerem HTTP(S) (Application Load Balancer) jest najlepszym i zalecanym sposobem na bezpieczne udostępnienie aplikacji webowej użytkownikom zewnętrznym z wymuszeniem autoryzacji opartej na tożsamości Google.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Korzyści z tego podejścia:
+a. **Brak publicznego IP na VM:** Maszyny wirtualne w grupie zarządzanej mogą pozostać całkowicie prywatne i nie mieć bezpośredniego dostępu do internetu ani publicznych adresów IP.
+b. **Centralna kontrola dostępu (IAP):** Gdy użytkownik próbuje wejść na adres Load Balancera, IAP przechwytuje żądanie i przekierowuje do ekranu logowania Google. Dostęp jest przyznawany tylko wtedy, gdy użytkownik posiada rolę `IAP-secured Web App User` w IAM.
+c. **Konfiguracja zapory sieciowej:** Zapora sieciowa VPC (firewall) musi zezwalać na ruch przychodzący do maszyn na port 5601 wyłącznie z zakresu adresów IP Google Front End (GFE) i IAP proxy, co zapobiega ominięciu zabezpieczeń.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Configure the bastion host with OS Login... Log in... by using SSH-in-browser and then to the web application.
+   * Dlaczego nieprawidłowa: OS Login i bastion host służą do dostępu administracyjnego przez protokół SSH. Używanie SSH-in-browser do normalnego korzystania z aplikacji webowej przez użytkowników końcowych jest nieporęczne, nie skaluje się i nie stanowi standardowego interfejsu aplikacji webowych.
+B. Modify the VPC routing... allow access from the internet 0.0.0.0/0 to port 5601...
+   * Dlaczego nieprawidłowa: Otwarcie portu 5601 na cały świat (0.0.0.0/0) bez bramy pośredniczącej wystawia aplikację bezpośrednio na ataki sieciowe w internecie. Ponadto sama zapora sieciowa nie zapewnia uwierzytelniania użytkowników za pomocą kont Google.
+C. Configure Secure Shell Access (SSH) bastion host in a public network... Use a bastion host as a jump host...
+   * Dlaczego nieprawidłowa: Podobnie jak opcja A, to rozwiązanie jest przeznaczone dla administratorów IT (zarządzanie serwerem przez tunelowanie SSH), a nie dla zwykłych użytkowników aplikacji webowej, którzy potrzebują prostego dostępu przez przeglądarkę (HTTP/S).
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Bezpieczne udostępnianie wewnętrznych aplikacji webowych (web interfaces/port HTTP) w GCP z logowaniem Google -> Zawsze **Identity-Aware Proxy (IAP)** na **HTTP(S) Load Balancerze**.
+* Zapora sieciowa (firewall) dla IAP na backendzie musi pozwalać na ruch z zakresów IP proxy Google.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Expose web interface without internet access to VMs + enforce Google credentials -> HTTP Load Balancer + Identity-Aware Proxy (IAP).
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/iap/docs/concepts-overview" target="_blank">Identity-Aware Proxy (IAP) overview</a>
+<a href="https://cloud.google.com/iap/docs/load-balancer-howto" target="_blank">Enabling IAP for Compute Engine (Load Balancer setup)</a>
 </pre>
 
 </div>

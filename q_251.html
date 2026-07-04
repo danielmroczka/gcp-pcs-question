@@ -55,24 +55,38 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. Enable Workload Identity Federation. Create a workload identity pool and specify the on-premises identity provider as a workforce identity pool provider. Create an attribute mapping to map the on-premises identity provider token to a Google STS token. Create a service account with the necessary permissions for the workload. Grant the external identity the Workload Identity user role on the service account.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź D jest prawidłowa, ponieważ Workload Identity Federation (WIF) jest oficjalnym i najbezpieczniejszym mechanizmem Google Cloud do nadawania tożsamości aplikacjom i obciążeniom działającym poza GCP (on-premises) bez konieczności generowania i zarządzania kluczami długoterminowymi (pliki JSON kont serwisowych).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Zasada działania WIF:
+a. **Brak kluczy:** Aplikacje on-premises uwierzytelniają się w swoim lokalnym IdP (np. Active Directory, Okta, Kubernetes), uzyskując token OIDC lub SAML.
+b. **Wymiana tokenów:** Aplikacja przesyła ten zewnętrzny token do Google Security Token Service (STS). STS weryfikuje token u skonfigurowanego dostawcy w puli (Workload Identity Pool Provider).
+c. **Mapowanie atrybutów:** STS mapuje roszczenia (claims) z zewnętrznego tokena na atrybuty Google Cloud.
+d. **Impersonacja konta serwisowego:** Na podstawie mapowania, STS wydaje tymczasowy, krótkotrwały token dostępu OAuth 2.0 dla przypisanego konta serwisowego GCP (`Workload Identity User`). Aplikacja wykonuje operacje w GCP za pomocą tego bezpiecznego, tymczasowego tokena.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Enable Secure Web Proxy... Create a proxy subnet... Create a Secure Web Proxy policy...
+   * Dlaczego nieprawidłowa: Secure Web Proxy (SWP) to usługa służąca do filtrowania i zabezpieczania wychodzącego ruchu internetowego (egress HTTP/S) z zasobów chmurowych GCP. Nie służy do uwierzytelniania i autoryzacji aplikacji lokalnych (on-premises) próbujących uzyskać dostęp do usług w chmurze GCP bez kluczy.
+B. Enable Workforce Identity Federation... Create a workforce identity pool...
+   * Dlaczego nieprawidłowa: Workforce Identity Federation służy do uwierzytelniania ludzi (pracowników, kontrahentów) w celu uzyskania dostępu do konsoli GCP lub CLI za pomocą zewnętrznego IdP. Pytanie dotyczy dostępu dla maszyn / aplikacji (on-premises applications), do czego służy wyłącznie **Workload** Identity Federation (WIF).
+C. Enable Identity-Aware Proxy (IAP). Configure IAP by specifying the groups...
+   * Dlaczego nieprawidłowa: IAP służy do zabezpieczania dostępu użytkowników do aplikacji webowych lub SSH/RDP działających w GCP. Nie rozwiązuje problemu autoryzacji i bezpiecznego wywoływania API Google Cloud (np. Cloud Storage, BigQuery) przez lokalne aplikacje automatyczne bez wpisanych na stałe kluczy.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Uwierzytelnianie bez kluczy (keyless authentication) dla zewnętrznych zasobów:
+  - Użytkownicy (ludzie) -> **Workforce Identity Federation**.
+  - Aplikacje / Serwery (maszyny) -> **Workload Identity Federation**.
+* WIF eliminuje potrzebę generowania i przechowywania niebezpiecznych plików kluczy JSON.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* On-premises applications + access Google Cloud + without hardcoded credentials -> Workload Identity Federation (WIF).
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/iam/docs/workload-identity-federation" target="_blank">Workload Identity Federation overview</a>
+<a href="https://cloud.google.com/iam/docs/best-practices-workload-identity-federation" target="_blank">Best practices for using Workload Identity Federation</a>
 </pre>
 
 </div>

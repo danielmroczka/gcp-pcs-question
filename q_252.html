@@ -58,24 +58,34 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Implement a Cloud DLP solution to scan and identify sensitive information, and apply redaction or masking techniques to the PII. Integrate VPC SC with your network security controls to block potential data exfiltration attempts.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź B jest prawidłowa, ponieważ kompleksowe zapobieganie eksfiltracji danych (data exfiltration mitigation) w chmurze wymaga podejścia wielowarstwowego, łączącego ochronę na poziomie danych (data layer) z ochroną na poziomie sieci i usług (network/service layer).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Zastosowane technologie:
+a. **Warstwa danych (Cloud DLP):** Cloud Data Loss Prevention pozwala na automatyczne skanowanie plików i baz danych, wykrywanie informacji wrażliwych (PII, np. PESEL, numery kart, paszporty) oraz ich deidentyfikację (redagowanie, maskowanie). Dzięki temu nawet jeśli dane opuszczą bezpieczne środowisko, nie zawierają one jawnych informacji wrażliwych.
+b. **Warstwa sieci/usług (VPC Service Controls):** VPC SC tworzy twardy perymetr bezpieczeństwa wokół usług zarządzanych (np. Cloud Storage, BigQuery). Uniemożliwia to skopiowanie danych z chronionych zasobów firmy do prywatnych kubłów Cloud Storage należących do nieautoryzowanych osób w innych organizacjach GCP, skutecznie blokując próby eksfiltracji sieciowej.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Encrypt all sensitive data in transit and at rest... TLS and HTTPS protocols.
+   * Dlaczego nieprawidłowa: Szyfrowanie w spoczynku i w transporcie chroni dane przed podsłuchem (poufność), ale nie zapobiega eksfiltracji. Użytkownik posiadający uprawnienia IAM nadal może pobrać zaszyfrowane dane przez bezpieczne połączenie HTTPS/TLS i zapisać je na swoim lokalnym dysku poza kontrolą firmy.
+C. Restrict all outbound network traffic from cloud resources...
+   * Dlaczego nieprawidłowa: Zablokowanie całego ruchu wychodzącego jest niepraktyczne operacyjnie (uniemożliwi działanie wielu aplikacji) i nie chroni przed eksfiltracją realizowaną za pomocą uprawnień IAM na usługach SaaS (np. kopiowanie z BigQuery do zewnętrznego projektu przez API Google), które nie są blokowane przez standardowe reguły sieciowe maszyn.
+D. Rely on employee expertise to prevent accidental data exfiltration incidents.
+   * Dlaczego nieprawidłowa: Poleganie wyłącznie na wiedzy pracowników (czynnik ludzki) bez wdrożenia technicznych zabezpieczeń (technical controls) jest niezgodne z podstawowymi zasadami bezpieczeństwa IT i nie chroni przed celowym działaniem na szkodę firmy ani przed błędami.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Ochrona przed eksfiltracją danych (data exfiltration) w GCP -> Zawsze szukaj **VPC Service Controls (VPC SC)**.
+* Klasyfikacja i maskowanie danych wrażliwych (PII) -> Zawsze **Cloud DLP** (Data Loss Prevention).
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Mitigate the risk of data exfiltration + PII -> Cloud DLP + VPC Service Controls.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/vpc-service-controls/docs/overview" target="_blank">VPC Service Controls overview</a>
+<a href="https://cloud.google.com/dlp/docs/concepts-overview" target="_blank">Cloud Data Loss Prevention (Cloud DLP) overview</a>
 </pre>
 
 </div>

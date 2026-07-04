@@ -58,24 +58,34 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+A. Use VM Manager to automatically distribute and apply patches to VMs across your projects. Integrate VM Manager with hardened, organization-standard VM images stored in a central repository.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź A jest prawidłowa, ponieważ łączy centralne zarządzanie utwardzonymi obrazami maszyn wirtualnych z automatyzacją procesu instalowania poprawek (patching) w skali całej organizacji.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Zalety tego rozwiązania:
+a. **Centralny rejestr obrazów (Central Repository):** Stworzenie zaufanego projektu, w którym przechowywane są certyfikowane, utwardzone obrazy maszyn (hardened images) pozwala na wymuszenie stosowania wyłącznie tych obrazów przez inne zespoły (np. za pomocą polityki organizacji `constraints/compute.trustedImageProjects`).
+b. **Automatyzacja poprawek (VM Manager):** Usługa OS Patch Management w VM Managerze pozwala na definiowanie harmonogramów aktualizacji systemów operacyjnych dla wszystkich maszyn wirtualnych w wielu projektach jednocześnie. Gwarantuje to, że nowo uruchomione maszyny oraz te już działające są stale patchowane i zgodne z baselinem bezpieczeństwa.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+B. Configure the sole-tenancy feature in Compute Engine for all projects...
+   * Dlaczego nieprawidłowa: Sole-tenancy (wyłączna dzierżawa) gwarantuje, że maszyny wirtualne działają na dedykowanym fizycznym sprzęcie. Służy to do celów licencyjnych i izolacji fizycznej, ale nie rozwiązuje problemów z aktualizacją oprogramowania (patching) i zapobieganiem VM sprawl.
+C. Create a Cloud Build trigger to build a pipeline... Use instance templates pointing to this registry.
+   * Dlaczego nieprawidłowa: Choć budowanie obrazów w Cloud Build jest poprawną praktyką, to samo utworzenie szablonów instancji (instance templates) nie rozwiązuje problemu ciągłego zarządzania aktualizacjami (patching) na już działających maszynach wirtualnych w ich cyklu życia, co wymaga systemu takiego jak VM Manager.
+D. Activate Security Command Center Enterprise. Use VM discovery and posture management...
+   * Dlaczego nieprawidłowa: SCC Enterprise pozwala na monitorowanie stanu maszyn i zgłaszanie alertów o braku poprawek (compliance), ale nie jest dedykowanym narzędziem do bezpośredniego wdrażania aktualizacji pakietów systemowych na maszynach w taki sposób jak VM Manager.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* VM Sprawl i spójność poprawek systemowych -> Zawsze używaj **VM Manager** (OS Patch Management).
+* Do wymuszenia bezpiecznych obrazów bazowych stosuj **Trusted Image Projects** na poziomie polityki organizacji.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Centralize VM image management + automate patch enforcement -> VM Manager + central repository of hardened images.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/compute/docs/os-patch-management" target="_blank">OS patch management overview</a>
+<a href="https://cloud.google.com/compute/docs/images/sharing-images-across-projects" target="_blank">Sharing images across projects</a>
 </pre>
 
 </div>

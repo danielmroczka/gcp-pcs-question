@@ -58,24 +58,36 @@
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+B. Deploy an Assured Workloads environment in an approved region. Configure Access Approval for sensitive operations on patient data. Enable both Cloud Audit Logs and Access Transparency.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź B jest prawidłowa, ponieważ łączy cztery kluczowe technologie Google Cloud wymagane do spełnienia rygorystycznych wymogów prawnych (takich jak HIPAA czy GDPR) w sektorze medycznym.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Spełnienie wymagań krok po kroku:
+a. **Rezydentność danych (Data Residency):** Assured Workloads (AW) automatycznie wymusza na folderze ograniczenia lokalizacji geograficznej (np. tylko regiony europejskie), gwarantując, że dane medyczne fizycznie nie opuszczą dozwolonych obszarów.
+b. **Zatwierdzanie akcji administracyjnych:** Usługa Access Approval (AA) wymaga, aby każda próba dostępu personelu Google do danych pacjenta (np. podczas rozwiązywania problemów technicznych) została zatwierdzona przez wyznaczonego oficera ds. zgodności (compliance officer) w Twojej firmie.
+c. **Audytowalność dostępu:** Cloud Audit Logs rejestruje wszystkie operacje użytkowników wewnątrz projektu, natomiast Access Transparency (AT) dostarcza logi z działań i powodów dostępu inżynierów samego Google, co zapewnia pełną rozliczalność i przejrzystość audytową.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Select a standard Google Cloud region... restrict access... using Access Context Manager...
+   * Dlaczego nieprawidłowa: Standardowy region bez Assured Workloads nie gwarantuje zgodności z wymogami suwerenności personelu wsparcia. Sam Access Context Manager kontroluje dostęp użytkowników firmowych, ale nie dostarcza mechanizmu zatwierdzania akcji administracyjnych personelu wsparcia technicznego Google (brak Access Approval).
+C. Deploy an Assured Workloads environment in multiple regions... Isolate network-level data by using VPC Service Controls.
+   * Dlaczego nieprawidłowa: Choć AW i VPC SC są bardzo bezpieczne, ta opcja pomija kluczowe wymaganie dotyczące konieczności zatwierdzania akcji administracyjnych (Access Approval) oraz audytowalności dostępu inżynierów wsparcia chmury (Access Transparency).
+D. Select multiple standard Google Cloud regions... Implement Access Control Lists (ACLs) on individual storage objects...
+   * Dlaczego nieprawidłowa: Używanie list ACL na obiektach Cloud Storage jest przestarzałą praktyką (zaleca się Uniform IAM). Ta opcja całkowicie ignoruje wymogi dotyczące zatwierdzania działań administracyjnych oraz rezydentności wsparcia technicznego.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Spełnienie surowych wymogów regulacyjnych (rezydentność, zatwierdzanie dostępu Google, logowanie) -> Złote trio: **Assured Workloads** + **Access Approval** + **Access Transparency**.
+* Access Transparency rejestruje działania Google, Access Approval pozwala na ich akceptację/odrzucenie przed wykonaniem.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Data reside in region + administrative actions require approval + auditable -> Assured Workloads + Access Approval + Access Transparency.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/assured-workloads/docs/overview" target="_blank">Assured Workloads overview</a>
+<a href="https://cloud.google.com/access-approval/docs/overview" target="_blank">Access Approval overview</a>
+<a href="https://cloud.google.com/logging/docs/audit/access-transparency-overview" target="_blank">Access Transparency overview</a>
 </pre>
 
 </div>

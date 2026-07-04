@@ -90,24 +90,35 @@ Your organization relies heavily on Cloud Run for its containerized applications
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+C. Configure Binary Authorization on Cloud Run to enforce image signatures. Create policies to allow deployment only for images passing a defined vulnerability threshold.
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź C jest prawidłowa, ponieważ integracja Binary Authorization z usługą Cloud Run stanowi jedyny zautomatyzowany i prewencyjny mechanizm (admission controller) w GCP, który gwarantuje, że do produkcji zostaną wdrożone wyłącznie te kontenery, które przeszły pomyślnie skanowanie podatności i zostały podpisane przez zaufany proces (atestator).
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Mechanizm działania:
+a. **Skanowanie w potoku:** Podczas budowania obrazu w Cloud Build, uruchamiany jest skaner podatności Artifact Analysis.
+b. **Generowanie atestacji (podpisu):** Jeśli skaner potwierdzi, że obraz nie zawiera krytycznych podatności (np. CVSS > Medium), system generuje podpis kryptograficzny (attestation) i kojarzy go z obrazem kontenera.
+c. **Weryfikacja przy wdrożeniu (Binary Authorization):** Cloud Run ma włączoną usługę Binary Authorization. Przy każdej próbie wdrożenia nowej rewizji, Binary Authorization weryfikuje podpis. Jeśli obraz nie posiada podpisu od autoryzowanego skanera, wdrożenie zostaje natychmiast zablokowane. Zapobiega to wdrożeniu podatnych obrazów w sposób w 100% zautomatyzowany.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. Implement vulnerability scanning as part of the Cloud Build process... manually rebuild...
+   * Dlaczego nieprawidłowa: Ręczna weryfikacja i ponowne kompilowanie nie zapobiega wdrożeniu. Deweloper nadal mógłby wdrożyć podatny kontener bezpośrednio (np. omijając potok CI/CD), ponieważ brak tu twardego mechanizmu kontroli (guardrail) na poziomie samej platformy uruchomieniowej Cloud Run.
+B. Perform manual vulnerability checks post-build... manual security-engineer-driven remediation...
+   * Dlaczego nieprawidłowa: Procesy manualne są wolne, podatne na błędy i nie pozwalają na skalowanie operacji deweloperskich. Nie blokują również automatycznych wdrożeń w sposób prewencyjny.
+D. Utilize a vulnerability scanner during the Cloud Build stage and set Artifact Registry permissions to block...
+   * Dlaczego nieprawidłowa: Uprawnienia IAM w Artifact Registry (np. rola read/write) nie mają wbudowanej funkcji dynamicznego blokowania pobierania pojedynczych obrazów w zależności od wyniku ich skanowania podatności. Uprawnienia IAM są statyczne i dotyczą całego repozytorium.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Wymuszenie wdrożeń wyłącznie zaufanych i przetestowanych (bez podatności) obrazów kontenerów na GKE lub Cloud Run -> Zawsze używaj **Binary Authorization**.
+* Atestacja (attestation) to cyfrowy podpis potwierdzający spełnienie kryteriów bezpieczeństwa przez obraz.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Cloud Run / GKE + block deployment of containers with vulnerabilities -> Binary Authorization.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/binary-authorization/docs/cloud-run-overview" target="_blank">Binary Authorization for Cloud Run overview</a>
+<a href="https://cloud.google.com/binary-authorization/docs/run-w-attestations" target="_blank">Deploying with attestations (vulnerability checks)</a>
 </pre>
 
 </div>

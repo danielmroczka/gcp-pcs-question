@@ -90,24 +90,35 @@ You are developing a new application that uses exclusively Compute Engine VMs. O
 
 <h2>Wyjaśnienie</h2>
 <pre>
-**Potwierdzona odpowiedź: AC**
+1. Prawidłowa odpowiedź lub odpowiedzi:
+D. 1. Create a general service account "g-sa" to orchestrate the batch jobs. 2. Create one service account per batch job "b-sa-[1-5]", and grant only the permissions required to run the individual batch jobs to the service accounts. 3. Grant the Service Account Token Creator role to g-sa. Use g-sa to obtain short-lived access tokens for b-sa-[1-5] and to execute the batch jobs with the permissions of b-sa-[1-5].
 
-Wyjaśnienie: 
-Aby całkowicie odizolować instancję Compute Engine zarówno od internetu, jak i od usług/API Google, należy zablokować dwie główne drogi komunikacji zewnętrznej:
-1. Public IP: Brak publicznego adresu IP uniemożliwia bezpośrednią, dwukierunkową komunikację z internetem. Instancja z samym prywatnym IP nie może inicjować połączeń ze światem zewnętrznym bez bramy NAT lub serwera proxy.
-2. Private Google Access (PGA): Jest to ustawienie na poziomie podsieci, które pozwala instancjom posiadającym wyłącznie prywatne adresy IP na łączenie się z publicznymi adresami IP usług Google (takich jak Cloud Storage, BigQuery czy KMS). Jeśli PGA pozostanie włączone, instancja mimo braku publicznego IP wciąż będzie miała dostęp do API Google. Wyłączenie PGA domyka tę lukę.
+2. Kompleksowe wyjaśnienie dlaczego dana odpowiedź jest prawidłowa (Analiza):
+Odpowiedź D jest prawidłowa, ponieważ realizuje zasadę najmniejszych uprawnień (least privilege) za pomocą mechanizmu podszywania się pod konta serwisowe (Service Account Impersonation) z użyciem tokenów krótkotrwałych (short-lived tokens), całkowicie eliminując potrzebę zarządzania niebezpiecznymi kluczami długoterminowymi.
 
-Dlaczego pozostałe są błędne:
-B. IP Forwarding: To ustawienie pozwala instancji na przekazywanie pakietów, które nie są adresowane do niej samej (wymagane np. przy budowie własnych bram NAT lub routerów programowych). Wyłączenie tego nie blokuje dostępu samej instancji do internetu czy API Google.
-D. Static routes: Trasy statyczne służą do definiowania ścieżek ruchu wewnątrz sieci VPC lub do sieci zewnętrznych (np. przez VPN). Chociaż można by ich użyć do przekierowania ruchu w 'czarną dziurę', samo ich istnienie nie jest domyślnym mechanizmem zapewniającym dostęp do internetu czy API Google w taki sposób jak Public IP czy PGA.
+Szczegóły techniczne:
+a. **Izolacja uprawnień:** Każde z pięciu zadań wsadowych (batch jobs) ma przypisane własne konto serwisowe (`b-sa-1` do `b-sa-5`) z precyzyjnie dobranymi rolami IAM. Dzięki temu błąd lub przejęcie jednego zadania nie zagraża zasobom powiązanym z pozostałymi zadaniami.
+b. **Bezpieczna orchestracja:** Maszyna wirtualna, na której działa aplikacja, używa ogólnego konta serwisowego `g-sa`. Konto to nie ma bezpośrednich uprawnień do zasobów zewnętrznych, a jedynie uprawnienie `roles/iam.serviceAccountTokenCreator` (Kreator tokenów konta serwisowego) dla pięciu kont zadaniowych.
+c. **Brak kluczy:** Gdy zachodzi potrzeba uruchomienia zadania, aplikacja (jako `g-sa`) wysyła żądanie do API Google o wygenerowanie tymczasowego tokenu dostępu OAuth 2.0 dla odpowiedniego konta `b-sa-X`. Token ten wygasa automatycznie (domyślnie po godzinie) i nie musi być nigdzie zapisywany na dysku.
 
-Wskazówki egzaminacyjne (Tips & Tricks):
-- Jeśli pytanie wspomina o dostępie do 'Google Services/APIs' z instancji bez publicznego IP, kluczem zawsze jest 'Private Google Access'.
-- VPC Networking - Public vs Private IP
-- Zasady routingu w GCP
+3. Wyjaśnienie z osobna każdej niepoprawnej odpowiedzi:
+A. ...generate service account keys for each... Store the service account keys in Secret Manager...
+   * Dlaczego nieprawidłowa: Generowanie zewnętrznych kluczy kont serwisowych (Service Account Keys / pliki JSON) i zapisywanie ich (nawet w Secret Managerze) niesie za sobą ryzyko wycieku w przypadku złej konfiguracji dostępu. Impersonacja za pomocą krótkotrwałych tokenów (opcja D) jest o wiele bezpieczniejsza, ponieważ nie tworzy żadnych trwałych kluczy kryptograficznych na dyskach.
+B. ...Create a general service account "g-sa"... Grant the permissions required... to g-sa.
+   * Dlaczego nieprawidłowa: Nadanie wszystkich uprawnień dla wszystkich pięciu zadań jednemu wspólnemu kontu `g-sa` łamie zasadę najmniejszych uprawnień. Jeśli aplikacja zostanie skompromitowana, napastnik uzyska dostęp do zasobów wszystkich pięciu zadań jednocześnie.
+C. ...Create a workload identity pool... Generate credential configuration files...
+   * Dlaczego nieprawidłowa: Workload Identity Federation (WIF) służy do nadawania tożsamości obciążeniom działającym *poza* Google Cloud (np. na AWS, Azure czy on-premises). W tym scenariuszu aplikacja działa wyłącznie na maszynach Compute Engine (VMs wewnątrz GCP), więc stosowanie WIF jest nadmiernie skomplikowane i niepotrzebne.
 
-Dokumentacja:
-<a href='https://cloud.google.com/vpc/docs/private-google-access' target='_blank'>https://cloud.google.com/vpc/docs/private-google-access</a>
+4. Wskazówki, hinty, tips and tricks:
+* Impersonacja konta serwisowego (Service Account Impersonation) w GCP opiera się na roli **`roles/iam.serviceAccountTokenCreator`** (Service Account Token Creator).
+* Pozwala to jednemu podmiotowi (np. maszynie z kontem `g-sa`) na generowanie tymczasowych tokenów dla innych kont serwisowych bez posiadania ich kluczy prywatnych.
+
+5. Reguły wyboru odpowiedzi (Słowa kluczowe):
+* Dedicated permissions for batch jobs + least privilege + Compute Engine -> Orchestrate with general SA + specific SAs + Service Account Token Creator role.
+
+6. Dodatkowe źródła i dokumentacja:
+<a href="https://cloud.google.com/iam/docs/service-account-impersonation" target="_blank">Service account impersonation overview</a>
+<a href="https://cloud.google.com/iam/docs/create-short-lived-credentials-direct" target="_blank">Creating short-lived credentials for a service account</a>
 </pre>
 
 </div>
