@@ -16,18 +16,36 @@ document.body.addEventListener('click', function(e) {
     }
 });
 
-// 2. Keyboard navigation
+// Helper to find navigation links based on text content
+function getNavLink(textPattern) {
+    const links = document.querySelectorAll('.q-nav a');
+    return Array.from(links).find(link => link.textContent.includes(textPattern));
+}
+
+// 2. Keyboard navigation & Shortcuts (Desktop)
 document.addEventListener('keydown', function(e) {
+    // Avoid triggering when focused on input fields
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+        return;
+    }
+    
     if (e.key === 'ArrowLeft') {
-        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
+        const prev = getNavLink('Poprzednie');
         if (prev) prev.click();
     } else if (e.key === 'ArrowRight') {
-        const next = document.querySelector('.q-nav a[href*="Następne"]');
+        const next = getNavLink('Następne');
         if (next) next.click();
+    } else if (e.key === ' ' || e.key === 'Spacebar' || e.key === 'Enter' || e.key.toLowerCase() === 'a' || e.key.toLowerCase() === 's') {
+        // Shortcuts: Space, Enter, 'A', or 'S' keys to show/hide the Suggested Answer
+        const btn = document.querySelector('.reveal-solution');
+        if (btn) {
+            e.preventDefault(); // Prevent scrolling when pressing Space
+            btn.click();
+        }
     }
 });
 
-// 3. Robust Swipe navigation (Pointer events + touch-action fix)
+// 3. Swipe navigation (Mobile - Swipe Left/Right)
 document.body.style.touchAction = 'pan-y';
 
 let pointerStartX = 0;
@@ -43,7 +61,6 @@ document.addEventListener('pointerup', e => {
     handleSwipe();
 }, { passive: true });
 
-// Handle cases where the browser cancels the pointer gesture (e.g., scroll started)
 document.addEventListener('pointercancel', e => {
     pointerStartX = 0;
     pointerEndX = 0;
@@ -52,17 +69,16 @@ document.addEventListener('pointercancel', e => {
 function handleSwipe() {
     const swipeDistance = pointerEndX - pointerStartX;
     
-    // Reset after calculation
     pointerStartX = 0;
     pointerEndX = 0;
 
     if (Math.abs(swipeDistance) < minSwipeDistance) return;
 
-    if (swipeDistance < 0) { // Swipe Left (Next)
-        const next = document.querySelector('.q-nav a[href*="Następne"]');
+    if (swipeDistance < 0) { // Swipe Left (Next Question)
+        const next = getNavLink('Następne');
         if (next) next.click();
-    } else { // Swipe Right (Previous)
-        const prev = document.querySelector('.q-nav a[href*="Poprzednie"]');
+    } else { // Swipe Right (Previous Question)
+        const prev = getNavLink('Poprzednie');
         if (prev) prev.click();
     }
 }
