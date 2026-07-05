@@ -53,15 +53,18 @@ let pointerEndX = 0;
 const minSwipeDistance = 50;
 
 document.addEventListener('pointerdown', e => {
+    if (e.pointerType !== 'touch') return;
     pointerStartX = e.clientX;
 }, { passive: true });
 
 document.addEventListener('pointerup', e => {
+    if (e.pointerType !== 'touch') return;
     pointerEndX = e.clientX;
     handleSwipe();
 }, { passive: true });
 
 document.addEventListener('pointercancel', e => {
+    if (e.pointerType !== 'touch') return;
     pointerStartX = 0;
     pointerEndX = 0;
 }, { passive: true });
