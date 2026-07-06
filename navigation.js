@@ -243,6 +243,48 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
+// 2.5 Add Copy Button
+(function() {
+    const nav = document.querySelector('.q-nav');
+    if (!nav) return;
+
+    const indexLink = Array.from(nav.querySelectorAll('a')).find(a => a.getAttribute('href') === 'index.html');
+    if (!indexLink) return;
+
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'btn btn-outline-secondary';
+    copyBtn.textContent = '📋 Kopiuj';
+    copyBtn.style.marginLeft = '10px';
+    
+    copyBtn.addEventListener('click', function() {
+        // Explicitly target the card containing the question
+        const questionCard = document.querySelector('.q-card:not(.q-answer)');
+        if (!questionCard) return;
+        
+        const questionBody = questionCard.querySelector('.question-body');
+        if (!questionBody) return;
+        
+        const questionText = questionBody.querySelector('.card-text').textContent.trim();
+        const choices = Array.from(questionBody.querySelectorAll('.multi-choice-item'))
+            .map(item => item.textContent.trim())
+            .join('\n');
+        
+        const textToCopy = `${questionText}\n\n${choices}`;
+        
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            const originalText = copyBtn.textContent;
+            copyBtn.textContent = '✅ Skopiowano!';
+            setTimeout(() => copyBtn.textContent = originalText, 2000);
+        }).catch(err => {
+            console.error('Błąd kopiowania: ', err);
+            copyBtn.textContent = '❌ Błąd';
+            setTimeout(() => copyBtn.textContent = '📋 Kopiuj', 2000);
+        });
+    });
+
+    indexLink.after(copyBtn);
+})();
+
 // 3. Swipe navigation (Mobile - Swipe Left/Right)
 document.body.style.touchAction = 'pan-y';
 
